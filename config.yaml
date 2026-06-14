@@ -1,0 +1,12 @@
+app:
+  title: "世界杯分析器 MVP V1"
+  language: "zh"
+
+model:
+  odds_weight: 0.60
+  polymarket_weight: 0.30
+  news_weight: 0.10
+
+report:
+  output_dir: "outputs/reports"
+
