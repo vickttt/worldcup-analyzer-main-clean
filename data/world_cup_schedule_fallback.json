@@ -1,0 +1,112 @@
+[
+  {
+    "fixture_id": null,
+    "home_team": {
+      "id": null,
+      "name": "Austria",
+      "logo": null
+    },
+    "away_team": {
+      "id": null,
+      "name": "Jordan",
+      "logo": null
+    },
+    "kickoff_utc": "2026-06-16T15:59:00+00:00",
+    "league_name": "World Cup 2026",
+    "round": "Group Stage - 1",
+    "group": "Group A",
+    "venue_name": "MetLife Stadium",
+    "venue_city": "New York / New Jersey",
+    "status": "NS",
+    "status_text": "未开始",
+    "source": "Local fallback schedule"
+  },
+  {
+    "fixture_id": null,
+    "home_team": {
+      "id": 26,
+      "name": "Argentina",
+      "logo": "https://media.api-sports.io/football/teams/26.png"
+    },
+    "away_team": {
+      "id": 1532,
+      "name": "Algeria",
+      "logo": "https://media.api-sports.io/football/teams/1532.png"
+    },
+    "kickoff_utc": "2026-06-17T01:00:00+00:00",
+    "league_name": "World Cup 2026",
+    "round": "Group Stage - 1",
+    "group": "Group A",
+    "venue_name": "Arrowhead Stadium",
+    "venue_city": "Kansas City",
+    "status": "NS",
+    "status_text": "未开始",
+    "source": "Local fallback schedule"
+  },
+  {
+    "fixture_id": null,
+    "home_team": {
+      "id": null,
+      "name": "France",
+      "logo": null
+    },
+    "away_team": {
+      "id": null,
+      "name": "England",
+      "logo": null
+    },
+    "kickoff_utc": "2026-06-18T01:00:00+00:00",
+    "league_name": "World Cup 2026",
+    "round": "Group Stage - 1",
+    "group": "Group B",
+    "venue_name": "AT&T Stadium",
+    "venue_city": "Dallas",
+    "status": "NS",
+    "status_text": "未开始",
+    "source": "Local fallback schedule"
+  },
+  {
+    "fixture_id": null,
+    "home_team": {
+      "id": null,
+      "name": "Germany",
+      "logo": null
+    },
+    "away_team": {
+      "id": null,
+      "name": "Spain",
+      "logo": null
+    },
+    "kickoff_utc": "2026-06-19T01:00:00+00:00",
+    "league_name": "World Cup 2026",
+    "round": "Group Stage - 1",
+    "group": "Group C",
+    "venue_name": "SoFi Stadium",
+    "venue_city": "Los Angeles",
+    "status": "NS",
+    "status_text": "未开始",
+    "source": "Local fallback schedule"
+  },
+  {
+    "fixture_id": null,
+    "home_team": {
+      "id": null,
+      "name": "Argentina",
+      "logo": "https://media.api-sports.io/football/teams/26.png"
+    },
+    "away_team": {
+      "id": null,
+      "name": "Brazil",
+      "logo": null
+    },
+    "kickoff_utc": "2026-06-21T01:00:00+00:00",
+    "league_name": "World Cup 2026",
+    "round": "Group Stage - 2",
+    "group": "Group A",
+    "venue_name": "Hard Rock Stadium",
+    "venue_city": "Miami",
+    "status": "NS",
+    "status_text": "未开始",
+    "source": "Local fallback schedule"
+  }
+]

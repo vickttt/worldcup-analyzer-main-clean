@@ -1,6 +1,13 @@
 TEAM_CN = {
     "Argentina": "阿根廷",
     "Algeria": "阿尔及利亚",
+    "Austria": "奥地利",
+    "Jordan": "约旦",
+    "France": "法国",
+    "England": "英格兰",
+    "Germany": "德国",
+    "Spain": "西班牙",
+    "Brazil": "巴西",
     "Draw": "平局",
 }
 

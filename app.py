@@ -26,6 +26,15 @@ from modules.polymarket_client import fetch_polymarket
 from modules.probability_model import combine_probabilities
 from modules.rating_model import rate_opportunity
 from modules.report_generator import build_report, save_report
+from modules.schedule_client import (
+    default_standings,
+    fetch_world_cup_schedule,
+    fixture_local_datetime,
+    group_by_match_date,
+    is_finished,
+    schedule_groups,
+    tournament_stats,
+)
 from modules.score_model import recommend_scores
 from modules.the_odds_client import fetch_odds
 from modules.value_model import analyze_value
@@ -256,6 +265,90 @@ def card_css():
             margin-bottom: 8px;
             color: #0f172a;
         }
+        .schedule-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+        }
+        .schedule-match {
+            font-size: 1.05rem;
+            font-weight: 850;
+            color: #0f172a;
+            margin-bottom: 0.35rem;
+        }
+        .schedule-meta {
+            color: #475569;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .schedule-empty {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 18px;
+            color: #64748b;
+        }
+        .portal-banner {
+            min-height: 330px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #dbe3ef;
+            background-image: linear-gradient(90deg, rgba(8,13,28,.88), rgba(8,13,28,.42)), url("__BANNER__");
+            background-size: cover;
+            background-position: center;
+            padding: 32px;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        .portal-title {
+            font-size: 2.35rem;
+            line-height: 1.08;
+            font-weight: 950;
+            color: white;
+            margin-top: 0.7rem;
+            max-width: 760px;
+        }
+        .portal-subtitle {
+            color: #dbeafe;
+            font-size: 1rem;
+            line-height: 1.65;
+            max-width: 620px;
+            margin-top: 0.8rem;
+        }
+        .portal-stat {
+            background: rgba(255,255,255,.13);
+            border: 1px solid rgba(255,255,255,.24);
+            border-radius: 14px;
+            padding: 13px 15px;
+            color: white;
+        }
+        .portal-stat-label {
+            color: #cbd5e1;
+            font-size: .78rem;
+            font-weight: 800;
+        }
+        .portal-stat-value {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-top: .25rem;
+        }
+        .status-pill {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 4px 10px;
+            background: #e0f2fe;
+            color: #075985;
+            font-size: .78rem;
+            font-weight: 800;
+        }
+        .status-pill-finished {
+            background: #dcfce7;
+            color: #166534;
+        }
         </style>
         """.replace("__BANNER__", BANNER_IMAGE_URL),
         unsafe_allow_html=True,
@@ -302,7 +395,7 @@ def probability_bar(label, value, price=None):
 
 
 def comparison_bar(label, value, max_value, color="#2563eb"):
-    ratio = 0 if not max_value else max(0, min(1, value / max_value))
+    ratio = 0.0 if not max_value else float(max(0, min(1, value / max_value)))
     st.write(f"**{label}**")
     st.progress(ratio)
     st.caption(f"约 €{value:.0f}M")
@@ -813,22 +906,294 @@ def render_technical_notes(odds, api_football_data):
             st.caption(note)
 
 
-def load_config():
-    path = Path(__file__).resolve().parent / "config.yaml"
-    with path.open("r", encoding="utf-8") as file:
-        return yaml.safe_load(file)
+def schedule_match_text(fixture):
+    home = fixture.get("home_team", {}).get("name") or ""
+    away = fixture.get("away_team", {}).get("name") or ""
+    return f"{home} vs {away}"
 
 
-config = load_config()
+def date_until_world_cup():
+    opening = datetime(2026, 6, 11, tzinfo=ZoneInfo("Asia/Shanghai")).date()
+    today = datetime.now(ZoneInfo("Asia/Shanghai")).date()
+    days = (opening - today).days
+    if days > 0:
+        return f"开幕倒计时 {days} 天"
+    return "赛事进行中"
 
-st.set_page_config(page_title=config["app"]["title"], layout="wide")
-card_css()
-st.title("世界杯赛前分析平台")
-st.caption("用赔率、预测市场和规则引擎识别市场可能错在哪里。")
 
-match_text = st.text_input("请输入比赛名称", value="Argentina vs Algeria")
+def team_visual(team, size=48):
+    logo = team.get("logo")
+    name = team.get("name") or ""
+    flags = {
+        "Argentina": "🇦🇷",
+        "Algeria": "🇩🇿",
+        "Austria": "🇦🇹",
+        "Jordan": "🇯🇴",
+        "France": "🇫🇷",
+        "England": "🏴",
+        "Germany": "🇩🇪",
+        "Spain": "🇪🇸",
+        "Brazil": "🇧🇷",
+    }
+    if logo:
+        st.image(logo, width=size)
+    else:
+        st.markdown(
+            f"""
+            <div style="
+                width:{size}px;height:{size}px;border-radius:999px;
+                display:flex;align-items:center;justify-content:center;
+                background:#f1f5f9;border:1px solid #cbd5e1;
+                font-size:{max(22, int(size * .48))}px;">
+                {flags.get(name, name[:1])}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-if st.button("生成赛前分析", type="primary"):
+
+def fixture_status_text(fixture):
+    if is_finished(fixture):
+        return "已结束"
+    return fixture.get("status_text") or "未开始"
+
+
+def fixture_score_text(fixture):
+    score = fixture.get("score") or {}
+    if is_finished(fixture) and score.get("home") is not None and score.get("away") is not None:
+        return f"{score['home']}:{score['away']}"
+    return "vs"
+
+
+def open_fixture(fixture):
+    st.session_state.selected_fixture = fixture
+    st.session_state.selected_match_text = schedule_match_text(fixture)
+    st.session_state.page = "post_match" if is_finished(fixture) else "analysis"
+    st.rerun()
+
+
+def render_schedule_card(fixture, index):
+    home = fixture.get("home_team", {})
+    away = fixture.get("away_team", {})
+    kickoff = fixture_local_datetime(fixture)
+    kickoff_text = kickoff.strftime("%m-%d %H:%M") if kickoff else "时间待定"
+    venue = " · ".join(
+        value for value in [fixture.get("venue_name"), fixture.get("venue_city")] if value
+    )
+    finished = is_finished(fixture)
+    button_text = "查看赛后报告" if finished else "查看赛前分析"
+
+    with st.container(border=True):
+        logo_left, info_col, logo_right, action_col = st.columns([0.7, 4.4, 0.7, 1.35])
+        with logo_left:
+            team_visual(home)
+        with info_col:
+            status_class = "status-pill-finished" if finished else ""
+            st.markdown(
+                f"""
+                <div class="schedule-match">
+                    {team_cn(home.get("name"))} {fixture_score_text(fixture)} {team_cn(away.get("name"))}
+                    <span class="status-pill {status_class}">{fixture_status_text(fixture)}</span>
+                </div>
+                <div class="schedule-meta">
+                    {kickoff_text} CST<br>
+                    {fixture.get("league_name") or "World Cup 2026"} · {fixture.get("round") or "Group Stage"}<br>
+                    {venue or "比赛地点待确认"}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with logo_right:
+            team_visual(away)
+        with action_col:
+            if st.button(button_text, key=f"open_{index}_{schedule_match_text(fixture)}", type="primary", use_container_width=True):
+                open_fixture(fixture)
+
+
+def render_schedule_section(fixtures, empty_text, key_prefix):
+    if not fixtures:
+        st.markdown(f'<div class="schedule-empty">{empty_text}</div>', unsafe_allow_html=True)
+        return
+    for index, fixture in enumerate(fixtures):
+        render_schedule_card(fixture, f"{key_prefix}_{index}")
+
+
+def render_portal_banner(fixtures):
+    stats = tournament_stats(fixtures)
+    next_match = None
+    now = datetime.now(ZoneInfo("Asia/Shanghai"))
+    for fixture in sorted(fixtures, key=lambda item: item.get("kickoff_utc") or ""):
+        kickoff = fixture_local_datetime(fixture)
+        if kickoff and kickoff >= now and not is_finished(fixture):
+            next_match = fixture
+            break
+    next_text = "赛程待确认"
+    if next_match:
+        kickoff = fixture_local_datetime(next_match)
+        next_text = f"{team_cn(next_match['home_team']['name'])} vs {team_cn(next_match['away_team']['name'])} · {kickoff.strftime('%m-%d %H:%M')}"
+
+    st.markdown(
+        f"""
+        <div class="portal-banner">
+            <div class="hero-kicker">2026 FIFA World Cup</div>
+            <div class="portal-title">世界杯赛程、比分与市场分析中心</div>
+            <div class="portal-subtitle">
+                浏览赛程、积分榜、热门比赛和市场盘口。点击任意比赛，直接进入赛前分析或赛后报告。
+            </div>
+            <div class="hero-meta">
+                <span class="hero-chip">{date_until_world_cup()}</span>
+                <span class="hero-chip">下一场：{next_text}</span>
+                <span class="hero-chip">赛程缓存24小时</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("已结束比赛", stats["finished_matches"])
+    col2.metric("总进球", stats["total_goals"])
+    col3.metric("场均进球", f"{stats['avg_goals']:.2f}")
+    col4.metric("最大比分", stats["biggest_score"])
+
+
+def render_search(fixtures):
+    query = st.text_input("搜索球队 / 比赛 / 日期", placeholder="例如：阿根廷、06-17、Argentina", label_visibility="collapsed")
+    if not query:
+        return
+    normalized = query.strip().lower()
+    matches = []
+    for fixture in fixtures:
+        local_time = fixture_local_datetime(fixture)
+        haystack = " ".join([
+            fixture.get("home_team", {}).get("name") or "",
+            fixture.get("away_team", {}).get("name") or "",
+            team_cn(fixture.get("home_team", {}).get("name") or ""),
+            team_cn(fixture.get("away_team", {}).get("name") or ""),
+            local_time.strftime("%m-%d") if local_time else "",
+            local_time.strftime("%Y-%m-%d") if local_time else "",
+        ]).lower()
+        if normalized in haystack:
+            matches.append(fixture)
+
+    st.markdown("**搜索结果**")
+    render_schedule_section(matches, "没有找到匹配的比赛。", "search")
+
+
+def render_today_matches(groups):
+    st.markdown('<div class="section-title">今日比赛</div>', unsafe_allow_html=True)
+    render_schedule_section(groups["today"], "今日暂无世界杯比赛，建议查看明日比赛或未来7天赛程。", "home_today")
+    if groups["tomorrow"]:
+        st.markdown('<div class="section-title">明日重点</div>', unsafe_allow_html=True)
+        render_schedule_section(groups["tomorrow"][:2], "明日暂无比赛。", "home_tomorrow")
+
+
+def render_popular_matches(fixtures, key_prefix="popular"):
+    names = {"Argentina vs Brazil", "France vs England", "Germany vs Spain", "Argentina vs Algeria"}
+    popular = [fixture for fixture in fixtures if schedule_match_text(fixture) in names]
+    if not popular:
+        return
+    st.markdown('<div class="section-title">热门分析</div>', unsafe_allow_html=True)
+    render_schedule_section(popular[:4], "暂无热门比赛。", key_prefix)
+
+
+def render_full_schedule(fixtures):
+    st.markdown('<div class="section-title">全部世界杯赛程</div>', unsafe_allow_html=True)
+    for date_key, date_fixtures in group_by_match_date(fixtures).items():
+        with st.expander(date_key, expanded=True):
+            render_schedule_section(date_fixtures, "当日暂无比赛。", f"date_{date_key}")
+
+
+def render_standings():
+    st.markdown('<div class="section-title">积分榜</div>', unsafe_allow_html=True)
+    for group_name, rows in default_standings().items():
+        st.markdown(f"**{group_name}**")
+        display_rows = []
+        for index, row in enumerate(rows, start=1):
+            display_rows.append({
+                "排名": index,
+                "球队": team_cn(row["team"]),
+                "赛": row["played"],
+                "胜": row["wins"],
+                "平": row["draws"],
+                "负": row["losses"],
+                "净胜球": row["gd"],
+                "积分": row["points"],
+            })
+        st.dataframe(display_rows, use_container_width=True, hide_index=True)
+
+
+def render_teams(fixtures):
+    st.markdown('<div class="section-title">球队</div>', unsafe_allow_html=True)
+    teams = {}
+    for fixture in fixtures:
+        for side in ["home_team", "away_team"]:
+            team = fixture.get(side) or {}
+            if team.get("name"):
+                teams[team["name"]] = team
+    cols = st.columns(4)
+    for index, team in enumerate(sorted(teams.values(), key=lambda item: team_cn(item["name"]))):
+        with cols[index % 4]:
+            with st.container(border=True):
+                team_visual(team, size=54)
+                st.markdown(f"**{team_cn(team['name'])}**")
+                profile = profile_for(team["name"])
+                st.caption(f"FIFA排名：{profile['fifa_rank']} · 主教练：{profile['coach']}")
+
+
+def render_market_center(fixtures):
+    st.markdown('<div class="section-title">市场分析</div>', unsafe_allow_html=True)
+    st.write("这里聚合未来重点比赛的赛前市场分析入口。不会新增预测模型，也不会新增付费数据源。")
+    render_popular_matches(fixtures, "market_popular")
+    with st.container(border=True):
+        st.markdown("**市场数据缓存**")
+        st.write("The Odds API 赔率：15分钟缓存")
+        st.write("Polymarket：5分钟缓存")
+        st.write("赛程与球队资料：24小时缓存")
+
+
+def render_schedule_page():
+    schedule = fetch_world_cup_schedule()
+    fixtures = schedule.get("fixtures", [])
+    groups = schedule_groups(fixtures)
+
+    render_portal_banner(fixtures)
+    render_search(fixtures)
+    st.caption(schedule.get("message", "世界杯赛程已加载。"))
+    today_tab, schedule_tab, standings_tab, teams_tab, market_tab = st.tabs([
+        "今日比赛",
+        "全部赛程",
+        "积分榜",
+        "球队",
+        "市场分析",
+    ])
+    with today_tab:
+        render_today_matches(groups)
+        render_popular_matches(fixtures, "home_popular")
+    with schedule_tab:
+        render_full_schedule(fixtures)
+    with standings_tab:
+        render_standings()
+    with teams_tab:
+        render_teams(fixtures)
+    with market_tab:
+        render_market_center(fixtures)
+
+    with st.expander("缓存与调用说明"):
+        st.write("世界杯赛程：24小时缓存，页面刷新优先读取缓存。")
+        st.write("球队资料：24小时缓存。")
+        st.write("赔率：15分钟缓存。")
+        st.write("Polymarket：5分钟缓存。")
+        st.write(f"当前赛程来源：{schedule.get('source')}")
+
+
+def render_analysis_page(match_text):
+    if st.button("← 返回赛程", type="secondary"):
+        st.session_state.page = "schedule"
+        st.session_state.selected_match_text = None
+        st.session_state.selected_fixture = None
+        st.rerun()
+
     try:
         match = parse_match(match_text)
         api_football_data = fetch_match_data(match)
@@ -899,3 +1264,94 @@ if st.button("生成赛前分析", type="primary"):
         )
     except Exception as error:
         st.error(str(error))
+
+
+def render_post_match_page(fixture):
+    if st.button("← 返回赛程", type="secondary"):
+        st.session_state.page = "schedule"
+        st.session_state.selected_match_text = None
+        st.session_state.selected_fixture = None
+        st.rerun()
+
+    home = fixture.get("home_team", {})
+    away = fixture.get("away_team", {})
+    kickoff = fixture_local_datetime(fixture)
+    score = fixture.get("score") or {}
+    post_match = fixture.get("post_match") or {}
+    stats = post_match.get("stats") or {}
+    goals = post_match.get("goals") or []
+    cards = post_match.get("cards") or []
+
+    st.markdown(
+        f"""
+        <div class="hero-banner">
+            <div class="hero-kicker">赛后报告 · {fixture.get("league_name", "World Cup 2026")}</div>
+            <div class="hero-match">
+                {team_cn(home.get("name"))} {score.get("home", "-")}:{score.get("away", "-")} {team_cn(away.get("name"))}
+            </div>
+            <div class="hero-meta">
+                <span class="hero-chip">{fixture.get("round") or "世界杯"}</span>
+                <span class="hero-chip">{kickoff.strftime("%Y-%m-%d %H:%M CST") if kickoff else "时间待确认"}</span>
+                <span class="hero-chip">{fixture.get("venue_name") or "球场待确认"}</span>
+                <span class="hero-chip">已结束</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    if not post_match:
+        st.info("这场比赛已标记为结束，但当前赛程缓存尚未包含进球、红黄牌和技术统计。不会显示投注建议。")
+        return
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("控球率", stats.get("possession", "-"))
+    col2.metric("射门", stats.get("shots", "-"))
+    col3.metric("角球", stats.get("corners", "-"))
+    col4.metric("赛前观点", post_match.get("prematch_review", "待复盘"))
+
+    left, right = st.columns(2)
+    with left:
+        st.markdown("**进球球员**")
+        if goals:
+            st.dataframe(goals, use_container_width=True, hide_index=True)
+        else:
+            st.info("暂无进球明细")
+    with right:
+        st.markdown("**红黄牌**")
+        if cards:
+            st.dataframe(cards, use_container_width=True, hide_index=True)
+        else:
+            st.info("暂无红黄牌明细")
+
+    with st.container(border=True):
+        st.markdown('<div class="section-title">赔率复盘</div>', unsafe_allow_html=True)
+        st.write(post_match.get("odds_review", "赛后赔率复盘待补充。"))
+
+
+def load_config():
+    path = Path(__file__).resolve().parent / "config.yaml"
+    with path.open("r", encoding="utf-8") as file:
+        return yaml.safe_load(file)
+
+
+config = load_config()
+
+st.set_page_config(page_title=config["app"]["title"], layout="wide")
+card_css()
+st.title("世界杯赛前分析平台")
+st.caption("用赔率、预测市场和规则引擎识别市场可能错在哪里。")
+
+if "page" not in st.session_state:
+    st.session_state.page = "schedule"
+if "selected_match_text" not in st.session_state:
+    st.session_state.selected_match_text = None
+if "selected_fixture" not in st.session_state:
+    st.session_state.selected_fixture = None
+
+if st.session_state.page == "post_match" and st.session_state.selected_fixture:
+    render_post_match_page(st.session_state.selected_fixture)
+elif st.session_state.page == "analysis" and st.session_state.selected_match_text:
+    render_analysis_page(st.session_state.selected_match_text)
+else:
+    render_schedule_page()
