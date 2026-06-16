@@ -301,6 +301,13 @@ def probability_bar(label, value, price=None):
     st.caption(percent(value or 0))
 
 
+def comparison_bar(label, value, max_value, color="#2563eb"):
+    ratio = 0 if not max_value else max(0, min(1, value / max_value))
+    st.write(f"**{label}**")
+    st.progress(ratio)
+    st.caption(f"约 €{value:.0f}M")
+
+
 def official_name(match_name, fallback):
     return team_cn(match_name or fallback)
 
@@ -501,15 +508,28 @@ def summarize_form(fixtures, team_id):
         "form": results,
         "gf": goals_for,
         "ga": goals_against,
+        "wins": results.count("W"),
+        "draws": results.count("D"),
+        "losses": results.count("L"),
+        "avg_gf": goals_for / len(results) if results else 0,
+        "avg_ga": goals_against / len(results) if results else 0,
     }
 
 
 def summarize_static_form(rows, count):
     selected = rows[:count]
+    form = [row["result"] for row in selected]
+    gf = sum(row["gf"] for row in selected)
+    ga = sum(row["ga"] for row in selected)
     return {
-        "form": [row["result"] for row in selected],
-        "gf": sum(row["gf"] for row in selected),
-        "ga": sum(row["ga"] for row in selected),
+        "form": form,
+        "gf": gf,
+        "ga": ga,
+        "wins": form.count("W"),
+        "draws": form.count("D"),
+        "losses": form.count("L"),
+        "avg_gf": gf / len(form) if form else 0,
+        "avg_ga": ga / len(form) if form else 0,
     }
 
 
@@ -557,13 +577,13 @@ def render_recent_form(api_football_data):
                         unsafe_allow_html=True,
                     )
                     w_col, gf_col, ga_col = st.columns(3)
-                    w_col.metric("最近5场", "".join(summary["last5"]["form"]))
-                    gf_col.metric("进球", summary["last5"]["gf"])
-                    ga_col.metric("失球", summary["last5"]["ga"])
+                    w_col.metric("最近5场", " ".join(summary["last5"]["form"]))
+                    gf_col.metric("进球 / 失球", f"{summary['last5']['gf']} / {summary['last5']['ga']}")
+                    ga_col.metric("胜平负", f"{summary['last5']['wins']}胜 {summary['last5']['draws']}平 {summary['last5']['losses']}负")
                     t1, t2, t3 = st.columns(3)
-                    t1.metric("最近10场", "".join(summary["last10"]["form"]))
-                    t2.metric("总进球", summary["last10"]["gf"])
-                    t3.metric("总失球", summary["last10"]["ga"])
+                    t1.metric("最近10场", " ".join(summary["last10"]["form"]))
+                    t2.metric("总进球 / 总失球", f"{summary['last10']['gf']} / {summary['last10']['ga']}")
+                    t3.metric("场均进失球", f"{summary['last10']['avg_gf']:.1f} / {summary['last10']['avg_ga']:.1f}")
                     st.caption(f"数据来源：{summary['source']}")
                 else:
                     st.info("近期战绩样本不足")
@@ -600,14 +620,17 @@ def render_handicap(match, odds):
         bookmakers = sorted({market.get("bookmaker") for market in selected if market.get("bookmaker")})
         best_home = max((market.get("home_odds") for market in selected if market.get("home_odds")), default=None)
         best_away = max((market.get("away_odds") for market in selected if market.get("away_odds")), default=None)
+        avg_home = sum(market.get("home_odds") for market in selected if market.get("home_odds")) / max(1, len([market for market in selected if market.get("home_odds")]))
+        avg_away = sum(market.get("away_odds") for market in selected if market.get("away_odds")) / max(1, len([market for market in selected if market.get("away_odds")]))
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         col1.metric("主盘口", format_team_line(match["home_cn"], main_line))
-        col2.metric("主队最佳赔率", fmt(best_home))
-        col3.metric("客队最佳赔率", fmt(best_away))
+        col2.metric("市场均值", f"{avg_home:.2f} / {avg_away:.2f}")
+        col3.metric("主队最佳赔率", fmt(best_home))
+        col4.metric("客队最佳赔率", fmt(best_away))
         st.caption("主要公司：" + (", ".join(bookmakers[:3]) if bookmakers else "-"))
 
-        with st.expander("查看全部让球盘口"):
+        with st.expander("展开全部赔率"):
             st.dataframe(markets, use_container_width=True, hide_index=True)
 
 
@@ -623,14 +646,19 @@ def render_totals(odds):
         bookmakers = sorted({market.get("bookmaker") for market in selected if market.get("bookmaker")})
         best_over = max((market.get("over_odds") for market in selected if market.get("over_odds")), default=None)
         best_under = max((market.get("under_odds") for market in selected if market.get("under_odds")), default=None)
+        over_values = [market.get("over_odds") for market in selected if market.get("over_odds")]
+        under_values = [market.get("under_odds") for market in selected if market.get("under_odds")]
+        avg_over = sum(over_values) / max(1, len(over_values))
+        avg_under = sum(under_values) / max(1, len(under_values))
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         col1.metric("主流总进球", f"{fmt(main_line)} 球")
-        col2.metric("大球最佳赔率", fmt(best_over))
-        col3.metric("小球最佳赔率", fmt(best_under))
+        col2.metric("市场均值", f"{avg_over:.2f} / {avg_under:.2f}")
+        col3.metric("大球最佳赔率", fmt(best_over))
+        col4.metric("小球最佳赔率", fmt(best_under))
         st.caption("主要公司：" + (", ".join(bookmakers[:3]) if bookmakers else "-"))
 
-        with st.expander("查看全部大小球盘口"):
+        with st.expander("展开全部赔率"):
             st.dataframe(markets, use_container_width=True, hide_index=True)
 
 
@@ -675,15 +703,18 @@ def render_polymarket(match, api_football_data, polymarket):
 def render_team_profiles(match, api_football_data):
     fixture = api_football_data.get("fixture") or {}
     teams = [
-        fixture.get("home_team", {}).get("name") or match["home_cn"],
-        fixture.get("away_team", {}).get("name") or match["away_cn"],
+        fixture.get("home_team") or {"name": match["home_cn"]},
+        fixture.get("away_team") or {"name": match["away_cn"]},
     ]
     with st.container(border=True):
         st.markdown('<div class="section-title">球队概览</div>', unsafe_allow_html=True)
         cols = st.columns(2)
-        for col, team_name in zip(cols, teams):
+        for col, team in zip(cols, teams):
+            team_name = team.get("name")
             profile = profile_for(team_name)
             with col:
+                if team.get("logo"):
+                    st.image(team["logo"], width=54)
                 st.markdown(f"**{team_cn(team_name)}**")
                 m1, m2, m3 = st.columns(3)
                 m1.metric("FIFA排名", profile["fifa_rank"])
@@ -693,6 +724,16 @@ def render_team_profiles(match, api_football_data):
                 m4.metric("平均年龄", profile["average_age"])
                 m5.metric("主教练", profile["coach"])
                 m6.metric("世界杯最佳", profile["best_world_cup"])
+                st.metric("世界杯参赛次数", profile["world_cup_appearances"])
+
+        profile_values = [profile_for(team.get("name")).get("team_value_number", 0) for team in teams]
+        max_value = max(profile_values) if profile_values else 0
+        st.divider()
+        st.markdown("**球队身价对比**")
+        value_cols = st.columns(2)
+        for col, team, value in zip(value_cols, teams, profile_values):
+            with col:
+                comparison_bar(team_cn(team.get("name")), value, max_value)
 
 
 def render_predicted_lineup_for_team(team_name):
@@ -727,9 +768,21 @@ def render_risk_notes(match, decision):
 
 def render_injuries_lineups(api_football_data):
     with st.container(border=True):
-        st.markdown('<div class="section-title">伤病与首发</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-title">预测首发与伤病</div>', unsafe_allow_html=True)
         injuries = api_football_data.get("injuries") or []
         lineups = api_football_data.get("lineups") or []
+        fixture = api_football_data.get("fixture") or {}
+        home_name = fixture.get("home_team", {}).get("name")
+        away_name = fixture.get("away_team", {}).get("name")
+        if home_name and away_name:
+            st.markdown("**市场预测首发**")
+            pred_left, pred_right = st.columns(2)
+            with pred_left:
+                render_predicted_lineup_for_team(home_name)
+            with pred_right:
+                render_predicted_lineup_for_team(away_name)
+
+        st.divider()
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("**伤病信息**")
@@ -738,23 +791,11 @@ def render_injuries_lineups(api_football_data):
             else:
                 st.info("暂无公开伤病信息")
         with col2:
-            st.markdown("**官方首发**")
-            if lineups:
-                st.dataframe(lineups, use_container_width=True, hide_index=True)
-            else:
-                st.info("官方首发尚未公布")
-
-        fixture = api_football_data.get("fixture") or {}
-        home_name = fixture.get("home_team", {}).get("name")
-        away_name = fixture.get("away_team", {}).get("name")
-        if home_name and away_name:
-            st.divider()
-            st.markdown("**市场预测首发**")
-            pred_left, pred_right = st.columns(2)
-            with pred_left:
-                render_predicted_lineup_for_team(home_name)
-            with pred_right:
-                render_predicted_lineup_for_team(away_name)
+            with st.expander("官方首发状态"):
+                if lineups:
+                    st.dataframe(lineups, use_container_width=True, hide_index=True)
+                else:
+                    st.info("官方首发尚未公布")
 
 
 def render_technical_notes(odds, api_football_data):

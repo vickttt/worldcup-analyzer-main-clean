@@ -12,6 +12,8 @@ TEAM_PROFILES = {
         "average_age": "约 28岁",
         "coach": "Lionel Scaloni",
         "best_world_cup": "冠军 1978 / 1986 / 2022",
+        "world_cup_appearances": "18次",
+        "team_value_number": 850,
         "colors": ("#75aadb", "#f6c343"),
     },
     "Algeria": {
@@ -21,6 +23,8 @@ TEAM_PROFILES = {
         "average_age": "约 28岁",
         "coach": "Vladimir Petkovic",
         "best_world_cup": "16强 2014",
+        "world_cup_appearances": "5次",
+        "team_value_number": 190,
         "colors": ("#006233", "#d21034"),
     },
 }
@@ -116,6 +120,8 @@ def profile_for(name):
         "average_age": "待接入",
         "coach": "待接入",
         "best_world_cup": "待接入",
+        "world_cup_appearances": "待接入",
+        "team_value_number": 0,
         "colors": ("#64748b", "#94a3b8"),
     })
 

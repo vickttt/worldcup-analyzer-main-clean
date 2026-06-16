@@ -487,12 +487,12 @@ def fetch_match_data(match):
             data["lineups_error"] = str(error)
 
         try:
-            data["home_recent"] = fetch_recent_fixtures(fixture_result["home_team"]["id"])
+            data["home_recent"] = fetch_recent_fixtures(fixture_result["home_team"]["id"], count=10)
         except (requests.RequestException, RuntimeError) as error:
             data["home_recent_error"] = str(error)
 
         try:
-            data["away_recent"] = fetch_recent_fixtures(fixture_result["away_team"]["id"])
+            data["away_recent"] = fetch_recent_fixtures(fixture_result["away_team"]["id"], count=10)
         except (requests.RequestException, RuntimeError) as error:
             data["away_recent_error"] = str(error)
 
@@ -508,11 +508,11 @@ def fetch_match_data(match):
             )
             data["error"] = str(error)
             try:
-                data["home_recent"] = fetch_recent_fixtures(known_fixture["home_team"]["id"])
+                data["home_recent"] = fetch_recent_fixtures(known_fixture["home_team"]["id"], count=10)
             except (requests.RequestException, RuntimeError) as recent_error:
                 data["home_recent_error"] = str(recent_error)
             try:
-                data["away_recent"] = fetch_recent_fixtures(known_fixture["away_team"]["id"])
+                data["away_recent"] = fetch_recent_fixtures(known_fixture["away_team"]["id"], count=10)
             except (requests.RequestException, RuntimeError) as recent_error:
                 data["away_recent_error"] = str(recent_error)
             return data
