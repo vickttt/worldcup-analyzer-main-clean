@@ -21,18 +21,8 @@ def get_mock_polymarket(match):
 
 def get_mock_news_and_injuries(match):
     return {
-        "home": [
-            "德国整体阵容较完整，主力框架稳定。",
-            "锋线存在轻微轮换可能，但核心中场预计首发。",
-        ],
-        "away": [
-            "库拉索防守端预计采取低位阵型。",
-            "暂无明确核心球员重伤信息，但整体阵容深度有限。",
-        ],
-        "risk_flags": [
-            "强弱差距明显时，强队可能提前轮换或降低比赛节奏。",
-            "如果德国迟迟无法进球，平局风险会上升。",
-        ],
-        "news_score_adjustment": -0.02,
+        "home": ["No news available"],
+        "away": ["No news available"],
+        "risk_flags": [],
+        "news_score_adjustment": 0,
     }
-

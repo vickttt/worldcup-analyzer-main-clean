@@ -2,6 +2,9 @@ import json
 import unicodedata
 
 import requests
+import streamlit as st
+
+from modules.cache_config import POLYMARKET_DATA_TTL
 
 
 GAMMA_API_BASE = "https://gamma-api.polymarket.com"
@@ -107,6 +110,7 @@ def empty_result(match, reason):
     }
 
 
+@st.cache_data(ttl=POLYMARKET_DATA_TTL, show_spinner=False)
 def fetch_polymarket(match, limit=100):
     try:
         response = requests.get(
@@ -163,4 +167,3 @@ def fetch_polymarket(match, limit=100):
         "event_url": f"https://polymarket.com/event/{slug}" if slug else None,
         "message": "已找到对应 Polymarket 市场。",
     }
-

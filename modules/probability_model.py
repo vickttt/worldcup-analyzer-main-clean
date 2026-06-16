@@ -4,6 +4,9 @@ def normalize_probabilities(probabilities):
 
 
 def odds_to_probabilities(odds):
+    if odds.get("implied_probabilities"):
+        return odds["implied_probabilities"]
+
     raw = {
         "home_win": 1 / odds["home_win"],
         "draw": 1 / odds["draw"],
@@ -13,10 +16,22 @@ def odds_to_probabilities(odds):
 
 
 def combine_probabilities(odds, polymarket, news, config):
-    odds_probs = odds_to_probabilities(odds)
+    has_odds = all(odds.get(key) is not None for key in ["home_win", "draw", "away_win"])
     has_polymarket = all(
         polymarket.get(key) is not None for key in ["home_win", "draw", "away_win"]
     )
+
+    if has_odds:
+        odds_probs = odds_to_probabilities(odds)
+    elif has_polymarket:
+        odds_probs = normalize_probabilities({
+            "home_win": polymarket["home_win"],
+            "draw": polymarket["draw"],
+            "away_win": polymarket["away_win"],
+        })
+    else:
+        odds_probs = {"home_win": 1 / 3, "draw": 1 / 3, "away_win": 1 / 3}
+
     if has_polymarket:
         market_probs = {
             "home_win": polymarket["home_win"],
@@ -27,7 +42,7 @@ def combine_probabilities(odds, polymarket, news, config):
     else:
         market_probs = odds_probs
 
-    odds_weight = config["model"]["odds_weight"]
+    odds_weight = config["model"]["odds_weight"] if has_odds else 0
     polymarket_weight = config["model"]["polymarket_weight"] if has_polymarket else 0
     news_weight = config["model"]["news_weight"]
     adjustment = news["news_score_adjustment"]
@@ -36,9 +51,10 @@ def combine_probabilities(odds, polymarket, news, config):
     for key in ["home_win", "draw", "away_win"]:
         combined[key] = odds_probs[key] * odds_weight + market_probs[key] * polymarket_weight
 
-    if not has_polymarket:
-        for key in ["home_win", "draw", "away_win"]:
-            combined[key] += odds_probs[key] * config["model"]["polymarket_weight"]
+    unused_market_weight = 1 - odds_weight - polymarket_weight - news_weight
+    fallback_probs = market_probs if has_polymarket else odds_probs
+    for key in ["home_win", "draw", "away_win"]:
+        combined[key] += fallback_probs[key] * unused_market_weight
 
     combined["home_win"] += adjustment * news_weight
     combined["draw"] -= adjustment * news_weight / 2
