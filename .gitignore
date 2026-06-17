@@ -4,6 +4,7 @@ __pycache__/
 *.pyc
 .DS_Store
 logs/
+data/cache/
 outputs/reports/
 .streamlit/secrets.toml
 .streamlit/secrets.toml.*

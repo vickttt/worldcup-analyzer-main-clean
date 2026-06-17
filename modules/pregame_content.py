@@ -1,3 +1,7 @@
+import base64
+from pathlib import Path
+
+
 TEAM_CN = {
     "Argentina": "阿根廷",
     "Algeria": "阿尔及利亚",
@@ -8,6 +12,51 @@ TEAM_CN = {
     "Germany": "德国",
     "Spain": "西班牙",
     "Brazil": "巴西",
+    "Japan": "日本",
+    "Australia": "澳大利亚",
+    "Belgium": "比利时",
+    "Bosnia and Herzegovina": "波黑",
+    "Canada": "加拿大",
+    "Cape Verde": "佛得角",
+    "Colombia": "哥伦比亚",
+    "Croatia": "克罗地亚",
+    "Curaçao": "库拉索",
+    "Curacao": "库拉索",
+    "Czech Republic": "捷克",
+    "Czechia": "捷克",
+    "Ecuador": "厄瓜多尔",
+    "Egypt": "埃及",
+    "Ghana": "加纳",
+    "Haiti": "海地",
+    "Iran": "伊朗",
+    "Iraq": "伊拉克",
+    "Ivory Coast": "科特迪瓦",
+    "Mexico": "墨西哥",
+    "Morocco": "摩洛哥",
+    "Netherlands": "荷兰",
+    "New Zealand": "新西兰",
+    "Norway": "挪威",
+    "Panama": "巴拿马",
+    "Paraguay": "巴拉圭",
+    "Portugal": "葡萄牙",
+    "Qatar": "卡塔尔",
+    "Saudi Arabia": "沙特阿拉伯",
+    "Scotland": "苏格兰",
+    "Senegal": "塞内加尔",
+    "South Africa": "南非",
+    "South Korea": "韩国",
+    "Sweden": "瑞典",
+    "Switzerland": "瑞士",
+    "Tunisia": "突尼斯",
+    "Turkey": "土耳其",
+    "Türkiye": "土耳其",
+    "Uruguay": "乌拉圭",
+    "Uzbekistan": "乌兹别克斯坦",
+    "Democratic Republic of the Congo": "刚果（金）",
+    "Democratic Republic of Congo": "刚果（金）",
+    "DR Congo": "刚果（金）",
+    "Congo DR": "刚果（金）",
+    "United States": "美国",
     "Draw": "平局",
 }
 
@@ -33,6 +82,39 @@ TEAM_PROFILES = {
         "world_cup_appearances": "5次",
         "team_value_number": 190,
         "colors": ("#006233", "#d21034"),
+    },
+    "Portugal": {
+        "fifa_rank": "6",
+        "elo": "欧洲顶级区间",
+        "team_value": "约 €10亿",
+        "average_age": "约 27岁",
+        "coach": "Roberto Martinez",
+        "best_world_cup": "季军 1966",
+        "world_cup_appearances": "9次",
+        "team_value_number": 1000,
+        "colors": ("#006600", "#ff0000"),
+    },
+    "Democratic Republic of the Congo": {
+        "fifa_rank": "60",
+        "elo": "非洲竞争区间",
+        "team_value": "约 €1.1亿",
+        "average_age": "约 27岁",
+        "coach": "Sebastien Desabre",
+        "best_world_cup": "小组赛 1974",
+        "world_cup_appearances": "1次",
+        "team_value_number": 110,
+        "colors": ("#007fff", "#f7d618"),
+    },
+    "DR Congo": {
+        "fifa_rank": "60",
+        "elo": "非洲竞争区间",
+        "team_value": "约 €1.1亿",
+        "average_age": "约 27岁",
+        "coach": "Sebastien Desabre",
+        "best_world_cup": "小组赛 1974",
+        "world_cup_appearances": "1次",
+        "team_value_number": 110,
+        "colors": ("#007fff", "#f7d618"),
     },
 }
 
@@ -82,11 +164,37 @@ STATIC_RECENT_FORM = {
     ],
 }
 
-BANNER_IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/4/4d/Arrowhead_Stadium_exterior.jpg"
+def banner_image_url():
+    path = Path(__file__).resolve().parents[1] / "assets" / "worldcup_usa_banner.png"
+    if path.exists():
+        encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+        return f"data:image/png;base64,{encoded}"
+    return "https://upload.wikimedia.org/wikipedia/commons/4/4d/Arrowhead_Stadium_exterior.jpg"
+
+
+BANNER_IMAGE_URL = banner_image_url()
+
+
+def group_letter_cn(letter):
+    return f"{letter}组"
 
 
 def team_cn(name):
-    return TEAM_CN.get(name, name)
+    text = str(name or "")
+    if text in TEAM_CN:
+        return TEAM_CN[text]
+    if text.startswith("Winner Group "):
+        return f"{group_letter_cn(text.replace('Winner Group ', ''))}第1名"
+    if text.startswith("Runner-up Group "):
+        return f"{group_letter_cn(text.replace('Runner-up Group ', ''))}第2名"
+    if text.startswith("3rd Group "):
+        groups = text.replace("3rd Group ", "").replace("/", " / ")
+        return f"{groups}组第三名"
+    if text.startswith("Winner Match "):
+        return f"第{text.replace('Winner Match ', '')}场胜者"
+    if text.startswith("Loser Match "):
+        return f"第{text.replace('Loser Match ', '')}场负者"
+    return text
 
 
 def bet_cn(value):
@@ -103,6 +211,8 @@ def bet_cn(value):
         "Under": "小于",
     }
     for old, new in replacements.items():
+        text = text.replace(old, new)
+    for old, new in sorted(TEAM_CN.items(), key=lambda item: len(item[0]), reverse=True):
         text = text.replace(old, new)
     return text
 
@@ -152,17 +262,14 @@ def disagreement_label(score):
 def build_storylines(match, betting_opinion, decision):
     recommendation = decision.get("final_recommendation", {}).get("bet", "观察为主")
     disagreement = decision.get("market_disagreement", {})
-    contrarian = decision.get("contrarian", {})
     upset = decision.get("upset_index", {})
+    home = team_cn(match["home_cn"])
+    away = team_cn(match["away_cn"])
 
     return [
-        "阿根廷作为卫冕冠军与本届世界杯热门球队，当前获得主流赔率市场和预测市场的共同支持。",
-        "阿尔及利亚代表非洲足球力量，身体对抗、转换速度和受让盘保护是本场的主要看点。",
-        f"目前最大市场分歧出现在{team_cn(disagreement.get('direction'))}方向，差异约为 {disagreement.get('difference', 0) * 100:.1f}%。",
-        f"亚洲让球盘当前更值得关注：{bet_cn(betting_opinion.get('asian_handicap'))}。",
-        f"逆向分数为 {contrarian.get('score', 0)} / 100，说明热门方向可能存在一定拥挤交易。",
-        f"综合模型当前更倾向的投注选择是：{bet_cn(recommendation)}。",
-        "本场比赛是否继续出现热门球队赢球但输盘的走势，值得重点观察。",
+        f"{home}是市场更支持的一方，核心问题不是是否被看好，而是盘口是否支持其打穿让球。",
+        f"当前各方对{team_cn(disagreement.get('direction'))}的看法差异不大，说明主流赔率与预测市场整体态度较一致。",
+        f"爆冷风险为 {upset.get('score', 0)} / 100，当前组合更适合围绕{bet_cn(recommendation)}展开，同时关注平局和弱势方不败路径。",
     ]
 
 
@@ -173,7 +280,7 @@ def build_risk_notes(match, decision):
 
     notes = [
         "本届世界杯热门球队并非每场都能顺利打穿盘口，强弱差距不等于投注价值。",
-        f"当前市场对{team_cn(match['home_cn'])}形成高度一致预期，需警惕热门球队被高估。",
+        f"当前需要警惕{team_cn(match['home_cn'])}或{team_cn(match['away_cn'])}任一方向被市场过度拥挤。",
         f"市场分歧为 {disagreement.get('score', 0)} / 100，属于{disagreement_label(disagreement.get('score', 0)).replace('🟢 ', '').replace('🟡 ', '').replace('🔴 ', '')}。",
         "当前未发现明显价值机会，临场盘口变化比赛前静态价格更重要。",
         f"逆向分数为 {contrarian.get('score', 0)} / 100，分数越高，越说明热门方向可能过热。",

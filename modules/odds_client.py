@@ -7,10 +7,16 @@ from pathlib import Path
 import requests
 import streamlit as st
 
-from modules.cache_config import MATCH_DATA_TTL, TEAM_DATA_TTL
+from modules.cache_config import MATCH_DATA_TTL, ODDS_DATA_TTL, TEAM_DATA_TTL
 
 
 API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
+EXACT_SCORE_BET_ID = 10
+PREFERRED_CORRECT_SCORE_BOOKMAKERS = {
+    4: "Pinnacle",
+    8: "Bet365",
+    13: "188Bet",
+}
 
 
 def normalize_text(value):
@@ -303,6 +309,66 @@ def fetch_odds_for_fixture(fixture):
     }
 
 
+def empty_correct_score_result(reason):
+    return {
+        "found": False,
+        "source": "API-Football / Exact Score",
+        "bookmakers": [],
+        "rows": [],
+        "message": reason,
+    }
+
+
+@st.cache_data(ttl=ODDS_DATA_TTL, show_spinner=False)
+def fetch_correct_score_odds_for_fixture(fixture_id):
+    if not fixture_id:
+        return empty_correct_score_result("缺少 API-Football fixture_id，无法查询真实波胆盘口。")
+
+    try:
+        response = request_json("/odds", {"fixture": fixture_id, "bet": EXACT_SCORE_BET_ID})
+    except (requests.RequestException, RuntimeError) as error:
+        return empty_correct_score_result(f"API-Football Exact Score 暂不可用：{error}")
+
+    rows = []
+    bookmaker_names = []
+    for item in response:
+        for bookmaker in item.get("bookmakers", []):
+            bookmaker_id = bookmaker.get("id")
+            bookmaker_name = bookmaker.get("name") or PREFERRED_CORRECT_SCORE_BOOKMAKERS.get(bookmaker_id)
+            if bookmaker_name:
+                bookmaker_names.append(bookmaker_name)
+            for bet in bookmaker.get("bets", []):
+                if bet.get("id") != EXACT_SCORE_BET_ID:
+                    continue
+                for value in bet.get("values", []):
+                    odd = parse_odd(value.get("odd"))
+                    score = value.get("value")
+                    if odd and score:
+                        rows.append({
+                            "bookmaker_id": bookmaker_id,
+                            "bookmaker": bookmaker_name,
+                            "score": score,
+                            "odd": odd,
+                        })
+
+    if not rows:
+        return empty_correct_score_result("API-Football 没有返回该比赛的真实波胆盘口。")
+
+    preferred_ids = set(PREFERRED_CORRECT_SCORE_BOOKMAKERS)
+    preferred_rows = [row for row in rows if row.get("bookmaker_id") in preferred_ids]
+    display_rows = preferred_rows or rows
+    display_rows = sorted(display_rows, key=lambda row: (row["score"], -row["odd"]))
+
+    return {
+        "found": True,
+        "source": "API-Football / Exact Score",
+        "bookmakers": sorted(set(bookmaker_names)),
+        "rows": display_rows,
+        "all_rows": rows,
+        "message": "已获取 API-Football 真实 Exact Score 波胆盘口。",
+    }
+
+
 def fetch_odds(match):
     try:
         fixture_result = find_fixture(match)
@@ -421,6 +487,7 @@ def fetch_match_diagnostics(match):
     result = {
         "fixture": None,
         "odds": None,
+        "correct_score": None,
         "injuries": None,
         "lineups": None,
         "home_recent": None,
@@ -437,6 +504,7 @@ def fetch_match_diagnostics(match):
             return result
 
         result["odds"] = fetch_odds(match)
+        result["correct_score"] = fetch_correct_score_odds_for_fixture(fixture["id"])
         result["injuries"] = fetch_injuries_for_fixture(fixture["id"])
         result["lineups"] = fetch_lineups_for_fixture(fixture["id"])
         result["home_recent"] = fetch_recent_fixtures(fixture_result["home_team"]["id"])
@@ -453,6 +521,7 @@ def fetch_match_data(match):
         "fixture_result": None,
         "fixture": None,
         "odds": None,
+        "correct_score": None,
         "injuries": [],
         "lineups": [],
         "home_recent": [],
@@ -475,6 +544,8 @@ def fetch_match_data(match):
             "API-Football 免费版无法获取 2026 World Cup odds：Free plans do not have access to this season。",
             fixture,
         )
+
+        data["correct_score"] = fetch_correct_score_odds_for_fixture(fixture["id"])
 
         try:
             data["injuries"] = fetch_injuries_for_fixture(fixture["id"])
@@ -506,6 +577,7 @@ def fetch_match_data(match):
                 "API-Football 免费版当前无法读取 2026 World Cup odds；赔率使用 The Odds API。",
                 known_fixture["fixture"],
             )
+            data["correct_score"] = empty_correct_score_result("缺少 API-Football fixture_id，无法查询真实波胆盘口。")
             data["error"] = str(error)
             try:
                 data["home_recent"] = fetch_recent_fixtures(known_fixture["home_team"]["id"], count=10)

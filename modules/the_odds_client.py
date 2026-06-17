@@ -11,13 +11,44 @@ from modules.cache_config import ODDS_DATA_TTL
 
 
 THE_ODDS_API_BASE = "https://api.the-odds-api.com/v4"
-WORLD_CUP_SPORT_KEYS = ["soccer_fifa_world_cup"]
+WORLD_CUP_SPORT_KEYS = [
+    "soccer_fifa_world_cup",
+    "soccer_international_friendlies",
+]
+
+TEAM_ODDS_ALIASES = {
+    "democratic republic of the congo": ["democratic republic of the congo", "democratic republic of congo", "dr congo", "congo dr", "congo kinshasa"],
+    "democratic republic of congo": ["democratic republic of congo", "democratic republic of the congo", "dr congo", "congo dr"],
+    "congo dr": ["congo dr", "dr congo", "democratic republic of the congo", "democratic republic of congo"],
+    "dr congo": ["dr congo", "congo dr", "democratic republic of the congo", "democratic republic of congo"],
+    "czech republic": ["czech republic", "czechia"],
+    "czechia": ["czechia", "czech republic"],
+    "curacao": ["curacao", "curaçao"],
+    "curaçao": ["curaçao", "curacao"],
+    "ivory coast": ["ivory coast", "cote d ivoire", "côte d ivoire"],
+    "south korea": ["south korea", "korea republic", "republic of korea"],
+    "united states": ["united states", "usa", "usmnt"],
+    "bosnia and herzegovina": ["bosnia and herzegovina", "bosnia-herzegovina", "bosnia"],
+}
 
 
 def normalize_text(value):
     normalized = unicodedata.normalize("NFKD", value or "")
     ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
     return " ".join(ascii_text.lower().replace(".", " ").replace("-", " ").split())
+
+
+def name_candidates(value):
+    normalized = normalize_text(value)
+    candidates = {normalized}
+    for alias in TEAM_ODDS_ALIASES.get(normalized, []):
+        candidates.add(normalize_text(alias))
+    return {candidate for candidate in candidates if candidate}
+
+
+def candidate_matches(candidates, text):
+    normalized = normalize_text(text)
+    return any(candidate == normalized or candidate in normalized or normalized in candidate for candidate in candidates)
 
 
 def load_the_odds_api_key():
@@ -81,21 +112,21 @@ def parse_price(value):
 
 
 def event_matches(event, match):
-    home = normalize_text(match["home_en"])
-    away = normalize_text(match["away_en"])
+    home_candidates = name_candidates(match["home_en"])
+    away_candidates = name_candidates(match["away_en"])
     event_home = normalize_text(event.get("home_team", ""))
     event_away = normalize_text(event.get("away_team", ""))
     title = normalize_text(" ".join([event_home, event_away]))
 
-    direct = home in event_home and away in event_away
-    reversed_match = home in event_away and away in event_home
-    fuzzy = home in title and away in title
+    direct = candidate_matches(home_candidates, event_home) and candidate_matches(away_candidates, event_away)
+    reversed_match = candidate_matches(home_candidates, event_away) and candidate_matches(away_candidates, event_home)
+    fuzzy = candidate_matches(home_candidates, title) and candidate_matches(away_candidates, title)
     return direct or reversed_match or fuzzy
 
 
 def extract_h2h_prices(event, match):
-    home = normalize_text(match["home_en"])
-    away = normalize_text(match["away_en"])
+    home_candidates = name_candidates(match["home_en"])
+    away_candidates = name_candidates(match["away_en"])
 
     for bookmaker in event.get("bookmakers", []):
         for market in bookmaker.get("markets", []):
@@ -110,9 +141,9 @@ def extract_h2h_prices(event, match):
                     continue
                 if name == "draw":
                     prices["draw"] = price
-                elif home in name:
+                elif candidate_matches(home_candidates, name):
                     prices["home_win"] = price
-                elif away in name:
+                elif candidate_matches(away_candidates, name):
                     prices["away_win"] = price
 
             if all(prices.get(key) for key in ["home_win", "draw", "away_win"]):
@@ -122,8 +153,8 @@ def extract_h2h_prices(event, match):
 
 
 def extract_spreads(event, match):
-    home = normalize_text(match["home_en"])
-    away = normalize_text(match["away_en"])
+    home_candidates = name_candidates(match["home_en"])
+    away_candidates = name_candidates(match["away_en"])
     markets = []
 
     for bookmaker in event.get("bookmakers", []):
@@ -139,9 +170,9 @@ def extract_spreads(event, match):
                 point = outcome.get("point")
                 if price is None or point is None:
                     continue
-                if home in name:
+                if candidate_matches(home_candidates, name):
                     home_row = {"line": point, "odds": price}
-                elif away in name:
+                elif candidate_matches(away_candidates, name):
                     away_row = {"line": point, "odds": price}
 
             if home_row and away_row:
@@ -202,7 +233,7 @@ def fetch_odds(match):
                 f"{THE_ODDS_API_BASE}/sports/{sport_key}/odds",
                 params={
                     "apiKey": api_key,
-                    "regions": "us,uk,eu",
+                    "regions": "eu",
                     "markets": "h2h,spreads,totals",
                     "oddsFormat": "decimal",
                     "dateFormat": "iso",
@@ -250,4 +281,4 @@ def fetch_odds(match):
     if last_error:
         return empty_result(f"无法连接 The Odds API 或读取赔率：{redact_secret(last_error)}")
 
-    return empty_result("The Odds API 未找到对应世界杯 h2h 赔率市场。")
+    return empty_result("未找到盘口数据：The Odds API 当前没有返回该比赛的胜平负、让球或大小球市场。")

@@ -1,0 +1,205 @@
+{
+  "fixtures": [
+    {
+      "fixture_id": "local-arg-alg-2026-06-17",
+      "home_team": {
+        "id": 26,
+        "name": "Argentina",
+        "logo": "https://media.api-sports.io/football/teams/26.png"
+      },
+      "away_team": {
+        "id": 1532,
+        "name": "Algeria",
+        "logo": "https://media.api-sports.io/football/teams/1532.png"
+      },
+      "kickoff_utc": "2026-06-17T01:00:00+00:00",
+      "league_name": "World Cup 2026",
+      "round": "Group Stage - 1",
+      "group": "A组",
+      "venue_name": "Arrowhead Stadium",
+      "venue_city": "Kansas City",
+      "status": "FT",
+      "status_text": "已结束",
+      "score": {
+        "home": 2,
+        "away": 0
+      },
+      "market_heat": 88,
+      "post_match": {
+        "stats": {
+          "possession": "61% / 39%",
+          "shots": "15 / 7",
+          "corners": "6 / 3"
+        },
+        "goals": [
+          {"时间": "34'", "球队": "阿根廷", "球员": "Lautaro Martinez"},
+          {"时间": "72'", "球队": "阿根廷", "球员": "Messi"}
+        ],
+        "cards": [
+          {"时间": "58'", "球队": "阿尔及利亚", "球员": "Bennacer", "类型": "黄牌"}
+        ],
+        "prematch_review": "赛前主胜方向正确",
+        "odds_review": "赛前市场明显支持阿根廷，赛果与主流胜平负方向一致。"
+      },
+      "source": "Local World Cup schedule"
+    },
+    {
+      "fixture_id": "local-ger-usa-2026-06-17",
+      "home_team": {
+        "id": null,
+        "name": "Germany",
+        "logo": null
+      },
+      "away_team": {
+        "id": null,
+        "name": "United States",
+        "logo": null
+      },
+      "kickoff_utc": "2026-06-17T04:00:00+00:00",
+      "league_name": "World Cup 2026",
+      "round": "Group Stage - 1",
+      "group": "B组",
+      "venue_name": "MetLife Stadium",
+      "venue_city": "New York / New Jersey",
+      "status": "FT",
+      "status_text": "已结束",
+      "score": {
+        "home": 1,
+        "away": 1
+      },
+      "market_heat": 84,
+      "post_match": {
+        "stats": {
+          "possession": "57% / 43%",
+          "shots": "13 / 10",
+          "corners": "5 / 4"
+        },
+        "goals": [
+          {"时间": "41'", "球队": "德国", "球员": "Musiala"},
+          {"时间": "67'", "球队": "美国", "球员": "Pulisic"}
+        ],
+        "cards": [
+          {"时间": "76'", "球队": "德国", "球员": "Kimmich", "类型": "黄牌"}
+        ],
+        "prematch_review": "热门方向未能打出",
+        "odds_review": "赛前市场偏向德国，平局结果提示热门方向存在拥挤风险。"
+      },
+      "source": "Local World Cup schedule"
+    },
+    {
+      "fixture_id": "local-bra-jpn-2026-06-17",
+      "home_team": {
+        "id": null,
+        "name": "Brazil",
+        "logo": null
+      },
+      "away_team": {
+        "id": null,
+        "name": "Japan",
+        "logo": null
+      },
+      "kickoff_utc": "2026-06-17T12:00:00+00:00",
+      "league_name": "World Cup 2026",
+      "round": "Group Stage - 1",
+      "group": "C组",
+      "venue_name": "SoFi Stadium",
+      "venue_city": "Los Angeles",
+      "status": "NS",
+      "status_text": "未开始",
+      "score": null,
+      "market_heat": 92,
+      "source": "Local World Cup schedule"
+    },
+    {
+      "fixture_id": "local-fra-eng-2026-06-18",
+      "home_team": {
+        "id": null,
+        "name": "France",
+        "logo": null
+      },
+      "away_team": {
+        "id": null,
+        "name": "England",
+        "logo": null
+      },
+      "kickoff_utc": "2026-06-18T01:00:00+00:00",
+      "league_name": "World Cup 2026",
+      "round": "Group Stage - 1",
+      "group": "D组",
+      "venue_name": "AT&T Stadium",
+      "venue_city": "Dallas",
+      "status": "NS",
+      "status_text": "未开始",
+      "score": null,
+      "market_heat": 95,
+      "source": "Local World Cup schedule"
+    },
+    {
+      "fixture_id": "local-ger-esp-2026-06-19",
+      "home_team": {
+        "id": null,
+        "name": "Germany",
+        "logo": null
+      },
+      "away_team": {
+        "id": null,
+        "name": "Spain",
+        "logo": null
+      },
+      "kickoff_utc": "2026-06-19T01:00:00+00:00",
+      "league_name": "World Cup 2026",
+      "round": "Group Stage - 1",
+      "group": "E组",
+      "venue_name": "BC Place",
+      "venue_city": "Vancouver",
+      "status": "NS",
+      "status_text": "未开始",
+      "score": null,
+      "market_heat": 91,
+      "source": "Local World Cup schedule"
+    },
+    {
+      "fixture_id": "local-arg-bra-2026-06-21",
+      "home_team": {
+        "id": 26,
+        "name": "Argentina",
+        "logo": "https://media.api-sports.io/football/teams/26.png"
+      },
+      "away_team": {
+        "id": null,
+        "name": "Brazil",
+        "logo": null
+      },
+      "kickoff_utc": "2026-06-21T01:00:00+00:00",
+      "league_name": "World Cup 2026",
+      "round": "Group Stage - 2",
+      "group": "A组",
+      "venue_name": "Hard Rock Stadium",
+      "venue_city": "Miami",
+      "status": "NS",
+      "status_text": "未开始",
+      "score": null,
+      "market_heat": 98,
+      "source": "Local World Cup schedule"
+    }
+  ],
+  "standings": {
+    "A组": [
+      {"team": "Argentina", "played": 1, "wins": 1, "draws": 0, "losses": 0, "gd": 2, "points": 3},
+      {"team": "Brazil", "played": 0, "wins": 0, "draws": 0, "losses": 0, "gd": 0, "points": 0},
+      {"team": "Algeria", "played": 1, "wins": 0, "draws": 0, "losses": 1, "gd": -2, "points": 0}
+    ],
+    "B组": [
+      {"team": "Germany", "played": 1, "wins": 0, "draws": 1, "losses": 0, "gd": 0, "points": 1},
+      {"team": "United States", "played": 1, "wins": 0, "draws": 1, "losses": 0, "gd": 0, "points": 1}
+    ],
+    "C组": [
+      {"team": "Brazil", "played": 0, "wins": 0, "draws": 0, "losses": 0, "gd": 0, "points": 0},
+      {"team": "Japan", "played": 0, "wins": 0, "draws": 0, "losses": 0, "gd": 0, "points": 0}
+    ],
+    "D组": [
+      {"team": "France", "played": 0, "wins": 0, "draws": 0, "losses": 0, "gd": 0, "points": 0},
+      {"team": "England", "played": 0, "wins": 0, "draws": 0, "losses": 0, "gd": 0, "points": 0}
+    ]
+  }
+}
