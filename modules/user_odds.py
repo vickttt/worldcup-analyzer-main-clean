@@ -282,15 +282,25 @@ def build_market_candidates(match, odds, api_football_data):
                     "source": "The Odds API 大小球均值",
                 })
 
-    correct = correct_score_summary(((api_football_data or {}).get("correct_score") or {}).get("rows") or [], limit=3)
-    for idx, score in enumerate(correct.get("hot") or [], start=1):
+    correct = correct_score_summary(((api_football_data or {}).get("correct_score") or {}).get("rows") or [], limit=200)
+    correct_scores = []
+    for score in correct.get("all") or correct.get("hot") or []:
+        parsed_score = parse_score(score.get("score"))
+        if not parsed_score:
+            continue
+        home_goals, away_goals = parsed_score
+        if home_goals > 5 or away_goals > 5:
+            continue
+        correct_scores.append(score)
+
+    for idx, score in enumerate(correct_scores, start=1):
         candidates.append({
             "slot": f"波胆{idx}",
             "type": "correct_score",
             "selection": score.get("score"),
             "name": f"波胆 {score.get('score')}",
             "standard_odds": score.get("avg_odds"),
-            "base_score": 54 - idx * 4,
+            "base_score": max(34, 58 - idx),
             "source": "API-Football 波胆均值",
         })
 
@@ -613,8 +623,19 @@ def build_recommendation_slots(match, odds, api_football_data, actual_odds, dist
     for rank, item in enumerate(ev_sorted, start=1):
         item["ev_rank"] = rank
 
-    slots = candidates[:5]
-    while len(slots) < 5:
+    core_candidates = [item for item in candidates if item.get("type") != "correct_score"]
+    correct_candidates = [item for item in candidates if item.get("type") == "correct_score"]
+    correct_candidates.sort(
+        key=lambda item: (
+            item.get("recommended", False),
+            item.get("path_match_score", 0),
+            item.get("coverage_rate", 0),
+            item.get("score", 0),
+        ),
+        reverse=True,
+    )
+    slots = core_candidates[:8] + correct_candidates[:24]
+    while len(slots) < min(5, max(5, len(slots))):
         slots.append({
             "slot": f"空位{len(slots) + 1}",
             "type": "empty",

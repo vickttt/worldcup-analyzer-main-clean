@@ -102,13 +102,28 @@ Curaçao:
   aliases: [Curacao, Curaçao]
 Bosnia and Herzegovina:
   canonical: Bosnia and Herzegovina
-  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia]
+  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia-Herzegovina, Bosnia Herzegovina, Bosnia]
 Bosnia & Herzegovina:
   canonical: Bosnia and Herzegovina
-  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia]
+  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia-Herzegovina, Bosnia Herzegovina, Bosnia]
+Bosnia-Herzegovina:
+  canonical: Bosnia and Herzegovina
+  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia-Herzegovina, Bosnia Herzegovina, Bosnia]
+Bosnia Herzegovina:
+  canonical: Bosnia and Herzegovina
+  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia-Herzegovina, Bosnia Herzegovina, Bosnia]
 Bosnia:
   canonical: Bosnia and Herzegovina
-  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia]
+  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia-Herzegovina, Bosnia Herzegovina, Bosnia]
 Iran:
   canonical: Iran
   aliases: [Iran, IR Iran]
+Australia:
+  canonical: Australia
+  aliases: [Australia]
+Scotland:
+  canonical: Scotland
+  aliases: [Scotland]
+Morocco:
+  canonical: Morocco
+  aliases: [Morocco]

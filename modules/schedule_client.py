@@ -93,7 +93,9 @@ def cache_ttl_for_payload(payload):
     return FINISHED_CACHE_TTL
 
 
-def fresh_cached_payload():
+def fresh_cached_payload(force_refresh=False):
+    if force_refresh:
+        return None
     payload = read_local_cache()
     if not payload:
         return None
@@ -484,9 +486,9 @@ def fetch_espn_standings():
 
 
 @st.cache_data(ttl=LIVE_CACHE_TTL, show_spinner=False)
-def fetch_world_cup_schedule():
+def fetch_world_cup_schedule(force_refresh=False):
     updated_at = datetime.now(LOCAL_TZ).strftime("%Y-%m-%d %H:%M CST")
-    cached = fresh_cached_payload()
+    cached = fresh_cached_payload(force_refresh=force_refresh)
     if cached:
         return {
             **cached,

@@ -33,8 +33,9 @@ TEAM_ODDS_ALIASES = {
     "ivory coast": ["ivory coast", "cote d ivoire", "côte d ivoire"],
     "south korea": ["south korea", "korea republic", "republic of korea"],
     "united states": ["united states", "usa", "usmnt"],
-    "bosnia and herzegovina": ["bosnia and herzegovina", "bosnia & herzegovina", "bosnia-herzegovina", "bosnia"],
-    "bosnia": ["bosnia", "bosnia and herzegovina", "bosnia & herzegovina", "bosnia-herzegovina"],
+    "bosnia and herzegovina": ["bosnia and herzegovina", "bosnia & herzegovina", "bosnia herzegovina", "bosnia-herzegovina", "bosnia"],
+    "bosnia herzegovina": ["bosnia herzegovina", "bosnia and herzegovina", "bosnia & herzegovina", "bosnia-herzegovina", "bosnia"],
+    "bosnia": ["bosnia", "bosnia and herzegovina", "bosnia & herzegovina", "bosnia herzegovina", "bosnia-herzegovina"],
     "iran": ["iran", "ir iran"],
     "ir iran": ["ir iran", "iran"],
 }
@@ -371,7 +372,7 @@ def fetch_daily_events(sport_key, date_key):
 
 
 @st.cache_data(ttl=ODDS_DATA_TTL, show_spinner=False)
-def fetch_odds(match, date_key=None, data_flow_version="odds_page_v2"):
+def fetch_odds(match, date_key=None, data_flow_version="odds_page_v4_24h_cache"):
     date_key = date_key or now_local().strftime("%Y-%m-%d")
     last_error = None
     for sport_key in WORLD_CUP_SPORT_KEYS:

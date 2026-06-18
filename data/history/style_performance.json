@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "matches": {
+    "2026_06_18_Switzerland_Bosnia_and_Herzegovina": "2026-06-19T06:09:08.467259+08:00"
+  },
+  "styles": {
+    "未分类": {
+      "matches": 11,
+      "stake": 13200,
+      "profit": -2237,
+      "wins": 5,
+      "max_drawdown": -1200,
+      "roi": -0.16946969696969696,
+      "win_rate": 0.45454545454545453
+    }
+  }
+}
