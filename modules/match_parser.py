@@ -1,17 +1,9 @@
 import re
-from pathlib import Path
 
-import yaml
-
-
-def load_team_aliases():
-    path = Path(__file__).resolve().parents[1] / "data" / "team_aliases.yaml"
-    with path.open("r", encoding="utf-8") as file:
-        return yaml.safe_load(file)
+from modules.team_resolver import canonical_name
 
 
 def parse_match(match_text):
-    aliases = load_team_aliases()
     cleaned = match_text.strip()
     parts = re.split(r"\s+(?:vs|VS|v|V|对|vs\.)\s+|\\s*-\s*|\\s+VS\\s+", cleaned)
 
@@ -27,8 +19,7 @@ def parse_match(match_text):
     return {
         "home_cn": home_cn,
         "away_cn": away_cn,
-        "home_en": aliases.get(home_cn, home_cn),
-        "away_en": aliases.get(away_cn, away_cn),
+        "home_en": canonical_name(home_cn),
+        "away_en": canonical_name(away_cn),
         "display_name": f"{home_cn} vs {away_cn}",
     }
-

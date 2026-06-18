@@ -1,28 +1,31 @@
+import json
 import os
 import tomllib
-import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
 import streamlit as st
 
-from modules.cache_config import MATCH_DATA_TTL, ODDS_DATA_TTL, TEAM_DATA_TTL
+from modules.cache_config import (
+    API_FOOTBALL_MARKET_DATA_TTL,
+    CORRECT_SCORE_DATA_TTL,
+    MATCH_DATA_TTL,
+    ODDS_DATA_TTL,
+    TEAM_DATA_TTL,
+)
+from modules.team_resolver import normalize_text, resolve_team as search_team
 
 
 API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
 EXACT_SCORE_BET_ID = 10
+ASIAN_HANDICAP_BET_ID = 4
 PREFERRED_CORRECT_SCORE_BOOKMAKERS = {
     4: "Pinnacle",
     8: "Bet365",
     13: "188Bet",
 }
-
-
-def normalize_text(value):
-    normalized = unicodedata.normalize("NFKD", value or "")
-    ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
-    return " ".join(ascii_text.lower().replace(".", " ").replace("-", " ").split())
+FIXTURE_CACHE_TTL = 24 * 60 * 60
 
 
 def load_api_key():
@@ -103,29 +106,134 @@ def request_json(path, params=None):
     return data.get("response", [])
 
 
-@st.cache_data(ttl=TEAM_DATA_TTL, show_spinner=False)
-def search_team(team_name):
-    teams = request_json("/teams", {"search": team_name})
-    if not teams:
+def cache_dir():
+    path = Path(__file__).resolve().parents[1] / "data" / "cache"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def fixture_cache_path():
+    return cache_dir() / "fixture_cache.json"
+
+
+def api_football_market_cache_path(fixture_id, bet_id):
+    return cache_dir() / f"api_football_market_{fixture_id}_{bet_id}.json"
+
+
+def read_fixture_cache_payload():
+    path = fixture_cache_path()
+    if not path.exists():
+        return {}
+    with path.open("r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+def write_fixture_cache_payload(payload):
+    with fixture_cache_path().open("w", encoding="utf-8") as file:
+        json.dump(payload, file, ensure_ascii=False, indent=2)
+
+
+def read_api_football_market_cache(fixture_id, bet_id, ttl):
+    path = api_football_market_cache_path(fixture_id, bet_id)
+    if not path.exists():
+        return None
+    with path.open("r", encoding="utf-8") as file:
+        payload = json.load(file)
+    fetched_at = parse_cache_datetime(payload.get("fetched_at"))
+    if not fetched_at:
+        return None
+    age = (datetime.now() - fetched_at).total_seconds()
+    if age <= ttl:
+        result = payload.get("result")
+        if isinstance(result, dict):
+            result["cache"] = {
+                "status": "file_cache",
+                "age_hours": round(age / 3600, 2),
+                "path": path.name,
+            }
+            return result
+    return None
+
+
+def read_stale_api_football_market_cache(fixture_id, bet_id):
+    path = api_football_market_cache_path(fixture_id, bet_id)
+    if not path.exists():
+        return None
+    with path.open("r", encoding="utf-8") as file:
+        payload = json.load(file)
+    result = payload.get("result")
+    if isinstance(result, dict):
+        result["cache"] = {
+            "status": "stale_file_cache",
+            "path": path.name,
+        }
+        return result
+    return None
+
+
+def write_api_football_market_cache(fixture_id, bet_id, result):
+    if not result or not result.get("found"):
+        return
+    payload = {
+        "fixture_id": fixture_id,
+        "bet_id": bet_id,
+        "fetched_at": datetime.now().isoformat(),
+        "result": result,
+    }
+    with api_football_market_cache_path(fixture_id, bet_id).open("w", encoding="utf-8") as file:
+        json.dump(payload, file, ensure_ascii=False, indent=2)
+
+
+def fixture_cache_key(home_team_id, away_team_id):
+    return "-".join(str(team_id) for team_id in sorted([home_team_id, away_team_id]))
+
+
+def parse_cache_datetime(value):
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
         return None
 
-    target = normalize_text(team_name)
-    national_teams = [item for item in teams if item.get("team", {}).get("national")]
-    candidates = national_teams or teams
 
-    for item in candidates:
-        team = item.get("team", {})
-        name = normalize_text(team.get("name", ""))
-        code = normalize_text(team.get("code", ""))
-        if target == name or target == code:
-            return team
+def read_cached_fixture(home_team, away_team):
+    cache = read_fixture_cache_payload()
+    key = fixture_cache_key(home_team.get("id"), away_team.get("id"))
+    entry = cache.get(key)
+    if not entry:
+        return None
+    fetched_at = parse_cache_datetime(entry.get("fetched_at"))
+    if not fetched_at:
+        return None
+    age = (datetime.now(timezone.utc) - fetched_at.astimezone(timezone.utc)).total_seconds()
+    if age > FIXTURE_CACHE_TTL:
+        return None
+    item = entry.get("fixture_item")
+    if not item:
+        return None
+    return {
+        "fixture": fixture_from_response(item),
+        "home_team": home_team,
+        "away_team": away_team,
+        "competition_pair": item.get("league", {}),
+        "message": "已从 fixture_cache.json 读取对应比赛。",
+        "cache_status": f"fixture_cache（{age / 3600:.1f}小时前）",
+    }
 
-    for item in candidates:
-        team = item.get("team", {})
-        if target in normalize_text(team.get("name", "")):
-            return team
 
-    return candidates[0].get("team")
+def write_cached_fixture(home_team, away_team, item, source):
+    cache = read_fixture_cache_payload()
+    key = fixture_cache_key(home_team.get("id"), away_team.get("id"))
+    cache[key] = {
+        "home_team_id": home_team.get("id"),
+        "away_team_id": away_team.get("id"),
+        "fixture_id": (item.get("fixture") or {}).get("id"),
+        "fixture_item": item,
+        "source": source,
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+    }
+    write_fixture_cache_payload(cache)
 
 
 def fixture_from_response(item):
@@ -200,9 +308,24 @@ def fixtures_for_team_competition(team_id, pair):
 
 
 @st.cache_data(ttl=MATCH_DATA_TTL, show_spinner=False)
+def head_to_head_fixtures(home_team_id, away_team_id):
+    return request_json("/fixtures/headtohead", {"h2h": f"{home_team_id}-{away_team_id}"})
+
+
+@st.cache_data(ttl=MATCH_DATA_TTL, show_spinner=False)
 def find_fixture(match):
     home_team = search_team(match["home_en"])
     away_team = search_team(match["away_en"])
+
+    for label, team in [("home", home_team), ("away", away_team)]:
+        resolver = (team or {}).get("_resolver") or {}
+        print(
+            "[Team Resolver]",
+            label,
+            "input=", resolver.get("input") or match.get(f"{label}_en"),
+            "matched=", resolver.get("matched_name"),
+            "team_id=", resolver.get("team_id"),
+        )
 
     if not home_team or not away_team:
         return {
@@ -211,6 +334,26 @@ def find_fixture(match):
             "away_team": away_team,
             "message": "未找到双方国家队信息。",
         }
+
+    cached_fixture = read_cached_fixture(home_team, away_team)
+    if cached_fixture:
+        return cached_fixture
+
+    try:
+        h2h_fixtures = head_to_head_fixtures(home_team["id"], away_team["id"])
+    except (requests.RequestException, RuntimeError):
+        h2h_fixtures = []
+
+    for item in h2h_fixtures:
+        if fixture_matches(item, home_team, away_team):
+            write_cached_fixture(home_team, away_team, item, "API-Football head-to-head")
+            return {
+                "fixture": fixture_from_response(item),
+                "home_team": home_team,
+                "away_team": away_team,
+                "competition_pair": item.get("league", {}),
+                "message": "已通过 API-Football head-to-head 找到对应比赛。",
+            }
 
     home_competitions, home_pairs = team_competitions(home_team["id"])
     away_competitions, away_pairs = team_competitions(away_team["id"])
@@ -223,6 +366,7 @@ def find_fixture(match):
 
     for item in fixture_pool:
         if fixture_matches(item, home_team, away_team):
+            write_cached_fixture(home_team, away_team, item, "API-Football fixtures")
             return {
                 "fixture": fixture_from_response(item),
                 "home_team": home_team,
@@ -319,14 +463,86 @@ def empty_correct_score_result(reason):
     }
 
 
-@st.cache_data(ttl=ODDS_DATA_TTL, show_spinner=False)
+def empty_asian_handicap_result(reason):
+    return {
+        "found": False,
+        "source": "API-Football / Asian Handicap",
+        "bookmakers": [],
+        "rows": [],
+        "message": reason,
+    }
+
+
+@st.cache_data(ttl=API_FOOTBALL_MARKET_DATA_TTL, show_spinner=False)
+def fetch_asian_handicap_odds_for_fixture(fixture_id):
+    if not fixture_id:
+        return empty_asian_handicap_result("缺少 API-Football fixture_id，无法查询真实亚洲让球盘。")
+
+    cached = read_api_football_market_cache(fixture_id, ASIAN_HANDICAP_BET_ID, API_FOOTBALL_MARKET_DATA_TTL)
+    if cached:
+        return cached
+
+    try:
+        response = request_json("/odds", {"fixture": fixture_id, "bet": ASIAN_HANDICAP_BET_ID})
+    except (requests.RequestException, RuntimeError) as error:
+        stale = read_stale_api_football_market_cache(fixture_id, ASIAN_HANDICAP_BET_ID)
+        if stale:
+            stale["message"] = f"{stale.get('message', '已读取缓存亚洲让球盘。')} API暂不可用，使用已保存缓存。"
+            return stale
+        return empty_asian_handicap_result(f"API-Football Asian Handicap 暂不可用：{error}")
+
+    rows = []
+    bookmaker_names = []
+    for item in response:
+        for bookmaker in item.get("bookmakers", []):
+            bookmaker_name = bookmaker.get("name")
+            if bookmaker_name:
+                bookmaker_names.append(bookmaker_name)
+            for bet in bookmaker.get("bets", []):
+                if bet.get("id") != ASIAN_HANDICAP_BET_ID:
+                    continue
+                market_name = bet.get("name") or "Asian Handicap"
+                for value in bet.get("values", []):
+                    odd = parse_odd(value.get("odd"))
+                    line_value = value.get("value")
+                    if odd and line_value:
+                        rows.append({
+                            "bookmaker": bookmaker_name,
+                            "market": market_name,
+                            "value": line_value,
+                            "odd": odd,
+                        })
+
+    if not rows:
+        return empty_asian_handicap_result("API-Football 没有返回该比赛的真实亚洲让球盘。")
+
+    result = {
+        "found": True,
+        "source": "API-Football / Asian Handicap",
+        "bookmakers": sorted(set(bookmaker_names)),
+        "rows": rows,
+        "message": "已获取 API-Football 真实亚洲让球盘。",
+    }
+    write_api_football_market_cache(fixture_id, ASIAN_HANDICAP_BET_ID, result)
+    return result
+
+
+@st.cache_data(ttl=CORRECT_SCORE_DATA_TTL, show_spinner=False)
 def fetch_correct_score_odds_for_fixture(fixture_id):
     if not fixture_id:
         return empty_correct_score_result("缺少 API-Football fixture_id，无法查询真实波胆盘口。")
 
+    cached = read_api_football_market_cache(fixture_id, EXACT_SCORE_BET_ID, CORRECT_SCORE_DATA_TTL)
+    if cached:
+        return cached
+
     try:
         response = request_json("/odds", {"fixture": fixture_id, "bet": EXACT_SCORE_BET_ID})
     except (requests.RequestException, RuntimeError) as error:
+        stale = read_stale_api_football_market_cache(fixture_id, EXACT_SCORE_BET_ID)
+        if stale:
+            stale["message"] = f"{stale.get('message', '已读取缓存波胆盘口。')} API暂不可用，使用已保存缓存。"
+            return stale
         return empty_correct_score_result(f"API-Football Exact Score 暂不可用：{error}")
 
     rows = []
@@ -359,7 +575,7 @@ def fetch_correct_score_odds_for_fixture(fixture_id):
     display_rows = preferred_rows or rows
     display_rows = sorted(display_rows, key=lambda row: (row["score"], -row["odd"]))
 
-    return {
+    result = {
         "found": True,
         "source": "API-Football / Exact Score",
         "bookmakers": sorted(set(bookmaker_names)),
@@ -367,6 +583,8 @@ def fetch_correct_score_odds_for_fixture(fixture_id):
         "all_rows": rows,
         "message": "已获取 API-Football 真实 Exact Score 波胆盘口。",
     }
+    write_api_football_market_cache(fixture_id, EXACT_SCORE_BET_ID, result)
+    return result
 
 
 def fetch_odds(match):
@@ -487,6 +705,7 @@ def fetch_match_diagnostics(match):
     result = {
         "fixture": None,
         "odds": None,
+        "asian_handicap": None,
         "correct_score": None,
         "injuries": None,
         "lineups": None,
@@ -504,6 +723,7 @@ def fetch_match_diagnostics(match):
             return result
 
         result["odds"] = fetch_odds(match)
+        result["asian_handicap"] = fetch_asian_handicap_odds_for_fixture(fixture["id"])
         result["correct_score"] = fetch_correct_score_odds_for_fixture(fixture["id"])
         result["injuries"] = fetch_injuries_for_fixture(fixture["id"])
         result["lineups"] = fetch_lineups_for_fixture(fixture["id"])
@@ -516,11 +736,12 @@ def fetch_match_diagnostics(match):
 
 
 @st.cache_data(ttl=MATCH_DATA_TTL, show_spinner=False)
-def fetch_match_data(match):
+def fetch_match_data(match, data_flow_version="team_resolver_v2"):
     data = {
         "fixture_result": None,
         "fixture": None,
         "odds": None,
+        "asian_handicap": None,
         "correct_score": None,
         "injuries": [],
         "lineups": [],
@@ -546,6 +767,7 @@ def fetch_match_data(match):
         )
 
         data["correct_score"] = fetch_correct_score_odds_for_fixture(fixture["id"])
+        data["asian_handicap"] = fetch_asian_handicap_odds_for_fixture(fixture["id"])
 
         try:
             data["injuries"] = fetch_injuries_for_fixture(fixture["id"])
@@ -578,6 +800,7 @@ def fetch_match_data(match):
                 known_fixture["fixture"],
             )
             data["correct_score"] = empty_correct_score_result("缺少 API-Football fixture_id，无法查询真实波胆盘口。")
+            data["asian_handicap"] = empty_asian_handicap_result("缺少 API-Football fixture_id，无法查询真实亚洲让球盘。")
             data["error"] = str(error)
             try:
                 data["home_recent"] = fetch_recent_fixtures(known_fixture["home_team"]["id"], count=10)

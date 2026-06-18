@@ -1,4 +1,11 @@
 from modules.pregame_content import team_cn
+from modules.market_utils import (
+    asian_handicap_summary,
+    bookmaker_margin,
+    correct_score_summary,
+    totals_summary,
+)
+from modules.user_odds import actual_odds_summary, build_recommendation_slots
 
 
 POPULAR_TEAMS = {
@@ -338,7 +345,227 @@ def favorite_probability_gap(match, odds, polymarket):
     }
 
 
-def odds_value_analysis(match, odds, polymarket):
+def favorite_key_from_odds(odds):
+    odds_probs = odds_probabilities(odds)
+    return max(odds_probs, key=odds_probs.get) if odds_probs else None
+
+
+def api_handicap_summary(api_football_data):
+    handicap = (api_football_data or {}).get("asian_handicap") or {}
+    return asian_handicap_summary(handicap.get("rows") or [])
+
+
+def api_correct_score_summary(api_football_data):
+    correct_score = (api_football_data or {}).get("correct_score") or {}
+    return correct_score_summary(correct_score.get("rows") or [])
+
+
+def handicap_direction_points(favorite, summary, max_points):
+    if not summary.get("available"):
+        return 0, "亚洲让球盘缺失。"
+    side_key = "home_win" if summary.get("main_side") == "home" else "away_win"
+    line = summary.get("main_line")
+    if side_key == favorite:
+        points = max_points
+        reason = f"主盘口为 {summary.get('main_value')}，与胜平负主方向一致。"
+    elif abs(float(line or 0)) <= 0.25:
+        points = round(max_points * 0.55)
+        reason = "亚洲让球盘较浅，未明显反向。"
+    else:
+        points = round(max_points * 0.25)
+        reason = f"主盘口为 {summary.get('main_value')}，与胜平负主方向存在冲突。"
+    return points, reason
+
+
+def totals_structure_points(odds, max_points):
+    summary = totals_summary(odds.get("over_under") or [])
+    if not summary.get("available"):
+        return 0, "大小球盘口缺失。"
+    avg_over = summary.get("avg_over")
+    avg_under = summary.get("avg_under")
+    if avg_over is None or avg_under is None:
+        return round(max_points * 0.45), "大小球盘口可用，但结构不完整。"
+    if abs(avg_over - avg_under) <= 0.08:
+        points = round(max_points * 0.70)
+        reason = f"大小球主盘口 {summary.get('line')}，大/小球均值接近，节奏判断中性。"
+    else:
+        points = max_points
+        side = "大球" if avg_over < avg_under else "小球"
+        reason = f"大小球主盘口 {summary.get('line')}，市场略偏向{side}。"
+    return points, reason
+
+
+def correct_score_points(match, favorite, api_football_data, max_points):
+    summary = api_correct_score_summary(api_football_data)
+    hot = summary.get("hot") or []
+    if not hot:
+        return 0, "真实波胆盘口缺失。"
+    home_favorite = favorite == "home_win"
+    support = 0
+    for item in hot[:5]:
+        score = str(item.get("score") or "")
+        try:
+            left, right = [int(part) for part in score.split(":", 1)]
+        except (ValueError, TypeError):
+            continue
+        if (home_favorite and left > right) or ((not home_favorite) and right > left):
+            support += 1
+    ratio = support / min(5, len(hot))
+    if ratio >= 0.8:
+        points = max_points
+    elif ratio >= 0.6:
+        points = round(max_points * 0.75)
+    elif ratio >= 0.4:
+        points = round(max_points * 0.50)
+    else:
+        points = round(max_points * 0.25)
+    favorite_label = display_team(label_for_key(match, favorite))
+    return points, f"热门波胆中有 {support}/{min(5, len(hot))} 个支持{favorite_label}方向。"
+
+
+def margin_points(odds, max_points):
+    margin = bookmaker_margin(odds)
+    if margin is None:
+        return 0, "无法计算庄家利润率。", None
+    if margin <= 0.04:
+        points = max_points
+        label = "抽水较低"
+    elif margin <= 0.07:
+        points = round(max_points * 0.75)
+        label = "抽水正常"
+    elif margin <= 0.10:
+        points = round(max_points * 0.45)
+        label = "抽水偏高"
+    else:
+        points = round(max_points * 0.20)
+        label = "抽水过高"
+    return points, f"庄家利润率约 {margin * 100:.1f}%，{label}。", margin
+
+
+def actual_edge_points(avg_ev_lift):
+    if avg_ev_lift is None:
+        return 0, "未输入可比较的实际赔率。"
+    if avg_ev_lift >= 0.05:
+        return 45, f"平均EV提升 {avg_ev_lift * 100:.1f}%。"
+    if avg_ev_lift >= 0.03:
+        return 35, f"平均EV提升 {avg_ev_lift * 100:.1f}%。"
+    if avg_ev_lift >= 0.01:
+        return 25, f"平均EV提升 {avg_ev_lift * 100:.1f}%。"
+    if avg_ev_lift >= 0:
+        return 15, f"平均EV小幅提升 {avg_ev_lift * 100:.1f}%。"
+    if avg_ev_lift >= -0.02:
+        return 5, f"平均EV下降 {abs(avg_ev_lift) * 100:.1f}%。"
+    return 0, f"平均EV明显下降 {abs(avg_ev_lift) * 100:.1f}%。"
+
+
+def recommendation_coverage_points(summary):
+    count = summary.get("recommended_count", 0)
+    points = {5: 20, 4: 17, 3: 14, 2: 10, 1: 6}.get(count, 0)
+    if count:
+        reason = f"五个投注位置中有 {count} 个达到推荐阈值。"
+    else:
+        reason = "实际赔率输入后，暂未形成达到阈值的推荐位置。"
+    return points, reason
+
+
+def polymarket_aux_points(match, odds, polymarket):
+    gap = favorite_probability_gap(match, odds, polymarket)
+    if not gap:
+        return 3, "Polymarket 缺少可比数据，低权重处理。", None
+    diff = abs(gap["difference"])
+    if diff <= 0.03:
+        points = 10
+        reason = "Polymarket 与传统赔率主方向接近。"
+    elif diff <= 0.08:
+        points = 7
+        reason = f"Polymarket 与传统赔率存在 {diff * 100:.1f}% 差异。"
+    else:
+        points = 4
+        reason = f"Polymarket 与传统赔率差异达到 {diff * 100:.1f}%，需谨慎。"
+    return points, reason, gap
+
+
+def odds_value_from_actual_odds(match, odds, polymarket, api_football_data, actual_odds):
+    slots = build_recommendation_slots(match, odds, api_football_data, actual_odds)
+    summary = actual_odds_summary(slots)
+    avg_edge = summary.get("avg_edge") if summary.get("recommended_count") else None
+    avg_ev_lift = summary.get("avg_ev_lift") if summary.get("recommended_count") else None
+    edge_score, edge_reason = actual_edge_points(avg_ev_lift)
+    coverage_score, coverage_reason = recommendation_coverage_points(summary)
+
+    favorite = favorite_key_from_odds(odds)
+    handicap_summary = api_handicap_summary(api_football_data)
+    handicap_raw, handicap_reason = handicap_direction_points(favorite, handicap_summary, 15) if favorite else (0, "缺少胜平负主方向。")
+    structure_score = clamp(handicap_raw, 0, 15)
+
+    margin_score_raw, margin_reason, margin = margin_points(odds, 10)
+    poly_score, poly_reason, gap = polymarket_aux_points(match, odds, polymarket)
+
+    score = clamp(edge_score + coverage_score + structure_score + margin_score_raw + poly_score)
+    components = [
+        {
+            "name": "实际赔率优势",
+            "points": edge_score,
+            "max_points": 45,
+            "reason": edge_reason,
+        },
+        {
+            "name": "推荐覆盖质量",
+            "points": coverage_score,
+            "max_points": 20,
+            "reason": coverage_reason,
+        },
+        {
+            "name": "盘口结构",
+            "points": structure_score,
+            "max_points": 15,
+            "reason": handicap_reason,
+        },
+        {
+            "name": "庄家利润率",
+            "points": margin_score_raw,
+            "max_points": 10,
+            "reason": margin_reason,
+        },
+        {
+            "name": "Polymarket辅助",
+            "points": poly_score,
+            "max_points": 10,
+            "reason": poly_reason,
+        },
+    ]
+    rating = value_rating(score)
+    best_edge = summary.get("best_edge")
+    label = gap["label"] if gap else "-"
+    return {
+        "score": score,
+        "rating": rating,
+        "label": label,
+        "market_probability": gap["market_probability"] if gap else None,
+        "model_probability": gap["model_probability"] if gap else None,
+        "difference": gap["difference"] if gap else 0,
+        "margin": margin,
+        "components": components,
+        "actual_odds": {
+            "recommended_count": summary.get("recommended_count", 0),
+            "avg_edge": avg_edge,
+            "best_edge": best_edge,
+            "avg_ev_lift": avg_ev_lift,
+            "best_ev_lift": summary.get("best_ev_lift"),
+        },
+        "reason": (
+            f"已输入实际赔率，赔率价值主要由EV提升、实际赔率优势和盘口价值因子决定；"
+            f"平均EV提升 {avg_ev_lift * 100:.1f}%。"
+            if avg_ev_lift is not None
+            else "已输入实际赔率，但当前推荐位置没有形成可比较优势。"
+        ),
+    }
+
+
+def odds_value_analysis(match, odds, polymarket, api_football_data=None, actual_odds=None):
+    if (actual_odds or {}).get("items"):
+        return odds_value_from_actual_odds(match, odds, polymarket, api_football_data, actual_odds)
+
     gap = favorite_probability_gap(match, odds, polymarket)
     odds_probs = odds_probabilities(odds)
     if not gap or not odds_probs:
@@ -350,90 +577,72 @@ def odds_value_analysis(match, odds, polymarket):
             "market_probability": None,
             "model_probability": None,
             "difference": 0,
+            "margin": bookmaker_margin(odds),
             "components": [
-                {"name": "市场价差", "points": 0, "max_points": 40, "reason": "缺少 Polymarket 对比数据。"},
-                {"name": "盘口一致", "points": 15, "max_points": 25, "reason": "缺少完整市场数据，按中性处理。"},
-                {"name": "赔率可用性", "points": 20, "max_points": 20, "reason": "胜平负盘口可用。"},
-                {"name": "价格风险", "points": 0, "max_points": 15, "reason": "缺少概率对比，保守处理。"},
+                {"name": "市场价差", "points": 0, "max_points": 10, "reason": "缺少 Polymarket 对比数据。"},
+                {"name": "盘口一致性", "points": 12, "max_points": 30, "reason": "缺少完整市场数据，按中性偏低处理。"},
+                {"name": "亚洲盘结构", "points": 0, "max_points": 25, "reason": "亚洲让球盘缺失。"},
+                {"name": "波胆结构", "points": 0, "max_points": 20, "reason": "真实波胆盘口缺失。"},
+                {"name": "庄家利润率", "points": 8, "max_points": 15, "reason": "按中性抽水处理。"},
             ],
             "reason": "缺少模型概率与市场概率的可比数据，赔率价值按中性偏低处理。",
         }
 
     difference_pct = gap["difference"] * 100
 
-    if gap["difference"] >= 0.08:
-        edge_points = 40
-    elif gap["difference"] >= 0.05:
-        edge_points = 30
-    elif gap["difference"] >= 0.02:
-        edge_points = 20
-    elif gap["difference"] >= 0:
+    if abs(gap["difference"]) >= 0.08:
         edge_points = 10
-    elif gap["difference"] >= -0.03:
-        edge_points = 5
+    elif abs(gap["difference"]) >= 0.05:
+        edge_points = 7
+    elif abs(gap["difference"]) >= 0.02:
+        edge_points = 4
     else:
-        edge_points = 0
+        edge_points = 1
 
     favorite = gap["key"]
-    h_side = handicap_side(odds)
-    if h_side == favorite:
-        consistency_points = 25
-        consistency_reason = "让球盘与胜平负主方向一致。"
-    elif h_side == "neutral":
-        consistency_points = 15
-        consistency_reason = "让球盘接近均衡。"
-    elif h_side:
-        consistency_points = 5
-        consistency_reason = "让球盘与胜平负主方向冲突。"
-    else:
-        consistency_points = 8
-        consistency_reason = "让球盘缺失。"
+    handicap_summary = api_handicap_summary(api_football_data)
+    handicap_points, handicap_reason = handicap_direction_points(favorite, handicap_summary, 25)
 
-    availability_points = 10
-    availability_reasons = ["胜平负盘口可用。"]
-    if odds.get("asian_handicap"):
-        availability_points += 5
-        availability_reasons.append("让球盘口可用。")
-    if odds.get("over_under"):
-        availability_points += 5
-        availability_reasons.append("大小球盘口可用。")
+    totals_points, totals_reason = totals_structure_points(odds, 8)
+    h_consistency = 14 if handicap_points >= 20 else 8 if handicap_points >= 10 else 3
+    winner_strength = 8 if odds_probs[favorite] >= 0.60 else 5 if odds_probs[favorite] >= 0.50 else 2
+    consistency_points = clamp(h_consistency + totals_points + winner_strength, 0, 30)
+    consistency_reason = f"胜平负主方向为{gap['label']}。{handicap_reason} {totals_reason}"
 
-    market_probability = gap["market_probability"]
-    if market_probability >= 0.78 and gap["difference"] <= 0.01:
-        risk_points = 3
-        risk_reason = "热门方向价格较短，赔率补偿有限。"
-    elif market_probability >= 0.68:
-        risk_points = 8
-        risk_reason = "热门方向价格偏短，但方向较清晰。"
-    else:
-        risk_points = 12
-        risk_reason = "赔率价格仍有一定回报空间。"
+    correct_points, correct_reason = correct_score_points(match, favorite, api_football_data, 20)
+    margin_score, margin_reason, margin = margin_points(odds, 15)
 
-    score = clamp(edge_points + consistency_points + availability_points + risk_points)
+    score = clamp(edge_points + consistency_points + handicap_points + correct_points + margin_score)
     components = [
         {
             "name": "市场价差",
             "points": edge_points,
-            "max_points": 40,
-            "reason": f"Polymarket 与赔率市场差异 {difference_pct:+.1f}%。",
+            "max_points": 10,
+            "reason": f"Polymarket 与赔率市场差异 {difference_pct:+.1f}%，只作为辅助。",
         },
         {
-            "name": "盘口一致",
+            "name": "盘口一致性",
             "points": consistency_points,
-            "max_points": 25,
+            "max_points": 30,
             "reason": consistency_reason,
         },
         {
-            "name": "盘口完整",
-            "points": availability_points,
-            "max_points": 20,
-            "reason": " ".join(availability_reasons),
+            "name": "亚洲盘结构",
+            "points": handicap_points,
+            "max_points": 25,
+            "reason": handicap_reason,
         },
         {
-            "name": "价格风险",
-            "points": risk_points,
+            "name": "波胆结构",
+            "points": correct_points,
+            "max_points": 20,
+            "reason": correct_reason,
+        },
+        {
+            "name": "庄家利润率",
+            "points": margin_score,
             "max_points": 15,
-            "reason": risk_reason,
+            "reason": margin_reason,
         },
     ]
     rating = value_rating(score)
@@ -444,14 +653,14 @@ def odds_value_analysis(match, odds, polymarket):
         "market_probability": gap["market_probability"],
         "model_probability": gap["model_probability"],
         "difference": gap["difference"],
+        "margin": margin,
         "components": components,
         "reason": (
             f"{gap['label']}方向：市场概率 {gap['market_probability'] * 100:.1f}%，"
             f"Polymarket {gap['model_probability'] * 100:.1f}%，差异 {difference_pct:+.1f}%；"
-            f"多因素得分 {score} / 100。"
+            f"盘口、波胆与抽水综合得分 {score} / 100。"
         ),
     }
-
 
 def market_value_component(match, odds, polymarket):
     value = odds_value_analysis(match, odds, polymarket)
@@ -607,7 +816,7 @@ def winner_strength_points(probability):
     return 8
 
 
-def direction_confidence(match, odds, polymarket, upset):
+def direction_confidence(match, odds, polymarket, api_football_data):
     odds_probs = odds_probabilities(odds)
     poly_probs = polymarket_probabilities(polymarket)
     if not odds_probs:
@@ -623,66 +832,55 @@ def direction_confidence(match, odds, polymarket, upset):
     favorite_probability = odds_probs[favorite]
     components = []
 
-    winner_points = winner_strength_points(favorite_probability)
+    winner_points = round(winner_strength_points(favorite_probability) / 32 * 30)
     components.append({
         "name": "胜平负方向",
         "points": winner_points,
-        "max_points": 35,
+        "max_points": 30,
         "reason": f"{favorite_label}市场概率 {favorite_probability * 100:.1f}%。",
     })
 
-    poly_points = 8
-    if poly_probs:
-        poly_favorite = max(poly_probs, key=poly_probs.get)
-        if poly_favorite == favorite:
-            poly_points = 23 if abs(poly_probs[favorite] - favorite_probability) <= 0.05 else 20
-            poly_reason = f"Polymarket 同样支持{favorite_label}，概率 {poly_probs[favorite] * 100:.1f}%。"
-        else:
-            poly_points = 6
-            poly_reason = "Polymarket 与赔率市场主方向不一致。"
-    else:
-        poly_reason = "Polymarket 数据不可用。"
+    handicap_summary = api_handicap_summary(api_football_data)
+    handicap_points, handicap_reason = handicap_direction_points(favorite, handicap_summary, 25)
     components.append({
-        "name": "Polymarket",
-        "points": poly_points,
-        "max_points": 25,
-        "reason": poly_reason,
-    })
-
-    h_side = handicap_side(odds)
-    if h_side == favorite:
-        handicap_points = 23
-        handicap_reason = "让球盘与胜平负主方向一致。"
-    elif h_side == "neutral":
-        handicap_points = 13
-        handicap_reason = "让球盘接近均衡。"
-    elif h_side:
-        handicap_points = 4
-        handicap_reason = "让球盘与胜平负主方向冲突。"
-    else:
-        handicap_points = 0
-        handicap_reason = "让球盘缺失。"
-    components.append({
-        "name": "盘口一致性",
+        "name": "亚洲让球盘",
         "points": handicap_points,
         "max_points": 25,
         "reason": handicap_reason,
     })
 
-    totals_points = 8 if totals_available(odds) else 0
+    totals_points, totals_reason = totals_structure_points(odds, 15)
     components.append({
-        "name": "大小球辅助",
+        "name": "大小球",
         "points": totals_points,
-        "max_points": 10,
-        "reason": "大小球盘口可用，比赛节奏判断有市场支撑。" if totals_points else "大小球盘口缺失。",
+        "max_points": 15,
+        "reason": totals_reason,
     })
 
-    risk_points = max(0, 5 - round(upset["score"] / 25))
+    correct_points, correct_reason = correct_score_points(match, favorite, api_football_data, 20)
     components.append({
-        "name": "风险清晰度",
-        "points": risk_points,
-        "max_points": 5,
-        "reason": f"爆冷指数 {upset['score']} / 100。",
+        "name": "波胆结构",
+        "points": correct_points,
+        "max_points": 20,
+        "reason": correct_reason,
+    })
+
+    poly_points = 3
+    if poly_probs:
+        poly_favorite = max(poly_probs, key=poly_probs.get)
+        if poly_favorite == favorite:
+            poly_points = 10 if abs(poly_probs[favorite] - favorite_probability) <= 0.05 else 8
+            poly_reason = f"Polymarket 同样支持{favorite_label}，概率 {poly_probs[favorite] * 100:.1f}%。"
+        else:
+            poly_points = 2
+            poly_reason = "Polymarket 与赔率市场主方向不一致。"
+    else:
+        poly_reason = "Polymarket 数据不可用，按低权重处理。"
+    components.append({
+        "name": "Polymarket",
+        "points": poly_points,
+        "max_points": 10,
+        "reason": poly_reason,
     })
 
     score = clamp(sum(item["points"] for item in components))
@@ -696,11 +894,15 @@ def direction_confidence(match, odds, polymarket, upset):
         level = "谨慎参与"
     else:
         level = "观望"
+    handicap_phrase = handicap_reason.replace("。", "")
+    correct_phrase = correct_reason.replace("。", "")
+    summary = f"市场普遍认为{favorite_label}占优，{handicap_phrase}，{correct_phrase}，因此方向把握{level}。"
     return {
         "score": score,
         "level": level,
         "components": components,
-        "reason": f"{favorite_label}方向较清晰，主要依据为胜平负、Polymarket与让球盘一致性。",
+        "summary": summary,
+        "reason": f"{favorite_label}方向把握由胜平负、亚洲盘、大小球、真实波胆和 Polymarket 共同决定。",
     }
 
 
@@ -799,7 +1001,7 @@ def stake_suggestion(final_score):
     return {"Conservative": 0, "Standard": 0, "Aggressive": 0}
 
 
-def build_decision_engine(match, odds, polymarket, api_football_data, betting_opinion):
+def build_decision_engine(match, odds, polymarket, api_football_data, betting_opinion, actual_odds=None):
     disagreement = market_disagreement(match, odds, polymarket)
     contrarian = contrarian_score(match, odds, polymarket)
     upset = upset_index(match, odds, polymarket, api_football_data)
@@ -807,9 +1009,8 @@ def build_decision_engine(match, odds, polymarket, api_football_data, betting_op
     injury_impact = injury_impact_score(api_football_data)
     elo = placeholder_score("ELO评分")
     team_value = placeholder_score("球队身价")
-    old_value_score, old_rating, rating_breakdown = build_value_rating_breakdown(match, odds, polymarket, upset)
-    direction = direction_confidence(match, odds, polymarket, upset)
-    odds_value = odds_value_analysis(match, odds, polymarket)
+    direction = direction_confidence(match, odds, polymarket, api_football_data)
+    odds_value = odds_value_analysis(match, odds, polymarket, api_football_data, actual_odds)
     participation = participation_advice(direction, odds_value, upset)
     stake = recommended_stake(direction, odds_value, participation)
 
@@ -828,13 +1029,13 @@ def build_decision_engine(match, odds, polymarket, api_football_data, betting_op
         "final_confidence_score": direction["score"],
         "value_rating": odds_value["rating"],
         "value_rating_score": odds_value["score"],
-        "value_rating_breakdown": rating_breakdown,
+        "value_rating_breakdown": odds_value.get("components", []),
         "value_rating_meaning": rating_meaning(odds_value["rating"], odds_value["score"]),
         "final_recommendation": final_recommendation(match, betting_opinion, contrarian, upset),
         "stake_suggestion": stake_suggestion(direction["score"]),
         "weights": {
-            "方向把握": "胜平负35 + Polymarket25 + 盘口25 + 大小球10 + 风险清晰度5",
-            "赔率价值": "Polymarket概率 - 赔率市场概率",
+            "方向把握": "胜平负30 + 亚洲让球25 + 大小球15 + 波胆20 + Polymarket10",
+            "赔率价值": "输入实际赔率后：实际赔率优势45 + 推荐覆盖20 + 盘口结构15 + 庄家利润率10 + Polymarket辅助10；未输入时使用市场标准盘口评估。",
             "参与建议": "方向把握 + 赔率价值 + 风险暴露",
             "推荐仓位": "方向把握为主，赔率价值微调",
         },

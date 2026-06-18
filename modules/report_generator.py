@@ -2,6 +2,8 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from modules.pregame_content import static_recent_form_for
+
 
 def percent(value):
     return f"{value * 100:.1f}%"
@@ -71,6 +73,18 @@ def summarize_form(fixtures, team_id):
         "form": results,
         "gf": goals_for,
         "ga": goals_against,
+    }
+
+
+def summarize_static_form(rows, count=5):
+    selected = (rows or [])[:count]
+    form = [row.get("result") for row in selected if row.get("result")]
+    gf = sum(row.get("gf", 0) for row in selected)
+    ga = sum(row.get("ga", 0) for row in selected)
+    return {
+        "form": form,
+        "gf": gf,
+        "ga": ga,
     }
 
 
@@ -224,17 +238,37 @@ def format_value_analysis_lines(value_analysis):
     return lines
 
 
-def format_asian_handicap_lines(odds):
+def format_asian_handicap_lines(api_football_data):
     lines = ["## Asian Handicap", ""]
-    markets = odds.get("asian_handicap") if odds else None
+    handicap = (api_football_data or {}).get("asian_handicap") or {}
+    markets = handicap.get("rows") or []
     if not markets:
-        return lines + ["The Odds API did not return this market"]
+        return lines + [handicap.get("message", "API-Football did not return this market")]
 
-    for market in markets:
+    lines.append(f"Source: {handicap.get('source', 'API-Football / Asian Handicap')}")
+    lines.append("")
+    for market in markets[:40]:
         lines.extend([
-            f"- Line：{format_value(market.get('line'))}",
-            f"  Home Odds：{format_value(market.get('home_odds'))}",
-            f"  Away Odds：{format_value(market.get('away_odds'))}",
+            f"- Line：{format_value(market.get('value'))}",
+            f"  Odds：{format_value(market.get('odd'))}",
+            f"  Source：{format_value(market.get('bookmaker'))}",
+        ])
+    return lines
+
+
+def format_correct_score_lines(api_football_data):
+    lines = ["## Correct Score", ""]
+    correct_score = (api_football_data or {}).get("correct_score") or {}
+    markets = correct_score.get("rows") or []
+    if not markets:
+        return lines + [correct_score.get("message", "API-Football did not return this market")]
+
+    lines.append(f"Source: {correct_score.get('source', 'API-Football / Exact Score')}")
+    lines.append("")
+    for market in markets[:40]:
+        lines.extend([
+            f"- Score：{format_value(market.get('score'))}",
+            f"  Odds：{format_value(market.get('odd'))}",
             f"  Source：{format_value(market.get('bookmaker'))}",
         ])
     return lines
@@ -307,13 +341,29 @@ def format_recent_form_lines(api_football_data):
             continue
         has_team = True
         summary = summarize_form(fixtures, team_id)
+        source = "API-Football"
+        if not summary["form"]:
+            static_rows = static_recent_form_for(team_name)
+            summary = summarize_static_form(static_rows, 5)
+            source = "Static local form database"
+
+        if not summary["form"]:
+            lines.extend([
+                team_name,
+                "",
+                "Recent form sample unavailable.",
+                "",
+            ])
+            continue
+
         lines.extend([
             team_name,
             "",
-            " ".join(summary["form"]) if summary["form"] else "Recent Form Unavailable",
+            " ".join(summary["form"]),
             "",
             f"GF: {summary['gf']}",
             f"GA: {summary['ga']}",
+            f"Source: {source}",
             "",
         ])
 
@@ -362,13 +412,13 @@ def build_report(
         "",
         *format_betting_opinion_lines(betting_opinion),
         "",
-        *format_recent_form_lines(api_football_data),
-        "",
         *format_match_winner_lines(odds),
         "",
-        *format_asian_handicap_lines(odds),
+        *format_asian_handicap_lines(api_football_data),
         "",
         *format_over_under_lines(odds),
+        "",
+        *format_correct_score_lines(api_football_data),
         "",
         *format_polymarket_lines(match, polymarket),
         "",

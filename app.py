@@ -8,6 +8,7 @@ import streamlit as st
 import yaml
 
 from modules.match_parser import parse_match
+from modules.market_utils import asian_handicap_summary, correct_score_summary
 from modules.betting_opinion import build_betting_opinion
 from modules.decision_engine import build_decision_engine, traffic_light
 from modules.mock_data import get_mock_news_and_injuries
@@ -48,6 +49,7 @@ from modules.schedule_client import (
 )
 from modules.score_model import recommend_scores
 from modules.the_odds_client import fetch_odds
+from modules.user_odds import build_recommendation_slots, parse_actual_odds, recommendation_reason
 from modules.value_model import analyze_value
 from modules.weather_client import weather_for_fixture
 
@@ -60,8 +62,17 @@ def fmt(value):
     if value is None:
         return "-"
     if isinstance(value, float):
-        return f"{value:g}"
+        return f"{value:.2f}"
     return str(value)
+
+
+def fmt_odds(value):
+    if value is None:
+        return "-"
+    try:
+        return f"{float(value):.2f}"
+    except (TypeError, ValueError):
+        return str(value)
 
 
 def money(value):
@@ -656,6 +667,76 @@ def selected_fixture_as_api_fixture(fixture):
     }
 
 
+def odds_date_key_from_fixture(selected_fixture, api_football_data):
+    fixture = selected_fixture or (api_football_data or {}).get("fixture") or {}
+    kickoff = fixture.get("kickoff_utc")
+    if not kickoff:
+        raw = fixture.get("raw") or {}
+        kickoff = (raw.get("fixture") or {}).get("date")
+    if not kickoff:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(kickoff).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return parsed.astimezone(ZoneInfo("UTC")).strftime("%Y-%m-%d")
+
+
+def render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key):
+    fixture_result = (api_football_data or {}).get("fixture_result") or {}
+    fixture = (api_football_data or {}).get("fixture") or {}
+    home_team = fixture_result.get("home_team") or fixture.get("home_team") or {}
+    away_team = fixture_result.get("away_team") or fixture.get("away_team") or {}
+    handicap = (api_football_data or {}).get("asian_handicap") or {}
+    correct_score = (api_football_data or {}).get("correct_score") or {}
+    debug_rows = [
+        {"项目": "Match", "状态": match.get("display_name"), "详情": f"{match.get('home_en')} vs {match.get('away_en')}"},
+        {"项目": "Odds Date Key", "状态": odds_date_key or "-", "详情": "The Odds API UTC比赛日"},
+        {"项目": "Fixture ID", "状态": fixture.get("id") or "-", "详情": fixture_result.get("message") or "-"},
+        {
+            "项目": "Home Team",
+            "状态": home_team.get("id") or "-",
+            "详情": f"{home_team.get('name') or '-'} / {(home_team.get('_resolver') or {}).get('cache_status', '-')}",
+        },
+        {
+            "项目": "Away Team",
+            "状态": away_team.get("id") or "-",
+            "详情": f"{away_team.get('name') or '-'} / {(away_team.get('_resolver') or {}).get('cache_status', '-')}",
+        },
+        {
+            "项目": "Match Winner",
+            "状态": "found" if odds.get("found") else "missing",
+            "详情": f"{odds.get('event_title') or odds.get('message')} / cache={odds.get('cache')}",
+        },
+        {
+            "项目": "Over/Under",
+            "状态": len(odds.get("over_under") or []),
+            "详情": "The Odds API totals rows",
+        },
+        {
+            "项目": "Asian Handicap",
+            "状态": len(handicap.get("rows") or []),
+            "详情": f"{handicap.get('source')} / {handicap.get('message')} / cache={handicap.get('cache')}",
+        },
+        {
+            "项目": "Correct Score",
+            "状态": len(correct_score.get("rows") or []),
+            "详情": f"{correct_score.get('source')} / {correct_score.get('message')} / cache={correct_score.get('cache')}",
+        },
+        {
+            "项目": "Polymarket",
+            "状态": "found" if polymarket.get("found") else "missing",
+            "详情": polymarket.get("event_title") or polymarket.get("message"),
+        },
+    ]
+    debug_rows = [
+        {key: "" if value is None else str(value) for key, value in row.items()}
+        for row in debug_rows
+    ]
+    with st.expander("Debug Panel：页面实际读取的数据对象", expanded=True):
+        st.dataframe(pd.DataFrame(debug_rows), use_container_width=True, hide_index=True)
+
+
 def render_match_overview(match, api_football_data, selected_fixture=None):
     if selected_fixture:
         home = selected_fixture.get("home_team") or {"name": match["home_cn"]}
@@ -834,14 +915,12 @@ def render_decision_engine(decision):
                 upset["reason"],
             )
 
-        support_cols = st.columns(4)
+        support_cols = st.columns(3)
         with support_cols[0]:
-            render_score_card("近期状态", decision["recent_form"]["score"], "框架分", decision["recent_form"]["reason"])
-        with support_cols[1]:
             render_score_card("ELO评分", decision["elo_rating"]["score"], "待接入", decision["elo_rating"]["reason"])
-        with support_cols[2]:
+        with support_cols[1]:
             render_score_card("伤病影响", decision["injury_impact"]["score"], "框架分", decision["injury_impact"]["reason"])
-        with support_cols[3]:
+        with support_cols[2]:
             render_score_card("球队身价", decision["team_value"]["score"], "待接入", decision["team_value"]["reason"])
 
         with st.expander("推荐理由"):
@@ -905,73 +984,8 @@ def render_betting_structure(distribution):
                 st.caption(row["path"])
 
 
-def recommendation_combo(match, odds, distribution):
-    if not odds.get("found"):
-        return []
-
-    implied = odds.get("implied_probabilities") or {}
-    home_name = team_cn(match["home_cn"])
-    away_name = team_cn(match["away_cn"])
-    outcomes = [
-        (home_name, odds.get("home_win"), implied.get("home_win", 0)),
-        ("平局", odds.get("draw"), implied.get("draw", 0)),
-        (away_name, odds.get("away_win"), implied.get("away_win", 0)),
-    ]
-    favorite_name, favorite_odds, _ = max(outcomes, key=lambda item: item[2])
-    combo = []
-    if favorite_odds:
-        combo.append({
-            "name": f"{favorite_name}独赢",
-            "share": 0.45,
-            "type": "winner",
-            "odds": favorite_odds,
-            "source": "胜平负真实赔率",
-        })
-
-    handicap_markets = odds.get("asian_handicap") or []
-    if handicap_markets:
-        main_line, selected = consensus_market(handicap_markets)
-        home_values = [market.get("home_odds") for market in selected if market.get("home_odds")]
-        away_values = [market.get("away_odds") for market in selected if market.get("away_odds")]
-        avg_home = sum(home_values) / len(home_values) if home_values else None
-        avg_away = sum(away_values) / len(away_values) if away_values else None
-        if avg_home and avg_away:
-            if avg_home <= avg_away:
-                line_name = format_team_line(match["home_cn"], main_line)
-                selected_odds = avg_home
-            else:
-                line_name = format_team_line(match["away_cn"], -(main_line or 0))
-                selected_odds = avg_away
-            combo.append({
-                "name": line_name,
-                "share": 0.35,
-                "type": "handicap",
-                "odds": selected_odds,
-                "source": "亚洲让球真实赔率",
-            })
-
-    total_markets = odds.get("over_under") or []
-    if total_markets:
-        main_total, selected = consensus_market(total_markets)
-        over_values = [market.get("over_odds") for market in selected if market.get("over_odds")]
-        under_values = [market.get("under_odds") for market in selected if market.get("under_odds")]
-        avg_over = sum(over_values) / len(over_values) if over_values else None
-        avg_under = sum(under_values) / len(under_values) if under_values else None
-        if avg_over and avg_under:
-            total_name = f"{'大于' if avg_over <= avg_under else '小于'} {fmt(main_total)} 球"
-            combo.append({
-                "name": total_name,
-                "share": 0.20,
-                "type": "total",
-                "odds": min(avg_over, avg_under),
-                "source": "大小球真实赔率",
-            })
-
-    total_share = sum(item["share"] for item in combo)
-    if total_share:
-        for item in combo:
-            item["share"] = item["share"] / total_share
-    return combo
+def recommendation_combo(match, odds, api_football_data=None, distribution=None, actual_odds=None):
+    return build_recommendation_slots(match, odds, api_football_data, actual_odds or {}, distribution)
 
 
 def round_to_hundred(value):
@@ -985,13 +999,16 @@ def recommended_total_stake(decision):
 
 def stake_amounts(combo, decision):
     total, _ = recommended_total_stake(decision)
-    return [
-        {
+    rows = []
+    for item in combo:
+        effective_odds = item.get("effective_odds") or item.get("standard_odds") or item.get("odds")
+        amount = round_to_hundred(total * item.get("share", 0)) if item.get("recommended") else 0
+        rows.append({
             **item,
-            "amount": round_to_hundred(total * item["share"]),
-        }
-        for item in combo
-    ]
+            "odds": effective_odds,
+            "amount": amount,
+        })
+    return rows
 
 
 def rating_class(rating):
@@ -1014,17 +1031,21 @@ def rating_badge(rating):
 
 
 def combo_role(index, item):
-    if item["type"] == "winner":
+    if not item.get("recommended"):
+        return "⚪ 不推荐"
+    if index == 1:
         return "🟢 主逻辑"
-    if item["type"] == "handicap":
-        return "🟡 边界逻辑"
-    if item["type"] == "total":
-        return "🔵 节奏逻辑"
-    return "⚪ 观察项"
+    if index == 2:
+        return "🟡 次逻辑"
+    if index == 3:
+        return "🔵 辅助逻辑"
+    if item.get("type") == "correct_score":
+        return "⚪ 波胆逻辑"
+    return "⚪ 补充逻辑"
 
 
-def render_recommended_combo(match, odds, distribution):
-    combo = recommendation_combo(match, odds, distribution)
+def render_recommended_combo(match, odds, api_football_data, distribution):
+    combo = recommendation_combo(match, odds, api_football_data, distribution)
     with st.container(border=True):
         st.markdown('<div class="section-title">推荐投注组合</div>', unsafe_allow_html=True)
         cols = st.columns(4)
@@ -1051,45 +1072,63 @@ def market_disagreement_reason(disagreement):
     return "Polymarket 与传统赔率观点基本一致。"
 
 
+def profit_text(amount, odds, outcome):
+    if outcome == "win" and amount and odds:
+        return f"+{round(amount * (odds - 1))}"
+    if outcome == "lose" and amount:
+        return f"-{amount}"
+    return "视比分"
+
+
+def combo_item(combo, item_type):
+    return next((item for item in combo if item.get("type") == item_type and item.get("recommended")), {})
+
+
+def total_known_profit(values):
+    total = 0
+    unknown = False
+    for value in values:
+        text = str(value)
+        if text == "视比分":
+            unknown = True
+            continue
+        try:
+            total += int(text.replace("+", ""))
+        except ValueError:
+            unknown = True
+    return f"{total:+d}" + (" + 浮动" if unknown else "")
+
+
 def path_analysis_rows(distribution, combo):
     favorite = distribution.get("favorite", "热门方")
     underdog = distribution.get("underdog", "弱势方")
-    has_winner = any(item["type"] == "winner" for item in combo)
-    has_handicap = any(item["type"] == "handicap" for item in combo)
-    has_total = any(item["type"] == "total" for item in combo)
+    winner = combo_item(combo, "winner")
+    handicap = combo_item(combo, "handicap")
+    total = combo_item(combo, "total")
+    correct = combo_item(combo, "correct_score")
 
-    def mark(enabled, text):
-        return text if enabled else "未配置"
+    def row(label, winner_result, handicap_result, total_result, correct_result, note):
+        values = [
+            profit_text(winner.get("amount"), winner.get("odds"), winner_result),
+            profit_text(handicap.get("amount"), handicap.get("odds"), handicap_result),
+            profit_text(total.get("amount"), total.get("odds"), total_result),
+            profit_text(correct.get("amount"), correct.get("odds"), correct_result),
+        ]
+        return {
+            "结果路径": label,
+            "独赢收益": values[0],
+            "让球收益": values[1],
+            "大小球收益": values[2],
+            "波胆收益": values[3],
+            "组合总收益": total_known_profit(values),
+            "解读": note,
+        }
 
     return [
-        {
-            "结果路径": f"{favorite}只赢1球",
-            "独赢": mark(has_winner, "赢"),
-            "让球": mark(has_handicap, "高风险/可能输盘"),
-            "大小球": mark(has_total, "取决于节奏"),
-            "解读": "独赢方向成立，但深盘承压。",
-        },
-        {
-            "结果路径": f"{favorite}赢2球及以上",
-            "独赢": mark(has_winner, "赢"),
-            "让球": mark(has_handicap, "更有利"),
-            "大小球": mark(has_total, "偏向大球路径"),
-            "解读": "主逻辑与让球逻辑同时受益。",
-        },
-        {
-            "结果路径": "平局",
-            "独赢": mark(has_winner, "输"),
-            "让球": mark(has_handicap, "主让方向不利"),
-            "大小球": mark(has_total, "偏向小球路径"),
-            "解读": "热门方向失效，是组合主要风险。",
-        },
-        {
-            "结果路径": f"{underdog}取胜",
-            "独赢": mark(has_winner, "输"),
-            "让球": mark(has_handicap, "主让方向不利"),
-            "大小球": mark(has_total, "取决于比分节奏"),
-            "解读": "爆冷路径，对主逻辑最不利。",
-        },
+        row(f"{favorite}只赢1球", "win", "lose", None, "lose", "独赢成立，但深盘承压。"),
+        row(f"{favorite}赢2球及以上", "win", "win", None, None, "主逻辑与让球逻辑同时受益，波胆取决于精确比分。"),
+        row("平局", "lose", "lose", None, None, "热门方向失效，是组合主要风险。"),
+        row(f"{underdog}取胜", "lose", "lose", None, None, "爆冷路径，对主逻辑最不利。"),
     ]
 
 
@@ -1118,8 +1157,51 @@ def render_rating_breakdown(decision):
                         st.caption(row["reason"])
 
 
-def render_core_decision(match, odds, distribution, decision, betting_opinion):
-    combo = recommendation_combo(match, odds, distribution)
+def actual_odds_example(match):
+    return f"""独赢,{team_cn(match['home_cn'])},1.62
+让球,{team_cn(match['home_cn'])},-1,2.05
+大小球,Under 2.5,1.91
+波胆,1:0,6.80
+波胆,2:0,7.20"""
+
+
+def render_actual_odds_input(match):
+    key = f"actual_odds_{match['home_cn']}_{match['away_cn']}"
+    raw_key = f"{key}_raw"
+    current_raw = st.session_state.get(raw_key, "")
+    with st.container(border=True):
+        st.markdown('<div class="section-title">我的实际赔率</div>', unsafe_allow_html=True)
+        st.caption("可选输入。这里填写你自己实际能买到的赔率，系统会优先用它评估价值；不填写则继续使用市场标准赔率。")
+        with st.form(key=f"{key}_form"):
+            raw_input = st.text_area(
+                "粘贴实际赔率",
+                value=current_raw,
+                height=210,
+                placeholder=actual_odds_example(match),
+                label_visibility="collapsed",
+            )
+            submitted = st.form_submit_button("应用实际赔率", type="primary")
+        if submitted:
+            st.session_state[raw_key] = raw_input
+            current_raw = raw_input
+        raw = current_raw
+        parsed = parse_actual_odds(raw)
+        if parsed.get("items"):
+            rows = [
+                {"盘口": item["type"], "方向": item["selection"], "实际赔率": fmt_odds(item["odds"])}
+                for item in parsed["items"]
+            ]
+            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        else:
+            st.caption("未应用实际赔率：推荐组合和赔率价值暂按市场标准赔率计算。")
+        with st.expander("支持的输入格式", expanded=False):
+            st.code(actual_odds_example(match), language="text")
+            st.caption("一行一个投注，适合从 Excel 复制；旧的多行格式仍然兼容。")
+        return parsed
+
+
+def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None):
+    combo = recommendation_combo(match, odds, api_football_data, distribution, actual_odds)
     combo_with_amounts = stake_amounts(combo, decision)
     total_stake, total_reason = recommended_total_stake(decision)
     with st.container(border=True):
@@ -1131,7 +1213,7 @@ def render_core_decision(match, odds, distribution, decision, betting_opinion):
         stake = decision.get("recommended_stake") or {}
         decision_cols = st.columns(4)
         decision_cols[0].metric("方向把握", f"{direction.get('score', decision['final_confidence_score'])} / 100")
-        decision_cols[0].caption(direction.get("level", "-"))
+        decision_cols[0].caption(direction.get("summary") or direction.get("level", "-"))
         decision_cols[1].metric("赔率价值", rating_badge(odds_value.get("rating", decision["value_rating"])))
         decision_cols[1].caption(odds_value.get("reason", decision["value_rating_meaning"]))
         decision_cols[2].metric("参与建议", participation.get("advice", "-"))
@@ -1146,18 +1228,31 @@ def render_core_decision(match, odds, distribution, decision, betting_opinion):
                 with col:
                     with st.container(border=True):
                         st.caption(f"投注{index} · {combo_role(index, item)}")
-                        st.metric(item["name"], f"{item['amount']}元")
-                        st.caption(f"占比 {int(item['share'] * 100)}% · 赔率 {fmt(item.get('odds'))}")
-                        st.caption(item.get("source", "真实盘口"))
+                        if item.get("recommended"):
+                            st.metric(item["name"], f"{item['amount']}元")
+                            st.caption(f"占比 {int(item.get('share', 0) * 100)}% · 使用赔率 {fmt_odds(item.get('odds'))}")
+                            if item.get("actual_odds"):
+                                st.caption(f"市场标准 {fmt_odds(item.get('standard_odds'))} · 实际赔率 {fmt_odds(item.get('actual_odds'))}")
+                            else:
+                                st.caption(f"市场标准 {fmt_odds(item.get('standard_odds'))}")
+                            if item.get("ev_lift") is not None:
+                                rank_text = f" · EV排名 {item['ev_rank']}" if item.get("ev_rank") else ""
+                                st.caption(f"EV提升 {item['ev_lift'] * 100:+.1f}%{rank_text} · 推荐分 {item.get('score', 0)}")
+                            if item.get("coverage_rate") is not None:
+                                st.caption(f"覆盖率 {item['coverage_rate'] * 100:.0f}% · {recommendation_reason(item)}")
+                            st.caption(item.get("reason", item.get("source", "真实盘口")))
+                        else:
+                            st.metric(item.get("slot", f"投注{index}"), "不推荐")
+                            st.caption(item.get("not_recommended_reason") or item.get("reason") or "当前没有达到推荐阈值。")
         else:
             st.info("当前没有足够真实盘口生成投注组合。")
-        st.caption("只使用真实独赢、让球、大小球盘口；波胆盘口未接入前，不生成比分投注。")
+        st.caption("实际赔率优先；未输入时使用真实市场标准赔率。禁止使用估算波胆赔率。")
 
         top_cols = st.columns(2)
         recommendation = decision["final_recommendation"]
         top_cols[0].metric("推荐方向", bet_cn(recommendation["bet"]))
         top_cols[0].caption(recommendation["reason"][0])
-        top_cols[1].metric("赔率价值差异", f"{odds_value.get('score', 0):+.1f}%")
+        top_cols[1].metric("赔率价值分", f"{odds_value.get('score', 0)} / 100")
         top_cols[1].caption(decision["value_rating_meaning"])
 
         render_rating_breakdown(decision)
@@ -1187,8 +1282,8 @@ def render_core_decision(match, odds, distribution, decision, betting_opinion):
         st.caption(exposure.get("meaning", ""))
 
         st.markdown("**结果覆盖分析**")
-        st.caption("不使用估算波胆收益。以下只展示不同结果路径下，真实盘口组合会如何表现。")
-        st.dataframe(pd.DataFrame(path_analysis_rows(distribution, combo)), use_container_width=True, hide_index=True)
+        st.caption("使用实际可成交赔率优先计算；未输入时使用市场标准赔率。波胆仅在精确比分命中时产生收益。")
+        st.dataframe(pd.DataFrame(path_analysis_rows(distribution, combo_with_amounts)), use_container_width=True, hide_index=True)
 
 
 def summarize_form(fixtures, team_id):
@@ -1333,34 +1428,39 @@ def render_match_winner(match, odds, api_football_data):
         st.info(f"市场当前认为最可能结果是：{favorite_label}，概率约 {percent(favorite_prob)}。")
 
 
-def render_handicap(match, odds):
+def render_handicap(match, api_football_data):
     with st.container(border=True):
         st.markdown('<div class="section-title">亚洲让球盘</div>', unsafe_allow_html=True)
-        markets = odds.get("asian_handicap") or []
-        if not markets:
-            st.info("未找到盘口数据：The Odds API 当前没有返回该比赛的亚洲让球盘。")
+        handicap = (api_football_data or {}).get("asian_handicap") or {}
+        if not handicap.get("found"):
+            st.info(handicap.get("message", "未找到盘口数据：API-Football 当前没有返回该比赛的亚洲让球盘。"))
             return
 
-        main_line, selected = consensus_market(markets)
-        bookmakers = sorted({market.get("bookmaker") for market in selected if market.get("bookmaker")})
-        best_home = max((market.get("home_odds") for market in selected if market.get("home_odds")), default=None)
-        best_away = max((market.get("away_odds") for market in selected if market.get("away_odds")), default=None)
-        avg_home = sum(market.get("home_odds") for market in selected if market.get("home_odds")) / max(1, len([market for market in selected if market.get("home_odds")]))
-        avg_away = sum(market.get("away_odds") for market in selected if market.get("away_odds")) / max(1, len([market for market in selected if market.get("away_odds")]))
-
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("主盘口", format_team_line(match["home_cn"], main_line))
-        col2.metric("市场均值", f"{avg_home:.2f} / {avg_away:.2f}")
-        col3.metric("主队最佳赔率", fmt(best_home))
-        col4.metric("客队最佳赔率", fmt(best_away))
-        st.caption("主要公司：" + (", ".join(bookmakers[:3]) if bookmakers else "-"))
-        if abs(main_line or 0) >= 1.25:
-            st.info("让球盘显示主队优势明显，但是否能赢到2球以上仍是盘口分歧核心。")
-        else:
-            st.info("让球盘较浅，市场更关注胜负方向，而不是大比分穿盘。")
-
-        with st.expander("展开全部赔率"):
-            st.dataframe(markets, use_container_width=True, hide_index=True)
+        rows = handicap.get("rows") or []
+        bookmakers = handicap.get("bookmakers") or []
+        summary = asian_handicap_summary(rows)
+        st.success(handicap.get("message", "已获取真实亚洲让球盘。"))
+        st.caption(
+            f"数据来源：{handicap.get('source')} · "
+            f"博彩公司：{', '.join(bookmakers[:6]) or '-'}"
+        )
+        if summary.get("available"):
+            c1, c2, c3 = st.columns(3)
+            c1.metric("主盘口", summary.get("main_value"))
+            c2.metric("市场均值", f"{summary.get('avg_odds'):.2f}" if summary.get("avg_odds") else "-")
+            c3.metric("最佳赔率", f"{summary.get('best_odds'):.2f}" if summary.get("best_odds") else "-")
+            st.caption("主盘口公司：" + (", ".join(summary.get("bookmakers", [])[:6]) or "-"))
+        with st.expander("展开全部盘口"):
+            all_rows = [
+                {
+                    "博彩公司": row.get("bookmaker"),
+                    "市场": row.get("market"),
+                    "盘口": row.get("value"),
+                    "赔率": row.get("odd"),
+                }
+                for row in rows
+            ]
+            st.dataframe(pd.DataFrame(all_rows), use_container_width=True, hide_index=True)
 
 
 def render_totals(odds):
@@ -1407,31 +1507,33 @@ def render_correct_score_market(api_football_data):
             return
 
         rows = correct_score.get("rows") or []
+        summary = correct_score_summary(rows)
         st.success(correct_score.get("message", "已获取真实波胆盘口。"))
         st.caption(
             f"数据来源：{correct_score.get('source')} · "
             f"博彩公司：{', '.join(correct_score.get('bookmakers', [])[:6]) or '-'}"
         )
-        display_rows = [
+        hot_rows = [
             {
-                "博彩公司": row.get("bookmaker"),
                 "比分": row.get("score"),
-                "赔率": row.get("odd"),
+                "市场均值赔率": f"{row.get('avg_odds'):.2f}" if row.get("avg_odds") else "-",
+                "最高赔率": f"{row.get('best_odds'):.2f}" if row.get("best_odds") else "-",
+                "最低赔率": f"{row.get('min_odds'):.2f}" if row.get("min_odds") else "-",
+                "博彩公司": ", ".join(row.get("bookmakers", [])[:4]),
             }
-            for row in rows[:40]
+            for row in summary.get("hot", [])
         ]
-        st.dataframe(pd.DataFrame(display_rows), use_container_width=True, hide_index=True)
-        if len(rows) > 40:
-            with st.expander("展开全部真实波胆盘口"):
-                all_rows = [
-                    {
-                        "博彩公司": row.get("bookmaker"),
-                        "比分": row.get("score"),
-                        "赔率": row.get("odd"),
-                    }
-                    for row in rows
-                ]
-                st.dataframe(pd.DataFrame(all_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(hot_rows), use_container_width=True, hide_index=True)
+        with st.expander("展开全部波胆"):
+            all_rows = [
+                {
+                    "博彩公司": row.get("bookmaker"),
+                    "比分": row.get("score"),
+                    "赔率": row.get("odd"),
+                }
+                for row in rows
+            ]
+            st.dataframe(pd.DataFrame(all_rows), use_container_width=True, hide_index=True)
 
 
 def render_value(value_analysis):
@@ -2058,8 +2160,10 @@ def render_analysis_page(match_text):
 
     try:
         match = parse_match(match_text)
-        api_football_data = fetch_match_data(match)
-        odds = fetch_odds(match)
+        selected_fixture = st.session_state.get("selected_fixture")
+        api_football_data = fetch_match_data(match, "page_market_data_v3")
+        odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
+        odds = fetch_odds(match, odds_date_key, "odds_page_v3")
         polymarket = fetch_polymarket(match)
         news = get_mock_news_and_injuries(match)
         probabilities = combine_probabilities(odds, polymarket, news, config)
@@ -2069,12 +2173,15 @@ def render_analysis_page(match_text):
         betting_opinion = build_betting_opinion(match, odds, polymarket, value_analysis)
         result_distribution = build_result_distribution(match, odds, polymarket)
         betting_opinion["result_distribution"] = result_distribution
+        render_match_overview(match, api_football_data, selected_fixture)
+        actual_odds = render_actual_odds_input(match)
         decision = build_decision_engine(
             match,
             odds,
             polymarket,
             api_football_data,
             betting_opinion,
+            actual_odds,
         )
         report = build_report(
             match,
@@ -2090,8 +2197,6 @@ def render_analysis_page(match_text):
         )
         report_path = save_report(report, match, config["report"]["output_dir"])
 
-        render_match_overview(match, api_football_data, st.session_state.get("selected_fixture"))
-
         core_tab, market_tab, source_tab = st.tabs([
             "核心决策",
             "市场盘口",
@@ -2099,12 +2204,12 @@ def render_analysis_page(match_text):
         ])
 
         with core_tab:
-            render_core_decision(match, odds, result_distribution, decision, betting_opinion)
+            render_core_decision(match, odds, api_football_data, result_distribution, decision, betting_opinion, actual_odds)
             render_storylines(match, betting_opinion, decision)
 
         with market_tab:
             render_match_winner(match, odds, api_football_data)
-            render_handicap(match, odds)
+            render_handicap(match, api_football_data)
             render_totals(odds)
             render_correct_score_market(api_football_data)
             render_polymarket(match, api_football_data, polymarket)
@@ -2112,7 +2217,8 @@ def render_analysis_page(match_text):
             render_market_consistency(match, odds, polymarket)
 
         with source_tab:
-            render_detail_data_source(odds, polymarket, st.session_state.get("selected_fixture"))
+            render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key)
+            render_detail_data_source(odds, polymarket, selected_fixture)
             render_technical_notes(odds, api_football_data)
 
         st.download_button(

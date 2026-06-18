@@ -167,7 +167,7 @@ def build_result_distribution(match, odds, polymarket):
         "main_path": main_path,
         "boundary_path": boundary_path,
         "extreme_path": extreme_path,
-        "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口与 Polymarket 概率的路径分布，不使用估算波胆赔率或比分概率。",
+        "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。",
     }
 
 

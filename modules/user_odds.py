@@ -1,0 +1,484 @@
+import csv
+from io import StringIO
+
+from modules.market_utils import asian_handicap_summary, correct_score_summary, totals_summary
+
+
+AI_OPTIMIZATION_INTERFACE = {
+    "enabled": False,
+    "description": "预留接口：未来可用历史赛果自动调整方向、盘口、波胆和EV权重。",
+    "weights": {
+        "path_match": 1.0,
+        "ev": 1.0,
+        "market_value": 1.0,
+        "coverage": 1.0,
+    },
+}
+
+
+def parse_float(value):
+    try:
+        number = float(str(value).strip())
+    except (TypeError, ValueError):
+        return None
+    return number if number > 1 else None
+
+
+def normalize(value):
+    return " ".join(str(value or "").strip().lower().replace("-", " ").split())
+
+
+def market_key(label):
+    text = normalize(label)
+    if "match winner" in text or "winner" in text or "胜平负" in text or "独赢" in text:
+        return "winner"
+    if "asian" in text or "handicap" in text or "让球" in text:
+        return "handicap"
+    if "over under" in text or "over/under" in text or "total" in text or "大小球" in text:
+        return "total"
+    if "correct score" in text or "exact score" in text or "波胆" in text:
+        return "correct_score"
+    return None
+
+
+def parse_actual_odds(raw_text):
+    text = str(raw_text or "").strip()
+    if not text:
+        return {"items": [], "by_type": {}, "raw": ""}
+
+    items = parse_csv_odds(text)
+    if not items:
+        items = parse_block_odds(text)
+
+    by_type = {}
+    for item in items:
+        key = item["type"]
+        if key == "correct_score":
+            by_type.setdefault(key, {})[normalize(item["selection"])] = item
+        else:
+            by_type[key] = item
+    return {"items": items, "by_type": by_type, "raw": text}
+
+
+def parse_csv_odds(text):
+    if "," not in text:
+        return []
+    rows = []
+    try:
+        reader = csv.reader(StringIO(text))
+        for raw in reader:
+            parts = [part.strip() for part in raw if part.strip()]
+            if len(parts) < 3:
+                continue
+            key = market_key(parts[0])
+            odds = parse_float(parts[-1])
+            if key and odds:
+                selection = parts[1]
+                if key == "handicap" and len(parts) >= 4:
+                    selection = f"{parts[1]} {parts[2]}"
+                rows.append({"type": key, "selection": selection, "odds": odds})
+    except csv.Error:
+        return []
+    return rows
+
+
+def parse_block_odds(text):
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    rows = []
+    index = 0
+    while index + 2 < len(lines):
+        key = market_key(lines[index])
+        odds = parse_float(lines[index + 2])
+        if key and odds:
+            rows.append({"type": key, "selection": lines[index + 1], "odds": odds})
+            index += 3
+        else:
+            index += 1
+    return rows
+
+
+def actual_for_candidate(candidate, actual_odds):
+    by_type = (actual_odds or {}).get("by_type") or {}
+    item_type = candidate.get("type")
+    if item_type == "correct_score":
+        return (by_type.get("correct_score") or {}).get(normalize(candidate.get("selection")))
+    return by_type.get(item_type)
+
+
+def odds_edge(actual_odds, standard_odds):
+    actual = parse_float(actual_odds)
+    standard = parse_float(standard_odds)
+    if not actual or not standard:
+        return None
+    return actual / standard - 1
+
+
+def candidate_with_actual(candidate, actual_odds):
+    actual = actual_for_candidate(candidate, actual_odds)
+    actual_price = actual.get("odds") if actual else None
+    edge = odds_edge(actual_price, candidate.get("standard_odds"))
+    return {
+        **candidate,
+        "actual_odds": actual_price,
+        "effective_odds": actual_price or candidate.get("standard_odds"),
+        "edge": edge,
+        "actual_selection": actual.get("selection") if actual else None,
+    }
+
+
+def market_probability(candidate):
+    probability = candidate.get("probability")
+    if probability is not None:
+        return probability
+    standard = parse_float(candidate.get("standard_odds"))
+    return 1 / standard if standard else None
+
+
+def expected_value(probability, odds_value):
+    price = parse_float(odds_value)
+    if probability is None or not price:
+        return None
+    return probability * price - 1
+
+
+def market_value_factor(candidate):
+    item_type = candidate.get("type")
+    if item_type == "handicap":
+        return 1.20
+    if item_type == "winner":
+        return 1.00
+    if item_type == "total":
+        return 0.80
+    if item_type == "correct_score":
+        return 0.65
+    return 0.70
+
+
+def build_market_candidates(match, odds, api_football_data):
+    candidates = []
+    implied = odds.get("implied_probabilities") or {}
+    if odds.get("found") and implied:
+        options = [
+            ("home_win", match["home_cn"], odds.get("home_win"), implied.get("home_win", 0)),
+            ("draw", "平局", odds.get("draw"), implied.get("draw", 0)),
+            ("away_win", match["away_cn"], odds.get("away_win"), implied.get("away_win", 0)),
+        ]
+        key, label, price, probability = max(options, key=lambda item: item[3])
+        if price:
+            candidates.append({
+                "slot": "独赢",
+                "type": "winner",
+                "selection": label,
+                "name": f"{label}独赢",
+                "standard_odds": price,
+                "probability": probability,
+                "base_score": 58 + probability * 20,
+                "source": "市场胜平负赔率",
+            })
+
+    handicap = asian_handicap_summary(((api_football_data or {}).get("asian_handicap") or {}).get("rows") or [])
+    if handicap.get("available") and handicap.get("avg_odds"):
+        candidates.append({
+            "slot": "让球",
+            "type": "handicap",
+            "selection": handicap.get("main_value"),
+            "name": handicap.get("main_value"),
+            "standard_odds": handicap.get("avg_odds"),
+            "base_score": 68,
+            "source": "API-Football 亚洲盘均值",
+        })
+
+    totals = totals_summary(odds.get("over_under") or [])
+    if totals.get("available"):
+        avg_over = totals.get("avg_over")
+        avg_under = totals.get("avg_under")
+        if avg_over and avg_under:
+            under = avg_under <= avg_over
+            candidates.append({
+                "slot": "大小球",
+                "type": "total",
+                "selection": f"{'Under' if under else 'Over'} {totals.get('line')}",
+                "name": f"{'小于' if under else '大于'} {totals.get('line')} 球",
+                "standard_odds": avg_under if under else avg_over,
+                "base_score": 52 if abs(avg_over - avg_under) > 0.08 else 42,
+                "source": "The Odds API 大小球均值",
+            })
+
+    correct = correct_score_summary(((api_football_data or {}).get("correct_score") or {}).get("rows") or [], limit=2)
+    for idx, score in enumerate(correct.get("hot") or [], start=1):
+        candidates.append({
+            "slot": f"波胆{idx}",
+            "type": "correct_score",
+            "selection": score.get("score"),
+            "name": f"波胆 {score.get('score')}",
+            "standard_odds": score.get("avg_odds"),
+            "base_score": 54 - idx * 4,
+            "source": "API-Football 波胆均值",
+        })
+
+    return candidates
+
+
+def score_candidate(candidate):
+    edge = candidate.get("edge")
+    ev_lift = candidate.get("ev_lift")
+    factor = candidate.get("market_value_factor", 1)
+    path_match = candidate.get("path_match_score", 0)
+    coverage = candidate.get("coverage_rate", 0)
+    edge_points = 0
+    if edge is not None:
+        weighted_edge = edge * factor
+        if weighted_edge >= 0.08:
+            edge_points = 30
+        elif weighted_edge >= 0.05:
+            edge_points = 22
+        elif weighted_edge >= 0.02:
+            edge_points = 12
+        elif weighted_edge >= -0.02:
+            edge_points = 0
+        elif weighted_edge >= -0.05:
+            edge_points = -18
+        else:
+            edge_points = -35
+    ev_points = 0
+    if ev_lift is not None:
+        if ev_lift >= 0.04:
+            ev_points = 18
+        elif ev_lift >= 0.02:
+            ev_points = 10
+        elif ev_lift >= 0:
+            ev_points = 3
+        elif ev_lift >= -0.02:
+            ev_points = -8
+        else:
+            ev_points = -18
+    if edge is None and ev_lift is None:
+        edge_points = -6
+    coverage_points = min(12, round(coverage * 18))
+    return round(candidate.get("base_score", 0) + edge_points + ev_points + path_match + coverage_points)
+
+
+def parse_score(score):
+    try:
+        home_goals, away_goals = [int(part) for part in str(score or "").split(":", 1)]
+    except (TypeError, ValueError):
+        return None
+    return home_goals, away_goals
+
+
+def distribution_probability(distribution, predicate):
+    total = 0
+    for row in (distribution or {}).get("rows") or []:
+        label = str(row.get("label") or "")
+        if predicate(label):
+            total += row.get("probability", 0)
+    return total
+
+
+def favorite_is_home(match, distribution):
+    favorite = str((distribution or {}).get("favorite") or "")
+    if not favorite:
+        return True
+    return favorite == str(match.get("home_cn") or "")
+
+
+def path_match_score(candidate, match, distribution):
+    if candidate.get("type") != "correct_score":
+        return 0, ""
+    parsed = parse_score(candidate.get("selection"))
+    if not parsed:
+        return 0, "波胆比分格式无法识别。"
+    home_goals, away_goals = parsed
+    diff = home_goals - away_goals
+    fav_home = favorite_is_home(match, distribution)
+    fav_diff = diff if fav_home else -diff
+
+    main_path = str((distribution or {}).get("main_path") or "")
+    if fav_diff == 1 and ("小胜" in main_path or "1球" in main_path):
+        return 18, "匹配主胜1球主路径。"
+    if fav_diff == 2 and "赢2球" in main_path:
+        return 18, "匹配赢2球主路径。"
+    if fav_diff >= 3 and "3球以上" in main_path:
+        return 18, "匹配大胜主路径。"
+    if fav_diff == 1:
+        return 12, "覆盖热门方小胜路径。"
+    if fav_diff == 2:
+        return 10, "覆盖盘口边界路径。"
+    if fav_diff >= 3:
+        return 8, "覆盖极端大胜路径。"
+    if fav_diff == 0:
+        return 6, "覆盖平局冷门路径。"
+    return 2, "覆盖弱势方爆冷路径，命中要求较高。"
+
+
+def coverage_rate(candidate, distribution):
+    item_type = candidate.get("type")
+    if item_type == "winner":
+        return distribution_probability(
+            distribution,
+            lambda label: ("小胜" in label or "赢2球" in label or "3球以上" in label),
+        )
+    if item_type == "handicap":
+        selection = str(candidate.get("selection") or "")
+        if "-1.5" in selection or "-1.25" in selection:
+            return distribution_probability(distribution, lambda label: "赢2球" in label or "3球以上" in label)
+        if "-1" in selection or "-0.75" in selection:
+            return distribution_probability(distribution, lambda label: "小胜" in label or "赢2球" in label or "3球以上" in label)
+        return distribution_probability(distribution, lambda label: "小胜" in label or "赢2球" in label or "3球以上" in label)
+    if item_type == "total":
+        selection = str(candidate.get("selection") or "").lower()
+        if "under" in selection or "小于" in selection:
+            return distribution_probability(distribution, lambda label: "平局" in label or "小胜" in label)
+        return distribution_probability(distribution, lambda label: "赢2球" in label or "3球以上" in label)
+    if item_type == "correct_score":
+        standard = parse_float(candidate.get("standard_odds"))
+        if not standard:
+            return 0
+        return min(0.25, (1 / standard) * 1.2)
+    return 0
+
+
+def enrich_candidate(candidate, actual_odds, match=None, distribution=None):
+    enriched = candidate_with_actual(candidate, actual_odds)
+    probability = market_probability(enriched)
+    factor = market_value_factor(enriched)
+    standard_ev = expected_value(probability, enriched.get("standard_odds"))
+    actual_ev = expected_value(probability, enriched.get("effective_odds"))
+    ev_lift = None
+    if actual_ev is not None and standard_ev is not None:
+        ev_lift = actual_ev - standard_ev
+    path_points, path_reason = path_match_score(enriched, match or {}, distribution or {})
+    coverage = coverage_rate(enriched, distribution or {})
+    enriched.update({
+        "probability": probability,
+        "market_value_factor": factor,
+        "standard_ev": standard_ev,
+        "actual_ev": actual_ev,
+        "ev_lift": ev_lift,
+        "path_match_score": path_points,
+        "path_match_reason": path_reason,
+        "coverage_rate": coverage,
+    })
+    enriched["score"] = score_candidate(enriched)
+    enriched["reason"] = odds_edge_reason(enriched)
+    enriched["recommended"] = enriched["score"] >= 55
+    if not enriched["recommended"]:
+        enriched["not_recommended_reason"] = not_recommended_reason(enriched)
+    return enriched
+
+
+def force_one_correct_score(candidates):
+    correct_scores = [item for item in candidates if item.get("type") == "correct_score"]
+    if not correct_scores or any(item.get("recommended") for item in correct_scores):
+        return
+    best = max(correct_scores, key=lambda item: (item.get("path_match_score", 0), item.get("score", 0)))
+    best["recommended"] = True
+    best["forced_recommendation"] = True
+    best["score"] = max(best.get("score", 0), 55)
+    best.pop("not_recommended_reason", None)
+    best["reason"] = f"硬规则保留至少一个波胆；{best.get('path_match_reason') or '用于覆盖最可能比分路径。'}"
+
+
+def build_recommendation_slots(match, odds, api_football_data, actual_odds, distribution=None):
+    candidates = [
+        enrich_candidate(candidate, actual_odds, match, distribution)
+        for candidate in build_market_candidates(match, odds, api_football_data)
+    ]
+    force_one_correct_score(candidates)
+    candidates.sort(key=lambda item: (item.get("recommended", False), item.get("score", 0)), reverse=True)
+    ev_sorted = sorted(
+        [item for item in candidates if item.get("ev_lift") is not None],
+        key=lambda item: item.get("ev_lift", -999),
+        reverse=True,
+    )
+    for rank, item in enumerate(ev_sorted, start=1):
+        item["ev_rank"] = rank
+
+    slots = candidates[:5]
+    while len(slots) < 5:
+        slots.append({
+            "slot": f"空位{len(slots) + 1}",
+            "type": "empty",
+            "recommended": False,
+            "name": "不推荐",
+            "score": 0,
+            "share": 0,
+            "reason": "没有可用的真实盘口数据。",
+            "not_recommended_reason": "没有可用的真实盘口数据。",
+        })
+
+    recommended_slots = [item for item in slots if item.get("recommended")]
+    total_score = sum(max(1, item["score"]) for item in recommended_slots)
+    for item in slots:
+        if item.get("recommended") and total_score:
+            item["share"] = max(0.08, item["score"] / total_score)
+        else:
+            item["share"] = 0
+    share_total = sum(item["share"] for item in slots if item.get("recommended"))
+    if share_total:
+        for item in slots:
+            if item.get("recommended"):
+                item["share"] = item["share"] / share_total
+    return slots
+
+
+def recommendation_reason(candidate):
+    if candidate.get("forced_recommendation"):
+        return candidate.get("reason", "硬规则保留至少一个波胆。")
+    item_type = candidate.get("type")
+    if item_type == "winner":
+        return "覆盖率最高，用于承接主方向判断。"
+    if item_type == "handicap":
+        return "市场主盘口，决定赢球路径是否打穿。"
+    if item_type == "total":
+        return "用于覆盖比赛节奏和进球数方向。"
+    if item_type == "correct_score":
+        return candidate.get("path_match_reason") or "用于覆盖最可能比分路径。"
+    return "综合评分进入前列。"
+
+
+def odds_edge_reason(candidate):
+    edge = candidate.get("edge")
+    ev_lift = candidate.get("ev_lift")
+    ev_text = ""
+    if ev_lift is not None:
+        ev_text = f" EV提升 {ev_lift * 100:+.1f}%。"
+    if edge is None:
+        return "未输入实际赔率，暂按市场标准赔率评估。"
+    if edge >= 0.05:
+        return f"实际赔率高于市场标准 {edge * 100:.1f}%，价值提升。{ev_text}"
+    if edge >= 0.02:
+        return f"实际赔率高于市场标准 {edge * 100:.1f}%，略有优势。{ev_text}"
+    if edge >= -0.02:
+        return f"实际赔率与市场标准接近，差异 {edge * 100:+.1f}%。{ev_text}"
+    return f"实际赔率低于市场标准 {abs(edge) * 100:.1f}%，价值下降。{ev_text}"
+
+
+def not_recommended_reason(candidate):
+    if not candidate.get("standard_odds"):
+        return "缺少市场标准赔率，无法评估。"
+    edge = candidate.get("edge")
+    ev_lift = candidate.get("ev_lift")
+    score = candidate.get("score", 0)
+    if edge is not None and edge < -0.02:
+        return f"实际赔率低于市场标准 {abs(edge) * 100:.1f}%，不划算。"
+    if ev_lift is not None and ev_lift < 0:
+        return f"EV为负，长期期望收益下降 {abs(ev_lift) * 100:.1f}%。"
+    if candidate.get("type") == "correct_score":
+        return "波胆命中要求高，当前分数不足。"
+    return f"综合分 {score}，未达到推荐阈值 55。"
+
+
+def actual_odds_summary(slots):
+    recommended = [slot for slot in slots if slot.get("recommended")]
+    if not recommended:
+        return {"avg_edge": 0, "best_edge": None, "avg_ev_lift": 0, "best_ev_lift": None, "recommended_count": 0}
+    edges = [slot.get("edge") for slot in recommended if slot.get("edge") is not None]
+    ev_lifts = [slot.get("ev_lift") for slot in recommended if slot.get("ev_lift") is not None]
+    return {
+        "avg_edge": sum(edges) / len(edges) if edges else 0,
+        "best_edge": max(edges) if edges else None,
+        "avg_ev_lift": sum(ev_lifts) / len(ev_lifts) if ev_lifts else 0,
+        "best_ev_lift": max(ev_lifts) if ev_lifts else None,
+        "recommended_count": len(recommended),
+    }

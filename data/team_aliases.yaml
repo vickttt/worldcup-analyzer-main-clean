@@ -1,30 +1,114 @@
-德国: Germany
-库拉索: Curacao
-瑞士: Switzerland
-卡塔尔: Qatar
-法国: France
-英格兰: England
-阿根廷: Argentina
-巴西: Brazil
-西班牙: Spain
-佛得角: Cape Verde
-比利时: Belgium
-埃及: Egypt
-葡萄牙: Portugal
-荷兰: Netherlands
-美国: United States
-墨西哥: Mexico
-日本: Japan
-韩国: South Korea
-奥地利: Austria
-约旦: Jordan
-阿尔及利亚: Algeria
-刚果（金）: DR Congo
-刚果民主共和国: DR Congo
-Democratic Republic of the Congo: DR Congo
-Democratic Republic of Congo: DR Congo
-Congo DR: DR Congo
-DR Congo: DR Congo
-Czech Republic: Czechia
-Curaçao: Curacao
-Bosnia and Herzegovina: Bosnia and Herzegovina
+德国:
+  canonical: Germany
+  aliases: [Germany]
+库拉索:
+  canonical: Curacao
+  aliases: [Curacao, Curaçao]
+瑞士:
+  canonical: Switzerland
+  aliases: [Switzerland]
+波黑:
+  canonical: Bosnia and Herzegovina
+  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia]
+卡塔尔:
+  canonical: Qatar
+  aliases: [Qatar]
+法国:
+  canonical: France
+  aliases: [France]
+英格兰:
+  canonical: England
+  aliases: [England]
+阿根廷:
+  canonical: Argentina
+  aliases: [Argentina]
+巴西:
+  canonical: Brazil
+  aliases: [Brazil]
+西班牙:
+  canonical: Spain
+  aliases: [Spain]
+佛得角:
+  canonical: Cape Verde
+  aliases: [Cape Verde]
+比利时:
+  canonical: Belgium
+  aliases: [Belgium]
+埃及:
+  canonical: Egypt
+  aliases: [Egypt]
+葡萄牙:
+  canonical: Portugal
+  aliases: [Portugal]
+荷兰:
+  canonical: Netherlands
+  aliases: [Netherlands]
+美国:
+  canonical: United States
+  aliases: [United States, USA, USMNT]
+加拿大:
+  canonical: Canada
+  aliases: [Canada]
+墨西哥:
+  canonical: Mexico
+  aliases: [Mexico]
+日本:
+  canonical: Japan
+  aliases: [Japan]
+韩国:
+  canonical: South Korea
+  aliases: [South Korea, Korea Republic, Korea Rep, Republic of Korea]
+捷克:
+  canonical: Czechia
+  aliases: [Czechia, Czech Republic]
+南非:
+  canonical: South Africa
+  aliases: [South Africa]
+奥地利:
+  canonical: Austria
+  aliases: [Austria]
+约旦:
+  canonical: Jordan
+  aliases: [Jordan]
+阿尔及利亚:
+  canonical: Algeria
+  aliases: [Algeria]
+刚果（金）:
+  canonical: DR Congo
+  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+刚果民主共和国:
+  canonical: DR Congo
+  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+Democratic Republic of the Congo:
+  canonical: DR Congo
+  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+Democratic Republic of Congo:
+  canonical: DR Congo
+  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+Congo DR:
+  canonical: DR Congo
+  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+DR Congo:
+  canonical: DR Congo
+  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+Czech Republic:
+  canonical: Czechia
+  aliases: [Czechia, Czech Republic]
+Czechia:
+  canonical: Czechia
+  aliases: [Czechia, Czech Republic]
+Curaçao:
+  canonical: Curacao
+  aliases: [Curacao, Curaçao]
+Bosnia and Herzegovina:
+  canonical: Bosnia and Herzegovina
+  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia]
+Bosnia & Herzegovina:
+  canonical: Bosnia and Herzegovina
+  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia]
+Bosnia:
+  canonical: Bosnia and Herzegovina
+  aliases: [Bosnia and Herzegovina, Bosnia & Herzegovina, Bosnia]
+Iran:
+  canonical: Iran
+  aliases: [Iran, IR Iran]

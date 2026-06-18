@@ -5,6 +5,7 @@ import requests
 import streamlit as st
 
 from modules.cache_config import POLYMARKET_DATA_TTL
+from modules.team_resolver import alias_candidates
 
 
 GAMMA_API_BASE = "https://gamma-api.polymarket.com"
@@ -15,6 +16,13 @@ def normalize_text(value):
     normalized = unicodedata.normalize("NFKD", value or "")
     ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
     return " ".join(ascii_text.lower().replace(".", " ").split())
+
+
+def name_candidates(value):
+    candidates = {normalize_text(value)}
+    for alias in alias_candidates(value):
+        candidates.add(normalize_text(alias))
+    return {candidate for candidate in candidates if candidate}
 
 
 def parse_json_list(value):
@@ -53,7 +61,9 @@ def event_matches(event, match):
         str(event.get("title", "")),
         str(event.get("slug", "")),
     ]))
-    return normalize_text(match["home_en"]) in text and normalize_text(match["away_en"]) in text
+    home_candidates = name_candidates(match["home_en"])
+    away_candidates = name_candidates(match["away_en"])
+    return any(name in text for name in home_candidates) and any(name in text for name in away_candidates)
 
 
 def map_binary_markets(event, match):
@@ -65,8 +75,8 @@ def map_binary_markets(event, match):
         "draw_market": None,
         "away_market": None,
     }
-    home = normalize_text(match["home_en"])
-    away = normalize_text(match["away_en"])
+    home_candidates = name_candidates(match["home_en"])
+    away_candidates = name_candidates(match["away_en"])
 
     for market in event.get("markets", []):
         question = normalize_text(market.get("question", ""))
@@ -78,10 +88,10 @@ def map_binary_markets(event, match):
         if "draw" in question:
             result["draw"] = price
             result["draw_market"] = market
-        elif home in question and "win" in question:
+        elif any(name in question for name in home_candidates) and "win" in question:
             result["home_win"] = price
             result["home_market"] = market
-        elif away in question and "win" in question:
+        elif any(name in question for name in away_candidates) and "win" in question:
             result["away_win"] = price
             result["away_market"] = market
 
