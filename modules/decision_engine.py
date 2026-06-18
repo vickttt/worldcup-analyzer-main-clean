@@ -442,25 +442,41 @@ def margin_points(odds, max_points):
     return points, f"庄家利润率约 {margin * 100:.1f}%，{label}。", margin
 
 
-def actual_edge_points(avg_ev_lift):
-    if avg_ev_lift is None:
+def actual_edge_points(summary):
+    avg_ev_lift = summary.get("avg_ev_lift")
+    weighted_ev_lift = summary.get("weighted_ev_lift", avg_ev_lift)
+    best_ev_lift = summary.get("best_ev_lift") or 0
+    positive_count = summary.get("positive_ev_count", 0)
+    core_positive = summary.get("core_positive_count", 0)
+    recommended_count = summary.get("recommended_count", 0)
+    if weighted_ev_lift is None:
         return 0, "未输入可比较的实际赔率。"
-    if avg_ev_lift >= 0.05:
-        return 45, f"平均EV提升 {avg_ev_lift * 100:.1f}%。"
-    if avg_ev_lift >= 0.03:
-        return 35, f"平均EV提升 {avg_ev_lift * 100:.1f}%。"
-    if avg_ev_lift >= 0.01:
-        return 25, f"平均EV提升 {avg_ev_lift * 100:.1f}%。"
-    if avg_ev_lift >= 0:
-        return 15, f"平均EV小幅提升 {avg_ev_lift * 100:.1f}%。"
-    if avg_ev_lift >= -0.02:
-        return 5, f"平均EV下降 {abs(avg_ev_lift) * 100:.1f}%。"
-    return 0, f"平均EV明显下降 {abs(avg_ev_lift) * 100:.1f}%。"
+    points = 0
+    points += min(14, positive_count * 4)
+    points += min(9, core_positive * 3)
+    if best_ev_lift >= 0.06:
+        points += 8
+    elif best_ev_lift >= 0.03:
+        points += 5
+    elif best_ev_lift > 0:
+        points += 3
+    if weighted_ev_lift >= 0.02:
+        points += 4
+    elif weighted_ev_lift >= 0:
+        points += 2
+    elif weighted_ev_lift < -0.03:
+        points -= 8
+    points = clamp(points, 0, 45)
+    return (
+        points,
+        f"{positive_count}/{recommended_count} 个推荐项为正EV，核心盘口正EV {core_positive} 个，"
+        f"最佳EV提升 {best_ev_lift * 100:.1f}%，覆盖率加权EV {weighted_ev_lift * 100:+.1f}%。",
+    )
 
 
 def recommendation_coverage_points(summary):
     count = summary.get("recommended_count", 0)
-    points = {5: 20, 4: 17, 3: 14, 2: 10, 1: 6}.get(count, 0)
+    points = {5: 15, 4: 13, 3: 11, 2: 8, 1: 5}.get(count, 0)
     if count:
         reason = f"五个投注位置中有 {count} 个达到推荐阈值。"
     else:
@@ -471,34 +487,35 @@ def recommendation_coverage_points(summary):
 def polymarket_aux_points(match, odds, polymarket):
     gap = favorite_probability_gap(match, odds, polymarket)
     if not gap:
-        return 3, "Polymarket 缺少可比数据，低权重处理。", None
+        return 2, "Polymarket 缺少可比数据，低权重处理。", None
     diff = abs(gap["difference"])
     if diff <= 0.03:
-        points = 10
+        points = 8
         reason = "Polymarket 与传统赔率主方向接近。"
     elif diff <= 0.08:
-        points = 7
+        points = 5
         reason = f"Polymarket 与传统赔率存在 {diff * 100:.1f}% 差异。"
     else:
-        points = 4
+        points = 3
         reason = f"Polymarket 与传统赔率差异达到 {diff * 100:.1f}%，需谨慎。"
     return points, reason, gap
 
 
-def odds_value_from_actual_odds(match, odds, polymarket, api_football_data, actual_odds):
-    slots = build_recommendation_slots(match, odds, api_football_data, actual_odds)
+def odds_value_from_actual_odds(match, odds, polymarket, api_football_data, actual_odds, distribution=None):
+    slots = build_recommendation_slots(match, odds, api_football_data, actual_odds, distribution)
     summary = actual_odds_summary(slots)
     avg_edge = summary.get("avg_edge") if summary.get("recommended_count") else None
     avg_ev_lift = summary.get("avg_ev_lift") if summary.get("recommended_count") else None
-    edge_score, edge_reason = actual_edge_points(avg_ev_lift)
+    weighted_ev_lift = summary.get("weighted_ev_lift") if summary.get("recommended_count") else None
+    edge_score, edge_reason = actual_edge_points(summary)
     coverage_score, coverage_reason = recommendation_coverage_points(summary)
 
     favorite = favorite_key_from_odds(odds)
     handicap_summary = api_handicap_summary(api_football_data)
-    handicap_raw, handicap_reason = handicap_direction_points(favorite, handicap_summary, 15) if favorite else (0, "缺少胜平负主方向。")
-    structure_score = clamp(handicap_raw, 0, 15)
+    handicap_raw, handicap_reason = handicap_direction_points(favorite, handicap_summary, 12) if favorite else (0, "缺少胜平负主方向。")
+    structure_score = clamp(handicap_raw, 0, 12)
 
-    margin_score_raw, margin_reason, margin = margin_points(odds, 10)
+    margin_score_raw, margin_reason, margin = margin_points(odds, 8)
     poly_score, poly_reason, gap = polymarket_aux_points(match, odds, polymarket)
 
     score = clamp(edge_score + coverage_score + structure_score + margin_score_raw + poly_score)
@@ -551,20 +568,21 @@ def odds_value_from_actual_odds(match, odds, polymarket, api_football_data, actu
             "avg_edge": avg_edge,
             "best_edge": best_edge,
             "avg_ev_lift": avg_ev_lift,
+            "weighted_ev_lift": weighted_ev_lift,
             "best_ev_lift": summary.get("best_ev_lift"),
         },
         "reason": (
             f"已输入实际赔率，赔率价值主要由EV提升、实际赔率优势和盘口价值因子决定；"
-            f"平均EV提升 {avg_ev_lift * 100:.1f}%。"
-            if avg_ev_lift is not None
+            f"覆盖率加权EV {weighted_ev_lift * 100:+.1f}%。"
+            if weighted_ev_lift is not None
             else "已输入实际赔率，但当前推荐位置没有形成可比较优势。"
         ),
     }
 
 
-def odds_value_analysis(match, odds, polymarket, api_football_data=None, actual_odds=None):
+def odds_value_analysis(match, odds, polymarket, api_football_data=None, actual_odds=None, distribution=None):
     if (actual_odds or {}).get("items"):
-        return odds_value_from_actual_odds(match, odds, polymarket, api_football_data, actual_odds)
+        return odds_value_from_actual_odds(match, odds, polymarket, api_football_data, actual_odds, distribution)
 
     gap = favorite_probability_gap(match, odds, polymarket)
     odds_probs = odds_probabilities(odds)
@@ -1001,7 +1019,7 @@ def stake_suggestion(final_score):
     return {"Conservative": 0, "Standard": 0, "Aggressive": 0}
 
 
-def build_decision_engine(match, odds, polymarket, api_football_data, betting_opinion, actual_odds=None):
+def build_decision_engine(match, odds, polymarket, api_football_data, betting_opinion, actual_odds=None, distribution=None):
     disagreement = market_disagreement(match, odds, polymarket)
     contrarian = contrarian_score(match, odds, polymarket)
     upset = upset_index(match, odds, polymarket, api_football_data)
@@ -1010,7 +1028,7 @@ def build_decision_engine(match, odds, polymarket, api_football_data, betting_op
     elo = placeholder_score("ELO评分")
     team_value = placeholder_score("球队身价")
     direction = direction_confidence(match, odds, polymarket, api_football_data)
-    odds_value = odds_value_analysis(match, odds, polymarket, api_football_data, actual_odds)
+    odds_value = odds_value_analysis(match, odds, polymarket, api_football_data, actual_odds, distribution)
     participation = participation_advice(direction, odds_value, upset)
     stake = recommended_stake(direction, odds_value, participation)
 

@@ -1,7 +1,9 @@
 import csv
+import re
 from io import StringIO
 
 from modules.market_utils import asian_handicap_summary, correct_score_summary, totals_summary
+from modules.team_resolver import canonical_name
 
 
 AI_OPTIMIZATION_INTERFACE = {
@@ -26,6 +28,35 @@ def parse_float(value):
 
 def normalize(value):
     return " ".join(str(value or "").strip().lower().replace("-", " ").split())
+
+
+def normalize_team(value):
+    return normalize(canonical_name(str(value or "").strip()))
+
+
+def normalize_score(value):
+    text = str(value or "").strip()
+    text = text.replace("：", ":").replace(" - ", ":").replace("-", ":")
+    text = re.sub(r"\s+", "", text)
+    match = re.search(r"(\d+):(\d+)", text)
+    if not match:
+        return text
+    return f"{int(match.group(1))}:{int(match.group(2))}"
+
+
+def standardize_selection(item_type, selection):
+    text = str(selection or "").strip()
+    if item_type == "winner":
+        return canonical_name(text)
+    if item_type == "correct_score":
+        return normalize_score(text)
+    if item_type == "total":
+        side, line = total_side_and_line(text)
+        if side and line is not None:
+            return f"{side.title()} {line:g}"
+    if item_type == "handicap":
+        return re.sub(r"\s+", " ", text)
+    return text
 
 
 def market_key(label):
@@ -54,9 +85,10 @@ def parse_actual_odds(raw_text):
     for item in items:
         key = item["type"]
         if key == "correct_score":
-            by_type.setdefault(key, {})[normalize(item["selection"])] = item
+            by_type.setdefault(key, {})[normalize_score(item["selection"])] = item
         else:
             by_type[key] = item
+        by_type.setdefault(f"{key}_items", []).append(item)
     return {"items": items, "by_type": by_type, "raw": text}
 
 
@@ -76,7 +108,7 @@ def parse_csv_odds(text):
                 selection = parts[1]
                 if key == "handicap" and len(parts) >= 4:
                     selection = f"{parts[1]} {parts[2]}"
-                rows.append({"type": key, "selection": selection, "odds": odds})
+                rows.append({"type": key, "selection": standardize_selection(key, selection), "odds": odds})
     except csv.Error:
         return []
     return rows
@@ -90,19 +122,61 @@ def parse_block_odds(text):
         key = market_key(lines[index])
         odds = parse_float(lines[index + 2])
         if key and odds:
-            rows.append({"type": key, "selection": lines[index + 1], "odds": odds})
+            rows.append({"type": key, "selection": standardize_selection(key, lines[index + 1]), "odds": odds})
             index += 3
         else:
             index += 1
     return rows
 
 
+def number_in_text(value):
+    match = re.search(r"([+-]?\d+(?:\.\d+)?)", str(value or ""))
+    return float(match.group(1)) if match else None
+
+
+def total_side_and_line(value):
+    text = normalize(value)
+    side = None
+    if "under" in text or "小于" in text:
+        side = "under"
+    if "over" in text or "大于" in text:
+        side = "over"
+    return side, number_in_text(value)
+
+
+def selection_matches(candidate, item):
+    item_type = candidate.get("type")
+    candidate_selection = candidate.get("selection")
+    actual_selection = item.get("selection")
+    if item_type == "winner":
+        left = normalize_team(candidate_selection)
+        right = normalize_team(actual_selection)
+        return left in right or right in left
+    if item_type == "total":
+        candidate_side, candidate_line = total_side_and_line(candidate_selection)
+        actual_side, actual_line = total_side_and_line(actual_selection)
+        return candidate_side == actual_side and candidate_line == actual_line
+    if item_type == "handicap":
+        candidate_line = number_in_text(candidate_selection)
+        actual_line = number_in_text(actual_selection)
+        if candidate_line is None or actual_line is None:
+            return False
+        return abs(candidate_line - actual_line) < 0.001
+    if item_type == "correct_score":
+        return normalize_score(candidate_selection) == normalize_score(actual_selection)
+    return normalize(candidate_selection) == normalize(actual_selection)
+
+
 def actual_for_candidate(candidate, actual_odds):
     by_type = (actual_odds or {}).get("by_type") or {}
     item_type = candidate.get("type")
     if item_type == "correct_score":
-        return (by_type.get("correct_score") or {}).get(normalize(candidate.get("selection")))
-    return by_type.get(item_type)
+        return (by_type.get("correct_score") or {}).get(normalize_score(candidate.get("selection")))
+    candidates = by_type.get(f"{item_type}_items") or []
+    for item in candidates:
+        if selection_matches(candidate, item):
+            return item
+    return None
 
 
 def odds_edge(actual_odds, standard_odds):
@@ -184,7 +258,7 @@ def build_market_candidates(match, odds, api_football_data):
             "selection": handicap.get("main_value"),
             "name": handicap.get("main_value"),
             "standard_odds": handicap.get("avg_odds"),
-            "base_score": 68,
+            "base_score": 74,
             "source": "API-Football 亚洲盘均值",
         })
 
@@ -193,18 +267,22 @@ def build_market_candidates(match, odds, api_football_data):
         avg_over = totals.get("avg_over")
         avg_under = totals.get("avg_under")
         if avg_over and avg_under:
-            under = avg_under <= avg_over
-            candidates.append({
-                "slot": "大小球",
-                "type": "total",
-                "selection": f"{'Under' if under else 'Over'} {totals.get('line')}",
-                "name": f"{'小于' if under else '大于'} {totals.get('line')} 球",
-                "standard_odds": avg_under if under else avg_over,
-                "base_score": 52 if abs(avg_over - avg_under) > 0.08 else 42,
-                "source": "The Odds API 大小球均值",
-            })
+            for side, price, label_cn in [
+                ("Under", avg_under, "小于"),
+                ("Over", avg_over, "大于"),
+            ]:
+                market_favored = price <= (avg_over if side == "Under" else avg_under)
+                candidates.append({
+                    "slot": "大小球",
+                    "type": "total",
+                    "selection": f"{side} {totals.get('line')}",
+                    "name": f"{label_cn} {totals.get('line')} 球",
+                    "standard_odds": price,
+                    "base_score": 50 if market_favored and abs(avg_over - avg_under) > 0.08 else 40,
+                    "source": "The Odds API 大小球均值",
+                })
 
-    correct = correct_score_summary(((api_football_data or {}).get("correct_score") or {}).get("rows") or [], limit=2)
+    correct = correct_score_summary(((api_football_data or {}).get("correct_score") or {}).get("rows") or [], limit=3)
     for idx, score in enumerate(correct.get("hot") or [], start=1):
         candidates.append({
             "slot": f"波胆{idx}",
@@ -225,6 +303,7 @@ def score_candidate(candidate):
     factor = candidate.get("market_value_factor", 1)
     path_match = candidate.get("path_match_score", 0)
     coverage = candidate.get("coverage_rate", 0)
+    direction_alignment = candidate.get("direction_alignment_score", 0)
     edge_points = 0
     if edge is not None:
         weighted_edge = edge * factor
@@ -255,7 +334,7 @@ def score_candidate(candidate):
     if edge is None and ev_lift is None:
         edge_points = -6
     coverage_points = min(12, round(coverage * 18))
-    return round(candidate.get("base_score", 0) + edge_points + ev_points + path_match + coverage_points)
+    return round(candidate.get("base_score", 0) + edge_points + ev_points + path_match + coverage_points + direction_alignment)
 
 
 def parse_score(score):
@@ -311,6 +390,22 @@ def path_match_score(candidate, match, distribution):
     return 2, "覆盖弱势方爆冷路径，命中要求较高。"
 
 
+def direction_alignment_score(candidate, match, distribution):
+    item_type = candidate.get("type")
+    favorite = str((distribution or {}).get("favorite") or "")
+    selection = str(candidate.get("selection") or candidate.get("name") or "")
+    if item_type == "winner":
+        return 20 if favorite and favorite in selection else 8
+    if item_type == "handicap":
+        return 22
+    if item_type == "correct_score":
+        return 10 if candidate.get("path_match_score", 0) >= 10 else 4
+    if item_type == "total":
+        ev_lift = candidate.get("ev_lift") or 0
+        return 4 if ev_lift >= 0.05 else -8
+    return 0
+
+
 def coverage_rate(candidate, distribution):
     item_type = candidate.get("type")
     if item_type == "winner":
@@ -359,6 +454,7 @@ def enrich_candidate(candidate, actual_odds, match=None, distribution=None):
         "path_match_reason": path_reason,
         "coverage_rate": coverage,
     })
+    enriched["direction_alignment_score"] = direction_alignment_score(enriched, match or {}, distribution or {})
     enriched["score"] = score_candidate(enriched)
     enriched["reason"] = odds_edge_reason(enriched)
     enriched["recommended"] = enriched["score"] >= 55
@@ -367,16 +463,139 @@ def enrich_candidate(candidate, actual_odds, match=None, distribution=None):
     return enriched
 
 
-def force_one_correct_score(candidates):
+def force_min_correct_scores(candidates, minimum=2):
     correct_scores = [item for item in candidates if item.get("type") == "correct_score"]
-    if not correct_scores or any(item.get("recommended") for item in correct_scores):
+    if not correct_scores:
         return
-    best = max(correct_scores, key=lambda item: (item.get("path_match_score", 0), item.get("score", 0)))
-    best["recommended"] = True
-    best["forced_recommendation"] = True
-    best["score"] = max(best.get("score", 0), 55)
-    best.pop("not_recommended_reason", None)
-    best["reason"] = f"硬规则保留至少一个波胆；{best.get('path_match_reason') or '用于覆盖最可能比分路径。'}"
+    recommended_count = sum(1 for item in correct_scores if item.get("recommended"))
+    if recommended_count >= min(minimum, len(correct_scores)):
+        return
+    sorted_scores = sorted(correct_scores, key=lambda item: (item.get("recommended", False), item.get("path_match_score", 0), item.get("score", 0)), reverse=True)
+    for item in sorted_scores:
+        if recommended_count >= min(minimum, len(correct_scores)):
+            break
+        if item.get("recommended"):
+            continue
+        item["recommended"] = True
+        item["forced_recommendation"] = True
+        item["score"] = max(item.get("score", 0), 55 if recommended_count == 0 else 45)
+        item.pop("not_recommended_reason", None)
+        item["reason"] = f"低金额保留波胆候选；{item.get('path_match_reason') or '用于覆盖最可能比分路径。'}"
+        recommended_count += 1
+
+
+def allocation_cap(item):
+    item_type = item.get("type")
+    if item_type == "winner":
+        return 0.45
+    if item_type == "handicap":
+        return 0.36
+    if item_type == "total":
+        return 0.26
+    if item_type == "correct_score":
+        return 0.16
+    return 0
+
+
+def allocation_floor(item):
+    if not item.get("recommended"):
+        return 0
+    if item.get("type") == "correct_score":
+        return 0.04 if item.get("forced_recommendation") else 0.06
+    return 0.04
+
+
+def allocation_raw_weight(item):
+    score_part = max(item.get("score", 0), 1) / 100
+    coverage_part = 0.35 + min(item.get("coverage_rate") or 0, 0.80)
+    ev_part = 1 + max(item.get("ev_lift") or 0, 0) * 6
+    if item.get("type") == "correct_score":
+        ev_part *= 0.70
+    return score_part * coverage_part * ev_part
+
+
+def normalize_shares(items):
+    total = sum(item.get("share", 0) for item in items)
+    if total <= 0:
+        return
+    for item in items:
+        item["share"] = item.get("share", 0) / total
+
+
+def apply_individual_caps(items):
+    for _ in range(5):
+        over = [item for item in items if item.get("share", 0) > allocation_cap(item)]
+        if not over:
+            break
+        overflow = 0
+        for item in over:
+            cap = allocation_cap(item)
+            overflow += item["share"] - cap
+            item["share"] = cap
+        receivers = [item for item in items if item not in over and item.get("share", 0) < allocation_cap(item)]
+        receiver_total = sum(item.get("share", 0) for item in receivers)
+        if not receivers or receiver_total <= 0:
+            break
+        for item in receivers:
+            room = allocation_cap(item) - item.get("share", 0)
+            item["share"] += min(room, overflow * item.get("share", 0) / receiver_total)
+    normalize_shares(items)
+
+
+def apply_correlation_caps(items):
+    correct_items = [item for item in items if item.get("type") == "correct_score"]
+    correct_total = sum(item.get("share", 0) for item in correct_items)
+    if correct_total > 0.26:
+        scale = 0.26 / correct_total
+        released = 0
+        for item in correct_items:
+            old = item["share"]
+            item["share"] = old * scale
+            released += old - item["share"]
+        receivers = [item for item in items if item.get("type") != "correct_score"]
+        receiver_total = sum(item.get("share", 0) for item in receivers)
+        if receiver_total:
+            for item in receivers:
+                item["share"] += released * item["share"] / receiver_total
+
+    path_items = [item for item in items if item.get("type") in {"winner", "handicap", "correct_score"}]
+    path_total = sum(item.get("share", 0) for item in path_items)
+    total_items = [item for item in items if item.get("type") == "total"]
+    if path_total > 0.86 and total_items:
+        scale = 0.86 / path_total
+        released = 0
+        for item in path_items:
+            old = item["share"]
+            item["share"] = old * scale
+            released += old - item["share"]
+        total_weight = sum(item.get("share", 0) for item in total_items)
+        for item in total_items:
+            item["share"] += released * item["share"] / total_weight if total_weight else released / len(total_items)
+    normalize_shares(items)
+
+
+def assign_portfolio_shares(slots):
+    recommended = [item for item in slots if item.get("recommended")]
+    if not recommended:
+        for item in slots:
+            item["share"] = 0
+        return
+
+    raw_total = sum(allocation_raw_weight(item) for item in recommended)
+    for item in slots:
+        if item.get("recommended") and raw_total:
+            item["share"] = allocation_raw_weight(item) / raw_total
+        else:
+            item["share"] = 0
+
+    for item in recommended:
+        item["share"] = max(item["share"], allocation_floor(item))
+    normalize_shares(recommended)
+    apply_individual_caps(recommended)
+    apply_correlation_caps(recommended)
+    for item in slots:
+        if not item.get("recommended"):
+            item["share"] = 0
 
 
 def build_recommendation_slots(match, odds, api_football_data, actual_odds, distribution=None):
@@ -384,7 +603,7 @@ def build_recommendation_slots(match, odds, api_football_data, actual_odds, dist
         enrich_candidate(candidate, actual_odds, match, distribution)
         for candidate in build_market_candidates(match, odds, api_football_data)
     ]
-    force_one_correct_score(candidates)
+    force_min_correct_scores(candidates, minimum=2)
     candidates.sort(key=lambda item: (item.get("recommended", False), item.get("score", 0)), reverse=True)
     ev_sorted = sorted(
         [item for item in candidates if item.get("ev_lift") is not None],
@@ -407,18 +626,7 @@ def build_recommendation_slots(match, odds, api_football_data, actual_odds, dist
             "not_recommended_reason": "没有可用的真实盘口数据。",
         })
 
-    recommended_slots = [item for item in slots if item.get("recommended")]
-    total_score = sum(max(1, item["score"]) for item in recommended_slots)
-    for item in slots:
-        if item.get("recommended") and total_score:
-            item["share"] = max(0.08, item["score"] / total_score)
-        else:
-            item["share"] = 0
-    share_total = sum(item["share"] for item in slots if item.get("recommended"))
-    if share_total:
-        for item in slots:
-            if item.get("recommended"):
-                item["share"] = item["share"] / share_total
+    assign_portfolio_shares(slots)
     return slots
 
 
@@ -472,13 +680,44 @@ def not_recommended_reason(candidate):
 def actual_odds_summary(slots):
     recommended = [slot for slot in slots if slot.get("recommended")]
     if not recommended:
-        return {"avg_edge": 0, "best_edge": None, "avg_ev_lift": 0, "best_ev_lift": None, "recommended_count": 0}
+        return {
+            "avg_edge": 0,
+            "best_edge": None,
+            "avg_ev_lift": 0,
+            "best_ev_lift": None,
+            "positive_ev_count": 0,
+            "negative_ev_count": 0,
+            "core_positive_count": 0,
+            "weighted_ev_lift": 0,
+            "recommended_count": 0,
+        }
     edges = [slot.get("edge") for slot in recommended if slot.get("edge") is not None]
     ev_lifts = [slot.get("ev_lift") for slot in recommended if slot.get("ev_lift") is not None]
+    positive_ev = [value for value in ev_lifts if value > 0]
+    negative_ev = [value for value in ev_lifts if value < 0]
+    core_positive = [
+        slot for slot in recommended
+        if slot.get("type") in {"winner", "handicap", "total"} and (slot.get("ev_lift") or 0) > 0
+    ]
+    weights = [
+        max(0.05, slot.get("coverage_rate") or 0)
+        * (1.25 if slot.get("type") in {"winner", "handicap"} else 1.10 if slot.get("type") == "total" else 0.40)
+        for slot in recommended
+        if slot.get("ev_lift") is not None
+    ]
+    weighted_values = [
+        (slot.get("ev_lift") or 0) * weight
+        for slot, weight in zip([slot for slot in recommended if slot.get("ev_lift") is not None], weights)
+    ]
+    weighted_ev = sum(weighted_values) / sum(weights) if weights else 0
     return {
         "avg_edge": sum(edges) / len(edges) if edges else 0,
         "best_edge": max(edges) if edges else None,
         "avg_ev_lift": sum(ev_lifts) / len(ev_lifts) if ev_lifts else 0,
         "best_ev_lift": max(ev_lifts) if ev_lifts else None,
+        "positive_ev_count": len(positive_ev),
+        "negative_ev_count": len(negative_ev),
+        "core_positive_count": len(core_positive),
+        "weighted_ev_lift": weighted_ev,
         "recommended_count": len(recommended),
     }

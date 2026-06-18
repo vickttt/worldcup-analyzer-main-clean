@@ -1,6 +1,9 @@
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 from html import escape
+from itertools import combinations
+import json
+import re
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -49,7 +52,14 @@ from modules.schedule_client import (
 )
 from modules.score_model import recommend_scores
 from modules.the_odds_client import fetch_odds
-from modules.user_odds import build_recommendation_slots, parse_actual_odds, recommendation_reason
+from modules.user_odds import (
+    build_market_candidates,
+    build_recommendation_slots,
+    candidate_with_actual,
+    parse_actual_odds,
+    parse_score,
+    recommendation_reason,
+)
 from modules.value_model import analyze_value
 from modules.weather_client import weather_for_fixture
 
@@ -73,6 +83,10 @@ def fmt_odds(value):
         return f"{float(value):.2f}"
     except (TypeError, ValueError):
         return str(value)
+
+
+def clamp(value, low=0, high=100):
+    return max(low, min(high, round(value)))
 
 
 def money(value):
@@ -1000,14 +1014,23 @@ def recommended_total_stake(decision):
 def stake_amounts(combo, decision):
     total, _ = recommended_total_stake(decision)
     rows = []
+    recommended_rows = []
     for item in combo:
         effective_odds = item.get("effective_odds") or item.get("standard_odds") or item.get("odds")
         amount = round_to_hundred(total * item.get("share", 0)) if item.get("recommended") else 0
-        rows.append({
+        row = {
             **item,
             "odds": effective_odds,
             "amount": amount,
-        })
+        }
+        rows.append(row)
+        if row.get("recommended"):
+            recommended_rows.append(row)
+
+    difference = total - sum(item.get("amount", 0) for item in recommended_rows)
+    if recommended_rows and difference:
+        target = max(recommended_rows, key=lambda item: item.get("share", 0))
+        target["amount"] = max(0, target.get("amount", 0) + difference)
     return rows
 
 
@@ -1042,6 +1065,11 @@ def combo_role(index, item):
     if item.get("type") == "correct_score":
         return "⚪ 波胆逻辑"
     return "⚪ 补充逻辑"
+
+
+def score_stars(score):
+    filled = max(1, min(5, round((score or 0) / 20)))
+    return "★" * filled + "☆" * (5 - filled)
 
 
 def render_recommended_combo(match, odds, api_football_data, distribution):
@@ -1080,8 +1108,20 @@ def profit_text(amount, odds, outcome):
     return "视比分"
 
 
+def profit_value(amount, odds, outcome):
+    if outcome == "win" and amount and odds:
+        return round(amount * (odds - 1))
+    if outcome == "lose" and amount:
+        return -amount
+    return 0
+
+
 def combo_item(combo, item_type):
     return next((item for item in combo if item.get("type") == item_type and item.get("recommended")), {})
+
+
+def combo_items(combo, item_type):
+    return [item for item in combo if item.get("type") == item_type and item.get("recommended")]
 
 
 def total_known_profit(values):
@@ -1099,7 +1139,1030 @@ def total_known_profit(values):
     return f"{total:+d}" + (" + 浮动" if unknown else "")
 
 
-def path_analysis_rows(distribution, combo):
+def portfolio_metrics(combo):
+    active = [item for item in combo if item.get("recommended") and item.get("amount")]
+    total_stake = sum(item.get("amount", 0) for item in active)
+    expected_profit = sum(item.get("amount", 0) * (item.get("actual_ev") or 0) for item in active)
+    core_expected_profit = sum(
+        item.get("amount", 0) * (item.get("actual_ev") or 0)
+        for item in active
+        if item.get("type") in {"winner", "handicap", "total"}
+    )
+    correct_score_expected_profit = sum(
+        item.get("amount", 0) * (item.get("actual_ev") or 0)
+        for item in active
+        if item.get("type") == "correct_score"
+    )
+    max_loss = total_stake
+    ratio = expected_profit / max_loss if max_loss else 0
+    return {
+        "total_stake": total_stake,
+        "expected_profit": round(expected_profit),
+        "expected_yield": expected_profit / total_stake if total_stake else 0,
+        "core_expected_profit": round(core_expected_profit),
+        "correct_score_expected_profit": round(correct_score_expected_profit),
+        "max_loss": max_loss,
+        "risk_reward": ratio,
+        "weighted_correlation": weighted_combo_correlation(active),
+    }
+
+
+def bet_correlation(first, second):
+    first_type = first.get("type")
+    second_type = second.get("type")
+    pair = {first_type, second_type}
+    if first_type == second_type == "correct_score":
+        return 0.35
+    if first_type == second_type:
+        return 1.0
+    if pair == {"winner", "handicap"}:
+        return 0.90
+    if pair == {"winner", "correct_score"}:
+        return 0.95
+    if pair == {"handicap", "correct_score"}:
+        return 0.88
+    if pair == {"winner", "total"}:
+        return 0.40
+    if pair == {"handicap", "total"}:
+        return 0.45
+    if pair == {"total", "correct_score"}:
+        return 0.55
+    return 0.30
+
+
+def weighted_combo_correlation(active):
+    if len(active) < 2:
+        return 0
+    weighted_sum = 0
+    weight_total = 0
+    for left_index, left in enumerate(active):
+        for right in active[left_index + 1:]:
+            weight = (left.get("amount", 0) or 0) * (right.get("amount", 0) or 0)
+            weighted_sum += weight * bet_correlation(left, right)
+            weight_total += weight
+    return weighted_sum / weight_total if weight_total else 0
+
+
+def correlation_matrix_rows(combo):
+    active = [item for item in combo if item.get("recommended") and item.get("amount")]
+    rows = []
+    for left in active:
+        row = {"投注": left.get("name", "-")}
+        for right in active:
+            row[right.get("name", "-")] = f"{bet_correlation(left, right) * 100:.0f}%"
+        rows.append(row)
+    return rows
+
+
+def market_odds_overview_rows(combo):
+    rows = []
+    for item in combo:
+        if item.get("type") in {"empty"}:
+            continue
+        actual = item.get("actual_odds")
+        market = item.get("standard_odds")
+        if actual is None or market is None:
+            status = "⚪ 未输入实际赔率"
+        elif actual > market:
+            status = "🟢 实际赔率更优"
+        elif actual < market:
+            status = "🔴 实际赔率偏低"
+        else:
+            status = "⚪ 与市场一致"
+        rows.append({
+            "投注": item.get("name", "-"),
+            "实际赔率": fmt_odds(actual),
+            "市场赔率": fmt_odds(market),
+            "差异": f"{(item.get('edge') or 0) * 100:+.1f}%" if item.get("edge") is not None else "-",
+            "状态": status,
+        })
+    return rows
+
+
+def actual_odds_completeness(combo):
+    candidates = [item for item in combo if item.get("type") != "empty"]
+    if not candidates:
+        return {"entered": 0, "total": 0, "ratio": 0, "missing": []}
+    entered = [item for item in candidates if item.get("actual_odds")]
+    missing = [item.get("name", "-") for item in candidates if not item.get("actual_odds")]
+    return {
+        "entered": len(entered),
+        "total": len(candidates),
+        "ratio": len(entered) / len(candidates),
+        "missing": missing,
+    }
+
+
+def actual_odds_completeness_for_match(match, odds, api_football_data, actual_odds, fallback_combo):
+    raw_candidates = build_market_candidates(match, odds, api_football_data)
+    if not raw_candidates:
+        return actual_odds_completeness(fallback_combo)
+
+    required = []
+    seen = set()
+    for candidate in raw_candidates:
+        key = (candidate.get("type"), candidate.get("slot"))
+        if candidate.get("type") == "total":
+            key = ("total", "主大小球")
+            if key in seen:
+                continue
+            total_candidates = [
+                candidate_with_actual(item, actual_odds)
+                for item in raw_candidates
+                if item.get("type") == "total"
+            ]
+            matched_total = next((item for item in total_candidates if item.get("actual_odds")), None)
+            required.append(matched_total or {**candidate, "name": "大小球主盘口", "actual_odds": None})
+            seen.add(key)
+            continue
+        if key in seen:
+            continue
+        seen.add(key)
+        required.append(candidate_with_actual(candidate, actual_odds))
+
+    entered = [item for item in required if item.get("actual_odds")]
+    missing = [item.get("name", "-") for item in required if not item.get("actual_odds")]
+    return {
+        "entered": len(entered),
+        "total": len(required),
+        "ratio": len(entered) / len(required) if required else 0,
+        "missing": missing,
+    }
+
+
+def optimized_strategy_reason_rows(strategy, match, distribution):
+    if not strategy:
+        return []
+    items = strategy.get("items") or []
+    positive_total = sum(max((item.get("amount", 0) * (item.get("actual_ev") or 0)), 0) for item in items)
+    rows = []
+    for item in items:
+        ev_amount = item.get("amount", 0) * (item.get("actual_ev") or 0)
+        contribution = max(ev_amount, 0) / positive_total if positive_total else 0
+        rows.append({
+            "保留投注": item.get("name", "-"),
+            "仓位": f"{item.get('amount', 0)}元",
+            "EV贡献占比": percent(contribution) if positive_total else "-",
+            "方向一致性": percent(item_direction_alignment(item, match, distribution)),
+            "保留原因": recommendation_reason(item),
+        })
+    return rows
+
+
+def strategy_holdings_rows(strategy, match, distribution):
+    rows = []
+    for item in (strategy or {}).get("items") or []:
+        rows.append({
+            "投注": item.get("name", "-"),
+            "仓位": f"{item.get('amount', 0)}元",
+            "使用赔率": fmt_odds(item.get("odds") or item.get("effective_odds") or item.get("standard_odds")),
+            "市场赔率": fmt_odds(item.get("standard_odds")),
+            "实际赔率": fmt_odds(item.get("actual_odds")),
+            "EV提升": f"{(item.get('ev_lift') or 0) * 100:+.1f}%" if item.get("ev_lift") is not None else "-",
+            "覆盖率": percent(item.get("coverage_rate") or 0),
+            "方向一致性": percent(item_direction_alignment(item, match, distribution)),
+            "说明": recommendation_reason(item),
+        })
+    return rows
+
+
+def strategy_path_rows(strategy):
+    rows = []
+    for row in (strategy or {}).get("score_rows") or []:
+        rows.append({
+            "比分": row.get("比分", "-"),
+            "路径": row.get("路径", "-"),
+            "路径权重": row.get("路径权重", "-"),
+            "组合收益": row.get("组合收益", "-"),
+            "EV贡献": row.get("EV贡献", "-"),
+        })
+    return rows
+
+
+def render_strategy_detail(strategy, match, distribution):
+    if not strategy:
+        return
+    st.markdown(f"**策略{strategy['code']}：{strategy['name']}**")
+    metric_cols = st.columns(6)
+    metric_cols[0].metric("总仓位", f"{sum(item.get('amount', 0) for item in strategy.get('items', []))}元")
+    metric_cols[1].metric("命中率", percent(strategy.get("hit_rate", 0)))
+    metric_cols[2].metric("EV", f"{strategy.get('expected_profit', 0):+.0f}")
+    metric_cols[3].metric("最大盈利", f"{strategy.get('max_profit', 0):+.0f}")
+    metric_cols[4].metric("最大亏损", f"-{strategy.get('max_loss', 0):.0f}")
+    metric_cols[5].metric("评分", strategy.get("score", 0))
+
+    holdings = strategy_holdings_rows(strategy, match, distribution)
+    if holdings:
+        st.markdown("**策略组成与仓位结构**")
+        st.dataframe(pd.DataFrame(holdings), use_container_width=True, hide_index=True)
+
+    paths = strategy_path_rows(strategy)
+    if paths:
+        st.markdown("**收益路径与风险路径**")
+        st.dataframe(pd.DataFrame(paths), use_container_width=True, hide_index=True)
+
+    best = max((strategy.get("score_rows") or []), key=lambda row: row.get("_total", 0), default=None)
+    worst = min((strategy.get("score_rows") or []), key=lambda row: row.get("_total", 0), default=None)
+    if best or worst:
+        best_text = f"{best.get('比分')} {best.get('组合收益')}" if best else "-"
+        worst_text = f"{worst.get('比分')} {worst.get('组合收益')}" if worst else "-"
+        st.caption(f"最佳比分路径：{best_text}；最差比分路径：{worst_text}。")
+
+
+def bet_identity(item):
+    return (
+        item.get("type"),
+        str(item.get("selection") or item.get("name") or ""),
+    )
+
+
+def discard_reason(item, selected_items):
+    if not item.get("recommended"):
+        return item.get("not_recommended_reason") or "未达到推荐阈值。"
+    if not item.get("actual_odds"):
+        return "未录入实际赔率，EV判断不完整。"
+    if item.get("edge") is not None and item.get("edge") < 0:
+        return "实际赔率低于市场赔率，价值不足。"
+    if item.get("ev_lift") is not None and item.get("ev_lift") <= 0:
+        return "EV贡献不足，未进入优化组合。"
+    if selected_items:
+        avg_corr = sum(bet_correlation(item, selected) for selected in selected_items) / len(selected_items)
+        if avg_corr >= 0.75:
+            return "与已选投注相关性过高，继续加入会造成路径集中。"
+    return "综合评分低于已选组合，未被策略优化器保留。"
+
+
+def discarded_bet_rows(all_combo, selected_strategy):
+    selected_items = (selected_strategy or {}).get("items") or []
+    selected_keys = {bet_identity(item) for item in selected_items}
+    rows = []
+    for item in all_combo:
+        if item.get("type") == "empty" or bet_identity(item) in selected_keys:
+            continue
+        rows.append({
+            "未保留投注": item.get("name", "-"),
+            "市场赔率": fmt_odds(item.get("standard_odds")),
+            "实际赔率": fmt_odds(item.get("actual_odds")),
+            "EV提升": f"{(item.get('ev_lift') or 0) * 100:+.1f}%" if item.get("ev_lift") is not None else "-",
+            "放弃原因": discard_reason(item, selected_items),
+        })
+    return rows
+
+
+def score_path_label(match, distribution, score):
+    try:
+        home_goals, away_goals = [int(part) for part in str(score).split(":", 1)]
+    except ValueError:
+        return "-"
+    favorite_home = distribution.get("favorite") in {team_cn(match["home_cn"]), match["home_cn"]}
+    margin = home_goals - away_goals if favorite_home else away_goals - home_goals
+    if margin == 1:
+        return "热门方胜1球主路径"
+    if margin == 2:
+        return "热门方胜2球主路径"
+    if margin >= 3:
+        return "热门方胜3球以上极端路径"
+    if margin == 0:
+        return "平局风险路径"
+    return "弱势方爆冷路径"
+
+
+def exact_score_probability(combo, score):
+    for item in combo_items(combo, "correct_score"):
+        if str(item.get("selection")) == str(score):
+            odds_value = item.get("standard_odds") or item.get("odds")
+            try:
+                return 1 / float(odds_value)
+            except (TypeError, ValueError, ZeroDivisionError):
+                return None
+    return None
+
+
+def score_category(match, distribution, score):
+    try:
+        home_goals, away_goals = [int(part) for part in str(score).split(":", 1)]
+    except ValueError:
+        return "unknown"
+    favorite_home = distribution.get("favorite") in {team_cn(match["home_cn"]), match["home_cn"]}
+    margin = home_goals - away_goals if favorite_home else away_goals - home_goals
+    if margin == 1:
+        return "favorite_1"
+    if margin == 2:
+        return "favorite_2"
+    if margin >= 3:
+        return "favorite_3_plus"
+    if margin == 0:
+        return "draw"
+    return "underdog"
+
+
+def distribution_category_probability(distribution, category):
+    rows = distribution.get("rows") or []
+    if category == "favorite_1":
+        return sum(row.get("probability", 0) for row in rows if "小胜" in row.get("label", ""))
+    if category == "favorite_2":
+        return sum(row.get("probability", 0) for row in rows if "赢2球" in row.get("label", ""))
+    if category == "favorite_3_plus":
+        return sum(row.get("probability", 0) for row in rows if "3球以上" in row.get("label", ""))
+    if category == "draw":
+        return sum(row.get("probability", 0) for row in rows if "平局" in row.get("label", ""))
+    if category == "underdog":
+        return sum(row.get("probability", 0) for row in rows if "不败" in row.get("label", ""))
+    return 0
+
+
+def scenario_probability(match, distribution, combo, score, all_scores):
+    exact_probability = exact_score_probability(combo, score)
+    if exact_probability is not None:
+        return exact_probability
+    category = score_category(match, distribution, score)
+    same_category_count = sum(
+        1 for candidate_score in all_scores
+        if score_category(match, distribution, candidate_score) == category
+    )
+    category_probability = distribution_category_probability(distribution, category)
+    return category_probability / same_category_count if same_category_count else 0
+
+
+def scenario_probability_map(match, distribution, combo, scores):
+    raw = {
+        score: max(0, scenario_probability(match, distribution, combo, score, scores))
+        for score in scores
+    }
+    total = sum(raw.values())
+    if total <= 0 and scores:
+        return {score: 1 / len(scores) for score in scores}
+    return {score: value / total for score, value in raw.items()} if total else {}
+
+
+def parse_handicap_selection(selection):
+    text = str(selection or "")
+    match = re.search(r"\b(Home|Away)\b\s*([+-]?\d+(?:\.\d+)?)", text, re.I)
+    if match:
+        return match.group(1).lower(), float(match.group(2))
+    return None, None
+
+
+def parse_total_selection(selection):
+    text = str(selection or "")
+    match = re.search(r"(Under|Over|小于|大于)\s*([0-9]+(?:\.[0-9]+)?)", text, re.I)
+    if not match:
+        return None, None
+    side = "under" if match.group(1).lower() in {"under", "小于"} else "over"
+    return side, float(match.group(2))
+
+
+def winner_outcome(item, match, home_goals, away_goals):
+    selection = str(item.get("selection") or item.get("name") or "")
+    if home_goals == away_goals:
+        result = "平局"
+    elif home_goals > away_goals:
+        result = match["home_cn"]
+    else:
+        result = match["away_cn"]
+    return "win" if result in selection else "lose"
+
+
+def handicap_outcome(item, home_goals, away_goals):
+    side, line = parse_handicap_selection(item.get("selection") or item.get("name"))
+    if side is None:
+        return None
+    adjusted = home_goals + line if side == "home" else away_goals + line
+    opponent = away_goals if side == "home" else home_goals
+    return "win" if adjusted > opponent else "lose"
+
+
+def total_outcome(item, home_goals, away_goals):
+    side, line = parse_total_selection(item.get("selection") or item.get("name"))
+    if side is None:
+        return None
+    total_goals = home_goals + away_goals
+    if side == "under":
+        return "win" if total_goals < line else "lose"
+    return "win" if total_goals > line else "lose"
+
+
+def correct_score_outcome(item, home_goals, away_goals):
+    return "win" if str(item.get("selection")) == f"{home_goals}:{away_goals}" else "lose"
+
+
+def score_profit_row(match, distribution, combo, score):
+    home_goals, away_goals = [int(part) for part in score.split(":", 1)]
+    winner = combo_item(combo, "winner")
+    handicap = combo_item(combo, "handicap")
+    total = combo_item(combo, "total")
+    correct_scores = combo_items(combo, "correct_score")
+
+    winner_profit = profit_value(winner.get("amount"), winner.get("odds"), winner_outcome(winner, match, home_goals, away_goals)) if winner else 0
+    handicap_profit = profit_value(handicap.get("amount"), handicap.get("odds"), handicap_outcome(handicap, home_goals, away_goals)) if handicap else 0
+    total_profit = profit_value(total.get("amount"), total.get("odds"), total_outcome(total, home_goals, away_goals)) if total else 0
+    correct_1 = correct_scores[0] if len(correct_scores) > 0 else {}
+    correct_2 = correct_scores[1] if len(correct_scores) > 1 else {}
+    correct_1_profit = profit_value(correct_1.get("amount"), correct_1.get("odds"), correct_score_outcome(correct_1, home_goals, away_goals)) if correct_1 else 0
+    correct_2_profit = profit_value(correct_2.get("amount"), correct_2.get("odds"), correct_score_outcome(correct_2, home_goals, away_goals)) if correct_2 else 0
+    total_value = winner_profit + handicap_profit + total_profit + correct_1_profit + correct_2_profit
+    probability = exact_score_probability(combo, score)
+    ev_contribution = total_value * probability if probability is not None else None
+    return {
+        "比分": score,
+        "路径": score_path_label(match, distribution, score),
+        "路径权重": percent(probability) if probability is not None else "-",
+        "独赢收益": f"{winner_profit:+d}",
+        "让球收益": f"{handicap_profit:+d}",
+        "大小球收益": f"{total_profit:+d}",
+        "波胆1收益": f"{correct_1_profit:+d}",
+        "波胆2收益": f"{correct_2_profit:+d}",
+        "组合收益": f"{total_value:+d}",
+        "概率×收益": "-",
+        "EV贡献": f"{ev_contribution:+.0f}" if ev_contribution is not None else "-",
+        "_total": total_value,
+        "_ev_contribution": ev_contribution,
+    }
+
+
+def score_candidates(match, distribution, combo):
+    favorite_home = distribution.get("favorite") == team_cn(match["home_cn"]) or distribution.get("favorite") == match["home_cn"]
+    defaults = ["1:0", "2:0", "2:1", "3:0", "1:1", "0:1"] if favorite_home else ["0:1", "0:2", "1:2", "0:3", "1:1", "1:0"]
+    correct = [item.get("selection") for item in combo_items(combo, "correct_score") if item.get("selection")]
+    ordered = []
+    for score in correct + defaults:
+        if score not in ordered and re.match(r"^\d+:\d+$", str(score)):
+            ordered.append(score)
+    return ordered[:8]
+
+
+def path_analysis_rows(match, distribution, combo):
+    scores = score_candidates(match, distribution, combo)
+    probabilities = scenario_probability_map(match, distribution, combo, scores)
+    rows = []
+    for score in scores:
+        row = score_profit_row(match, distribution, combo, score)
+        probability = probabilities.get(score, 0)
+        ev_contribution = row["_total"] * probability
+        row["路径权重"] = percent(probability)
+        row["概率×收益"] = f"{percent(probability)} × {row['组合收益']}"
+        row["EV贡献"] = f"{ev_contribution:+.0f}"
+        row["_ev_contribution"] = ev_contribution
+        rows.append(row)
+    rows.sort(key=lambda row: row.get("_ev_contribution") or 0, reverse=True)
+    positive_total = sum(max(row.get("_ev_contribution") or 0, 0) for row in rows)
+    cumulative = 0
+    for row in rows:
+        contribution = max(row.get("_ev_contribution") or 0, 0)
+        cumulative += contribution
+        row["累计贡献"] = percent(cumulative / positive_total) if positive_total else "-"
+    return [{key: value for key, value in row.items() if not key.startswith("_")} for row in rows]
+
+
+def worst_score_path(match, distribution, combo):
+    rows = [score_profit_row(match, distribution, combo, score) for score in score_candidates(match, distribution, combo)]
+    if not rows:
+        return {"score": "-", "profit": 0}
+    worst = min(rows, key=lambda row: row["_total"])
+    return {"score": worst["比分"], "profit": worst["_total"]}
+
+
+def best_score_path(match, distribution, combo):
+    rows = [score_profit_row(match, distribution, combo, score) for score in score_candidates(match, distribution, combo)]
+    if not rows:
+        return {"score": "-", "profit": 0}
+    best = max(rows, key=lambda row: row["_total"])
+    return {"score": best["比分"], "profit": best["_total"]}
+
+
+def strategy_item_groups(combo):
+    active = [item for item in combo if item.get("recommended") and item.get("type") != "empty"]
+    correct_scores = [item for item in active if item.get("type") == "correct_score"]
+    correct_scores.sort(key=lambda item: (item.get("score", 0), item.get("ev_lift") or -99), reverse=True)
+    return {
+        "all": active,
+        "winner": [item for item in active if item.get("type") == "winner"][:1],
+        "handicap": [item for item in active if item.get("type") == "handicap"][:1],
+        "total": [item for item in active if item.get("type") == "total"][:1],
+        "correct": correct_scores,
+    }
+
+
+def correct_score_path_probability(item, match, distribution):
+    score = item.get("selection")
+    exact_probability = exact_score_probability([item], score)
+    if exact_probability is not None:
+        return exact_probability
+    category = score_category(match, distribution, score)
+    return distribution_category_probability(distribution, category)
+
+
+def main_path_correct_scores(combo, match, distribution, limit=3):
+    correct_scores = [
+        item for item in combo
+        if item.get("recommended") and item.get("type") == "correct_score" and item.get("selection")
+    ]
+    ranked = []
+    for item in correct_scores:
+        alignment = item_direction_alignment(item, match, distribution)
+        if alignment < 0.70:
+            continue
+        probability = correct_score_path_probability(item, match, distribution)
+        ranked.append({
+            **item,
+            "path_probability": probability,
+            "main_path_rank_score": probability * 100 + alignment * 10 + (item.get("score", 0) / 100),
+        })
+    ranked.sort(key=lambda item: item.get("main_path_rank_score", 0), reverse=True)
+    return ranked[:limit]
+
+
+def build_strategy_library(combo, match, distribution):
+    groups = strategy_item_groups(combo)
+    best_correct = groups["correct"][:1]
+    double_correct = groups["correct"][:2]
+    main_path_correct = main_path_correct_scores(combo, match, distribution, limit=3)
+    strategies = [
+        {"code": "A", "name": "当前推荐组合", "items": groups["all"]},
+        {"code": "B", "name": "只买最佳波胆", "items": best_correct},
+        {"code": "C", "name": "双波胆组合", "items": double_correct},
+        {"code": "D", "name": "独赢策略", "items": groups["winner"]},
+        {"code": "E", "name": "让球策略", "items": groups["handicap"]},
+        {"code": "F", "name": "独赢 + 让球", "items": groups["winner"] + groups["handicap"]},
+        {"code": "G", "name": "独赢 + 波胆", "items": groups["winner"] + best_correct},
+        {"code": "H", "name": "让球 + 波胆", "items": groups["handicap"] + best_correct},
+        {"code": "I", "name": "大小球策略", "items": groups["total"]},
+        {"code": "J", "name": "主路径波胆组合", "items": main_path_correct},
+    ]
+    return [strategy for strategy in strategies if strategy["items"]]
+
+
+def build_auto_optimized_strategy(combo, match, distribution, total_stake):
+    active = [item for item in combo if item.get("recommended") and item.get("type") != "empty"]
+    if len(active) < 2:
+        return None
+    best = None
+    max_size = min(5, len(active))
+    for size in range(2, max_size + 1):
+        for items in combinations(active, size):
+            candidate = {"code": "O", "name": "自动优化组合", "items": list(items)}
+            evaluated = evaluate_strategy(candidate, match, distribution, total_stake)
+            if best is None or evaluated["score"] > best["score"]:
+                best = evaluated
+    return best
+
+
+def strategy_weight(item):
+    if item.get("path_probability") is not None:
+        return max(0.05, item.get("path_probability", 0))
+    if item.get("type") == "winner":
+        return 1.25
+    if item.get("type") == "handicap":
+        return 1.15
+    if item.get("type") == "total":
+        return 0.90
+    if item.get("type") == "correct_score":
+        return 0.80
+    return 0.50
+
+
+def correlation_adjusted_weight(item, items):
+    base = strategy_weight(item)
+    score_boost = max(item.get("score", 50), 1) / 70
+    ev_boost = 1 + max(item.get("ev_lift") or 0, 0) * 4
+    coverage_boost = 0.75 + min(item.get("coverage_rate") or 0, 0.60)
+    peers = [peer for peer in items if peer is not item]
+    avg_corr = sum(bet_correlation(item, peer) for peer in peers) / len(peers) if peers else 0
+    correlation_penalty = 1 - avg_corr * 0.42
+    return max(0.03, base * score_boost * ev_boost * coverage_boost * correlation_penalty)
+
+
+def correlation_penalty_rows(items):
+    rows = []
+    for item in items:
+        peers = [peer for peer in items if peer is not item]
+        avg_corr = sum(bet_correlation(item, peer) for peer in peers) / len(peers) if peers else 0
+        base = strategy_weight(item)
+        score_boost = max(item.get("score", 50), 1) / 70
+        ev_boost = 1 + max(item.get("ev_lift") or 0, 0) * 4
+        coverage_boost = 0.75 + min(item.get("coverage_rate") or 0, 0.60)
+        raw = base * score_boost * ev_boost * coverage_boost
+        adjusted = correlation_adjusted_weight(item, items)
+        reduction = 1 - adjusted / raw if raw else 0
+        rows.append({
+            "投注": item.get("name", "-"),
+            "基础权重": f"{base:.2f}",
+            "推荐分加成": f"{score_boost:.2f}",
+            "EV加成": f"{ev_boost:.2f}",
+            "覆盖率加成": f"{coverage_boost:.2f}",
+            "平均相关性": percent(avg_corr),
+            "相关性惩罚": f"-{reduction * 100:.1f}%",
+            "调整前权重": f"{raw:.2f}",
+            "调整后权重": f"{adjusted:.2f}",
+            "仓位": f"{item.get('amount', 0)}元",
+        })
+    return rows
+
+
+def allocate_strategy_items(items, total_stake):
+    if not items or not total_stake:
+        return []
+    weight_total = sum(correlation_adjusted_weight(item, items) for item in items)
+    allocated = []
+    for item in items:
+        amount = round_to_hundred(total_stake * correlation_adjusted_weight(item, items) / weight_total) if weight_total else 0
+        allocated.append({**item, "amount": amount})
+    difference = total_stake - sum(item.get("amount", 0) for item in allocated)
+    if allocated and difference:
+        target = max(allocated, key=lambda item: correlation_adjusted_weight(item, items))
+        target["amount"] = max(0, target.get("amount", 0) + difference)
+    allocated = enforce_correct_score_floor(allocated, total_stake)
+    for item in allocated:
+        item["share"] = item.get("amount", 0) / total_stake if total_stake else 0
+    return allocated
+
+
+def enforce_correct_score_floor(items, total_stake):
+    correct_items = [item for item in items if item.get("type") == "correct_score"]
+    other_items = [item for item in items if item.get("type") != "correct_score"]
+    if not correct_items or not other_items or not total_stake:
+        return items
+    current = sum(item.get("amount", 0) for item in correct_items)
+    target = max(100, round_to_hundred(total_stake * 0.16))
+    if current >= target:
+        return items
+    needed = target - current
+    removable = sum(max(0, item.get("amount", 0) - 100) for item in other_items)
+    transfer = min(needed, removable)
+    if transfer <= 0:
+        return items
+
+    donor_total = sum(max(0, item.get("amount", 0) - 100) for item in other_items)
+    removed = 0
+    for item in other_items:
+        capacity = max(0, item.get("amount", 0) - 100)
+        reduction = round_to_hundred(transfer * capacity / donor_total) if donor_total else 0
+        reduction = min(capacity, reduction)
+        item["amount"] -= reduction
+        removed += reduction
+    if removed < transfer and other_items:
+        donor = max(other_items, key=lambda item: item.get("amount", 0))
+        extra = min(donor.get("amount", 0) - 100, transfer - removed)
+        donor["amount"] -= max(0, extra)
+        removed += max(0, extra)
+
+    correct_weight_total = sum(strategy_weight(item) for item in correct_items)
+    added = 0
+    for item in correct_items:
+        addition = round_to_hundred(removed * strategy_weight(item) / correct_weight_total) if correct_weight_total else 0
+        item["amount"] += addition
+        added += addition
+    if added != removed:
+        correct_items[0]["amount"] += removed - added
+    return items
+
+
+def item_direction_alignment(item, match, distribution):
+    item_type = item.get("type")
+    favorite = distribution.get("favorite")
+    selection = str(item.get("selection") or item.get("name") or "")
+    if item_type == "winner":
+        return 1.0 if favorite and favorite in selection else 0.30
+    if item_type == "handicap":
+        return 0.95
+    if item_type == "correct_score":
+        parsed = parse_score(item.get("selection"))
+        if not parsed:
+            return 0.45
+        home_goals, away_goals = parsed
+        favorite_home = favorite in {team_cn(match["home_cn"]), match["home_cn"]}
+        margin = home_goals - away_goals if favorite_home else away_goals - home_goals
+        if margin in {1, 2}:
+            return 0.90
+        if margin >= 3:
+            return 0.75
+        if margin == 0:
+            return 0.35
+        return 0.20
+    if item_type == "total":
+        return 0.35
+    return 0.25
+
+
+def strategy_direction_alignment(items, match, distribution):
+    if not items:
+        return 0
+    weights = [max(item.get("amount", 0), 1) for item in items]
+    weighted = sum(
+        item_direction_alignment(item, match, distribution) * weight
+        for item, weight in zip(items, weights)
+    )
+    base = weighted / sum(weights)
+    has_core_direction = any(item.get("type") in {"winner", "handicap"} for item in items)
+    has_total_only = all(item.get("type") == "total" for item in items)
+    if has_core_direction:
+        base = min(1.0, base + 0.08)
+    if has_total_only:
+        base = min(base, 0.42)
+    return base
+
+
+def item_strategic_value(item, match, distribution):
+    item_type = item.get("type")
+    if item_type in {"winner", "handicap"}:
+        return 1.0
+    if item_type == "correct_score":
+        alignment = item_direction_alignment(item, match, distribution)
+        if alignment >= 0.90:
+            return 0.90
+        if alignment >= 0.75:
+            return 0.80
+        return 0.45
+    if item_type == "total":
+        return 0.45
+    return 0.35
+
+
+def strategy_strategic_value(items, match, distribution):
+    if not items:
+        return 0
+    weights = [max(item.get("amount", 0), 1) for item in items]
+    weighted = sum(
+        item_strategic_value(item, match, distribution) * weight
+        for item, weight in zip(items, weights)
+    )
+    return weighted / sum(weights)
+
+
+def strategy_score(
+    ev_yield,
+    hit_rate,
+    risk_reward,
+    max_loss,
+    total_stake,
+    concentration,
+    direction_alignment,
+    strategic_value,
+):
+    if ev_yield >= 0.06:
+        ev_points = 32
+    elif ev_yield >= 0.03:
+        ev_points = 26
+    elif ev_yield >= 0:
+        ev_points = 18
+    elif ev_yield >= -0.03:
+        ev_points = 8
+    else:
+        ev_points = 2
+    hit_points = min(28, hit_rate * 38)
+    rr_points = min(10, max(0, risk_reward) * 3.5)
+    loss_ratio = max_loss / total_stake if total_stake else 1
+    if loss_ratio <= 0.50:
+        loss_points = 10
+    elif loss_ratio <= 0.75:
+        loss_points = 7
+    else:
+        loss_points = 3
+    direction_points = direction_alignment * 10
+    strategic_points = strategic_value * 14
+    concentration_points = max(0, (1 - concentration) * 8)
+    raw_total = (
+        ev_points
+        + hit_points
+        + rr_points
+        + loss_points
+        + direction_points
+        + strategic_points
+        + concentration_points
+    )
+    total = round(50 + (raw_total - 50) * 1.35)
+    if direction_alignment < 0.45:
+        total = min(total, 80)
+    return clamp(total), {
+        "方向一致性": round(direction_points),
+        "战略价值": round(strategic_points),
+        "命中率": round(hit_points),
+        "EV": round(ev_points),
+        "风险收益比": round(rr_points),
+        "最大亏损控制": round(loss_points),
+        "路径分散度": round(concentration_points),
+    }
+
+
+def evaluate_strategy(strategy, match, distribution, total_stake):
+    items = allocate_strategy_items(strategy["items"], total_stake)
+    scores = score_candidates(match, distribution, items)
+    probabilities = scenario_probability_map(match, distribution, items, scores)
+    score_rows = []
+    total_probability = 0
+    hit_probability = 0
+    weighted_profit = 0
+    profits = []
+    for score in scores:
+        row = score_profit_row(match, distribution, items, score)
+        probability = probabilities.get(score, 0)
+        profit = row["_total"]
+        ev_contribution = probability * profit
+        row["路径权重"] = percent(probability)
+        row["概率×收益"] = f"{percent(probability)} × {row['组合收益']}"
+        row["EV贡献"] = f"{ev_contribution:+.0f}"
+        row["_ev_contribution"] = ev_contribution
+        total_probability += probability
+        if profit > 0:
+            hit_probability += probability
+        weighted_profit += ev_contribution
+        profits.append((profit, probability))
+        score_rows.append(row)
+
+    if total_probability:
+        hit_rate = hit_probability / total_probability
+        expected_profit = weighted_profit / total_probability
+    else:
+        hit_rate = 0
+        expected_profit = sum(item.get("amount", 0) * (item.get("actual_ev") or 0) for item in items)
+
+    max_profit = max((profit for profit, _ in profits), default=0)
+    min_profit = min((profit for profit, _ in profits), default=-total_stake)
+    max_loss = abs(min(0, min_profit))
+    variance = 0
+    if total_probability:
+        variance = sum(probability * ((profit - expected_profit) ** 2) for profit, probability in profits) / total_probability
+    volatility = variance ** 0.5
+    risk_reward = max_profit / max_loss if max_loss else max_profit / total_stake if total_stake else 0
+    coverage = sum(item.get("coverage_rate") or 0 for item in items) / len(items) if items else 0
+    concentration = weighted_combo_correlation(items)
+    direction_alignment = strategy_direction_alignment(items, match, distribution)
+    strategic_value = strategy_strategic_value(items, match, distribution)
+    ev_yield = expected_profit / total_stake if total_stake else 0
+    capital_efficiency = expected_profit / total_stake if total_stake else 0
+    score, score_components = strategy_score(
+        ev_yield,
+        hit_rate,
+        risk_reward,
+        max_loss,
+        total_stake,
+        concentration,
+        direction_alignment,
+        strategic_value,
+    )
+
+    return {
+        "code": strategy["code"],
+        "name": strategy["name"],
+        "items": items,
+        "hit_rate": hit_rate,
+        "expected_profit": expected_profit,
+        "expected_yield": ev_yield,
+        "capital_efficiency": capital_efficiency,
+        "max_profit": max_profit,
+        "max_loss": max_loss,
+        "volatility": volatility,
+        "risk_reward": risk_reward,
+        "coverage": min(1, coverage),
+        "concentration": concentration,
+        "direction_alignment": direction_alignment,
+        "strategic_value": strategic_value,
+        "score": score,
+        "score_components": score_components,
+        "score_rows": score_rows,
+    }
+
+
+def strategy_comparison(match, distribution, combo, total_stake):
+    strategies = build_strategy_library(combo, match, distribution)
+    evaluated = [evaluate_strategy(strategy, match, distribution, total_stake) for strategy in strategies]
+    optimized = build_auto_optimized_strategy(combo, match, distribution, total_stake)
+    if optimized:
+        evaluated.append(optimized)
+    return sorted(evaluated, key=lambda item: item["score"], reverse=True)
+
+
+def strategy_table_rows(strategies):
+    rows = []
+    for strategy in strategies:
+        rows.append({
+            "策略": f"{strategy['code']} · {strategy['name']}",
+            "命中率": percent(strategy["hit_rate"]),
+            "EV": f"{strategy['expected_profit']:+.0f}",
+            "预期收益率": f"{strategy['expected_yield'] * 100:+.1f}%",
+            "资金效率": f"{strategy['capital_efficiency'] * 100:+.1f}%",
+            "最大盈利": f"{strategy['max_profit']:+.0f}",
+            "最大亏损": f"-{strategy['max_loss']:.0f}",
+            "盈亏波动": f"{strategy['volatility']:.0f}",
+            "风险收益比": f"{strategy['risk_reward']:.2f}",
+            "覆盖率": percent(strategy["coverage"]),
+            "路径集中度": percent(strategy["concentration"]),
+            "方向一致性": percent(strategy["direction_alignment"]),
+            "战略价值": percent(strategy["strategic_value"]),
+            "综合评分": strategy["score"],
+        })
+    return rows
+
+
+def strategy_component_rows(strategies):
+    rows = []
+    for strategy in strategies:
+        row = {"策略": f"{strategy['code']} · {strategy['name']}"}
+        row.update({name: f"+{points}" for name, points in (strategy.get("score_components") or {}).items()})
+        row["总分"] = strategy["score"]
+        rows.append(row)
+    return rows
+
+
+def strategy_direct_comparison_rows(strategies):
+    current = next((strategy for strategy in strategies if strategy["code"] == "A"), None)
+    best = strategies[0] if strategies else None
+    if not current or not best:
+        return []
+    return [
+        {
+            "方案": "原始推荐组合",
+            "策略": current["name"],
+            "命中率": percent(current["hit_rate"]),
+            "EV": f"{current['expected_profit']:+.0f}",
+            "预期收益率": f"{current['expected_yield'] * 100:+.1f}%",
+            "资金效率": f"{current['capital_efficiency'] * 100:+.1f}%",
+            "最大盈利": f"{current['max_profit']:+.0f}",
+            "最大亏损": f"-{current['max_loss']:.0f}",
+            "覆盖率": percent(current["coverage"]),
+            "战略价值": percent(current["strategic_value"]),
+            "综合评分": current["score"],
+        },
+        {
+            "方案": "策略优化器第一名",
+            "策略": best["name"],
+            "命中率": percent(best["hit_rate"]),
+            "EV": f"{best['expected_profit']:+.0f}",
+            "预期收益率": f"{best['expected_yield'] * 100:+.1f}%",
+            "资金效率": f"{best['capital_efficiency'] * 100:+.1f}%",
+            "最大盈利": f"{best['max_profit']:+.0f}",
+            "最大亏损": f"-{best['max_loss']:.0f}",
+            "覆盖率": percent(best["coverage"]),
+            "战略价值": percent(best["strategic_value"]),
+            "综合评分": best["score"],
+        },
+    ]
+
+
+def participation_with_portfolio(participation, portfolio):
+    advice = participation.get("advice", "-")
+    reason = participation.get("reason", "-")
+    expected_yield = portfolio.get("expected_yield", 0)
+    if expected_yield <= -0.05 and advice in {"强烈参与", "建议参与"}:
+        return {
+            "advice": "小仓参与",
+            "reason": f"方向仍成立，但组合EV为 {expected_yield * 100:.1f}%，负EV偏高，因此自动降为小仓参与。",
+        }
+    if expected_yield <= -0.08:
+        return {
+            "advice": "仅观察",
+            "reason": f"组合EV为 {expected_yield * 100:.1f}%，负EV过高，建议先观察而不是执行。",
+        }
+    if expected_yield < 0 and advice in {"强烈参与", "建议参与", "小仓参与"}:
+        return {
+            "advice": advice,
+            "reason": f"{reason} 当前组合EV略负，主要需要关注波胆覆盖成本与相关性暴露。",
+        }
+    return {"advice": advice, "reason": reason}
+
+
+def strategy_conclusion(strategies):
+    if not strategies:
+        return "当前真实盘口不足，暂无法比较策略。"
+    best = strategies[0]
+    second = strategies[1] if len(strategies) > 1 else None
+    if second and best["expected_yield"] < second["expected_yield"] and best["hit_rate"] > second["hit_rate"]:
+        return (
+            f"策略优化器首选「{best['name']}」。虽然「{second['name']}」预期收益率更高，"
+            f"但「{best['name']}」命中率更高、路径更稳，综合评分更优。"
+        )
+    if best["concentration"] >= 0.75:
+        return (
+            f"策略优化器首选「{best['name']}」，但路径集中度偏高。"
+            "这代表多个投注依赖同一比赛剧本，需要控制总仓位。"
+        )
+    return (
+        f"策略优化器首选「{best['name']}」，综合评分 {best['score']}。"
+        "该策略在命中率、EV和风险收益比之间更均衡。"
+    )
+
+
+def strategy_j_comparison(strategies):
+    current = next((strategy for strategy in strategies if strategy["code"] == "A"), None)
+    main_correct = next((strategy for strategy in strategies if strategy["code"] == "J"), None)
+    if not current or not main_correct:
+        return None
+    if main_correct["score"] > current["score"]:
+        return (
+            f"策略J「主路径波胆组合」评分 {main_correct['score']}，高于当前推荐组合 {current['score']}。"
+            f"它的预期收益率为 {main_correct['expected_yield'] * 100:+.1f}%，"
+            f"命中率为 {percent(main_correct['hit_rate'])}。"
+            "这说明本场可以把主路径波胆作为激进策略重点观察。"
+        )
+    return (
+        f"当前推荐组合评分 {current['score']}，高于策略J「主路径波胆组合」{main_correct['score']}。"
+        f"策略J预期收益率为 {main_correct['expected_yield'] * 100:+.1f}%，"
+        f"命中率为 {percent(main_correct['hit_rate'])}。"
+        "这说明主路径波胆可以作为进攻型补充，但当前组合在稳定性上更占优。"
+    )
+
+
+def path_analysis_rows_old(distribution, combo):
     favorite = distribution.get("favorite", "热门方")
     underdog = distribution.get("underdog", "弱势方")
     winner = combo_item(combo, "winner")
@@ -1165,13 +2228,119 @@ def actual_odds_example(match):
 波胆,2:0,7.20"""
 
 
+USER_ODDS_CACHE_DIR = Path("data/cache/user_odds")
+USER_ODDS_CACHE_TTL = timedelta(days=7)
+
+
+def user_odds_slug(match):
+    raw = f"{match['home_cn']}_vs_{match['away_cn']}"
+    slug = re.sub(r"[^A-Za-z0-9\u4e00-\u9fff]+", "_", raw).strip("_")
+    return slug or "match"
+
+
+def user_odds_cache_path(match):
+    return USER_ODDS_CACHE_DIR / f"{user_odds_slug(match)}.json"
+
+
+def load_user_odds_cache(match):
+    path = user_odds_cache_path(match)
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    updated_at = data.get("updated_at")
+    if updated_at:
+        try:
+            updated = datetime.fromisoformat(updated_at)
+        except ValueError:
+            updated = None
+        if updated and updated.tzinfo is None:
+            updated = updated.astimezone()
+        if updated and datetime.now().astimezone() - updated > USER_ODDS_CACHE_TTL:
+            return None
+    return data
+
+
+def save_user_odds_cache(match, raw_text, parsed):
+    USER_ODDS_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    now = datetime.now().astimezone()
+    data = {
+        "schema_version": 1,
+        "match": {
+            "home": match["home_cn"],
+            "away": match["away_cn"],
+            "display": f"{team_cn(match['home_cn'])} vs {team_cn(match['away_cn'])}",
+        },
+        "profile": {
+            "id": "default",
+            "name": "我的赔率A",
+            "source": "manual",
+        },
+        "created_at": now.isoformat(),
+        "updated_at": now.isoformat(),
+        "raw_text": raw_text,
+        "record_count": len(parsed.get("items") or []),
+    }
+    path = user_odds_cache_path(match)
+    if path.exists():
+        existing = load_user_odds_cache(match) or {}
+        data["created_at"] = existing.get("created_at", data["created_at"])
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    return data
+
+
+def clear_user_odds_cache(match):
+    path = user_odds_cache_path(match)
+    if path.exists():
+        path.unlink()
+
+
+def format_cache_time(value):
+    if not value:
+        return "-"
+    try:
+        parsed = datetime.fromisoformat(value).astimezone(ZoneInfo("Asia/Shanghai"))
+    except ValueError:
+        return value
+    return parsed.strftime("%Y-%m-%d %H:%M")
+
+
 def render_actual_odds_input(match):
     key = f"actual_odds_{match['home_cn']}_{match['away_cn']}"
     raw_key = f"{key}_raw"
+    cache = load_user_odds_cache(match)
+    if raw_key not in st.session_state and cache:
+        st.session_state[raw_key] = cache.get("raw_text", "")
+        st.session_state[f"{key}_restored"] = True
     current_raw = st.session_state.get(raw_key, "")
     with st.container(border=True):
         st.markdown('<div class="section-title">我的实际赔率</div>', unsafe_allow_html=True)
         st.caption("可选输入。这里填写你自己实际能买到的赔率，系统会优先用它评估价值；不填写则继续使用市场标准赔率。")
+        if cache:
+            st.info(
+                f"当前已载入赔率：{format_cache_time(cache.get('updated_at'))} · "
+                f"{cache.get('match', {}).get('display', '')} · "
+                f"{cache.get('record_count', 0)}条赔率记录 · "
+                f"{cache.get('profile', {}).get('name', '我的赔率A')}"
+            )
+            if st.session_state.get(f"{key}_restored"):
+                st.caption("已恢复上次录入赔率。")
+
+        restore_col, clear_col = st.columns(2)
+        with restore_col:
+            if st.button("恢复上次赔率", key=f"{key}_restore", disabled=not bool(cache)):
+                st.session_state[raw_key] = (cache or {}).get("raw_text", "")
+                st.session_state[f"{key}_restored"] = True
+                st.rerun()
+        with clear_col:
+            if st.button("清空已保存赔率", key=f"{key}_clear", disabled=not bool(cache)):
+                clear_user_odds_cache(match)
+                st.session_state[raw_key] = ""
+                st.session_state[f"{key}_restored"] = False
+                st.rerun()
+
         with st.form(key=f"{key}_form"):
             raw_input = st.text_area(
                 "粘贴实际赔率",
@@ -1186,6 +2355,9 @@ def render_actual_odds_input(match):
             current_raw = raw_input
         raw = current_raw
         parsed = parse_actual_odds(raw)
+        if submitted and raw.strip():
+            cache = save_user_odds_cache(match, raw, parsed)
+            st.success(f"已保存实际赔率：{format_cache_time(cache.get('updated_at'))} · {len(parsed.get('items') or [])}条记录")
         if parsed.get("items"):
             rows = [
                 {"盘口": item["type"], "方向": item["selection"], "实际赔率": fmt_odds(item["odds"])}
@@ -1202,14 +2374,20 @@ def render_actual_odds_input(match):
 
 def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None):
     combo = recommendation_combo(match, odds, api_football_data, distribution, actual_odds)
-    combo_with_amounts = stake_amounts(combo, decision)
+    initial_combo_with_amounts = stake_amounts(combo, decision)
     total_stake, total_reason = recommended_total_stake(decision)
+    strategies = strategy_comparison(match, distribution, initial_combo_with_amounts, total_stake)
+    selected_strategy = strategies[0] if strategies else None
+    combo_with_amounts = selected_strategy["items"] if selected_strategy else initial_combo_with_amounts
+    portfolio = portfolio_metrics(combo_with_amounts)
+    worst_path = worst_score_path(match, distribution, combo_with_amounts)
+    best_path = best_score_path(match, distribution, combo_with_amounts)
     with st.container(border=True):
         st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
 
         direction = decision.get("direction_confidence") or {}
         odds_value = decision.get("odds_value") or {}
-        participation = decision.get("participation_advice") or {}
+        participation = participation_with_portfolio(decision.get("participation_advice") or {}, portfolio)
         stake = decision.get("recommended_stake") or {}
         decision_cols = st.columns(4)
         decision_cols[0].metric("方向把握", f"{direction.get('score', decision['final_confidence_score'])} / 100")
@@ -1220,9 +2398,66 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
         decision_cols[2].caption(participation.get("reason", "-"))
         decision_cols[3].metric("推荐仓位", f"{stake.get('amount', total_stake)}元")
         decision_cols[3].caption(stake.get("reason", total_reason))
+        standard_stake = stake.get("amount", total_stake)
+        conservative_stake = round_to_hundred(standard_stake * 0.7)
+        aggressive_stake = round_to_hundred(standard_stake * 1.3)
+        decision_cols[3].caption(
+            f"信心区间：保守 {conservative_stake} · 标准 {standard_stake} · 激进 {aggressive_stake}"
+        )
 
         st.markdown("**推荐投注组合**")
+        if selected_strategy:
+            st.caption(f"推荐组合来源：策略优化器第一名「{selected_strategy['name']}」（{selected_strategy['score']}分）。")
+        portfolio_cols = st.columns(5)
+        portfolio_cols[0].metric("组合EV", f"{portfolio['expected_profit']:+d}元")
+        portfolio_cols[0].caption("按当前组合的长期期望收益估算。")
+        portfolio_cols[1].metric("预期收益率", f"{portfolio['expected_yield'] * 100:+.1f}%")
+        portfolio_cols[1].caption("组合EV / 推荐总仓位。")
+        portfolio_cols[2].metric("最大亏损", f"-{portfolio['max_loss']}元")
+        portfolio_cols[2].caption("所有推荐项同时失效时的风险。")
+        portfolio_cols[3].metric("最佳路径收益", best_path["score"], f"{best_path['profit']:+d}元")
+        portfolio_cols[3].caption("当前候选比分里的最高收益。")
+        portfolio_cols[4].metric("最差路径收益", worst_path["score"], f"{worst_path['profit']:+d}元")
+        portfolio_cols[4].caption("当前组合最容易受伤的比分路径。")
+        st.caption(
+            f"路径相关性约 {portfolio['weighted_correlation'] * 100:.0f}%。"
+            "独赢、让球和波胆通常高度相关，因此组合器会限制同一路径仓位过度集中。"
+        )
+        if portfolio["expected_profit"] < 0 and participation.get("advice") in {"强烈参与", "建议参与", "小仓参与"}:
+            st.warning(
+                "组合EV当前为负，但参与建议仍成立：负值主要可能来自波胆覆盖成本或个别保护仓位。"
+                f"核心盘口EV约 {portfolio['core_expected_profit']:+d} 元，"
+                f"波胆覆盖EV约 {portfolio['correct_score_expected_profit']:+d} 元。"
+                "如果只追求EV，可降低波胆仓位；如果重视路径覆盖，可保留低金额波胆。"
+            )
+
         if combo_with_amounts:
+            overview_rows = market_odds_overview_rows(initial_combo_with_amounts)
+            if overview_rows:
+                st.markdown("**实际赔率 VS 市场赔率**")
+                st.dataframe(pd.DataFrame(overview_rows), use_container_width=True, hide_index=True)
+                completeness = actual_odds_completeness(initial_combo_with_amounts)
+                if completeness["total"]:
+                    st.caption(
+                        f"实际赔率完整度：已录入 {completeness['entered']} / {completeness['total']}，"
+                        f"完整度 {completeness['ratio'] * 100:.0f}%。"
+                    )
+                    if completeness["missing"]:
+                        st.warning(
+                            "实际赔率录入不完整，策略结果可能失真。缺少："
+                            + "、".join(completeness["missing"])
+                        )
+
+            if selected_strategy:
+                reason_rows = optimized_strategy_reason_rows(selected_strategy, match, distribution)
+                if reason_rows:
+                    st.markdown("**自动优化组合生成原因**")
+                    st.dataframe(pd.DataFrame(reason_rows), use_container_width=True, hide_index=True)
+                discarded_rows = discarded_bet_rows(initial_combo_with_amounts, selected_strategy)
+                if discarded_rows:
+                    with st.expander("未进入优化组合的原因", expanded=False):
+                        st.dataframe(pd.DataFrame(discarded_rows), use_container_width=True, hide_index=True)
+
             combo_cols = st.columns(len(combo_with_amounts))
             for index, (col, item) in enumerate(zip(combo_cols, combo_with_amounts), start=1):
                 with col:
@@ -1231,6 +2466,7 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
                         if item.get("recommended"):
                             st.metric(item["name"], f"{item['amount']}元")
                             st.caption(f"占比 {int(item.get('share', 0) * 100)}% · 使用赔率 {fmt_odds(item.get('odds'))}")
+                            st.caption(f"{score_stars(item.get('score', 0))} · 推荐指数")
                             if item.get("actual_odds"):
                                 st.caption(f"市场标准 {fmt_odds(item.get('standard_odds'))} · 实际赔率 {fmt_odds(item.get('actual_odds'))}")
                             else:
@@ -1244,6 +2480,50 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
                         else:
                             st.metric(item.get("slot", f"投注{index}"), "不推荐")
                             st.caption(item.get("not_recommended_reason") or item.get("reason") or "当前没有达到推荐阈值。")
+            if selected_strategy:
+                with st.expander("展开推荐组合", expanded=False):
+                    st.caption("推荐组合来自策略优化器第一名，因此这里展示的是最终执行层组合。")
+                    render_strategy_detail(selected_strategy, match, distribution)
+            matrix_rows = correlation_matrix_rows(combo_with_amounts)
+            if matrix_rows:
+                with st.expander("组合相关性矩阵", expanded=False):
+                    st.caption("相关性越高，说明多个投注依赖同一比赛路径；组合器会降低过度重叠的仓位。")
+                    st.dataframe(pd.DataFrame(matrix_rows), use_container_width=True, hide_index=True)
+                    penalty_rows = correlation_penalty_rows(combo_with_amounts)
+                    if penalty_rows:
+                        st.markdown("**相关性惩罚如何影响仓位**")
+                        st.dataframe(pd.DataFrame(penalty_rows), use_container_width=True, hide_index=True)
+
+            if strategies:
+                st.markdown("**策略优化器**")
+                leader_cols = st.columns(3)
+                for col, strategy in zip(leader_cols, strategies[:3]):
+                    with col:
+                        with st.container(border=True):
+                            st.caption(f"策略{strategy['code']}")
+                            st.metric(strategy["name"], f"{strategy['score']}分")
+                            st.caption(
+                                f"命中率 {percent(strategy['hit_rate'])} · "
+                                f"EV {strategy['expected_yield'] * 100:+.1f}% · "
+                                f"方向 {percent(strategy['direction_alignment'])}"
+                            )
+                st.info(strategy_conclusion(strategies))
+                j_note = strategy_j_comparison(strategies)
+                if j_note:
+                    st.caption(j_note)
+                comparison_rows = strategy_direct_comparison_rows(strategies)
+                if comparison_rows:
+                    st.markdown("**原始推荐组合 vs 策略第一名**")
+                    st.dataframe(pd.DataFrame(comparison_rows), use_container_width=True, hide_index=True)
+                st.dataframe(pd.DataFrame(strategy_table_rows(strategies)), use_container_width=True, hide_index=True)
+                with st.expander("策略评分来源", expanded=False):
+                    st.dataframe(pd.DataFrame(strategy_component_rows(strategies)), use_container_width=True, hide_index=True)
+                with st.expander(f"查看详情：{strategies[0]['name']}", expanded=False):
+                    render_strategy_detail(strategies[0], match, distribution)
+                with st.expander("查看全部策略详情", expanded=False):
+                    for strategy in strategies:
+                        render_strategy_detail(strategy, match, distribution)
+                        st.divider()
         else:
             st.info("当前没有足够真实盘口生成投注组合。")
         st.caption("实际赔率优先；未输入时使用真实市场标准赔率。禁止使用估算波胆赔率。")
@@ -1255,22 +2535,17 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
         top_cols[1].metric("赔率价值分", f"{odds_value.get('score', 0)} / 100")
         top_cols[1].caption(decision["value_rating_meaning"])
 
-        render_rating_breakdown(decision)
+        with st.expander("方向把握与赔率价值计算", expanded=False):
+            render_rating_breakdown(decision)
 
-        risk_cols = st.columns(3)
-        disagreement = decision["market_disagreement"]
+        risk_cols = st.columns(2)
         upset = decision["upset_index"]
         with risk_cols[0]:
-            st.metric("市场分歧指数", f"{disagreement['score']} / 100", disagreement_label(disagreement["score"]))
-            st.caption(market_disagreement_reason(disagreement))
-        with risk_cols[1]:
             st.metric("爆冷指数", f"{upset['score']} / 100", upset["meaning"])
             st.caption(upset["reason"])
-        with risk_cols[2]:
-            scenarios = build_extreme_scenarios(distribution)
-            top_extreme = scenarios[0] if scenarios else {"name": "暂无明显极端路径", "level": "低", "probability": 0}
-            st.metric("极端路径风险", top_extreme["level"], top_extreme["name"])
-            st.caption(top_extreme.get("note", "当前没有明显极端路径信号。"))
+        with risk_cols[1]:
+            st.metric("极端路径风险", worst_path["score"], f"{worst_path['profit']:+d}元")
+            st.caption("这里的极端路径定义为：最容易导致当前推荐组合亏损的比分。")
 
         exposure = distribution.get("risk_exposure") or {}
         st.markdown("**风险暴露**")
@@ -1282,8 +2557,8 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
         st.caption(exposure.get("meaning", ""))
 
         st.markdown("**结果覆盖分析**")
-        st.caption("使用实际可成交赔率优先计算；未输入时使用市场标准赔率。波胆仅在精确比分命中时产生收益。")
-        st.dataframe(pd.DataFrame(path_analysis_rows(distribution, combo_with_amounts)), use_container_width=True, hide_index=True)
+        st.caption("比分级收益分析。使用实际可成交赔率优先计算；未输入时使用市场标准赔率。")
+        st.dataframe(pd.DataFrame(path_analysis_rows(match, distribution, combo_with_amounts)), use_container_width=True, hide_index=True)
 
 
 def summarize_form(fixtures, team_id):
@@ -2182,6 +3457,7 @@ def render_analysis_page(match_text):
             api_football_data,
             betting_opinion,
             actual_odds,
+            result_distribution,
         )
         report = build_report(
             match,
