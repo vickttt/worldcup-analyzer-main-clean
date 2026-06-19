@@ -38,6 +38,94 @@ def read_json(path):
         return json.load(file)
 
 
+def parse_price(value):
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    return number if number > 1 else None
+
+
+def raw_probabilities(home_win, draw, away_win):
+    return {
+        "home_win": 1 / home_win,
+        "draw": 1 / draw,
+        "away_win": 1 / away_win,
+    }
+
+
+def implied_probabilities(home_win, draw, away_win):
+    raw = raw_probabilities(home_win, draw, away_win)
+    total = sum(raw.values())
+    return {key: value / total for key, value in raw.items()}
+
+
+def parse_api_football_winner_and_totals(api_football):
+    response = ((api_football or {}).get("all_odds") or {}).get("response") or []
+    winner = None
+    totals = []
+    winner_bookmaker = None
+
+    for item in response:
+        for bookmaker in item.get("bookmakers", []):
+            bookmaker_name = bookmaker.get("name")
+            for bet in bookmaker.get("bets", []):
+                bet_id = bet.get("id")
+                if bet_id == 1 and not winner:
+                    prices = {}
+                    for value in bet.get("values", []):
+                        label = str(value.get("value") or "").strip().lower()
+                        odd = parse_price(value.get("odd"))
+                        if label == "home":
+                            prices["home_win"] = odd
+                        elif label == "draw":
+                            prices["draw"] = odd
+                        elif label == "away":
+                            prices["away_win"] = odd
+                    if all(prices.get(key) for key in ["home_win", "draw", "away_win"]):
+                        winner = prices
+                        winner_bookmaker = bookmaker_name
+
+                if bet_id == 5:
+                    by_line = {}
+                    for value in bet.get("values", []):
+                        label = str(value.get("value") or "").strip()
+                        odd = parse_price(value.get("odd"))
+                        parts = label.split()
+                        if len(parts) != 2 or not odd:
+                            continue
+                        side, line_text = parts
+                        try:
+                            line = float(line_text)
+                        except ValueError:
+                            continue
+                        row = by_line.setdefault(line, {"line": line, "bookmaker": bookmaker_name})
+                        if side.lower() == "over":
+                            row["over_odds"] = odd
+                        elif side.lower() == "under":
+                            row["under_odds"] = odd
+                    totals.extend(
+                        row for row in by_line.values()
+                        if row.get("over_odds") and row.get("under_odds")
+                    )
+
+    if not winner:
+        return None
+    return {
+        **winner,
+        "over_under_line": totals[0].get("line") if totals else None,
+        "asian_handicap": [],
+        "over_under": totals,
+        "raw_probabilities": raw_probabilities(winner["home_win"], winner["draw"], winner["away_win"]),
+        "implied_probabilities": implied_probabilities(winner["home_win"], winner["draw"], winner["away_win"]),
+        "source": f"API-Football / {winner_bookmaker or 'All Odds'}",
+        "event_title": None,
+        "event_id": None,
+        "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。",
+        "found": True,
+    }
+
+
 def load_match_database(match, selected_fixture=None):
     base = match_dir(match, selected_fixture)
     if not base.exists():
@@ -61,7 +149,18 @@ def load_match_database(match, selected_fixture=None):
 
 def db_odds(db):
     odds = (db or {}).get("odds") or {}
+    effective = odds.get("effective_winner_totals") or {}
+    if effective.get("found"):
+        result = dict(effective)
+        result["cache"] = result.get("cache") or {
+            "source": "World Cup Database effective_winner_totals",
+            "path": str(((db or {}).get("base_dir") or Path("")) / "odds.json"),
+        }
+        return result
     result = odds.get("the_odds_api") or {}
+    api_fallback = parse_api_football_winner_and_totals(odds.get("api_football") or {})
+    if not result.get("found") and api_fallback:
+        result = api_fallback
     if result:
         result = dict(result)
         result["cache"] = result.get("cache") or {
@@ -108,12 +207,13 @@ def truthy_market(result, rows_key="rows"):
 def data_completeness(db):
     odds = ((db or {}).get("odds") or {}).get("the_odds_api") or {}
     api = ((db or {}).get("odds") or {}).get("api_football") or {}
+    api_odds_fallback = parse_api_football_winner_and_totals(api)
     fixture = (db or {}).get("fixture") or {}
     checks = [
         ("Fixture", bool(fixture.get("api_football_fixture"))),
-        ("Winner Odds", bool(odds.get("found"))),
+        ("Winner Odds", bool(odds.get("found")) or bool(api_odds_fallback)),
         ("Asian Handicap", truthy_market(api.get("asian_handicap"))),
-        ("Totals", bool(odds.get("over_under"))),
+        ("Totals", bool(odds.get("over_under")) or bool((api_odds_fallback or {}).get("over_under"))),
         ("Correct Score", truthy_market(api.get("correct_score"))),
         ("Lineups", bool(((db or {}).get("lineups") or {}).get("response"))),
         ("Injuries", ((db or {}).get("injuries") or {}).get("ok") is True),

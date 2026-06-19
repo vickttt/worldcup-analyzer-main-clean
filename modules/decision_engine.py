@@ -859,27 +859,27 @@ def direction_confidence(match, odds, polymarket, api_football_data):
     })
 
     handicap_summary = api_handicap_summary(api_football_data)
-    handicap_points, handicap_reason = handicap_direction_points(favorite, handicap_summary, 25)
+    handicap_points, handicap_reason = handicap_direction_points(favorite, handicap_summary, 30)
     components.append({
         "name": "亚洲让球盘",
         "points": handicap_points,
-        "max_points": 25,
+        "max_points": 30,
         "reason": handicap_reason,
     })
 
-    totals_points, totals_reason = totals_structure_points(odds, 15)
+    totals_points, totals_reason = totals_structure_points(odds, 8)
     components.append({
         "name": "大小球",
         "points": totals_points,
-        "max_points": 15,
+        "max_points": 8,
         "reason": totals_reason,
     })
 
-    correct_points, correct_reason = correct_score_points(match, favorite, api_football_data, 20)
+    correct_points, correct_reason = correct_score_points(match, favorite, api_football_data, 22)
     components.append({
         "name": "波胆结构",
         "points": correct_points,
-        "max_points": 20,
+        "max_points": 22,
         "reason": correct_reason,
     })
 
@@ -1052,7 +1052,7 @@ def build_decision_engine(match, odds, polymarket, api_football_data, betting_op
         "final_recommendation": final_recommendation(match, betting_opinion, contrarian, upset),
         "stake_suggestion": stake_suggestion(direction["score"]),
         "weights": {
-            "方向把握": "胜平负30 + 亚洲让球25 + 大小球15 + 波胆20 + Polymarket10",
+            "方向把握": "胜平负30 + 亚洲让球30 + 大小球8 + 波胆22 + Polymarket10",
             "赔率价值": "输入实际赔率后：实际赔率优势45 + 推荐覆盖20 + 盘口结构15 + 庄家利润率10 + Polymarket辅助10；未输入时使用市场标准盘口评估。",
             "参与建议": "方向把握 + 赔率价值 + 风险暴露",
             "推荐仓位": "方向把握为主，赔率价值微调",

@@ -6,11 +6,11 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 CONTEXT_FILE = ROOT / "GPT_CONTEXT.md"
 LATEST_FILE = ROOT / "LATEST.md"
-VERSION = "v1.60-dev"
+VERSION = "v1.64-dev"
 URL = "http://localhost:8502"
 CURRENT_BEST_PORTFOLIO = "推荐组合（当前最优）"
 CURRENT_UTILITY = "Calculated per selected match"
-TOP_ISSUE = "Pre-match decision cockpit needs validation against finished matches and saved snapshots."
+TOP_ISSUE = "Validate Market Center Score and direction-over-tempo weighting on Brazil vs Haiti and future deep-favorite matches."
 
 
 def run(command):

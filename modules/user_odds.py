@@ -218,13 +218,13 @@ def expected_value(probability, odds_value):
 def market_value_factor(candidate):
     item_type = candidate.get("type")
     if item_type == "handicap":
-        return 1.20
+        return 1.35
     if item_type == "winner":
         return 1.00
     if item_type == "total":
-        return 0.80
+        return 0.55
     if item_type == "correct_score":
-        return 0.65
+        return 0.85
     return 0.70
 
 
@@ -294,13 +294,28 @@ def build_market_candidates(match, odds, api_football_data):
         correct_scores.append(score)
 
     for idx, score in enumerate(correct_scores, start=1):
+        if idx <= 3:
+            market_center_score = 20
+            market_center_label = "核心波胆"
+        elif idx <= 5:
+            market_center_score = 12
+            market_center_label = "市场中心附近"
+        elif idx <= 10:
+            market_center_score = 4
+            market_center_label = "次级路径"
+        else:
+            market_center_score = -12
+            market_center_label = "边缘路径"
         candidates.append({
             "slot": f"波胆{idx}",
             "type": "correct_score",
             "selection": score.get("score"),
             "name": f"波胆 {score.get('score')}",
             "standard_odds": score.get("avg_odds"),
-            "base_score": max(34, 58 - idx),
+            "base_score": max(30, 56 - idx),
+            "market_center_rank": idx,
+            "market_center_score": market_center_score,
+            "market_center_label": market_center_label,
             "source": "API-Football 波胆均值",
         })
 
@@ -312,6 +327,9 @@ def score_candidate(candidate):
     ev_lift = candidate.get("ev_lift")
     factor = candidate.get("market_value_factor", 1)
     path_match = candidate.get("path_match_score", 0)
+    market_center_score = candidate.get("market_center_score", 0)
+    consistency_score = candidate.get("path_consistency_score", 0)
+    conflict_penalty = candidate.get("path_conflict_penalty", 0)
     coverage = candidate.get("coverage_rate", 0)
     direction_alignment = candidate.get("direction_alignment_score", 0)
     edge_points = 0
@@ -344,7 +362,20 @@ def score_candidate(candidate):
     if edge is None and ev_lift is None:
         edge_points = -6
     coverage_points = min(12, round(coverage * 18))
-    return round(candidate.get("base_score", 0) + edge_points + ev_points + path_match + coverage_points + direction_alignment)
+    if candidate.get("type") == "correct_score" and candidate.get("market_center_rank", 99) > 5:
+        if not ((edge or 0) >= 0.08 or (ev_lift or 0) >= 0.05):
+            market_center_score = min(market_center_score, -12)
+    return round(
+        candidate.get("base_score", 0)
+        + edge_points
+        + ev_points
+        + path_match
+        + market_center_score
+        + consistency_score
+        - conflict_penalty
+        + coverage_points
+        + direction_alignment
+    )
 
 
 def parse_score(score):
@@ -368,7 +399,171 @@ def favorite_is_home(match, distribution):
     favorite = str((distribution or {}).get("favorite") or "")
     if not favorite:
         return True
-    return favorite == str(match.get("home_cn") or "")
+    home_names = {
+        str(match.get("home_cn") or ""),
+        str(match.get("home") or ""),
+        canonical_name(str(match.get("home_cn") or "")),
+    }
+    try:
+        from modules.pregame_content import team_cn
+        home_names.add(team_cn(match.get("home_cn") or ""))
+    except Exception:
+        pass
+    return favorite in home_names
+
+
+def selection_line(selection):
+    match = re.search(r"([+-]?\d+(?:\.\d+)?)", str(selection or ""))
+    if not match:
+        return None
+    try:
+        return float(match.group(1))
+    except ValueError:
+        return None
+
+
+def total_side_line(selection):
+    text = str(selection or "").lower()
+    line_match = re.search(r"(\d+(?:\.\d+)?)", text)
+    line = float(line_match.group(1)) if line_match else None
+    if "under" in text or "小" in text:
+        return "under", line
+    if "over" in text or "大" in text:
+        return "over", line
+    return None, line
+
+
+def primary_path_profile(candidates, match, distribution):
+    handicap = max(
+        [item for item in candidates if item.get("type") == "handicap"],
+        key=lambda item: item.get("score", item.get("base_score", 0)),
+        default=None,
+    )
+    total = max(
+        [item for item in candidates if item.get("type") == "total"],
+        key=lambda item: item.get("score", item.get("base_score", 0)),
+        default=None,
+    )
+    total_side, total_line = total_side_line((total or {}).get("selection"))
+    return {
+        "favorite_home": favorite_is_home(match, distribution),
+        "favorite": (distribution or {}).get("favorite"),
+        "handicap_selection": (handicap or {}).get("selection"),
+        "handicap_line": selection_line((handicap or {}).get("selection")),
+        "total_selection": (total or {}).get("selection"),
+        "total_side": total_side,
+        "total_line": total_line,
+    }
+
+
+def required_favorite_margin(handicap_line):
+    if handicap_line is None:
+        return None
+    line = float(handicap_line)
+    if line >= 0:
+        return 0
+    abs_line = abs(line)
+    if abs_line <= 0.5:
+        return 1
+    if abs_line <= 1:
+        return 1
+    if abs_line <= 1.5:
+        return 2
+    if abs_line <= 2:
+        return 2
+    if abs_line <= 2.5:
+        return 3
+    return int(abs_line) + 1
+
+
+def correct_score_path_consistency(candidate, profile):
+    if candidate.get("type") != "correct_score":
+        return 0, 0, ""
+    parsed = parse_score(candidate.get("selection"))
+    if not parsed:
+        return 0, 30, "比分格式无法识别。"
+
+    home_goals, away_goals = parsed
+    total_goals = home_goals + away_goals
+    fav_diff = home_goals - away_goals if profile.get("favorite_home") else away_goals - home_goals
+    required_margin = required_favorite_margin(profile.get("handicap_line"))
+    total_side = profile.get("total_side")
+    total_line = profile.get("total_line")
+
+    score = 0
+    penalty = 0
+    reasons = []
+
+    if fav_diff > 0:
+        score += 10
+        reasons.append("方向一致")
+    else:
+        penalty += 45
+        reasons.append("与主胜方向冲突")
+
+    if required_margin is not None:
+        if fav_diff >= required_margin:
+            score += 14
+            reasons.append(f"符合让球主线{profile.get('handicap_selection')}")
+        else:
+            penalty += 35
+            reasons.append(f"未覆盖让球主线{profile.get('handicap_selection')}")
+
+    if total_side and total_line is not None:
+        if total_side == "over":
+            if total_goals > total_line:
+                score += 12
+                reasons.append(f"符合{profile.get('total_selection')}")
+            else:
+                if candidate.get("market_center_rank", 99) <= 3 and (required_margin is None or fav_diff >= required_margin):
+                    penalty += 18
+                    reasons.append(f"低于{profile.get('total_selection')}，但属于市场中心且打穿让球")
+                else:
+                    penalty += 38
+                    reasons.append(f"与{profile.get('total_selection')}冲突")
+        elif total_side == "under":
+            if total_goals < total_line:
+                score += 12
+                reasons.append(f"符合{profile.get('total_selection')}")
+            else:
+                if candidate.get("market_center_rank", 99) <= 3 and fav_diff > 0:
+                    penalty += 18
+                    reasons.append(f"高于{profile.get('total_selection')}，但属于市场中心且方向一致")
+                else:
+                    penalty += 38
+                    reasons.append(f"与{profile.get('total_selection')}冲突")
+
+    if candidate.get("market_center_rank", 99) <= 5 and penalty <= 20:
+        score += 8
+        reasons.append("位于波胆市场中心")
+    elif candidate.get("market_center_rank", 99) > 10:
+        penalty += 10
+        reasons.append("偏离波胆市场中心")
+
+    return score, penalty, "；".join(reasons)
+
+
+def apply_path_consistency(candidates, match, distribution):
+    profile = primary_path_profile(candidates, match, distribution)
+    for item in candidates:
+        if item.get("type") != "correct_score":
+            continue
+        consistency, penalty, reason = correct_score_path_consistency(item, profile)
+        item["path_consistency_score"] = consistency
+        item["path_conflict_penalty"] = penalty
+        item["path_consistency_reason"] = reason
+        item["score"] = score_candidate(item)
+        if penalty >= 35:
+            item["recommended"] = False
+            item["not_recommended_reason"] = f"路径冲突：{reason}"
+            item["reason"] = f"未进入主路径：{reason}"
+        else:
+            item["recommended"] = item["score"] >= 55
+            if item["recommended"]:
+                item.pop("not_recommended_reason", None)
+            else:
+                item["not_recommended_reason"] = not_recommended_reason(item)
+    return profile
 
 
 def path_match_score(candidate, match, distribution):
@@ -384,13 +579,13 @@ def path_match_score(candidate, match, distribution):
 
     main_path = str((distribution or {}).get("main_path") or "")
     if fav_diff == 1 and ("小胜" in main_path or "1球" in main_path):
-        return 18, "匹配主胜1球主路径。"
+        return 12, "匹配主胜1球路径。"
     if fav_diff == 2 and "赢2球" in main_path:
-        return 18, "匹配赢2球主路径。"
+        return 15, "匹配赢2球主路径。"
     if fav_diff >= 3 and "3球以上" in main_path:
-        return 18, "匹配大胜主路径。"
+        return 15, "匹配大胜主路径。"
     if fav_diff == 1:
-        return 12, "覆盖热门方小胜路径。"
+        return 8, "覆盖热门方小胜路径。"
     if fav_diff == 2:
         return 10, "覆盖盘口边界路径。"
     if fav_diff >= 3:
@@ -409,10 +604,11 @@ def direction_alignment_score(candidate, match, distribution):
     if item_type == "handicap":
         return 22
     if item_type == "correct_score":
-        return 10 if candidate.get("path_match_score", 0) >= 10 else 4
+        center_bonus = 4 if candidate.get("market_center_rank", 99) <= 5 else -4
+        return max(0, (12 if candidate.get("path_match_score", 0) >= 10 else 4) + center_bonus)
     if item_type == "total":
         ev_lift = candidate.get("ev_lift") or 0
-        return 4 if ev_lift >= 0.05 else -8
+        return 0 if ev_lift >= 0.05 else -12
     return 0
 
 
@@ -463,6 +659,7 @@ def enrich_candidate(candidate, actual_odds, match=None, distribution=None):
         "path_match_score": path_points,
         "path_match_reason": path_reason,
         "coverage_rate": coverage,
+        "market_center_reason": market_center_reason(enriched),
     })
     enriched["direction_alignment_score"] = direction_alignment_score(enriched, match or {}, distribution or {})
     enriched["score"] = score_candidate(enriched)
@@ -474,13 +671,28 @@ def enrich_candidate(candidate, actual_odds, match=None, distribution=None):
 
 
 def force_min_correct_scores(candidates, minimum=2):
-    correct_scores = [item for item in candidates if item.get("type") == "correct_score"]
+    correct_scores = [
+        item for item in candidates
+        if item.get("type") == "correct_score" and item.get("path_conflict_penalty", 0) < 35
+    ]
     if not correct_scores:
         return
     recommended_count = sum(1 for item in correct_scores if item.get("recommended"))
     if recommended_count >= min(minimum, len(correct_scores)):
         return
-    sorted_scores = sorted(correct_scores, key=lambda item: (item.get("recommended", False), item.get("path_match_score", 0), item.get("score", 0)), reverse=True)
+    sorted_scores = sorted(
+        correct_scores,
+        key=lambda item: (
+            item.get("recommended", False),
+            item.get("market_center_score", 0),
+            -item.get("market_center_rank", 999),
+            item.get("path_consistency_score", 0),
+            -item.get("path_conflict_penalty", 0),
+            item.get("path_match_score", 0),
+            item.get("score", 0),
+        ),
+        reverse=True,
+    )
     for item in sorted_scores:
         if recommended_count >= min(minimum, len(correct_scores)):
             break
@@ -490,7 +702,7 @@ def force_min_correct_scores(candidates, minimum=2):
         item["forced_recommendation"] = True
         item["score"] = max(item.get("score", 0), 55 if recommended_count == 0 else 45)
         item.pop("not_recommended_reason", None)
-        item["reason"] = f"低金额保留波胆候选；{item.get('path_match_reason') or '用于覆盖最可能比分路径。'}"
+        item["reason"] = f"低金额保留波胆候选；{item.get('market_center_reason') or item.get('path_match_reason') or '用于覆盖最可能比分路径。'}"
         recommended_count += 1
 
 
@@ -499,9 +711,9 @@ def allocation_cap(item):
     if item_type == "winner":
         return 0.45
     if item_type == "handicap":
-        return 0.36
+        return 0.42
     if item_type == "total":
-        return 0.26
+        return 0.18
     if item_type == "correct_score":
         return 0.16
     return 0
@@ -521,6 +733,14 @@ def allocation_raw_weight(item):
     ev_part = 1 + max(item.get("ev_lift") or 0, 0) * 6
     if item.get("type") == "correct_score":
         ev_part *= 0.70
+    if item.get("type") == "total":
+        ev_part *= 0.55
+    if item.get("type") == "handicap":
+        ev_part *= 1.25
+    if item.get("type") == "correct_score":
+        ev_part *= 1 + max(item.get("market_center_score", 0), 0) / 35
+        ev_part *= 1 + max(item.get("path_consistency_score", 0), 0) / 50
+        ev_part *= max(0.10, 1 - item.get("path_conflict_penalty", 0) / 70)
     return score_part * coverage_part * ev_part
 
 
@@ -613,6 +833,7 @@ def build_recommendation_slots(match, odds, api_football_data, actual_odds, dist
         enrich_candidate(candidate, actual_odds, match, distribution)
         for candidate in build_market_candidates(match, odds, api_football_data)
     ]
+    apply_path_consistency(candidates, match, distribution or {})
     force_min_correct_scores(candidates, minimum=2)
     candidates.sort(key=lambda item: (item.get("recommended", False), item.get("score", 0)), reverse=True)
     ev_sorted = sorted(
@@ -628,6 +849,10 @@ def build_recommendation_slots(match, odds, api_football_data, actual_odds, dist
     correct_candidates.sort(
         key=lambda item: (
             item.get("recommended", False),
+            item.get("market_center_score", 0),
+            -item.get("market_center_rank", 999),
+            item.get("path_consistency_score", 0),
+            -item.get("path_conflict_penalty", 0),
             item.get("path_match_score", 0),
             item.get("coverage_rate", 0),
             item.get("score", 0),
@@ -660,9 +885,9 @@ def recommendation_reason(candidate):
     if item_type == "handicap":
         return "市场主盘口，决定赢球路径是否打穿。"
     if item_type == "total":
-        return "用于覆盖比赛节奏和进球数方向。"
+        return "节奏资产，只辅助判断进球数，不代表比赛主逻辑。"
     if item_type == "correct_score":
-        return candidate.get("path_match_reason") or "用于覆盖最可能比分路径。"
+        return candidate.get("market_center_reason") or candidate.get("path_match_reason") or "用于覆盖最可能比分路径。"
     return "综合评分进入前列。"
 
 
@@ -696,6 +921,18 @@ def not_recommended_reason(candidate):
     if candidate.get("type") == "correct_score":
         return "波胆命中要求高，当前分数不足。"
     return f"综合分 {score}，未达到推荐阈值 55。"
+
+
+def market_center_reason(candidate):
+    if candidate.get("type") != "correct_score":
+        return ""
+    rank = candidate.get("market_center_rank")
+    label = candidate.get("market_center_label")
+    if not rank:
+        return ""
+    if rank <= 5:
+        return f"{candidate.get('selection')} 是波胆市场第{rank}低赔率路径，属于{label}。"
+    return f"{candidate.get('selection')} 是波胆市场第{rank}路径，偏离市场中心；除非EV优势明显，否则降低优先级。"
 
 
 def actual_odds_summary(slots):

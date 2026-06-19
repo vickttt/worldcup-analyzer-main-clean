@@ -11,7 +11,7 @@ import streamlit as st
 import yaml
 
 from modules.match_parser import parse_match
-from modules.market_utils import asian_handicap_summary, correct_score_summary
+from modules.market_utils import asian_handicap_summary, correct_score_summary, totals_summary
 from modules.betting_opinion import build_betting_opinion
 from modules.decision_engine import build_decision_engine, traffic_light
 from modules.mock_data import get_mock_news_and_injuries
@@ -65,6 +65,7 @@ from modules.user_odds import (
 )
 from modules.value_model import analyze_value
 from modules.weather_client import weather_for_fixture
+from modules.perf_logger import perf_timer, read_recent_events
 from modules.worldcup_db import (
     db_api_football_data,
     db_odds,
@@ -731,8 +732,7 @@ def fixture_needs_status_refresh(fixture):
 def refresh_selected_fixture_if_needed(fixture):
     if not fixture_needs_status_refresh(fixture):
         return fixture
-    fetch_world_cup_schedule.clear()
-    schedule = fetch_world_cup_schedule(force_refresh=True)
+    schedule = fetch_world_cup_schedule(force_refresh=False)
     for candidate in schedule.get("fixtures", []):
         if same_fixture(fixture, candidate):
             st.session_state.selected_fixture = candidate
@@ -1357,6 +1357,8 @@ def market_odds_overview_rows(combo):
             "实际赔率": fmt_odds(actual),
             "市场赔率": fmt_odds(market),
             "差异": f"{(item.get('edge') or 0) * 100:+.1f}%" if item.get("edge") is not None else "-",
+            "EV提升": f"{(item.get('ev_lift') or 0) * 100:+.1f}%" if item.get("ev_lift") is not None else "-",
+            "_ev_lift": item.get("ev_lift") if item.get("ev_lift") is not None else -999,
             "状态": status,
         })
     return rows
@@ -1500,8 +1502,8 @@ ROLE_CN = {
 ROLE_CONSTRAINTS = {
     "保险资产": (0.20, 0.40),
     "收益资产": (0.30, 0.60),
-    "方向资产": (0.15, 0.45),
-    "节奏资产": (0.00, 0.35),
+    "方向资产": (0.25, 0.55),
+    "节奏资产": (0.00, 0.22),
     "尾部资产": (0.00, 0.15),
 }
 
@@ -1575,9 +1577,9 @@ def betting_asset_roles(item, match, distribution):
             roles.append(role_entry("Return Asset", 0.15, "赔率具备一定收益弹性。"))
         return normalize_role_weights(roles)
     if item_type == "total":
-        roles.append(role_entry("Tempo Asset", 0.70, "表达比赛进球节奏，不直接判断谁赢。"))
+        roles.append(role_entry("Tempo Asset", 0.55, "表达比赛进球节奏，不直接判断谁赢。"))
         if coverage >= 0.45:
-            roles.append(role_entry("Insurance Asset", 0.20, "覆盖多种比分路径下的进球区间。"))
+            roles.append(role_entry("Insurance Asset", 0.15, "覆盖多种比分路径下的进球区间。"))
         if odds_value >= 2.15:
             roles.append(role_entry("Return Asset", 0.10, "赔率具备轻微收益弹性。"))
         return normalize_role_weights(roles)
@@ -1650,6 +1652,10 @@ def role_balance_adjustment(items, match, distribution):
     adjustment = role_constraint_adjustment(exposure)
     if exposure.get("方向资产", 0) + exposure.get("保险资产", 0) >= 0.35:
         adjustment += 20
+    if exposure.get("方向资产", 0) >= 0.25:
+        adjustment += 12
+    if exposure.get("节奏资产", 0) > 0.25 and exposure.get("方向资产", 0) < 0.25:
+        adjustment -= 22
     if 0.05 <= exposure.get("尾部资产", 0) <= 0.15:
         adjustment += 8
     return adjustment
@@ -2223,6 +2229,7 @@ def evaluate_allocation(vector, assets, return_matrix, total_stake, match, distr
     max_loss = abs(min(0, min_profit))
     correlation = weighted_combo_correlation(active)
     strategic_value = strategy_strategic_value(active, match, distribution)
+    consistency_score = strategy_path_consistency(active)
     sharpe_ratio = expected_profit / volatility if volatility else 0
     stability = portfolio_stability_score(volatility, max_loss, total_stake, correlation, profits)
     risk = volatility + max_loss * 0.35 + correlation * total_stake * 0.20
@@ -2236,6 +2243,7 @@ def evaluate_allocation(vector, assets, return_matrix, total_stake, match, distr
         correlation,
         strategy_direction_alignment(active, match, distribution),
         strategic_value,
+        consistency_score,
         sharpe_ratio,
         stability,
     )
@@ -2840,7 +2848,16 @@ def model_error_summary(match, distribution, final_score):
 def strategy_item_groups(combo):
     active = [item for item in combo if item.get("recommended") and item.get("type") != "empty"]
     correct_scores = [item for item in active if item.get("type") == "correct_score"]
-    correct_scores.sort(key=lambda item: (item.get("score", 0), item.get("ev_lift") or -99), reverse=True)
+    correct_scores.sort(
+        key=lambda item: (
+            item.get("market_center_score", 0),
+            -item.get("market_center_rank", 999),
+            item.get("path_consistency_score", 0),
+            -item.get("path_conflict_penalty", 0),
+            item.get("score", 0),
+        ),
+        reverse=True,
+    )
     return {
         "all": active,
         "winner": [item for item in active if item.get("type") == "winner"][:1],
@@ -3043,7 +3060,7 @@ def item_direction_alignment(item, match, distribution):
         if not parsed:
             return 0.45
         home_goals, away_goals = parsed
-        favorite_home = favorite in {team_cn(match["home_cn"]), match["home_cn"]}
+        favorite_home = favorite in {team_cn(match["home_cn"]), match["home_cn"], match.get("home")}
         margin = home_goals - away_goals if favorite_home else away_goals - home_goals
         if margin in {1, 2}:
             return 0.90
@@ -3080,7 +3097,7 @@ def item_strategic_value(item, match, distribution):
         "方向资产": 1.0,
         "保险资产": 0.78,
         "收益资产": 0.68,
-        "节奏资产": 0.45,
+        "节奏资产": 0.32,
         "尾部资产": 0.40,
         "辅助资产": 0.30,
     }
@@ -3103,6 +3120,32 @@ def strategy_strategic_value(items, match, distribution):
     return weighted / sum(weights)
 
 
+def item_path_consistency(item):
+    if item.get("type") == "correct_score":
+        raw = 55 + item.get("path_consistency_score", 0) - item.get("path_conflict_penalty", 0)
+        return max(0, min(1, raw / 100))
+    if item.get("type") in {"winner", "handicap"}:
+        return 0.88
+    if item.get("type") == "total":
+        return 0.58
+    return 0.45
+
+
+def strategy_path_consistency(items):
+    if not items:
+        return 0
+    weights = [max(item.get("amount", 0), 1) for item in items]
+    weighted = sum(item_path_consistency(item) * weight for item, weight in zip(items, weights))
+    base = weighted / sum(weights)
+    severe_conflicts = [
+        item for item in items
+        if item.get("type") == "correct_score" and item.get("path_conflict_penalty", 0) >= 35
+    ]
+    if severe_conflicts:
+        base = min(base, 0.35)
+    return base
+
+
 def strategy_score(
     ev_yield,
     hit_rate,
@@ -3112,6 +3155,7 @@ def strategy_score(
     concentration,
     direction_alignment,
     strategic_value,
+    consistency_score,
     sharpe_ratio,
     stability_score,
 ):
@@ -3134,8 +3178,9 @@ def strategy_score(
         loss_points = 7
     else:
         loss_points = 3
-    direction_points = direction_alignment * 10
-    strategic_points = strategic_value * 14
+    direction_points = direction_alignment * 16
+    strategic_points = strategic_value * 18
+    consistency_points = consistency_score * 24
     sharpe_points = max(0, min(8, (sharpe_ratio + 0.2) * 10))
     stability_points = max(0, min(8, stability_score / 12.5))
     concentration_points = max(0, (1 - concentration) * 8)
@@ -3146,6 +3191,7 @@ def strategy_score(
         + loss_points
         + direction_points
         + strategic_points
+        + consistency_points
         + sharpe_points
         + stability_points
         + concentration_points
@@ -3153,9 +3199,14 @@ def strategy_score(
     total = round(50 + (raw_total - 50) * 1.35)
     if direction_alignment < 0.45:
         total = min(total, 80)
+    if strategic_value < 0.45:
+        total = min(total, 82)
+    if consistency_score < 0.50:
+        total = min(total, 74)
     return clamp(total), {
         "方向一致性": round(direction_points),
         "战略价值": round(strategic_points),
+        "路径一致性": round(consistency_points),
         "Sharpe": round(sharpe_points),
         "稳定性": round(stability_points),
         "命中率": round(hit_points),
@@ -3211,6 +3262,7 @@ def evaluate_strategy(strategy, match, distribution, total_stake):
     concentration = weighted_combo_correlation(items)
     direction_alignment = strategy_direction_alignment(items, match, distribution)
     strategic_value = strategy_strategic_value(items, match, distribution)
+    consistency_score = strategy_path_consistency(items)
     ev_yield = expected_profit / total_stake if total_stake else 0
     capital_efficiency = expected_profit / total_stake if total_stake else 0
     stability_score = portfolio_stability_score(volatility, max_loss, total_stake, concentration, profits)
@@ -3223,6 +3275,7 @@ def evaluate_strategy(strategy, match, distribution, total_stake):
         concentration,
         direction_alignment,
         strategic_value,
+        consistency_score,
         sharpe_ratio,
         stability_score,
     )
@@ -3245,6 +3298,7 @@ def evaluate_strategy(strategy, match, distribution, total_stake):
         "concentration": concentration,
         "direction_alignment": direction_alignment,
         "strategic_value": strategic_value,
+        "consistency_score": consistency_score,
         "role_constraint": {
             "adjustment": role_balance_adjustment(items, match, distribution),
             "rows": role_constraint_rows(items, match, distribution),
@@ -3266,7 +3320,7 @@ def strategy_comparison(match, distribution, combo, total_stake):
     ranked = sorted(evaluated, key=lambda item: item["score"], reverse=True)
     for index, strategy in enumerate(ranked):
         strategy["original_name"] = strategy["name"]
-        strategy["rank_name"] = normalize_portfolio_name(strategy["name"], index)
+        strategy["rank_name"] = "推荐组合" if index == 0 else f"第{index + 1}组合"
     return ranked
 
 
@@ -3318,6 +3372,7 @@ def strategy_table_rows(strategies, match=None, distribution=None):
             "路径集中度": percent(strategy["concentration"]),
             "方向一致性": percent(strategy["direction_alignment"]),
             "战略价值": percent(strategy["strategic_value"]),
+            "路径一致性": percent(strategy.get("consistency_score", 0)),
             "综合评分": strategy["score"],
         })
     return rows
@@ -3783,14 +3838,8 @@ def render_actual_odds_input(match):
     current_raw = st.session_state.get(raw_key, "")
     with st.container(border=True):
         st.markdown('<div class="section-title">我的实际赔率</div>', unsafe_allow_html=True)
-        st.caption("可选输入。这里填写你自己实际能买到的赔率，系统会优先用它评估价值；不填写则继续使用市场标准赔率。")
         if cache:
-            st.info(
-                f"当前已载入赔率：{format_cache_time(cache.get('updated_at'))} · "
-                f"{cache.get('match', {}).get('display', '')} · "
-                f"{cache.get('record_count', 0)}条赔率记录 · "
-                f"{cache.get('profile', {}).get('name', '我的赔率A')}"
-            )
+            st.caption(f"已载入：{format_cache_time(cache.get('updated_at'))} · {cache.get('record_count', 0)}条")
             if st.session_state.get(f"{key}_restored"):
                 st.caption("已恢复上次录入赔率。")
 
@@ -3811,7 +3860,7 @@ def render_actual_odds_input(match):
             raw_input = st.text_area(
                 "粘贴实际赔率",
                 value=current_raw,
-                height=210,
+                height=145,
                 placeholder=actual_odds_example(match),
                 label_visibility="collapsed",
             )
@@ -3824,6 +3873,7 @@ def render_actual_odds_input(match):
         if submitted and raw.strip():
             cache = save_user_odds_cache(match, raw, parsed)
             st.success(f"已保存实际赔率：{format_cache_time(cache.get('updated_at'))} · {len(parsed.get('items') or [])}条记录")
+            st.rerun()
         if parsed.get("items"):
             rows = [
                 {"盘口": item["type"], "方向": item["selection"], "实际赔率": fmt_odds(item["odds"])}
@@ -3834,8 +3884,17 @@ def render_actual_odds_input(match):
             st.caption("未应用实际赔率：推荐组合和赔率价值暂按市场标准赔率计算。")
         if st.checkbox("显示支持的输入格式", value=False, key=f"actual_odds_format_{user_odds_slug(match)}"):
             st.code(actual_odds_example(match), language="text")
-            st.caption("一行一个投注，适合从 Excel 复制；旧的多行格式仍然兼容。")
         return parsed
+
+
+def current_actual_odds(match):
+    key = f"actual_odds_{match['home_cn']}_{match['away_cn']}"
+    raw_key = f"{key}_raw"
+    cache = load_user_odds_cache(match)
+    raw = st.session_state.get(raw_key)
+    if raw is None and cache:
+        raw = cache.get("raw_text", "")
+    return parse_actual_odds(raw or "")
 
 
 HISTORY_DIR = Path("data/history")
@@ -4258,6 +4317,7 @@ def render_my_portfolio_input(match, selected_fixture, candidates, title="我的
         if submitted:
             cache = save_my_portfolio(match, selected_fixture, raw, items)
             st.success(f"我的组合已保存：{format_cache_time(cache.get('updated_at'))} · {len(items)}项")
+            st.rerun()
         if items:
             rows = [
                 {
@@ -4357,232 +4417,329 @@ def render_my_portfolio_settlement(match, selected_fixture, snapshot, distributi
         return portfolio
 
 
-def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None):
-    combo = recommendation_combo(match, odds, api_football_data, distribution, actual_odds)
-    initial_combo_with_amounts = stake_amounts(combo, decision)
-    total_stake, total_reason = recommended_total_stake(decision)
-    strategies = strategy_comparison(match, distribution, initial_combo_with_amounts, total_stake)
-    selected_strategy = strategies[0] if strategies else None
-    combo_with_amounts = selected_strategy["items"] if selected_strategy else initial_combo_with_amounts
-    portfolio = portfolio_metrics(combo_with_amounts)
-    worst_path = worst_score_path(match, distribution, combo_with_amounts)
-    best_path = best_score_path(match, distribution, combo_with_amounts)
-    with st.container(border=True):
-        st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
+def strategy_item_names(strategy):
+    return [
+        item.get("name") or item.get("selection") or "-"
+        for item in strategy.get("items") or []
+        if item.get("type") != "empty"
+    ]
 
-        direction = decision.get("direction_confidence") or {}
-        odds_value = decision.get("odds_value") or {}
-        participation = participation_with_portfolio(decision.get("participation_advice") or {}, portfolio)
-        stake = decision.get("recommended_stake") or {}
-        decision_cols = st.columns(4)
-        decision_cols[0].metric("方向把握", f"{direction.get('score', decision['final_confidence_score'])} / 100")
-        decision_cols[0].caption(direction.get("summary") or direction.get("level", "-"))
-        decision_cols[1].metric("赔率价值", rating_badge(odds_value.get("rating", decision["value_rating"])))
-        decision_cols[1].caption(odds_value.get("reason", decision["value_rating_meaning"]))
-        decision_cols[2].metric("参与建议", participation.get("advice", "-"))
-        decision_cols[2].caption(participation.get("reason", "-"))
-        decision_cols[3].metric("推荐仓位", f"{stake.get('amount', total_stake)}元")
-        decision_cols[3].caption(stake.get("reason", total_reason))
-        standard_stake = stake.get("amount", total_stake)
-        conservative_stake = round_to_hundred(standard_stake * 0.7)
-        aggressive_stake = round_to_hundred(standard_stake * 1.3)
-        decision_cols[3].caption(
-            f"信心区间：保守 {conservative_stake} · 标准 {standard_stake} · 激进 {aggressive_stake}"
-        )
 
-        st.markdown("**推荐投注组合**")
-        if selected_strategy:
-            st.caption(f"推荐组合来源：{selected_strategy.get('rank_name', selected_strategy['name'])}（{selected_strategy['score']}分）。")
-        portfolio_cols = st.columns(5)
-        portfolio_cols[0].metric("组合EV", f"{portfolio['expected_profit']:+d}元")
-        portfolio_cols[0].caption("按当前组合的长期期望收益估算。")
-        portfolio_cols[1].metric("预期收益率", f"{portfolio['expected_yield'] * 100:+.1f}%")
-        portfolio_cols[1].caption("组合EV / 推荐总仓位。")
-        portfolio_cols[2].metric("最大亏损", f"-{portfolio['max_loss']}元")
-        portfolio_cols[2].caption("所有推荐项同时失效时的风险。")
-        portfolio_cols[3].metric("最佳路径收益", best_path["score"], f"{best_path['profit']:+d}元")
-        portfolio_cols[3].caption("当前候选比分里的最高收益。")
-        portfolio_cols[4].metric("最差路径收益", worst_path["score"], f"{worst_path['profit']:+d}元")
-        portfolio_cols[4].caption("当前组合最容易受伤的比分路径。")
-        st.caption(
-            f"路径相关性约 {portfolio['weighted_correlation'] * 100:.0f}%。"
-            "独赢、让球和波胆通常高度相关，因此组合器会限制同一路径仓位过度集中。"
-        )
-        if portfolio["expected_profit"] < 0 and participation.get("advice") in {"强烈参与", "建议参与", "小仓参与"}:
-            st.warning(
-                "组合EV当前为负，但参与建议仍成立：负值主要可能来自波胆覆盖成本或个别保护仓位。"
-                f"核心盘口EV约 {portfolio['core_expected_profit']:+d} 元，"
-                f"波胆覆盖EV约 {portfolio['correct_score_expected_profit']:+d} 元。"
-                "如果只追求EV，可降低波胆仓位；如果重视路径覆盖，可保留低金额波胆。"
-            )
+def strategy_difference(strategy, baseline):
+    base_names = set(strategy_item_names(baseline or {}))
+    current_names = set(strategy_item_names(strategy or {}))
+    if not base_names:
+        return "-"
+    if strategy is baseline or current_names == base_names:
+        return "基准组合"
+    missing = list(base_names - current_names)
+    added = list(current_names - base_names)
+    parts = []
+    if missing:
+        parts.append("少了：" + "、".join(missing[:2]))
+    if added:
+        parts.append("多了：" + "、".join(added[:2]))
+    return "；".join(parts) or "资金比例不同"
 
-        if strategies:
-            st.markdown("**赛前策略排行榜**")
-            st.caption("按当前真实盘口、实际赔率和比分路径矩阵，对所有候选组合进行赛前排序。")
-            st.dataframe(pd.DataFrame(prematch_strategy_ranking_rows(strategies)), use_container_width=True, hide_index=True)
 
-        if selected_strategy:
-            role_rows = role_allocation_rows(selected_strategy.get("items") or [], match, distribution)
-            if role_rows:
-                st.markdown("**赛前资产角色分析**")
-                st.caption("先看组合角色，再看具体投注。组合是否稳健，取决于收益、保险、方向、节奏和尾部资产是否失衡。")
-                st.dataframe(pd.DataFrame(role_rows), use_container_width=True, hide_index=True)
+def portfolio_ranking_rows(strategies, baseline=None):
+    rows = []
+    for index, strategy in enumerate(strategies or [], start=1):
+        metrics = strategy.get("metrics") or {}
+        style = strategy.get("portfolio_style") or {}
+        item_names = strategy_item_names(strategy)
+        rows.append({
+            "排名": index,
+            "组合名称": normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1),
+            "EV": f"{int(metrics.get('expected_profit', strategy.get('expected_profit', 0))):+d}元",
+            "ROI": percent(metrics.get("expected_yield", strategy.get("expected_yield", 0))),
+            "综合评分": strategy.get("score", "-"),
+        })
+    return rows
 
-            preview_rows = settlement_preview_rows(selected_strategy, match, distribution)
-            if preview_rows:
-                st.markdown("**赛前逐项结算预演**")
-                st.caption("这里直接展开推荐组合的每一笔资产，避免推荐逻辑藏在算法里。")
-                st.dataframe(pd.DataFrame(preview_rows), use_container_width=True, hide_index=True)
 
-            why_rows = why_portfolio_rows(selected_strategy, match, distribution)
-            if why_rows:
-                st.markdown("**Why This Portfolio**")
-                st.caption("解释每个资产为什么进入当前组合。")
-                st.dataframe(pd.DataFrame(why_rows), use_container_width=True, hide_index=True)
+def strategy_difference_rows(strategy, baseline):
+    base_names = strategy_item_names(baseline or {})
+    current_names = strategy_item_names(strategy or {})
+    base_set = set(base_names)
+    current_set = set(current_names)
+    return [
+        {"类别": "删除", "投注": "、".join([name for name in base_names if name not in current_set]) or "无"},
+        {"类别": "保留", "投注": "、".join([name for name in current_names if name in base_set]) or "无"},
+        {"类别": "增加", "投注": "、".join([name for name in current_names if name not in base_set]) or "无"},
+    ]
 
-            risk_rows = risk_path_rows(selected_strategy)
-            if risk_rows:
-                st.markdown("**赛前风险暴露**")
-                st.caption("提前看到当前组合最怕哪些比分路径。")
-                st.dataframe(pd.DataFrame(risk_rows), use_container_width=True, hide_index=True)
 
-            top_rows = top_outcome_preview_rows(selected_strategy)
-            if top_rows:
-                st.markdown("**Top 10 Probable Outcomes**")
-                st.caption("按当前概率模型列出最重要的比分路径及对应组合收益。")
-                st.dataframe(pd.DataFrame(top_rows), use_container_width=True, hide_index=True)
-
-        if combo_with_amounts:
-            overview_rows = market_odds_overview_rows(initial_combo_with_amounts)
-            if overview_rows:
-                st.markdown("**实际赔率 VS 市场赔率**")
-                st.dataframe(pd.DataFrame(overview_rows), use_container_width=True, hide_index=True)
-                completeness = actual_odds_completeness(initial_combo_with_amounts)
-                if completeness["total"]:
-                    st.caption(
-                        f"实际赔率完整度：已录入 {completeness['entered']} / {completeness['total']}，"
-                        f"完整度 {completeness['ratio'] * 100:.0f}%。"
-                    )
-                    if completeness["missing"]:
-                        st.warning(
-                            "实际赔率录入不完整，策略结果可能失真。缺少："
-                            + "、".join(completeness["missing"])
-                        )
-
-            if selected_strategy:
-                reason_rows = optimized_strategy_reason_rows(selected_strategy, match, distribution)
-                if reason_rows:
-                    st.markdown("**推荐组合生成原因**")
-                    st.dataframe(pd.DataFrame(reason_rows), use_container_width=True, hide_index=True)
-                discarded_rows = discarded_bet_rows(initial_combo_with_amounts, selected_strategy)
-                if discarded_rows:
-                    if st.checkbox("显示未进入优化组合的原因", value=False, key="discarded_bet_reasons"):
-                        st.dataframe(pd.DataFrame(discarded_rows), use_container_width=True, hide_index=True)
-
-            combo_cols = st.columns(len(combo_with_amounts))
-            for index, (col, item) in enumerate(zip(combo_cols, combo_with_amounts), start=1):
-                with col:
-                    with st.container(border=True):
-                        st.caption(f"投注{index} · {combo_role(index, item)}")
-                        if item.get("recommended"):
-                            st.metric(item["name"], f"{item['amount']}元")
-                            st.caption(f"占比 {int(item.get('share', 0) * 100)}% · 使用赔率 {fmt_odds(item.get('odds'))}")
-                            st.caption(f"{score_stars(item.get('score', 0))} · 推荐指数")
-                            if item.get("actual_odds"):
-                                st.caption(f"市场标准 {fmt_odds(item.get('standard_odds'))} · 实际赔率 {fmt_odds(item.get('actual_odds'))}")
-                            else:
-                                st.caption(f"市场标准 {fmt_odds(item.get('standard_odds'))}")
-                            if item.get("ev_lift") is not None:
-                                rank_text = f" · EV排名 {item['ev_rank']}" if item.get("ev_rank") else ""
-                                st.caption(f"EV提升 {item['ev_lift'] * 100:+.1f}%{rank_text} · 推荐分 {item.get('score', 0)}")
-                            if item.get("coverage_rate") is not None:
-                                st.caption(f"覆盖率 {item['coverage_rate'] * 100:.0f}% · {recommendation_reason(item)}")
-                            st.caption(item.get("reason", item.get("source", "真实盘口")))
-                        else:
-                            st.metric(item.get("slot", f"投注{index}"), "不推荐")
-                            st.caption(item.get("not_recommended_reason") or item.get("reason") or "当前没有达到推荐阈值。")
-            if selected_strategy:
-                if st.checkbox("展开推荐组合", value=False, key="strategy_selected_detail"):
-                    st.caption("推荐组合来自策略优化器当前第一名，因此这里展示的是最终执行层组合。")
-                    render_strategy_detail(selected_strategy, match, distribution)
-            matrix_rows = correlation_matrix_rows(combo_with_amounts)
-            if matrix_rows:
-                if st.checkbox("显示组合相关性矩阵", value=False, key="combo_correlation_matrix"):
-                    st.caption("相关性越高，说明多个投注依赖同一比赛路径；组合器会降低过度重叠的仓位。")
-                    st.dataframe(pd.DataFrame(matrix_rows), use_container_width=True, hide_index=True)
-                    penalty_rows = correlation_penalty_rows(combo_with_amounts)
-                    if penalty_rows:
-                        st.markdown("**相关性惩罚如何影响仓位**")
-                        st.dataframe(pd.DataFrame(penalty_rows), use_container_width=True, hide_index=True)
-
-            if strategies:
-                if st.checkbox("显示高级策略研究", value=False, key="advanced_strategy_research"):
-                    st.info(strategy_conclusion(strategies))
-                    j_note = strategy_j_comparison(strategies)
-                    if j_note:
-                        st.caption(j_note)
-                    comparison_rows = strategy_direct_comparison_rows(strategies)
-                    if comparison_rows:
-                        st.markdown("**原始推荐组合 vs 策略第一名**")
-                        st.dataframe(pd.DataFrame(comparison_rows), use_container_width=True, hide_index=True)
-                    frontier_rows = efficient_frontier_rows(strategies)
-                    if frontier_rows:
-                        st.markdown("**有效前沿**")
-                        st.caption("按组合风险从低到高排列，用来区分保守、均衡和激进区域。")
-                        st.dataframe(pd.DataFrame(frontier_rows), use_container_width=True, hide_index=True)
-                    marginal_correct_rows = correct_score_marginal_ev_rows(initial_combo_with_amounts)
-                    if marginal_correct_rows:
-                        st.markdown("**波胆边际EV曲线**")
-                        st.caption("按边际贡献观察波胆数量是否继续增加；边际EV变低时，优化器会自动停止。")
-                        st.dataframe(pd.DataFrame(marginal_correct_rows), use_container_width=True, hide_index=True)
-                    insurance_rows = insurance_cost_rows(strategies, match, distribution)
-                    if insurance_rows:
-                        st.markdown("**保险成本分析**")
-                        st.caption("把独赢、让球、大小球视为保险资产，比较它们相对纯波胆组合带来的EV变化和路径覆盖变化。")
-                        st.dataframe(pd.DataFrame(insurance_rows), use_container_width=True, hide_index=True)
-                    st.dataframe(pd.DataFrame(strategy_table_rows(strategies, match, distribution)), use_container_width=True, hide_index=True)
-                    st.markdown("**策略评分来源**")
-                    st.dataframe(pd.DataFrame(strategy_component_rows(strategies)), use_container_width=True, hide_index=True)
-                    st.markdown("**策略详情**")
-                    for index, strategy in enumerate(strategies[:5], start=1):
-                        label = f"{strategy.get('rank_name', strategy['name'])} · {strategy['score']}分"
-                        if st.checkbox(label, value=False, key=f"strategy_detail_{index}_{strategy.get('code', index)}"):
-                            render_strategy_detail(strategy, match, distribution)
+def portfolio_detail_rows(strategy, match, distribution):
+    role_lookup = {row.get("投注"): row for row in role_allocation_rows(strategy.get("items") or [], match, distribution)}
+    reason_lookup = {row.get("资产"): row for row in why_portfolio_rows(strategy, match, distribution)}
+    risk_rows = risk_path_rows(strategy)
+    risk_text = "；".join(
+        f"{row.get('比分', '-')}: {row.get('组合收益', '-')}"
+        for row in risk_rows[:2]
+    ) or "-"
+    rows = []
+    for row in settlement_preview_rows(strategy, match, distribution):
+        bet_name = row.get("投注", "-")
+        role_row = role_lookup.get(bet_name) or {}
+        reason_row = reason_lookup.get(bet_name) or {}
+        item = next((asset for asset in (strategy.get("items") or []) if asset.get("name") == bet_name), {})
+        if item.get("type") == "correct_score" and item.get("market_center_rank"):
+            deviation = f"第{item.get('market_center_rank')}路径 · {item.get('market_center_label', '-')}"
         else:
-            st.info("当前没有足够真实盘口生成投注组合。")
-        st.caption("实际赔率优先；未输入时使用真实市场标准赔率。禁止使用估算波胆赔率。")
+            deviation = "-"
+        path_note = item.get("path_consistency_reason") or item.get("path_match_reason") or "-"
+        if item.get("path_conflict_penalty", 0):
+            path_note = f"{path_note}；冲突扣分 {item.get('path_conflict_penalty')}"
+        rows.append({
+            "投注内容": bet_name,
+            "资产角色": role_row.get("资产角色") or row.get("资产角色", "-"),
+            "推荐理由": reason_row.get("原因") or row.get("作用", "-"),
+            "风险暴露": risk_text,
+        })
+    return rows
 
-        top_cols = st.columns(2)
-        recommendation = decision["final_recommendation"]
-        top_cols[0].metric("推荐方向", bet_cn(recommendation["bet"]))
-        top_cols[0].caption(recommendation["reason"][0])
-        top_cols[1].metric("赔率价值分", f"{odds_value.get('score', 0)} / 100")
-        top_cols[1].caption(decision["value_rating_meaning"])
+
+def render_portfolio_detail_bundle(strategy, match, distribution):
+    rows = portfolio_detail_rows(strategy, match, distribution)
+    if rows:
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+
+def evaluated_my_portfolio_strategy(my_portfolio, match, distribution):
+    items = (my_portfolio or {}).get("items") or []
+    total_stake = sum(float(item.get("amount") or 0) for item in items)
+    if not items or total_stake <= 0:
+        return None
+    strategy = {
+        "code": "my_portfolio",
+        "name": "我的组合",
+        "rank_name": "我的组合",
+        "items": items,
+        "fixed_amounts": True,
+    }
+    evaluated = evaluate_strategy(strategy, match, distribution, total_stake)
+    evaluated["name"] = "我的组合"
+    evaluated["rank_name"] = "我的组合"
+    evaluated["original_name"] = "我的组合"
+    return evaluated
+
+
+def render_strategy_detail_dialog(strategy, index, match, distribution, baseline=None):
+    name = normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1)
+
+    @st.dialog(f"{name}详情")
+    def show_detail():
+        metrics = strategy.get("metrics") or {}
+        if baseline:
+            st.markdown("**与推荐组合差异**")
+            st.dataframe(pd.DataFrame(strategy_difference_rows(strategy, baseline)), use_container_width=True, hide_index=True)
+        st.markdown("**投注内容**")
+        render_portfolio_detail_bundle(strategy, match, distribution)
+        cols = st.columns(4)
+        cols[0].metric("EV", f"{int(metrics.get('expected_profit', strategy.get('expected_profit', 0))):+d}元")
+        cols[1].metric("ROI", percent(metrics.get("expected_yield", strategy.get("expected_yield", 0))))
+        cols[2].metric("最大亏损", f"-{int(metrics.get('max_loss', strategy.get('max_loss', 0)))}元")
+        cols[3].metric("评分", strategy.get("score", "-"))
+        if st.button("关闭", key=f"close_strategy_{index}_{strategy.get('code', '')}"):
+            st.rerun()
+
+    if st.button(f"查看详情：{name}", key=f"strategy_detail_{index}_{strategy.get('code', '')}"):
+        show_detail()
+
+
+def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None):
+    if not strategies:
+        st.info("当前没有足够真实盘口生成组合排行榜。")
+        return
+
+    with perf_timer("detail", "render_portfolio_ranking", {"shown": min(6, len(strategies)), "total": len(strategies)}):
+        st.markdown("**组合排行**")
+        my_strategy = evaluated_my_portfolio_strategy(my_portfolio, match, distribution)
+        comparison = list(strategies)
+        if my_strategy:
+            comparison.append(my_strategy)
+        comparison = sorted(comparison, key=lambda item: item.get("score", 0), reverse=True)
+        shown = comparison[:6]
+        if my_strategy and all(item.get("code") != "my_portfolio" for item in shown):
+            shown = shown[:5] + [my_strategy]
+        baseline = strategies[0] if strategies else None
+        st.dataframe(pd.DataFrame(portfolio_ranking_rows(shown, baseline)), use_container_width=True, hide_index=True)
+        if my_strategy:
+            my_rank = next((idx for idx, item in enumerate(comparison, start=1) if item.get("code") == "my_portfolio"), None)
+            st.caption(f"我的组合当前排名：第 {my_rank} / {len(comparison)}。")
+        detail_cols = st.columns(min(3, len(shown)))
+        for index, strategy in enumerate(shown, start=1):
+            with detail_cols[(index - 1) % len(detail_cols)]:
+                render_strategy_detail_dialog(strategy, index, match, distribution, baseline)
+
+
+def render_actual_market_odds_summary(initial_combo):
+    rows = market_odds_overview_rows(initial_combo)
+    if not rows:
+        return
+    with perf_timer("detail", "render_actual_vs_market", {"rows": len(rows)}):
+        with st.container(border=True):
+            st.markdown("**实际赔率 VS 市场赔率**")
+            rows = sorted(rows, key=lambda row: row.get("_ev_lift", -999), reverse=True)
+            visible_rows = [{key: value for key, value in row.items() if not key.startswith("_")} for row in rows[:10]]
+            st.dataframe(pd.DataFrame(visible_rows), use_container_width=True, hide_index=True)
+            if len(rows) > 10 and st.checkbox("查看其余赔率对比", value=False, key="show_more_actual_vs_market"):
+                more_rows = [{key: value for key, value in row.items() if not key.startswith("_")} for row in rows[10:]]
+                st.dataframe(pd.DataFrame(more_rows), use_container_width=True, hide_index=True)
+            completeness = actual_odds_completeness(initial_combo)
+            if completeness["total"]:
+                st.caption(
+                    f"实际赔率完整度：已录入 {completeness['entered']} / {completeness['total']}，"
+                    f"完整度 {completeness['ratio'] * 100:.0f}%。"
+                )
+                if completeness["missing"]:
+                    st.warning("缺少：" + "、".join(completeness["missing"]))
+
+
+def actual_odds_expander_title(match, combo):
+    cache = load_user_odds_cache(match)
+    completeness = actual_odds_completeness(combo)
+    count = (cache or {}).get("record_count", 0)
+    updated = format_cache_time((cache or {}).get("updated_at")) if cache else "未录入"
+    ratio = f"{completeness['ratio'] * 100:.0f}%" if completeness.get("total") else "0%"
+    return f"我的实际赔率（已录入{count}条 · {updated} · 完整度{ratio}）"
+
+
+def actual_value_expander_title(combo):
+    rows = market_odds_overview_rows(combo)
+    value_rows = [row for row in rows if row.get("_ev_lift", -999) > 0]
+    avg = sum(row.get("_ev_lift", 0) for row in value_rows) / len(value_rows) if value_rows else 0
+    return f"实际赔率价值分析（发现{len(value_rows)}个价值盘口 · 平均EV提升 {avg * 100:+.1f}%）"
+
+
+def my_portfolio_expander_title(match, selected_fixture, portfolio):
+    cache = load_my_portfolio(match, selected_fixture) or {}
+    items = (portfolio or cache or {}).get("items") or []
+    total = sum(float(item.get("amount") or 0) for item in items)
+    updated = format_cache_time(cache.get("updated_at")) if cache else "未保存"
+    return f"我的组合（已录入{len(items)}项 · 总金额{int(total)}元 · {updated}）"
+
+
+def render_advanced_research(strategies, combo, initial_combo, match, distribution, decision):
+    if not st.checkbox("Advanced Research", value=False, key="advanced_research"):
+        return
+    with perf_timer("detail", "render_advanced_research"):
+        st.caption("高级研究区仅保留 Kelly、保险成本和评分来源。")
+        if strategies:
+            insurance_rows = insurance_cost_rows(strategies, match, distribution)
+            if insurance_rows:
+                st.markdown("**保险成本分析**")
+                st.dataframe(pd.DataFrame(insurance_rows), use_container_width=True, hide_index=True)
+            kelly_rows = kelly_reference_rows(strategies[0])
+            if kelly_rows:
+                st.markdown("**Kelly参考**")
+                st.dataframe(pd.DataFrame(kelly_rows), use_container_width=True, hide_index=True)
+            st.markdown("**评分来源**")
+            st.dataframe(pd.DataFrame(strategy_component_rows(strategies)), use_container_width=True, hide_index=True)
 
         if st.checkbox("显示方向把握与赔率价值计算", value=False, key="rating_breakdown_detail"):
             render_rating_breakdown(decision)
 
-        risk_cols = st.columns(2)
-        upset = decision["upset_index"]
-        with risk_cols[0]:
-            st.metric("爆冷指数", f"{upset['score']} / 100", upset["meaning"])
-            st.caption(upset["reason"])
-        with risk_cols[1]:
-            st.metric("极端路径风险", worst_path["score"], f"{worst_path['profit']:+d}元")
-            st.caption("这里的极端路径定义为：最容易导致当前推荐组合亏损的比分。")
 
-        exposure = distribution.get("risk_exposure") or {}
-        st.markdown("**风险暴露**")
-        lose_paths = exposure.get("lose_paths", [])
-        exposure_cols = st.columns(3)
-        exposure_cols[0].metric("主要风险路径", lose_paths[0] if lose_paths else "-")
-        exposure_cols[1].metric("次要风险路径", lose_paths[1] if len(lose_paths) > 1 else "-")
-        exposure_cols[2].metric("极端风险路径", lose_paths[-1] if lose_paths else "-")
-        st.caption(exposure.get("meaning", ""))
+def path_layer_summary(match, odds, api_football_data):
+    handicap = asian_handicap_summary(((api_football_data or {}).get("asian_handicap") or {}).get("rows") or [])
+    totals = totals_summary((odds or {}).get("over_under") or [])
+    correct = correct_score_summary(((api_football_data or {}).get("correct_score") or {}).get("rows") or [], limit=5)
 
-        st.markdown("**结果覆盖分析**")
-        st.caption("比分级收益分析。使用实际可成交赔率优先计算；未输入时使用市场标准赔率。")
-        st.dataframe(pd.DataFrame(path_analysis_rows(match, distribution, combo_with_amounts)), use_container_width=True, hide_index=True)
+    direction_path = handicap.get("main_value") or "暂无亚洲盘主线"
+    if handicap.get("available"):
+        line_strength = abs(float(handicap.get("main_line") or 0))
+        confidence = min(100, 45 + line_strength * 15 + min(20, len(handicap.get("rows") or []) / 8))
+        handicap_confidence = f"{round(confidence)} / 100"
+        handicap_reason = f"主线 {direction_path}，来自 {len(handicap.get('rows') or [])} 条真实亚洲盘。"
+    else:
+        handicap_confidence = "0 / 100"
+        handicap_reason = "未解析到真实亚洲让球盘。"
+
+    if totals.get("available"):
+        avg_over = totals.get("avg_over") or 0
+        avg_under = totals.get("avg_under") or 0
+        if avg_over and avg_under and avg_over < avg_under:
+            tempo_path = f"Over {totals.get('line')}"
+        elif avg_over and avg_under and avg_under < avg_over:
+            tempo_path = f"Under {totals.get('line')}"
+        else:
+            tempo_path = f"{totals.get('line')} 附近中性"
+    else:
+        tempo_path = "暂无大小球主线"
+
+    score_path = " / ".join(item.get("score", "-") for item in (correct.get("hot") or [])[:3]) or "暂无波胆中心"
+    return {
+        "direction_path": direction_path,
+        "tempo_path": tempo_path,
+        "score_path": score_path,
+        "handicap_confidence": handicap_confidence,
+        "handicap_reason": handicap_reason,
+    }
+
+
+def render_path_layers(match, odds, api_football_data):
+    summary = path_layer_summary(match, odds, api_football_data)
+    st.markdown("**主路径结构**")
+    cols = st.columns(4)
+    cols[0].metric("主方向", summary["direction_path"])
+    cols[1].metric("主节奏", summary["tempo_path"])
+    cols[2].metric("主波胆", summary["score_path"])
+    cols[3].metric("让球信心", summary["handicap_confidence"])
+    st.caption(summary["handicap_reason"])
+
+
+def render_market_consensus_panel(match, odds, api_football_data):
+    summary = path_layer_summary(match, odds, api_football_data)
+    with st.container(border=True):
+        st.markdown("**Market Consensus**")
+        cols = st.columns(3)
+        cols[0].metric("主亚洲盘", summary["direction_path"])
+        cols[1].metric("主大小球", summary["tempo_path"])
+        cols[2].metric("主波胆路径", summary["score_path"])
+        st.caption(summary["handicap_reason"])
+
+
+def render_core_risk_summary(match, decision, distribution):
+    with st.container(border=True):
+        st.markdown('<div class="section-title">风险提示</div>', unsafe_allow_html=True)
+        notes = build_risk_notes(match, decision)[:3]
+        for note in notes:
+            st.markdown(f'<div class="warning-item">{note}</div>', unsafe_allow_html=True)
+        exposure = (distribution or {}).get("risk_exposure") or {}
+        if exposure.get("lose_paths"):
+            st.caption("重点风险路径：" + " / ".join(exposure.get("lose_paths", [])[:5]))
+        if exposure.get("meaning"):
+            st.caption(exposure.get("meaning"))
+
+
+def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None):
+    combo = recommendation_combo(match, odds, api_football_data, distribution, actual_odds)
+    initial_combo_with_amounts = stake_amounts(combo, decision)
+    total_stake, total_reason = recommended_total_stake(decision)
+    strategies = strategy_comparison(match, distribution, initial_combo_with_amounts, total_stake)
+    with st.container(border=True):
+        st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
+        render_portfolio_ranking(strategies, match, distribution, my_portfolio)
+        render_core_risk_summary(match, decision, distribution)
+
+        current_combo_with_actual = stake_amounts(recommendation_combo(match, odds, api_football_data, distribution, actual_odds), decision)
+        st.markdown("**辅助功能**")
+        with st.expander(actual_odds_expander_title(match, current_combo_with_actual), expanded=False):
+            actual_odds = render_actual_odds_input(match)
+        with st.expander(my_portfolio_expander_title(match, selected_fixture, my_portfolio), expanded=False):
+            my_portfolio = render_my_portfolio_input(match, selected_fixture, combo)
+        with st.expander(actual_value_expander_title(current_combo_with_actual), expanded=False):
+            render_actual_market_odds_summary(current_combo_with_actual)
+
+    return {
+        "strategies": strategies,
+        "snapshot_combo": initial_combo_with_amounts,
+        "top_strategy": (strategies[0] if strategies else {}),
+        "my_portfolio": my_portfolio or {},
+        "actual_odds": actual_odds or {},
+    }
 
 
 def summarize_form(fixtures, team_id):
@@ -4761,7 +4918,7 @@ def team_profile_metrics(profile, standing):
             ("净胜球", standing.get("gd")),
             ("胜平负", f"{standing.get('wins', 0)}胜 {standing.get('draws', 0)}平 {standing.get('losses', 0)}负"),
         ])
-    return [{"项目": label, "数据": value} for label, value in items if value not in {None, "", "待接入"}]
+    return [{"项目": label, "数据": str(value)} for label, value in items if value not in {None, "", "待接入"}]
 
 
 def lineup_rows_for_team(lineups, team_name):
@@ -4824,9 +4981,35 @@ def render_team_intelligence(match, selected_fixture, api_football_data):
             with st.container(border=True):
                 team_visual({"name": team_name, "logo": profile.get("logo") or team.get("logo")}, size=64)
                 st.markdown(f"### {team_cn(team_name)}")
-                profile_rows = team_profile_metrics(profile, standing)
-                if profile_rows:
-                    st.dataframe(pd.DataFrame(profile_rows), use_container_width=True, hide_index=True)
+                st.markdown("**预计/官方首发阵容**")
+                rows = lineup_rows_for_team(lineups, team_name)
+                if rows:
+                    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+                else:
+                    lineup = predicted_lineup_for(team_name)
+                    if lineup:
+                        st.caption("市场预测首发，非官方首发。")
+                        st.write(f"阵型：{lineup.get('formation', '-')}")
+                        st.write(f"门将：{', '.join(lineup.get('goalkeeper', []))}")
+                        st.write(f"后卫：{', '.join(lineup.get('defenders', []))}")
+                        st.write(f"中场：{', '.join(lineup.get('midfielders', []))}")
+                        st.write(f"前锋：{', '.join(lineup.get('forwards', []))}")
+                    else:
+                        st.info("本场官方首发暂未公布。")
+
+                injury_rows = injury_rows_for_team(injuries, team_name)
+                st.markdown("**伤病与停赛**")
+                if injury_rows:
+                    st.dataframe(pd.DataFrame(injury_rows), use_container_width=True, hide_index=True)
+                else:
+                    st.info("暂无公开伤病或停赛信息。")
+
+                lineup = predicted_lineup_for(team_name)
+                key_players = (lineup or {}).get("key_players") or []
+                if key_players:
+                    st.markdown("**关键球员**")
+                    st.caption("、".join(key_players))
+
                 summary = team_form_summary(team, recent_map.get(team_name) or [])
                 if summary["last5"]["form"]:
                     st.markdown("**近期战绩**")
@@ -4840,26 +5023,11 @@ def render_team_intelligence(match, selected_fixture, api_football_data):
                         f"最近5场：{summary['last5']['wins']}胜{summary['last5']['draws']}平{summary['last5']['losses']}负 · "
                         f"进球/失球 {summary['last5']['gf']}/{summary['last5']['ga']}"
                     )
-                rows = lineup_rows_for_team(lineups, team_name)
-                st.markdown("**预计/官方首发阵容**")
-                if rows:
-                    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
-                else:
-                    st.info("本场官方首发暂未公布；上一场阵容样本未返回。")
-                injury_rows = injury_rows_for_team(injuries, team_name)
-                st.markdown("**伤病与停赛**")
-                if injury_rows:
-                    st.dataframe(pd.DataFrame(injury_rows), use_container_width=True, hide_index=True)
-                else:
-                    st.info("暂无公开伤病或停赛信息。")
 
-    db_dir = worldcup_data_match_dir(match, selected_fixture)
-    with st.container(border=True):
-        st.markdown("**永久数据库状态**")
-        st.caption(f"目录：{db_dir}")
-        expected = ["fixture.json", "odds.json", "lineups.json", "injuries.json", "players.json", "events.json", "match_stats.json", "pre_match.json", "post_match.json"]
-        rows = [{"文件": name, "状态": "已保存" if (db_dir / name).exists() else "未保存"} for name in expected]
-        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+                profile_rows = team_profile_metrics(profile, standing)
+                if profile_rows:
+                    st.markdown("**球队资料**")
+                    st.dataframe(pd.DataFrame(profile_rows), use_container_width=True, hide_index=True)
 
 
 def render_match_winner(match, odds, api_football_data):
@@ -5224,8 +5392,8 @@ def render_post_match_analysis_tab(match, selected_fixture, distribution, strate
         )
 
         if recommendation_audit_rows:
-            st.markdown("**Recommendation Audit**")
-            st.caption("唯一主表：排名、具体投注、盈亏、命中情况和资产角色表现集中在这里。")
+            st.markdown("**组合排行榜**")
+            st.caption("赛后只保留这一张主表：组合排名、具体投注、盈亏、命中情况和资产角色表现集中在这里。")
             st.dataframe(pd.DataFrame(recommendation_audit_rows), use_container_width=True, hide_index=True)
 
         st.markdown("**模型误差分析**")
@@ -5233,9 +5401,9 @@ def render_post_match_analysis_tab(match, selected_fixture, distribution, strate
 
         contribution_rows = role_contribution_rows(results)
         if contribution_rows:
-            st.markdown("**资产角色贡献分析**")
-            st.caption("按全部已结算组合汇总，代表投注用于解释每类资产主要来自哪些下注。")
-            st.dataframe(pd.DataFrame(contribution_rows), use_container_width=True, hide_index=True)
+            if st.checkbox("Advanced Research：资产角色贡献", value=False, key="post_match_role_contribution"):
+                st.caption("按全部已结算组合汇总，代表投注用于解释每类资产主要来自哪些下注。")
+                st.dataframe(pd.DataFrame(contribution_rows), use_container_width=True, hide_index=True)
 
 
 def render_injuries_lineups(api_football_data):
@@ -5705,26 +5873,35 @@ def render_cache_notes(schedule):
 
 
 def render_schedule_page():
-    if st.button("刷新赛程状态", type="secondary"):
-        fetch_world_cup_schedule.clear()
-        st.session_state.force_schedule_refresh = True
-        st.rerun()
-    force_refresh = st.session_state.pop("force_schedule_refresh", False)
-    schedule = fetch_world_cup_schedule(force_refresh=force_refresh)
-    fixtures = schedule.get("fixtures", [])
+    with perf_timer("home", "total"):
+        if st.button("刷新赛程状态", type="secondary"):
+            fetch_world_cup_schedule.clear()
+            st.session_state.force_schedule_refresh = True
+            st.rerun()
+        force_refresh = st.session_state.pop("force_schedule_refresh", False)
+        with perf_timer("home", "fetch_schedule", {"force_refresh": force_refresh}):
+            schedule = fetch_world_cup_schedule(force_refresh=force_refresh)
+        fixtures = schedule.get("fixtures", [])
 
-    render_portal_banner(fixtures)
-    render_search(fixtures)
-    st.caption(
-        f"赛程数据来源：{schedule.get('source')} · 更新时间：{schedule.get('updated_at', '-')} · "
-        f"缓存状态：{schedule.get('cache_status', '-')}"
-    )
-    render_date_nav(fixtures)
-    render_standings(schedule)
-    render_tournament_stats_center(fixtures, schedule)
-    if st.checkbox("显示全部世界杯赛程", value=False, key="full_schedule_toggle"):
-        render_full_schedule(fixtures)
-    render_cache_notes(schedule)
+        with perf_timer("home", "banner"):
+            render_portal_banner(fixtures)
+        with perf_timer("home", "search"):
+            render_search(fixtures)
+        st.caption(
+            f"赛程数据来源：{schedule.get('source')} · 更新时间：{schedule.get('updated_at', '-')} · "
+            f"缓存状态：{schedule.get('cache_status', '-')}"
+        )
+        with perf_timer("home", "date_nav"):
+            render_date_nav(fixtures)
+        with perf_timer("home", "standings"):
+            render_standings(schedule)
+        with perf_timer("home", "tournament_stats"):
+            render_tournament_stats_center(fixtures, schedule)
+        if st.checkbox("显示全部世界杯赛程", value=False, key="full_schedule_toggle"):
+            with perf_timer("home", "full_schedule"):
+                render_full_schedule(fixtures)
+        with perf_timer("home", "cache_notes"):
+            render_cache_notes(schedule)
 
 
 def render_analysis_page(match_text):
@@ -5735,60 +5912,71 @@ def render_analysis_page(match_text):
         st.rerun()
 
     try:
-        match = parse_match(match_text)
-        selected_fixture = refresh_selected_fixture_if_needed(st.session_state.get("selected_fixture"))
-        if selected_fixture and is_finished(selected_fixture):
-            st.session_state.selected_fixture = selected_fixture
-            st.session_state.page = "post_match"
-            st.rerun()
-        local_db = load_match_database(match, selected_fixture)
-        if local_db:
-            api_football_data = db_api_football_data(local_db)
-            odds = db_odds(local_db)
-            odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
-        else:
-            api_football_data = fetch_match_data(match, "page_market_data_v3")
-            odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
-            odds = fetch_odds(match, odds_date_key, "odds_page_v4_24h_cache")
-        polymarket = fetch_polymarket(match)
-        news = get_mock_news_and_injuries(match)
-        probabilities = combine_probabilities(odds, polymarket, news, config)
-        scores = recommend_scores(match, probabilities, odds)
-        rating = rate_opportunity(probabilities, polymarket, news, odds)
-        value_analysis = analyze_value(match, odds, polymarket)
-        betting_opinion = build_betting_opinion(match, odds, polymarket, value_analysis)
-        result_distribution = build_result_distribution(match, odds, polymarket)
-        betting_opinion["result_distribution"] = result_distribution
-        render_match_overview(match, api_football_data, selected_fixture)
-        actual_odds = render_actual_odds_input(match)
-        decision = build_decision_engine(
-            match,
-            odds,
-            polymarket,
-            api_football_data,
-            betting_opinion,
-            actual_odds,
-            result_distribution,
-        )
-        report = build_report(
-            match,
-            odds,
-            polymarket,
-            news,
-            probabilities,
-            scores,
-            rating,
-            api_football_data,
-            value_analysis,
-            betting_opinion,
-        )
-        report_path = save_report(report, match, config["report"]["output_dir"])
-        portfolio_candidates = recommendation_combo(match, odds, api_football_data, result_distribution, actual_odds)
-        my_portfolio = render_my_portfolio_input(match, selected_fixture, portfolio_candidates)
-        total_stake, _ = recommended_total_stake(decision)
-        snapshot_combo = stake_amounts(portfolio_candidates, decision)
-        snapshot_strategies = strategy_comparison(match, result_distribution, snapshot_combo, total_stake)
-        top_strategy = snapshot_strategies[0] if snapshot_strategies else {}
+        with perf_timer("detail", "pre_tab_total", {"match": match_text}):
+            with perf_timer("detail", "parse_and_fixture"):
+                match = parse_match(match_text)
+                selected_fixture = refresh_selected_fixture_if_needed(st.session_state.get("selected_fixture"))
+                if selected_fixture and is_finished(selected_fixture):
+                    st.session_state.selected_fixture = selected_fixture
+                    st.session_state.page = "post_match"
+                    st.rerun()
+            with perf_timer("detail", "load_worldcup_database"):
+                local_db = load_match_database(match, selected_fixture)
+                if local_db:
+                    api_football_data = db_api_football_data(local_db)
+                    odds = db_odds(local_db)
+                    odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
+                else:
+                    api_football_data = fetch_match_data(match, "page_market_data_v3")
+                    odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
+                    odds = fetch_odds(match, odds_date_key, "odds_page_v4_24h_cache")
+            with perf_timer("detail", "fetch_polymarket"):
+                polymarket = fetch_polymarket(match)
+            with perf_timer("detail", "base_models"):
+                news = get_mock_news_and_injuries(match)
+                probabilities = combine_probabilities(odds, polymarket, news, config)
+                scores = recommend_scores(match, probabilities, odds)
+                rating = rate_opportunity(probabilities, polymarket, news, odds)
+                value_analysis = analyze_value(match, odds, polymarket)
+                betting_opinion = build_betting_opinion(match, odds, polymarket, value_analysis, api_football_data)
+            with perf_timer("detail", "result_distribution"):
+                result_distribution = build_result_distribution(match, odds, polymarket)
+                betting_opinion["result_distribution"] = result_distribution
+            with perf_timer("detail", "render_match_overview"):
+                render_match_overview(match, api_football_data, selected_fixture)
+            actual_odds = current_actual_odds(match)
+            with perf_timer("detail", "decision_engine"):
+                decision = build_decision_engine(
+                    match,
+                    odds,
+                    polymarket,
+                    api_football_data,
+                    betting_opinion,
+                    actual_odds,
+                    result_distribution,
+                )
+            with perf_timer("detail", "report_generation"):
+                report = build_report(
+                    match,
+                    odds,
+                    polymarket,
+                    news,
+                    probabilities,
+                    scores,
+                    rating,
+                    api_football_data,
+                    value_analysis,
+                    betting_opinion,
+                )
+                report_path = save_report(report, match, config["report"]["output_dir"])
+            with perf_timer("detail", "portfolio_candidates"):
+                portfolio_candidates = recommendation_combo(match, odds, api_football_data, result_distribution, actual_odds)
+            my_portfolio = load_my_portfolio(match, selected_fixture) or {}
+            with perf_timer("detail", "portfolio_optimizer"):
+                total_stake, _ = recommended_total_stake(decision)
+                snapshot_combo = stake_amounts(portfolio_candidates, decision)
+                snapshot_strategies = strategy_comparison(match, result_distribution, snapshot_combo, total_stake)
+                top_strategy = snapshot_strategies[0] if snapshot_strategies else {}
         snapshot_payload = {
             "model_versions": MODEL_VERSION_TRACKING,
             "match_info": {
@@ -5816,47 +6004,65 @@ def render_analysis_page(match_text):
             "value_analysis": value_analysis,
             "betting_opinion": betting_opinion,
         }
-        snapshot_file, snapshot_created = save_match_snapshot(match, selected_fixture, snapshot_payload)
-        st.caption(
+        with perf_timer("detail", "save_match_snapshot"):
+            snapshot_file, snapshot_created = save_match_snapshot(match, selected_fixture, snapshot_payload)
+        snapshot_status = (
             f"Match Snapshot：{'已创建' if snapshot_created else '已存在'} · "
             f"{snapshot_file}"
         )
 
-        core_tab, market_tab, post_tab, source_tab, team_tab = st.tabs([
+        core_tab, team_tab, market_tab, post_tab, source_tab = st.tabs([
             "核心决策",
+            "球队信息",
             "市场盘口",
             "赛后总结",
             "数据来源",
-            "球队信息",
         ])
 
         with core_tab:
-            render_core_decision(match, odds, api_football_data, result_distribution, decision, betting_opinion, actual_odds)
-            render_storylines(match, betting_opinion, decision)
-
-        with market_tab:
-            market_results = [
-                safe_render_market_section("胜平负赔率", render_match_winner, match, odds, api_football_data),
-                safe_render_market_section("亚洲让球盘", render_handicap, match, api_football_data),
-                safe_render_market_section("大小球盘口", render_totals, odds),
-                safe_render_market_section("真实波胆盘口", render_correct_score_market, api_football_data),
-                safe_render_market_section("Polymarket", render_polymarket, match, api_football_data, polymarket),
-                safe_render_market_section("市场价值分析", render_value, value_analysis),
-                safe_render_market_section("市场一致性分析", render_market_consistency, match, odds, polymarket),
-            ]
-            render_market_debug_summary(odds, api_football_data, polymarket, market_results)
-
-        with source_tab:
-            render_data_completeness(local_db)
-            render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key)
-            render_detail_data_source(odds, polymarket, selected_fixture)
-            render_technical_notes(odds, api_football_data)
-
-        with post_tab:
-            render_post_match_analysis_tab(match, selected_fixture, result_distribution, snapshot_strategies, my_portfolio)
+            with perf_timer("detail", "tab_core_decision"):
+                render_core_decision(
+                    match,
+                    odds,
+                    api_football_data,
+                    result_distribution,
+                    decision,
+                    betting_opinion,
+                    actual_odds,
+                    selected_fixture,
+                    my_portfolio,
+                )
 
         with team_tab:
-            render_team_intelligence(match, selected_fixture, api_football_data)
+            with perf_timer("detail", "tab_team_intelligence"):
+                render_team_intelligence(match, selected_fixture, api_football_data)
+
+        with market_tab:
+            with perf_timer("detail", "tab_market"):
+                render_market_consensus_panel(match, odds, api_football_data)
+                market_results = [
+                    safe_render_market_section("胜平负赔率", render_match_winner, match, odds, api_football_data),
+                    safe_render_market_section("亚洲让球盘", render_handicap, match, api_football_data),
+                    safe_render_market_section("大小球盘口", render_totals, odds),
+                    safe_render_market_section("真实波胆盘口", render_correct_score_market, api_football_data),
+                    safe_render_market_section("Polymarket", render_polymarket, match, api_football_data, polymarket),
+                    safe_render_market_section("市场价值分析", render_value, value_analysis),
+                    safe_render_market_section("市场一致性分析", render_market_consistency, match, odds, polymarket),
+                ]
+                render_market_debug_summary(odds, api_football_data, polymarket, market_results)
+
+        with post_tab:
+            with perf_timer("detail", "tab_post_match"):
+                render_post_match_analysis_tab(match, selected_fixture, result_distribution, snapshot_strategies, my_portfolio)
+
+        with source_tab:
+            with perf_timer("detail", "tab_source"):
+                st.caption(snapshot_status)
+                render_data_completeness(local_db)
+                render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key)
+                render_detail_data_source(odds, polymarket, selected_fixture)
+                render_technical_notes(odds, api_football_data)
+                render_advanced_research(snapshot_strategies, snapshot_combo, snapshot_combo, match, result_distribution, decision)
 
         st.download_button(
             "下载 Markdown 报告",

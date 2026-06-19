@@ -7,8 +7,8 @@
     "away_en": "Paraguay",
     "display_name": "Turkey vs Paraguay"
   },
-  "created_at": "2026-06-19T16:02:52.734159+08:00",
-  "schedule_source": "ESPN",
+  "created_at": "2026-06-19T16:52:22.867074+08:00",
+  "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
   "the_odds_api": {
@@ -30217,84 +30217,84 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Asian Handicap",
-          "odd": 1.95,
+          "odd": 2.05,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Asian Handicap",
-          "odd": 1.8,
+          "odd": 1.73,
           "value": "Away -0.5"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Asian Handicap",
-          "odd": 1.44,
+          "odd": 1.5,
           "value": "Home +0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Asian Handicap",
-          "odd": 2.65,
+          "odd": 2.5,
           "value": "Away +0"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 3.45,
+          "odd": 3.3,
           "value": "Home -1.25"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.3,
+          "odd": 1.32,
           "value": "Away -1.25"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 3.0,
+          "odd": 2.85,
           "value": "Home -1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.38,
+          "odd": 1.4,
           "value": "Away -1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 2.35,
+          "odd": 2.3,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.58,
+          "odd": 1.6,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 2.0,
+          "odd": 2.02,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.85,
+          "odd": 1.82,
           "value": "Away -0.5"
         },
         {
@@ -30399,28 +30399,28 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 5.0,
+          "odd": 4.65,
           "value": "Home -1.75"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.17,
+          "odd": 1.18,
           "value": "Away -1.75"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 3.8,
+          "odd": 3.7,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.25,
+          "odd": 1.26,
           "value": "Away -1.5"
         },
         {
@@ -30455,70 +30455,70 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 2.29,
+          "odd": 2.31,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.57,
+          "odd": 1.56,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.72,
+          "odd": 1.73,
           "value": "Home -0.25"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 2.05,
+          "odd": 2.04,
           "value": "Away -0.25"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.48,
+          "odd": 1.49,
           "value": "Home +0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 2.7,
+          "odd": 2.66,
           "value": "Away +0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.34,
+          "odd": 1.35,
           "value": "Home +0.25"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 3.1,
+          "odd": 3.05,
           "value": "Away +0.25"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.16,
+          "odd": 1.17,
           "value": "Home +0.75"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 4.65,
+          "odd": 4.55,
           "value": "Away +0.75"
         },
         {
@@ -30539,14 +30539,14 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.06,
+          "odd": 1.07,
           "value": "Home +1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 7.2,
+          "odd": 7.0,
           "value": "Away +1"
         },
         {
@@ -30567,14 +30567,14 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 3.58,
+          "odd": 3.65,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.23,
+          "odd": 1.22,
           "value": "Away -1.5"
         },
         {
@@ -30588,7 +30588,7 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 7.5,
+          "odd": 7.4,
           "value": "Away +1.25"
         },
         {
@@ -30602,14 +30602,14 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 7.9,
+          "odd": 7.7,
           "value": "Away +1.5"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 10.25,
+          "odd": 10.0,
           "value": "Away +1.75"
         },
         {
@@ -30644,42 +30644,42 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.91,
+          "odd": 1.88,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.78,
+          "odd": 1.81,
           "value": "Away -0.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.23,
+          "odd": 1.22,
           "value": "Home +0.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 3.65,
+          "odd": 3.75,
           "value": "Away +0.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 3.6,
+          "odd": 3.5,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.24,
+          "odd": 1.25,
           "value": "Away -1.5"
         },
         {
@@ -30700,28 +30700,28 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 7.5,
+          "odd": 7.0,
           "value": "Home -2.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.04,
+          "odd": 1.05,
           "value": "Away -2.5"
         },
         {
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Asian Handicap",
-          "odd": 4.0,
+          "odd": 3.75,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Asian Handicap",
-          "odd": 1.2,
+          "odd": 1.22,
           "value": "Away -1.5"
         },
         {
@@ -30756,70 +30756,70 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 2.91,
+          "odd": 2.95,
           "value": "Home -1"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.34,
+          "odd": 1.33,
           "value": "Away -1"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 2.25,
+          "odd": 2.27,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.55,
+          "odd": 1.54,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.92,
+          "odd": 1.94,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.76,
+          "odd": 1.74,
           "value": "Away -0.5"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.67,
+          "odd": 1.68,
           "value": "Home -0.25"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 2.04,
+          "odd": 2.02,
           "value": "Away -0.25"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.41,
+          "odd": 1.42,
           "value": "Home +0"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 2.63,
+          "odd": 2.59,
           "value": "Away +0"
         },
         {
@@ -30840,49 +30840,49 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 3.61,
+          "odd": 3.58,
           "value": "Home -1.25"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.31,
+          "odd": 1.33,
           "value": "Away -1.25"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 3.15,
+          "odd": 3.14,
           "value": "Home -1"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.4,
+          "odd": 1.41,
           "value": "Away -1"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 2.42,
+          "odd": 2.43,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.61,
+          "odd": 1.62,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 2.07,
+          "odd": 2.09,
           "value": "Home -0.5"
         },
         {
@@ -30896,7 +30896,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.77,
+          "odd": 1.78,
           "value": "Home -0.25"
         },
         {
@@ -30910,7 +30910,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.48,
+          "odd": 1.5,
           "value": "Home +0"
         },
         {
@@ -30924,7 +30924,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.36,
+          "odd": 1.37,
           "value": "Home +0.25"
         },
         {
@@ -30938,14 +30938,14 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.29,
+          "odd": 1.3,
           "value": "Home +0.5"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 3.79,
+          "odd": 3.8,
           "value": "Away +0.5"
         },
         {
@@ -30966,21 +30966,21 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 4.07,
+          "odd": 4.03,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.26,
+          "odd": 1.27,
           "value": "Away -1.5"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Asian Handicap",
-          "odd": 2.42,
+          "odd": 2.44,
           "value": "Home -0.75"
         },
         {
@@ -30994,14 +30994,14 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Asian Handicap",
-          "odd": 2.06,
+          "odd": 2.05,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Asian Handicap",
-          "odd": 1.86,
+          "odd": 1.88,
           "value": "Away -0.5"
         },
         {
@@ -31015,7 +31015,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Asian Handicap",
-          "odd": 2.17,
+          "odd": 2.19,
           "value": "Away -0.25"
         },
         {
@@ -31050,14 +31050,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 2.29,
+          "odd": 2.31,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.57,
+          "odd": 1.56,
           "value": "Away -0.75"
         },
         {
@@ -31071,35 +31071,35 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 2.12,
+          "odd": 2.1,
           "value": "Away -0.25"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.49,
+          "odd": 1.5,
           "value": "Home +0"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 2.72,
+          "odd": 2.69,
           "value": "Away +0"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.34,
+          "odd": 1.35,
           "value": "Home +0.25"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 3.1,
+          "odd": 3.05,
           "value": "Away +0.25"
         },
         {
@@ -31113,14 +31113,28 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 4.62,
+          "odd": 4.53,
           "value": "Away +0.75"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 6.55,
+          "odd": 17.0,
+          "value": "Home -3"
+        },
+        {
+          "bookmaker_id": 11,
+          "bookmaker": "1xBet",
+          "market": "Asian Handicap",
+          "odd": 1.01,
+          "value": "Away -3"
+        },
+        {
+          "bookmaker_id": 11,
+          "bookmaker": "1xBet",
+          "market": "Asian Handicap",
+          "odd": 6.6,
           "value": "Home -2"
         },
         {
@@ -31134,14 +31148,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.06,
+          "odd": 1.07,
           "value": "Home +1"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 7.2,
+          "odd": 7.0,
           "value": "Away +1"
         },
         {
@@ -31162,14 +31176,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 3.58,
+          "odd": 3.65,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.23,
+          "odd": 1.22,
           "value": "Away -1.5"
         },
         {
@@ -31183,7 +31197,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 7.46,
+          "odd": 7.36,
           "value": "Away +1.25"
         },
         {
@@ -31197,14 +31211,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 7.9,
+          "odd": 7.7,
           "value": "Away +1.5"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 10.2,
+          "odd": 10.0,
           "value": "Away +1.75"
         },
         {
@@ -31239,168 +31253,168 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 3.5,
+          "odd": 3.55,
           "value": "Home -1.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.33,
+          "odd": 1.32,
           "value": "Away -1.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 3.05,
+          "odd": 3.25,
           "value": "Home -1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.4,
+          "odd": 1.37,
           "value": "Away -1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 2.37,
+          "odd": 2.5,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.62,
+          "odd": 1.57,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 2.02,
+          "odd": 2.1,
           "value": "Home -0.5"
+        },
+        {
+          "bookmaker_id": 32,
+          "bookmaker": "Betano",
+          "market": "Asian Handicap",
+          "odd": 1.78,
+          "value": "Away -0.5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
           "odd": 1.83,
-          "value": "Away -0.5"
-        },
-        {
-          "bookmaker_id": 32,
-          "bookmaker": "Betano",
-          "market": "Asian Handicap",
-          "odd": 1.75,
           "value": "Home -0.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 2.12,
+          "odd": 2.02,
           "value": "Away -0.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.37,
+          "odd": 1.42,
           "value": "Home +0.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 3.2,
+          "odd": 3.0,
           "value": "Away +0.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.32,
+          "odd": 1.34,
           "value": "Home +0.5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 3.55,
+          "odd": 3.45,
           "value": "Away +0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.95,
+          "odd": 2.02,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.82,
+          "odd": 1.76,
           "value": "Away -0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.26,
+          "odd": 1.29,
           "value": "Home +0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 3.7,
+          "odd": 3.5,
           "value": "Away +0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 3.65,
+          "odd": 3.85,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.27,
+          "odd": 1.25,
           "value": "Away -1.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.06,
+          "odd": 1.07,
           "value": "Home +1.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 8.5,
+          "odd": 7.8,
           "value": "Away +1.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 7.9,
+          "odd": 8.4,
           "value": "Home -2.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.07,
+          "odd": 1.06,
           "value": "Away -2.5"
         },
         {
@@ -31414,14 +31428,14 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 23.0,
+          "odd": 20.0,
           "value": "Away +2.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 19.0,
+          "odd": 21.0,
           "value": "Home -3.5"
         },
         {
@@ -31437,84 +31451,84 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Asian Handicap",
-          "odd": 1.95,
+          "odd": 2.05,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Asian Handicap",
-          "odd": 1.8,
+          "odd": 1.73,
           "value": "Away -0.5"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Asian Handicap",
-          "odd": 1.44,
+          "odd": 1.5,
           "value": "Home +0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Asian Handicap",
-          "odd": 2.65,
+          "odd": 2.5,
           "value": "Away +0"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 3.45,
+          "odd": 3.3,
           "value": "Home -1.25"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.3,
+          "odd": 1.32,
           "value": "Away -1.25"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 3.0,
+          "odd": 2.85,
           "value": "Home -1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.38,
+          "odd": 1.4,
           "value": "Away -1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 2.35,
+          "odd": 2.3,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.58,
+          "odd": 1.6,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 2.0,
+          "odd": 2.02,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.85,
+          "odd": 1.82,
           "value": "Away -0.5"
         },
         {
@@ -31619,28 +31633,28 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 5.0,
+          "odd": 4.65,
           "value": "Home -1.75"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.17,
+          "odd": 1.18,
           "value": "Away -1.75"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 3.8,
+          "odd": 3.7,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Asian Handicap",
-          "odd": 1.25,
+          "odd": 1.26,
           "value": "Away -1.5"
         },
         {
@@ -31675,70 +31689,70 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 2.29,
+          "odd": 2.31,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.57,
+          "odd": 1.56,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.72,
+          "odd": 1.73,
           "value": "Home -0.25"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 2.05,
+          "odd": 2.04,
           "value": "Away -0.25"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.48,
+          "odd": 1.49,
           "value": "Home +0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 2.7,
+          "odd": 2.66,
           "value": "Away +0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.34,
+          "odd": 1.35,
           "value": "Home +0.25"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 3.1,
+          "odd": 3.05,
           "value": "Away +0.25"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.16,
+          "odd": 1.17,
           "value": "Home +0.75"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 4.65,
+          "odd": 4.55,
           "value": "Away +0.75"
         },
         {
@@ -31759,14 +31773,14 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.06,
+          "odd": 1.07,
           "value": "Home +1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 7.2,
+          "odd": 7.0,
           "value": "Away +1"
         },
         {
@@ -31787,14 +31801,14 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 3.58,
+          "odd": 3.65,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 1.23,
+          "odd": 1.22,
           "value": "Away -1.5"
         },
         {
@@ -31808,7 +31822,7 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 7.5,
+          "odd": 7.4,
           "value": "Away +1.25"
         },
         {
@@ -31822,14 +31836,14 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 7.9,
+          "odd": 7.7,
           "value": "Away +1.5"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Asian Handicap",
-          "odd": 10.25,
+          "odd": 10.0,
           "value": "Away +1.75"
         },
         {
@@ -31864,42 +31878,42 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.91,
+          "odd": 1.88,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.78,
+          "odd": 1.81,
           "value": "Away -0.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.23,
+          "odd": 1.22,
           "value": "Home +0.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 3.65,
+          "odd": 3.75,
           "value": "Away +0.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 3.6,
+          "odd": 3.5,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.24,
+          "odd": 1.25,
           "value": "Away -1.5"
         },
         {
@@ -31920,28 +31934,28 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 7.5,
+          "odd": 7.0,
           "value": "Home -2.5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Asian Handicap",
-          "odd": 1.04,
+          "odd": 1.05,
           "value": "Away -2.5"
         },
         {
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Asian Handicap",
-          "odd": 4.0,
+          "odd": 3.75,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Asian Handicap",
-          "odd": 1.2,
+          "odd": 1.22,
           "value": "Away -1.5"
         },
         {
@@ -31976,70 +31990,70 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 2.91,
+          "odd": 2.95,
           "value": "Home -1"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.34,
+          "odd": 1.33,
           "value": "Away -1"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 2.25,
+          "odd": 2.27,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.55,
+          "odd": 1.54,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.92,
+          "odd": 1.94,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.76,
+          "odd": 1.74,
           "value": "Away -0.5"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.67,
+          "odd": 1.68,
           "value": "Home -0.25"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 2.04,
+          "odd": 2.02,
           "value": "Away -0.25"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 1.41,
+          "odd": 1.42,
           "value": "Home +0"
         },
         {
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Asian Handicap",
-          "odd": 2.63,
+          "odd": 2.59,
           "value": "Away +0"
         },
         {
@@ -32060,49 +32074,49 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 3.61,
+          "odd": 3.58,
           "value": "Home -1.25"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.31,
+          "odd": 1.33,
           "value": "Away -1.25"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 3.15,
+          "odd": 3.14,
           "value": "Home -1"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.4,
+          "odd": 1.41,
           "value": "Away -1"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 2.42,
+          "odd": 2.43,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.61,
+          "odd": 1.62,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 2.07,
+          "odd": 2.09,
           "value": "Home -0.5"
         },
         {
@@ -32116,7 +32130,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.77,
+          "odd": 1.78,
           "value": "Home -0.25"
         },
         {
@@ -32130,7 +32144,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.48,
+          "odd": 1.5,
           "value": "Home +0"
         },
         {
@@ -32144,7 +32158,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.36,
+          "odd": 1.37,
           "value": "Home +0.25"
         },
         {
@@ -32158,14 +32172,14 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.29,
+          "odd": 1.3,
           "value": "Home +0.5"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 3.79,
+          "odd": 3.8,
           "value": "Away +0.5"
         },
         {
@@ -32186,21 +32200,21 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 4.07,
+          "odd": 4.03,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Asian Handicap",
-          "odd": 1.26,
+          "odd": 1.27,
           "value": "Away -1.5"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Asian Handicap",
-          "odd": 2.42,
+          "odd": 2.44,
           "value": "Home -0.75"
         },
         {
@@ -32214,14 +32228,14 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Asian Handicap",
-          "odd": 2.06,
+          "odd": 2.05,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Asian Handicap",
-          "odd": 1.86,
+          "odd": 1.88,
           "value": "Away -0.5"
         },
         {
@@ -32235,7 +32249,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Asian Handicap",
-          "odd": 2.17,
+          "odd": 2.19,
           "value": "Away -0.25"
         },
         {
@@ -32270,14 +32284,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 2.29,
+          "odd": 2.31,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.57,
+          "odd": 1.56,
           "value": "Away -0.75"
         },
         {
@@ -32291,35 +32305,35 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 2.12,
+          "odd": 2.1,
           "value": "Away -0.25"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.49,
+          "odd": 1.5,
           "value": "Home +0"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 2.72,
+          "odd": 2.69,
           "value": "Away +0"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.34,
+          "odd": 1.35,
           "value": "Home +0.25"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 3.1,
+          "odd": 3.05,
           "value": "Away +0.25"
         },
         {
@@ -32333,14 +32347,28 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 4.62,
+          "odd": 4.53,
           "value": "Away +0.75"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 6.55,
+          "odd": 17.0,
+          "value": "Home -3"
+        },
+        {
+          "bookmaker_id": 11,
+          "bookmaker": "1xBet",
+          "market": "Asian Handicap",
+          "odd": 1.01,
+          "value": "Away -3"
+        },
+        {
+          "bookmaker_id": 11,
+          "bookmaker": "1xBet",
+          "market": "Asian Handicap",
+          "odd": 6.6,
           "value": "Home -2"
         },
         {
@@ -32354,14 +32382,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.06,
+          "odd": 1.07,
           "value": "Home +1"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 7.2,
+          "odd": 7.0,
           "value": "Away +1"
         },
         {
@@ -32382,14 +32410,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 3.58,
+          "odd": 3.65,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 1.23,
+          "odd": 1.22,
           "value": "Away -1.5"
         },
         {
@@ -32403,7 +32431,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 7.46,
+          "odd": 7.36,
           "value": "Away +1.25"
         },
         {
@@ -32417,14 +32445,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 7.9,
+          "odd": 7.7,
           "value": "Away +1.5"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Asian Handicap",
-          "odd": 10.2,
+          "odd": 10.0,
           "value": "Away +1.75"
         },
         {
@@ -32459,168 +32487,168 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 3.5,
+          "odd": 3.55,
           "value": "Home -1.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.33,
+          "odd": 1.32,
           "value": "Away -1.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 3.05,
+          "odd": 3.25,
           "value": "Home -1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.4,
+          "odd": 1.37,
           "value": "Away -1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 2.37,
+          "odd": 2.5,
           "value": "Home -0.75"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.62,
+          "odd": 1.57,
           "value": "Away -0.75"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 2.02,
+          "odd": 2.1,
           "value": "Home -0.5"
+        },
+        {
+          "bookmaker_id": 32,
+          "bookmaker": "Betano",
+          "market": "Asian Handicap",
+          "odd": 1.78,
+          "value": "Away -0.5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
           "odd": 1.83,
-          "value": "Away -0.5"
-        },
-        {
-          "bookmaker_id": 32,
-          "bookmaker": "Betano",
-          "market": "Asian Handicap",
-          "odd": 1.75,
           "value": "Home -0.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 2.12,
+          "odd": 2.02,
           "value": "Away -0.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.37,
+          "odd": 1.42,
           "value": "Home +0.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 3.2,
+          "odd": 3.0,
           "value": "Away +0.25"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 1.32,
+          "odd": 1.34,
           "value": "Home +0.5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Asian Handicap",
-          "odd": 3.55,
+          "odd": 3.45,
           "value": "Away +0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.95,
+          "odd": 2.02,
           "value": "Home -0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.82,
+          "odd": 1.76,
           "value": "Away -0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.26,
+          "odd": 1.29,
           "value": "Home +0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 3.7,
+          "odd": 3.5,
           "value": "Away +0.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 3.65,
+          "odd": 3.85,
           "value": "Home -1.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.27,
+          "odd": 1.25,
           "value": "Away -1.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.06,
+          "odd": 1.07,
           "value": "Home +1.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 8.5,
+          "odd": 7.8,
           "value": "Away +1.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 7.9,
+          "odd": 8.4,
           "value": "Home -2.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 1.07,
+          "odd": 1.06,
           "value": "Away -2.5"
         },
         {
@@ -32634,14 +32662,14 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 23.0,
+          "odd": 20.0,
           "value": "Away +2.5"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Asian Handicap",
-          "odd": 19.0,
+          "odd": 21.0,
           "value": "Home -3.5"
         },
         {
@@ -32676,14 +32704,14 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 6.0,
+          "odd": 6.25,
           "score": "1:0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 8.0,
+          "odd": 8.5,
           "score": "2:0"
         },
         {
@@ -32697,7 +32725,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 17.0,
           "score": "3:0"
         },
         {
@@ -32718,7 +32746,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 41.0,
           "score": "4:0"
         },
         {
@@ -32732,7 +32760,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 8.0,
+          "odd": 8.5,
           "score": "0:0"
         },
         {
@@ -32760,35 +32788,35 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 15.0,
           "score": "0:2"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 41.0,
+          "odd": 34.0,
           "score": "0:3"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 10.0,
+          "odd": 9.5,
           "score": "1:2"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 23.0,
           "score": "1:3"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 31.0,
+          "odd": 29.0,
           "score": "2:3"
         },
         {
@@ -32802,28 +32830,28 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 91.0,
           "score": "0:4"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 61.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 71.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 46.0,
+          "odd": 51.0,
           "score": "4:2"
         },
         {
@@ -32837,14 +32865,14 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 91.0,
           "score": "5:0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 76.0,
           "score": "5:1"
         },
         {
@@ -33187,7 +33215,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 7.0,
+          "odd": 7.5,
           "score": "1:0"
         },
         {
@@ -33215,14 +33243,14 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 19.0,
+          "odd": 17.0,
           "score": "3:1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 29.0,
           "score": "3:2"
         },
         {
@@ -33243,7 +33271,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 8.5,
+          "odd": 9.5,
           "score": "0:0"
         },
         {
@@ -33264,14 +33292,14 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 10.0,
+          "odd": 11.0,
           "score": "0:1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 19.0,
+          "odd": 21.0,
           "score": "0:2"
         },
         {
@@ -33285,7 +33313,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 13.0,
           "score": "1:2"
         },
         {
@@ -33327,7 +33355,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 81.0,
           "score": "2:4"
         },
         {
@@ -33341,21 +33369,21 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 401.0,
+          "odd": 351.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 301.0,
+          "odd": 251.0,
           "score": "1:5"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 401.0,
+          "odd": 351.0,
           "score": "2:5"
         },
         {
@@ -33383,7 +33411,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 126.0,
           "score": "5:2"
         },
         {
@@ -33397,49 +33425,49 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 251.0,
+          "odd": 201.0,
           "score": "6:1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 501.0,
+          "odd": 401.0,
           "score": "6:2"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 126.0,
+          "odd": 101.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 351.0,
+          "odd": 301.0,
           "score": "5:3"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 401.0,
+          "odd": 301.0,
           "score": "4:4"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 6.6,
+          "odd": 6.7,
           "score": "1:0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 9.2,
+          "odd": 9.3,
           "score": "2:0"
         },
         {
@@ -33453,14 +33481,14 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 17.5,
+          "odd": 17.75,
           "score": "3:0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 16.75,
           "score": "3:1"
         },
         {
@@ -33488,7 +33516,7 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 7.7,
+          "odd": 7.8,
           "score": "0:0"
         },
         {
@@ -33502,21 +33530,21 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 14.75,
+          "odd": 14.5,
           "score": "2:2"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 9.8,
+          "odd": 9.9,
           "score": "0:1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 19.5,
+          "odd": 19.25,
           "score": "0:2"
         },
         {
@@ -33530,28 +33558,28 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 12.5,
+          "odd": 12.25,
           "score": "1:2"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 35.0,
+          "odd": 34.0,
           "score": "1:3"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 43.0,
+          "odd": 41.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 69.0,
+          "odd": 67.0,
           "score": "3:3"
         },
         {
@@ -33565,7 +33593,7 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 69.0,
+          "odd": 67.0,
           "score": "4:2"
         },
         {
@@ -33614,7 +33642,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 14.0,
           "score": "3:1"
         },
         {
@@ -33628,7 +33656,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 29.0,
+          "odd": 26.0,
           "score": "4:0"
         },
         {
@@ -33649,7 +33677,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 6.1,
+          "odd": 6.25,
           "score": "1:1"
         },
         {
@@ -33670,7 +33698,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 18.0,
           "score": "0:2"
         },
         {
@@ -33691,7 +33719,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 23.0,
+          "odd": 25.0,
           "score": "1:3"
         },
         {
@@ -33712,7 +33740,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 126.0,
+          "odd": 131.0,
           "score": "0:4"
         },
         {
@@ -33754,7 +33782,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 67.0,
           "score": "5:1"
         },
         {
@@ -33789,7 +33817,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 8.0,
+          "odd": 8.5,
           "score": "2:1"
         },
         {
@@ -33824,7 +33852,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 41.0,
+          "odd": 36.0,
           "score": "4:1"
         },
         {
@@ -33880,7 +33908,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 31.0,
           "score": "1:3"
         },
         {
@@ -33894,14 +33922,14 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 61.0,
+          "odd": 67.0,
           "score": "3:3"
         },
         {
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 176.0,
           "score": "0:4"
         },
         {
@@ -33915,7 +33943,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 126.0,
           "score": "2:4"
         },
         {
@@ -33924,6 +33952,13 @@
           "market": "Exact Score",
           "odd": 67.0,
           "score": "4:2"
+        },
+        {
+          "bookmaker_id": 3,
+          "bookmaker": "Betfair",
+          "market": "Exact Score",
+          "odd": 176.0,
+          "score": "3:4"
         },
         {
           "bookmaker_id": 3,
@@ -34013,7 +34048,7 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Exact Score",
-          "odd": 10.5,
+          "odd": 11.0,
           "score": "0:0"
         },
         {
@@ -34027,7 +34062,7 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 14.0,
           "score": "2:2"
         },
         {
@@ -34104,7 +34139,7 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Exact Score",
-          "odd": 67.0,
+          "odd": 61.0,
           "score": "4:2"
         },
         {
@@ -34314,7 +34349,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 19.5,
+          "odd": 19.0,
           "score": "3:0"
         },
         {
@@ -34328,7 +34363,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 32.0,
           "score": "3:2"
         },
         {
@@ -34363,7 +34398,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 16.5,
           "score": "2:2"
         },
         {
@@ -34412,7 +34447,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 90.0,
+          "odd": 85.0,
           "score": "3:3"
         },
         {
@@ -34426,21 +34461,21 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 180.0,
+          "odd": 190.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 235.0,
+          "odd": 245.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 95.0,
+          "odd": 90.0,
           "score": "4:2"
         },
         {
@@ -34454,14 +34489,14 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 215.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 240.0,
           "score": "4:4"
         },
         {
@@ -34475,7 +34510,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 9.5,
+          "odd": 9.0,
           "score": "2:0"
         },
         {
@@ -34510,14 +34545,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 46.0,
+          "odd": 41.0,
           "score": "4:0"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 41.0,
+          "odd": 36.0,
           "score": "4:1"
         },
         {
@@ -34545,7 +34580,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 9.5,
+          "odd": 10.0,
           "score": "0:1"
         },
         {
@@ -34566,7 +34601,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 11.0,
+          "odd": 12.0,
           "score": "1:2"
         },
         {
@@ -34580,14 +34615,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 36.0,
+          "odd": 34.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 55.0,
+          "odd": 60.0,
           "score": "3:3"
         },
         {
@@ -34671,7 +34706,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 90.0,
+          "odd": 100.0,
           "score": "5:0"
         },
         {
@@ -35322,28 +35357,28 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 10.0,
+          "odd": 10.25,
           "score": "2:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 9.0,
+          "odd": 9.25,
           "score": "2:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 19.5,
+          "odd": 21.0,
           "score": "3:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 18.0,
+          "odd": 19.0,
           "score": "3:1"
         },
         {
@@ -35357,14 +35392,14 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 50.0,
+          "odd": 55.0,
           "score": "4:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 45.0,
+          "odd": 50.0,
           "score": "4:1"
         },
         {
@@ -35392,147 +35427,147 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 9.75,
+          "odd": 10.0,
           "score": "0:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 20.0,
           "score": "0:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 60.0,
+          "odd": 55.0,
           "score": "0:3"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 13.5,
+          "odd": 12.5,
           "score": "1:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 37.0,
+          "odd": 32.0,
           "score": "1:3"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 45.0,
+          "odd": 40.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 80.0,
+          "odd": 75.0,
           "score": "3:3"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 175.0,
           "score": "0:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 150.0,
+          "odd": 110.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 175.0,
+          "odd": 150.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 80.0,
+          "odd": 90.0,
           "score": "4:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 1000.0,
+          "odd": 800.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 700.0,
+          "odd": 500.0,
           "score": "1:5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 800.0,
+          "odd": 600.0,
           "score": "2:5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 300.0,
+          "odd": 250.0,
           "score": "3:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 150.0,
+          "odd": 175.0,
           "score": "5:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 150.0,
+          "odd": 175.0,
           "score": "5:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 300.0,
           "score": "5:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 600.0,
+          "odd": 700.0,
           "score": "6:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 600.0,
+          "odd": 700.0,
           "score": "6:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 1000.0,
+          "odd": 1250.0,
           "score": "6:2"
         },
         {
@@ -35546,7 +35581,7 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 1250.0,
+          "odd": 1000.0,
           "score": "3:5"
         },
         {
@@ -35560,21 +35595,21 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 700.0,
+          "odd": 600.0,
           "score": "4:4"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 6.9,
+          "odd": 7.2,
           "score": "1:0"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 8.8,
+          "odd": 9.3,
           "score": "2:0"
         },
         {
@@ -35588,7 +35623,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 18.0,
           "score": "3:0"
         },
         {
@@ -35602,14 +35637,14 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 32.0,
+          "odd": 31.0,
           "score": "3:2"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 45.0,
+          "odd": 50.0,
           "score": "4:0"
         },
         {
@@ -35623,7 +35658,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 9.2,
+          "odd": 9.4,
           "score": "0:0"
         },
         {
@@ -35637,7 +35672,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 14.0,
           "score": "2:2"
         },
         {
@@ -35651,42 +35686,42 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 20.0,
+          "odd": 18.0,
           "score": "0:2"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 55.0,
+          "odd": 50.0,
           "score": "0:3"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 13.0,
+          "odd": 12.0,
           "score": "1:2"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 38.0,
+          "odd": 34.0,
           "score": "1:3"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 50.0,
+          "odd": 45.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 80.0,
+          "odd": 75.0,
           "score": "3:3"
         },
         {
@@ -35700,14 +35735,14 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 125.0,
+          "odd": 100.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 150.0,
+          "odd": 125.0,
           "score": "2:4"
         },
         {
@@ -35721,7 +35756,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 225.0,
+          "odd": 200.0,
           "score": "3:4"
         },
         {
@@ -35735,7 +35770,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 275.0,
           "score": "4:4"
         },
         {
@@ -35891,14 +35926,14 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 6.0,
+          "odd": 6.25,
           "score": "1:0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 8.0,
+          "odd": 8.5,
           "score": "2:0"
         },
         {
@@ -35912,7 +35947,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 17.0,
           "score": "3:0"
         },
         {
@@ -35933,7 +35968,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 41.0,
           "score": "4:0"
         },
         {
@@ -35947,7 +35982,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 8.0,
+          "odd": 8.5,
           "score": "0:0"
         },
         {
@@ -35975,35 +36010,35 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 15.0,
           "score": "0:2"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 41.0,
+          "odd": 34.0,
           "score": "0:3"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 10.0,
+          "odd": 9.5,
           "score": "1:2"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 23.0,
           "score": "1:3"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 31.0,
+          "odd": 29.0,
           "score": "2:3"
         },
         {
@@ -36017,28 +36052,28 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 91.0,
           "score": "0:4"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 61.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 71.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 46.0,
+          "odd": 51.0,
           "score": "4:2"
         },
         {
@@ -36052,14 +36087,14 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 91.0,
           "score": "5:0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 76.0,
           "score": "5:1"
         },
         {
@@ -36402,7 +36437,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 7.0,
+          "odd": 7.5,
           "score": "1:0"
         },
         {
@@ -36430,14 +36465,14 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 19.0,
+          "odd": 17.0,
           "score": "3:1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 29.0,
           "score": "3:2"
         },
         {
@@ -36458,7 +36493,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 8.5,
+          "odd": 9.5,
           "score": "0:0"
         },
         {
@@ -36479,14 +36514,14 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 10.0,
+          "odd": 11.0,
           "score": "0:1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 19.0,
+          "odd": 21.0,
           "score": "0:2"
         },
         {
@@ -36500,7 +36535,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 13.0,
           "score": "1:2"
         },
         {
@@ -36542,7 +36577,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 81.0,
           "score": "2:4"
         },
         {
@@ -36556,21 +36591,21 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 401.0,
+          "odd": 351.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 301.0,
+          "odd": 251.0,
           "score": "1:5"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 401.0,
+          "odd": 351.0,
           "score": "2:5"
         },
         {
@@ -36598,7 +36633,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 126.0,
           "score": "5:2"
         },
         {
@@ -36612,49 +36647,49 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 251.0,
+          "odd": 201.0,
           "score": "6:1"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 501.0,
+          "odd": 401.0,
           "score": "6:2"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 126.0,
+          "odd": 101.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 351.0,
+          "odd": 301.0,
           "score": "5:3"
         },
         {
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 401.0,
+          "odd": 301.0,
           "score": "4:4"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 6.6,
+          "odd": 6.7,
           "score": "1:0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 9.2,
+          "odd": 9.3,
           "score": "2:0"
         },
         {
@@ -36668,14 +36703,14 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 17.5,
+          "odd": 17.75,
           "score": "3:0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 16.75,
           "score": "3:1"
         },
         {
@@ -36703,7 +36738,7 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 7.7,
+          "odd": 7.8,
           "score": "0:0"
         },
         {
@@ -36717,21 +36752,21 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 14.75,
+          "odd": 14.5,
           "score": "2:2"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 9.8,
+          "odd": 9.9,
           "score": "0:1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 19.5,
+          "odd": 19.25,
           "score": "0:2"
         },
         {
@@ -36745,28 +36780,28 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 12.5,
+          "odd": 12.25,
           "score": "1:2"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 35.0,
+          "odd": 34.0,
           "score": "1:3"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 43.0,
+          "odd": 41.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 69.0,
+          "odd": 67.0,
           "score": "3:3"
         },
         {
@@ -36780,7 +36815,7 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 69.0,
+          "odd": 67.0,
           "score": "4:2"
         },
         {
@@ -36829,7 +36864,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 14.0,
           "score": "3:1"
         },
         {
@@ -36843,7 +36878,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 29.0,
+          "odd": 26.0,
           "score": "4:0"
         },
         {
@@ -36864,7 +36899,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 6.1,
+          "odd": 6.25,
           "score": "1:1"
         },
         {
@@ -36885,7 +36920,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 18.0,
           "score": "0:2"
         },
         {
@@ -36906,7 +36941,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 23.0,
+          "odd": 25.0,
           "score": "1:3"
         },
         {
@@ -36927,7 +36962,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 126.0,
+          "odd": 131.0,
           "score": "0:4"
         },
         {
@@ -36969,7 +37004,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 67.0,
           "score": "5:1"
         },
         {
@@ -37004,7 +37039,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 8.0,
+          "odd": 8.5,
           "score": "2:1"
         },
         {
@@ -37039,7 +37074,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 41.0,
+          "odd": 36.0,
           "score": "4:1"
         },
         {
@@ -37095,7 +37130,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 31.0,
           "score": "1:3"
         },
         {
@@ -37109,14 +37144,14 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 61.0,
+          "odd": 67.0,
           "score": "3:3"
         },
         {
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 176.0,
           "score": "0:4"
         },
         {
@@ -37130,7 +37165,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 126.0,
           "score": "2:4"
         },
         {
@@ -37139,6 +37174,13 @@
           "market": "Exact Score",
           "odd": 67.0,
           "score": "4:2"
+        },
+        {
+          "bookmaker_id": 3,
+          "bookmaker": "Betfair",
+          "market": "Exact Score",
+          "odd": 176.0,
+          "score": "3:4"
         },
         {
           "bookmaker_id": 3,
@@ -37228,7 +37270,7 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Exact Score",
-          "odd": 10.5,
+          "odd": 11.0,
           "score": "0:0"
         },
         {
@@ -37242,7 +37284,7 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 14.0,
           "score": "2:2"
         },
         {
@@ -37319,7 +37361,7 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Exact Score",
-          "odd": 67.0,
+          "odd": 61.0,
           "score": "4:2"
         },
         {
@@ -37529,7 +37571,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 19.5,
+          "odd": 19.0,
           "score": "3:0"
         },
         {
@@ -37543,7 +37585,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 32.0,
           "score": "3:2"
         },
         {
@@ -37578,7 +37620,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 16.5,
           "score": "2:2"
         },
         {
@@ -37627,7 +37669,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 90.0,
+          "odd": 85.0,
           "score": "3:3"
         },
         {
@@ -37641,21 +37683,21 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 180.0,
+          "odd": 190.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 235.0,
+          "odd": 245.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 95.0,
+          "odd": 90.0,
           "score": "4:2"
         },
         {
@@ -37669,14 +37711,14 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 215.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 240.0,
           "score": "4:4"
         },
         {
@@ -37690,7 +37732,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 9.5,
+          "odd": 9.0,
           "score": "2:0"
         },
         {
@@ -37725,14 +37767,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 46.0,
+          "odd": 41.0,
           "score": "4:0"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 41.0,
+          "odd": 36.0,
           "score": "4:1"
         },
         {
@@ -37760,7 +37802,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 9.5,
+          "odd": 10.0,
           "score": "0:1"
         },
         {
@@ -37781,7 +37823,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 11.0,
+          "odd": 12.0,
           "score": "1:2"
         },
         {
@@ -37795,14 +37837,14 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 36.0,
+          "odd": 34.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 55.0,
+          "odd": 60.0,
           "score": "3:3"
         },
         {
@@ -37886,7 +37928,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 90.0,
+          "odd": 100.0,
           "score": "5:0"
         },
         {
@@ -38537,28 +38579,28 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 10.0,
+          "odd": 10.25,
           "score": "2:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 9.0,
+          "odd": 9.25,
           "score": "2:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 19.5,
+          "odd": 21.0,
           "score": "3:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 18.0,
+          "odd": 19.0,
           "score": "3:1"
         },
         {
@@ -38572,14 +38614,14 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 50.0,
+          "odd": 55.0,
           "score": "4:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 45.0,
+          "odd": 50.0,
           "score": "4:1"
         },
         {
@@ -38607,147 +38649,147 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 9.75,
+          "odd": 10.0,
           "score": "0:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 20.0,
           "score": "0:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 60.0,
+          "odd": 55.0,
           "score": "0:3"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 13.5,
+          "odd": 12.5,
           "score": "1:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 37.0,
+          "odd": 32.0,
           "score": "1:3"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 45.0,
+          "odd": 40.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 80.0,
+          "odd": 75.0,
           "score": "3:3"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 175.0,
           "score": "0:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 150.0,
+          "odd": 110.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 175.0,
+          "odd": 150.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 80.0,
+          "odd": 90.0,
           "score": "4:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 1000.0,
+          "odd": 800.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 700.0,
+          "odd": 500.0,
           "score": "1:5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 800.0,
+          "odd": 600.0,
           "score": "2:5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 300.0,
+          "odd": 250.0,
           "score": "3:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 150.0,
+          "odd": 175.0,
           "score": "5:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 150.0,
+          "odd": 175.0,
           "score": "5:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 300.0,
           "score": "5:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 600.0,
+          "odd": 700.0,
           "score": "6:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 600.0,
+          "odd": 700.0,
           "score": "6:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 1000.0,
+          "odd": 1250.0,
           "score": "6:2"
         },
         {
@@ -38761,7 +38803,7 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 1250.0,
+          "odd": 1000.0,
           "score": "3:5"
         },
         {
@@ -38775,21 +38817,21 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 700.0,
+          "odd": 600.0,
           "score": "4:4"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 6.9,
+          "odd": 7.2,
           "score": "1:0"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 8.8,
+          "odd": 9.3,
           "score": "2:0"
         },
         {
@@ -38803,7 +38845,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 17.0,
+          "odd": 18.0,
           "score": "3:0"
         },
         {
@@ -38817,14 +38859,14 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 32.0,
+          "odd": 31.0,
           "score": "3:2"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 45.0,
+          "odd": 50.0,
           "score": "4:0"
         },
         {
@@ -38838,7 +38880,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 9.2,
+          "odd": 9.4,
           "score": "0:0"
         },
         {
@@ -38852,7 +38894,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 14.0,
           "score": "2:2"
         },
         {
@@ -38866,42 +38908,42 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 20.0,
+          "odd": 18.0,
           "score": "0:2"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 55.0,
+          "odd": 50.0,
           "score": "0:3"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 13.0,
+          "odd": 12.0,
           "score": "1:2"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 38.0,
+          "odd": 34.0,
           "score": "1:3"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 50.0,
+          "odd": 45.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 80.0,
+          "odd": 75.0,
           "score": "3:3"
         },
         {
@@ -38915,14 +38957,14 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 125.0,
+          "odd": 100.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 150.0,
+          "odd": 125.0,
           "score": "2:4"
         },
         {
@@ -38936,7 +38978,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 225.0,
+          "odd": 200.0,
           "score": "3:4"
         },
         {
@@ -38950,7 +38992,7 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 275.0,
           "score": "4:4"
         },
         {
@@ -39103,5 +39145,725 @@
       ],
       "message": "强制刷新成功。"
     }
+  },
+  "effective_winner_totals": {
+    "home_win": 2.0,
+    "draw": 3.3,
+    "away_win": 3.75,
+    "over_under_line": 1.5,
+    "asian_handicap": [],
+    "over_under": [
+      {
+        "line": 1.5,
+        "bookmaker": "10Bet",
+        "over_odds": 1.33,
+        "under_odds": 3.2
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "10Bet",
+        "over_odds": 2.0,
+        "under_odds": 1.8
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "10Bet",
+        "over_odds": 3.55,
+        "under_odds": 1.28
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "10Bet",
+        "over_odds": 1.07,
+        "under_odds": 8.0
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "10Bet",
+        "over_odds": 7.0,
+        "under_odds": 1.09
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "Bet365",
+        "over_odds": 1.36,
+        "under_odds": 3.2
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "Bet365",
+        "over_odds": 2.1,
+        "under_odds": 1.73
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "Bet365",
+        "over_odds": 4.0,
+        "under_odds": 1.25
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "Bet365",
+        "over_odds": 1.07,
+        "under_odds": 9.0
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "Bet365",
+        "over_odds": 8.0,
+        "under_odds": 1.08
+      },
+      {
+        "line": 5.5,
+        "bookmaker": "Bet365",
+        "over_odds": 17.0,
+        "under_odds": 1.02
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "Marathonbet",
+        "over_odds": 1.32,
+        "under_odds": 3.05
+      },
+      {
+        "line": 1.75,
+        "bookmaker": "Marathonbet",
+        "over_odds": 1.4,
+        "under_odds": 2.74
+      },
+      {
+        "line": 2.0,
+        "bookmaker": "Marathonbet",
+        "over_odds": 1.53,
+        "under_odds": 2.38
+      },
+      {
+        "line": 2.25,
+        "bookmaker": "Marathonbet",
+        "over_odds": 1.78,
+        "under_odds": 1.98
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "Marathonbet",
+        "over_odds": 2.07,
+        "under_odds": 1.78
+      },
+      {
+        "line": 2.75,
+        "bookmaker": "Marathonbet",
+        "over_odds": 2.32,
+        "under_odds": 1.57
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "Marathonbet",
+        "over_odds": 3.42,
+        "under_odds": 1.26
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "Marathonbet",
+        "over_odds": 1.02,
+        "under_odds": 7.7
+      },
+      {
+        "line": 0.75,
+        "bookmaker": "Marathonbet",
+        "over_odds": 1.04,
+        "under_odds": 7.2
+      },
+      {
+        "line": 1.0,
+        "bookmaker": "Marathonbet",
+        "over_odds": 1.05,
+        "under_odds": 6.7
+      },
+      {
+        "line": 1.25,
+        "bookmaker": "Marathonbet",
+        "over_odds": 1.18,
+        "under_odds": 4.1
+      },
+      {
+        "line": 3.0,
+        "bookmaker": "Marathonbet",
+        "over_odds": 2.82,
+        "under_odds": 1.39
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "Marathonbet",
+        "over_odds": 6.35,
+        "under_odds": 1.06
+      },
+      {
+        "line": 3.25,
+        "bookmaker": "Marathonbet",
+        "over_odds": 3.16,
+        "under_odds": 1.31
+      },
+      {
+        "line": 3.75,
+        "bookmaker": "Marathonbet",
+        "over_odds": 4.25,
+        "under_odds": 1.17
+      },
+      {
+        "line": 4.0,
+        "bookmaker": "Marathonbet",
+        "over_odds": 5.75,
+        "under_odds": 1.08
+      },
+      {
+        "line": 4.25,
+        "bookmaker": "Marathonbet",
+        "over_odds": 6.05,
+        "under_odds": 1.07
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "Unibet",
+        "over_odds": 1.29,
+        "under_odds": 3.45
+      },
+      {
+        "line": 1.75,
+        "bookmaker": "Unibet",
+        "over_odds": 1.38,
+        "under_odds": 3.05
+      },
+      {
+        "line": 2.0,
+        "bookmaker": "Unibet",
+        "over_odds": 1.49,
+        "under_odds": 2.63
+      },
+      {
+        "line": 2.25,
+        "bookmaker": "Unibet",
+        "over_odds": 1.73,
+        "under_odds": 2.1
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "Unibet",
+        "over_odds": 1.96,
+        "under_odds": 1.8
+      },
+      {
+        "line": 2.75,
+        "bookmaker": "Unibet",
+        "over_odds": 2.25,
+        "under_odds": 1.64
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "Unibet",
+        "over_odds": 3.4,
+        "under_odds": 1.3
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "Unibet",
+        "over_odds": 1.04,
+        "under_odds": 10.0
+      },
+      {
+        "line": 0.75,
+        "bookmaker": "Unibet",
+        "over_odds": 1.08,
+        "under_odds": 7.0
+      },
+      {
+        "line": 1.0,
+        "bookmaker": "Unibet",
+        "over_odds": 1.1,
+        "under_odds": 6.4
+      },
+      {
+        "line": 1.25,
+        "bookmaker": "Unibet",
+        "over_odds": 1.26,
+        "under_odds": 3.7
+      },
+      {
+        "line": 3.0,
+        "bookmaker": "Unibet",
+        "over_odds": 2.75,
+        "under_odds": 1.45
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "Unibet",
+        "over_odds": 7.0,
+        "under_odds": 1.09
+      },
+      {
+        "line": 3.25,
+        "bookmaker": "Unibet",
+        "over_odds": 3.1,
+        "under_odds": 1.37
+      },
+      {
+        "line": 3.75,
+        "bookmaker": "Unibet",
+        "over_odds": 6.1,
+        "under_odds": 1.11
+      },
+      {
+        "line": 5.5,
+        "bookmaker": "Unibet",
+        "over_odds": 14.0,
+        "under_odds": 1.01
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "Betfair",
+        "over_odds": 1.3,
+        "under_odds": 3.3
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "Betfair",
+        "over_odds": 2.0,
+        "under_odds": 1.75
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "Betfair",
+        "over_odds": 3.7,
+        "under_odds": 1.25
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "Betfair",
+        "over_odds": 1.04,
+        "under_odds": 9.0
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "Betfair",
+        "over_odds": 7.5,
+        "under_odds": 1.07
+      },
+      {
+        "line": 5.5,
+        "bookmaker": "Betfair",
+        "over_odds": 17.0,
+        "under_odds": 1.01
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "BetVictor",
+        "over_odds": 1.33,
+        "under_odds": 3.3
+      },
+      {
+        "line": 1.75,
+        "bookmaker": "BetVictor",
+        "over_odds": 1.42,
+        "under_odds": 2.58
+      },
+      {
+        "line": 2.0,
+        "bookmaker": "BetVictor",
+        "over_odds": 1.54,
+        "under_odds": 2.27
+      },
+      {
+        "line": 2.25,
+        "bookmaker": "BetVictor",
+        "over_odds": 1.77,
+        "under_odds": 1.9
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "BetVictor",
+        "over_odds": 1.99,
+        "under_odds": 1.7
+      },
+      {
+        "line": 2.75,
+        "bookmaker": "BetVictor",
+        "over_odds": 2.27,
+        "under_odds": 1.54
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "BetVictor",
+        "over_odds": 3.9,
+        "under_odds": 1.25
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "BetVictor",
+        "over_odds": 1.04,
+        "under_odds": 10.5
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "BetVictor",
+        "over_odds": 9.0,
+        "under_odds": 1.06
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "Pinnacle",
+        "over_odds": 1.33,
+        "under_odds": 3.4
+      },
+      {
+        "line": 1.75,
+        "bookmaker": "Pinnacle",
+        "over_odds": 1.42,
+        "under_odds": 3.0
+      },
+      {
+        "line": 2.0,
+        "bookmaker": "Pinnacle",
+        "over_odds": 1.54,
+        "under_odds": 2.57
+      },
+      {
+        "line": 2.25,
+        "bookmaker": "Pinnacle",
+        "over_odds": 1.83,
+        "under_odds": 2.08
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "Pinnacle",
+        "over_odds": 2.08,
+        "under_odds": 1.8
+      },
+      {
+        "line": 2.75,
+        "bookmaker": "Pinnacle",
+        "over_odds": 2.4,
+        "under_odds": 1.61
+      },
+      {
+        "line": 1.25,
+        "bookmaker": "Pinnacle",
+        "over_odds": 1.21,
+        "under_odds": 4.59
+      },
+      {
+        "line": 3.0,
+        "bookmaker": "Pinnacle",
+        "over_odds": 3.0,
+        "under_odds": 1.41
+      },
+      {
+        "line": 3.25,
+        "bookmaker": "Pinnacle",
+        "over_odds": 3.38,
+        "under_odds": 1.34
+      },
+      {
+        "line": 2.0,
+        "bookmaker": "SBO",
+        "over_odds": 1.59,
+        "under_odds": 2.44
+      },
+      {
+        "line": 2.25,
+        "bookmaker": "SBO",
+        "over_odds": 1.85,
+        "under_odds": 2.05
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "SBO",
+        "over_odds": 2.14,
+        "under_odds": 1.77
+      },
+      {
+        "line": 2.75,
+        "bookmaker": "SBO",
+        "over_odds": 2.47,
+        "under_odds": 1.58
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "1xBet",
+        "over_odds": 1.31,
+        "under_odds": 3.1
+      },
+      {
+        "line": 1.75,
+        "bookmaker": "1xBet",
+        "over_odds": 1.41,
+        "under_odds": 2.75
+      },
+      {
+        "line": 2.0,
+        "bookmaker": "1xBet",
+        "over_odds": 1.52,
+        "under_odds": 2.4
+      },
+      {
+        "line": 2.25,
+        "bookmaker": "1xBet",
+        "over_odds": 1.83,
+        "under_odds": 2.04
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "1xBet",
+        "over_odds": 2.07,
+        "under_odds": 1.81
+      },
+      {
+        "line": 2.75,
+        "bookmaker": "1xBet",
+        "over_odds": 2.31,
+        "under_odds": 1.56
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "1xBet",
+        "over_odds": 3.42,
+        "under_odds": 1.26
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "1xBet",
+        "over_odds": 1.02,
+        "under_odds": 7.8
+      },
+      {
+        "line": 0.75,
+        "bookmaker": "1xBet",
+        "over_odds": 1.04,
+        "under_odds": 7.35
+      },
+      {
+        "line": 1.0,
+        "bookmaker": "1xBet",
+        "over_odds": 1.05,
+        "under_odds": 6.75
+      },
+      {
+        "line": 1.25,
+        "bookmaker": "1xBet",
+        "over_odds": 1.19,
+        "under_odds": 4.12
+      },
+      {
+        "line": 3.0,
+        "bookmaker": "1xBet",
+        "over_odds": 2.82,
+        "under_odds": 1.39
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "1xBet",
+        "over_odds": 6.35,
+        "under_odds": 1.06
+      },
+      {
+        "line": 3.25,
+        "bookmaker": "1xBet",
+        "over_odds": 3.08,
+        "under_odds": 1.31
+      },
+      {
+        "line": 3.75,
+        "bookmaker": "1xBet",
+        "over_odds": 4.22,
+        "under_odds": 1.16
+      },
+      {
+        "line": 4.0,
+        "bookmaker": "1xBet",
+        "over_odds": 5.75,
+        "under_odds": 1.08
+      },
+      {
+        "line": 4.25,
+        "bookmaker": "1xBet",
+        "over_odds": 6.03,
+        "under_odds": 1.06
+      },
+      {
+        "line": 5.0,
+        "bookmaker": "1xBet",
+        "over_odds": 13.0,
+        "under_odds": 1.02
+      },
+      {
+        "line": 5.5,
+        "bookmaker": "1xBet",
+        "over_odds": 16.0,
+        "under_odds": 1.01
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "Betano",
+        "over_odds": 1.36,
+        "under_odds": 3.25
+      },
+      {
+        "line": 1.75,
+        "bookmaker": "Betano",
+        "over_odds": 1.44,
+        "under_odds": 2.9
+      },
+      {
+        "line": 2.0,
+        "bookmaker": "Betano",
+        "over_odds": 1.57,
+        "under_odds": 2.5
+      },
+      {
+        "line": 2.25,
+        "bookmaker": "Betano",
+        "over_odds": 1.82,
+        "under_odds": 2.05
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "Betano",
+        "over_odds": 2.07,
+        "under_odds": 1.8
+      },
+      {
+        "line": 2.75,
+        "bookmaker": "Betano",
+        "over_odds": 2.37,
+        "under_odds": 1.62
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "Betano",
+        "over_odds": 3.55,
+        "under_odds": 1.3
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "Betano",
+        "over_odds": 1.08,
+        "under_odds": 8.25
+      },
+      {
+        "line": 3.0,
+        "bookmaker": "Betano",
+        "over_odds": 2.92,
+        "under_odds": 1.44
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "Betano",
+        "over_odds": 6.7,
+        "under_odds": 1.11
+      },
+      {
+        "line": 5.5,
+        "bookmaker": "Betano",
+        "over_odds": 11.75,
+        "under_odds": 1.04
+      },
+      {
+        "line": 6.5,
+        "bookmaker": "Betano",
+        "over_odds": 16.5,
+        "under_odds": 1.01
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "Superbet",
+        "over_odds": 1.35,
+        "under_odds": 3.25
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "Superbet",
+        "over_odds": 2.07,
+        "under_odds": 1.76
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "Superbet",
+        "over_odds": 3.65,
+        "under_odds": 1.29
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "Superbet",
+        "over_odds": 1.07,
+        "under_odds": 9.0
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "Superbet",
+        "over_odds": 7.4,
+        "under_odds": 1.09
+      },
+      {
+        "line": 5.5,
+        "bookmaker": "Superbet",
+        "over_odds": 16.0,
+        "under_odds": 1.03
+      },
+      {
+        "line": 6.5,
+        "bookmaker": "Superbet",
+        "over_odds": 37.0,
+        "under_odds": 1.01
+      },
+      {
+        "line": 1.5,
+        "bookmaker": "888Sport",
+        "over_odds": 1.33,
+        "under_odds": 3.0
+      },
+      {
+        "line": 2.5,
+        "bookmaker": "888Sport",
+        "over_odds": 2.05,
+        "under_odds": 1.7
+      },
+      {
+        "line": 3.5,
+        "bookmaker": "888Sport",
+        "over_odds": 3.7,
+        "under_odds": 1.25
+      },
+      {
+        "line": 0.5,
+        "bookmaker": "888Sport",
+        "over_odds": 1.06,
+        "under_odds": 8.5
+      },
+      {
+        "line": 4.5,
+        "bookmaker": "888Sport",
+        "over_odds": 7.5,
+        "under_odds": 1.08
+      },
+      {
+        "line": 5.5,
+        "bookmaker": "888Sport",
+        "over_odds": 17.0,
+        "under_odds": 1.02
+      }
+    ],
+    "raw_probabilities": {
+      "home_win": 0.5,
+      "draw": 0.30303030303030304,
+      "away_win": 0.26666666666666666
+    },
+    "implied_probabilities": {
+      "home_win": 0.4674220963172804,
+      "draw": 0.28328611898017,
+      "away_win": 0.24929178470254953
+    },
+    "source": "API-Football / 10Bet",
+    "event_title": null,
+    "event_id": null,
+    "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。",
+    "found": true
   }
 }

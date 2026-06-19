@@ -1,8 +1,19 @@
+from modules.market_utils import asian_handicap_summary
+
+
 def format_line(team, line):
     if line is None:
         return team
     sign = "+" if line > 0 else ""
     return f"{team} {sign}{line:g}"
+
+
+def format_api_handicap_line(match, summary):
+    line = summary.get("main_line")
+    if line is None:
+        return "No view"
+    team = match["home_cn"] if summary.get("main_side") == "home" else match["away_cn"]
+    return format_line(team, line)
 
 
 def consensus_market(markets, line_key="line"):
@@ -70,6 +81,13 @@ def handicap_opinion(odds, match):
 
     away_line = -line if line is not None else None
     return f"Lean {format_line(match['away_cn'], away_line)}"
+
+
+def api_handicap_opinion(api_football_data, match):
+    summary = asian_handicap_summary(((api_football_data or {}).get("asian_handicap") or {}).get("rows") or [])
+    if not summary.get("available"):
+        return "No view"
+    return f"Lean {format_api_handicap_line(match, summary)}"
 
 
 def totals_opinion(odds):
@@ -164,7 +182,7 @@ def confidence_score(risk):
     }.get(risk, 50)
 
 
-def build_betting_opinion(match, odds, polymarket, value_analysis):
+def build_betting_opinion(match, odds, polymarket, value_analysis, api_football_data=None):
     winner = strongest_match_winner(odds, match)
     value = value_direction(value_analysis)
 
@@ -175,7 +193,9 @@ def build_betting_opinion(match, odds, polymarket, value_analysis):
     else:
         match_winner = f"Lean {winner}"
 
-    handicap = handicap_opinion(odds, match)
+    handicap = api_handicap_opinion(api_football_data, match)
+    if handicap == "No view":
+        handicap = handicap_opinion(odds, match)
     goals = totals_opinion(odds)
     risk = risk_level(odds, polymarket, value_analysis)
     confidence = confidence_score(risk)

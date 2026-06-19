@@ -46,6 +46,24 @@
 美国:
   canonical: USA
   aliases: [United States, USA, USMNT]
+澳大利亚:
+  canonical: Australia
+  aliases: [Australia]
+苏格兰:
+  canonical: Scotland
+  aliases: [Scotland]
+摩洛哥:
+  canonical: Morocco
+  aliases: [Morocco]
+海地:
+  canonical: Haiti
+  aliases: [Haiti]
+土耳其:
+  canonical: Turkiye
+  aliases: [Turkiye, Türkiye, Turkey]
+巴拉圭:
+  canonical: Paraguay
+  aliases: [Paraguay]
 加拿大:
   canonical: Canada
   aliases: [Canada]

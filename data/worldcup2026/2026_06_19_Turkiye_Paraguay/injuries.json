@@ -7,8 +7,8 @@
     "away_en": "Paraguay",
     "display_name": "Turkey vs Paraguay"
   },
-  "created_at": "2026-06-19T16:02:52.734159+08:00",
-  "schedule_source": "ESPN",
+  "created_at": "2026-06-19T16:52:22.867074+08:00",
+  "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
   "ok": false,

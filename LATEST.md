@@ -1,8 +1,8 @@
 # WorldCup Analyzer
 
-Version: v1.60-dev
+Version: v1.64-dev
 
-Updated: 2026-06-19 15:58
+Updated: 2026-06-19 20:12
 
 Status: Running
 
@@ -10,7 +10,7 @@ Current Best Portfolio: 推荐组合（当前最优）
 
 Current Utility: Calculated per selected match
 
-Top Issue: Pre-match decision cockpit needs validation against finished matches and saved snapshots.
+Top Issue: Validate Market Center Score and direction-over-tempo weighting on Brazil vs Haiti and future deep-favorite matches.
 
 GPT Context: GPT_CONTEXT.md
 

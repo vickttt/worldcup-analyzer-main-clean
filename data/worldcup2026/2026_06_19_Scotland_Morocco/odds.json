@@ -7,13 +7,13 @@
     "away_en": "Morocco",
     "display_name": "Scotland vs Morocco"
   },
-  "created_at": "2026-06-19T16:01:30.358069+08:00",
-  "schedule_source": "ESPN",
+  "created_at": "2026-06-19T16:51:14.523178+08:00",
+  "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
   "the_odds_api": {
     "found": true,
-    "home_win": 5.6,
+    "home_win": 5.75,
     "draw": 3.6,
     "away_win": 1.66,
     "over_under_line": 2.5,
@@ -38,8 +38,8 @@
       },
       {
         "line": 0.75,
-        "home_odds": 1.93,
-        "away_odds": 1.97,
+        "home_odds": 1.96,
+        "away_odds": 1.96,
         "bookmaker": "Pinnacle"
       },
       {
@@ -50,8 +50,8 @@
       },
       {
         "line": 0.75,
-        "home_odds": 1.89,
-        "away_odds": 1.93,
+        "home_odds": 1.91,
+        "away_odds": 1.91,
         "bookmaker": "Bovada"
       },
       {
@@ -62,7 +62,7 @@
       },
       {
         "line": 0.75,
-        "home_odds": 1.96,
+        "home_odds": 1.97,
         "away_odds": 2.0,
         "bookmaker": "Matchbook"
       },
@@ -88,38 +88,38 @@
     "over_under": [
       {
         "line": 2.5,
-        "over_odds": 2.1,
-        "under_odds": 1.7,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
         "bookmaker": "Unibet"
       },
       {
         "line": 2.5,
-        "over_odds": 2.15,
-        "under_odds": 1.72,
+        "over_odds": 2.17,
+        "under_odds": 1.71,
         "bookmaker": "Unibet (SE)"
       },
       {
         "line": 2.5,
-        "over_odds": 2.1,
-        "under_odds": 1.7,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
         "bookmaker": "LeoVegas"
       },
       {
         "line": 2.5,
-        "over_odds": 2.1,
-        "under_odds": 1.7,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
         "bookmaker": "Grosvenor"
       },
       {
         "line": 2.5,
-        "over_odds": 2.1,
-        "under_odds": 1.7,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
         "bookmaker": "Casumo"
       },
       {
         "line": 2.5,
-        "over_odds": 2.1,
-        "under_odds": 1.7,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
         "bookmaker": "BetRivers"
       },
       {
@@ -130,8 +130,8 @@
       },
       {
         "line": 2.5,
-        "over_odds": 2.1,
-        "under_odds": 1.7,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
         "bookmaker": "Unibet (NL)"
       },
       {
@@ -142,14 +142,14 @@
       },
       {
         "line": 2.5,
-        "over_odds": 2.06,
-        "under_odds": 1.66,
+        "over_odds": 2.08,
+        "under_odds": 1.65,
         "bookmaker": "PMU (FR)"
       },
       {
         "line": 2.5,
-        "over_odds": 2.1,
-        "under_odds": 1.7,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
         "bookmaker": "TABtouch"
       },
       {
@@ -160,8 +160,8 @@
       },
       {
         "line": 2.25,
-        "over_odds": 2.03,
-        "under_odds": 1.86,
+        "over_odds": 2.05,
+        "under_odds": 1.87,
         "bookmaker": "Pinnacle"
       },
       {
@@ -238,14 +238,14 @@
       }
     ],
     "raw_probabilities": {
-      "home_win": 0.17857142857142858,
+      "home_win": 0.17391304347826086,
       "draw": 0.2777777777777778,
       "away_win": 0.6024096385542169
     },
     "implied_probabilities": {
-      "home_win": 0.16866109731316323,
-      "draw": 0.2623617069315873,
-      "away_win": 0.5689771957552495
+      "home_win": 0.16498716214350787,
+      "draw": 0.26352116175699175,
+      "away_win": 0.5714916760995002
     },
     "source": "The Odds API / Unibet",
     "event_title": "Scotland vs Morocco",
@@ -258,8 +258,8 @@
       "events_count": 2
     },
     "request_headers": {
-      "x-requests-used": "234",
-      "x-requests-remaining": "266",
+      "x-requests-used": "284",
+      "x-requests-remaining": "216",
       "x-requests-last": "12"
     },
     "raw_event": {
@@ -273,11 +273,11 @@
         {
           "key": "unibet",
           "title": "Unibet",
-          "last_update": "2026-06-19T08:00:32Z",
+          "last_update": "2026-06-19T08:50:14Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:32Z",
+              "last_update": "2026-06-19T08:50:14Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -285,7 +285,7 @@
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.6
+                  "price": 5.75
                 },
                 {
                   "name": "Draw",
@@ -295,16 +295,16 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:32Z",
+              "last_update": "2026-06-19T08:50:14Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.1,
+                  "price": 2.14,
                   "point": 2.5
                 },
                 {
                   "name": "Under",
-                  "price": 1.7,
+                  "price": 1.68,
                   "point": 2.5
                 }
               ]
@@ -314,11 +314,11 @@
         {
           "key": "winamax_de",
           "title": "Winamax (DE)",
-          "last_update": "2026-06-19T08:00:57Z",
+          "last_update": "2026-06-19T08:50:39Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:56Z",
+              "last_update": "2026-06-19T08:50:39Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -339,19 +339,19 @@
         {
           "key": "unibet_se",
           "title": "Unibet (SE)",
-          "last_update": "2026-06-19T08:00:42Z",
+          "last_update": "2026-06-19T08:49:50Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:42Z",
+              "last_update": "2026-06-19T08:49:49Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.7
+                  "price": 1.68
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.8
+                  "price": 6.0
                 },
                 {
                   "name": "Draw",
@@ -361,16 +361,16 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:42Z",
+              "last_update": "2026-06-19T08:49:49Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.15,
+                  "price": 2.17,
                   "point": 2.5
                 },
                 {
                   "name": "Under",
-                  "price": 1.72,
+                  "price": 1.71,
                   "point": 2.5
                 }
               ]
@@ -380,19 +380,19 @@
         {
           "key": "leovegas",
           "title": "LeoVegas",
-          "last_update": "2026-06-19T08:00:31Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:30Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.67
+                  "price": 1.66
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.75
+                  "price": 5.8
                 },
                 {
                   "name": "Draw",
@@ -402,16 +402,16 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:30Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.1,
+                  "price": 2.14,
                   "point": 2.5
                 },
                 {
                   "name": "Under",
-                  "price": 1.7,
+                  "price": 1.68,
                   "point": 2.5
                 }
               ]
@@ -421,23 +421,23 @@
         {
           "key": "livescorebet",
           "title": "LiveScore Bet",
-          "last_update": "2026-06-19T08:00:17Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:17Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.65
+                  "price": 1.64
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.5
+                  "price": 5.6
                 },
                 {
                   "name": "Draw",
-                  "price": 3.5
+                  "price": 3.55
                 }
               ]
             }
@@ -446,38 +446,38 @@
         {
           "key": "grosvenor",
           "title": "Grosvenor",
-          "last_update": "2026-06-19T08:00:55Z",
+          "last_update": "2026-06-19T08:50:25Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:55Z",
+              "last_update": "2026-06-19T08:50:25Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.65
+                  "price": 1.64
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.5
+                  "price": 5.6
                 },
                 {
                   "name": "Draw",
-                  "price": 3.5
+                  "price": 3.55
                 }
               ]
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:55Z",
+              "last_update": "2026-06-19T08:50:25Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.1,
+                  "price": 2.14,
                   "point": 2.5
                 },
                 {
                   "name": "Under",
-                  "price": 1.7,
+                  "price": 1.68,
                   "point": 2.5
                 }
               ]
@@ -487,19 +487,19 @@
         {
           "key": "casumo",
           "title": "Casumo",
-          "last_update": "2026-06-19T08:00:31Z",
+          "last_update": "2026-06-19T08:50:37Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:31Z",
+              "last_update": "2026-06-19T08:50:37Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.67
+                  "price": 1.66
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.75
+                  "price": 5.8
                 },
                 {
                   "name": "Draw",
@@ -509,16 +509,16 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:31Z",
+              "last_update": "2026-06-19T08:50:37Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.1,
+                  "price": 2.14,
                   "point": 2.5
                 },
                 {
                   "name": "Under",
-                  "price": 1.7,
+                  "price": 1.68,
                   "point": 2.5
                 }
               ]
@@ -528,19 +528,19 @@
         {
           "key": "betrivers",
           "title": "BetRivers",
-          "last_update": "2026-06-19T08:00:32Z",
+          "last_update": "2026-06-19T08:50:40Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:32Z",
+              "last_update": "2026-06-19T08:50:40Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.67
+                  "price": 1.66
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.75
+                  "price": 5.8
                 },
                 {
                   "name": "Draw",
@@ -550,16 +550,16 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:32Z",
+              "last_update": "2026-06-19T08:50:40Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.1,
+                  "price": 2.14,
                   "point": 2.5
                 },
                 {
                   "name": "Under",
-                  "price": 1.7,
+                  "price": 1.68,
                   "point": 2.5
                 }
               ]
@@ -569,11 +569,11 @@
         {
           "key": "gtbets",
           "title": "GTbets",
-          "last_update": "2026-06-19T08:00:45Z",
+          "last_update": "2026-06-19T08:50:04Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:45Z",
+              "last_update": "2026-06-19T08:50:04Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -591,7 +591,7 @@
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T08:00:45Z",
+              "last_update": "2026-06-19T08:50:04Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -607,7 +607,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:45Z",
+              "last_update": "2026-06-19T08:50:04Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -626,23 +626,23 @@
         {
           "key": "virginbet",
           "title": "Virgin Bet",
-          "last_update": "2026-06-19T08:00:17Z",
+          "last_update": "2026-06-19T08:50:02Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:17Z",
+              "last_update": "2026-06-19T08:50:02Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.65
+                  "price": 1.64
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.5
+                  "price": 5.6
                 },
                 {
                   "name": "Draw",
-                  "price": 3.5
+                  "price": 3.55
                 }
               ]
             }
@@ -651,11 +651,11 @@
         {
           "key": "winamax_fr",
           "title": "Winamax (FR)",
-          "last_update": "2026-06-19T08:00:44Z",
+          "last_update": "2026-06-19T08:50:39Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:43Z",
+              "last_update": "2026-06-19T08:50:39Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -676,19 +676,19 @@
         {
           "key": "unibet_nl",
           "title": "Unibet (NL)",
-          "last_update": "2026-06-19T08:00:58Z",
+          "last_update": "2026-06-19T08:50:13Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:57Z",
+              "last_update": "2026-06-19T08:50:13Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.71
+                  "price": 1.7
                 },
                 {
                   "name": "Scotland",
-                  "price": 6.0
+                  "price": 6.1
                 },
                 {
                   "name": "Draw",
@@ -698,16 +698,16 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:57Z",
+              "last_update": "2026-06-19T08:50:13Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.1,
+                  "price": 2.14,
                   "point": 2.5
                 },
                 {
                   "name": "Under",
-                  "price": 1.7,
+                  "price": 1.68,
                   "point": 2.5
                 }
               ]
@@ -717,29 +717,29 @@
         {
           "key": "onexbet",
           "title": "1xBet",
-          "last_update": "2026-06-19T08:00:05Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:05Z",
+              "last_update": "2026-06-19T08:50:37Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.78
+                  "price": 1.77
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.38
+                  "price": 5.44
                 },
                 {
                   "name": "Draw",
-                  "price": 3.71
+                  "price": 3.73
                 }
               ]
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T08:00:05Z",
+              "last_update": "2026-06-19T08:50:37Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -755,7 +755,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:05Z",
+              "last_update": "2026-06-19T08:50:37Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -774,19 +774,19 @@
         {
           "key": "tipico_de",
           "title": "Tipico",
-          "last_update": "2026-06-19T08:00:30Z",
+          "last_update": "2026-06-19T08:50:14Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:30Z",
+              "last_update": "2026-06-19T08:50:14Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.7
+                  "price": 1.67
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.2
+                  "price": 5.7
                 },
                 {
                   "name": "Draw",
@@ -799,11 +799,11 @@
         {
           "key": "unibet_fr",
           "title": "Unibet (FR)",
-          "last_update": "2026-06-19T08:00:56Z",
+          "last_update": "2026-06-19T08:49:53Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:56Z",
+              "last_update": "2026-06-19T08:49:52Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -815,7 +815,7 @@
                 },
                 {
                   "name": "Draw",
-                  "price": 3.6
+                  "price": 3.65
                 }
               ]
             }
@@ -824,38 +824,38 @@
         {
           "key": "pmu_fr",
           "title": "PMU (FR)",
-          "last_update": "2026-06-19T08:00:05Z",
+          "last_update": "2026-06-19T08:50:02Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:05Z",
+              "last_update": "2026-06-19T08:50:01Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.65
+                  "price": 1.64
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.5
+                  "price": 5.6
                 },
                 {
                   "name": "Draw",
-                  "price": 3.5
+                  "price": 3.55
                 }
               ]
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:05Z",
+              "last_update": "2026-06-19T08:50:01Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.06,
+                  "price": 2.08,
                   "point": 2.5
                 },
                 {
                   "name": "Under",
-                  "price": 1.66,
+                  "price": 1.65,
                   "point": 2.5
                 }
               ]
@@ -865,38 +865,38 @@
         {
           "key": "tabtouch",
           "title": "TABtouch",
-          "last_update": "2026-06-19T08:00:55Z",
+          "last_update": "2026-06-19T08:50:51Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:55Z",
+              "last_update": "2026-06-19T08:50:51Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.65
+                  "price": 1.64
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.5
+                  "price": 5.6
                 },
                 {
                   "name": "Draw",
-                  "price": 3.5
+                  "price": 3.55
                 }
               ]
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:55Z",
+              "last_update": "2026-06-19T08:50:51Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.1,
+                  "price": 2.14,
                   "point": 2.5
                 },
                 {
                   "name": "Under",
-                  "price": 1.7,
+                  "price": 1.68,
                   "point": 2.5
                 }
               ]
@@ -906,19 +906,19 @@
         {
           "key": "leovegas_se",
           "title": "LeoVegas (SE)",
-          "last_update": "2026-06-19T08:00:31Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:31Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.67
+                  "price": 1.66
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.75
+                  "price": 5.8
                 },
                 {
                   "name": "Draw",
@@ -931,11 +931,11 @@
         {
           "key": "unibet_uk",
           "title": "Unibet (UK)",
-          "last_update": "2026-06-19T08:00:44Z",
+          "last_update": "2026-06-19T08:50:27Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:43Z",
+              "last_update": "2026-06-19T08:50:27Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -956,23 +956,23 @@
         {
           "key": "marathonbet",
           "title": "Marathon Bet",
-          "last_update": "2026-06-19T08:00:46Z",
+          "last_update": "2026-06-19T08:50:42Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:45Z",
+              "last_update": "2026-06-19T08:50:42Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.73
+                  "price": 4.65
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.3
+                  "price": 10.5
                 },
                 {
                   "name": "Draw",
-                  "price": 3.64
+                  "price": 1.25
                 }
               ]
             }
@@ -981,11 +981,11 @@
         {
           "key": "mybookieag",
           "title": "MyBookie.ag",
-          "last_update": "2026-06-19T07:59:31Z",
+          "last_update": "2026-06-19T08:49:24Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T07:59:31Z",
+              "last_update": "2026-06-19T08:49:24Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1003,7 +1003,7 @@
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T07:59:31Z",
+              "last_update": "2026-06-19T08:49:24Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1019,7 +1019,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T07:59:31Z",
+              "last_update": "2026-06-19T08:49:24Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -1038,11 +1038,11 @@
         {
           "key": "pointsbetau",
           "title": "PointsBet (AU)",
-          "last_update": "2026-06-19T08:00:08Z",
+          "last_update": "2026-06-19T08:49:39Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:08Z",
+              "last_update": "2026-06-19T08:49:39Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1050,7 +1050,7 @@
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.25
+                  "price": 5.5
                 },
                 {
                   "name": "Draw",
@@ -1063,11 +1063,11 @@
         {
           "key": "betfred_uk",
           "title": "Betfred (UK)",
-          "last_update": "2026-06-19T08:00:18Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:17Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1088,11 +1088,11 @@
         {
           "key": "betr_au",
           "title": "Betr",
-          "last_update": "2026-06-19T08:00:31Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:30Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1113,11 +1113,11 @@
         {
           "key": "betright",
           "title": "Bet Right",
-          "last_update": "2026-06-19T08:00:31Z",
+          "last_update": "2026-06-19T08:50:03Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:31Z",
+              "last_update": "2026-06-19T08:50:02Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1138,15 +1138,15 @@
         {
           "key": "sportsbet",
           "title": "SportsBet",
-          "last_update": "2026-06-19T08:00:34Z",
+          "last_update": "2026-06-19T08:49:39Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:34Z",
+              "last_update": "2026-06-19T08:49:39Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.72
+                  "price": 1.7
                 },
                 {
                   "name": "Scotland",
@@ -1163,15 +1163,15 @@
         {
           "key": "fanduel",
           "title": "FanDuel",
-          "last_update": "2026-06-19T08:00:31Z",
+          "last_update": "2026-06-19T08:50:15Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:31Z",
+              "last_update": "2026-06-19T08:50:15Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.71
+                  "price": 1.69
                 },
                 {
                   "name": "Scotland",
@@ -1188,11 +1188,11 @@
         {
           "key": "skybet",
           "title": "Sky Bet",
-          "last_update": "2026-06-19T08:00:10Z",
+          "last_update": "2026-06-19T08:49:39Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:09Z",
+              "last_update": "2026-06-19T08:49:39Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1213,15 +1213,15 @@
         {
           "key": "paddypower",
           "title": "Paddy Power",
-          "last_update": "2026-06-19T07:59:40Z",
+          "last_update": "2026-06-19T08:49:36Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T07:59:40Z",
+              "last_update": "2026-06-19T08:49:36Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.7
+                  "price": 1.67
                 },
                 {
                   "name": "Scotland",
@@ -1238,97 +1238,11 @@
         {
           "key": "smarkets",
           "title": "Smarkets",
-          "last_update": "2026-06-19T08:00:36Z",
+          "last_update": "2026-06-19T08:50:41Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:35Z",
-              "outcomes": [
-                {
-                  "name": "Morocco",
-                  "price": 1.76
-                },
-                {
-                  "name": "Scotland",
-                  "price": 5.8
-                },
-                {
-                  "name": "Draw",
-                  "price": 3.65
-                }
-              ]
-            },
-            {
-              "key": "h2h_lay",
-              "last_update": "2026-06-19T08:00:35Z",
-              "outcomes": [
-                {
-                  "name": "Morocco",
-                  "price": 1.78
-                },
-                {
-                  "name": "Scotland",
-                  "price": 6.0
-                },
-                {
-                  "name": "Draw",
-                  "price": 3.7
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "key": "betfair_ex_uk",
-          "title": "Betfair",
-          "last_update": "2026-06-19T08:00:32Z",
-          "markets": [
-            {
-              "key": "h2h",
-              "last_update": "2026-06-19T08:00:31Z",
-              "outcomes": [
-                {
-                  "name": "Morocco",
-                  "price": 1.77
-                },
-                {
-                  "name": "Scotland",
-                  "price": 5.8
-                },
-                {
-                  "name": "Draw",
-                  "price": 3.7
-                }
-              ]
-            },
-            {
-              "key": "h2h_lay",
-              "last_update": "2026-06-19T08:00:31Z",
-              "outcomes": [
-                {
-                  "name": "Morocco",
-                  "price": 1.78
-                },
-                {
-                  "name": "Scotland",
-                  "price": 6.0
-                },
-                {
-                  "name": "Draw",
-                  "price": 3.75
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "key": "betfair_ex_eu",
-          "title": "Betfair",
-          "last_update": "2026-06-19T08:00:48Z",
-          "markets": [
-            {
-              "key": "h2h",
-              "last_update": "2026-06-19T08:00:48Z",
+              "last_update": "2026-06-19T08:50:40Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1346,7 +1260,7 @@
             },
             {
               "key": "h2h_lay",
-              "last_update": "2026-06-19T08:00:48Z",
+              "last_update": "2026-06-19T08:50:40Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1365,21 +1279,21 @@
           ]
         },
         {
-          "key": "betfair_ex_au",
+          "key": "betfair_ex_uk",
           "title": "Betfair",
-          "last_update": "2026-06-19T08:00:59Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:59Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.77
+                  "price": 1.76
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.8
+                  "price": 5.9
                 },
                 {
                   "name": "Draw",
@@ -1389,7 +1303,93 @@
             },
             {
               "key": "h2h_lay",
-              "last_update": "2026-06-19T08:00:59Z",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.77
+                },
+                {
+                  "name": "Scotland",
+                  "price": 6.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betfair_ex_eu",
+          "title": "Betfair",
+          "last_update": "2026-06-19T08:50:50Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:50Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.76
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.9
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.7
+                }
+              ]
+            },
+            {
+              "key": "h2h_lay",
+              "last_update": "2026-06-19T08:50:50Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.77
+                },
+                {
+                  "name": "Scotland",
+                  "price": 6.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betfair_ex_au",
+          "title": "Betfair",
+          "last_update": "2026-06-19T08:50:42Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:42Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.77
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.9
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.7
+                }
+              ]
+            },
+            {
+              "key": "h2h_lay",
+              "last_update": "2026-06-19T08:50:42Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1410,11 +1410,11 @@
         {
           "key": "pinnacle",
           "title": "Pinnacle",
-          "last_update": "2026-06-19T08:00:42Z",
+          "last_update": "2026-06-19T08:50:26Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:42Z",
+              "last_update": "2026-06-19T08:50:26Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1422,42 +1422,42 @@
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.46
+                  "price": 5.65
                 },
                 {
                   "name": "Draw",
-                  "price": 3.67
+                  "price": 3.69
                 }
               ]
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T08:00:42Z",
+              "last_update": "2026-06-19T08:50:26Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.97,
+                  "price": 1.96,
                   "point": -0.75
                 },
                 {
                   "name": "Scotland",
-                  "price": 1.93,
+                  "price": 1.96,
                   "point": 0.75
                 }
               ]
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:42Z",
+              "last_update": "2026-06-19T08:50:26Z",
               "outcomes": [
                 {
                   "name": "Over",
-                  "price": 2.03,
+                  "price": 2.05,
                   "point": 2.25
                 },
                 {
                   "name": "Under",
-                  "price": 1.86,
+                  "price": 1.87,
                   "point": 2.25
                 }
               ]
@@ -1467,11 +1467,11 @@
         {
           "key": "coolbet",
           "title": "Coolbet",
-          "last_update": "2026-06-19T07:59:56Z",
+          "last_update": "2026-06-19T08:50:02Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T07:59:55Z",
+              "last_update": "2026-06-19T08:50:02Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1489,7 +1489,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T07:59:55Z",
+              "last_update": "2026-06-19T08:50:02Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -1508,11 +1508,11 @@
         {
           "key": "betonlineag",
           "title": "BetOnline.ag",
-          "last_update": "2026-06-19T08:00:33Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:32Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1530,7 +1530,7 @@
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T08:00:32Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1546,7 +1546,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:32Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -1565,19 +1565,19 @@
         {
           "key": "bovada",
           "title": "Bovada",
-          "last_update": "2026-06-19T07:58:55Z",
+          "last_update": "2026-06-19T08:45:43Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T07:58:55Z",
+              "last_update": "2026-06-19T08:45:43Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.72
+                  "price": 1.7
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.3
+                  "price": 5.45
                 },
                 {
                   "name": "Draw",
@@ -1587,23 +1587,23 @@
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T07:58:55Z",
+              "last_update": "2026-06-19T08:45:43Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.93,
+                  "price": 1.91,
                   "point": -0.75
                 },
                 {
                   "name": "Scotland",
-                  "price": 1.89,
+                  "price": 1.91,
                   "point": 0.75
                 }
               ]
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T07:58:55Z",
+              "last_update": "2026-06-19T08:45:43Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -1622,11 +1622,11 @@
         {
           "key": "everygame",
           "title": "Everygame",
-          "last_update": "2026-06-19T07:59:11Z",
+          "last_update": "2026-06-19T08:50:29Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T07:59:11Z",
+              "last_update": "2026-06-19T08:50:29Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1647,19 +1647,19 @@
         {
           "key": "draftkings",
           "title": "DraftKings",
-          "last_update": "2026-06-19T07:58:50Z",
+          "last_update": "2026-06-19T08:50:52Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T07:58:50Z",
+              "last_update": "2026-06-19T08:50:51Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.74
+                  "price": 1.71
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.25
+                  "price": 5.5
                 },
                 {
                   "name": "Draw",
@@ -1672,19 +1672,19 @@
         {
           "key": "betclic_fr",
           "title": "Betclic (FR)",
-          "last_update": "2026-06-19T07:56:40Z",
+          "last_update": "2026-06-19T08:49:14Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T07:56:40Z",
+              "last_update": "2026-06-19T08:49:14Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.73
+                  "price": 1.72
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.25
+                  "price": 5.5
                 },
                 {
                   "name": "Draw",
@@ -1697,11 +1697,11 @@
         {
           "key": "neds",
           "title": "Neds",
-          "last_update": "2026-06-19T08:00:57Z",
+          "last_update": "2026-06-19T08:50:02Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:57Z",
+              "last_update": "2026-06-19T08:50:02Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1722,11 +1722,11 @@
         {
           "key": "ladbrokes_au",
           "title": "Ladbrokes",
-          "last_update": "2026-06-19T08:00:32Z",
+          "last_update": "2026-06-19T08:50:03Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:32Z",
+              "last_update": "2026-06-19T08:50:03Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1747,11 +1747,11 @@
         {
           "key": "ladbrokes_uk",
           "title": "Ladbrokes",
-          "last_update": "2026-06-19T08:00:17Z",
+          "last_update": "2026-06-19T08:50:50Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:17Z",
+              "last_update": "2026-06-19T08:50:50Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1772,11 +1772,11 @@
         {
           "key": "betmgm",
           "title": "BetMGM",
-          "last_update": "2026-06-19T08:00:58Z",
+          "last_update": "2026-06-19T08:50:37Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:58Z",
+              "last_update": "2026-06-19T08:50:37Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1794,7 +1794,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:58Z",
+              "last_update": "2026-06-19T08:50:37Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -1813,11 +1813,11 @@
         {
           "key": "coral",
           "title": "Coral",
-          "last_update": "2026-06-19T08:00:42Z",
+          "last_update": "2026-06-19T08:50:40Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:42Z",
+              "last_update": "2026-06-19T08:50:40Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1838,11 +1838,11 @@
         {
           "key": "boylesports",
           "title": "BoyleSports",
-          "last_update": "2026-06-19T08:00:45Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:45Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1863,11 +1863,11 @@
         {
           "key": "sport888",
           "title": "888sport",
-          "last_update": "2026-06-19T08:00:55Z",
+          "last_update": "2026-06-19T08:50:26Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:55Z",
+              "last_update": "2026-06-19T08:50:25Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1888,11 +1888,11 @@
         {
           "key": "williamhill",
           "title": "William Hill",
-          "last_update": "2026-06-19T08:00:36Z",
+          "last_update": "2026-06-19T08:50:01Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:35Z",
+              "last_update": "2026-06-19T08:50:01Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1900,7 +1900,7 @@
                 },
                 {
                   "name": "Scotland",
-                  "price": 4.8
+                  "price": 5.0
                 },
                 {
                   "name": "Draw",
@@ -1910,7 +1910,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:35Z",
+              "last_update": "2026-06-19T08:50:01Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -1929,11 +1929,11 @@
         {
           "key": "tab",
           "title": "TAB",
-          "last_update": "2026-06-19T07:59:56Z",
+          "last_update": "2026-06-19T08:50:47Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T07:59:56Z",
+              "last_update": "2026-06-19T08:50:47Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1954,11 +1954,11 @@
         {
           "key": "codere_it",
           "title": "Codere (IT)",
-          "last_update": "2026-06-19T08:00:19Z",
+          "last_update": "2026-06-19T08:50:38Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:18Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -1976,7 +1976,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:18Z",
+              "last_update": "2026-06-19T08:50:38Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -1995,19 +1995,19 @@
         {
           "key": "betanysports",
           "title": "BetAnything",
-          "last_update": "2026-06-19T08:00:08Z",
+          "last_update": "2026-06-19T08:50:15Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:08Z",
+              "last_update": "2026-06-19T08:50:14Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.71
+                  "price": 1.7
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.3
+                  "price": 5.45
                 },
                 {
                   "name": "Draw",
@@ -2017,7 +2017,7 @@
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T08:00:08Z",
+              "last_update": "2026-06-19T08:50:14Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2033,7 +2033,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:08Z",
+              "last_update": "2026-06-19T08:50:14Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -2052,11 +2052,11 @@
         {
           "key": "matchbook",
           "title": "Matchbook",
-          "last_update": "2026-06-19T08:00:42Z",
+          "last_update": "2026-06-19T08:50:52Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:42Z",
+              "last_update": "2026-06-19T08:50:52Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2064,7 +2064,7 @@
                 },
                 {
                   "name": "Scotland",
-                  "price": 5.8
+                  "price": 5.9
                 },
                 {
                   "name": "Draw",
@@ -2074,7 +2074,7 @@
             },
             {
               "key": "h2h_lay",
-              "last_update": "2026-06-19T08:00:42Z",
+              "last_update": "2026-06-19T08:50:52Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2082,7 +2082,7 @@
                 },
                 {
                   "name": "Scotland",
-                  "price": 6.0
+                  "price": 6.2
                 },
                 {
                   "name": "Draw",
@@ -2092,7 +2092,7 @@
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T08:00:42Z",
+              "last_update": "2026-06-19T08:50:52Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2101,7 +2101,7 @@
                 },
                 {
                   "name": "Scotland",
-                  "price": 1.96,
+                  "price": 1.97,
                   "point": 0.75
                 }
               ]
@@ -2111,11 +2111,11 @@
         {
           "key": "betus",
           "title": "BetUS",
-          "last_update": "2026-06-19T08:00:18Z",
+          "last_update": "2026-06-19T08:50:50Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:18Z",
+              "last_update": "2026-06-19T08:50:50Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2133,7 +2133,7 @@
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T08:00:18Z",
+              "last_update": "2026-06-19T08:50:50Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2149,7 +2149,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:18Z",
+              "last_update": "2026-06-19T08:50:50Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -2168,11 +2168,11 @@
         {
           "key": "lowvig",
           "title": "LowVig.ag",
-          "last_update": "2026-06-19T08:00:44Z",
+          "last_update": "2026-06-19T08:50:40Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:44Z",
+              "last_update": "2026-06-19T08:50:40Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2190,7 +2190,7 @@
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T08:00:44Z",
+              "last_update": "2026-06-19T08:50:40Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2206,7 +2206,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:44Z",
+              "last_update": "2026-06-19T08:50:40Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -2225,11 +2225,11 @@
         {
           "key": "playup",
           "title": "PlayUp",
-          "last_update": "2026-06-19T08:00:43Z",
+          "last_update": "2026-06-19T08:50:15Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:43Z",
+              "last_update": "2026-06-19T08:50:15Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2247,7 +2247,7 @@
             },
             {
               "key": "spreads",
-              "last_update": "2026-06-19T08:00:43Z",
+              "last_update": "2026-06-19T08:50:15Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2263,7 +2263,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:43Z",
+              "last_update": "2026-06-19T08:50:15Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -2282,23 +2282,23 @@
         {
           "key": "betway",
           "title": "Betway",
-          "last_update": "2026-06-19T08:00:31Z",
+          "last_update": "2026-06-19T08:50:27Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:31Z",
+              "last_update": "2026-06-19T08:50:27Z",
               "outcomes": [
                 {
                   "name": "Morocco",
-                  "price": 1.75
+                  "price": 1.7
                 },
                 {
                   "name": "Scotland",
-                  "price": 4.75
+                  "price": 5.25
                 },
                 {
                   "name": "Draw",
-                  "price": 3.6
+                  "price": 3.5
                 }
               ]
             }
@@ -2307,11 +2307,11 @@
         {
           "key": "nordicbet",
           "title": "Nordic Bet",
-          "last_update": "2026-06-19T08:00:46Z",
+          "last_update": "2026-06-19T08:50:39Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:46Z",
+              "last_update": "2026-06-19T08:50:39Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2329,7 +2329,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:46Z",
+              "last_update": "2026-06-19T08:50:39Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -2348,11 +2348,11 @@
         {
           "key": "betsson",
           "title": "Betsson",
-          "last_update": "2026-06-19T08:00:32Z",
+          "last_update": "2026-06-19T08:50:51Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:31Z",
+              "last_update": "2026-06-19T08:50:51Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2370,7 +2370,7 @@
             },
             {
               "key": "totals",
-              "last_update": "2026-06-19T08:00:31Z",
+              "last_update": "2026-06-19T08:50:51Z",
               "outcomes": [
                 {
                   "name": "Over",
@@ -2389,11 +2389,11 @@
         {
           "key": "betvictor",
           "title": "Bet Victor",
-          "last_update": "2026-06-19T08:00:12Z",
+          "last_update": "2026-06-19T08:50:06Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:12Z",
+              "last_update": "2026-06-19T08:50:06Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -2414,11 +2414,11 @@
         {
           "key": "betfair_sb_uk",
           "title": "Betfair Sportsbook",
-          "last_update": "2026-06-19T08:00:31Z",
+          "last_update": "2026-06-19T08:50:01Z",
           "markets": [
             {
               "key": "h2h",
-              "last_update": "2026-06-19T08:00:31Z",
+              "last_update": "2026-06-19T08:50:01Z",
               "outcomes": [
                 {
                   "name": "Morocco",
@@ -35740,14 +35740,14 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 9.0,
+          "odd": 9.5,
           "score": "1:0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 23.0,
           "score": "2:0"
         },
         {
@@ -35761,14 +35761,14 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 56.0,
+          "odd": 61.0,
           "score": "3:0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 41.0,
           "score": "3:1"
         },
         {
@@ -35796,7 +35796,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 8.0,
+          "odd": 7.5,
           "score": "0:0"
         },
         {
@@ -35824,7 +35824,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 6.25,
+          "odd": 6.0,
           "score": "0:2"
         },
         {
@@ -35859,7 +35859,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 67.0,
+          "odd": 71.0,
           "score": "3:3"
         },
         {
@@ -36300,7 +36300,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 7.5,
+          "odd": 8.0,
           "score": "0:0"
         },
         {
@@ -36356,7 +36356,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 41.0,
+          "odd": 34.0,
           "score": "2:3"
         },
         {
@@ -36384,7 +36384,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 67.0,
+          "odd": 51.0,
           "score": "2:4"
         },
         {
@@ -36503,28 +36503,28 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 27.0,
           "score": "2:0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 16.0,
+          "odd": 16.25,
           "score": "2:1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 83.0,
+          "odd": 86.0,
           "score": "3:0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 56.0,
+          "odd": 58.0,
           "score": "3:1"
         },
         {
@@ -36545,35 +36545,35 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 6.1,
+          "odd": 6.15,
           "score": "1:1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 18.5,
+          "odd": 19.0,
           "score": "2:2"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 5.15,
+          "odd": 5.05,
           "score": "0:1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 6.85,
+          "odd": 6.75,
           "score": "0:2"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 13.0,
+          "odd": 12.75,
           "score": "0:3"
         },
         {
@@ -36601,7 +36601,7 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 106.0,
           "score": "3:3"
         },
         {
@@ -36622,35 +36622,35 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 83.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 83.0,
+          "odd": 81.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 98.0,
+          "odd": 96.0,
           "score": "1:5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 11.5,
+          "odd": 12.0,
           "score": "1:0"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 23.0,
           "score": "2:0"
         },
         {
@@ -36664,7 +36664,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 76.0,
           "score": "3:0"
         },
         {
@@ -36699,7 +36699,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 9.0,
+          "odd": 9.5,
           "score": "0:0"
         },
         {
@@ -36776,7 +36776,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 25.0,
           "score": "1:4"
         },
         {
@@ -36797,14 +36797,14 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 56.0,
+          "odd": 51.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 67.0,
+          "odd": 61.0,
           "score": "1:5"
         },
         {
@@ -36846,7 +36846,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 14.0,
+          "odd": 15.0,
           "score": "2:1"
         },
         {
@@ -36860,14 +36860,14 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 51.0,
+          "odd": 56.0,
           "score": "3:1"
         },
         {
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 61.0,
+          "odd": 71.0,
           "score": "3:2"
         },
         {
@@ -36895,7 +36895,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 6.0,
+          "odd": 6.5,
           "score": "1:1"
         },
         {
@@ -36916,7 +36916,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 7.5,
+          "odd": 7.0,
           "score": "0:2"
         },
         {
@@ -36930,7 +36930,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 8.5,
+          "odd": 8.0,
           "score": "1:2"
         },
         {
@@ -36951,7 +36951,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 91.0,
           "score": "3:3"
         },
         {
@@ -36965,7 +36965,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 31.0,
           "score": "1:4"
         },
         {
@@ -37021,7 +37021,7 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 16.0,
           "score": "2:1"
         },
         {
@@ -37343,14 +37343,14 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 11.5,
+          "odd": 12.0,
           "score": "1:0"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 23.0,
           "score": "2:0"
         },
         {
@@ -37385,7 +37385,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 201.0,
           "score": "4:0"
         },
         {
@@ -37399,7 +37399,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 9.0,
+          "odd": 9.5,
           "score": "0:0"
         },
         {
@@ -37462,7 +37462,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 76.0,
           "score": "3:3"
         },
         {
@@ -37476,7 +37476,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 25.0,
           "score": "1:4"
         },
         {
@@ -37490,21 +37490,21 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 151.0,
           "score": "4:2"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 61.0,
+          "odd": 51.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 91.0,
+          "odd": 151.0,
           "score": "0:6"
         },
         {
@@ -37518,7 +37518,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 201.0,
+          "odd": 81.0,
           "score": "1:6"
         },
         {
@@ -37532,14 +37532,14 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 401.0,
           "score": "2:6"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 121.0,
+          "odd": 101.0,
           "score": "3:4"
         },
         {
@@ -37553,14 +37553,14 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 226.0,
+          "odd": 151.0,
           "score": "5:1"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 226.0,
           "score": "5:2"
         },
         {
@@ -37574,7 +37574,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 201.0,
+          "odd": 276.0,
           "score": "6:1"
         },
         {
@@ -37588,21 +37588,21 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 301.0,
+          "odd": 126.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 126.0,
+          "odd": 451.0,
           "score": "3:5"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 226.0,
           "score": "3:6"
         },
         {
@@ -37623,7 +37623,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 201.0,
+          "odd": 251.0,
           "score": "5:3"
         },
         {
@@ -37952,7 +37952,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 226.0,
           "score": "0:7"
         },
         {
@@ -38211,21 +38211,21 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 125.0,
+          "odd": 130.0,
           "score": "3:0"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 75.0,
+          "odd": 80.0,
           "score": "3:1"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 95.0,
+          "odd": 100.0,
           "score": "3:2"
         },
         {
@@ -38253,7 +38253,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 6.6,
+          "odd": 6.7,
           "score": "1:1"
         },
         {
@@ -38281,7 +38281,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 14.0,
+          "odd": 13.5,
           "score": "0:3"
         },
         {
@@ -38302,14 +38302,14 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 42.0,
+          "odd": 40.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 140.0,
+          "odd": 110.0,
           "score": "3:3"
         },
         {
@@ -38323,14 +38323,14 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 44.0,
+          "odd": 42.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 105.0,
+          "odd": 100.0,
           "score": "2:4"
         },
         {
@@ -38344,21 +38344,21 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 235.0,
           "score": "3:4"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 240.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 220.0,
           "score": "4:4"
         },
         {
@@ -38400,7 +38400,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 60.0,
+          "odd": 65.0,
           "score": "3:2"
         },
         {
@@ -38435,7 +38435,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 14.0,
+          "odd": 15.0,
           "score": "2:2"
         },
         {
@@ -38484,7 +38484,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 80.0,
+          "odd": 90.0,
           "score": "3:3"
         },
         {
@@ -39212,28 +39212,28 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 10.25,
+          "odd": 10.75,
           "score": "1:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 27.0,
+          "odd": 30.0,
           "score": "2:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 17.5,
+          "odd": 18.0,
           "score": "2:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 100.0,
+          "odd": 110.0,
           "score": "3:0"
         },
         {
@@ -39247,35 +39247,35 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 75.0,
+          "odd": 80.0,
           "score": "3:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 450.0,
+          "odd": 500.0,
           "score": "4:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 300.0,
+          "odd": 350.0,
           "score": "4:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 7.4,
+          "odd": 7.3,
           "score": "0:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 7.1,
+          "odd": 7.0,
           "score": "1:1"
         },
         {
@@ -39289,21 +39289,21 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 5.6,
+          "odd": 5.5,
           "score": "0:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 7.7,
+          "odd": 7.5,
           "score": "0:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 14.5,
+          "odd": 14.0,
           "score": "0:3"
         },
         {
@@ -39352,28 +39352,28 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 90.0,
+          "odd": 100.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 350.0,
+          "odd": 400.0,
           "score": "4:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 110.0,
+          "odd": 100.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 400.0,
+          "odd": 350.0,
           "score": "0:6"
         },
         {
@@ -39408,7 +39408,7 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 300.0,
+          "odd": 350.0,
           "score": "3:4"
         },
         {
@@ -39436,7 +39436,7 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 900.0,
+          "odd": 1000.0,
           "score": "3:5"
         },
         {
@@ -39506,28 +39506,28 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 8.1,
+          "odd": 8.3,
           "score": "0:0"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 6.9,
+          "odd": 6.8,
           "score": "1:1"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 20.0,
           "score": "2:2"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 5.7,
+          "odd": 5.8,
           "score": "0:1"
         },
         {
@@ -39604,21 +39604,21 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 225.0,
+          "odd": 200.0,
           "score": "3:4"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 275.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 325.0,
           "score": "4:4"
         },
         {
@@ -39760,14 +39760,14 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 9.0,
+          "odd": 9.5,
           "score": "1:0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 23.0,
           "score": "2:0"
         },
         {
@@ -39781,14 +39781,14 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 56.0,
+          "odd": 61.0,
           "score": "3:0"
         },
         {
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 41.0,
           "score": "3:1"
         },
         {
@@ -39816,7 +39816,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 8.0,
+          "odd": 7.5,
           "score": "0:0"
         },
         {
@@ -39844,7 +39844,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 6.25,
+          "odd": 6.0,
           "score": "0:2"
         },
         {
@@ -39879,7 +39879,7 @@
           "bookmaker_id": 1,
           "bookmaker": "10Bet",
           "market": "Exact Score",
-          "odd": 67.0,
+          "odd": 71.0,
           "score": "3:3"
         },
         {
@@ -40320,7 +40320,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 7.5,
+          "odd": 8.0,
           "score": "0:0"
         },
         {
@@ -40376,7 +40376,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 41.0,
+          "odd": 34.0,
           "score": "2:3"
         },
         {
@@ -40404,7 +40404,7 @@
           "bookmaker_id": 8,
           "bookmaker": "Bet365",
           "market": "Exact Score",
-          "odd": 67.0,
+          "odd": 51.0,
           "score": "2:4"
         },
         {
@@ -40523,28 +40523,28 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 27.0,
           "score": "2:0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 16.0,
+          "odd": 16.25,
           "score": "2:1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 83.0,
+          "odd": 86.0,
           "score": "3:0"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 56.0,
+          "odd": 58.0,
           "score": "3:1"
         },
         {
@@ -40565,35 +40565,35 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 6.1,
+          "odd": 6.15,
           "score": "1:1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 18.5,
+          "odd": 19.0,
           "score": "2:2"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 5.15,
+          "odd": 5.05,
           "score": "0:1"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 6.85,
+          "odd": 6.75,
           "score": "0:2"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 13.0,
+          "odd": 12.75,
           "score": "0:3"
         },
         {
@@ -40621,7 +40621,7 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 106.0,
           "score": "3:3"
         },
         {
@@ -40642,35 +40642,35 @@
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 83.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 83.0,
+          "odd": 81.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 2,
           "bookmaker": "Marathonbet",
           "market": "Exact Score",
-          "odd": 98.0,
+          "odd": 96.0,
           "score": "1:5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 11.5,
+          "odd": 12.0,
           "score": "1:0"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 23.0,
           "score": "2:0"
         },
         {
@@ -40684,7 +40684,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 76.0,
           "score": "3:0"
         },
         {
@@ -40719,7 +40719,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 9.0,
+          "odd": 9.5,
           "score": "0:0"
         },
         {
@@ -40796,7 +40796,7 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 25.0,
           "score": "1:4"
         },
         {
@@ -40817,14 +40817,14 @@
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 56.0,
+          "odd": 51.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 16,
           "bookmaker": "Unibet",
           "market": "Exact Score",
-          "odd": 67.0,
+          "odd": 61.0,
           "score": "1:5"
         },
         {
@@ -40866,7 +40866,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 14.0,
+          "odd": 15.0,
           "score": "2:1"
         },
         {
@@ -40880,14 +40880,14 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 51.0,
+          "odd": 56.0,
           "score": "3:1"
         },
         {
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 61.0,
+          "odd": 71.0,
           "score": "3:2"
         },
         {
@@ -40915,7 +40915,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 6.0,
+          "odd": 6.5,
           "score": "1:1"
         },
         {
@@ -40936,7 +40936,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 7.5,
+          "odd": 7.0,
           "score": "0:2"
         },
         {
@@ -40950,7 +40950,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 8.5,
+          "odd": 8.0,
           "score": "1:2"
         },
         {
@@ -40971,7 +40971,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 91.0,
           "score": "3:3"
         },
         {
@@ -40985,7 +40985,7 @@
           "bookmaker_id": 3,
           "bookmaker": "Betfair",
           "market": "Exact Score",
-          "odd": 34.0,
+          "odd": 31.0,
           "score": "1:4"
         },
         {
@@ -41041,7 +41041,7 @@
           "bookmaker_id": 36,
           "bookmaker": "BetVictor",
           "market": "Exact Score",
-          "odd": 15.0,
+          "odd": 16.0,
           "score": "2:1"
         },
         {
@@ -41363,14 +41363,14 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 11.5,
+          "odd": 12.0,
           "score": "1:0"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 23.0,
           "score": "2:0"
         },
         {
@@ -41405,7 +41405,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 101.0,
+          "odd": 201.0,
           "score": "4:0"
         },
         {
@@ -41419,7 +41419,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 9.0,
+          "odd": 9.5,
           "score": "0:0"
         },
         {
@@ -41482,7 +41482,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 71.0,
+          "odd": 76.0,
           "score": "3:3"
         },
         {
@@ -41496,7 +41496,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 26.0,
+          "odd": 25.0,
           "score": "1:4"
         },
         {
@@ -41510,21 +41510,21 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 81.0,
+          "odd": 151.0,
           "score": "4:2"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 61.0,
+          "odd": 51.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 91.0,
+          "odd": 151.0,
           "score": "0:6"
         },
         {
@@ -41538,7 +41538,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 201.0,
+          "odd": 81.0,
           "score": "1:6"
         },
         {
@@ -41552,14 +41552,14 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 401.0,
           "score": "2:6"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 121.0,
+          "odd": 101.0,
           "score": "3:4"
         },
         {
@@ -41573,14 +41573,14 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 226.0,
+          "odd": 151.0,
           "score": "5:1"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 226.0,
           "score": "5:2"
         },
         {
@@ -41594,7 +41594,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 201.0,
+          "odd": 276.0,
           "score": "6:1"
         },
         {
@@ -41608,21 +41608,21 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 301.0,
+          "odd": 126.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 126.0,
+          "odd": 451.0,
           "score": "3:5"
         },
         {
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 226.0,
           "score": "3:6"
         },
         {
@@ -41643,7 +41643,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 201.0,
+          "odd": 251.0,
           "score": "5:3"
         },
         {
@@ -41972,7 +41972,7 @@
           "bookmaker_id": 4,
           "bookmaker": "Pinnacle",
           "market": "Exact Score",
-          "odd": 151.0,
+          "odd": 226.0,
           "score": "0:7"
         },
         {
@@ -42231,21 +42231,21 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 125.0,
+          "odd": 130.0,
           "score": "3:0"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 75.0,
+          "odd": 80.0,
           "score": "3:1"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 95.0,
+          "odd": 100.0,
           "score": "3:2"
         },
         {
@@ -42273,7 +42273,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 6.6,
+          "odd": 6.7,
           "score": "1:1"
         },
         {
@@ -42301,7 +42301,7 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 14.0,
+          "odd": 13.5,
           "score": "0:3"
         },
         {
@@ -42322,14 +42322,14 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 42.0,
+          "odd": 40.0,
           "score": "2:3"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 140.0,
+          "odd": 110.0,
           "score": "3:3"
         },
         {
@@ -42343,14 +42343,14 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 44.0,
+          "odd": 42.0,
           "score": "1:4"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 105.0,
+          "odd": 100.0,
           "score": "2:4"
         },
         {
@@ -42364,21 +42364,21 @@
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 235.0,
           "score": "3:4"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 240.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 5,
           "bookmaker": "SBO",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 220.0,
           "score": "4:4"
         },
         {
@@ -42420,7 +42420,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 60.0,
+          "odd": 65.0,
           "score": "3:2"
         },
         {
@@ -42455,7 +42455,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 14.0,
+          "odd": 15.0,
           "score": "2:2"
         },
         {
@@ -42504,7 +42504,7 @@
           "bookmaker_id": 11,
           "bookmaker": "1xBet",
           "market": "Exact Score",
-          "odd": 80.0,
+          "odd": 90.0,
           "score": "3:3"
         },
         {
@@ -43232,28 +43232,28 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 10.25,
+          "odd": 10.75,
           "score": "1:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 27.0,
+          "odd": 30.0,
           "score": "2:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 17.5,
+          "odd": 18.0,
           "score": "2:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 100.0,
+          "odd": 110.0,
           "score": "3:0"
         },
         {
@@ -43267,35 +43267,35 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 75.0,
+          "odd": 80.0,
           "score": "3:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 450.0,
+          "odd": 500.0,
           "score": "4:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 300.0,
+          "odd": 350.0,
           "score": "4:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 7.4,
+          "odd": 7.3,
           "score": "0:0"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 7.1,
+          "odd": 7.0,
           "score": "1:1"
         },
         {
@@ -43309,21 +43309,21 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 5.6,
+          "odd": 5.5,
           "score": "0:1"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 7.7,
+          "odd": 7.5,
           "score": "0:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 14.5,
+          "odd": 14.0,
           "score": "0:3"
         },
         {
@@ -43372,28 +43372,28 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 90.0,
+          "odd": 100.0,
           "score": "2:4"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 350.0,
+          "odd": 400.0,
           "score": "4:2"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 110.0,
+          "odd": 100.0,
           "score": "0:5"
         },
         {
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 400.0,
+          "odd": 350.0,
           "score": "0:6"
         },
         {
@@ -43428,7 +43428,7 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 300.0,
+          "odd": 350.0,
           "score": "3:4"
         },
         {
@@ -43456,7 +43456,7 @@
           "bookmaker_id": 32,
           "bookmaker": "Betano",
           "market": "Exact Score",
-          "odd": 900.0,
+          "odd": 1000.0,
           "score": "3:5"
         },
         {
@@ -43526,28 +43526,28 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 8.1,
+          "odd": 8.3,
           "score": "0:0"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 6.9,
+          "odd": 6.8,
           "score": "1:1"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 21.0,
+          "odd": 20.0,
           "score": "2:2"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 5.7,
+          "odd": 5.8,
           "score": "0:1"
         },
         {
@@ -43624,21 +43624,21 @@
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 225.0,
+          "odd": 200.0,
           "score": "3:4"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 275.0,
           "score": "4:3"
         },
         {
           "bookmaker_id": 34,
           "bookmaker": "Superbet",
           "market": "Exact Score",
-          "odd": 250.0,
+          "odd": 325.0,
           "score": "4:4"
         },
         {
@@ -43776,6 +43776,2434 @@
         }
       ],
       "message": "强制刷新成功。"
+    }
+  },
+  "effective_winner_totals": {
+    "found": true,
+    "home_win": 5.75,
+    "draw": 3.6,
+    "away_win": 1.66,
+    "over_under_line": 2.5,
+    "asian_handicap": [
+      {
+        "line": 0.5,
+        "home_odds": 2.07,
+        "away_odds": 1.73,
+        "bookmaker": "GTbets"
+      },
+      {
+        "line": 1.5,
+        "home_odds": 1.34,
+        "away_odds": 3.44,
+        "bookmaker": "1xBet"
+      },
+      {
+        "line": 0.5,
+        "home_odds": 2.13,
+        "away_odds": 1.72,
+        "bookmaker": "MyBookie.ag"
+      },
+      {
+        "line": 0.75,
+        "home_odds": 1.96,
+        "away_odds": 1.96,
+        "bookmaker": "Pinnacle"
+      },
+      {
+        "line": 0.5,
+        "home_odds": 2.19,
+        "away_odds": 1.74,
+        "bookmaker": "BetOnline.ag"
+      },
+      {
+        "line": 0.75,
+        "home_odds": 1.91,
+        "away_odds": 1.91,
+        "bookmaker": "Bovada"
+      },
+      {
+        "line": 0.5,
+        "home_odds": 2.15,
+        "away_odds": 1.74,
+        "bookmaker": "BetAnything"
+      },
+      {
+        "line": 0.75,
+        "home_odds": 1.97,
+        "away_odds": 2.0,
+        "bookmaker": "Matchbook"
+      },
+      {
+        "line": 0.5,
+        "home_odds": 2.15,
+        "away_odds": 1.74,
+        "bookmaker": "BetUS"
+      },
+      {
+        "line": 0.5,
+        "home_odds": 2.19,
+        "away_odds": 1.74,
+        "bookmaker": "LowVig.ag"
+      },
+      {
+        "line": 1.5,
+        "home_odds": 1.36,
+        "away_odds": 3.1,
+        "bookmaker": "PlayUp"
+      }
+    ],
+    "over_under": [
+      {
+        "line": 2.5,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
+        "bookmaker": "Unibet"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.17,
+        "under_odds": 1.71,
+        "bookmaker": "Unibet (SE)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
+        "bookmaker": "LeoVegas"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
+        "bookmaker": "Grosvenor"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
+        "bookmaker": "Casumo"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
+        "bookmaker": "BetRivers"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.2,
+        "under_odds": 1.66,
+        "bookmaker": "GTbets"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
+        "bookmaker": "Unibet (NL)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.28,
+        "under_odds": 1.67,
+        "bookmaker": "1xBet"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.08,
+        "under_odds": 1.65,
+        "bookmaker": "PMU (FR)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.14,
+        "under_odds": 1.68,
+        "bookmaker": "TABtouch"
+      },
+      {
+        "line": 2.0,
+        "over_odds": 1.68,
+        "under_odds": 2.2,
+        "bookmaker": "MyBookie.ag"
+      },
+      {
+        "line": 2.25,
+        "over_odds": 2.05,
+        "under_odds": 1.87,
+        "bookmaker": "Pinnacle"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.26,
+        "under_odds": 1.69,
+        "bookmaker": "Coolbet"
+      },
+      {
+        "line": 2.0,
+        "over_odds": 1.71,
+        "under_odds": 2.23,
+        "bookmaker": "BetOnline.ag"
+      },
+      {
+        "line": 2.25,
+        "over_odds": 2.0,
+        "under_odds": 1.83,
+        "bookmaker": "Bovada"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.25,
+        "under_odds": 1.62,
+        "bookmaker": "BetMGM"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.15,
+        "under_odds": 1.65,
+        "bookmaker": "William Hill"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.15,
+        "under_odds": 1.6,
+        "bookmaker": "Codere (IT)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.3,
+        "under_odds": 1.62,
+        "bookmaker": "BetAnything"
+      },
+      {
+        "line": 2.0,
+        "over_odds": 1.69,
+        "under_odds": 2.25,
+        "bookmaker": "BetUS"
+      },
+      {
+        "line": 2.0,
+        "over_odds": 1.71,
+        "under_odds": 2.23,
+        "bookmaker": "LowVig.ag"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.25,
+        "under_odds": 1.6,
+        "bookmaker": "PlayUp"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.3,
+        "under_odds": 1.65,
+        "bookmaker": "Nordic Bet"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 2.3,
+        "under_odds": 1.65,
+        "bookmaker": "Betsson"
+      }
+    ],
+    "raw_probabilities": {
+      "home_win": 0.17391304347826086,
+      "draw": 0.2777777777777778,
+      "away_win": 0.6024096385542169
+    },
+    "implied_probabilities": {
+      "home_win": 0.16498716214350787,
+      "draw": 0.26352116175699175,
+      "away_win": 0.5714916760995002
+    },
+    "source": "The Odds API / Unibet",
+    "event_title": "Scotland vs Morocco",
+    "event_id": "4cd769aa7bae0ad9762bd69b80ef2903",
+    "message": "已强制刷新 The Odds API 胜平负、让球、大小球。",
+    "cache": {
+      "source": "fresh api response",
+      "sport_key": "soccer_fifa_world_cup",
+      "date_key": "2026-06-19",
+      "events_count": 2
+    },
+    "request_headers": {
+      "x-requests-used": "284",
+      "x-requests-remaining": "216",
+      "x-requests-last": "12"
+    },
+    "raw_event": {
+      "id": "4cd769aa7bae0ad9762bd69b80ef2903",
+      "sport_key": "soccer_fifa_world_cup",
+      "sport_title": "FIFA World Cup",
+      "commence_time": "2026-06-19T22:00:00Z",
+      "home_team": "Scotland",
+      "away_team": "Morocco",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2026-06-19T08:50:14Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.66
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.75
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.14,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.68,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "winamax_de",
+          "title": "Winamax (DE)",
+          "last_update": "2026-06-19T08:50:39Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:39Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.72
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.2
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.7
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_se",
+          "title": "Unibet (SE)",
+          "last_update": "2026-06-19T08:49:50Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.68
+                },
+                {
+                  "name": "Scotland",
+                  "price": 6.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.7
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.17,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.71,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "leovegas",
+          "title": "LeoVegas",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.66
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.8
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.14,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.68,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "livescorebet",
+          "title": "LiveScore Bet",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.64
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.6
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.55
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "grosvenor",
+          "title": "Grosvenor",
+          "last_update": "2026-06-19T08:50:25Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.64
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.6
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.55
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.14,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.68,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "casumo",
+          "title": "Casumo",
+          "last_update": "2026-06-19T08:50:37Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.66
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.8
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.14,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.68,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2026-06-19T08:50:40Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:40Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.66
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.8
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:40Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.14,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.68,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2026-06-19T08:50:04Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:04Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.78
+                },
+                {
+                  "name": "Scotland",
+                  "price": 4.97
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.59
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:50:04Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.73,
+                  "point": -0.5
+                },
+                {
+                  "name": "Scotland",
+                  "price": 2.07,
+                  "point": 0.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.2,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.66,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "virginbet",
+          "title": "Virgin Bet",
+          "last_update": "2026-06-19T08:50:02Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:02Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.64
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.6
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.55
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "winamax_fr",
+          "title": "Winamax (FR)",
+          "last_update": "2026-06-19T08:50:39Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:39Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.1
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.65
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_nl",
+          "title": "Unibet (NL)",
+          "last_update": "2026-06-19T08:50:13Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:13Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 6.1
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.75
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.14,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.68,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "onexbet",
+          "title": "1xBet",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.77
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.44
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.73
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 3.44,
+                  "point": -1.5
+                },
+                {
+                  "name": "Scotland",
+                  "price": 1.34,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.28,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.67,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "tipico_de",
+          "title": "Tipico",
+          "last_update": "2026-06-19T08:50:14Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.67
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.7
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_fr",
+          "title": "Unibet (FR)",
+          "last_update": "2026-06-19T08:49:53Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.72
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.5
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.65
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pmu_fr",
+          "title": "PMU (FR)",
+          "last_update": "2026-06-19T08:50:02Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:01Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.64
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.6
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.55
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.08,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.65,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "tabtouch",
+          "title": "TABtouch",
+          "last_update": "2026-06-19T08:50:51Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:51Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.64
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.6
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.55
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.14,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.68,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "leovegas_se",
+          "title": "LeoVegas (SE)",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.66
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.8
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_uk",
+          "title": "Unibet (UK)",
+          "last_update": "2026-06-19T08:50:27Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.75
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.25
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "marathonbet",
+          "title": "Marathon Bet",
+          "last_update": "2026-06-19T08:50:42Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:42Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 4.65
+                },
+                {
+                  "name": "Scotland",
+                  "price": 10.5
+                },
+                {
+                  "name": "Draw",
+                  "price": 1.25
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2026-06-19T08:49:24Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:49:24Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.72
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.1
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.55
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:49:24Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.72,
+                  "point": -0.5
+                },
+                {
+                  "name": "Scotland",
+                  "price": 2.13,
+                  "point": 0.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:49:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 1.68,
+                  "point": 2.0
+                },
+                {
+                  "name": "Under",
+                  "price": 2.2,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetau",
+          "title": "PointsBet (AU)",
+          "last_update": "2026-06-19T08:49:39Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:49:39Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.74
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.5
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betfred_uk",
+          "title": "Betfred (UK)",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.73
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.5
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betr_au",
+          "title": "Betr",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.67
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.5
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betright",
+          "title": "Bet Right",
+          "last_update": "2026-06-19T08:50:03Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:02Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.25
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sportsbet",
+          "title": "SportsBet",
+          "last_update": "2026-06-19T08:49:39Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:49:39Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.5
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2026-06-19T08:50:15Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.69
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.6
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "skybet",
+          "title": "Sky Bet",
+          "last_update": "2026-06-19T08:49:39Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:49:39Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.67
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "paddypower",
+          "title": "Paddy Power",
+          "last_update": "2026-06-19T08:49:36Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.67
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.5
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "smarkets",
+          "title": "Smarkets",
+          "last_update": "2026-06-19T08:50:41Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:40Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.77
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.9
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.7
+                }
+              ]
+            },
+            {
+              "key": "h2h_lay",
+              "last_update": "2026-06-19T08:50:40Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.78
+                },
+                {
+                  "name": "Scotland",
+                  "price": 6.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betfair_ex_uk",
+          "title": "Betfair",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.76
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.9
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.7
+                }
+              ]
+            },
+            {
+              "key": "h2h_lay",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.77
+                },
+                {
+                  "name": "Scotland",
+                  "price": 6.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betfair_ex_eu",
+          "title": "Betfair",
+          "last_update": "2026-06-19T08:50:50Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:50Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.76
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.9
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.7
+                }
+              ]
+            },
+            {
+              "key": "h2h_lay",
+              "last_update": "2026-06-19T08:50:50Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.77
+                },
+                {
+                  "name": "Scotland",
+                  "price": 6.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betfair_ex_au",
+          "title": "Betfair",
+          "last_update": "2026-06-19T08:50:42Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:42Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.77
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.9
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.7
+                }
+              ]
+            },
+            {
+              "key": "h2h_lay",
+              "last_update": "2026-06-19T08:50:42Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.78
+                },
+                {
+                  "name": "Scotland",
+                  "price": 6.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pinnacle",
+          "title": "Pinnacle",
+          "last_update": "2026-06-19T08:50:26Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.74
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.65
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.69
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.96,
+                  "point": -0.75
+                },
+                {
+                  "name": "Scotland",
+                  "price": 1.96,
+                  "point": 0.75
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.05,
+                  "point": 2.25
+                },
+                {
+                  "name": "Under",
+                  "price": 1.87,
+                  "point": 2.25
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "coolbet",
+          "title": "Coolbet",
+          "last_update": "2026-06-19T08:50:02Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:02Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.75
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.8
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.26,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.69,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.74
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.62
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.74,
+                  "point": -0.5
+                },
+                {
+                  "name": "Scotland",
+                  "price": 2.19,
+                  "point": 0.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 1.71,
+                  "point": 2.0
+                },
+                {
+                  "name": "Under",
+                  "price": 2.23,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2026-06-19T08:45:43Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:45:43Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.45
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.55
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:45:43Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.91,
+                  "point": -0.75
+                },
+                {
+                  "name": "Scotland",
+                  "price": 1.91,
+                  "point": 0.75
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:45:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.0,
+                  "point": 2.25
+                },
+                {
+                  "name": "Under",
+                  "price": 1.83,
+                  "point": 2.25
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "everygame",
+          "title": "Everygame",
+          "last_update": "2026-06-19T08:50:29Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:29Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.73
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.25
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2026-06-19T08:50:52Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:51Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.71
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.5
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betclic_fr",
+          "title": "Betclic (FR)",
+          "last_update": "2026-06-19T08:49:14Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:49:14Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.72
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.5
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.65
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "neds",
+          "title": "Neds",
+          "last_update": "2026-06-19T08:50:02Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:02Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.73
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "ladbrokes_au",
+          "title": "Ladbrokes",
+          "last_update": "2026-06-19T08:50:03Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:03Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.73
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "ladbrokes_uk",
+          "title": "Ladbrokes",
+          "last_update": "2026-06-19T08:50:50Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:50Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.73
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2026-06-19T08:50:37Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.71
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.25,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.62,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "coral",
+          "title": "Coral",
+          "last_update": "2026-06-19T08:50:40Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:40Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.73
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "boylesports",
+          "title": "BoyleSports",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 4.75
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sport888",
+          "title": "888sport",
+          "last_update": "2026-06-19T08:50:26Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 4.8
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.3
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill",
+          "title": "William Hill",
+          "last_update": "2026-06-19T08:50:01Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:01Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.73
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.4
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.15,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.65,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "tab",
+          "title": "TAB",
+          "last_update": "2026-06-19T08:50:47Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:47Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "codere_it",
+          "title": "Codere (IT)",
+          "last_update": "2026-06-19T08:50:38Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.73
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.2
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.15,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.6,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betanysports",
+          "title": "BetAnything",
+          "last_update": "2026-06-19T08:50:15Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.45
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.55
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.74,
+                  "point": -0.5
+                },
+                {
+                  "name": "Scotland",
+                  "price": 2.15,
+                  "point": 0.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.3,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.62,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "matchbook",
+          "title": "Matchbook",
+          "last_update": "2026-06-19T08:50:52Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:52Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.77
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.9
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.7
+                }
+              ]
+            },
+            {
+              "key": "h2h_lay",
+              "last_update": "2026-06-19T08:50:52Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.78
+                },
+                {
+                  "name": "Scotland",
+                  "price": 6.2
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.75
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:50:52Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 2.0,
+                  "point": -0.75
+                },
+                {
+                  "name": "Scotland",
+                  "price": 1.97,
+                  "point": 0.75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2026-06-19T08:50:50Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:50Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.74
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.15
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:50:50Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.74,
+                  "point": -0.5
+                },
+                {
+                  "name": "Scotland",
+                  "price": 2.15,
+                  "point": 0.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 1.69,
+                  "point": 2.0
+                },
+                {
+                  "name": "Under",
+                  "price": 2.25,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2026-06-19T08:50:40Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:40Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.74
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.62
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.6
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:50:40Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.74,
+                  "point": -0.5
+                },
+                {
+                  "name": "Scotland",
+                  "price": 2.19,
+                  "point": 0.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:40Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 1.71,
+                  "point": 2.0
+                },
+                {
+                  "name": "Under",
+                  "price": 2.23,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "playup",
+          "title": "PlayUp",
+          "last_update": "2026-06-19T08:50:15Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.72
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.25
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.4
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2026-06-19T08:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 3.1,
+                  "point": -1.5
+                },
+                {
+                  "name": "Scotland",
+                  "price": 1.36,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.25,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.6,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betway",
+          "title": "Betway",
+          "last_update": "2026-06-19T08:50:27Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.25
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "nordicbet",
+          "title": "Nordic Bet",
+          "last_update": "2026-06-19T08:50:39Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:39Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.75
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.55
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.3,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.65,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betsson",
+          "title": "Betsson",
+          "last_update": "2026-06-19T08:50:51Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:51Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.75
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.55
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2026-06-19T08:50:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 2.3,
+                  "point": 2.5
+                },
+                {
+                  "name": "Under",
+                  "price": 1.65,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betvictor",
+          "title": "Bet Victor",
+          "last_update": "2026-06-19T08:50:06Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.7
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.25
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betfair_sb_uk",
+          "title": "Betfair Sportsbook",
+          "last_update": "2026-06-19T08:50:01Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2026-06-19T08:50:01Z",
+              "outcomes": [
+                {
+                  "name": "Morocco",
+                  "price": 1.62
+                },
+                {
+                  "name": "Scotland",
+                  "price": 5.0
+                },
+                {
+                  "name": "Draw",
+                  "price": 3.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   }
 }

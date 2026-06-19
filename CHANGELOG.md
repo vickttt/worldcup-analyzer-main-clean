@@ -2,6 +2,27 @@
 
 ## 2026-06-19
 
+- Collapsed My Actual Odds, My Portfolio, and Actual-vs-Market Value Analysis by default to keep Core Decision focused on Portfolio Ranking and risk notes.
+- Added compact expander titles showing odds count, saved time, completeness, portfolio stake, and value-market summary.
+- Simplified portfolio detail dialogs by removing repeated risk path tables and keeping only differences, bet content, asset role, reason, and risk exposure.
+- Removed the duplicated standalone Recommendation block from Core Decision; Portfolio Ranking first place is now the recommendation.
+- Compressed Portfolio Ranking to rank, name, EV, ROI, and score only, with differences shown inside detail dialogs.
+- Limited actual-vs-market odds display to Top 10 by EV lift by default.
+- Reordered Team Information around lineup, injuries, key players, recent form, and then profile data.
+- Added Market Consensus to the market tab for main Asian handicap, totals, and correct score paths.
+- Reduced Advanced Research to Kelly, insurance cost, and scoring source only.
+- Added hierarchical path consistency checks across winner, handicap, totals, and correct score candidates.
+- Penalized correct scores that conflict with the main direction, handicap line, or totals path, preventing combinations such as Over 3.5 with 1:0.
+- Added portfolio-level path consistency into strategy scoring and detail explanations.
+- Restored top-level detail tabs and simplified the Core Decision page to recommendation, portfolio ranking, my portfolio, and risk notes.
+- Replaced long portfolio cards with a compact comparison table plus on-demand detail dialogs.
+- Moved Match Snapshot, data completeness, debug information, and Advanced Research into the Data Source tab.
+- Added backend performance logging for homepage, detail page, data loading, portfolio optimizer, tabs, and team intelligence.
+- Added `scripts/performance_report.py` to summarize recent page timings and slowest modules.
+- Fixed Chinese team-name mapping for Australia, Scotland, Morocco, Haiti, Turkiye, and Paraguay so schedule-card detail pages resolve the correct local database folders.
+- Added API-Football All Odds fallback for Match Winner and Goals Over/Under when The Odds API is missing but local API-Football data exists.
+- Added `scripts/build_worldcup_index.py` and generated `data/worldcup2026/index.json` for the World Cup archive.
+- Verified local database odds display for USA vs Australia, Scotland vs Morocco, Brazil vs Haiti, and Turkiye vs Paraguay.
 - Added Terminal Fetch Mode entrypoint `scripts/refresh_api_data.py`.
 - Added fetch logs under `data/fetch_logs/` for terminal API refresh diagnostics.
 - Added local World Cup database reader so the detail page prefers `data/worldcup2026` JSON before live API calls.
@@ -72,3 +93,27 @@
 - Added `GPT_CONTEXT.md` as the current project state file.
 - Added `scripts/update_gpt_context.py` to refresh GPT context after major changes.
 - Historical notes should be kept here instead of expanding `GPT_CONTEXT.md`.
+- Reorganized the match detail page around portfolio decisions instead of separate model tables.
+- Moved 我的实际赔率 and 我的组合 into a side-by-side input area.
+- Simplified Core Decision to key cards,首选组合, Portfolio Ranking, and result coverage.
+- Merged pre-match asset roles, settlement preview, reasons, risk paths, and outcome preview into per-portfolio detail.
+- Moved Kelly, Sharpe, insurance cost, marginal contribution, scoring source, and correlation matrix into Advanced Research.
+- Renamed post-match Recommendation Audit display to 组合排行榜 and moved role contribution into Advanced Research.
+- Shortened the 我的实际赔率 card to keep it visually balanced with 我的组合.
+- Unified 首选组合 and 推荐组合 naming into 推荐组合 only.
+- Removed the Portfolio Ranking 展开详情 column.
+- Replaced multiple portfolio detail checkboxes with a single 查看组合 dropdown.
+- Merged portfolio content, asset role, reason, and risk exposure into one compact 组合详情 table.
+- Removed default long risk/path tables from Core Decision and kept deep research behind Advanced Research.
+- Compressed Portfolio Ranking to Top 6 default display.
+- Removed the portfolio selector and merged details directly into each ranking item.
+- Added a compact tree-style portfolio card showing EV, ROI, hit rate, score, style, bets, roles, reasons, and risk.
+- Moved actual odds versus market odds directly below 我的实际赔率.
+- Replaced Streamlit tabs on the detail page with a lazy single-section selector to avoid rendering market, source, post-match, and team sections at once.
+- Stopped forced schedule refresh when entering a detail page; detail pages now use cached schedule data unless the user manually refreshes schedule status.
+- Added render performance timers for Portfolio Ranking, actual-vs-market odds, and Advanced Research.
+- Fixed Betting Opinion Asian Handicap to read API-Football handicap data instead of The Odds API handicap fields.
+- Added Market Center Score for correct score candidates so core score paths outrank edge score paths unless EV advantage is clear.
+- Increased direction and handicap priority while reducing tempo asset influence in candidate scoring and portfolio scoring.
+- Added Direction Path, Tempo Path, Score Path, and Handicap Confidence to Core Decision.
+- Added market-center deviation labels to portfolio detail rows for correct score bets.

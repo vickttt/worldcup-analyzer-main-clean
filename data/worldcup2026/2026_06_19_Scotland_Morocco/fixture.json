@@ -7,34 +7,35 @@
     "away_en": "Morocco",
     "display_name": "Scotland vs Morocco"
   },
-  "created_at": "2026-06-19T16:01:30.358069+08:00",
-  "schedule_source": "ESPN",
+  "created_at": "2026-06-19T16:51:14.523178+08:00",
+  "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
   "schedule_fixture": {
-    "fixture_id": "760445",
+    "fixture_id": "30",
     "home_team": {
-      "id": "580",
+      "id": "12",
       "name": "Scotland",
-      "logo": null
+      "logo": "https://flagcdn.com/w80/gb-sct.png"
     },
     "away_team": {
-      "id": "2869",
+      "id": "10",
       "name": "Morocco",
-      "logo": null
+      "logo": "https://flagcdn.com/w80/ma.png"
     },
-    "kickoff_utc": "2026-06-19T22:00Z",
+    "kickoff_utc": "06/19/2026 18:00",
+    "kickoff_display": "06/19/2026 18:00",
     "league_name": "World Cup 2026",
-    "round": "group-stage",
-    "group": "",
-    "venue_name": "Gillette Stadium",
-    "venue_city": "Foxborough, Massachusetts, USA",
-    "status": "STATUS_SCHEDULED",
-    "status_text": "Scheduled",
+    "round": "group",
+    "group": "C",
+    "venue_name": "Boston Stadium",
+    "venue_city": "Boston (Foxborough), United States",
+    "status": "NS",
+    "status_text": "未开始",
     "score": null,
     "market_heat": null,
     "post_match": null,
-    "source": "ESPN"
+    "source": "WorldCup2026 API"
   },
   "api_football_fixture": {
     "fixture_id": 1489390,
@@ -155,5 +156,53 @@
       "cache_status": "fresh api response"
     }
   },
-  "standings": null
+  "standings": {
+    "group": "Group C",
+    "rows": [
+      {
+        "team": "Scotland",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 1,
+        "ga": 0,
+        "gd": 1,
+        "points": 3
+      },
+      {
+        "team": "Brazil",
+        "played": 1,
+        "wins": 0,
+        "draws": 1,
+        "losses": 0,
+        "gf": 1,
+        "ga": 1,
+        "gd": 0,
+        "points": 1
+      },
+      {
+        "team": "Morocco",
+        "played": 1,
+        "wins": 0,
+        "draws": 1,
+        "losses": 0,
+        "gf": 1,
+        "ga": 1,
+        "gd": 0,
+        "points": 1
+      },
+      {
+        "team": "Haiti",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 0,
+        "ga": 1,
+        "gd": -1,
+        "points": 0
+      }
+    ]
+  }
 }
