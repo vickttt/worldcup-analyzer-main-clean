@@ -44,7 +44,7 @@
   canonical: Netherlands
   aliases: [Netherlands]
 美国:
-  canonical: United States
+  canonical: USA
   aliases: [United States, USA, USMNT]
 加拿大:
   canonical: Canada
@@ -75,22 +75,22 @@
   aliases: [Algeria]
 刚果（金）:
   canonical: DR Congo
-  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+  aliases: [Congo DR, DR Congo, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
 刚果民主共和国:
   canonical: DR Congo
-  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+  aliases: [Congo DR, DR Congo, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
 Democratic Republic of the Congo:
   canonical: DR Congo
-  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+  aliases: [Congo DR, DR Congo, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
 Democratic Republic of Congo:
   canonical: DR Congo
-  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+  aliases: [Congo DR, DR Congo, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
 Congo DR:
   canonical: DR Congo
-  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+  aliases: [Congo DR, DR Congo, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
 DR Congo:
   canonical: DR Congo
-  aliases: [DR Congo, Congo DR, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
+  aliases: [Congo DR, DR Congo, Democratic Republic of the Congo, Democratic Republic of Congo, Congo]
 Czech Republic:
   canonical: Czechia
   aliases: [Czechia, Czech Republic]
@@ -121,9 +121,30 @@ Iran:
 Australia:
   canonical: Australia
   aliases: [Australia]
+USA:
+  canonical: USA
+  aliases: [USA, United States, USMNT]
+United States:
+  canonical: USA
+  aliases: [USA, United States, USMNT]
 Scotland:
   canonical: Scotland
   aliases: [Scotland]
 Morocco:
   canonical: Morocco
   aliases: [Morocco]
+Turkey:
+  canonical: Turkiye
+  aliases: [Turkiye, Türkiye, Turkey]
+Turkiye:
+  canonical: Turkiye
+  aliases: [Turkiye, Türkiye, Turkey]
+Türkiye:
+  canonical: Turkiye
+  aliases: [Turkiye, Türkiye, Turkey]
+Paraguay:
+  canonical: Paraguay
+  aliases: [Paraguay]
+Haiti:
+  canonical: Haiti
+  aliases: [Haiti]

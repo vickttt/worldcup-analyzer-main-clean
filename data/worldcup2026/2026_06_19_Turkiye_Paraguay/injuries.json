@@ -1,0 +1,17 @@
+{
+  "source_id": "66456946",
+  "match": {
+    "home_cn": "Turkey",
+    "away_cn": "Paraguay",
+    "home_en": "Turkiye",
+    "away_en": "Paraguay",
+    "display_name": "Turkey vs Paraguay"
+  },
+  "created_at": "2026-06-19T16:02:52.734159+08:00",
+  "schedule_source": "ESPN",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": false,
+  "response": [],
+  "error": "HTTPSConnectionPool(host='v3.football.api-sports.io', port=443): Max retries exceeded with url: /injuries?fixture=1539006 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)')))"
+}

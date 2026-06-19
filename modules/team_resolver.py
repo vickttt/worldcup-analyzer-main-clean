@@ -13,6 +13,7 @@ from modules.cache_config import TEAM_ID_CACHE_TTL
 
 
 API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
+TEAM_VARIANT_TOKENS = (" w", " u17", " u18", " u19", " u20", " u21", " u22", " u23")
 
 
 def normalize_text(value):
@@ -126,28 +127,67 @@ def request_teams(query):
     return data.get("response", [])
 
 
+def is_unwanted_team_variant(team_name, target_name):
+    normalized_name = normalize_text(team_name)
+    normalized_target = normalize_text(target_name)
+    target_allows_variant = any(token.strip() in normalized_target.split() for token in TEAM_VARIANT_TOKENS)
+    if target_allows_variant:
+        return False
+    return any(
+        normalized_name.endswith(token) or f"{token} " in normalized_name
+        for token in TEAM_VARIANT_TOKENS
+    )
+
+
+def team_match_score(team_name, team, allow_fuzzy=True):
+    target = normalize_text(team_name)
+    name = normalize_text(team.get("name", ""))
+    code = normalize_text(team.get("code", ""))
+    country = normalize_text(team.get("country", ""))
+
+    if is_unwanted_team_variant(team.get("name", ""), team_name):
+        return -1
+    if target == name:
+        return 100
+    if target == country:
+        return 95
+    if code and target == code:
+        return 90
+    if allow_fuzzy and target and name and (target in name or name in target):
+        return 60
+    if allow_fuzzy and target and country and (target in country or country in target):
+        return 55
+    return 0
+
+
 def select_team_from_response(team_name, teams):
     if not teams:
         return None
 
-    target = normalize_text(team_name)
     national_teams = [item for item in teams if item.get("team", {}).get("national")]
     candidates = national_teams or teams
 
-    for item in candidates:
+    scored = []
+    for index, item in enumerate(candidates):
         team = item.get("team", {})
-        name = normalize_text(team.get("name", ""))
-        code = normalize_text(team.get("code", ""))
-        if target == name or target == code:
-            return team
+        score = team_match_score(team_name, team)
+        if team.get("national"):
+            score += 5
+        if score > 0:
+            scored.append((score, -index, team))
 
-    for item in candidates:
-        team = item.get("team", {})
-        name = normalize_text(team.get("name", ""))
-        if target in name or name in target:
-            return team
+    if scored:
+        return sorted(scored, reverse=True)[0][2]
 
-    return candidates[0].get("team")
+    fallback = next(
+        (
+            item.get("team")
+            for item in candidates
+            if not is_unwanted_team_variant((item.get("team") or {}).get("name", ""), team_name)
+        ),
+        None,
+    )
+    return fallback
 
 
 def read_team_cache():
@@ -172,6 +212,8 @@ def cache_keys(team_name):
 
 def cache_entry_to_team(entry, team_name):
     team = dict(entry.get("team") or {})
+    if team_match_score(team_name, team) <= 0:
+        return None
     team["_resolver"] = {
         "input": team_name,
         "matched_query": entry.get("matched_query"),
@@ -216,7 +258,7 @@ def resolve_team(team_name):
         attempted.append(candidate)
         try:
             teams = request_teams(candidate)
-        except RuntimeError:
+        except (RuntimeError, requests.RequestException):
             continue
         team = select_team_from_response(candidate, teams)
         if team:
@@ -232,4 +274,3 @@ def resolve_team(team_name):
             write_cached_team(team_name, team, candidate, attempted)
             return team
     return None
-

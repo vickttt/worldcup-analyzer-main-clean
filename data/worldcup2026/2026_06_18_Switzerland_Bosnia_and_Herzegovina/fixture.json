@@ -1,0 +1,237 @@
+{
+  "source_id": "26",
+  "match": {
+    "home_cn": "Switzerland",
+    "away_cn": "Bosnia and Herzegovina",
+    "home_en": "Switzerland",
+    "away_en": "Bosnia and Herzegovina",
+    "display_name": "Switzerland vs Bosnia and Herzegovina"
+  },
+  "created_at": "2026-06-19T15:45:18.212803+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "26",
+    "home_team": {
+      "id": "8",
+      "name": "Switzerland",
+      "logo": "https://flagcdn.com/w80/ch.png"
+    },
+    "away_team": {
+      "id": "6",
+      "name": "Bosnia and Herzegovina",
+      "logo": "https://flagcdn.com/w80/ba.png"
+    },
+    "kickoff_utc": "06/18/2026 12:00",
+    "kickoff_display": "06/18/2026 12:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "B",
+    "venue_name": "Los Angeles Stadium",
+    "venue_city": "Los Angeles (Inglewood), United States",
+    "status": "FT",
+    "status_text": "已结束",
+    "score": {
+      "home": 4,
+      "away": 1
+    },
+    "market_heat": null,
+    "post_match": {
+      "stats": {},
+      "goals": [
+        {
+          "球队": "Switzerland",
+          "球员": "Jvhan Mnzambi 74'"
+        },
+        {
+          "球队": "Switzerland",
+          "球员": "Rvbn Vargas 84'"
+        },
+        {
+          "球队": "Switzerland",
+          "球员": "Jvhan Mnzambi 90'"
+        },
+        {
+          "球队": "Bosnia and Herzegovina",
+          "球员": "Armin Mhmich 90+3'"
+        }
+      ],
+      "cards": [],
+      "prematch_review": "待复盘",
+      "odds_review": "赛后赔率复盘待补充。"
+    },
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1539005,
+    "kickoff_utc": "2026-06-18T19:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 2",
+    "venue": "SoFi Stadium",
+    "city": "Inglewood",
+    "status": "FT",
+    "raw": {
+      "fixture": {
+        "id": 1539005,
+        "referee": "Joao Pedro Pinheiro, Portugal",
+        "timezone": "UTC",
+        "date": "2026-06-18T19:00:00+00:00",
+        "timestamp": 1781809200,
+        "periods": {
+          "first": 1781809200,
+          "second": 1781812800
+        },
+        "venue": {
+          "id": null,
+          "name": "SoFi Stadium",
+          "city": "Inglewood"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": 7
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 2",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 15,
+          "name": "Switzerland",
+          "logo": "https://media.api-sports.io/football/teams/15.png",
+          "winner": true
+        },
+        "away": {
+          "id": 1113,
+          "name": "Bosnia & Herzegovina",
+          "logo": "https://media.api-sports.io/football/teams/1113.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 4,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 4,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 15,
+    "name": "Switzerland",
+    "code": "SUI",
+    "country": "Switzerland",
+    "founded": 1895,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/15.png",
+    "_resolver": {
+      "input": "Switzerland",
+      "matched_query": "Switzerland",
+      "matched_name": "Switzerland",
+      "team_id": 15,
+      "attempted": [
+        "Switzerland"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 1113,
+    "name": "Bosnia & Herzegovina",
+    "code": "BIH",
+    "country": "Bosnia",
+    "founded": 1992,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/1113.png",
+    "_resolver": {
+      "input": "Bosnia and Herzegovina",
+      "matched_query": "Bosnia",
+      "matched_name": "Bosnia & Herzegovina",
+      "team_id": 1113,
+      "attempted": [
+        "Bosnia and Herzegovina",
+        "Bosnia & Herzegovina",
+        "Bosnia-Herzegovina",
+        "Bosnia"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group B",
+    "rows": [
+      {
+        "team": "Canada",
+        "played": 2,
+        "wins": 1,
+        "draws": 1,
+        "losses": 0,
+        "gf": 7,
+        "ga": 1,
+        "gd": 6,
+        "points": 4
+      },
+      {
+        "team": "Switzerland",
+        "played": 2,
+        "wins": 1,
+        "draws": 1,
+        "losses": 0,
+        "gf": 5,
+        "ga": 2,
+        "gd": 3,
+        "points": 4
+      },
+      {
+        "team": "Bosnia and Herzegovina",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 2,
+        "ga": 5,
+        "gd": -3,
+        "points": 1
+      },
+      {
+        "team": "Qatar",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 1,
+        "ga": 7,
+        "gd": -6,
+        "points": 1
+      }
+    ]
+  }
+}

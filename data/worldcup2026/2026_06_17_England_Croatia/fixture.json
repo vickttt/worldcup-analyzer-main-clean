@@ -1,0 +1,242 @@
+{
+  "source_id": "22",
+  "match": {
+    "home_cn": "England",
+    "away_cn": "Croatia",
+    "home_en": "England",
+    "away_en": "Croatia",
+    "display_name": "England vs Croatia"
+  },
+  "created_at": "2026-06-19T15:44:27.612078+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "22",
+    "home_team": {
+      "id": "45",
+      "name": "England",
+      "logo": "https://flagcdn.com/w80/gb-eng.png"
+    },
+    "away_team": {
+      "id": "46",
+      "name": "Croatia",
+      "logo": "https://flagcdn.com/w80/hr.png"
+    },
+    "kickoff_utc": "06/17/2026 15:00",
+    "kickoff_display": "06/17/2026 15:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "L",
+    "venue_name": "Dallas Stadium",
+    "venue_city": "Dallas (Arlington, Texas), United States",
+    "status": "FT",
+    "status_text": "已结束",
+    "score": {
+      "home": 4,
+      "away": 2
+    },
+    "market_heat": null,
+    "post_match": {
+      "stats": {},
+      "goals": [
+        {
+          "球队": "England",
+          "球员": "H. Kane 12'(p)"
+        },
+        {
+          "球队": "England",
+          "球员": "H. Kane 42'"
+        },
+        {
+          "球队": "England",
+          "球员": "J. Bellingham 47'"
+        },
+        {
+          "球队": "England",
+          "球员": "M. Rashford 85'"
+        },
+        {
+          "球队": "Croatia",
+          "球员": "M. Baturina 36'"
+        },
+        {
+          "球队": "Croatia",
+          "球员": "P. Musa 45+5'"
+        }
+      ],
+      "cards": [],
+      "prematch_review": "待复盘",
+      "odds_review": "赛后赔率复盘待补充。"
+    },
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1489384,
+    "kickoff_utc": "2026-06-17T20:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 1",
+    "venue": "AT&T Stadium",
+    "city": "Arlington",
+    "status": "FT",
+    "raw": {
+      "fixture": {
+        "id": 1489384,
+        "referee": "Clement Turpin, France",
+        "timezone": "UTC",
+        "date": "2026-06-17T20:00:00+00:00",
+        "timestamp": 1781726400,
+        "periods": {
+          "first": 1781726400,
+          "second": 1781730000
+        },
+        "venue": {
+          "id": null,
+          "name": "AT&T Stadium",
+          "city": "Arlington"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": 6
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 1",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 10,
+          "name": "England",
+          "logo": "https://media.api-sports.io/football/teams/10.png",
+          "winner": true
+        },
+        "away": {
+          "id": 3,
+          "name": "Croatia",
+          "logo": "https://media.api-sports.io/football/teams/3.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 4,
+        "away": 2
+      },
+      "score": {
+        "halftime": {
+          "home": 2,
+          "away": 2
+        },
+        "fulltime": {
+          "home": 4,
+          "away": 2
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 10,
+    "name": "England",
+    "code": "ENG",
+    "country": "England",
+    "founded": 1863,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/10.png",
+    "_resolver": {
+      "input": "England",
+      "matched_query": "England",
+      "matched_name": "England",
+      "team_id": 10,
+      "attempted": [
+        "England"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 3,
+    "name": "Croatia",
+    "code": "CRO",
+    "country": "Croatia",
+    "founded": 1912,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/3.png",
+    "_resolver": {
+      "input": "Croatia",
+      "matched_query": "Croatia",
+      "matched_name": "Croatia",
+      "team_id": 3,
+      "attempted": [
+        "Croatia"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group L",
+    "rows": [
+      {
+        "team": "England",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 4,
+        "ga": 2,
+        "gd": 2,
+        "points": 3
+      },
+      {
+        "team": "Ghana",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 1,
+        "ga": 0,
+        "gd": 1,
+        "points": 3
+      },
+      {
+        "team": "Panama",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 0,
+        "ga": 1,
+        "gd": -1,
+        "points": 0
+      },
+      {
+        "team": "Croatia",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 2,
+        "ga": 4,
+        "gd": -2,
+        "points": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source_id": "26",
+  "match": {
+    "home_cn": "Switzerland",
+    "away_cn": "Bosnia and Herzegovina",
+    "home_en": "Switzerland",
+    "away_en": "Bosnia and Herzegovina",
+    "display_name": "Switzerland vs Bosnia and Herzegovina"
+  },
+  "created_at": "2026-06-19T15:45:18.212803+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "status": "available",
+  "post_match": {
+    "stats": {},
+    "goals": [
+      {
+        "球队": "Switzerland",
+        "球员": "Jvhan Mnzambi 74'"
+      },
+      {
+        "球队": "Switzerland",
+        "球员": "Rvbn Vargas 84'"
+      },
+      {
+        "球队": "Switzerland",
+        "球员": "Jvhan Mnzambi 90'"
+      },
+      {
+        "球队": "Bosnia and Herzegovina",
+        "球员": "Armin Mhmich 90+3'"
+      }
+    ],
+    "cards": [],
+    "prematch_review": "待复盘",
+    "odds_review": "赛后赔率复盘待补充。"
+  }
+}

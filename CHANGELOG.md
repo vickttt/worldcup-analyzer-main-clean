@@ -2,6 +2,23 @@
 
 ## 2026-06-19
 
+- Added Terminal Fetch Mode entrypoint `scripts/refresh_api_data.py`.
+- Added fetch logs under `data/fetch_logs/` for terminal API refresh diagnostics.
+- Added local World Cup database reader so the detail page prefers `data/worldcup2026` JSON before live API calls.
+- Added Data Completeness display for fixture, winner odds, Asian handicap, totals, correct score, lineups, injuries, players, and match stats.
+- Restored Brazil vs Haiti API-Football Asian Handicap and Correct Score from successful local cache after a transient SSL fixture lookup failure.
+- Added permanent World Cup data center snapshots under `data/worldcup2026/`.
+- Added `scripts/build_worldcup_data_center.py` for same-day fixture, odds, lineup, injury, event, player, pre-match, and post-match archival.
+- Added the detail-page `球队信息` tab with recent form, lineup status, injuries/suspensions, and permanent database status.
+- Hardened Team Resolver to reject youth/women variants such as U17 and W teams when resolving senior national teams.
+- Added aliases for USA, United States, Turkey, Turkiye, Türkiye, Paraguay, and Haiti.
+- Reordered DR Congo aliases to prefer `Congo DR`, preventing U17 team matches.
+- Added The Odds API daily-cache fallback when a live refresh fails after data was already saved.
+- Refreshed the 2026-06-19 database for USA vs Australia, Scotland vs Morocco, Brazil vs Haiti, and Turkiye vs Paraguay.
+- Backfilled priority finished matches: France vs Senegal, Portugal vs Congo DR, England vs Croatia, and Switzerland vs Bosnia and Herzegovina.
+- Fixed the market odds tab crash by pinning Altair to 4.2.2 for Python 3.14 compatibility.
+- Replaced detail-page nested expanders with checkbox toggles so one failed section cannot crash the tab.
+- Added a market tab Debug Summary covering fixture, winner odds, Asian handicap, totals, correct score, and Polymarket status.
 - Added `scripts/refresh_today_odds.py` to refresh and verify today's odds cache.
 - Refreshed The Odds API Match Winner and Over/Under cache for today's matches.
 - Expanded team aliases for Bosnia-Herzegovina, Australia, Scotland, and Morocco.
@@ -14,6 +31,35 @@
 - Added Portfolio Style classification: Aggressive, Balanced, Conservative.
 - Added Style Performance Database under `data/history/style_performance.json`.
 - Added model version tracking to new pre-match and post-match snapshots.
+- Simplified the post-match page so Recommendation Audit is the only main ranking table.
+- Added User Portfolio / 我的组合 into Recommendation Audit as a peer portfolio.
+- Unified system portfolio names to 首选组合, 第2组合, 第3组合, etc.
+- Added `data/history/portfolio_performance.json` for long-term portfolio-level ROI and win-rate tracking.
+- Existing post-match snapshots now backfill audit fields without relying on cache or API refresh.
+- Renamed post-match system portfolios to 推荐组合, 第2组合, 第3组合, etc.
+- Removed duplicate post-match ranking display; Recommendation Audit is now the only main ranking table.
+- Recommendation Audit now includes 我的组合 as a peer portfolio with ranking, ROI, hit summary, failure reason, and role performance.
+- Asset role contribution and Prediction Audit can now be viewed by selected portfolio instead of mixing all portfolios.
+- Legacy names such as 推荐组合（当前最优）, 首选组合, 备选组合, and 第N优组合 are normalized at display time.
+- Recommendation Audit now includes a visible 具体投注 column so users can see what each portfolio bought.
+- Prediction Audit and asset role contribution are merged into 组合审计详情 instead of separate page sections.
+- Portfolio audit details are saved into post-match history snapshots for long-term replay.
+- Added 我的组合结算 directly below the final score on the post-match page.
+- My Portfolio can now be entered or edited after the match and immediately settled.
+- My Portfolio supports both comma format and space format such as `瑞士2:0 600`.
+- My Portfolio is included as a first-level portfolio in Recommendation Audit.
+- Reworked 我的组合结算 into a two-column input and visible format example layout.
+- My Portfolio now supports odds-plus-stake rows such as `独赢,瑞士,1.55,600`.
+- Removed the separate 组合审计详情 display to reduce repeated post-match explanations.
+- Removed the Recommendation Audit source column and kept 具体投注 as the more useful field.
+- Asset role contribution now includes 代表投注 to clarify which bets drove each role.
+- Simplified My Portfolio input so users enter only market, selection, and stake, not odds.
+- My Portfolio now matches odds from pre-match user-entered odds first, then pre-match snapshot market odds.
+- My Portfolio displays explicit warnings when a bet cannot be matched to saved odds.
+- Unmatched My Portfolio bets are marked as 未找到赔率 and do not silently affect settlement.
+- Added My Portfolio Smart Parser for natural inputs such as `瑞士胜600`, `瑞士-1600`, `小2.5600`, and `2:0500`.
+- Smart Parser supports English/Chinese separators, spaces, tabs, Chinese totals, English totals, team aliases, and score inputs.
+- My Portfolio now shows a parsed preview before saving so users can confirm recognized market, odds, and stake.
 - Moved post-match style decision structure into pre-match Core Decision: strategy ranking, asset role allocation, settlement preview, risk paths, and top outcome preview.
 - Simplified finished-match page to focus on Post Match Analysis and strategy settlement only.
 - Upgraded Betting Asset Role Framework from single-role labels to multi-role weighted asset roles.

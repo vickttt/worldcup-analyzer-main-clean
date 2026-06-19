@@ -1,0 +1,65 @@
+{
+  "source_id": "22",
+  "match": {
+    "home_cn": "England",
+    "away_cn": "Croatia",
+    "home_en": "England",
+    "away_en": "Croatia",
+    "display_name": "England vs Croatia"
+  },
+  "created_at": "2026-06-19T15:44:27.612078+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "standings": {
+    "group": "Group L",
+    "rows": [
+      {
+        "team": "England",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 4,
+        "ga": 2,
+        "gd": 2,
+        "points": 3
+      },
+      {
+        "team": "Ghana",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 1,
+        "ga": 0,
+        "gd": 1,
+        "points": 3
+      },
+      {
+        "team": "Panama",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 0,
+        "ga": 1,
+        "gd": -1,
+        "points": 0
+      },
+      {
+        "team": "Croatia",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 2,
+        "ga": 4,
+        "gd": -2,
+        "points": 0
+      }
+    ]
+  },
+  "home_recent": [],
+  "away_recent": []
+}

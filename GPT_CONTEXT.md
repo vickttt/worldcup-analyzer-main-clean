@@ -15,72 +15,111 @@ CHANGELOG.md
 
 Version: v1.60-dev
 
-Updated: 2026-06-19 06:08
+Updated: 2026-06-19 15:58
 
 Modified Files:
-- app.py
-- data/team_aliases.yaml
-- modules/cache_config.py
-- modules/schedule_client.py
-- modules/the_odds_client.py
-- modules/user_odds.py
 - CHANGELOG.md
 - GPT_CONTEXT.md
 - LATEST.md
-- data/history/.gitkeep
-- data/history/2026_06_18_Canada_Qatar.json
-- data/history/2026_06_18_Switzerland_Bosnia_and_Herzegovina.json
-- scripts/refresh_today_odds.py
-- scripts/update_gpt_context.py
+- app.py
+- data/history/2026_06_18_Switzerland_Bosnia_and_Herzegovina_post.json
+- data/team_aliases.yaml
+- modules/team_resolver.py
+- requirements.txt
+- data/fetch_logs/20260619_155517_2026_06_19_refresh_summary.json
+- data/history/2026_06_19_Brazil_Haiti_pre.json
+- data/history/2026_06_19_Scotland_Morocco_pre.json
+- data/history/my_portfolios/2026_06_18_Switzerland_Bosnia_and_Herzegovina.json
+- data/history/portfolio_performance.json
+- data/worldcup2026/2026_06_16_France_Senegal/events.json
+- data/worldcup2026/2026_06_16_France_Senegal/fixture.json
+- data/worldcup2026/2026_06_16_France_Senegal/injuries.json
+- data/worldcup2026/2026_06_16_France_Senegal/lineups.json
+- data/worldcup2026/2026_06_16_France_Senegal/match_stats.json
+- data/worldcup2026/2026_06_16_France_Senegal/odds.json
+- data/worldcup2026/2026_06_16_France_Senegal/players.json
+- data/worldcup2026/2026_06_16_France_Senegal/post_match.json
+- data/worldcup2026/2026_06_16_France_Senegal/pre_match.json
+- data/worldcup2026/2026_06_16_France_Senegal/team_stats.json
+- data/worldcup2026/2026_06_17_England_Croatia/events.json
+- data/worldcup2026/2026_06_17_England_Croatia/fixture.json
+- data/worldcup2026/2026_06_17_England_Croatia/injuries.json
+- data/worldcup2026/2026_06_17_England_Croatia/lineups.json
+- data/worldcup2026/2026_06_17_England_Croatia/match_stats.json
+- data/worldcup2026/2026_06_17_England_Croatia/odds.json
+- data/worldcup2026/2026_06_17_England_Croatia/players.json
+- data/worldcup2026/2026_06_17_England_Croatia/post_match.json
+- data/worldcup2026/2026_06_17_England_Croatia/pre_match.json
+- data/worldcup2026/2026_06_17_England_Croatia/team_stats.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/events.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/fixture.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/injuries.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/lineups.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/match_stats.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/odds.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/players.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/post_match.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/pre_match.json
+- data/worldcup2026/2026_06_17_Portugal_DR_Congo/team_stats.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/events.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/fixture.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/injuries.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/lineups.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/match_stats.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/odds.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/players.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/post_match.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/pre_match.json
+- data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina/team_stats.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/events.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/fixture.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/injuries.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/lineups.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/match_stats.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/odds.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/players.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/post_match.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/pre_match.json
+- data/worldcup2026/2026_06_19_Brazil_Haiti/team_stats.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/events.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/fixture.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/injuries.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/lineups.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/match_stats.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/odds.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/players.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/post_match.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/pre_match.json
+- data/worldcup2026/2026_06_19_Scotland_Morocco/team_stats.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/events.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/fixture.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/injuries.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/lineups.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/match_stats.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/odds.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/players.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/post_match.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/pre_match.json
+- data/worldcup2026/2026_06_19_Turkiye_Paraguay/team_stats.json
+- data/worldcup2026/2026_06_19_USA_Australia/events.json
+- data/worldcup2026/2026_06_19_USA_Australia/fixture.json
+- data/worldcup2026/2026_06_19_USA_Australia/injuries.json
+- data/worldcup2026/2026_06_19_USA_Australia/lineups.json
+- data/worldcup2026/2026_06_19_USA_Australia/match_stats.json
+- data/worldcup2026/2026_06_19_USA_Australia/odds.json
+- data/worldcup2026/2026_06_19_USA_Australia/players.json
+- data/worldcup2026/2026_06_19_USA_Australia/post_match.json
+- data/worldcup2026/2026_06_19_USA_Australia/pre_match.json
+- data/worldcup2026/2026_06_19_USA_Australia/team_stats.json
+- data/worldcup2026/2026_06_19_refresh_summary.json
+- data/worldcup2026/history_backfill_summary.json
+- modules/worldcup_db.py
+- scripts/build_worldcup_data_center.py
+- scripts/refresh_api_data.py
+- scripts/refresh_match_prematch_snapshot.py
 
 Status:
 Running: http://localhost:8502
-
-## Current Recommendation
-
-Current Best Portfolio:
-- Generated by Odds Distribution Optimizer
-- Uses real Match Winner, Asian Handicap, Over/Under, and Correct Score odds when available
-- Uses user-entered actual odds when provided
-
-Total Stake:
-- Determined by direction confidence and odds value
-- Minimum stake is never 0
-
-Current Metrics:
-- EV: calculated per selected match
-- Sharpe: calculated per selected match
-- Stability: calculated per selected match
-
-## Current Model
-
-Enabled:
-- Score Probability Distribution
-- Full Score State Space
-- Return Matrix
-- Utility Function
-- Kelly
-- Sharpe
-- Insurance Cost
-- Insurance Efficiency
-- Correlation Matrix
-- Marginal Contribution
-- Efficient Frontier
-- Portfolio Optimizer
-- Odds Distribution Optimizer
-- Betting Asset Role Framework
-- Multi-Role Asset Allocation
-- Role-Driven Portfolio Optimizer
-- Pre-Match Decision Cockpit
-- Asset Role Contribution
-- Match Snapshot
-- Prediction Audit
-- Recommendation Audit
-- Portfolio Style
-- Style Performance Database
-- My Portfolio
-- Post Match Analysis
-- Strategy Settlement
 
 ## Current Problems
 

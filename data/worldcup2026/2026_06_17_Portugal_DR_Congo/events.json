@@ -1,0 +1,348 @@
+{
+  "source_id": "21",
+  "match": {
+    "home_cn": "Portugal",
+    "away_cn": "Democratic Republic of the Congo",
+    "home_en": "Portugal",
+    "away_en": "DR Congo",
+    "display_name": "Portugal vs Democratic Republic of the Congo"
+  },
+  "created_at": "2026-06-19T15:43:53.547481+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "time": {
+        "elapsed": 6,
+        "extra": null
+      },
+      "team": {
+        "id": 27,
+        "name": "Portugal",
+        "logo": "https://media.api-sports.io/football/teams/27.png"
+      },
+      "player": {
+        "id": 335051,
+        "name": "J. Neves"
+      },
+      "assist": {
+        "id": 1864,
+        "name": "P. Neto"
+      },
+      "type": "Goal",
+      "detail": "Normal Goal",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 13,
+        "extra": null
+      },
+      "team": {
+        "id": 27,
+        "name": "Portugal",
+        "logo": "https://media.api-sports.io/football/teams/27.png"
+      },
+      "player": {
+        "id": 636,
+        "name": "Bernardo Silva"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Foul"
+    },
+    {
+      "time": {
+        "elapsed": 32,
+        "extra": null
+      },
+      "team": {
+        "id": 1508,
+        "name": "Congo DR",
+        "logo": "https://media.api-sports.io/football/teams/1508.png"
+      },
+      "player": {
+        "id": 375,
+        "name": "Chancel Mbemba"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Foul"
+    },
+    {
+      "time": {
+        "elapsed": 45,
+        "extra": null
+      },
+      "team": {
+        "id": 1508,
+        "name": "Congo DR",
+        "logo": "https://media.api-sports.io/football/teams/1508.png"
+      },
+      "player": {
+        "id": 20649,
+        "name": "Y. Wissa"
+      },
+      "assist": {
+        "id": 18816,
+        "name": "A. Masuaku"
+      },
+      "type": "Goal",
+      "detail": "Normal Goal",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 46,
+        "extra": null
+      },
+      "team": {
+        "id": 27,
+        "name": "Portugal",
+        "logo": "https://media.api-sports.io/football/teams/27.png"
+      },
+      "player": {
+        "id": 636,
+        "name": "B. Silva"
+      },
+      "assist": {
+        "id": 161585,
+        "name": "F. Conceicao"
+      },
+      "type": "subst",
+      "detail": "Substitution 1",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 57,
+        "extra": null
+      },
+      "team": {
+        "id": 1508,
+        "name": "Congo DR",
+        "logo": "https://media.api-sports.io/football/teams/1508.png"
+      },
+      "player": {
+        "id": 375598,
+        "name": "N. Mukau"
+      },
+      "assist": {
+        "id": 365331,
+        "name": "N. Sadiki"
+      },
+      "type": "subst",
+      "detail": "Substitution 1",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 71,
+        "extra": null
+      },
+      "team": {
+        "id": 27,
+        "name": "Portugal",
+        "logo": "https://media.api-sports.io/football/teams/27.png"
+      },
+      "player": {
+        "id": 1864,
+        "name": "P. Neto"
+      },
+      "assist": {
+        "id": 22236,
+        "name": "R. Leao"
+      },
+      "type": "subst",
+      "detail": "Substitution 2",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 72,
+        "extra": null
+      },
+      "team": {
+        "id": 27,
+        "name": "Portugal",
+        "logo": "https://media.api-sports.io/football/teams/27.png"
+      },
+      "player": {
+        "id": 263482,
+        "name": "N. Mendes"
+      },
+      "assist": {
+        "id": 130,
+        "name": "N. Semedo"
+      },
+      "type": "subst",
+      "detail": "Substitution 3",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 74,
+        "extra": null
+      },
+      "team": {
+        "id": 1508,
+        "name": "Congo DR",
+        "logo": "https://media.api-sports.io/football/teams/1508.png"
+      },
+      "player": {
+        "id": 18816,
+        "name": "A. Masuaku"
+      },
+      "assist": {
+        "id": 21098,
+        "name": "J. Kayembe"
+      },
+      "type": "subst",
+      "detail": "Substitution 2",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 74,
+        "extra": null
+      },
+      "team": {
+        "id": 1508,
+        "name": "Congo DR",
+        "logo": "https://media.api-sports.io/football/teams/1508.png"
+      },
+      "player": {
+        "id": 1424,
+        "name": "E. Kayembe"
+      },
+      "assist": {
+        "id": 48555,
+        "name": "C. Pickel"
+      },
+      "type": "subst",
+      "detail": "Substitution 3",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 83,
+        "extra": null
+      },
+      "team": {
+        "id": 27,
+        "name": "Portugal",
+        "logo": "https://media.api-sports.io/football/teams/27.png"
+      },
+      "player": {
+        "id": 128384,
+        "name": "Vitinha"
+      },
+      "assist": {
+        "id": 41585,
+        "name": "G. Ramos"
+      },
+      "type": "subst",
+      "detail": "Substitution 4",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 85,
+        "extra": null
+      },
+      "team": {
+        "id": 1508,
+        "name": "Congo DR",
+        "logo": "https://media.api-sports.io/football/teams/1508.png"
+      },
+      "player": {
+        "id": 18846,
+        "name": "A. Wan-Bissaka"
+      },
+      "assist": {
+        "id": 24245,
+        "name": "G. Kalulu"
+      },
+      "type": "subst",
+      "detail": "Substitution 4",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 85,
+        "extra": null
+      },
+      "team": {
+        "id": 1508,
+        "name": "Congo DR",
+        "logo": "https://media.api-sports.io/football/teams/1508.png"
+      },
+      "player": {
+        "id": 3033,
+        "name": "C. Bakambu"
+      },
+      "assist": {
+        "id": 20674,
+        "name": "S. Banza"
+      },
+      "type": "subst",
+      "detail": "Substitution 5",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 88,
+        "extra": null
+      },
+      "team": {
+        "id": 27,
+        "name": "Portugal",
+        "logo": "https://media.api-sports.io/football/teams/27.png"
+      },
+      "player": {
+        "id": 130,
+        "name": "Nélson Semedo"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Foul"
+    },
+    {
+      "time": {
+        "elapsed": 90,
+        "extra": 2
+      },
+      "team": {
+        "id": 27,
+        "name": "Portugal",
+        "logo": "https://media.api-sports.io/football/teams/27.png"
+      },
+      "player": {
+        "id": 161939,
+        "name": "Tomás Araújo"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Foul"
+    }
+  ],
+  "error": null
+}

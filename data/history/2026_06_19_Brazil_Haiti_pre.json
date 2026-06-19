@@ -1,0 +1,461 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "pre_match_snapshot",
+  "created_at": "2026-06-19T15:40:56.336726+08:00",
+  "match": {
+    "home": "Brazil",
+    "away": "Haiti",
+    "display": "巴西 vs 海地"
+  },
+  "fixture": {
+    "fixture_id": "29",
+    "home_team": {
+      "id": "9",
+      "name": "Brazil",
+      "logo": "https://flagcdn.com/w80/br.png"
+    },
+    "away_team": {
+      "id": "11",
+      "name": "Haiti",
+      "logo": "https://flagcdn.com/w80/ht.png"
+    },
+    "kickoff_utc": "06/19/2026 21:00",
+    "kickoff_display": "06/19/2026 21:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "C",
+    "venue_name": "Philadelphia Stadium",
+    "venue_city": "Philadelphia, United States",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "model_versions": {
+    "model_version": "v1.61",
+    "probability_engine_version": "score_distribution_v1",
+    "optimizer_version": "portfolio_optimizer_v1",
+    "asset_framework_version": "multi_role_asset_framework_v1",
+    "audit_version": "prediction_audit_v1"
+  },
+  "match_info": {
+    "odds_date_key": "2026-06-19",
+    "report_path": "outputs/reports/Brazil_vs_Haiti_20260619_154056.md"
+  },
+  "odds": {
+    "found": false,
+    "home_win": null,
+    "draw": null,
+    "away_win": null,
+    "over_under_line": null,
+    "asian_handicap": [],
+    "over_under": [],
+    "raw_probabilities": null,
+    "implied_probabilities": null,
+    "source": "The Odds API",
+    "event_title": null,
+    "event_id": null,
+    "message": "未找到盘口数据：The Odds API 当前没有返回该比赛的胜平负或大小球市场。",
+    "cache": null
+  },
+  "api_football_data": {
+    "fixture_result": {
+      "fixture": null,
+      "home_team": null,
+      "away_team": {
+        "id": 2386,
+        "name": "Haiti",
+        "code": "HAI",
+        "country": "Haiti",
+        "founded": 1904,
+        "national": true,
+        "logo": "https://media.api-sports.io/football/teams/2386.png",
+        "_resolver": {
+          "input": "Haiti",
+          "matched_query": "Haiti",
+          "matched_name": "Haiti",
+          "team_id": 2386,
+          "attempted": [
+            "Haiti"
+          ],
+          "cache_status": "api_resolved"
+        }
+      },
+      "message": "未找到双方国家队信息。"
+    },
+    "fixture": null,
+    "odds": {
+      "found": false,
+      "home_win": null,
+      "draw": null,
+      "away_win": null,
+      "over_under_line": null,
+      "raw_probabilities": null,
+      "implied_probabilities": null,
+      "source": "API-Football 免费版",
+      "event_title": null,
+      "event_id": null,
+      "message": "未找到双方国家队信息。"
+    },
+    "asian_handicap": null,
+    "correct_score": null,
+    "injuries": [],
+    "lineups": [],
+    "home_recent": [],
+    "away_recent": [],
+    "error": "未找到双方国家队信息。"
+  },
+  "polymarket": {
+    "found": true,
+    "home_win": 0.885,
+    "draw": 0.0815,
+    "away_win": 0.0355,
+    "volume": 1424114.9885499973,
+    "liquidity": 3404725.30383,
+    "source": "Polymarket Gamma API 真实数据",
+    "event_title": "Brazil vs. Haiti",
+    "event_slug": "fifwc-bra-hai-2026-06-19",
+    "event_url": "https://polymarket.com/event/fifwc-bra-hai-2026-06-19",
+    "message": "已找到对应 Polymarket 市场。"
+  },
+  "actual_odds": {
+    "items": [],
+    "by_type": {},
+    "raw": ""
+  },
+  "my_portfolio": {
+    "raw_text": "",
+    "items": []
+  },
+  "recommendation_combo": [
+    {
+      "slot": "空位1",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位2",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位3",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位4",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位5",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    }
+  ],
+  "strategy_snapshot": {
+    "strategies": [],
+    "strategy_table": [],
+    "insurance_cost": [],
+    "correlation_matrix": [],
+    "kelly": [],
+    "return_matrix": [],
+    "role_constraints": [],
+    "portfolio_style": {}
+  },
+  "decision": {
+    "market_disagreement": {
+      "score": 0,
+      "level": "低分歧",
+      "direction": "-",
+      "difference": 0,
+      "odds_probability": null,
+      "polymarket_probability": null,
+      "reason": "缺少可比较的市场数据。"
+    },
+    "contrarian": {
+      "score": 75,
+      "level": "较高",
+      "popular_side": "Brazil",
+      "reason": "当前市场结构下，逆向压力有限。"
+    },
+    "upset_index": {
+      "score": 48,
+      "meaning": "中等爆冷风险",
+      "reason": "小组赛阶段与弱势方属性提高了爆冷敏感度。"
+    },
+    "recent_form": {
+      "score": 50,
+      "reason": "近期状态暂不可用，采用中性分。"
+    },
+    "elo_rating": {
+      "score": 50,
+      "reason": "ELO评分 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "injury_impact": {
+      "score": 50,
+      "reason": "暂无公开伤病信息，采用中性分。"
+    },
+    "team_value": {
+      "score": 50,
+      "reason": "球队身价 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "direction_confidence": {
+      "score": 0,
+      "level": "观望",
+      "components": [],
+      "reason": "缺少胜平负赔率，无法形成方向把握。"
+    },
+    "odds_value": {
+      "score": 35,
+      "rating": "C",
+      "label": "-",
+      "market_probability": null,
+      "model_probability": null,
+      "difference": 0,
+      "margin": null,
+      "components": [
+        {
+          "name": "市场价差",
+          "points": 0,
+          "max_points": 10,
+          "reason": "缺少 Polymarket 对比数据。"
+        },
+        {
+          "name": "盘口一致性",
+          "points": 12,
+          "max_points": 30,
+          "reason": "缺少完整市场数据，按中性偏低处理。"
+        },
+        {
+          "name": "亚洲盘结构",
+          "points": 0,
+          "max_points": 25,
+          "reason": "亚洲让球盘缺失。"
+        },
+        {
+          "name": "波胆结构",
+          "points": 0,
+          "max_points": 20,
+          "reason": "真实波胆盘口缺失。"
+        },
+        {
+          "name": "庄家利润率",
+          "points": 8,
+          "max_points": 15,
+          "reason": "按中性抽水处理。"
+        }
+      ],
+      "reason": "缺少模型概率与市场概率的可比数据，赔率价值按中性偏低处理。"
+    },
+    "participation_advice": {
+      "advice": "放弃",
+      "reason": "方向把握 0 / 100，赔率价值 C，爆冷指数 48 / 100。"
+    },
+    "recommended_stake": {
+      "amount": 100,
+      "base": 0,
+      "adjustment": 0,
+      "reason": "方向把握 0 分，对应基础仓位 0；赔率价值 C，调整 +0。"
+    },
+    "final_confidence_score": 0,
+    "value_rating": "C",
+    "value_rating_score": 35,
+    "value_rating_breakdown": [
+      {
+        "name": "市场价差",
+        "points": 0,
+        "max_points": 10,
+        "reason": "缺少 Polymarket 对比数据。"
+      },
+      {
+        "name": "盘口一致性",
+        "points": 12,
+        "max_points": 30,
+        "reason": "缺少完整市场数据，按中性偏低处理。"
+      },
+      {
+        "name": "亚洲盘结构",
+        "points": 0,
+        "max_points": 25,
+        "reason": "亚洲让球盘缺失。"
+      },
+      {
+        "name": "波胆结构",
+        "points": 0,
+        "max_points": 20,
+        "reason": "真实波胆盘口缺失。"
+      },
+      {
+        "name": "庄家利润率",
+        "points": 8,
+        "max_points": 15,
+        "reason": "按中性抽水处理。"
+      }
+    ],
+    "value_rating_meaning": "赔率价值 35 / 100，评级 C：价格基本合理",
+    "final_recommendation": {
+      "bet": "观察为主",
+      "reason": [
+        "暂未发现强逆向让球机会",
+        "当前仅将市场方向作为参考"
+      ]
+    },
+    "stake_suggestion": {
+      "Conservative": 0,
+      "Standard": 0,
+      "Aggressive": 0
+    },
+    "weights": {
+      "方向把握": "胜平负30 + 亚洲让球25 + 大小球15 + 波胆20 + Polymarket10",
+      "赔率价值": "输入实际赔率后：实际赔率优势45 + 推荐覆盖20 + 盘口结构15 + 庄家利润率10 + Polymarket辅助10；未输入时使用市场标准盘口评估。",
+      "参与建议": "方向把握 + 赔率价值 + 风险暴露",
+      "推荐仓位": "方向把握为主，赔率价值微调"
+    }
+  },
+  "probability_distribution": {
+    "available": true,
+    "favorite": "巴西",
+    "underdog": "海地",
+    "rows": [
+      {
+        "label": "巴西小胜（1球）",
+        "probability": 0.3766289026746669,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+      },
+      {
+        "label": "巴西赢2球",
+        "probability": 0.3048900640699685,
+        "meaning": "盘口边界路径，决定让球盘输赢。"
+      },
+      {
+        "label": "巴西赢3球以上",
+        "probability": 0.2152165158140954,
+        "meaning": "强队大胜路径，过去版本容易低估。"
+      },
+      {
+        "label": "平局区间",
+        "probability": 0.0828841655649344,
+        "meaning": "比赛进入低分差或胶着路径。"
+      },
+      {
+        "label": "海地不败",
+        "probability": 0.02038035187633479,
+        "meaning": "爆冷或热门方向失效路径。"
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "巴西 -1.5",
+      "lose_paths": [
+        "巴西只赢1球",
+        "平局",
+        "海地胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "巴西小胜（1球）",
+    "boundary_path": "巴西赢2球",
+    "extreme_path": "巴西赢3球以上",
+    "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+  },
+  "value_analysis": {
+    "available": false,
+    "message": "Value Analysis requires both The Odds API and Polymarket probabilities.",
+    "rows": [],
+    "has_value": false
+  },
+  "betting_opinion": {
+    "match_winner": "No view",
+    "asian_handicap": "No view",
+    "over_under": "No view",
+    "risk_level": "High",
+    "confidence": 42,
+    "match_winner_reason": "Insufficient market data for a winner view.",
+    "asian_handicap_reason": "Handicap market is not available.",
+    "over_under_reason": "Goals market is not available.",
+    "summary": "Insufficient market data for a view.",
+    "result_distribution": {
+      "available": true,
+      "favorite": "巴西",
+      "underdog": "海地",
+      "rows": [
+        {
+          "label": "巴西小胜（1球）",
+          "probability": 0.3766289026746669,
+          "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+        },
+        {
+          "label": "巴西赢2球",
+          "probability": 0.3048900640699685,
+          "meaning": "盘口边界路径，决定让球盘输赢。"
+        },
+        {
+          "label": "巴西赢3球以上",
+          "probability": 0.2152165158140954,
+          "meaning": "强队大胜路径，过去版本容易低估。"
+        },
+        {
+          "label": "平局区间",
+          "probability": 0.0828841655649344,
+          "meaning": "比赛进入低分差或胶着路径。"
+        },
+        {
+          "label": "海地不败",
+          "probability": 0.02038035187633479,
+          "meaning": "爆冷或热门方向失效路径。"
+        }
+      ],
+      "risk_exposure": {
+        "example_bet": "巴西 -1.5",
+        "lose_paths": [
+          "巴西只赢1球",
+          "平局",
+          "海地胜"
+        ],
+        "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+      },
+      "main_path": "巴西小胜（1球）",
+      "boundary_path": "巴西赢2球",
+      "extreme_path": "巴西赢3球以上",
+      "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+    }
+  }
+}

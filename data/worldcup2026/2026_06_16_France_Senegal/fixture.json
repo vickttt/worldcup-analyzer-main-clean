@@ -1,0 +1,234 @@
+{
+  "source_id": "17",
+  "match": {
+    "home_cn": "France",
+    "away_cn": "Senegal",
+    "home_en": "France",
+    "away_en": "Senegal",
+    "display_name": "France vs Senegal"
+  },
+  "created_at": "2026-06-19T15:43:15.887476+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "17",
+    "home_team": {
+      "id": "33",
+      "name": "France",
+      "logo": "https://flagcdn.com/w80/fr.png"
+    },
+    "away_team": {
+      "id": "34",
+      "name": "Senegal",
+      "logo": "https://flagcdn.com/w80/sn.png"
+    },
+    "kickoff_utc": "06/16/2026 15:00",
+    "kickoff_display": "06/16/2026 15:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "I",
+    "venue_name": "New York/New Jersey Stadium",
+    "venue_city": "New York/New Jersey (East Rutherford), United States",
+    "status": "FT",
+    "status_text": "已结束",
+    "score": {
+      "home": 3,
+      "away": 1
+    },
+    "market_heat": null,
+    "post_match": {
+      "stats": {},
+      "goals": [
+        {
+          "球队": "France",
+          "球员": "K. Mbappé 66'"
+        },
+        {
+          "球队": "France",
+          "球员": "B. Barcola 82'"
+        },
+        {
+          "球队": "France",
+          "球员": "K. Mbappé 90+6'"
+        },
+        {
+          "球队": "Senegal",
+          "球员": "I. Mbaye 90+5'"
+        }
+      ],
+      "cards": [],
+      "prematch_review": "待复盘",
+      "odds_review": "赛后赔率复盘待补充。"
+    },
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1489383,
+    "kickoff_utc": "2026-06-16T19:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 1",
+    "venue": "MetLife Stadium",
+    "city": "East Rutherford",
+    "status": "FT",
+    "raw": {
+      "fixture": {
+        "id": 1489383,
+        "referee": "Alireza Faghani, Australia",
+        "timezone": "UTC",
+        "date": "2026-06-16T19:00:00+00:00",
+        "timestamp": 1781636400,
+        "periods": {
+          "first": 1781636400,
+          "second": 1781640000
+        },
+        "venue": {
+          "id": null,
+          "name": "MetLife Stadium",
+          "city": "East Rutherford"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": 10
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 1",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "France",
+          "logo": "https://media.api-sports.io/football/teams/2.png",
+          "winner": true
+        },
+        "away": {
+          "id": 13,
+          "name": "Senegal",
+          "logo": "https://media.api-sports.io/football/teams/13.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 3,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 3,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 2,
+    "name": "France",
+    "code": "FRA",
+    "country": "France",
+    "founded": 1919,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/2.png",
+    "_resolver": {
+      "input": "France",
+      "matched_query": "France",
+      "matched_name": "France",
+      "team_id": 2,
+      "attempted": [
+        "France"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 13,
+    "name": "Senegal",
+    "code": "SEN",
+    "country": "Senegal",
+    "founded": 1960,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/13.png",
+    "_resolver": {
+      "input": "Senegal",
+      "matched_query": "Senegal",
+      "matched_name": "Senegal",
+      "team_id": 13,
+      "attempted": [
+        "Senegal"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group I",
+    "rows": [
+      {
+        "team": "Norway",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 4,
+        "ga": 1,
+        "gd": 3,
+        "points": 3
+      },
+      {
+        "team": "France",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 3,
+        "ga": 1,
+        "gd": 2,
+        "points": 3
+      },
+      {
+        "team": "Senegal",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 1,
+        "ga": 3,
+        "gd": -2,
+        "points": 0
+      },
+      {
+        "team": "Iraq",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 1,
+        "ga": 4,
+        "gd": -3,
+        "points": 0
+      }
+    ]
+  }
+}

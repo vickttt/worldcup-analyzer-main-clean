@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "matches": {
+    "2026_06_18_Switzerland_Bosnia_and_Herzegovina": "2026-06-19T12:49:05.004799+08:00"
+  },
+  "portfolios": {
+    "备选组合3": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": 1152,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.96,
+      "win_rate": 1.0
+    },
+    "推荐组合（当前最优）": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": 906,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.755,
+      "win_rate": 1.0
+    },
+    "备选组合4": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": 660,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.55,
+      "win_rate": 1.0
+    },
+    "备选组合1": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": 596,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.49666666666666665,
+      "win_rate": 1.0
+    },
+    "备选组合2": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": 172,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.14333333333333334,
+      "win_rate": 1.0
+    },
+    "第7优组合": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": -270,
+      "wins": 0,
+      "max_drawdown": -270,
+      "roi": -0.225,
+      "win_rate": 0.0
+    },
+    "第10优组合": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": -653,
+      "wins": 0,
+      "max_drawdown": -653,
+      "roi": -0.5441666666666667,
+      "win_rate": 0.0
+    },
+    "第6优组合": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": -1200,
+      "wins": 0,
+      "max_drawdown": -1200,
+      "roi": -1.0,
+      "win_rate": 0.0
+    },
+    "第8优组合": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": -1200,
+      "wins": 0,
+      "max_drawdown": -1200,
+      "roi": -1.0,
+      "win_rate": 0.0
+    },
+    "第9优组合": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": -1200,
+      "wins": 0,
+      "max_drawdown": -1200,
+      "roi": -1.0,
+      "win_rate": 0.0
+    },
+    "第11优组合": {
+      "matches": 1,
+      "stake": 1200,
+      "profit": -1200,
+      "wins": 0,
+      "max_drawdown": -1200,
+      "roi": -1.0,
+      "win_rate": 0.0
+    }
+  }
+}

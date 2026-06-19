@@ -1,0 +1,535 @@
+{
+  "source_id": "26",
+  "match": {
+    "home_cn": "Switzerland",
+    "away_cn": "Bosnia and Herzegovina",
+    "home_en": "Switzerland",
+    "away_en": "Bosnia and Herzegovina",
+    "display_name": "Switzerland vs Bosnia and Herzegovina"
+  },
+  "created_at": "2026-06-19T15:45:18.212803+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png",
+        "colors": {
+          "player": {
+            "primary": "de152f",
+            "number": "ffffff",
+            "border": "de152f"
+          },
+          "goalkeeper": {
+            "primary": "a5e3fc",
+            "number": "0c0b0b",
+            "border": "a5e3fc"
+          }
+        }
+      },
+      "formation": "4-3-1-2",
+      "startXI": [
+        {
+          "player": {
+            "id": 25282,
+            "name": "Gregor Kobel",
+            "number": 1,
+            "pos": "G",
+            "grid": "1:1"
+          }
+        },
+        {
+          "player": {
+            "id": 48378,
+            "name": "Silvan Widmer",
+            "number": 3,
+            "pos": "D",
+            "grid": "2:4"
+          }
+        },
+        {
+          "player": {
+            "id": 2803,
+            "name": "Nico Elvedi",
+            "number": 4,
+            "pos": "D",
+            "grid": "2:3"
+          }
+        },
+        {
+          "player": {
+            "id": 5,
+            "name": "Manuel Akanji",
+            "number": 5,
+            "pos": "D",
+            "grid": "2:2"
+          }
+        },
+        {
+          "player": {
+            "id": 1631,
+            "name": "Ricardo Rodríguez",
+            "number": 13,
+            "pos": "D",
+            "grid": "2:1"
+          }
+        },
+        {
+          "player": {
+            "id": 951,
+            "name": "Michel Aebischer",
+            "number": 20,
+            "pos": "M",
+            "grid": "3:3"
+          }
+        },
+        {
+          "player": {
+            "id": 1464,
+            "name": "Granit Xhaka",
+            "number": 10,
+            "pos": "M",
+            "grid": "3:2"
+          }
+        },
+        {
+          "player": {
+            "id": 2807,
+            "name": "Remo Freuler",
+            "number": 8,
+            "pos": "M",
+            "grid": "3:1"
+          }
+        },
+        {
+          "player": {
+            "id": 163032,
+            "name": "Fabian Rieder",
+            "number": 22,
+            "pos": "M",
+            "grid": "4:1"
+          }
+        },
+        {
+          "player": {
+            "id": 421,
+            "name": "Breel Embolo",
+            "number": 7,
+            "pos": "F",
+            "grid": "5:2"
+          }
+        },
+        {
+          "player": {
+            "id": 48648,
+            "name": "Dan Ndoye",
+            "number": 11,
+            "pos": "F",
+            "grid": "5:1"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "id": 406244,
+            "name": "Johan Manzambi",
+            "number": 9,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 957,
+            "name": "Djibril Sow",
+            "number": 15,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 48471,
+            "name": "Rubén Vargas",
+            "number": 17,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 349344,
+            "name": "Luca Jaquez",
+            "number": 25,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 48497,
+            "name": "Cédric Itten",
+            "number": 26,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 1142,
+            "name": "Yvon Mvogo",
+            "number": 12,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 123468,
+            "name": "Marvin Keller",
+            "number": 21,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 48372,
+            "name": "Eray Cömert",
+            "number": 18,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 162414,
+            "name": "Aurèle Amenda",
+            "number": 24,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 2810,
+            "name": "Denis Zakaria",
+            "number": 6,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 264705,
+            "name": "Ardon Jashari",
+            "number": 14,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 952,
+            "name": "Christian Fassnacht",
+            "number": 16,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 48389,
+            "name": "Noah Okafor",
+            "number": 19,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 123469,
+            "name": "Zeki Amdouni",
+            "number": 23,
+            "pos": "F",
+            "grid": null
+          }
+        }
+      ],
+      "coach": {
+        "id": 1504,
+        "name": "Murat Yakin",
+        "photo": "https://media.api-sports.io/football/coachs/1504.png"
+      }
+    },
+    {
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png",
+        "colors": {
+          "player": {
+            "primary": "ffffff",
+            "number": "104b98",
+            "border": "ffffff"
+          },
+          "goalkeeper": {
+            "primary": "000000",
+            "number": "ffffff",
+            "border": "000000"
+          }
+        }
+      },
+      "formation": "4-4-2",
+      "startXI": [
+        {
+          "player": {
+            "id": 9026,
+            "name": "Nikola Vasilj",
+            "number": 1,
+            "pos": "G",
+            "grid": "1:1"
+          }
+        },
+        {
+          "player": {
+            "id": 7318,
+            "name": "Amar Dedić",
+            "number": 7,
+            "pos": "D",
+            "grid": "2:4"
+          }
+        },
+        {
+          "player": {
+            "id": 1741,
+            "name": "Nikola Katić",
+            "number": 18,
+            "pos": "D",
+            "grid": "2:3"
+          }
+        },
+        {
+          "player": {
+            "id": 271350,
+            "name": "Tarik Muharemović",
+            "number": 4,
+            "pos": "D",
+            "grid": "2:2"
+          }
+        },
+        {
+          "player": {
+            "id": 1442,
+            "name": "Sead Kolašinac",
+            "number": 5,
+            "pos": "D",
+            "grid": "2:1"
+          }
+        },
+        {
+          "player": {
+            "id": 322101,
+            "name": "Amar Memić",
+            "number": 15,
+            "pos": "M",
+            "grid": "3:4"
+          }
+        },
+        {
+          "player": {
+            "id": 264094,
+            "name": "Benjamin Tahirović",
+            "number": 6,
+            "pos": "M",
+            "grid": "3:3"
+          }
+        },
+        {
+          "player": {
+            "id": 1324,
+            "name": "Ivan Šunjić",
+            "number": 14,
+            "pos": "M",
+            "grid": "3:2"
+          }
+        },
+        {
+          "player": {
+            "id": 395559,
+            "name": "Kerim Alajbegović",
+            "number": 19,
+            "pos": "M",
+            "grid": "3:1"
+          }
+        },
+        {
+          "player": {
+            "id": 46930,
+            "name": "Ermedin Demirović",
+            "number": 10,
+            "pos": "F",
+            "grid": "4:2"
+          }
+        },
+        {
+          "player": {
+            "id": 790,
+            "name": "Edin Džeko",
+            "number": 11,
+            "pos": "F",
+            "grid": "4:1"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "id": 162222,
+            "name": "Ivan Bašić",
+            "number": 13,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 329409,
+            "name": "Esmir Bajraktarević",
+            "number": 20,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 50006,
+            "name": "Amir Hadžiahmetović",
+            "number": 16,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 77037,
+            "name": "Jovo Lukić",
+            "number": 25,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 340173,
+            "name": "Ermin Mahmić",
+            "number": 26,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 108370,
+            "name": "Martin Zlomislić",
+            "number": 22,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 446130,
+            "name": "Mladen Jurkas",
+            "number": 12,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 409670,
+            "name": "Arjan Malić",
+            "number": 24,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 53517,
+            "name": "Dennis Hadžikadunić",
+            "number": 3,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 76867,
+            "name": "Nihad Mujakić",
+            "number": 2,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 14301,
+            "name": "Stjepan Radeljić",
+            "number": 21,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 70514,
+            "name": "Armin Gigović",
+            "number": 8,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 25129,
+            "name": "Dženis Burnić",
+            "number": 17,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 28382,
+            "name": "Haris Tabaković",
+            "number": 23,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 314377,
+            "name": "Samed Baždar",
+            "number": 9,
+            "pos": "F",
+            "grid": null
+          }
+        }
+      ],
+      "coach": {
+        "id": 22538,
+        "name": "Sergej Barbarez",
+        "photo": "https://media.api-sports.io/football/coachs/22538.png"
+      }
+    }
+  ],
+  "error": null
+}

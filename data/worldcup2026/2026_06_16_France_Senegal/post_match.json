@@ -1,0 +1,39 @@
+{
+  "source_id": "17",
+  "match": {
+    "home_cn": "France",
+    "away_cn": "Senegal",
+    "home_en": "France",
+    "away_en": "Senegal",
+    "display_name": "France vs Senegal"
+  },
+  "created_at": "2026-06-19T15:43:15.887476+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "status": "available",
+  "post_match": {
+    "stats": {},
+    "goals": [
+      {
+        "球队": "France",
+        "球员": "K. Mbappé 66'"
+      },
+      {
+        "球队": "France",
+        "球员": "B. Barcola 82'"
+      },
+      {
+        "球队": "France",
+        "球员": "K. Mbappé 90+6'"
+      },
+      {
+        "球队": "Senegal",
+        "球员": "I. Mbaye 90+5'"
+      }
+    ],
+    "cards": [],
+    "prematch_review": "待复盘",
+    "odds_review": "赛后赔率复盘待补充。"
+  }
+}

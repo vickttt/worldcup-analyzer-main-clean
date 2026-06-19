@@ -1,0 +1,544 @@
+{
+  "source_id": "21",
+  "match": {
+    "home_cn": "Portugal",
+    "away_cn": "Democratic Republic of the Congo",
+    "home_en": "Portugal",
+    "away_en": "DR Congo",
+    "display_name": "Portugal vs Democratic Republic of the Congo"
+  },
+  "created_at": "2026-06-19T15:43:53.547481+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "team": {
+        "id": 27,
+        "name": "Portugal",
+        "logo": "https://media.api-sports.io/football/teams/27.png",
+        "colors": {
+          "player": {
+            "primary": "00050f",
+            "number": "ffffff",
+            "border": "00050f"
+          },
+          "goalkeeper": {
+            "primary": "e774a2",
+            "number": "3e3938",
+            "border": "e774a2"
+          }
+        }
+      },
+      "coach": {
+        "id": 48,
+        "name": "Roberto Martinez",
+        "photo": "https://media.api-sports.io/football/coachs/48.png"
+      },
+      "formation": "4-2-3-1",
+      "startXI": [
+        {
+          "player": {
+            "id": 369,
+            "name": "D. Costa",
+            "number": 1,
+            "pos": "G",
+            "grid": "1:1"
+          }
+        },
+        {
+          "player": {
+            "id": 855,
+            "name": "J. Cancelo",
+            "number": 20,
+            "pos": "D",
+            "grid": "2:4"
+          }
+        },
+        {
+          "player": {
+            "id": 161939,
+            "name": "T. Araujo",
+            "number": 4,
+            "pos": "D",
+            "grid": "2:3"
+          }
+        },
+        {
+          "player": {
+            "id": 336671,
+            "name": "R. Veiga",
+            "number": 13,
+            "pos": "D",
+            "grid": "2:2"
+          }
+        },
+        {
+          "player": {
+            "id": 263482,
+            "name": "N. Mendes",
+            "number": 25,
+            "pos": "D",
+            "grid": "2:1"
+          }
+        },
+        {
+          "player": {
+            "id": 335051,
+            "name": "J. Neves",
+            "number": 15,
+            "pos": "M",
+            "grid": "3:2"
+          }
+        },
+        {
+          "player": {
+            "id": 128384,
+            "name": "Vitinha",
+            "number": 23,
+            "pos": "M",
+            "grid": "3:1"
+          }
+        },
+        {
+          "player": {
+            "id": 636,
+            "name": "B. Silva",
+            "number": 10,
+            "pos": "M",
+            "grid": "4:3"
+          }
+        },
+        {
+          "player": {
+            "id": 1485,
+            "name": "B. Fernandes",
+            "number": 8,
+            "pos": "M",
+            "grid": "4:2"
+          }
+        },
+        {
+          "player": {
+            "id": 1864,
+            "name": "P. Neto",
+            "number": 18,
+            "pos": "M",
+            "grid": "4:1"
+          }
+        },
+        {
+          "player": {
+            "id": 874,
+            "name": "C. Ronaldo",
+            "number": 7,
+            "pos": "F",
+            "grid": "5:1"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "id": 1590,
+            "name": "J. Sa",
+            "number": 12,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 46672,
+            "name": "R. Silva",
+            "number": 22,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 925,
+            "name": "G. Guedes",
+            "number": 19,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 567,
+            "name": "R. Dias",
+            "number": 3,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 130,
+            "name": "N. Semedo",
+            "number": 2,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 886,
+            "name": "D. Dalot",
+            "number": 5,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 41585,
+            "name": "G. Ramos",
+            "number": 9,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 265595,
+            "name": "G. Inacio",
+            "number": 14,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 190485,
+            "name": "Samu Costa",
+            "number": 24,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 41621,
+            "name": "M. Nunes",
+            "number": 6,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 2676,
+            "name": "R. Neves",
+            "number": 21,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 22236,
+            "name": "R. Leao",
+            "number": 17,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 583,
+            "name": "Joao Felix",
+            "number": 11,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 41112,
+            "name": "Trincao",
+            "number": 16,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 161585,
+            "name": "F. Conceicao",
+            "number": 26,
+            "pos": "F",
+            "grid": null
+          }
+        }
+      ]
+    },
+    {
+      "team": {
+        "id": 1508,
+        "name": "Congo DR",
+        "logo": "https://media.api-sports.io/football/teams/1508.png",
+        "colors": {
+          "player": {
+            "primary": "6bc7f1",
+            "number": "ffffff",
+            "border": "6bc7f1"
+          },
+          "goalkeeper": {
+            "primary": "34df33",
+            "number": "ffffff",
+            "border": "34df33"
+          }
+        }
+      },
+      "coach": {
+        "id": 370,
+        "name": "Sebastien Desabre",
+        "photo": "https://media.api-sports.io/football/coachs/370.png"
+      },
+      "formation": "5-3-2",
+      "startXI": [
+        {
+          "player": {
+            "id": 24012,
+            "name": "L. Mpasi-Nzau",
+            "number": 1,
+            "pos": "G",
+            "grid": "1:1"
+          }
+        },
+        {
+          "player": {
+            "id": 18846,
+            "name": "A. Wan-Bissaka",
+            "number": 2,
+            "pos": "D",
+            "grid": "2:5"
+          }
+        },
+        {
+          "player": {
+            "id": 375,
+            "name": "C. Mbemba",
+            "number": 22,
+            "pos": "D",
+            "grid": "2:4"
+          }
+        },
+        {
+          "player": {
+            "id": 19182,
+            "name": "A. Tuanzebe",
+            "number": 4,
+            "pos": "D",
+            "grid": "2:3"
+          }
+        },
+        {
+          "player": {
+            "id": 199767,
+            "name": "S. Kapuadi",
+            "number": 3,
+            "pos": "D",
+            "grid": "2:2"
+          }
+        },
+        {
+          "player": {
+            "id": 18816,
+            "name": "A. Masuaku",
+            "number": 26,
+            "pos": "D",
+            "grid": "2:1"
+          }
+        },
+        {
+          "player": {
+            "id": 375598,
+            "name": "N. Mukau",
+            "number": 6,
+            "pos": "M",
+            "grid": "3:3"
+          }
+        },
+        {
+          "player": {
+            "id": 21101,
+            "name": "S. Moutoussamy",
+            "number": 8,
+            "pos": "M",
+            "grid": "3:2"
+          }
+        },
+        {
+          "player": {
+            "id": 1424,
+            "name": "E. Kayembe",
+            "number": 25,
+            "pos": "M",
+            "grid": "3:1"
+          }
+        },
+        {
+          "player": {
+            "id": 20649,
+            "name": "Y. Wissa",
+            "number": 20,
+            "pos": "F",
+            "grid": "4:2"
+          }
+        },
+        {
+          "player": {
+            "id": 3033,
+            "name": "C. Bakambu",
+            "number": 17,
+            "pos": "F",
+            "grid": "4:1"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "id": 314509,
+            "name": "M. Epolo",
+            "number": 21,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 48501,
+            "name": "T. Fayulu",
+            "number": 16,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 21098,
+            "name": "J. Kayembe",
+            "number": 12,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 48555,
+            "name": "C. Pickel",
+            "number": 18,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 24245,
+            "name": "G. Kalulu",
+            "number": 24,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 20674,
+            "name": "S. Banza",
+            "number": 23,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 129670,
+            "name": "N. Mbuku",
+            "number": 7,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 279482,
+            "name": "B. Cipenga",
+            "number": 9,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 179699,
+            "name": "F. Mayele",
+            "number": 19,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 365331,
+            "name": "N. Sadiki",
+            "number": 14,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 47545,
+            "name": "G. Kakuta",
+            "number": 11,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 8445,
+            "name": "D. Batubinsika",
+            "number": 5,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 8627,
+            "name": "T. Bongonda",
+            "number": 10,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 44791,
+            "name": "A. Tshibola",
+            "number": 15,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 3034,
+            "name": "M. Elia",
+            "number": 13,
+            "pos": "F",
+            "grid": null
+          }
+        }
+      ]
+    }
+  ],
+  "error": null
+}

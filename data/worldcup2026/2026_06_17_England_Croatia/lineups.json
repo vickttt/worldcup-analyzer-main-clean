@@ -1,0 +1,535 @@
+{
+  "source_id": "22",
+  "match": {
+    "home_cn": "England",
+    "away_cn": "Croatia",
+    "home_en": "England",
+    "away_en": "Croatia",
+    "display_name": "England vs Croatia"
+  },
+  "created_at": "2026-06-19T15:44:27.612078+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "team": {
+        "id": 10,
+        "name": "England",
+        "logo": "https://media.api-sports.io/football/teams/10.png",
+        "colors": {
+          "player": {
+            "primary": "e7e7f0",
+            "number": "e01b1b",
+            "border": "e7e7f0"
+          },
+          "goalkeeper": {
+            "primary": "d9f700",
+            "number": "f7f7f7",
+            "border": "d9f700"
+          }
+        }
+      },
+      "coach": {
+        "id": 40,
+        "name": "Thomas Tuchel",
+        "photo": "https://media.api-sports.io/football/coachs/40.png"
+      },
+      "formation": "4-2-3-1",
+      "startXI": [
+        {
+          "player": {
+            "id": 2932,
+            "name": "J. Pickford",
+            "number": 1,
+            "pos": "G",
+            "grid": "1:1"
+          }
+        },
+        {
+          "player": {
+            "id": 19545,
+            "name": "R. James",
+            "number": 24,
+            "pos": "D",
+            "grid": "2:4"
+          }
+        },
+        {
+          "player": {
+            "id": 19354,
+            "name": "E. Konsa",
+            "number": 2,
+            "pos": "D",
+            "grid": "2:3"
+          }
+        },
+        {
+          "player": {
+            "id": 626,
+            "name": "J. Stones",
+            "number": 5,
+            "pos": "D",
+            "grid": "2:2"
+          }
+        },
+        {
+          "player": {
+            "id": 307123,
+            "name": "N. O'Reilly",
+            "number": 3,
+            "pos": "D",
+            "grid": "2:1"
+          }
+        },
+        {
+          "player": {
+            "id": 138908,
+            "name": "E. Anderson",
+            "number": 8,
+            "pos": "M",
+            "grid": "3:2"
+          }
+        },
+        {
+          "player": {
+            "id": 2937,
+            "name": "D. Rice",
+            "number": 4,
+            "pos": "M",
+            "grid": "3:1"
+          }
+        },
+        {
+          "player": {
+            "id": 136723,
+            "name": "N. Madueke",
+            "number": 20,
+            "pos": "M",
+            "grid": "4:3"
+          }
+        },
+        {
+          "player": {
+            "id": 129718,
+            "name": "J. Bellingham",
+            "number": 10,
+            "pos": "M",
+            "grid": "4:2"
+          }
+        },
+        {
+          "player": {
+            "id": 138787,
+            "name": "A. Gordon",
+            "number": 18,
+            "pos": "M",
+            "grid": "4:1"
+          }
+        },
+        {
+          "player": {
+            "id": 184,
+            "name": "H. Kane",
+            "number": 9,
+            "pos": "F",
+            "grid": "5:1"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "id": 19088,
+            "name": "D. Henderson",
+            "number": 13,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 162489,
+            "name": "J. Trafford",
+            "number": 23,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 292,
+            "name": "J. Henderson",
+            "number": 14,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 18961,
+            "name": "D. Burn",
+            "number": 15,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 19366,
+            "name": "O. Watkins",
+            "number": 19,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 19170,
+            "name": "M. Rogers",
+            "number": 17,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 1460,
+            "name": "B. Saka",
+            "number": 7,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 284322,
+            "name": "K. Mainoo",
+            "number": 16,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 19974,
+            "name": "I. Toney",
+            "number": 22,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 909,
+            "name": "M. Rashford",
+            "number": 11,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 19586,
+            "name": "E. Eze",
+            "number": 21,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 67971,
+            "name": "M. Guehi",
+            "number": 6,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 19235,
+            "name": "D. Spence",
+            "number": 25,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 158698,
+            "name": "J. Quansah",
+            "number": 26,
+            "pos": "D",
+            "grid": null
+          }
+        }
+      ]
+    },
+    {
+      "team": {
+        "id": 3,
+        "name": "Croatia",
+        "logo": "https://media.api-sports.io/football/teams/3.png",
+        "colors": {
+          "player": {
+            "primary": "274ebb",
+            "number": "ffffff",
+            "border": "274ebb"
+          },
+          "goalkeeper": {
+            "primary": "e3d243",
+            "number": "0d0d0d",
+            "border": "e3d243"
+          }
+        }
+      },
+      "coach": {
+        "id": 115,
+        "name": "Zlatko Dalic",
+        "photo": "https://media.api-sports.io/football/coachs/115.png"
+      },
+      "formation": "3-4-2-1",
+      "startXI": [
+        {
+          "player": {
+            "id": 1305,
+            "name": "D. Livakovic",
+            "number": 1,
+            "pos": "G",
+            "grid": "1:1"
+          }
+        },
+        {
+          "player": {
+            "id": 14701,
+            "name": "J. Sutalo",
+            "number": 6,
+            "pos": "D",
+            "grid": "2:3"
+          }
+        },
+        {
+          "player": {
+            "id": 387521,
+            "name": "L. Vuskovic",
+            "number": 22,
+            "pos": "D",
+            "grid": "2:2"
+          }
+        },
+        {
+          "player": {
+            "id": 129033,
+            "name": "J. Gvardiol",
+            "number": 4,
+            "pos": "D",
+            "grid": "2:1"
+          }
+        },
+        {
+          "player": {
+            "id": 125171,
+            "name": "J. Stanisic",
+            "number": 2,
+            "pos": "M",
+            "grid": "3:4"
+          }
+        },
+        {
+          "player": {
+            "id": 754,
+            "name": "L. Modric",
+            "number": 10,
+            "pos": "M",
+            "grid": "3:3"
+          }
+        },
+        {
+          "player": {
+            "id": 2763,
+            "name": "M. Pasalic",
+            "number": 15,
+            "pos": "M",
+            "grid": "3:2"
+          }
+        },
+        {
+          "player": {
+            "id": 207,
+            "name": "I. Perisic",
+            "number": 14,
+            "pos": "M",
+            "grid": "3:1"
+          }
+        },
+        {
+          "player": {
+            "id": 348205,
+            "name": "P. Sucic",
+            "number": 17,
+            "pos": "F",
+            "grid": "4:2"
+          }
+        },
+        {
+          "player": {
+            "id": 295026,
+            "name": "M. Baturina",
+            "number": 16,
+            "pos": "F",
+            "grid": "4:1"
+          }
+        },
+        {
+          "player": {
+            "id": 66055,
+            "name": "P. Musa",
+            "number": 26,
+            "pos": "F",
+            "grid": "5:1"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "id": 524,
+            "name": "D. Kotarski",
+            "number": 23,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 14268,
+            "name": "I. Pandur",
+            "number": 12,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 726,
+            "name": "A. Kramaric",
+            "number": 9,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 46746,
+            "name": "A. Budimir",
+            "number": 11,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 1902,
+            "name": "D. Caleta-Car",
+            "number": 5,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 842,
+            "name": "N. Vlasic",
+            "number": 13,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 1322,
+            "name": "N. Moro",
+            "number": 7,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 30827,
+            "name": "M. Erlic",
+            "number": 25,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 14395,
+            "name": "K. Jakic",
+            "number": 18,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 1084,
+            "name": "M. Pongracic",
+            "number": 3,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 7332,
+            "name": "L. Sucic",
+            "number": 21,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 260865,
+            "name": "M. Pasalic",
+            "number": 24,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 202696,
+            "name": "I. Matanovic",
+            "number": 20,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 2291,
+            "name": "M. Kovacic",
+            "number": 8,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 284869,
+            "name": "T. Fruk",
+            "number": 19,
+            "pos": "M",
+            "grid": null
+          }
+        }
+      ]
+    }
+  ],
+  "error": null
+}

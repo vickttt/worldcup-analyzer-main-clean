@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-06-19T13:50:25.695895+08:00",
+  "match": "瑞士 vs 波黑",
+  "raw_text": "波胆,2:0,600\n波胆,1:0,350\n波胆,2:1,250\n波胆,3:0,200\n1:1,100",
+  "items": [
+    {
+      "slot": "用户赛前赔率",
+      "type": "correct_score",
+      "selection": "2:0",
+      "name": "波胆 2:0",
+      "standard_odds": 6.5,
+      "effective_odds": 6.5,
+      "odds": 6.5,
+      "source": "用户赛前录入赔率",
+      "amount": 600,
+      "matched": true,
+      "raw_input": "波胆,2:0,600"
+    },
+    {
+      "slot": "用户赛前赔率",
+      "type": "correct_score",
+      "selection": "1:0",
+      "name": "波胆 1:0",
+      "standard_odds": 5.5,
+      "effective_odds": 5.5,
+      "odds": 5.5,
+      "source": "用户赛前录入赔率",
+      "amount": 350,
+      "matched": true,
+      "raw_input": "波胆,1:0,350"
+    },
+    {
+      "slot": "用户赛前赔率",
+      "type": "correct_score",
+      "selection": "2:1",
+      "name": "波胆 2:1",
+      "standard_odds": 8.0,
+      "effective_odds": 8.0,
+      "odds": 8.0,
+      "source": "用户赛前录入赔率",
+      "amount": 250,
+      "matched": true,
+      "raw_input": "波胆,2:1,250"
+    },
+    {
+      "slot": "用户赛前赔率",
+      "type": "correct_score",
+      "selection": "3:0",
+      "name": "波胆 3:0",
+      "standard_odds": 11.5,
+      "effective_odds": 11.5,
+      "odds": 11.5,
+      "source": "用户赛前录入赔率",
+      "amount": 200,
+      "matched": true,
+      "raw_input": "波胆,3:0,200"
+    },
+    {
+      "slot": "用户赛前赔率",
+      "type": "correct_score",
+      "selection": "1:1",
+      "name": "波胆 1:1",
+      "standard_odds": 8.0,
+      "effective_odds": 8.0,
+      "odds": 8.0,
+      "source": "用户赛前录入赔率",
+      "amount": 100,
+      "matched": true,
+      "raw_input": "1:1,100"
+    }
+  ]
+}

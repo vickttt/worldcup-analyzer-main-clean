@@ -1,0 +1,53 @@
+{
+  "created_at": "2026-06-19T15:45:22.692235+08:00",
+  "matches": [
+    {
+      "match": "France vs Senegal",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_16_France_Senegal",
+      "schedule_fixture_id": "17",
+      "api_football_fixture_id": 1489383,
+      "odds_found": false,
+      "api_asian_rows": 190,
+      "api_correct_rows": 585,
+      "lineups_rows": 2,
+      "injuries_rows": 0,
+      "recommended": "Home -1.5 + 波胆 0:1 + 波胆 1:2 + 波胆 2:3"
+    },
+    {
+      "match": "Portugal vs Democratic Republic of the Congo",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_17_Portugal_DR_Congo",
+      "schedule_fixture_id": null,
+      "api_football_fixture_id": 1539003,
+      "odds_found": false,
+      "api_asian_rows": 184,
+      "api_correct_rows": 586,
+      "lineups_rows": 2,
+      "injuries_rows": 0,
+      "recommended": "Home -1.5 + 波胆 2:0 + 波胆 0:1 + 波胆 1:2"
+    },
+    {
+      "match": "England vs Croatia",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_17_England_Croatia",
+      "schedule_fixture_id": "22",
+      "api_football_fixture_id": 1489384,
+      "odds_found": false,
+      "api_asian_rows": 169,
+      "api_correct_rows": 577,
+      "lineups_rows": 2,
+      "injuries_rows": 0,
+      "recommended": "Home -1 + 波胆 0:1 + 波胆 1:2 + 波胆 2:3"
+    },
+    {
+      "match": "Switzerland vs Bosnia and Herzegovina",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_18_Switzerland_Bosnia_and_Herzegovina",
+      "schedule_fixture_id": "26",
+      "api_football_fixture_id": 1539005,
+      "odds_found": false,
+      "api_asian_rows": 178,
+      "api_correct_rows": 458,
+      "lineups_rows": 2,
+      "injuries_rows": 0,
+      "recommended": "Home -1.5 + 波胆 0:1 + 波胆 1:2 + 波胆 2:3"
+    }
+  ]
+}

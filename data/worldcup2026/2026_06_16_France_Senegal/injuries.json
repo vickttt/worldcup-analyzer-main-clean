@@ -1,0 +1,17 @@
+{
+  "source_id": "17",
+  "match": {
+    "home_cn": "France",
+    "away_cn": "Senegal",
+    "home_en": "France",
+    "away_en": "Senegal",
+    "display_name": "France vs Senegal"
+  },
+  "created_at": "2026-06-19T15:43:15.887476+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [],
+  "error": null
+}

@@ -1,0 +1,17 @@
+{
+  "source_id": "26",
+  "match": {
+    "home_cn": "Switzerland",
+    "away_cn": "Bosnia and Herzegovina",
+    "home_en": "Switzerland",
+    "away_en": "Bosnia and Herzegovina",
+    "display_name": "Switzerland vs Bosnia and Herzegovina"
+  },
+  "created_at": "2026-06-19T15:45:18.212803+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [],
+  "error": null
+}

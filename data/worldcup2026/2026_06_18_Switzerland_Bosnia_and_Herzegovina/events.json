@@ -1,0 +1,436 @@
+{
+  "source_id": "26",
+  "match": {
+    "home_cn": "Switzerland",
+    "away_cn": "Bosnia and Herzegovina",
+    "home_en": "Switzerland",
+    "away_en": "Bosnia and Herzegovina",
+    "display_name": "Switzerland vs Bosnia and Herzegovina"
+  },
+  "created_at": "2026-06-19T15:45:18.212803+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "time": {
+        "elapsed": 59,
+        "extra": null
+      },
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png"
+      },
+      "player": {
+        "id": 7318,
+        "name": "Amar Dedić"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Foul"
+    },
+    {
+      "time": {
+        "elapsed": 61,
+        "extra": null
+      },
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png"
+      },
+      "player": {
+        "id": 790,
+        "name": "Edin Džeko"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Foul"
+    },
+    {
+      "time": {
+        "elapsed": 63,
+        "extra": null
+      },
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png"
+      },
+      "player": {
+        "id": 264094,
+        "name": "Benjamin Tahirović"
+      },
+      "assist": {
+        "id": 162222,
+        "name": "Ivan Bašić"
+      },
+      "type": "subst",
+      "detail": "Substitution 1",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 64,
+        "extra": null
+      },
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png"
+      },
+      "player": {
+        "id": 790,
+        "name": "Edin Džeko"
+      },
+      "assist": {
+        "id": 329409,
+        "name": "Esmir Bajraktarević"
+      },
+      "type": "subst",
+      "detail": "Substitution 2",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 65,
+        "extra": null
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 2803,
+        "name": "Nico Elvedi"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Foul"
+    },
+    {
+      "time": {
+        "elapsed": 71,
+        "extra": null
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 163032,
+        "name": "Fabian Rieder"
+      },
+      "assist": {
+        "id": 48471,
+        "name": "Rubén Vargas"
+      },
+      "type": "subst",
+      "detail": "Substitution 1",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 71,
+        "extra": null
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 48648,
+        "name": "Dan Ndoye"
+      },
+      "assist": {
+        "id": 406244,
+        "name": "Johan Manzambi"
+      },
+      "type": "subst",
+      "detail": "Substitution 2",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 71,
+        "extra": null
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 951,
+        "name": "Michel Aebischer"
+      },
+      "assist": {
+        "id": 957,
+        "name": "Djibril Sow"
+      },
+      "type": "subst",
+      "detail": "Substitution 3",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 74,
+        "extra": null
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 406244,
+        "name": "Johan Manzambi"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Goal",
+      "detail": "Normal Goal",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 80,
+        "extra": null
+      },
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png"
+      },
+      "player": {
+        "id": 271350,
+        "name": "Tarik Muharemović"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Red Card",
+      "comments": "Professional foul last man"
+    },
+    {
+      "time": {
+        "elapsed": 84,
+        "extra": null
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 48471,
+        "name": "Rubén Vargas"
+      },
+      "assist": {
+        "id": 421,
+        "name": "Breel Embolo"
+      },
+      "type": "Goal",
+      "detail": "Normal Goal",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 86,
+        "extra": null
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 48378,
+        "name": "Silvan Widmer"
+      },
+      "assist": {
+        "id": 349344,
+        "name": "Luca Jaquez"
+      },
+      "type": "subst",
+      "detail": "Substitution 4",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 86,
+        "extra": null
+      },
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png"
+      },
+      "player": {
+        "id": 46930,
+        "name": "Ermedin Demirović"
+      },
+      "assist": {
+        "id": 77037,
+        "name": "Jovo Lukić"
+      },
+      "type": "subst",
+      "detail": "Substitution 3",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 86,
+        "extra": null
+      },
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png"
+      },
+      "player": {
+        "id": 1324,
+        "name": "Ivan Šunjić"
+      },
+      "assist": {
+        "id": 50006,
+        "name": "Amir Hadžiahmetović"
+      },
+      "type": "subst",
+      "detail": "Substitution 4",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 89,
+        "extra": null
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 421,
+        "name": "Breel Embolo"
+      },
+      "assist": {
+        "id": 48497,
+        "name": "Cédric Itten"
+      },
+      "type": "subst",
+      "detail": "Substitution 5",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 90,
+        "extra": 7
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 1464,
+        "name": "Granit Xhaka"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Goal",
+      "detail": "Penalty",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 90,
+        "extra": null
+      },
+      "team": {
+        "id": 15,
+        "name": "Switzerland",
+        "logo": "https://media.api-sports.io/football/teams/15.png"
+      },
+      "player": {
+        "id": 406244,
+        "name": "Johan Manzambi"
+      },
+      "assist": {
+        "id": 48471,
+        "name": "Rubén Vargas"
+      },
+      "type": "Goal",
+      "detail": "Normal Goal",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 90,
+        "extra": 3
+      },
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png"
+      },
+      "player": {
+        "id": 340173,
+        "name": "Ermin Mahmić"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Goal",
+      "detail": "Normal Goal",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 90,
+        "extra": null
+      },
+      "team": {
+        "id": 1113,
+        "name": "Bosnia & Herzegovina",
+        "logo": "https://media.api-sports.io/football/teams/1113.png"
+      },
+      "player": {
+        "id": 395559,
+        "name": "Kerim Alajbegović"
+      },
+      "assist": {
+        "id": 340173,
+        "name": "Ermin Mahmić"
+      },
+      "type": "subst",
+      "detail": "Substitution 5",
+      "comments": null
+    }
+  ],
+  "error": null
+}

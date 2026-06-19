@@ -1,0 +1,159 @@
+{
+  "source_id": "66456932",
+  "match": {
+    "home_cn": "Brazil",
+    "away_cn": "Haiti",
+    "home_en": "Brazil",
+    "away_en": "Haiti",
+    "display_name": "Brazil vs Haiti"
+  },
+  "created_at": "2026-06-19T16:02:12.689790+08:00",
+  "schedule_source": "ESPN",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "760444",
+    "home_team": {
+      "id": "205",
+      "name": "Brazil",
+      "logo": null
+    },
+    "away_team": {
+      "id": "2654",
+      "name": "Haiti",
+      "logo": null
+    },
+    "kickoff_utc": "2026-06-20T00:30Z",
+    "league_name": "World Cup 2026",
+    "round": "group-stage",
+    "group": "",
+    "venue_name": "Lincoln Financial Field",
+    "venue_city": "Philadelphia, Pennsylvania, USA",
+    "status": "STATUS_SCHEDULED",
+    "status_text": "Scheduled",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "ESPN"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1489389,
+    "kickoff_utc": "2026-06-20T00:30:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 2",
+    "venue": "Lincoln Financial Field",
+    "city": "Philadelphia",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1489389,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-06-20T00:30:00+00:00",
+        "timestamp": 1781915400,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": null,
+          "name": "Lincoln Financial Field",
+          "city": "Philadelphia"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 2",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 6,
+          "name": "Brazil",
+          "logo": "https://media.api-sports.io/football/teams/6.png",
+          "winner": null
+        },
+        "away": {
+          "id": 2386,
+          "name": "Haiti",
+          "logo": "https://media.api-sports.io/football/teams/2386.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 6,
+    "name": "Brazil",
+    "code": "BRA",
+    "country": "Brazil",
+    "founded": 1914,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/6.png",
+    "_resolver": {
+      "input": "Brazil",
+      "matched_query": "Brazil",
+      "matched_name": "Brazil",
+      "team_id": 6,
+      "attempted": [
+        "Brazil"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 2386,
+    "name": "Haiti",
+    "code": "HAI",
+    "country": "Haiti",
+    "founded": 1904,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/2386.png",
+    "_resolver": {
+      "input": "Haiti",
+      "matched_query": "Haiti",
+      "matched_name": "Haiti",
+      "team_id": 2386,
+      "attempted": [
+        "Haiti"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": null
+}
