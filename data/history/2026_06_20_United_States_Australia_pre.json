@@ -1,0 +1,6759 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "pre_match_snapshot",
+  "created_at": "2026-06-19T16:18:35.840482+08:00",
+  "match": {
+    "home": "United States",
+    "away": "Australia",
+    "display": "美国 vs 澳大利亚"
+  },
+  "fixture": {
+    "fixture_id": "760442",
+    "home_team": {
+      "id": "660",
+      "name": "United States",
+      "logo": null
+    },
+    "away_team": {
+      "id": "628",
+      "name": "Australia",
+      "logo": null
+    },
+    "kickoff_utc": "2026-06-19T19:00Z",
+    "league_name": "World Cup 2026",
+    "round": "group-stage",
+    "group": "",
+    "venue_name": "Lumen Field",
+    "venue_city": "Seattle, Washington, USA",
+    "status": "STATUS_SCHEDULED",
+    "status_text": "Scheduled",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "ESPN"
+  },
+  "model_versions": {
+    "model_version": "v1.61",
+    "probability_engine_version": "score_distribution_v1",
+    "optimizer_version": "portfolio_optimizer_v1",
+    "asset_framework_version": "multi_role_asset_framework_v1",
+    "audit_version": "prediction_audit_v1"
+  },
+  "match_info": {
+    "odds_date_key": "2026-06-19",
+    "report_path": "outputs/reports/United_States_vs_Australia_20260619_161835.md"
+  },
+  "odds": {
+    "found": true,
+    "home_win": 1.6,
+    "draw": 3.9,
+    "away_win": 5.5,
+    "over_under_line": 2.5,
+    "asian_handicap": [],
+    "over_under": [
+      {
+        "line": 2.5,
+        "over_odds": 1.88,
+        "under_odds": 1.9,
+        "bookmaker": "GTbets"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.91,
+        "under_odds": 1.96,
+        "bookmaker": "1xBet"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.83,
+        "under_odds": 1.92,
+        "bookmaker": "TABtouch"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.84,
+        "under_odds": 1.92,
+        "bookmaker": "Unibet"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.87,
+        "under_odds": 1.94,
+        "bookmaker": "Unibet (SE)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.83,
+        "under_odds": 1.92,
+        "bookmaker": "LeoVegas"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.83,
+        "under_odds": 1.92,
+        "bookmaker": "Grosvenor"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.83,
+        "under_odds": 1.92,
+        "bookmaker": "Casumo"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.83,
+        "under_odds": 1.92,
+        "bookmaker": "BetRivers"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.83,
+        "under_odds": 1.92,
+        "bookmaker": "Unibet (NL)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.81,
+        "under_odds": 1.88,
+        "bookmaker": "PMU (FR)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.94,
+        "under_odds": 1.93,
+        "bookmaker": "Coolbet"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.91,
+        "under_odds": 1.98,
+        "bookmaker": "Pinnacle"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.93,
+        "under_odds": 1.93,
+        "bookmaker": "BetOnline.ag"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.85,
+        "under_odds": 1.98,
+        "bookmaker": "Bovada"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.91,
+        "under_odds": 1.87,
+        "bookmaker": "BetMGM"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.86,
+        "under_odds": 1.95,
+        "bookmaker": "MyBookie.ag"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.85,
+        "under_odds": 1.85,
+        "bookmaker": "William Hill"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.79,
+        "under_odds": 1.88,
+        "bookmaker": "Codere (IT)"
+      },
+      {
+        "line": 3.0,
+        "over_odds": 2.7,
+        "under_odds": 1.5,
+        "bookmaker": "BetAnything"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.95,
+        "under_odds": 2.04,
+        "bookmaker": "Matchbook"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.91,
+        "under_odds": 1.91,
+        "bookmaker": "BetUS"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.93,
+        "under_odds": 1.93,
+        "bookmaker": "LowVig.ag"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.85,
+        "under_odds": 1.9,
+        "bookmaker": "PlayUp"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.9,
+        "under_odds": 1.92,
+        "bookmaker": "Nordic Bet"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.85,
+        "under_odds": 1.98,
+        "bookmaker": "Betsson"
+      }
+    ],
+    "raw_probabilities": {
+      "home_win": 0.625,
+      "draw": 0.25641025641025644,
+      "away_win": 0.18181818181818182
+    },
+    "implied_probabilities": {
+      "home_win": 0.5878322828172102,
+      "draw": 0.24116196218141958,
+      "away_win": 0.17100575500137025
+    },
+    "source": "The Odds API / SportsBet",
+    "event_title": "USA vs Australia",
+    "event_id": "065b3573e875f8d23803357f73e5b99e",
+    "message": "已找到 The Odds API h2h 真实赔率。",
+    "cache": {
+      "source": "fresh api response - forced single match refresh",
+      "sport_key": "soccer_fifa_world_cup",
+      "date_key": "2026-06-19",
+      "events_count": 2
+    }
+  },
+  "api_football_data": {
+    "fixture_result": {
+      "fixture": {
+        "id": 1405465,
+        "name": "USA vs Australia",
+        "home_team": {
+          "id": 2384,
+          "name": "USA",
+          "logo": "https://media.api-sports.io/football/teams/2384.png",
+          "winner": true
+        },
+        "away_team": {
+          "id": 20,
+          "name": "Australia",
+          "logo": "https://media.api-sports.io/football/teams/20.png",
+          "winner": false
+        },
+        "raw": {
+          "fixture": {
+            "id": 1405465,
+            "referee": "Pierre Luce Lauziere, Canada",
+            "timezone": "UTC",
+            "date": "2025-10-15T01:00:00+00:00",
+            "timestamp": 1760490000,
+            "periods": {
+              "first": 1760490000,
+              "second": 1760493600
+            },
+            "venue": {
+              "id": null,
+              "name": "Dick's Sporting Goods Park",
+              "city": "Commerce City"
+            },
+            "status": {
+              "long": "Match Finished",
+              "short": "FT",
+              "elapsed": 90,
+              "extra": 4
+            }
+          },
+          "league": {
+            "id": 10,
+            "name": "Friendlies",
+            "country": "World",
+            "logo": "https://media.api-sports.io/football/leagues/10.png",
+            "flag": null,
+            "season": 2025,
+            "round": "Friendlies 1",
+            "standings": false
+          },
+          "teams": {
+            "home": {
+              "id": 2384,
+              "name": "USA",
+              "logo": "https://media.api-sports.io/football/teams/2384.png",
+              "winner": true
+            },
+            "away": {
+              "id": 20,
+              "name": "Australia",
+              "logo": "https://media.api-sports.io/football/teams/20.png",
+              "winner": false
+            }
+          },
+          "goals": {
+            "home": 2,
+            "away": 1
+          },
+          "score": {
+            "halftime": {
+              "home": 1,
+              "away": 1
+            },
+            "fulltime": {
+              "home": 2,
+              "away": 1
+            },
+            "extratime": {
+              "home": null,
+              "away": null
+            },
+            "penalty": {
+              "home": null,
+              "away": null
+            }
+          }
+        }
+      },
+      "home_team": {
+        "id": 2384,
+        "name": "USA",
+        "code": "USA",
+        "country": "USA",
+        "founded": 1913,
+        "national": true,
+        "logo": "https://media.api-sports.io/football/teams/2384.png",
+        "_resolver": {
+          "input": "USA",
+          "matched_query": "USA",
+          "matched_name": "USA",
+          "team_id": 2384,
+          "attempted": [
+            "USA"
+          ],
+          "cache_status": "api_resolved"
+        }
+      },
+      "away_team": {
+        "id": 20,
+        "name": "Australia",
+        "code": "AUS",
+        "country": "Australia",
+        "founded": 1961,
+        "national": true,
+        "logo": "https://media.api-sports.io/football/teams/20.png",
+        "_resolver": {
+          "input": "Australia",
+          "matched_query": "Australia",
+          "matched_name": "Australia",
+          "team_id": 20,
+          "attempted": [
+            "Australia"
+          ],
+          "cache_status": "team_id_cache"
+        }
+      },
+      "competition_pair": {
+        "id": 10,
+        "name": "Friendlies",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/10.png",
+        "flag": null,
+        "season": 2025,
+        "round": "Friendlies 1",
+        "standings": false
+      },
+      "message": "已通过 API-Football head-to-head 找到对应比赛。"
+    },
+    "fixture": {
+      "id": 1405465,
+      "name": "USA vs Australia",
+      "home_team": {
+        "id": 2384,
+        "name": "USA",
+        "logo": "https://media.api-sports.io/football/teams/2384.png",
+        "winner": true
+      },
+      "away_team": {
+        "id": 20,
+        "name": "Australia",
+        "logo": "https://media.api-sports.io/football/teams/20.png",
+        "winner": false
+      },
+      "raw": {
+        "fixture": {
+          "id": 1405465,
+          "referee": "Pierre Luce Lauziere, Canada",
+          "timezone": "UTC",
+          "date": "2025-10-15T01:00:00+00:00",
+          "timestamp": 1760490000,
+          "periods": {
+            "first": 1760490000,
+            "second": 1760493600
+          },
+          "venue": {
+            "id": null,
+            "name": "Dick's Sporting Goods Park",
+            "city": "Commerce City"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 4
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2025,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": true
+          },
+          "away": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      }
+    },
+    "odds": {
+      "found": false,
+      "home_win": null,
+      "draw": null,
+      "away_win": null,
+      "over_under_line": null,
+      "raw_probabilities": null,
+      "implied_probabilities": null,
+      "source": "API-Football 免费版",
+      "event_title": "USA vs Australia",
+      "event_id": 1405465,
+      "message": "API-Football 免费版无法获取 2026 World Cup odds：Free plans do not have access to this season。"
+    },
+    "asian_handicap": {
+      "found": false,
+      "source": "API-Football / Asian Handicap",
+      "bookmakers": [],
+      "rows": [],
+      "message": "API-Football 没有返回该比赛的真实亚洲让球盘。"
+    },
+    "correct_score": {
+      "found": false,
+      "source": "API-Football / Exact Score",
+      "bookmakers": [],
+      "rows": [],
+      "message": "API-Football Exact Score 暂不可用：HTTPSConnectionPool(host='v3.football.api-sports.io', port=443): Max retries exceeded with url: /odds?fixture=1405465&bet=10 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)')))"
+    },
+    "injuries": [],
+    "lineups": [
+      {
+        "team": {
+          "id": 2384,
+          "name": "USA",
+          "logo": "https://media.api-sports.io/football/teams/2384.png",
+          "colors": {
+            "player": {
+              "primary": "ffffff",
+              "number": "00007d",
+              "border": "ffffff"
+            },
+            "goalkeeper": {
+              "primary": "ffdc03",
+              "number": "ffffff",
+              "border": "ffdc03"
+            }
+          }
+        },
+        "coach": {
+          "id": 13,
+          "name": "Mauricio Roberto Pochettino Trossero",
+          "photo": "https://media.api-sports.io/football/coachs/13.png"
+        },
+        "formation": "3-4-3",
+        "startXI": [
+          {
+            "player": {
+              "id": 50728,
+              "name": "Matthew Freese",
+              "number": 24,
+              "pos": "G",
+              "grid": "1:1"
+            }
+          },
+          {
+            "player": {
+              "id": 50879,
+              "name": "Miles Robinson",
+              "number": 12,
+              "pos": "D",
+              "grid": "2:3"
+            }
+          },
+          {
+            "player": {
+              "id": 126949,
+              "name": "Chris Richards",
+              "number": 3,
+              "pos": "D",
+              "grid": "2:2"
+            }
+          },
+          {
+            "player": {
+              "id": 50735,
+              "name": "Mark McKenzie",
+              "number": 22,
+              "pos": "D",
+              "grid": "2:1"
+            }
+          },
+          {
+            "player": {
+              "id": 355994,
+              "name": "Alexander Freeman",
+              "number": 16,
+              "pos": "M",
+              "grid": "3:4"
+            }
+          },
+          {
+            "player": {
+              "id": 50863,
+              "name": "James Sands",
+              "number": 15,
+              "pos": "M",
+              "grid": "3:3"
+            }
+          },
+          {
+            "player": {
+              "id": 51114,
+              "name": "Cristian Roldán",
+              "number": 6,
+              "pos": "M",
+              "grid": "3:2"
+            }
+          },
+          {
+            "player": {
+              "id": 1138,
+              "name": "Timothy Weah",
+              "number": 21,
+              "pos": "M",
+              "grid": "3:1"
+            }
+          },
+          {
+            "player": {
+              "id": 415,
+              "name": "Weston McKennie",
+              "number": 8,
+              "pos": "F",
+              "grid": "4:3"
+            }
+          },
+          {
+            "player": {
+              "id": 427,
+              "name": "Haji Wright",
+              "number": 19,
+              "pos": "F",
+              "grid": "4:2"
+            }
+          },
+          {
+            "player": {
+              "id": 17,
+              "name": "Christian Pulišić",
+              "number": 10,
+              "pos": "F",
+              "grid": "4:1"
+            }
+          }
+        ],
+        "substitutes": [
+          {
+            "player": {
+              "id": 312896,
+              "name": "Diego Luna",
+              "number": 7,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 80752,
+              "name": "Tanner Tessmann",
+              "number": 4,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 50739,
+              "name": "Brenden Aaronson",
+              "number": 11,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 138835,
+              "name": "Folarin Balogun",
+              "number": 20,
+              "pos": "F",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 362400,
+              "name": "Maximilian Arfsten",
+              "number": 18,
+              "pos": "F",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 201714,
+              "name": "Aidan Morris",
+              "number": 23,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 50999,
+              "name": "Matt Turner",
+              "number": 1,
+              "pos": "G",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 266606,
+              "name": "Chris Brady",
+              "number": 25,
+              "pos": "G",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 102685,
+              "name": "Patrick Schulte",
+              "number": 26,
+              "pos": "G",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 19314,
+              "name": "Cameron Carter-Vickers",
+              "number": 2,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 19023,
+              "name": "Tim Ream",
+              "number": 13,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 162037,
+              "name": "Malik Tillman",
+              "number": 17,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 407652,
+              "name": "Patrick Agyemang",
+              "number": 9,
+              "pos": "F",
+              "grid": null
+            }
+          }
+        ]
+      },
+      {
+        "team": {
+          "id": 20,
+          "name": "Australia",
+          "logo": "https://media.api-sports.io/football/teams/20.png",
+          "colors": {
+            "player": {
+              "primary": "273657",
+              "number": "a6d6ca",
+              "border": "273657"
+            },
+            "goalkeeper": {
+              "primary": "035bf6",
+              "number": "ffffff",
+              "border": "035bf6"
+            }
+          }
+        },
+        "coach": {
+          "id": 151,
+          "name": "Anthony Popović",
+          "photo": "https://media.api-sports.io/football/coachs/151.png"
+        },
+        "formation": "3-4-2-1",
+        "startXI": [
+          {
+            "player": {
+              "id": 2741,
+              "name": "Mathew Ryan",
+              "number": 1,
+              "pos": "G",
+              "grid": "1:1"
+            }
+          },
+          {
+            "player": {
+              "id": 33847,
+              "name": "Jason Geria",
+              "number": 22,
+              "pos": "D",
+              "grid": "2:3"
+            }
+          },
+          {
+            "player": {
+              "id": 348568,
+              "name": "Alessandro Circati",
+              "number": 23,
+              "pos": "D",
+              "grid": "2:2"
+            }
+          },
+          {
+            "player": {
+              "id": 20457,
+              "name": "Cameron Burgess",
+              "number": 21,
+              "pos": "D",
+              "grid": "2:1"
+            }
+          },
+          {
+            "player": {
+              "id": 6808,
+              "name": "Jacob Italiano",
+              "number": 20,
+              "pos": "M",
+              "grid": "3:4"
+            }
+          },
+          {
+            "player": {
+              "id": 7050,
+              "name": "Aiden O'Neill",
+              "number": 13,
+              "pos": "M",
+              "grid": "3:3"
+            }
+          },
+          {
+            "player": {
+              "id": 296642,
+              "name": "Maximilien Balard",
+              "number": 16,
+              "pos": "M",
+              "grid": "3:2"
+            }
+          },
+          {
+            "player": {
+              "id": 337587,
+              "name": "Jordan Bos",
+              "number": 5,
+              "pos": "M",
+              "grid": "3:1"
+            }
+          },
+          {
+            "player": {
+              "id": 6904,
+              "name": "Connor Metcalfe",
+              "number": 8,
+              "pos": "F",
+              "grid": "4:2"
+            }
+          },
+          {
+            "player": {
+              "id": 44843,
+              "name": "Martin Boyle",
+              "number": 6,
+              "pos": "F",
+              "grid": "4:1"
+            }
+          },
+          {
+            "player": {
+              "id": 7023,
+              "name": "Nicholas D'Agostino",
+              "number": 7,
+              "pos": "F",
+              "grid": "5:1"
+            }
+          }
+        ],
+        "substitutes": [
+          {
+            "player": {
+              "id": 38123,
+              "name": "Ajdin Hrustić",
+              "number": 10,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 269539,
+              "name": "Patrick Yazbek",
+              "number": 19,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 198352,
+              "name": "Mohamed Touré",
+              "number": 9,
+              "pos": "F",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 338014,
+              "name": "Nestory Irankunda",
+              "number": 14,
+              "pos": "F",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 7037,
+              "name": "Lewis Miller",
+              "number": 3,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 6993,
+              "name": "Mitchell Duke",
+              "number": 15,
+              "pos": "F",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 6870,
+              "name": "Paul Izzo",
+              "number": 12,
+              "pos": "G",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 7029,
+              "name": "Joe Gauci",
+              "number": 18,
+              "pos": "G",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 2742,
+              "name": "Miloš Degenek",
+              "number": 2,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 7038,
+              "name": "Kye Rowles",
+              "number": 4,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 369281,
+              "name": "Hayden Matthews",
+              "number": 25,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 6832,
+              "name": "Cameron Devlin",
+              "number": 17,
+              "pos": "M",
+              "grid": null
+            }
+          }
+        ]
+      }
+    ],
+    "home_recent": [
+      {
+        "fixture": {
+          "id": 1364768,
+          "referee": "K. Garcia",
+          "timezone": "UTC",
+          "date": "2025-03-22T22:00:00+00:00",
+          "timestamp": 1742680800,
+          "periods": {
+            "first": 1742680800,
+            "second": 1742684400
+          },
+          "venue": {
+            "id": null,
+            "name": "SoFi Stadium",
+            "city": "Inglewood, California"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 7
+          }
+        },
+        "league": {
+          "id": 536,
+          "name": "CONCACAF Nations League",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/536.png",
+          "flag": null,
+          "season": 2024,
+          "round": "3rd Place Final",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 5529,
+            "name": "Canada",
+            "logo": "https://media.api-sports.io/football/teams/5529.png",
+            "winner": true
+          },
+          "away": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1316375,
+          "referee": "O. Nation",
+          "timezone": "UTC",
+          "date": "2025-03-20T23:00:00+00:00",
+          "timestamp": 1742511600,
+          "periods": {
+            "first": 1742511600,
+            "second": 1742515200
+          },
+          "venue": {
+            "id": null,
+            "name": "SoFi Stadium",
+            "city": "Inglewood, California"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 9
+          }
+        },
+        "league": {
+          "id": 536,
+          "name": "CONCACAF Nations League",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/536.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Semi-finals",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": false
+          },
+          "away": {
+            "id": 11,
+            "name": "Panama",
+            "logo": "https://media.api-sports.io/football/teams/11.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1312105,
+          "referee": "M. Escobar",
+          "timezone": "UTC",
+          "date": "2024-11-19T01:00:00+00:00",
+          "timestamp": 1731978000,
+          "periods": {
+            "first": 1731978000,
+            "second": 1731981600
+          },
+          "venue": {
+            "id": 19408,
+            "name": "CITYPARK",
+            "city": "St. Louis, Missouri"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 536,
+          "name": "CONCACAF Nations League",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/536.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Quarter-finals",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": true
+          },
+          "away": {
+            "id": 2385,
+            "name": "Jamaica",
+            "logo": "https://media.api-sports.io/football/teams/2385.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 4,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 3,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 4,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1312104,
+          "referee": "J. Calderón",
+          "timezone": "UTC",
+          "date": "2024-11-15T01:00:00+00:00",
+          "timestamp": 1731632400,
+          "periods": {
+            "first": 1731632400,
+            "second": 1731636000
+          },
+          "venue": {
+            "id": 1976,
+            "name": "Independence Park",
+            "city": "Kingston"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 5
+          }
+        },
+        "league": {
+          "id": 536,
+          "name": "CONCACAF Nations League",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/536.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Quarter-finals",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 2385,
+            "name": "Jamaica",
+            "logo": "https://media.api-sports.io/football/teams/2385.png",
+            "winner": false
+          },
+          "away": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1293948,
+          "referee": "K. Herrera",
+          "timezone": "UTC",
+          "date": "2024-10-16T02:30:00+00:00",
+          "timestamp": 1729045800,
+          "periods": {
+            "first": 1729045800,
+            "second": 1729049400
+          },
+          "venue": {
+            "id": 1076,
+            "name": "Estadio AKRON",
+            "city": "Zapopan"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 3
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 16,
+            "name": "Mexico",
+            "logo": "https://media.api-sports.io/football/teams/16.png",
+            "winner": true
+          },
+          "away": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1215629,
+          "referee": "K. Garcia",
+          "timezone": "UTC",
+          "date": "2024-10-13T01:00:00+00:00",
+          "timestamp": 1728781200,
+          "periods": {
+            "first": 1728781200,
+            "second": 1728784800
+          },
+          "venue": {
+            "id": 11535,
+            "name": "Q2 Stadium",
+            "city": "Austin, Texas"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 6
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": true
+          },
+          "away": {
+            "id": 11,
+            "name": "Panama",
+            "logo": "https://media.api-sports.io/football/teams/11.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1215628,
+          "referee": "S. Brown",
+          "timezone": "UTC",
+          "date": "2024-09-10T23:00:00+00:00",
+          "timestamp": 1726009200,
+          "periods": {
+            "first": 1726009200,
+            "second": 1726012800
+          },
+          "venue": {
+            "id": 19229,
+            "name": "TQL Stadium",
+            "city": "Cincinnati, Ohio"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": null
+          },
+          "away": {
+            "id": 4673,
+            "name": "New Zealand",
+            "logo": "https://media.api-sports.io/football/teams/4673.png",
+            "winner": null
+          }
+        },
+        "goals": {
+          "home": 1,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 1,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1215627,
+          "referee": "K. Herrera",
+          "timezone": "UTC",
+          "date": "2024-09-07T20:00:00+00:00",
+          "timestamp": 1725739200,
+          "periods": {
+            "first": 1725739200,
+            "second": 1725742800
+          },
+          "venue": {
+            "id": 1615,
+            "name": "Children's Mercy Park",
+            "city": "Kansas City, Kansas"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": false
+          },
+          "away": {
+            "id": 5529,
+            "name": "Canada",
+            "logo": "https://media.api-sports.io/football/teams/5529.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 1,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 1,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1146317,
+          "referee": "K. Ortega",
+          "timezone": "UTC",
+          "date": "2024-07-02T01:00:00+00:00",
+          "timestamp": 1719882000,
+          "periods": {
+            "first": 1719882000,
+            "second": 1719885600
+          },
+          "venue": {
+            "id": null,
+            "name": "Arrowhead Stadium",
+            "city": "Kansas City, Missouri"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 9,
+          "name": "Copa America",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/9.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 3",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": false
+          },
+          "away": {
+            "id": 7,
+            "name": "Uruguay",
+            "logo": "https://media.api-sports.io/football/teams/7.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1146310,
+          "referee": "I. Barton",
+          "timezone": "UTC",
+          "date": "2024-06-28T22:00:00+00:00",
+          "timestamp": 1719612000,
+          "periods": {
+            "first": 1719612000,
+            "second": 1719615600
+          },
+          "venue": {
+            "id": 1898,
+            "name": "Mercedes-Benz Stadium",
+            "city": "Atlanta, Georgia"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 9,
+          "name": "Copa America",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/9.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 2",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 11,
+            "name": "Panama",
+            "logo": "https://media.api-sports.io/football/teams/11.png",
+            "winner": true
+          },
+          "away": {
+            "id": 2384,
+            "name": "USA",
+            "logo": "https://media.api-sports.io/football/teams/2384.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      }
+    ],
+    "away_recent": [
+      {
+        "fixture": {
+          "id": 1169460,
+          "referee": "Ahmed Al Kaf",
+          "timezone": "UTC",
+          "date": "2024-02-02T15:30:00+00:00",
+          "timestamp": 1706887800,
+          "periods": {
+            "first": 1706887800,
+            "second": 1706891400
+          },
+          "venue": {
+            "id": null,
+            "name": "Al Janoub Stadium",
+            "city": "Al Wakrah"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "AET",
+            "elapsed": 120,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 7,
+          "name": "Asian Cup",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/7.png",
+          "flag": null,
+          "season": 2023,
+          "round": "Quarter-finals",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": false
+          },
+          "away": {
+            "id": 17,
+            "name": "South Korea",
+            "logo": "https://media.api-sports.io/football/teams/17.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 1,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 1,
+            "away": 1
+          },
+          "extratime": {
+            "home": 0,
+            "away": 1
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1167786,
+          "referee": "Mohamed Abdulla Hassan Mohd",
+          "timezone": "UTC",
+          "date": "2024-01-28T11:30:00+00:00",
+          "timestamp": 1706441400,
+          "periods": {
+            "first": 1706441400,
+            "second": 1706445000
+          },
+          "venue": {
+            "id": null,
+            "name": "Jassim Bin Hamad Stadium",
+            "city": "Doha"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 7,
+          "name": "Asian Cup",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/7.png",
+          "flag": null,
+          "season": 2023,
+          "round": "Round of 16",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": true
+          },
+          "away": {
+            "id": 1571,
+            "name": "Indonesia",
+            "logo": "https://media.api-sports.io/football/teams/1571.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 4,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 2,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 4,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1034519,
+          "referee": "Y. Araki",
+          "timezone": "UTC",
+          "date": "2024-01-23T11:30:00+00:00",
+          "timestamp": 1706009400,
+          "periods": {
+            "first": 1706009400,
+            "second": 1706013000
+          },
+          "venue": {
+            "id": null,
+            "name": "Al Janoub Stadium",
+            "city": "Al Wakrah"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 7,
+          "name": "Asian Cup",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/7.png",
+          "flag": null,
+          "season": 2023,
+          "round": "Group Stage - 3",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": null
+          },
+          "away": {
+            "id": 1568,
+            "name": "Uzbekistan",
+            "logo": "https://media.api-sports.io/football/teams/1568.png",
+            "winner": null
+          }
+        },
+        "goals": {
+          "home": 1,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 1,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1034506,
+          "referee": "Adel Al Naqbi",
+          "timezone": "UTC",
+          "date": "2024-01-18T11:30:00+00:00",
+          "timestamp": 1705577400,
+          "periods": {
+            "first": 1705577400,
+            "second": 1705581000
+          },
+          "venue": {
+            "id": null,
+            "name": "Jassim Bin Hamad Stadium",
+            "city": "Doha"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 7,
+          "name": "Asian Cup",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/7.png",
+          "flag": null,
+          "season": 2023,
+          "round": "Group Stage - 2",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1565,
+            "name": "Syria",
+            "logo": "https://media.api-sports.io/football/teams/1565.png",
+            "winner": false
+          },
+          "away": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1034493,
+          "referee": "Y. Yamashita",
+          "timezone": "UTC",
+          "date": "2024-01-13T11:30:00+00:00",
+          "timestamp": 1705145400,
+          "periods": {
+            "first": 1705145400,
+            "second": 1705149000
+          },
+          "venue": {
+            "id": null,
+            "name": "Ahmad bin Ali Stadium",
+            "city": "Al-Rayyan"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 7,
+          "name": "Asian Cup",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/7.png",
+          "flag": null,
+          "season": 2023,
+          "round": "Group Stage - 1",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": true
+          },
+          "away": {
+            "id": 1537,
+            "name": "India",
+            "logo": "https://media.api-sports.io/football/teams/1537.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1155242,
+          "referee": "Mohamed Alharmoodi",
+          "timezone": "UTC",
+          "date": "2024-01-06T14:00:00+00:00",
+          "timestamp": 1704549600,
+          "periods": {
+            "first": 1704549600,
+            "second": 1704553200
+          },
+          "venue": {
+            "id": null,
+            "name": "Baniyas Stadium",
+            "city": "Abu Dhabi"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 1547,
+            "name": "Bahrain",
+            "logo": "https://media.api-sports.io/football/teams/1547.png",
+            "winner": false
+          },
+          "away": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1135020,
+          "referee": "Mohamed Alharmoodi",
+          "timezone": "UTC",
+          "date": "2024-01-06T14:00:00+00:00",
+          "timestamp": 1704549600,
+          "periods": {
+            "first": 1704549600,
+            "second": 1704553200
+          },
+          "venue": {
+            "id": null,
+            "name": "Baniyas Stadium",
+            "city": "Abu Dhabi"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2023,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 1547,
+            "name": "Bahrain",
+            "logo": "https://media.api-sports.io/football/teams/1547.png",
+            "winner": false
+          },
+          "away": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1068053,
+          "referee": "S. Attwell",
+          "timezone": "UTC",
+          "date": "2023-10-17T18:45:00+00:00",
+          "timestamp": 1697568300,
+          "periods": {
+            "first": 1697568300,
+            "second": 1697571900
+          },
+          "venue": {
+            "id": 10503,
+            "name": "Gtech Community Stadium",
+            "city": "Brentford, Middlesex"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2023,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": true
+          },
+          "away": {
+            "id": 4673,
+            "name": "New Zealand",
+            "logo": "https://media.api-sports.io/football/teams/4673.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1012351,
+          "referee": "Stephanie Frappart, France",
+          "timezone": "UTC",
+          "date": "2023-10-13T18:45:00+00:00",
+          "timestamp": 1697222700,
+          "periods": {
+            "first": 1697222700,
+            "second": 1697226300
+          },
+          "venue": {
+            "id": 489,
+            "name": "Wembley Stadium",
+            "city": "London"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2023,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 10,
+            "name": "England",
+            "logo": "https://media.api-sports.io/football/teams/10.png",
+            "winner": true
+          },
+          "away": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 1,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 1,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1081943,
+          "referee": "R. Vazquez",
+          "timezone": "UTC",
+          "date": "2023-09-10T02:00:00+00:00",
+          "timestamp": 1694311200,
+          "periods": {
+            "first": 1694311200,
+            "second": 1694314800
+          },
+          "venue": {
+            "id": null,
+            "name": "AT&T Stadium",
+            "city": "Arlington, Texas"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 10,
+          "name": "Friendlies",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/10.png",
+          "flag": null,
+          "season": 2023,
+          "round": "Friendlies 1",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 16,
+            "name": "Mexico",
+            "logo": "https://media.api-sports.io/football/teams/16.png",
+            "winner": null
+          },
+          "away": {
+            "id": 20,
+            "name": "Australia",
+            "logo": "https://media.api-sports.io/football/teams/20.png",
+            "winner": null
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      }
+    ],
+    "error": null
+  },
+  "polymarket": {
+    "found": true,
+    "home_win": 0.605,
+    "draw": 0.215,
+    "away_win": 0.175,
+    "volume": 2706476.482099046,
+    "liquidity": 6876949.4883,
+    "source": "Polymarket Gamma API 真实数据",
+    "event_title": "United States vs. Australia",
+    "event_slug": "fifwc-usa-aus-2026-06-19",
+    "event_url": "https://polymarket.com/event/fifwc-usa-aus-2026-06-19",
+    "message": "已找到对应 Polymarket 市场。"
+  },
+  "actual_odds": {
+    "items": [],
+    "by_type": {},
+    "raw": ""
+  },
+  "my_portfolio": {
+    "raw_text": "",
+    "items": []
+  },
+  "recommendation_combo": [
+    {
+      "slot": "独赢",
+      "type": "winner",
+      "selection": "United States",
+      "name": "United States独赢",
+      "standard_odds": 1.6,
+      "probability": 0.5878322828172102,
+      "base_score": 69.7566456563442,
+      "source": "市场胜平负赔率",
+      "actual_odds": null,
+      "effective_odds": 1.6,
+      "edge": null,
+      "actual_selection": null,
+      "market_value_factor": 1.0,
+      "standard_ev": -0.05946834749246355,
+      "actual_ev": -0.05946834749246355,
+      "ev_lift": 0.0,
+      "path_match_score": 0,
+      "path_match_reason": "",
+      "coverage_rate": 0.6590009026228166,
+      "direction_alignment_score": 8,
+      "score": 93,
+      "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+      "recommended": true,
+      "ev_rank": 1,
+      "share": 1.0,
+      "odds": 1.6,
+      "amount": 100
+    },
+    {
+      "slot": "大小球",
+      "type": "total",
+      "selection": "Under 2.5",
+      "name": "小于 2.5 球",
+      "standard_odds": 1.9268,
+      "base_score": 40,
+      "source": "The Odds API 大小球均值",
+      "actual_odds": null,
+      "effective_odds": 1.9268,
+      "edge": null,
+      "actual_selection": null,
+      "probability": 0.5189952252439277,
+      "market_value_factor": 0.8,
+      "standard_ev": 0.0,
+      "actual_ev": 0.0,
+      "ev_lift": 0.0,
+      "path_match_score": 0,
+      "path_match_reason": "",
+      "coverage_rate": 0.5183551198260217,
+      "direction_alignment_score": -8,
+      "score": 44,
+      "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+      "recommended": false,
+      "not_recommended_reason": "综合分 44，未达到推荐阈值 55。",
+      "ev_rank": 2,
+      "share": 0,
+      "odds": 1.9268,
+      "amount": 0
+    },
+    {
+      "slot": "大小球",
+      "type": "total",
+      "selection": "Over 2.5",
+      "name": "大于 2.5 球",
+      "standard_odds": 1.8688,
+      "base_score": 40,
+      "source": "The Odds API 大小球均值",
+      "actual_odds": null,
+      "effective_odds": 1.8688,
+      "edge": null,
+      "actual_selection": null,
+      "probability": 0.5351027397260274,
+      "market_value_factor": 0.8,
+      "standard_ev": 0.0,
+      "actual_ev": 0.0,
+      "ev_lift": 0.0,
+      "path_match_score": 0,
+      "path_match_reason": "",
+      "coverage_rate": 0.38222052352123365,
+      "direction_alignment_score": -8,
+      "score": 42,
+      "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+      "recommended": false,
+      "not_recommended_reason": "综合分 42，未达到推荐阈值 55。",
+      "ev_rank": 3,
+      "share": 0,
+      "odds": 1.8688,
+      "amount": 0
+    },
+    {
+      "slot": "空位4",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位5",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    }
+  ],
+  "strategy_snapshot": {
+    "strategies": [
+      {
+        "code": "A",
+        "name": "当前推荐组合",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "United States",
+            "name": "United States独赢",
+            "standard_odds": 1.6,
+            "probability": 0.5878322828172102,
+            "base_score": 69.7566456563442,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.6,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.05946834749246355,
+            "actual_ev": -0.05946834749246355,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6590009026228166,
+            "direction_alignment_score": 8,
+            "score": 93,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.6,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6590009026228166,
+        "expected_profit": 5.440144419650678,
+        "expected_yield": 0.054401444196506776,
+        "capital_efficiency": 0.054401444196506776,
+        "max_profit": 60,
+        "max_loss": 100,
+        "volatility": 75.84720859667364,
+        "sharpe_ratio": 0.07172504460354341,
+        "risk_reward": 0.6,
+        "coverage": 0.6590009026228166,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "role_constraint": {
+          "adjustment": -60,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "15.0% - 45.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 35.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 75.84720859667364
+        },
+        "stability_score": 38,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 4,
+          "战略价值": 11,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 25,
+          "EV": 26,
+          "风险收益比": 2,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          }
+        ],
+        "original_name": "当前推荐组合",
+        "rank_name": "推荐组合"
+      },
+      {
+        "code": "D",
+        "name": "独赢策略",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "United States",
+            "name": "United States独赢",
+            "standard_odds": 1.6,
+            "probability": 0.5878322828172102,
+            "base_score": 69.7566456563442,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.6,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.05946834749246355,
+            "actual_ev": -0.05946834749246355,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6590009026228166,
+            "direction_alignment_score": 8,
+            "score": 93,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.6,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6590009026228166,
+        "expected_profit": 5.440144419650678,
+        "expected_yield": 0.054401444196506776,
+        "capital_efficiency": 0.054401444196506776,
+        "max_profit": 60,
+        "max_loss": 100,
+        "volatility": 75.84720859667364,
+        "sharpe_ratio": 0.07172504460354341,
+        "risk_reward": 0.6,
+        "coverage": 0.6590009026228166,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "role_constraint": {
+          "adjustment": -60,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "15.0% - 45.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 35.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 75.84720859667364
+        },
+        "stability_score": 38,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 4,
+          "战略价值": 11,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 25,
+          "EV": 26,
+          "风险收益比": 2,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          }
+        ],
+        "original_name": "独赢策略",
+        "rank_name": "第2组合"
+      },
+      {
+        "code": "F",
+        "name": "独赢 + 让球",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "United States",
+            "name": "United States独赢",
+            "standard_odds": 1.6,
+            "probability": 0.5878322828172102,
+            "base_score": 69.7566456563442,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.6,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.05946834749246355,
+            "actual_ev": -0.05946834749246355,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6590009026228166,
+            "direction_alignment_score": 8,
+            "score": 93,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.6,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6590009026228166,
+        "expected_profit": 5.440144419650678,
+        "expected_yield": 0.054401444196506776,
+        "capital_efficiency": 0.054401444196506776,
+        "max_profit": 60,
+        "max_loss": 100,
+        "volatility": 75.84720859667364,
+        "sharpe_ratio": 0.07172504460354341,
+        "risk_reward": 0.6,
+        "coverage": 0.6590009026228166,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "role_constraint": {
+          "adjustment": -60,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "15.0% - 45.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 35.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 75.84720859667364
+        },
+        "stability_score": 38,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 4,
+          "战略价值": 11,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 25,
+          "EV": 26,
+          "风险收益比": 2,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          }
+        ],
+        "original_name": "独赢 + 让球",
+        "rank_name": "第3组合"
+      },
+      {
+        "code": "G",
+        "name": "独赢 + 波胆",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "United States",
+            "name": "United States独赢",
+            "standard_odds": 1.6,
+            "probability": 0.5878322828172102,
+            "base_score": 69.7566456563442,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.6,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.05946834749246355,
+            "actual_ev": -0.05946834749246355,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6590009026228166,
+            "direction_alignment_score": 8,
+            "score": 93,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.6,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6590009026228166,
+        "expected_profit": 5.440144419650678,
+        "expected_yield": 0.054401444196506776,
+        "capital_efficiency": 0.054401444196506776,
+        "max_profit": 60,
+        "max_loss": 100,
+        "volatility": 75.84720859667364,
+        "sharpe_ratio": 0.07172504460354341,
+        "risk_reward": 0.6,
+        "coverage": 0.6590009026228166,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "role_constraint": {
+          "adjustment": -60,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "15.0% - 45.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 35.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 75.84720859667364
+        },
+        "stability_score": 38,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 4,
+          "战略价值": 11,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 25,
+          "EV": 26,
+          "风险收益比": 2,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          }
+        ],
+        "original_name": "独赢 + 波胆",
+        "rank_name": "第4组合"
+      },
+      {
+        "code": "O",
+        "name": "赔率分布优化器",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "United States",
+            "name": "United States独赢",
+            "standard_odds": 1.6,
+            "probability": 0.5878322828172102,
+            "base_score": 69.7566456563442,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.6,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.05946834749246355,
+            "actual_ev": -0.05946834749246355,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6590009026228166,
+            "direction_alignment_score": 8,
+            "score": 93,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.6,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6590009026228166,
+        "expected_profit": 5.440144419650678,
+        "expected_yield": 0.054401444196506776,
+        "capital_efficiency": 0.054401444196506776,
+        "max_profit": 60,
+        "max_loss": 100,
+        "volatility": 75.84720859667364,
+        "sharpe_ratio": 0.07172504460354341,
+        "risk_reward": 0.6,
+        "coverage": 0.6590009026228166,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "role_constraint": {
+          "adjustment": -60,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "15.0% - 45.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 35.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 75.84720859667364
+        },
+        "stability_score": 38,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 4,
+          "战略价值": 11,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 25,
+          "EV": 26,
+          "风险收益比": 2,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.9%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "6.9% × +60",
+            "EV贡献": "+4",
+            "_total": 60,
+            "_ev_contribution": 4.151705686523745
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.6%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "5.6% × +60",
+            "EV贡献": "+3",
+            "_total": 60,
+            "_ev_contribution": 3.360904603376365
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.8% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.831494814488773
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.4%",
+            "独赢收益": "+60",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+60",
+            "概率×收益": "1.4% × +60",
+            "EV贡献": "+1",
+            "_total": 60,
+            "_ev_contribution": 0.8626920907062327
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.7%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.7% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.7101739760910336
+          }
+        ],
+        "original_name": "赔率分布优化器",
+        "rank_name": "第5组合"
+      }
+    ],
+    "strategy_table": [
+      {
+        "组合": "推荐组合",
+        "来源": "当前推荐组合",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "65.9%",
+        "EV": "+5",
+        "预期收益率": "+5.4%",
+        "资金效率": "+5.4%",
+        "最大盈利": "+60",
+        "最大亏损": "-100",
+        "盈亏波动": "76",
+        "Sharpe": "0.07",
+        "稳定性": "38 / 100",
+        "风险收益比": "0.60",
+        "覆盖率": "65.9%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "综合评分": 80
+      },
+      {
+        "组合": "第2组合",
+        "来源": "独赢策略",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "65.9%",
+        "EV": "+5",
+        "预期收益率": "+5.4%",
+        "资金效率": "+5.4%",
+        "最大盈利": "+60",
+        "最大亏损": "-100",
+        "盈亏波动": "76",
+        "Sharpe": "0.07",
+        "稳定性": "38 / 100",
+        "风险收益比": "0.60",
+        "覆盖率": "65.9%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "综合评分": 80
+      },
+      {
+        "组合": "第3组合",
+        "来源": "独赢 + 让球",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "65.9%",
+        "EV": "+5",
+        "预期收益率": "+5.4%",
+        "资金效率": "+5.4%",
+        "最大盈利": "+60",
+        "最大亏损": "-100",
+        "盈亏波动": "76",
+        "Sharpe": "0.07",
+        "稳定性": "38 / 100",
+        "风险收益比": "0.60",
+        "覆盖率": "65.9%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "综合评分": 80
+      },
+      {
+        "组合": "第4组合",
+        "来源": "独赢 + 波胆",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "65.9%",
+        "EV": "+5",
+        "预期收益率": "+5.4%",
+        "资金效率": "+5.4%",
+        "最大盈利": "+60",
+        "最大亏损": "-100",
+        "盈亏波动": "76",
+        "Sharpe": "0.07",
+        "稳定性": "38 / 100",
+        "风险收益比": "0.60",
+        "覆盖率": "65.9%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "综合评分": 80
+      },
+      {
+        "组合": "第5组合",
+        "来源": "赔率分布优化器",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "65.9%",
+        "EV": "+5",
+        "预期收益率": "+5.4%",
+        "资金效率": "+5.4%",
+        "最大盈利": "+60",
+        "最大亏损": "-100",
+        "盈亏波动": "76",
+        "Sharpe": "0.07",
+        "稳定性": "38 / 100",
+        "风险收益比": "0.60",
+        "覆盖率": "65.9%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "综合评分": 80
+      }
+    ],
+    "insurance_cost": [],
+    "correlation_matrix": [
+      {
+        "投注": "United States独赢",
+        "United States独赢": "100%"
+      }
+    ],
+    "kelly": [
+      {
+        "投注": "United States独赢",
+        "Kelly": "0.0%",
+        "25% Kelly": "0元",
+        "50% Kelly": "0元",
+        "当前仓位": "100元",
+        "偏离25% Kelly": "+100元"
+      }
+    ],
+    "return_matrix": [
+      {
+        "比分": "1:0",
+        "路径": "热门方胜1球主路径",
+        "比分概率": "6.9%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "6.9% × +60",
+        "EV贡献": "+4",
+        "_total": 60,
+        "_ev_contribution": 4.151705686523745
+      },
+      {
+        "比分": "2:1",
+        "路径": "热门方胜1球主路径",
+        "比分概率": "6.9%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "6.9% × +60",
+        "EV贡献": "+4",
+        "_total": 60,
+        "_ev_contribution": 4.151705686523745
+      },
+      {
+        "比分": "3:2",
+        "路径": "热门方胜1球主路径",
+        "比分概率": "6.9%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "6.9% × +60",
+        "EV贡献": "+4",
+        "_total": 60,
+        "_ev_contribution": 4.151705686523745
+      },
+      {
+        "比分": "4:3",
+        "路径": "热门方胜1球主路径",
+        "比分概率": "6.9%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "6.9% × +60",
+        "EV贡献": "+4",
+        "_total": 60,
+        "_ev_contribution": 4.151705686523745
+      },
+      {
+        "比分": "2:0",
+        "路径": "热门方胜2球主路径",
+        "比分概率": "5.6%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "5.6% × +60",
+        "EV贡献": "+3",
+        "_total": 60,
+        "_ev_contribution": 3.360904603376365
+      },
+      {
+        "比分": "3:1",
+        "路径": "热门方胜2球主路径",
+        "比分概率": "5.6%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "5.6% × +60",
+        "EV贡献": "+3",
+        "_total": 60,
+        "_ev_contribution": 3.360904603376365
+      },
+      {
+        "比分": "4:2",
+        "路径": "热门方胜2球主路径",
+        "比分概率": "5.6%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "5.6% × +60",
+        "EV贡献": "+3",
+        "_total": 60,
+        "_ev_contribution": 3.360904603376365
+      },
+      {
+        "比分": "5:3",
+        "路径": "热门方胜2球主路径",
+        "比分概率": "5.6%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "5.6% × +60",
+        "EV贡献": "+3",
+        "_total": 60,
+        "_ev_contribution": 3.360904603376365
+      },
+      {
+        "比分": "0:0",
+        "路径": "平局风险路径",
+        "比分概率": "4.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.8% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.831494814488773
+      },
+      {
+        "比分": "1:1",
+        "路径": "平局风险路径",
+        "比分概率": "4.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.8% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.831494814488773
+      },
+      {
+        "比分": "2:2",
+        "路径": "平局风险路径",
+        "比分概率": "4.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.8% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.831494814488773
+      },
+      {
+        "比分": "3:3",
+        "路径": "平局风险路径",
+        "比分概率": "4.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.8% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.831494814488773
+      },
+      {
+        "比分": "4:4",
+        "路径": "平局风险路径",
+        "比分概率": "4.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.8% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.831494814488773
+      },
+      {
+        "比分": "3:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "4:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "4:1",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "5:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "5:1",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "5:2",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "6:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "6:1",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "6:2",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "7:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "7:1",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.4%",
+        "独赢收益": "+60",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+60",
+        "概率×收益": "1.4% × +60",
+        "EV贡献": "+1",
+        "_total": 60,
+        "_ev_contribution": 0.8626920907062327
+      },
+      {
+        "比分": "0:1",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "0:2",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "0:3",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "0:4",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "0:5",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "1:2",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "1:3",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "1:4",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "1:5",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "2:3",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "2:4",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "2:5",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "3:4",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      },
+      {
+        "比分": "3:5",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.7%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.7% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.7101739760910336
+      }
+    ],
+    "role_constraints": [
+      {
+        "资产角色": "保险资产",
+        "当前占比": "100.0%",
+        "目标区间": "20.0% - 40.0%",
+        "状态": "偏高"
+      },
+      {
+        "资产角色": "收益资产",
+        "当前占比": "0.0%",
+        "目标区间": "30.0% - 60.0%",
+        "状态": "偏低"
+      },
+      {
+        "资产角色": "方向资产",
+        "当前占比": "0.0%",
+        "目标区间": "15.0% - 45.0%",
+        "状态": "偏低"
+      },
+      {
+        "资产角色": "节奏资产",
+        "当前占比": "0.0%",
+        "目标区间": "0.0% - 35.0%",
+        "状态": "合理"
+      },
+      {
+        "资产角色": "尾部资产",
+        "当前占比": "0.0%",
+        "目标区间": "0.0% - 15.0%",
+        "状态": "合理"
+      }
+    ],
+    "portfolio_style": {
+      "style": "Conservative",
+      "style_cn": "保守型",
+      "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+      "role_exposure": {
+        "保险资产": 1.0
+      },
+      "return_share": 0,
+      "insurance_share": 1.0,
+      "tail_share": 0,
+      "tempo_share": 0,
+      "correlation": 0,
+      "volatility": 75.84720859667364
+    }
+  },
+  "decision": {
+    "market_disagreement": {
+      "score": 25,
+      "level": "低分歧",
+      "direction": "平局",
+      "difference": 0.025081560171369338,
+      "odds_probability": 0.24116196218141958,
+      "polymarket_probability": 0.21608040201005024,
+      "reason": "最大市场价差出现在平局方向。"
+    },
+    "contrarian": {
+      "score": 50,
+      "level": "中等",
+      "popular_side": "United States",
+      "reason": "当前市场结构下，逆向压力有限。"
+    },
+    "upset_index": {
+      "score": 42,
+      "meaning": "低爆冷风险",
+      "reason": "小组赛阶段与弱势方属性提高了爆冷敏感度。"
+    },
+    "recent_form": {
+      "score": 55,
+      "reason": "近期状态可用，V1 框架给予轻微信号。"
+    },
+    "elo_rating": {
+      "score": 50,
+      "reason": "ELO评分 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "injury_impact": {
+      "score": 50,
+      "reason": "暂无公开伤病信息，采用中性分。"
+    },
+    "team_value": {
+      "score": 50,
+      "reason": "球队身价 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "direction_confidence": {
+      "score": 42,
+      "level": "观望",
+      "components": [
+        {
+          "name": "胜平负方向",
+          "points": 22,
+          "max_points": 30,
+          "reason": "美国市场概率 58.8%。"
+        },
+        {
+          "name": "亚洲让球盘",
+          "points": 0,
+          "max_points": 25,
+          "reason": "亚洲让球盘缺失。"
+        },
+        {
+          "name": "大小球",
+          "points": 10,
+          "max_points": 15,
+          "reason": "大小球主盘口 2.5，大/小球均值接近，节奏判断中性。"
+        },
+        {
+          "name": "波胆结构",
+          "points": 0,
+          "max_points": 20,
+          "reason": "真实波胆盘口缺失。"
+        },
+        {
+          "name": "Polymarket",
+          "points": 10,
+          "max_points": 10,
+          "reason": "Polymarket 同样支持美国，概率 60.8%。"
+        }
+      ],
+      "summary": "市场普遍认为美国占优，亚洲让球盘缺失，真实波胆盘口缺失，因此方向把握观望。",
+      "reason": "美国方向把握由胜平负、亚洲盘、大小球、真实波胆和 Polymarket 共同决定。"
+    },
+    "odds_value": {
+      "score": 29,
+      "rating": "D",
+      "label": "美国",
+      "market_probability": 0.5878322828172102,
+      "model_probability": 0.6080402010050251,
+      "difference": 0.020207918187814866,
+      "margin": 0.06322843822843827,
+      "components": [
+        {
+          "name": "市场价差",
+          "points": 4,
+          "max_points": 10,
+          "reason": "Polymarket 与赔率市场差异 +2.0%，只作为辅助。"
+        },
+        {
+          "name": "盘口一致性",
+          "points": 14,
+          "max_points": 30,
+          "reason": "胜平负主方向为美国。亚洲让球盘缺失。 大小球主盘口 2.5，大/小球均值接近，节奏判断中性。"
+        },
+        {
+          "name": "亚洲盘结构",
+          "points": 0,
+          "max_points": 25,
+          "reason": "亚洲让球盘缺失。"
+        },
+        {
+          "name": "波胆结构",
+          "points": 0,
+          "max_points": 20,
+          "reason": "真实波胆盘口缺失。"
+        },
+        {
+          "name": "庄家利润率",
+          "points": 11,
+          "max_points": 15,
+          "reason": "庄家利润率约 6.3%，抽水正常。"
+        }
+      ],
+      "reason": "美国方向：市场概率 58.8%，Polymarket 60.8%，差异 +2.0%；盘口、波胆与抽水综合得分 29 / 100。"
+    },
+    "participation_advice": {
+      "advice": "放弃",
+      "reason": "方向把握 42 / 100，赔率价值 D，爆冷指数 42 / 100。"
+    },
+    "recommended_stake": {
+      "amount": 100,
+      "base": 0,
+      "adjustment": -100,
+      "reason": "方向把握 42 分，对应基础仓位 0；赔率价值 D，调整 -100。"
+    },
+    "final_confidence_score": 42,
+    "value_rating": "D",
+    "value_rating_score": 29,
+    "value_rating_breakdown": [
+      {
+        "name": "市场价差",
+        "points": 4,
+        "max_points": 10,
+        "reason": "Polymarket 与赔率市场差异 +2.0%，只作为辅助。"
+      },
+      {
+        "name": "盘口一致性",
+        "points": 14,
+        "max_points": 30,
+        "reason": "胜平负主方向为美国。亚洲让球盘缺失。 大小球主盘口 2.5，大/小球均值接近，节奏判断中性。"
+      },
+      {
+        "name": "亚洲盘结构",
+        "points": 0,
+        "max_points": 25,
+        "reason": "亚洲让球盘缺失。"
+      },
+      {
+        "name": "波胆结构",
+        "points": 0,
+        "max_points": 20,
+        "reason": "真实波胆盘口缺失。"
+      },
+      {
+        "name": "庄家利润率",
+        "points": 11,
+        "max_points": 15,
+        "reason": "庄家利润率约 6.3%，抽水正常。"
+      }
+    ],
+    "value_rating_meaning": "赔率价值 29 / 100，评级 D：价值有限",
+    "final_recommendation": {
+      "bet": "United States",
+      "reason": [
+        "暂未发现强逆向让球机会",
+        "当前仅将市场方向作为参考"
+      ]
+    },
+    "stake_suggestion": {
+      "Conservative": 100,
+      "Standard": 300,
+      "Aggressive": 500
+    },
+    "weights": {
+      "方向把握": "胜平负30 + 亚洲让球25 + 大小球15 + 波胆20 + Polymarket10",
+      "赔率价值": "输入实际赔率后：实际赔率优势45 + 推荐覆盖20 + 盘口结构15 + 庄家利润率10 + Polymarket辅助10；未输入时使用市场标准盘口评估。",
+      "参与建议": "方向把握 + 赔率价值 + 风险暴露",
+      "推荐仓位": "方向把握为主，赔率价值微调"
+    }
+  },
+  "probability_distribution": {
+    "available": true,
+    "favorite": "美国",
+    "underdog": "澳大利亚",
+    "rows": [
+      {
+        "label": "美国小胜（1球）",
+        "probability": 0.276780379101583,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+      },
+      {
+        "label": "平局区间",
+        "probability": 0.24157474072443866,
+        "meaning": "比赛进入低分差或胶着路径。"
+      },
+      {
+        "label": "美国赢2球",
+        "probability": 0.22406030689175765,
+        "meaning": "盘口边界路径，决定让球盘输赢。"
+      },
+      {
+        "label": "美国赢3球以上",
+        "probability": 0.158160216629476,
+        "meaning": "强队大胜路径，过去版本容易低估。"
+      },
+      {
+        "label": "澳大利亚不败",
+        "probability": 0.09942435665274471,
+        "meaning": "爆冷或热门方向失效路径。"
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "美国 -1.5",
+      "lose_paths": [
+        "美国只赢1球",
+        "平局",
+        "澳大利亚胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "美国小胜（1球）",
+    "boundary_path": "美国赢2球",
+    "extreme_path": "美国赢3球以上",
+    "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+  },
+  "value_analysis": {
+    "available": true,
+    "message": "No major value gap detected",
+    "rows": [
+      {
+        "label": "United States",
+        "odds_api": 0.5878322828172102,
+        "polymarket": 0.6080402010050251,
+        "difference": 0.020207918187814866,
+        "is_value": false
+      },
+      {
+        "label": "Draw",
+        "odds_api": 0.24116196218141958,
+        "polymarket": 0.21608040201005024,
+        "difference": -0.025081560171369338,
+        "is_value": false
+      },
+      {
+        "label": "Australia",
+        "odds_api": 0.17100575500137025,
+        "polymarket": 0.1758793969849246,
+        "difference": 0.004873641983554361,
+        "is_value": false
+      }
+    ],
+    "has_value": false
+  },
+  "betting_opinion": {
+    "match_winner": "Lean United States",
+    "asian_handicap": "No view",
+    "over_under": "Lean Over 2.5",
+    "risk_level": "Low",
+    "confidence": 72,
+    "match_winner_reason": "Market consensus and Polymarket both favor United States.",
+    "asian_handicap_reason": "Handicap market is not available.",
+    "over_under_reason": "Over odds are slightly favored by the market.",
+    "summary": "Market generally supports United States.",
+    "result_distribution": {
+      "available": true,
+      "favorite": "美国",
+      "underdog": "澳大利亚",
+      "rows": [
+        {
+          "label": "美国小胜（1球）",
+          "probability": 0.276780379101583,
+          "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+        },
+        {
+          "label": "平局区间",
+          "probability": 0.24157474072443866,
+          "meaning": "比赛进入低分差或胶着路径。"
+        },
+        {
+          "label": "美国赢2球",
+          "probability": 0.22406030689175765,
+          "meaning": "盘口边界路径，决定让球盘输赢。"
+        },
+        {
+          "label": "美国赢3球以上",
+          "probability": 0.158160216629476,
+          "meaning": "强队大胜路径，过去版本容易低估。"
+        },
+        {
+          "label": "澳大利亚不败",
+          "probability": 0.09942435665274471,
+          "meaning": "爆冷或热门方向失效路径。"
+        }
+      ],
+      "risk_exposure": {
+        "example_bet": "美国 -1.5",
+        "lose_paths": [
+          "美国只赢1球",
+          "平局",
+          "澳大利亚胜"
+        ],
+        "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+      },
+      "main_path": "美国小胜（1球）",
+      "boundary_path": "美国赢2球",
+      "extreme_path": "美国赢3球以上",
+      "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+    }
+  }
+}
