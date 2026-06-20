@@ -2,6 +2,7 @@
 
 ## 2026-06-21
 
+- Ran Recommendation Auditor v0.1 on `SCENARIO_ENGINE_REPORT.md` and generated `docs/RECOMMENDATION_AUDIT_REPORT.md`.
 - Refined Scenario Engine read-only script asset mapping so 4-goal correct scores are aggressive upside and 5-goal correct scores are tail/extreme upside, lowering the generated consistency score to 82.
 - Added `scripts/generate_scenario_engine_report.py`, a read-only Scenario Engine report generator for saved local snapshots.
 - Generated `SCENARIO_ENGINE_REPORT.md` for Germany vs Ivory Coast using existing local data only.
