@@ -1,0 +1,473 @@
+{
+  "source_id": "36",
+  "match": {
+    "home_cn": "Tunisia",
+    "away_cn": "Japan",
+    "home_en": "Tunisia",
+    "away_en": "Japan",
+    "display_name": "Tunisia vs Japan"
+  },
+  "created_at": "2026-06-20T20:36:44.459099+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "fixture_players": {
+    "ok": true,
+    "response": [],
+    "error": null
+  },
+  "home_team_assets": {
+    "squad": {
+      "ok": true,
+      "response": [
+        {
+          "team": {
+            "id": 28,
+            "name": "Tunisia",
+            "logo": "https://media.api-sports.io/football/teams/28.png"
+          },
+          "players": [
+            {
+              "id": 49423,
+              "name": "S. Ben Hsan",
+              "age": 29,
+              "number": 22,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/49423.png"
+            },
+            {
+              "id": 533394,
+              "name": "C. Abdelmouhib",
+              "age": 24,
+              "number": 1,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/533394.png"
+            },
+            {
+              "id": 49424,
+              "name": "A. Dahmen",
+              "age": 28,
+              "number": 16,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/49424.png"
+            },
+            {
+              "id": 49583,
+              "name": "A. Abdi",
+              "age": 32,
+              "number": 2,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/49583.png"
+            },
+            {
+              "id": 393977,
+              "name": "A. Arous",
+              "age": 21,
+              "number": 5,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/393977.png"
+            },
+            {
+              "id": 135059,
+              "name": "A. Ben Hmida",
+              "age": 30,
+              "number": 21,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/135059.png"
+            },
+            {
+              "id": 2945,
+              "name": "D. Bronn",
+              "age": 30,
+              "number": 6,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/2945.png"
+            },
+            {
+              "id": 533360,
+              "name": "R. Chikhaoui",
+              "age": 21,
+              "number": 24,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/533360.png"
+            },
+            {
+              "id": 375608,
+              "name": "M. Neffati",
+              "age": 21,
+              "number": 23,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/375608.png"
+            },
+            {
+              "id": 163068,
+              "name": "O. Rekik",
+              "age": 24,
+              "number": 4,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/163068.png"
+            },
+            {
+              "id": 50030,
+              "name": "M. Talbi",
+              "age": 27,
+              "number": 3,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/50030.png"
+            },
+            {
+              "id": 18942,
+              "name": "Y. Valery",
+              "age": 26,
+              "number": 20,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/18942.png"
+            },
+            {
+              "id": 49469,
+              "name": "M. Ben Ouanes",
+              "age": 31,
+              "number": 12,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/49469.png"
+            },
+            {
+              "id": 533295,
+              "name": "K. Ayari",
+              "age": 20,
+              "number": 14,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/533295.png"
+            },
+            {
+              "id": 310196,
+              "name": "Ismaël Gharbi",
+              "age": 21,
+              "number": 11,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/310196.png"
+            },
+            {
+              "id": 25300,
+              "name": "R. Khedira",
+              "age": 31,
+              "number": 13,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/25300.png"
+            },
+            {
+              "id": 180560,
+              "name": "H. Mejbri",
+              "age": 22,
+              "number": 10,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/180560.png"
+            },
+            {
+              "id": 21587,
+              "name": "E. Skhiri",
+              "age": 30,
+              "number": 17,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/21587.png"
+            },
+            {
+              "id": 199310,
+              "name": "A. Ben Slimane",
+              "age": 24,
+              "number": 25,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/199310.png"
+            },
+            {
+              "id": 67195,
+              "name": "H. Mahmoud",
+              "age": 25,
+              "number": 15,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/67195.png"
+            },
+            {
+              "id": 57518,
+              "name": "S. Tounekti",
+              "age": 23,
+              "number": 26,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/57518.png"
+            },
+            {
+              "id": 42012,
+              "name": "E. Achouri",
+              "age": 26,
+              "number": 7,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/42012.png"
+            },
+            {
+              "id": 2962,
+              "name": "F. Chaouat",
+              "age": 29,
+              "number": 19,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/2962.png"
+            },
+            {
+              "id": 566059,
+              "name": "R. Elloumi",
+              "age": 18,
+              "number": 18,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/566059.png"
+            },
+            {
+              "id": 344862,
+              "name": "H. Mastouri",
+              "age": 28,
+              "number": 9,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/344862.png"
+            },
+            {
+              "id": 323974,
+              "name": "E. Saad",
+              "age": 26,
+              "number": 8,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/323974.png"
+            }
+          ]
+        }
+      ],
+      "error": null
+    },
+    "team_id": 28,
+    "name": "Tunisia"
+  },
+  "away_team_assets": {
+    "squad": {
+      "ok": true,
+      "response": [
+        {
+          "team": {
+            "id": 12,
+            "name": "Japan",
+            "logo": "https://media.api-sports.io/football/teams/12.png"
+          },
+          "players": [
+            {
+              "id": 304782,
+              "name": "T. Hayakawa",
+              "age": 26,
+              "number": 23,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/304782.png"
+            },
+            {
+              "id": 33034,
+              "name": "K. Osako",
+              "age": 26,
+              "number": 12,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/33034.png"
+            },
+            {
+              "id": 199578,
+              "name": "Z. Suzuki",
+              "age": 23,
+              "number": 1,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/199578.png"
+            },
+            {
+              "id": 38114,
+              "name": "K. Itakura",
+              "age": 28,
+              "number": 4,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/38114.png"
+            },
+            {
+              "id": 32893,
+              "name": "H. Ito",
+              "age": 26,
+              "number": 21,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/32893.png"
+            },
+            {
+              "id": 440,
+              "name": "Y. Nagatomo",
+              "age": 39,
+              "number": 5,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/440.png"
+            },
+            {
+              "id": 33165,
+              "name": "A. Seko",
+              "age": 25,
+              "number": 20,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/33165.png"
+            },
+            {
+              "id": 32887,
+              "name": "Y. Sugawara",
+              "age": 25,
+              "number": 2,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/32887.png"
+            },
+            {
+              "id": 351014,
+              "name": "J. Suzuki",
+              "age": 22,
+              "number": 25,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/351014.png"
+            },
+            {
+              "id": 32954,
+              "name": "S. Taniguchi",
+              "age": 34,
+              "number": 3,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/32954.png"
+            },
+            {
+              "id": 2597,
+              "name": "T. Tomiyasu",
+              "age": 27,
+              "number": 22,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/2597.png"
+            },
+            {
+              "id": 32858,
+              "name": "T. Watanabe",
+              "age": 28,
+              "number": 16,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/32858.png"
+            },
+            {
+              "id": 2598,
+              "name": "R. Doan",
+              "age": 27,
+              "number": 10,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/2598.png"
+            },
+            {
+              "id": 2601,
+              "name": "D. Kamada",
+              "age": 29,
+              "number": 15,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/2601.png"
+            },
+            {
+              "id": 33889,
+              "name": "K. Sano",
+              "age": 25,
+              "number": 24,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/33889.png"
+            },
+            {
+              "id": 32966,
+              "name": "A. Tanaka",
+              "age": 27,
+              "number": 7,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/32966.png"
+            },
+            {
+              "id": 1942,
+              "name": "J. Ito",
+              "age": 32,
+              "number": 14,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/1942.png"
+            },
+            {
+              "id": 32862,
+              "name": "T. Kubo",
+              "age": 24,
+              "number": 8,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/32862.png"
+            },
+            {
+              "id": 33224,
+              "name": "D. Maeda",
+              "age": 28,
+              "number": 11,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/33224.png"
+            },
+            {
+              "id": 33321,
+              "name": "Keito Nakamura",
+              "age": 25,
+              "number": 13,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/33321.png"
+            },
+            {
+              "id": 199143,
+              "name": "Y. Suzuki",
+              "age": 24,
+              "number": 17,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/199143.png"
+            },
+            {
+              "id": 375930,
+              "name": "K. Goto",
+              "age": 20,
+              "number": 9,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/375930.png"
+            },
+            {
+              "id": 33289,
+              "name": "Koki Ogawa",
+              "age": 28,
+              "number": 19,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/33289.png"
+            },
+            {
+              "id": 422572,
+              "name": "K. Shiogai",
+              "age": 20,
+              "number": 26,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/422572.png"
+            },
+            {
+              "id": 72155,
+              "name": "A. Ueda",
+              "age": 27,
+              "number": 18,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/72155.png"
+            },
+            {
+              "id": 106851,
+              "name": "S. Machino",
+              "age": 26,
+              "number": 6,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/106851.png"
+            }
+          ]
+        }
+      ],
+      "error": null
+    },
+    "team_id": 12,
+    "name": "Japan"
+  }
+}

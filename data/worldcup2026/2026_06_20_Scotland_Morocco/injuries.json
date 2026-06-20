@@ -1,0 +1,17 @@
+{
+  "source_id": "760445",
+  "match": {
+    "home_cn": "Scotland",
+    "away_cn": "Morocco",
+    "home_en": "Scotland",
+    "away_en": "Morocco",
+    "display_name": "Scotland vs Morocco"
+  },
+  "created_at": "2026-06-20T20:31:30.329262+08:00",
+  "schedule_source": "ESPN",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [],
+  "error": null
+}

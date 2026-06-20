@@ -15,117 +15,109 @@ CHANGELOG.md
 
 Version: v1.64-dev
 
-Updated: 2026-06-19 20:12
+Updated: 2026-06-20 21:07
 
 Modified Files:
-- CHANGELOG.md
 - GPT_CONTEXT.md
 - LATEST.md
 - app.py
-- data/history/2026_06_18_Switzerland_Bosnia_and_Herzegovina_post.json
-- data/team_aliases.yaml
-- data/worldcup2026/2026_06_19_Brazil_Haiti/events.json
-- data/worldcup2026/2026_06_19_Brazil_Haiti/fixture.json
-- data/worldcup2026/2026_06_19_Brazil_Haiti/injuries.json
-- data/worldcup2026/2026_06_19_Brazil_Haiti/lineups.json
-- data/worldcup2026/2026_06_19_Brazil_Haiti/match_stats.json
-- data/worldcup2026/2026_06_19_Brazil_Haiti/odds.json
-- data/worldcup2026/2026_06_19_Brazil_Haiti/players.json
-- data/worldcup2026/2026_06_19_Brazil_Haiti/post_match.json
-- data/worldcup2026/2026_06_19_Brazil_Haiti/pre_match.json
-- data/worldcup2026/2026_06_19_Brazil_Haiti/team_stats.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/events.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/fixture.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/injuries.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/lineups.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/match_stats.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/odds.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/players.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/post_match.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/pre_match.json
-- data/worldcup2026/2026_06_19_Scotland_Morocco/team_stats.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/events.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/fixture.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/injuries.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/lineups.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/match_stats.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/odds.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/players.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/post_match.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/pre_match.json
-- data/worldcup2026/2026_06_19_Turkiye_Paraguay/team_stats.json
-- data/worldcup2026/2026_06_19_USA_Australia/events.json
-- data/worldcup2026/2026_06_19_USA_Australia/fixture.json
-- data/worldcup2026/2026_06_19_USA_Australia/injuries.json
-- data/worldcup2026/2026_06_19_USA_Australia/lineups.json
-- data/worldcup2026/2026_06_19_USA_Australia/match_stats.json
-- data/worldcup2026/2026_06_19_USA_Australia/odds.json
-- data/worldcup2026/2026_06_19_USA_Australia/players.json
-- data/worldcup2026/2026_06_19_USA_Australia/post_match.json
-- data/worldcup2026/2026_06_19_USA_Australia/pre_match.json
-- data/worldcup2026/2026_06_19_USA_Australia/team_stats.json
-- data/worldcup2026/2026_06_19_refresh_summary.json
-- modules/betting_opinion.py
-- modules/decision_engine.py
-- modules/user_odds.py
-- modules/worldcup_db.py
-- scripts/build_worldcup_data_center.py
-- scripts/update_gpt_context.py
-- data/fetch_logs/20260619_165226_2026_06_19_refresh_summary.json
+- data/history/portfolio_performance.json
+- data/history/style_performance.json
 - data/performance_logs/app_performance.jsonl
-- data/worldcup2026/index.json
-- modules/perf_logger.py
-- scripts/build_worldcup_index.py
-- scripts/performance_report.py
+- data/team_aliases.yaml
+- scripts/build_worldcup_data_center.py
+- scripts/refresh_match_prematch_snapshot.py
+- data/fetch_logs/20260620_203245_2026_06_20_refresh_summary.json
+- data/fetch_logs/20260620_203647_2026_06_20_refresh_summary.json
+- data/history/2026_06_19_United_States_Australia_post.json
+- data/history/2026_06_20_Germany_Ivory_Coast_pre.json
+- data/history/2026_06_20_Netherlands_Sweden_pre.json
+- data/history/my_portfolios/2026_06_19_United_States_Australia.json
+- data/history/my_portfolios/2026_06_20_Germany_Ivory_Coast.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/events.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/fixture.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/injuries.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/lineups.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/match_stats.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/odds.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/players.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/post_match.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/pre_match.json
+- data/worldcup2026/2026_06_20_Brazil_Haiti/team_stats.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/events.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/fixture.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/injuries.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/lineups.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/match_stats.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/odds.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/players.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/post_match.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/pre_match.json
+- data/worldcup2026/2026_06_20_Ecuador_Curacao/team_stats.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/events.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/fixture.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/injuries.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/lineups.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/match_stats.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/odds.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/players.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/post_match.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/pre_match.json
+- data/worldcup2026/2026_06_20_Germany_Ivory_Coast/team_stats.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/events.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/fixture.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/injuries.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/lineups.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/match_stats.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/odds.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/players.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/post_match.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/pre_match.json
+- data/worldcup2026/2026_06_20_Netherlands_Sweden/team_stats.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/events.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/fixture.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/injuries.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/lineups.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/match_stats.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/odds.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/players.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/post_match.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/pre_match.json
+- data/worldcup2026/2026_06_20_Scotland_Morocco/team_stats.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/events.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/fixture.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/injuries.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/lineups.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/match_stats.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/odds.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/players.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/post_match.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/pre_match.json
+- data/worldcup2026/2026_06_20_Tunisia_Japan/team_stats.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/events.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/fixture.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/injuries.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/lineups.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/match_stats.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/odds.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/players.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/post_match.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/pre_match.json
+- data/worldcup2026/2026_06_20_Turkiye_Paraguay/team_stats.json
+- data/worldcup2026/2026_06_20_USA_Australia/events.json
+- data/worldcup2026/2026_06_20_USA_Australia/fixture.json
+- data/worldcup2026/2026_06_20_USA_Australia/injuries.json
+- data/worldcup2026/2026_06_20_USA_Australia/lineups.json
+- data/worldcup2026/2026_06_20_USA_Australia/match_stats.json
+- data/worldcup2026/2026_06_20_USA_Australia/odds.json
+- data/worldcup2026/2026_06_20_USA_Australia/players.json
+- data/worldcup2026/2026_06_20_USA_Australia/post_match.json
+- data/worldcup2026/2026_06_20_USA_Australia/pre_match.json
+- data/worldcup2026/2026_06_20_USA_Australia/team_stats.json
+- data/worldcup2026/2026_06_20_refresh_summary.json
 
 Status:
 Running: http://localhost:8502
-
-## Current Recommendation
-
-Current Best Portfolio:
-- Generated by Odds Distribution Optimizer
-- Uses real Match Winner, Asian Handicap, Over/Under, and Correct Score odds when available
-- Uses user-entered actual odds when provided
-
-Total Stake:
-- Determined by direction confidence and odds value
-- Minimum stake is never 0
-
-Current Metrics:
-- EV: calculated per selected match
-- Sharpe: calculated per selected match
-- Stability: calculated per selected match
-
-## Current Model
-
-Enabled:
-- Score Probability Distribution
-- Full Score State Space
-- Return Matrix
-- Utility Function
-- Kelly
-- Sharpe
-- Insurance Cost
-- Insurance Efficiency
-- Correlation Matrix
-- Marginal Contribution
-- Efficient Frontier
-- Portfolio Optimizer
-- Odds Distribution Optimizer
-- Betting Asset Role Framework
-- Multi-Role Asset Allocation
-- Role-Driven Portfolio Optimizer
-- Pre-Match Decision Cockpit
-- Asset Role Contribution
-- Match Snapshot
-- Prediction Audit
-- Recommendation Audit
-- Portfolio Style
-- Style Performance Database
-- My Portfolio
-- Post Match Analysis
-- Strategy Settlement
 
 ## Current Problems
 

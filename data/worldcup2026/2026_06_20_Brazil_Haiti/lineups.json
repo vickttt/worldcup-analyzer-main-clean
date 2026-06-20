@@ -1,0 +1,535 @@
+{
+  "source_id": "760444",
+  "match": {
+    "home_cn": "Brazil",
+    "away_cn": "Haiti",
+    "home_en": "Brazil",
+    "away_en": "Haiti",
+    "display_name": "Brazil vs Haiti"
+  },
+  "created_at": "2026-06-20T20:32:05.607700+08:00",
+  "schedule_source": "ESPN",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "team": {
+        "id": 6,
+        "name": "Brazil",
+        "logo": "https://media.api-sports.io/football/teams/6.png",
+        "colors": {
+          "player": {
+            "primary": "313a97",
+            "number": "f8df40",
+            "border": "313a97"
+          },
+          "goalkeeper": {
+            "primary": "47484d",
+            "number": "c8d77c",
+            "border": "47484d"
+          }
+        }
+      },
+      "formation": "4-3-3",
+      "startXI": [
+        {
+          "player": {
+            "id": 280,
+            "name": "Alisson",
+            "number": 1,
+            "pos": "G",
+            "grid": "1:1"
+          }
+        },
+        {
+          "player": {
+            "id": 618,
+            "name": "Danilo",
+            "number": 13,
+            "pos": "D",
+            "grid": "2:4"
+          }
+        },
+        {
+          "player": {
+            "id": 257,
+            "name": "Marquinhos",
+            "number": 4,
+            "pos": "D",
+            "grid": "2:3"
+          }
+        },
+        {
+          "player": {
+            "id": 22224,
+            "name": "Gabriel Magalhães",
+            "number": 3,
+            "pos": "D",
+            "grid": "2:2"
+          }
+        },
+        {
+          "player": {
+            "id": 24866,
+            "name": "Douglas Santos",
+            "number": 16,
+            "pos": "D",
+            "grid": "2:1"
+          }
+        },
+        {
+          "player": {
+            "id": 10135,
+            "name": "Bruno Guimarães",
+            "number": 8,
+            "pos": "M",
+            "grid": "3:3"
+          }
+        },
+        {
+          "player": {
+            "id": 747,
+            "name": "Casemiro",
+            "number": 5,
+            "pos": "M",
+            "grid": "3:2"
+          }
+        },
+        {
+          "player": {
+            "id": 1646,
+            "name": "Lucas Paquetá",
+            "number": 20,
+            "pos": "M",
+            "grid": "3:1"
+          }
+        },
+        {
+          "player": {
+            "id": 1496,
+            "name": "Raphinha",
+            "number": 11,
+            "pos": "F",
+            "grid": "4:3"
+          }
+        },
+        {
+          "player": {
+            "id": 1165,
+            "name": "Matheus Cunha",
+            "number": 9,
+            "pos": "F",
+            "grid": "4:2"
+          }
+        },
+        {
+          "player": {
+            "id": 762,
+            "name": "Vinícius Júnior",
+            "number": 7,
+            "pos": "F",
+            "grid": "4:1"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "id": 407806,
+            "name": "Rayan",
+            "number": 26,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 377122,
+            "name": "Endrick",
+            "number": 19,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 127769,
+            "name": "Gabriel Martinelli",
+            "number": 22,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 10097,
+            "name": "Éderson",
+            "number": 2,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 275170,
+            "name": "Danilo Santos",
+            "number": 18,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 2410,
+            "name": "Weverton",
+            "number": 12,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 617,
+            "name": "Ederson",
+            "number": 23,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 860,
+            "name": "Alex Sandro",
+            "number": 6,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 30497,
+            "name": "Bremer",
+            "number": 14,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 10124,
+            "name": "Léo Pereira",
+            "number": 15,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 30424,
+            "name": "Roger Ibañez",
+            "number": 24,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 299,
+            "name": "Fabinho",
+            "number": 17,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 265785,
+            "name": "Luiz Henrique",
+            "number": 21,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 196156,
+            "name": "Igor Thiago",
+            "number": 25,
+            "pos": "F",
+            "grid": null
+          }
+        }
+      ],
+      "coach": {
+        "id": 2407,
+        "name": "Carlo Ancelotti",
+        "photo": "https://media.api-sports.io/football/coachs/2407.png"
+      }
+    },
+    {
+      "team": {
+        "id": 2386,
+        "name": "Haiti",
+        "logo": "https://media.api-sports.io/football/teams/2386.png",
+        "colors": {
+          "player": {
+            "primary": "971b17",
+            "number": "f6f3f3",
+            "border": "971b17"
+          },
+          "goalkeeper": {
+            "primary": "0d0d0d",
+            "number": "ffffff",
+            "border": "0d0d0d"
+          }
+        }
+      },
+      "formation": "5-4-1",
+      "startXI": [
+        {
+          "player": {
+            "id": 87789,
+            "name": "Johny Placide",
+            "number": 1,
+            "pos": "G",
+            "grid": "1:1"
+          }
+        },
+        {
+          "player": {
+            "id": 20850,
+            "name": "Carlens Arcus",
+            "number": 2,
+            "pos": "D",
+            "grid": "2:5"
+          }
+        },
+        {
+          "player": {
+            "id": 20655,
+            "name": "Jean-Kévin Duverne",
+            "number": 22,
+            "pos": "D",
+            "grid": "2:4"
+          }
+        },
+        {
+          "player": {
+            "id": 12303,
+            "name": "Ricardo Adé",
+            "number": 4,
+            "pos": "D",
+            "grid": "2:3"
+          }
+        },
+        {
+          "player": {
+            "id": 1411,
+            "name": "Hannes Delcroix",
+            "number": 5,
+            "pos": "D",
+            "grid": "2:2"
+          }
+        },
+        {
+          "player": {
+            "id": 190747,
+            "name": "Martin Expérience",
+            "number": 8,
+            "pos": "D",
+            "grid": "2:1"
+          }
+        },
+        {
+          "player": {
+            "id": 174915,
+            "name": "Josué Casimir",
+            "number": 21,
+            "pos": "M",
+            "grid": "3:4"
+          }
+        },
+        {
+          "player": {
+            "id": 338367,
+            "name": "Danley Jean Jacques",
+            "number": 17,
+            "pos": "M",
+            "grid": "3:3"
+          }
+        },
+        {
+          "player": {
+            "id": 20665,
+            "name": "Jean-Ricner Bellegarde",
+            "number": 10,
+            "pos": "M",
+            "grid": "3:2"
+          }
+        },
+        {
+          "player": {
+            "id": 162733,
+            "name": "Ruben Providence",
+            "number": 15,
+            "pos": "M",
+            "grid": "3:1"
+          }
+        },
+        {
+          "player": {
+            "id": 8601,
+            "name": "Frantzdy Pierrot",
+            "number": 20,
+            "pos": "F",
+            "grid": "4:1"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "id": 194242,
+            "name": "Dominique Simon",
+            "number": 25,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 84087,
+            "name": "Wilson Isidor",
+            "number": 18,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 128766,
+            "name": "Louicius Don Deedson",
+            "number": 11,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 21613,
+            "name": "Lenny Joseph",
+            "number": 16,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 50958,
+            "name": "Derrick Etienne",
+            "number": 7,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 174768,
+            "name": "Alexandre Pierre",
+            "number": 12,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 123742,
+            "name": "Josué Duverger",
+            "number": 23,
+            "pos": "G",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 573613,
+            "name": "Keeto Thermoncy",
+            "number": 3,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 102505,
+            "name": "Duke Lacroix",
+            "number": 13,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 318930,
+            "name": "Garven-Michee Metusala",
+            "number": 14,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 275367,
+            "name": "Wilguens Paugain",
+            "number": 24,
+            "pos": "D",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 237142,
+            "name": "Carl Fred Sainté",
+            "number": 6,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 371050,
+            "name": "Woodensky Pierre",
+            "number": 26,
+            "pos": "M",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 45020,
+            "name": "Duckens Nazon",
+            "number": 9,
+            "pos": "F",
+            "grid": null
+          }
+        },
+        {
+          "player": {
+            "id": 48535,
+            "name": "Yassin Fortune",
+            "number": 19,
+            "pos": "F",
+            "grid": null
+          }
+        }
+      ],
+      "coach": {
+        "id": 373,
+        "name": "Sebastien Migne",
+        "photo": "https://media.api-sports.io/football/coachs/373.png"
+      }
+    }
+  ],
+  "error": null
+}

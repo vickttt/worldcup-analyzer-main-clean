@@ -1,0 +1,331 @@
+{
+  "created_at": "2026-06-20T20:36:47.838656+08:00",
+  "scope": "today",
+  "mode": "Terminal Fetch Mode",
+  "matches": [
+    {
+      "match": "Netherlands vs Sweden",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_20_Netherlands_Sweden",
+      "schedule_fixture_id": "35",
+      "api_football_fixture_id": 1539007,
+      "odds_found": true,
+      "effective_odds_found": true,
+      "effective_odds_source": "The Odds API / Unibet",
+      "effective_totals_rows": 25,
+      "api_asian_rows": 185,
+      "api_correct_rows": 618,
+      "lineups_rows": 0,
+      "injuries_rows": 0,
+      "recommended": "Home -1.5 + Netherlands独赢 + 波胆 3:1 + 波胆 3:0",
+      "data_completeness": 67,
+      "fetch_rows": [
+        {
+          "source": "The Odds API / Unibet",
+          "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
+          "dataset": "Winner Odds / Totals",
+          "success": true,
+          "records": 25,
+          "empty": false,
+          "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-20）。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1539007&bet=4",
+          "dataset": "Asian Handicap",
+          "success": true,
+          "records": 185,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1539007&bet=10",
+          "dataset": "Correct Score",
+          "success": true,
+          "records": 618,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/lineups?fixture=1539007",
+          "dataset": "Lineups",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/injuries?fixture=1539007",
+          "dataset": "Injuries",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/statistics?fixture=1539007",
+          "dataset": "Match Stats",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/players?fixture=1539007",
+          "dataset": "Players",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        }
+      ]
+    },
+    {
+      "match": "Germany vs Ivory Coast",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_20_Germany_Ivory_Coast",
+      "schedule_fixture_id": "33",
+      "api_football_fixture_id": 1489393,
+      "odds_found": true,
+      "effective_odds_found": true,
+      "effective_odds_source": "The Odds API / Unibet",
+      "effective_totals_rows": 26,
+      "api_asian_rows": 184,
+      "api_correct_rows": 612,
+      "lineups_rows": 0,
+      "injuries_rows": 0,
+      "recommended": "Home -1.5 + Germany独赢 + 波胆 3:1 + 波胆 2:0",
+      "data_completeness": 67,
+      "fetch_rows": [
+        {
+          "source": "The Odds API / Unibet",
+          "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
+          "dataset": "Winner Odds / Totals",
+          "success": true,
+          "records": 26,
+          "empty": false,
+          "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-20）。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1489393&bet=4",
+          "dataset": "Asian Handicap",
+          "success": true,
+          "records": 184,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1489393&bet=10",
+          "dataset": "Correct Score",
+          "success": true,
+          "records": 612,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/lineups?fixture=1489393",
+          "dataset": "Lineups",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/injuries?fixture=1489393",
+          "dataset": "Injuries",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/statistics?fixture=1489393",
+          "dataset": "Match Stats",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/players?fixture=1489393",
+          "dataset": "Players",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        }
+      ]
+    },
+    {
+      "match": "Ecuador vs Curaçao",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_20_Ecuador_Curacao",
+      "schedule_fixture_id": null,
+      "api_football_fixture_id": 1489392,
+      "odds_found": true,
+      "effective_odds_found": true,
+      "effective_odds_source": "The Odds API / Unibet",
+      "effective_totals_rows": 25,
+      "api_asian_rows": 230,
+      "api_correct_rows": 599,
+      "lineups_rows": 0,
+      "injuries_rows": 0,
+      "recommended": "Home -1.5 + Ecuador独赢 + 波胆 2:0 + 波胆 3:0",
+      "data_completeness": 67,
+      "fetch_rows": [
+        {
+          "source": "The Odds API / Unibet",
+          "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
+          "dataset": "Winner Odds / Totals",
+          "success": true,
+          "records": 25,
+          "empty": false,
+          "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-21）。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1489392&bet=4",
+          "dataset": "Asian Handicap",
+          "success": true,
+          "records": 230,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1489392&bet=10",
+          "dataset": "Correct Score",
+          "success": true,
+          "records": 599,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/lineups?fixture=1489392",
+          "dataset": "Lineups",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/injuries?fixture=1489392",
+          "dataset": "Injuries",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/statistics?fixture=1489392",
+          "dataset": "Match Stats",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/players?fixture=1489392",
+          "dataset": "Players",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        }
+      ]
+    },
+    {
+      "match": "Tunisia vs Japan",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_20_Tunisia_Japan",
+      "schedule_fixture_id": "36",
+      "api_football_fixture_id": 1489394,
+      "odds_found": true,
+      "effective_odds_found": true,
+      "effective_odds_source": "The Odds API / Unibet",
+      "effective_totals_rows": 25,
+      "api_asian_rows": 181,
+      "api_correct_rows": 577,
+      "lineups_rows": 0,
+      "injuries_rows": 0,
+      "recommended": "Home +1.5 + Japan独赢 + 波胆 0:1 + 波胆 0:2",
+      "data_completeness": 67,
+      "fetch_rows": [
+        {
+          "source": "The Odds API / Unibet",
+          "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
+          "dataset": "Winner Odds / Totals",
+          "success": true,
+          "records": 25,
+          "empty": false,
+          "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-21）。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1489394&bet=4",
+          "dataset": "Asian Handicap",
+          "success": true,
+          "records": 181,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1489394&bet=10",
+          "dataset": "Correct Score",
+          "success": true,
+          "records": 577,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/lineups?fixture=1489394",
+          "dataset": "Lineups",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/injuries?fixture=1489394",
+          "dataset": "Injuries",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/statistics?fixture=1489394",
+          "dataset": "Match Stats",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/players?fixture=1489394",
+          "dataset": "Players",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        }
+      ]
+    }
+  ]
+}

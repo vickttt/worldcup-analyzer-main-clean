@@ -1556,3 +1556,970 @@
 {"ts": "2026-06-19T20:40:48", "page": "detail", "module": "tab_market", "elapsed_ms": 3.69, "meta": {}}
 {"ts": "2026-06-19T20:40:48", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.97, "meta": {}}
 {"ts": "2026-06-19T20:40:48", "page": "detail", "module": "tab_source", "elapsed_ms": 0.86, "meta": {}}
+{"ts": "2026-06-20T20:25:43", "page": "home", "module": "fetch_schedule", "elapsed_ms": 46719.01, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:25:43", "page": "home", "module": "banner", "elapsed_ms": 0.49, "meta": {}}
+{"ts": "2026-06-20T20:25:43", "page": "home", "module": "search", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-20T20:25:44", "page": "home", "module": "date_nav", "elapsed_ms": 78.7, "meta": {}}
+{"ts": "2026-06-20T20:25:44", "page": "home", "module": "standings", "elapsed_ms": 70.8, "meta": {}}
+{"ts": "2026-06-20T20:25:44", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-20T20:25:44", "page": "home", "module": "cache_notes", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T20:25:44", "page": "home", "module": "total", "elapsed_ms": 46876.69, "meta": {}}
+{"ts": "2026-06-20T20:26:23", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.45, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:26:23", "page": "home", "module": "banner", "elapsed_ms": 0.27, "meta": {}}
+{"ts": "2026-06-20T20:26:23", "page": "home", "module": "search", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-20T20:26:24", "page": "home", "module": "date_nav", "elapsed_ms": 20.41, "meta": {}}
+{"ts": "2026-06-20T20:26:24", "page": "home", "module": "total", "elapsed_ms": 26.08, "meta": {}}
+{"ts": "2026-06-20T20:26:24", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 20.26, "meta": {}}
+{"ts": "2026-06-20T20:26:45", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 21716.87, "meta": {}}
+{"ts": "2026-06-20T20:26:53", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 7335.62, "meta": {}}
+{"ts": "2026-06-20T20:26:53", "page": "detail", "module": "base_models", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-20T20:26:53", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "render_match_overview", "elapsed_ms": 6326.54, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.4, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "report_generation", "elapsed_ms": 1.36, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 11.3, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 12.93, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 35432.26, "meta": {"match": "Netherlands vs Sweden"}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 2.9, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.44, "meta": {"shown": 5, "total": 5}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.94, "meta": {"rows": 3}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 27.43, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 3.98, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "tab_market", "elapsed_ms": 2.95, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "tab_post_match", "elapsed_ms": 1.52, "meta": {}}
+{"ts": "2026-06-20T20:26:59", "page": "detail", "module": "tab_source", "elapsed_ms": 0.52, "meta": {}}
+{"ts": "2026-06-20T20:28:24", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.17, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:28:24", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:28:24", "page": "home", "module": "search", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:28:24", "page": "home", "module": "date_nav", "elapsed_ms": 25.61, "meta": {}}
+{"ts": "2026-06-20T20:28:24", "page": "home", "module": "standings", "elapsed_ms": 30.28, "meta": {}}
+{"ts": "2026-06-20T20:28:24", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:28:24", "page": "home", "module": "cache_notes", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-20T20:28:24", "page": "home", "module": "total", "elapsed_ms": 60.24, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.41, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "banner", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "search", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "date_nav", "elapsed_ms": 13.84, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "total", "elapsed_ms": 19.63, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.14, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "banner", "elapsed_ms": 0.06, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "search", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "date_nav", "elapsed_ms": 19.15, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "standings", "elapsed_ms": 25.56, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "cache_notes", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:28:27", "page": "home", "module": "total", "elapsed_ms": 48.24, "meta": {}}
+{"ts": "2026-06-20T20:28:31", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.45, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:28:31", "page": "home", "module": "banner", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-20T20:28:31", "page": "home", "module": "search", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:28:31", "page": "home", "module": "date_nav", "elapsed_ms": 24.12, "meta": {}}
+{"ts": "2026-06-20T20:28:31", "page": "home", "module": "total", "elapsed_ms": 30.95, "meta": {}}
+{"ts": "2026-06-20T20:31:30", "page": "home", "module": "fetch_schedule", "elapsed_ms": 43080.75, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:31:30", "page": "home", "module": "banner", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-20T20:31:30", "page": "home", "module": "search", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-20T20:31:30", "page": "home", "module": "date_nav", "elapsed_ms": 19.87, "meta": {}}
+{"ts": "2026-06-20T20:31:30", "page": "home", "module": "standings", "elapsed_ms": 36.74, "meta": {}}
+{"ts": "2026-06-20T20:31:30", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.7, "meta": {}}
+{"ts": "2026-06-20T20:31:30", "page": "home", "module": "cache_notes", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-20T20:31:30", "page": "home", "module": "total", "elapsed_ms": 43143.34, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.44, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "banner", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "search", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "date_nav", "elapsed_ms": 13.52, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "total", "elapsed_ms": 19.17, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.15, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "search", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "date_nav", "elapsed_ms": 23.21, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "standings", "elapsed_ms": 28.92, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "cache_notes", "elapsed_ms": 0.29, "meta": {}}
+{"ts": "2026-06-20T20:32:00", "page": "home", "module": "total", "elapsed_ms": 55.95, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.38, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:32:02", "page": "home", "module": "banner", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "home", "module": "search", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "home", "module": "date_nav", "elapsed_ms": 25.48, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "home", "module": "total", "elapsed_ms": 31.36, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 15.94, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 0.43, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "base_models", "elapsed_ms": 0.04, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "report_generation", "elapsed_ms": 0.71, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 4.27, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 6.44, "meta": {}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 30.43, "meta": {"match": "Netherlands vs Sweden"}}
+{"ts": "2026-06-20T20:32:02", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.62, "meta": {}}
+{"ts": "2026-06-20T20:32:03", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.27, "meta": {"shown": 5, "total": 5}}
+{"ts": "2026-06-20T20:32:03", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.62, "meta": {"rows": 3}}
+{"ts": "2026-06-20T20:32:03", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 20.41, "meta": {}}
+{"ts": "2026-06-20T20:32:03", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 2.39, "meta": {}}
+{"ts": "2026-06-20T20:32:03", "page": "detail", "module": "tab_market", "elapsed_ms": 2.82, "meta": {}}
+{"ts": "2026-06-20T20:32:03", "page": "detail", "module": "tab_post_match", "elapsed_ms": 1.95, "meta": {}}
+{"ts": "2026-06-20T20:32:03", "page": "detail", "module": "tab_source", "elapsed_ms": 0.5, "meta": {}}
+{"ts": "2026-06-20T20:33:03", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.18, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:33:03", "page": "home", "module": "banner", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:33:03", "page": "home", "module": "search", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:33:03", "page": "home", "module": "date_nav", "elapsed_ms": 23.23, "meta": {}}
+{"ts": "2026-06-20T20:33:03", "page": "home", "module": "standings", "elapsed_ms": 23.43, "meta": {}}
+{"ts": "2026-06-20T20:33:03", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-20T20:33:03", "page": "home", "module": "cache_notes", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-20T20:33:03", "page": "home", "module": "total", "elapsed_ms": 50.02, "meta": {}}
+{"ts": "2026-06-20T20:33:06", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.26, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T20:33:06", "page": "home", "module": "banner", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:33:06", "page": "home", "module": "search", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-20T20:33:06", "page": "home", "module": "date_nav", "elapsed_ms": 22.17, "meta": {}}
+{"ts": "2026-06-20T20:33:06", "page": "home", "module": "total", "elapsed_ms": 25.08, "meta": {}}
+{"ts": "2026-06-20T20:33:06", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 16.49, "meta": {}}
+{"ts": "2026-06-20T20:33:16", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 10091.27, "meta": {}}
+{"ts": "2026-06-20T20:33:22", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 6288.03, "meta": {}}
+{"ts": "2026-06-20T20:33:22", "page": "detail", "module": "base_models", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T20:33:22", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.01, "meta": {}}
+{"ts": "2026-06-20T20:33:27", "page": "detail", "module": "render_match_overview", "elapsed_ms": 4662.18, "meta": {}}
+{"ts": "2026-06-20T20:33:27", "page": "detail", "module": "decision_engine", "elapsed_ms": 2.32, "meta": {}}
+{"ts": "2026-06-20T20:33:27", "page": "detail", "module": "report_generation", "elapsed_ms": 1.22, "meta": {}}
+{"ts": "2026-06-20T20:33:27", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 178.7, "meta": {}}
+{"ts": "2026-06-20T20:33:27", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 360.81, "meta": {}}
+{"ts": "2026-06-20T20:33:27", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 21606.15, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:33:27", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 3.89, "meta": {}}
+{"ts": "2026-06-20T20:33:28", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.11, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:33:28", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.65, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:33:28", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 685.94, "meta": {}}
+{"ts": "2026-06-20T20:33:28", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.77, "meta": {}}
+{"ts": "2026-06-20T20:33:28", "page": "detail", "module": "tab_market", "elapsed_ms": 3.46, "meta": {}}
+{"ts": "2026-06-20T20:33:28", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.33, "meta": {}}
+{"ts": "2026-06-20T20:33:28", "page": "detail", "module": "tab_source", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-20T20:34:26", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 19.21, "meta": {}}
+{"ts": "2026-06-20T20:34:26", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 0.64, "meta": {}}
+{"ts": "2026-06-20T20:34:26", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-20T20:34:26", "page": "detail", "module": "base_models", "elapsed_ms": 0.29, "meta": {}}
+{"ts": "2026-06-20T20:34:26", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:34:26", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.23, "meta": {}}
+{"ts": "2026-06-20T20:34:26", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.78, "meta": {}}
+{"ts": "2026-06-20T20:34:26", "page": "detail", "module": "report_generation", "elapsed_ms": 0.78, "meta": {}}
+{"ts": "2026-06-20T20:34:26", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 166.49, "meta": {}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 358.11, "meta": {}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 550.29, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.31, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.62, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 670.93, "meta": {}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.39, "meta": {}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "tab_market", "elapsed_ms": 4.5, "meta": {}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.29, "meta": {}}
+{"ts": "2026-06-20T20:34:27", "page": "detail", "module": "tab_source", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 32.76, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 1.03, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "base_models", "elapsed_ms": 0.34, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.91, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "report_generation", "elapsed_ms": 0.81, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 179.74, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 359.42, "meta": {}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 578.73, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:34:47", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:34:48", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.03, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:34:48", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.67, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:34:48", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 668.08, "meta": {}}
+{"ts": "2026-06-20T20:34:48", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.51, "meta": {}}
+{"ts": "2026-06-20T20:34:48", "page": "detail", "module": "tab_market", "elapsed_ms": 4.12, "meta": {}}
+{"ts": "2026-06-20T20:34:48", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.22, "meta": {}}
+{"ts": "2026-06-20T20:34:48", "page": "detail", "module": "tab_source", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 32.27, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 0.71, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "base_models", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.34, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.92, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "report_generation", "elapsed_ms": 0.68, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 167.08, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 356.56, "meta": {}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 562.72, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:34:54", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-20T20:34:55", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.01, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:34:55", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.74, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:34:55", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 676.0, "meta": {}}
+{"ts": "2026-06-20T20:34:55", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.66, "meta": {}}
+{"ts": "2026-06-20T20:34:55", "page": "detail", "module": "tab_market", "elapsed_ms": 4.71, "meta": {}}
+{"ts": "2026-06-20T20:34:55", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.32, "meta": {}}
+{"ts": "2026-06-20T20:34:55", "page": "detail", "module": "tab_source", "elapsed_ms": 0.42, "meta": {}}
+{"ts": "2026-06-20T20:35:23", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 34.74, "meta": {}}
+{"ts": "2026-06-20T20:35:23", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 0.71, "meta": {}}
+{"ts": "2026-06-20T20:35:23", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-20T20:35:23", "page": "detail", "module": "base_models", "elapsed_ms": 0.35, "meta": {}}
+{"ts": "2026-06-20T20:35:23", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:35:23", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.29, "meta": {}}
+{"ts": "2026-06-20T20:35:23", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.95, "meta": {}}
+{"ts": "2026-06-20T20:35:23", "page": "detail", "module": "report_generation", "elapsed_ms": 0.62, "meta": {}}
+{"ts": "2026-06-20T20:35:24", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 170.49, "meta": {}}
+{"ts": "2026-06-20T20:35:24", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 363.28, "meta": {}}
+{"ts": "2026-06-20T20:35:24", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 574.59, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:35:24", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:35:24", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 0.98, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:35:25", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.64, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:35:25", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 701.26, "meta": {}}
+{"ts": "2026-06-20T20:35:25", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.74, "meta": {}}
+{"ts": "2026-06-20T20:35:25", "page": "detail", "module": "tab_market", "elapsed_ms": 4.71, "meta": {}}
+{"ts": "2026-06-20T20:35:25", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.29, "meta": {}}
+{"ts": "2026-06-20T20:35:25", "page": "detail", "module": "tab_source", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 33.49, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.55, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "base_models", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "decision_engine", "elapsed_ms": 1.11, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "report_generation", "elapsed_ms": 0.52, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 152.56, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 355.62, "meta": {}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 552.82, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:36:19", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T20:36:20", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.13, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:36:20", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.65, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:36:20", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 687.61, "meta": {}}
+{"ts": "2026-06-20T20:36:20", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.46, "meta": {}}
+{"ts": "2026-06-20T20:36:20", "page": "detail", "module": "tab_market", "elapsed_ms": 6.24, "meta": {}}
+{"ts": "2026-06-20T20:36:20", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.26, "meta": {}}
+{"ts": "2026-06-20T20:36:20", "page": "detail", "module": "tab_source", "elapsed_ms": 0.75, "meta": {}}
+{"ts": "2026-06-20T20:36:23", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 35.89, "meta": {}}
+{"ts": "2026-06-20T20:36:23", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.95, "meta": {}}
+{"ts": "2026-06-20T20:36:23", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-20T20:36:23", "page": "detail", "module": "base_models", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-20T20:36:23", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:36:23", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.35, "meta": {}}
+{"ts": "2026-06-20T20:36:23", "page": "detail", "module": "decision_engine", "elapsed_ms": 1.21, "meta": {}}
+{"ts": "2026-06-20T20:36:23", "page": "detail", "module": "report_generation", "elapsed_ms": 0.58, "meta": {}}
+{"ts": "2026-06-20T20:36:23", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 155.91, "meta": {}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 359.03, "meta": {}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 562.41, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.52, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.71, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 682.83, "meta": {}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.39, "meta": {}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "tab_market", "elapsed_ms": 5.61, "meta": {}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.3, "meta": {}}
+{"ts": "2026-06-20T20:36:24", "page": "detail", "module": "tab_source", "elapsed_ms": 0.92, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 37.94, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.14, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "base_models", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.27, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "decision_engine", "elapsed_ms": 1.22, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "report_generation", "elapsed_ms": 0.99, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 168.42, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 382.96, "meta": {}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 601.6, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:36:57", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T20:36:58", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.74, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:36:58", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.69, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:36:58", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 705.0, "meta": {}}
+{"ts": "2026-06-20T20:36:58", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.65, "meta": {}}
+{"ts": "2026-06-20T20:36:58", "page": "detail", "module": "tab_market", "elapsed_ms": 6.22, "meta": {}}
+{"ts": "2026-06-20T20:36:58", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.22, "meta": {}}
+{"ts": "2026-06-20T20:36:58", "page": "detail", "module": "tab_source", "elapsed_ms": 0.9, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 28.26, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.97, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "base_models", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.29, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "decision_engine", "elapsed_ms": 1.29, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "report_generation", "elapsed_ms": 0.64, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 156.28, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 357.91, "meta": {}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 555.39, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:37:12", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:37:13", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.64, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:37:13", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.73, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:37:13", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 699.86, "meta": {}}
+{"ts": "2026-06-20T20:37:13", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.55, "meta": {}}
+{"ts": "2026-06-20T20:37:13", "page": "detail", "module": "tab_market", "elapsed_ms": 6.01, "meta": {}}
+{"ts": "2026-06-20T20:37:13", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.55, "meta": {}}
+{"ts": "2026-06-20T20:37:13", "page": "detail", "module": "tab_source", "elapsed_ms": 0.97, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 19.61, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.45, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "base_models", "elapsed_ms": 0.29, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.95, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "report_generation", "elapsed_ms": 0.52, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 167.04, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 370.92, "meta": {}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 570.24, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:37:24", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T20:37:25", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.56, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:37:25", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.67, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:37:25", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 719.06, "meta": {}}
+{"ts": "2026-06-20T20:37:25", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.68, "meta": {}}
+{"ts": "2026-06-20T20:37:25", "page": "detail", "module": "tab_market", "elapsed_ms": 6.12, "meta": {}}
+{"ts": "2026-06-20T20:37:25", "page": "detail", "module": "tab_post_match", "elapsed_ms": 3.36, "meta": {}}
+{"ts": "2026-06-20T20:37:25", "page": "detail", "module": "tab_source", "elapsed_ms": 0.99, "meta": {}}
+{"ts": "2026-06-20T20:37:35", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 19.59, "meta": {}}
+{"ts": "2026-06-20T20:37:35", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.25, "meta": {}}
+{"ts": "2026-06-20T20:37:35", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-20T20:37:35", "page": "detail", "module": "base_models", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-20T20:37:35", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-20T20:37:35", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:37:35", "page": "detail", "module": "decision_engine", "elapsed_ms": 1.32, "meta": {}}
+{"ts": "2026-06-20T20:37:35", "page": "detail", "module": "report_generation", "elapsed_ms": 0.59, "meta": {}}
+{"ts": "2026-06-20T20:37:35", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 156.31, "meta": {}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 366.23, "meta": {}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 555.71, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.45, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.77, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 715.56, "meta": {}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 2.99, "meta": {}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "tab_market", "elapsed_ms": 7.48, "meta": {}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.56, "meta": {}}
+{"ts": "2026-06-20T20:37:36", "page": "detail", "module": "tab_source", "elapsed_ms": 0.95, "meta": {}}
+{"ts": "2026-06-20T20:42:37", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 26.69, "meta": {}}
+{"ts": "2026-06-20T20:42:37", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.09, "meta": {}}
+{"ts": "2026-06-20T20:42:37", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-20T20:42:37", "page": "detail", "module": "base_models", "elapsed_ms": 0.39, "meta": {}}
+{"ts": "2026-06-20T20:42:37", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:42:37", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:42:37", "page": "detail", "module": "decision_engine", "elapsed_ms": 1.04, "meta": {}}
+{"ts": "2026-06-20T20:42:37", "page": "detail", "module": "report_generation", "elapsed_ms": 0.56, "meta": {}}
+{"ts": "2026-06-20T20:42:38", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 162.72, "meta": {}}
+{"ts": "2026-06-20T20:42:38", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 360.93, "meta": {}}
+{"ts": "2026-06-20T20:42:38", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 560.35, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:42:38", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:42:38", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 0.97, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:42:39", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.84, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:42:39", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 682.33, "meta": {}}
+{"ts": "2026-06-20T20:42:39", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.88, "meta": {}}
+{"ts": "2026-06-20T20:42:39", "page": "detail", "module": "tab_market", "elapsed_ms": 5.63, "meta": {}}
+{"ts": "2026-06-20T20:42:39", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.71, "meta": {}}
+{"ts": "2026-06-20T20:42:39", "page": "detail", "module": "tab_source", "elapsed_ms": 1.2, "meta": {}}
+{"ts": "2026-06-20T20:43:22", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 24.19, "meta": {}}
+{"ts": "2026-06-20T20:43:22", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.11, "meta": {}}
+{"ts": "2026-06-20T20:43:22", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.16, "meta": {}}
+{"ts": "2026-06-20T20:43:22", "page": "detail", "module": "base_models", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:43:22", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:43:22", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-20T20:43:22", "page": "detail", "module": "decision_engine", "elapsed_ms": 1.09, "meta": {}}
+{"ts": "2026-06-20T20:43:22", "page": "detail", "module": "report_generation", "elapsed_ms": 0.64, "meta": {}}
+{"ts": "2026-06-20T20:43:22", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 162.32, "meta": {}}
+{"ts": "2026-06-20T20:43:23", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 357.97, "meta": {}}
+{"ts": "2026-06-20T20:43:23", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 556.57, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:43:23", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:43:23", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.21, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T20:43:23", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 680.23, "meta": {}}
+{"ts": "2026-06-20T20:43:23", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 14.67, "meta": {}}
+{"ts": "2026-06-20T20:43:23", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 4.37, "meta": {}}
+{"ts": "2026-06-20T20:43:23", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T20:43:24", "page": "detail", "module": "base_models", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-20T20:43:24", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:43:24", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-20T20:43:24", "page": "detail", "module": "decision_engine", "elapsed_ms": 162.13, "meta": {}}
+{"ts": "2026-06-20T20:43:24", "page": "detail", "module": "report_generation", "elapsed_ms": 0.42, "meta": {}}
+{"ts": "2026-06-20T20:43:24", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 160.74, "meta": {}}
+{"ts": "2026-06-20T20:43:25", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1195.8, "meta": {}}
+{"ts": "2026-06-20T20:43:25", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1553.91, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:43:25", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-20T20:43:26", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.23, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:43:27", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.55, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:43:27", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1520.47, "meta": {}}
+{"ts": "2026-06-20T20:43:27", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.74, "meta": {}}
+{"ts": "2026-06-20T20:43:27", "page": "detail", "module": "tab_market", "elapsed_ms": 5.67, "meta": {}}
+{"ts": "2026-06-20T20:43:27", "page": "detail", "module": "tab_post_match", "elapsed_ms": 3.31, "meta": {}}
+{"ts": "2026-06-20T20:43:27", "page": "detail", "module": "tab_source", "elapsed_ms": 1.02, "meta": {}}
+{"ts": "2026-06-20T20:46:27", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 27.6, "meta": {}}
+{"ts": "2026-06-20T20:46:27", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.71, "meta": {}}
+{"ts": "2026-06-20T20:46:27", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-20T20:46:27", "page": "detail", "module": "base_models", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-20T20:46:27", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:46:27", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:46:27", "page": "detail", "module": "decision_engine", "elapsed_ms": 164.46, "meta": {}}
+{"ts": "2026-06-20T20:46:27", "page": "detail", "module": "report_generation", "elapsed_ms": 2.14, "meta": {}}
+{"ts": "2026-06-20T20:46:27", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 159.14, "meta": {}}
+{"ts": "2026-06-20T20:46:29", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1167.86, "meta": {}}
+{"ts": "2026-06-20T20:46:29", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1551.13, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:46:29", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T20:46:30", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 3.09, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:46:30", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.58, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:46:30", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1523.99, "meta": {}}
+{"ts": "2026-06-20T20:46:30", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 2.04, "meta": {}}
+{"ts": "2026-06-20T20:46:30", "page": "detail", "module": "tab_market", "elapsed_ms": 6.46, "meta": {}}
+{"ts": "2026-06-20T20:46:30", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.47, "meta": {}}
+{"ts": "2026-06-20T20:46:30", "page": "detail", "module": "tab_source", "elapsed_ms": 0.88, "meta": {}}
+{"ts": "2026-06-20T20:46:35", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 35.03, "meta": {}}
+{"ts": "2026-06-20T20:46:35", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.0, "meta": {}}
+{"ts": "2026-06-20T20:46:35", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:46:35", "page": "detail", "module": "base_models", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T20:46:35", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:46:35", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-20T20:46:35", "page": "detail", "module": "decision_engine", "elapsed_ms": 157.86, "meta": {}}
+{"ts": "2026-06-20T20:46:35", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:46:35", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.91, "meta": {}}
+{"ts": "2026-06-20T20:46:36", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1167.36, "meta": {}}
+{"ts": "2026-06-20T20:46:36", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1549.02, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:46:36", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-20T20:46:38", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.99, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:46:38", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.61, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:46:38", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1559.35, "meta": {}}
+{"ts": "2026-06-20T20:46:38", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.66, "meta": {}}
+{"ts": "2026-06-20T20:46:38", "page": "detail", "module": "tab_market", "elapsed_ms": 7.74, "meta": {}}
+{"ts": "2026-06-20T20:46:38", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.53, "meta": {}}
+{"ts": "2026-06-20T20:46:38", "page": "detail", "module": "tab_source", "elapsed_ms": 1.18, "meta": {}}
+{"ts": "2026-06-20T20:46:43", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 37.04, "meta": {}}
+{"ts": "2026-06-20T20:46:43", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.96, "meta": {}}
+{"ts": "2026-06-20T20:46:43", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:46:43", "page": "detail", "module": "base_models", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T20:46:43", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:46:43", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T20:46:43", "page": "detail", "module": "decision_engine", "elapsed_ms": 157.62, "meta": {}}
+{"ts": "2026-06-20T20:46:43", "page": "detail", "module": "report_generation", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-20T20:46:43", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 159.0, "meta": {}}
+{"ts": "2026-06-20T20:46:44", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1164.14, "meta": {}}
+{"ts": "2026-06-20T20:46:44", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1544.68, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:46:44", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:46:46", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.64, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:46:46", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.56, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:46:46", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1520.47, "meta": {}}
+{"ts": "2026-06-20T20:46:46", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.75, "meta": {}}
+{"ts": "2026-06-20T20:46:46", "page": "detail", "module": "tab_market", "elapsed_ms": 6.16, "meta": {}}
+{"ts": "2026-06-20T20:46:46", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.55, "meta": {}}
+{"ts": "2026-06-20T20:46:46", "page": "detail", "module": "tab_source", "elapsed_ms": 0.79, "meta": {}}
+{"ts": "2026-06-20T20:46:49", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 35.95, "meta": {}}
+{"ts": "2026-06-20T20:46:49", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.89, "meta": {}}
+{"ts": "2026-06-20T20:46:49", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-20T20:46:49", "page": "detail", "module": "base_models", "elapsed_ms": 0.34, "meta": {}}
+{"ts": "2026-06-20T20:46:49", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:46:49", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-20T20:46:50", "page": "detail", "module": "decision_engine", "elapsed_ms": 158.75, "meta": {}}
+{"ts": "2026-06-20T20:46:50", "page": "detail", "module": "report_generation", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-20T20:46:50", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 159.33, "meta": {}}
+{"ts": "2026-06-20T20:46:51", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1172.87, "meta": {}}
+{"ts": "2026-06-20T20:46:51", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1553.97, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:46:51", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T20:46:52", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.62, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:46:52", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.48, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:46:52", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1514.9, "meta": {}}
+{"ts": "2026-06-20T20:46:52", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.72, "meta": {}}
+{"ts": "2026-06-20T20:46:53", "page": "detail", "module": "tab_market", "elapsed_ms": 6.35, "meta": {}}
+{"ts": "2026-06-20T20:46:53", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.45, "meta": {}}
+{"ts": "2026-06-20T20:46:53", "page": "detail", "module": "tab_source", "elapsed_ms": 0.86, "meta": {}}
+{"ts": "2026-06-20T20:47:08", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 33.86, "meta": {}}
+{"ts": "2026-06-20T20:47:08", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.88, "meta": {}}
+{"ts": "2026-06-20T20:47:08", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-20T20:47:08", "page": "detail", "module": "base_models", "elapsed_ms": 0.34, "meta": {}}
+{"ts": "2026-06-20T20:47:08", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:47:08", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.27, "meta": {}}
+{"ts": "2026-06-20T20:47:08", "page": "detail", "module": "decision_engine", "elapsed_ms": 155.3, "meta": {}}
+{"ts": "2026-06-20T20:47:08", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:47:08", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.73, "meta": {}}
+{"ts": "2026-06-20T20:47:09", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1163.69, "meta": {}}
+{"ts": "2026-06-20T20:47:09", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1543.22, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:47:09", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:47:10", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 3.04, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:47:11", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.51, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:47:11", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1503.54, "meta": {}}
+{"ts": "2026-06-20T20:47:11", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.67, "meta": {}}
+{"ts": "2026-06-20T20:47:11", "page": "detail", "module": "tab_market", "elapsed_ms": 6.0, "meta": {}}
+{"ts": "2026-06-20T20:47:11", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.59, "meta": {}}
+{"ts": "2026-06-20T20:47:11", "page": "detail", "module": "tab_source", "elapsed_ms": 0.96, "meta": {}}
+{"ts": "2026-06-20T20:47:14", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 29.74, "meta": {}}
+{"ts": "2026-06-20T20:47:14", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.42, "meta": {}}
+{"ts": "2026-06-20T20:47:14", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:47:14", "page": "detail", "module": "base_models", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T20:47:14", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:47:14", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T20:47:15", "page": "detail", "module": "decision_engine", "elapsed_ms": 169.47, "meta": {}}
+{"ts": "2026-06-20T20:47:15", "page": "detail", "module": "report_generation", "elapsed_ms": 2.12, "meta": {}}
+{"ts": "2026-06-20T20:47:15", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 160.04, "meta": {}}
+{"ts": "2026-06-20T20:47:16", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1165.05, "meta": {}}
+{"ts": "2026-06-20T20:47:16", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1553.42, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:47:16", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:47:17", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.53, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:47:18", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.74, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:47:18", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1507.38, "meta": {}}
+{"ts": "2026-06-20T20:47:18", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.84, "meta": {}}
+{"ts": "2026-06-20T20:47:18", "page": "detail", "module": "tab_market", "elapsed_ms": 6.4, "meta": {}}
+{"ts": "2026-06-20T20:47:18", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.52, "meta": {}}
+{"ts": "2026-06-20T20:47:18", "page": "detail", "module": "tab_source", "elapsed_ms": 0.85, "meta": {}}
+{"ts": "2026-06-20T20:47:27", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 30.68, "meta": {}}
+{"ts": "2026-06-20T20:47:27", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.47, "meta": {}}
+{"ts": "2026-06-20T20:47:27", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-20T20:47:27", "page": "detail", "module": "base_models", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T20:47:27", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.04, "meta": {}}
+{"ts": "2026-06-20T20:47:27", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-20T20:47:27", "page": "detail", "module": "decision_engine", "elapsed_ms": 156.42, "meta": {}}
+{"ts": "2026-06-20T20:47:27", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:47:27", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.97, "meta": {}}
+{"ts": "2026-06-20T20:47:29", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1162.95, "meta": {}}
+{"ts": "2026-06-20T20:47:29", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1538.92, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:47:29", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T20:47:30", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 3.23, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:47:30", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.65, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:47:30", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1539.18, "meta": {}}
+{"ts": "2026-06-20T20:47:30", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.55, "meta": {}}
+{"ts": "2026-06-20T20:47:30", "page": "detail", "module": "tab_market", "elapsed_ms": 7.45, "meta": {}}
+{"ts": "2026-06-20T20:47:30", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.53, "meta": {}}
+{"ts": "2026-06-20T20:47:30", "page": "detail", "module": "tab_source", "elapsed_ms": 0.97, "meta": {}}
+{"ts": "2026-06-20T20:48:00", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 34.85, "meta": {}}
+{"ts": "2026-06-20T20:48:00", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.03, "meta": {}}
+{"ts": "2026-06-20T20:48:00", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.16, "meta": {}}
+{"ts": "2026-06-20T20:48:00", "page": "detail", "module": "base_models", "elapsed_ms": 0.39, "meta": {}}
+{"ts": "2026-06-20T20:48:00", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.04, "meta": {}}
+{"ts": "2026-06-20T20:48:00", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-20T20:48:00", "page": "detail", "module": "decision_engine", "elapsed_ms": 160.1, "meta": {}}
+{"ts": "2026-06-20T20:48:00", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:48:00", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 159.7, "meta": {}}
+{"ts": "2026-06-20T20:48:01", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1187.09, "meta": {}}
+{"ts": "2026-06-20T20:48:01", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1572.22, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:48:01", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:48:03", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.45, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:48:03", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.45, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:48:03", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1502.1, "meta": {}}
+{"ts": "2026-06-20T20:48:03", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.39, "meta": {}}
+{"ts": "2026-06-20T20:48:03", "page": "detail", "module": "tab_market", "elapsed_ms": 5.39, "meta": {}}
+{"ts": "2026-06-20T20:48:03", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.38, "meta": {}}
+{"ts": "2026-06-20T20:48:03", "page": "detail", "module": "tab_source", "elapsed_ms": 0.78, "meta": {}}
+{"ts": "2026-06-20T20:51:52", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 31.76, "meta": {}}
+{"ts": "2026-06-20T20:51:52", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.65, "meta": {}}
+{"ts": "2026-06-20T20:51:52", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:51:52", "page": "detail", "module": "base_models", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:51:52", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:51:52", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.43, "meta": {}}
+{"ts": "2026-06-20T20:51:52", "page": "detail", "module": "decision_engine", "elapsed_ms": 166.66, "meta": {}}
+{"ts": "2026-06-20T20:51:52", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:51:52", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.37, "meta": {}}
+{"ts": "2026-06-20T20:51:53", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1149.26, "meta": {}}
+{"ts": "2026-06-20T20:51:53", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1534.24, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:51:53", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:51:55", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.83, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:51:55", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.56, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:51:55", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1499.06, "meta": {}}
+{"ts": "2026-06-20T20:51:55", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.73, "meta": {}}
+{"ts": "2026-06-20T20:51:55", "page": "detail", "module": "tab_market", "elapsed_ms": 6.66, "meta": {}}
+{"ts": "2026-06-20T20:51:55", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.53, "meta": {}}
+{"ts": "2026-06-20T20:51:55", "page": "detail", "module": "tab_source", "elapsed_ms": 0.9, "meta": {}}
+{"ts": "2026-06-20T20:51:59", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 32.69, "meta": {}}
+{"ts": "2026-06-20T20:51:59", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.97, "meta": {}}
+{"ts": "2026-06-20T20:51:59", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:51:59", "page": "detail", "module": "base_models", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-20T20:51:59", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:51:59", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T20:51:59", "page": "detail", "module": "decision_engine", "elapsed_ms": 157.24, "meta": {}}
+{"ts": "2026-06-20T20:51:59", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:51:59", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.58, "meta": {}}
+{"ts": "2026-06-20T20:52:00", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1157.49, "meta": {}}
+{"ts": "2026-06-20T20:52:00", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1533.81, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:52:00", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:52:02", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.62, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:52:02", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.61, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:52:02", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1516.82, "meta": {}}
+{"ts": "2026-06-20T20:52:02", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.78, "meta": {}}
+{"ts": "2026-06-20T20:52:02", "page": "detail", "module": "tab_market", "elapsed_ms": 6.17, "meta": {}}
+{"ts": "2026-06-20T20:52:02", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.35, "meta": {}}
+{"ts": "2026-06-20T20:52:02", "page": "detail", "module": "tab_source", "elapsed_ms": 0.87, "meta": {}}
+{"ts": "2026-06-20T20:55:04", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 29.54, "meta": {}}
+{"ts": "2026-06-20T20:55:04", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.85, "meta": {}}
+{"ts": "2026-06-20T20:55:04", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:55:04", "page": "detail", "module": "base_models", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-20T20:55:04", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:55:04", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T20:55:04", "page": "detail", "module": "decision_engine", "elapsed_ms": 168.09, "meta": {}}
+{"ts": "2026-06-20T20:55:04", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:55:04", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 160.39, "meta": {}}
+{"ts": "2026-06-20T20:55:06", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1171.47, "meta": {}}
+{"ts": "2026-06-20T20:55:06", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1555.82, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:55:06", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-20T20:55:07", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.81, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:55:07", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.5, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:55:07", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1517.16, "meta": {}}
+{"ts": "2026-06-20T20:55:07", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.64, "meta": {}}
+{"ts": "2026-06-20T20:55:07", "page": "detail", "module": "tab_market", "elapsed_ms": 6.26, "meta": {}}
+{"ts": "2026-06-20T20:55:07", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.32, "meta": {}}
+{"ts": "2026-06-20T20:55:07", "page": "detail", "module": "tab_source", "elapsed_ms": 0.74, "meta": {}}
+{"ts": "2026-06-20T20:55:29", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 36.29, "meta": {}}
+{"ts": "2026-06-20T20:55:29", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.66, "meta": {}}
+{"ts": "2026-06-20T20:55:29", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:55:29", "page": "detail", "module": "base_models", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T20:55:29", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:55:29", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T20:55:29", "page": "detail", "module": "decision_engine", "elapsed_ms": 157.44, "meta": {}}
+{"ts": "2026-06-20T20:55:29", "page": "detail", "module": "report_generation", "elapsed_ms": 0.43, "meta": {}}
+{"ts": "2026-06-20T20:55:29", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.97, "meta": {}}
+{"ts": "2026-06-20T20:55:30", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1180.42, "meta": {}}
+{"ts": "2026-06-20T20:55:30", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1559.93, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:55:30", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-20T20:55:31", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.64, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:55:32", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.54, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:55:32", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1514.66, "meta": {}}
+{"ts": "2026-06-20T20:55:32", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.56, "meta": {}}
+{"ts": "2026-06-20T20:55:32", "page": "detail", "module": "tab_market", "elapsed_ms": 7.46, "meta": {}}
+{"ts": "2026-06-20T20:55:32", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.43, "meta": {}}
+{"ts": "2026-06-20T20:55:32", "page": "detail", "module": "tab_source", "elapsed_ms": 0.87, "meta": {}}
+{"ts": "2026-06-20T20:55:58", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 35.92, "meta": {}}
+{"ts": "2026-06-20T20:55:58", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.38, "meta": {}}
+{"ts": "2026-06-20T20:55:58", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:55:58", "page": "detail", "module": "base_models", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T20:55:58", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:55:58", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T20:55:59", "page": "detail", "module": "decision_engine", "elapsed_ms": 157.02, "meta": {}}
+{"ts": "2026-06-20T20:55:59", "page": "detail", "module": "report_generation", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-20T20:55:59", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 157.75, "meta": {}}
+{"ts": "2026-06-20T20:56:00", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1189.46, "meta": {}}
+{"ts": "2026-06-20T20:56:00", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1567.6, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:56:00", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:56:01", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.78, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:56:01", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.5, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:56:01", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1519.29, "meta": {}}
+{"ts": "2026-06-20T20:56:01", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.55, "meta": {}}
+{"ts": "2026-06-20T20:56:01", "page": "detail", "module": "tab_market", "elapsed_ms": 6.35, "meta": {}}
+{"ts": "2026-06-20T20:56:01", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.48, "meta": {}}
+{"ts": "2026-06-20T20:56:01", "page": "detail", "module": "tab_source", "elapsed_ms": 0.8, "meta": {}}
+{"ts": "2026-06-20T20:56:04", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 28.08, "meta": {}}
+{"ts": "2026-06-20T20:56:04", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.6, "meta": {}}
+{"ts": "2026-06-20T20:56:04", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:56:04", "page": "detail", "module": "base_models", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:56:04", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:56:04", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-20T20:56:04", "page": "detail", "module": "decision_engine", "elapsed_ms": 157.11, "meta": {}}
+{"ts": "2026-06-20T20:56:04", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:56:04", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 159.74, "meta": {}}
+{"ts": "2026-06-20T20:56:05", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1167.29, "meta": {}}
+{"ts": "2026-06-20T20:56:05", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1540.18, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:56:05", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:56:07", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.79, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:56:07", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.7, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:56:07", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1510.91, "meta": {}}
+{"ts": "2026-06-20T20:56:07", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.78, "meta": {}}
+{"ts": "2026-06-20T20:56:07", "page": "detail", "module": "tab_market", "elapsed_ms": 6.41, "meta": {}}
+{"ts": "2026-06-20T20:56:07", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.39, "meta": {}}
+{"ts": "2026-06-20T20:56:07", "page": "detail", "module": "tab_source", "elapsed_ms": 0.78, "meta": {}}
+{"ts": "2026-06-20T20:56:12", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 32.37, "meta": {}}
+{"ts": "2026-06-20T20:56:12", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.45, "meta": {}}
+{"ts": "2026-06-20T20:56:12", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:56:12", "page": "detail", "module": "base_models", "elapsed_ms": 0.39, "meta": {}}
+{"ts": "2026-06-20T20:56:12", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-20T20:56:12", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T20:56:12", "page": "detail", "module": "decision_engine", "elapsed_ms": 155.89, "meta": {}}
+{"ts": "2026-06-20T20:56:12", "page": "detail", "module": "report_generation", "elapsed_ms": 0.43, "meta": {}}
+{"ts": "2026-06-20T20:56:12", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 159.53, "meta": {}}
+{"ts": "2026-06-20T20:56:14", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1192.24, "meta": {}}
+{"ts": "2026-06-20T20:56:14", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1568.11, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:56:14", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:56:15", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.84, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:56:15", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.61, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:56:15", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1529.33, "meta": {}}
+{"ts": "2026-06-20T20:56:15", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.66, "meta": {}}
+{"ts": "2026-06-20T20:56:15", "page": "detail", "module": "tab_market", "elapsed_ms": 6.1, "meta": {}}
+{"ts": "2026-06-20T20:56:15", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.41, "meta": {}}
+{"ts": "2026-06-20T20:56:15", "page": "detail", "module": "tab_source", "elapsed_ms": 0.8, "meta": {}}
+{"ts": "2026-06-20T20:57:09", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 27.55, "meta": {}}
+{"ts": "2026-06-20T20:57:09", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.96, "meta": {}}
+{"ts": "2026-06-20T20:57:09", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:57:09", "page": "detail", "module": "base_models", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T20:57:09", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:57:09", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T20:57:09", "page": "detail", "module": "decision_engine", "elapsed_ms": 158.4, "meta": {}}
+{"ts": "2026-06-20T20:57:09", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T20:57:10", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 160.48, "meta": {}}
+{"ts": "2026-06-20T20:57:11", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1184.65, "meta": {}}
+{"ts": "2026-06-20T20:57:11", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1557.83, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:57:11", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.52, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1519.47, "meta": {}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 13.22, "meta": {}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 4.54, "meta": {}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "base_models", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.18, "meta": {}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "decision_engine", "elapsed_ms": 165.95, "meta": {}}
+{"ts": "2026-06-20T20:57:12", "page": "detail", "module": "report_generation", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-20T20:57:13", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 166.7, "meta": {}}
+{"ts": "2026-06-20T20:57:14", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1198.97, "meta": {}}
+{"ts": "2026-06-20T20:57:14", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1565.99, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:57:14", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:57:15", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.46, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:57:15", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.5, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:57:15", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1525.29, "meta": {}}
+{"ts": "2026-06-20T20:57:15", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.67, "meta": {}}
+{"ts": "2026-06-20T20:57:15", "page": "detail", "module": "tab_market", "elapsed_ms": 4.6, "meta": {}}
+{"ts": "2026-06-20T20:57:15", "page": "detail", "module": "tab_post_match", "elapsed_ms": 3.05, "meta": {}}
+{"ts": "2026-06-20T20:57:15", "page": "detail", "module": "tab_source", "elapsed_ms": 1.81, "meta": {}}
+{"ts": "2026-06-20T20:57:31", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 37.6, "meta": {}}
+{"ts": "2026-06-20T20:57:31", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.92, "meta": {}}
+{"ts": "2026-06-20T20:57:31", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:57:31", "page": "detail", "module": "base_models", "elapsed_ms": 0.35, "meta": {}}
+{"ts": "2026-06-20T20:57:31", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:57:31", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-20T20:57:32", "page": "detail", "module": "decision_engine", "elapsed_ms": 155.67, "meta": {}}
+{"ts": "2026-06-20T20:57:32", "page": "detail", "module": "report_generation", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-20T20:57:32", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.9, "meta": {}}
+{"ts": "2026-06-20T20:57:33", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1181.54, "meta": {}}
+{"ts": "2026-06-20T20:57:33", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1563.6, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:57:33", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:57:34", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 4.04, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:57:34", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.51, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:57:34", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1518.33, "meta": {}}
+{"ts": "2026-06-20T20:57:34", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.52, "meta": {}}
+{"ts": "2026-06-20T20:57:34", "page": "detail", "module": "tab_market", "elapsed_ms": 5.75, "meta": {}}
+{"ts": "2026-06-20T20:57:34", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.26, "meta": {}}
+{"ts": "2026-06-20T20:57:34", "page": "detail", "module": "tab_source", "elapsed_ms": 0.78, "meta": {}}
+{"ts": "2026-06-20T20:59:02", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 37.36, "meta": {}}
+{"ts": "2026-06-20T20:59:02", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.6, "meta": {}}
+{"ts": "2026-06-20T20:59:02", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T20:59:02", "page": "detail", "module": "base_models", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-20T20:59:02", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T20:59:02", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.27, "meta": {}}
+{"ts": "2026-06-20T20:59:02", "page": "detail", "module": "decision_engine", "elapsed_ms": 169.5, "meta": {}}
+{"ts": "2026-06-20T20:59:02", "page": "detail", "module": "report_generation", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-20T20:59:02", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.66, "meta": {}}
+{"ts": "2026-06-20T20:59:04", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1160.72, "meta": {}}
+{"ts": "2026-06-20T20:59:04", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1552.98, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T20:59:04", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T20:59:05", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 3.83, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T20:59:05", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.54, "meta": {"rows": 28}}
+{"ts": "2026-06-20T20:59:05", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1497.8, "meta": {}}
+{"ts": "2026-06-20T20:59:05", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.64, "meta": {}}
+{"ts": "2026-06-20T20:59:05", "page": "detail", "module": "tab_market", "elapsed_ms": 6.21, "meta": {}}
+{"ts": "2026-06-20T20:59:05", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.37, "meta": {}}
+{"ts": "2026-06-20T20:59:05", "page": "detail", "module": "tab_source", "elapsed_ms": 0.8, "meta": {}}
+{"ts": "2026-06-20T21:00:03", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 17.32, "meta": {}}
+{"ts": "2026-06-20T21:00:03", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.38, "meta": {}}
+{"ts": "2026-06-20T21:00:03", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-20T21:00:03", "page": "detail", "module": "base_models", "elapsed_ms": 0.27, "meta": {}}
+{"ts": "2026-06-20T21:00:03", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:00:03", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T21:00:03", "page": "detail", "module": "decision_engine", "elapsed_ms": 172.44, "meta": {}}
+{"ts": "2026-06-20T21:00:03", "page": "detail", "module": "report_generation", "elapsed_ms": 0.47, "meta": {}}
+{"ts": "2026-06-20T21:00:03", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 161.77, "meta": {}}
+{"ts": "2026-06-20T21:00:04", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1188.45, "meta": {}}
+{"ts": "2026-06-20T21:00:04", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1563.86, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:00:04", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T21:00:06", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.42, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:00:06", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.57, "meta": {"rows": 28}}
+{"ts": "2026-06-20T21:00:06", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1501.22, "meta": {}}
+{"ts": "2026-06-20T21:00:06", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 2.34, "meta": {}}
+{"ts": "2026-06-20T21:00:06", "page": "detail", "module": "tab_market", "elapsed_ms": 6.27, "meta": {}}
+{"ts": "2026-06-20T21:00:06", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.39, "meta": {}}
+{"ts": "2026-06-20T21:00:06", "page": "detail", "module": "tab_source", "elapsed_ms": 0.72, "meta": {}}
+{"ts": "2026-06-20T21:00:19", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 23.22, "meta": {}}
+{"ts": "2026-06-20T21:00:19", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.24, "meta": {}}
+{"ts": "2026-06-20T21:00:19", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T21:00:19", "page": "detail", "module": "base_models", "elapsed_ms": 0.29, "meta": {}}
+{"ts": "2026-06-20T21:00:19", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:00:19", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T21:00:19", "page": "detail", "module": "decision_engine", "elapsed_ms": 163.27, "meta": {}}
+{"ts": "2026-06-20T21:00:19", "page": "detail", "module": "report_generation", "elapsed_ms": 0.48, "meta": {}}
+{"ts": "2026-06-20T21:00:19", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 193.5, "meta": {}}
+{"ts": "2026-06-20T21:00:21", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1206.22, "meta": {}}
+{"ts": "2026-06-20T21:00:21", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1613.1, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:00:21", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.32, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1493.24, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 13.01, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 4.19, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "base_models", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "decision_engine", "elapsed_ms": 165.92, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "report_generation", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-20T21:00:22", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 161.22, "meta": {}}
+{"ts": "2026-06-20T21:00:24", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1195.51, "meta": {}}
+{"ts": "2026-06-20T21:00:24", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1556.32, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:00:24", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T21:00:25", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.29, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:00:25", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.44, "meta": {"rows": 28}}
+{"ts": "2026-06-20T21:00:25", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1510.36, "meta": {}}
+{"ts": "2026-06-20T21:00:25", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.27, "meta": {}}
+{"ts": "2026-06-20T21:00:25", "page": "detail", "module": "tab_market", "elapsed_ms": 4.09, "meta": {}}
+{"ts": "2026-06-20T21:00:25", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.49, "meta": {}}
+{"ts": "2026-06-20T21:00:25", "page": "detail", "module": "tab_source", "elapsed_ms": 0.84, "meta": {}}
+{"ts": "2026-06-20T21:00:34", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 34.86, "meta": {}}
+{"ts": "2026-06-20T21:00:34", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.89, "meta": {}}
+{"ts": "2026-06-20T21:00:34", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T21:00:34", "page": "detail", "module": "base_models", "elapsed_ms": 0.34, "meta": {}}
+{"ts": "2026-06-20T21:00:34", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:00:34", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T21:00:35", "page": "detail", "module": "decision_engine", "elapsed_ms": 157.15, "meta": {}}
+{"ts": "2026-06-20T21:00:35", "page": "detail", "module": "report_generation", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-20T21:00:35", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 159.2, "meta": {}}
+{"ts": "2026-06-20T21:00:36", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1168.68, "meta": {}}
+{"ts": "2026-06-20T21:00:36", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1547.32, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:00:36", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-20T21:00:37", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 3.27, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:00:37", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.49, "meta": {"rows": 28}}
+{"ts": "2026-06-20T21:00:37", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1518.52, "meta": {}}
+{"ts": "2026-06-20T21:00:37", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.46, "meta": {}}
+{"ts": "2026-06-20T21:00:37", "page": "detail", "module": "tab_market", "elapsed_ms": 5.5, "meta": {}}
+{"ts": "2026-06-20T21:00:37", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.32, "meta": {}}
+{"ts": "2026-06-20T21:00:37", "page": "detail", "module": "tab_source", "elapsed_ms": 0.75, "meta": {}}
+{"ts": "2026-06-20T21:02:17", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 31.48, "meta": {}}
+{"ts": "2026-06-20T21:02:17", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 14.78, "meta": {}}
+{"ts": "2026-06-20T21:02:17", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-20T21:02:17", "page": "detail", "module": "base_models", "elapsed_ms": 0.49, "meta": {}}
+{"ts": "2026-06-20T21:02:17", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:02:17", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-20T21:02:17", "page": "detail", "module": "decision_engine", "elapsed_ms": 156.84, "meta": {}}
+{"ts": "2026-06-20T21:02:17", "page": "detail", "module": "report_generation", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-20T21:02:17", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.63, "meta": {}}
+{"ts": "2026-06-20T21:02:18", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1181.1, "meta": {}}
+{"ts": "2026-06-20T21:02:18", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1579.5, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:02:18", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T21:02:20", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.42, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:02:20", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.46, "meta": {"rows": 28}}
+{"ts": "2026-06-20T21:02:20", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1512.8, "meta": {}}
+{"ts": "2026-06-20T21:02:20", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.34, "meta": {}}
+{"ts": "2026-06-20T21:02:20", "page": "detail", "module": "tab_market", "elapsed_ms": 5.39, "meta": {}}
+{"ts": "2026-06-20T21:02:20", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.35, "meta": {}}
+{"ts": "2026-06-20T21:02:20", "page": "detail", "module": "tab_source", "elapsed_ms": 0.73, "meta": {}}
+{"ts": "2026-06-20T21:03:21", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 36.04, "meta": {}}
+{"ts": "2026-06-20T21:03:21", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.27, "meta": {}}
+{"ts": "2026-06-20T21:03:21", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.16, "meta": {}}
+{"ts": "2026-06-20T21:03:21", "page": "detail", "module": "base_models", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-20T21:03:21", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:03:21", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-20T21:03:21", "page": "detail", "module": "decision_engine", "elapsed_ms": 169.59, "meta": {}}
+{"ts": "2026-06-20T21:03:21", "page": "detail", "module": "report_generation", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-20T21:03:21", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 159.31, "meta": {}}
+{"ts": "2026-06-20T21:03:22", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1162.18, "meta": {}}
+{"ts": "2026-06-20T21:03:22", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1555.4, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:03:22", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.57, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1510.16, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 13.52, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 3.98, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "base_models", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "decision_engine", "elapsed_ms": 165.23, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "report_generation", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-20T21:03:24", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 161.69, "meta": {}}
+{"ts": "2026-06-20T21:03:26", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1194.01, "meta": {}}
+{"ts": "2026-06-20T21:03:26", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1555.54, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:03:26", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T21:03:27", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.59, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:03:27", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.56, "meta": {"rows": 28}}
+{"ts": "2026-06-20T21:03:27", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1506.71, "meta": {}}
+{"ts": "2026-06-20T21:03:27", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.62, "meta": {}}
+{"ts": "2026-06-20T21:03:27", "page": "detail", "module": "tab_market", "elapsed_ms": 4.64, "meta": {}}
+{"ts": "2026-06-20T21:03:27", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.42, "meta": {}}
+{"ts": "2026-06-20T21:03:27", "page": "detail", "module": "tab_source", "elapsed_ms": 0.94, "meta": {}}
+{"ts": "2026-06-20T21:03:55", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 32.74, "meta": {}}
+{"ts": "2026-06-20T21:03:55", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5.73, "meta": {}}
+{"ts": "2026-06-20T21:03:55", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T21:03:55", "page": "detail", "module": "base_models", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-20T21:03:55", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:03:55", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-20T21:03:55", "page": "detail", "module": "decision_engine", "elapsed_ms": 156.73, "meta": {}}
+{"ts": "2026-06-20T21:03:55", "page": "detail", "module": "report_generation", "elapsed_ms": 0.47, "meta": {}}
+{"ts": "2026-06-20T21:03:55", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 158.53, "meta": {}}
+{"ts": "2026-06-20T21:03:56", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1179.16, "meta": {}}
+{"ts": "2026-06-20T21:03:56", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1552.96, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:03:56", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-20T21:03:57", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.58, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1495.8, "meta": {}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 14.06, "meta": {}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 4.32, "meta": {}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "base_models", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "decision_engine", "elapsed_ms": 176.88, "meta": {}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "report_generation", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-20T21:03:58", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 162.69, "meta": {}}
+{"ts": "2026-06-20T21:03:59", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1179.22, "meta": {}}
+{"ts": "2026-06-20T21:03:59", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1554.32, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:03:59", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-20T21:04:01", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.57, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:04:01", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.57, "meta": {"rows": 28}}
+{"ts": "2026-06-20T21:04:01", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1512.34, "meta": {}}
+{"ts": "2026-06-20T21:04:01", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.48, "meta": {}}
+{"ts": "2026-06-20T21:04:01", "page": "detail", "module": "tab_market", "elapsed_ms": 4.1, "meta": {}}
+{"ts": "2026-06-20T21:04:01", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.26, "meta": {}}
+{"ts": "2026-06-20T21:04:01", "page": "detail", "module": "tab_source", "elapsed_ms": 0.79, "meta": {}}
+{"ts": "2026-06-20T21:06:07", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 16.15, "meta": {}}
+{"ts": "2026-06-20T21:06:07", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 4.96, "meta": {}}
+{"ts": "2026-06-20T21:06:07", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-20T21:06:07", "page": "detail", "module": "base_models", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-20T21:06:07", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T21:06:07", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-20T21:06:07", "page": "detail", "module": "decision_engine", "elapsed_ms": 175.61, "meta": {}}
+{"ts": "2026-06-20T21:06:07", "page": "detail", "module": "report_generation", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-20T21:06:07", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 166.7, "meta": {}}
+{"ts": "2026-06-20T21:06:09", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 1184.2, "meta": {}}
+{"ts": "2026-06-20T21:06:09", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 1567.14, "meta": {"match": "Germany vs Ivory Coast"}}
+{"ts": "2026-06-20T21:06:09", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T21:06:10", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 3.55, "meta": {"shown": 6, "total": 11}}
+{"ts": "2026-06-20T21:06:10", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.45, "meta": {"rows": 28}}
+{"ts": "2026-06-20T21:06:10", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 1521.89, "meta": {}}
+{"ts": "2026-06-20T21:06:10", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.78, "meta": {}}
+{"ts": "2026-06-20T21:06:10", "page": "detail", "module": "tab_market", "elapsed_ms": 6.01, "meta": {}}
+{"ts": "2026-06-20T21:06:10", "page": "detail", "module": "tab_post_match", "elapsed_ms": 2.66, "meta": {}}
+{"ts": "2026-06-20T21:06:10", "page": "detail", "module": "tab_source", "elapsed_ms": 1.01, "meta": {}}
+{"ts": "2026-06-20T21:07:20", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.88, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T21:07:20", "page": "home", "module": "banner", "elapsed_ms": 0.18, "meta": {}}
+{"ts": "2026-06-20T21:07:20", "page": "home", "module": "search", "elapsed_ms": 0.51, "meta": {}}
+{"ts": "2026-06-20T21:07:20", "page": "home", "module": "date_nav", "elapsed_ms": 35.35, "meta": {}}
+{"ts": "2026-06-20T21:07:20", "page": "home", "module": "standings", "elapsed_ms": 49.45, "meta": {}}
+{"ts": "2026-06-20T21:07:20", "page": "home", "module": "tournament_stats", "elapsed_ms": 1.47, "meta": {}}
+{"ts": "2026-06-20T21:07:20", "page": "home", "module": "cache_notes", "elapsed_ms": 1.53, "meta": {}}
+{"ts": "2026-06-20T21:07:20", "page": "home", "module": "total", "elapsed_ms": 91.66, "meta": {}}
+{"ts": "2026-06-20T21:08:42", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.16, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T21:08:42", "page": "home", "module": "banner", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T21:08:42", "page": "home", "module": "search", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-20T21:08:42", "page": "home", "module": "date_nav", "elapsed_ms": 17.63, "meta": {}}
+{"ts": "2026-06-20T21:08:42", "page": "home", "module": "standings", "elapsed_ms": 25.89, "meta": {}}
+{"ts": "2026-06-20T21:08:42", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.42, "meta": {}}
+{"ts": "2026-06-20T21:08:42", "page": "home", "module": "cache_notes", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-20T21:08:42", "page": "home", "module": "total", "elapsed_ms": 48.23, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.46, "meta": {"force_refresh": false}}
+{"ts": "2026-06-20T21:08:49", "page": "home", "module": "banner", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "home", "module": "search", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "home", "module": "date_nav", "elapsed_ms": 35.29, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "home", "module": "total", "elapsed_ms": 39.23, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 15.74, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 4.88, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "base_models", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.02, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.23, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.95, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "report_generation", "elapsed_ms": 0.97, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 156.87, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 363.1, "meta": {}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 545.87, "meta": {"match": "Netherlands vs Sweden"}}
+{"ts": "2026-06-20T21:08:49", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-20T21:08:50", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 1.39, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T21:08:50", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.62, "meta": {"rows": 28}}
+{"ts": "2026-06-20T21:08:50", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 690.66, "meta": {}}
+{"ts": "2026-06-20T21:08:50", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.33, "meta": {}}
+{"ts": "2026-06-20T21:08:50", "page": "detail", "module": "tab_market", "elapsed_ms": 3.77, "meta": {}}
+{"ts": "2026-06-20T21:08:50", "page": "detail", "module": "tab_post_match", "elapsed_ms": 1.39, "meta": {}}
+{"ts": "2026-06-20T21:08:50", "page": "detail", "module": "tab_source", "elapsed_ms": 0.93, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 36.03, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6.66, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "base_models", "elapsed_ms": 0.52, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "decision_engine", "elapsed_ms": 1.4, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "report_generation", "elapsed_ms": 0.93, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 164.0, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 359.56, "meta": {}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 573.32, "meta": {"match": "Netherlands vs Sweden"}}
+{"ts": "2026-06-20T21:09:42", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-20T21:09:43", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 2.63, "meta": {"shown": 6, "total": 10}}
+{"ts": "2026-06-20T21:09:43", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 0.68, "meta": {"rows": 28}}
+{"ts": "2026-06-20T21:09:43", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 687.98, "meta": {}}
+{"ts": "2026-06-20T21:09:43", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 1.78, "meta": {}}
+{"ts": "2026-06-20T21:09:43", "page": "detail", "module": "tab_market", "elapsed_ms": 4.47, "meta": {}}
+{"ts": "2026-06-20T21:09:43", "page": "detail", "module": "tab_post_match", "elapsed_ms": 1.33, "meta": {}}
+{"ts": "2026-06-20T21:09:43", "page": "detail", "module": "tab_source", "elapsed_ms": 0.84, "meta": {}}

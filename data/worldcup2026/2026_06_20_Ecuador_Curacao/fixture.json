@@ -1,0 +1,135 @@
+{
+  "source_id": "34",
+  "match": {
+    "home_cn": "Ecuador",
+    "away_cn": "Curaçao",
+    "home_en": "Ecuador",
+    "away_en": "Curacao",
+    "display_name": "Ecuador vs Curaçao"
+  },
+  "created_at": "2026-06-20T20:36:07.741452+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": null,
+  "api_football_fixture": {
+    "fixture_id": 1489392,
+    "kickoff_utc": "2026-06-21T00:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 2",
+    "venue": "Arrowhead Stadium",
+    "city": "Kansas City",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1489392,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-06-21T00:00:00+00:00",
+        "timestamp": 1782000000,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": null,
+          "name": "Arrowhead Stadium",
+          "city": "Kansas City"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 2",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 2382,
+          "name": "Ecuador",
+          "logo": "https://media.api-sports.io/football/teams/2382.png",
+          "winner": null
+        },
+        "away": {
+          "id": 5530,
+          "name": "Curaçao",
+          "logo": "https://media.api-sports.io/football/teams/5530.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 2382,
+    "name": "Ecuador",
+    "code": "ECU",
+    "country": "Ecuador",
+    "founded": 1925,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/2382.png",
+    "_resolver": {
+      "input": "Ecuador",
+      "matched_query": "Ecuador",
+      "matched_name": "Ecuador",
+      "team_id": 2382,
+      "attempted": [
+        "Ecuador"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 5530,
+    "name": "Curaçao",
+    "code": "CUR",
+    "country": "Curacao",
+    "founded": 1921,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/5530.png",
+    "_resolver": {
+      "input": "Curacao",
+      "matched_query": "Curacao",
+      "matched_name": "Curaçao",
+      "team_id": 5530,
+      "attempted": [
+        "Curacao"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": null
+}

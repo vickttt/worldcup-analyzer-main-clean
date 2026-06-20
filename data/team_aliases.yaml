@@ -166,3 +166,33 @@ Paraguay:
 Haiti:
   canonical: Haiti
   aliases: [Haiti]
+Netherlands:
+  canonical: Netherlands
+  aliases: [Netherlands, Holland]
+荷兰:
+  canonical: Netherlands
+  aliases: [Netherlands, Holland]
+Sweden:
+  canonical: Sweden
+  aliases: [Sweden]
+瑞典:
+  canonical: Sweden
+  aliases: [Sweden]
+Ecuador:
+  canonical: Ecuador
+  aliases: [Ecuador]
+厄瓜多尔:
+  canonical: Ecuador
+  aliases: [Ecuador]
+Ivory Coast:
+  canonical: Ivory Coast
+  aliases: [Ivory Coast, Côte d'Ivoire, Cote d'Ivoire]
+科特迪瓦:
+  canonical: Ivory Coast
+  aliases: [Ivory Coast, Côte d'Ivoire, Cote d'Ivoire]
+Tunisia:
+  canonical: Tunisia
+  aliases: [Tunisia]
+突尼斯:
+  canonical: Tunisia
+  aliases: [Tunisia]

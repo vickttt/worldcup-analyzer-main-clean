@@ -1,0 +1,282 @@
+{
+  "source_id": "760445",
+  "match": {
+    "home_cn": "Scotland",
+    "away_cn": "Morocco",
+    "home_en": "Scotland",
+    "away_en": "Morocco",
+    "display_name": "Scotland vs Morocco"
+  },
+  "created_at": "2026-06-20T20:31:30.329262+08:00",
+  "schedule_source": "ESPN",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "time": {
+        "elapsed": 2,
+        "extra": null
+      },
+      "team": {
+        "id": 31,
+        "name": "Morocco",
+        "logo": "https://media.api-sports.io/football/teams/31.png"
+      },
+      "player": {
+        "id": 161897,
+        "name": "Ismael Saibari"
+      },
+      "assist": {
+        "id": 744,
+        "name": "Brahim Díaz"
+      },
+      "type": "Goal",
+      "detail": "Normal Goal",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 23,
+        "extra": null
+      },
+      "team": {
+        "id": 31,
+        "name": "Morocco",
+        "logo": "https://media.api-sports.io/football/teams/31.png"
+      },
+      "player": {
+        "id": 18814,
+        "name": "Issa Diop"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Foul"
+    },
+    {
+      "time": {
+        "elapsed": 60,
+        "extra": null
+      },
+      "team": {
+        "id": 1108,
+        "name": "Scotland",
+        "logo": "https://media.api-sports.io/football/teams/1108.png"
+      },
+      "player": {
+        "id": 1117,
+        "name": "Kieran Tierney"
+      },
+      "assist": {
+        "id": 343576,
+        "name": "Ben Gannon-Doak"
+      },
+      "type": "subst",
+      "detail": "Substitution 1",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 66,
+        "extra": null
+      },
+      "team": {
+        "id": 1108,
+        "name": "Scotland",
+        "logo": "https://media.api-sports.io/football/teams/1108.png"
+      },
+      "player": {
+        "id": 289,
+        "name": "Andy Robertson"
+      },
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "type": "Card",
+      "detail": "Yellow Card",
+      "comments": "Foul"
+    },
+    {
+      "time": {
+        "elapsed": 71,
+        "extra": null
+      },
+      "team": {
+        "id": 1108,
+        "name": "Scotland",
+        "logo": "https://media.api-sports.io/football/teams/1108.png"
+      },
+      "player": {
+        "id": 1125,
+        "name": "Ryan Christie"
+      },
+      "assist": {
+        "id": 19077,
+        "name": "Kenny McLean"
+      },
+      "type": "subst",
+      "detail": "Substitution 2",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 71,
+        "extra": null
+      },
+      "team": {
+        "id": 1108,
+        "name": "Scotland",
+        "logo": "https://media.api-sports.io/football/teams/1108.png"
+      },
+      "player": {
+        "id": 19524,
+        "name": "Che Adams"
+      },
+      "assist": {
+        "id": 45307,
+        "name": "Lyndon Dykes"
+      },
+      "type": "subst",
+      "detail": "Substitution 3",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 84,
+        "extra": null
+      },
+      "team": {
+        "id": 31,
+        "name": "Morocco",
+        "logo": "https://media.api-sports.io/football/teams/31.png"
+      },
+      "player": {
+        "id": 744,
+        "name": "Brahim Díaz"
+      },
+      "assist": {
+        "id": 535046,
+        "name": "Ayoube Amaimouni Echghouyab"
+      },
+      "type": "subst",
+      "detail": "Substitution 1",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 84,
+        "extra": null
+      },
+      "team": {
+        "id": 31,
+        "name": "Morocco",
+        "logo": "https://media.api-sports.io/football/teams/31.png"
+      },
+      "player": {
+        "id": 340573,
+        "name": "Bilal El Khannouss"
+      },
+      "assist": {
+        "id": 336659,
+        "name": "Chemsdine Talbi"
+      },
+      "type": "subst",
+      "detail": "Substitution 2",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 84,
+        "extra": null
+      },
+      "team": {
+        "id": 31,
+        "name": "Morocco",
+        "logo": "https://media.api-sports.io/football/teams/31.png"
+      },
+      "player": {
+        "id": 161897,
+        "name": "Ismael Saibari"
+      },
+      "assist": {
+        "id": 36579,
+        "name": "Soufiane Rahimi"
+      },
+      "type": "subst",
+      "detail": "Substitution 3",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 89,
+        "extra": null
+      },
+      "team": {
+        "id": 1108,
+        "name": "Scotland",
+        "logo": "https://media.api-sports.io/football/teams/1108.png"
+      },
+      "player": {
+        "id": 19191,
+        "name": "John McGinn"
+      },
+      "assist": {
+        "id": 45078,
+        "name": "Ross Stewart"
+      },
+      "type": "subst",
+      "detail": "Substitution 4",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 89,
+        "extra": null
+      },
+      "team": {
+        "id": 1108,
+        "name": "Scotland",
+        "logo": "https://media.api-sports.io/football/teams/1108.png"
+      },
+      "player": {
+        "id": 138417,
+        "name": "Nathan Patterson"
+      },
+      "assist": {
+        "id": 1115,
+        "name": "Tony Ralston"
+      },
+      "type": "subst",
+      "detail": "Substitution 5",
+      "comments": null
+    },
+    {
+      "time": {
+        "elapsed": 90,
+        "extra": null
+      },
+      "team": {
+        "id": 31,
+        "name": "Morocco",
+        "logo": "https://media.api-sports.io/football/teams/31.png"
+      },
+      "player": {
+        "id": 129678,
+        "name": "Azzedine Ounahi"
+      },
+      "assist": {
+        "id": 415431,
+        "name": "Samir El Mourabet"
+      },
+      "type": "subst",
+      "detail": "Substitution 4",
+      "comments": null
+    }
+  ],
+  "error": null
+}

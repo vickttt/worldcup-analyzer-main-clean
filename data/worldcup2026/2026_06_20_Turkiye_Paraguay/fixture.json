@@ -1,0 +1,135 @@
+{
+  "source_id": "760443",
+  "match": {
+    "home_cn": "Türkiye",
+    "away_cn": "Paraguay",
+    "home_en": "Turkiye",
+    "away_en": "Paraguay",
+    "display_name": "Türkiye vs Paraguay"
+  },
+  "created_at": "2026-06-20T20:32:42.728695+08:00",
+  "schedule_source": "ESPN",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": null,
+  "api_football_fixture": {
+    "fixture_id": 1539006,
+    "kickoff_utc": "2026-06-20T03:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 2",
+    "venue": "Levi's Stadium",
+    "city": "Santa Clara",
+    "status": "FT",
+    "raw": {
+      "fixture": {
+        "id": 1539006,
+        "referee": "Iván Barton, El Salvador",
+        "timezone": "UTC",
+        "date": "2026-06-20T03:00:00+00:00",
+        "timestamp": 1781924400,
+        "periods": {
+          "first": 1781924400,
+          "second": 1781928000
+        },
+        "venue": {
+          "id": null,
+          "name": "Levi's Stadium",
+          "city": "Santa Clara"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": 9
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 2",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 777,
+          "name": "Türkiye",
+          "logo": "https://media.api-sports.io/football/teams/777.png",
+          "winner": false
+        },
+        "away": {
+          "id": 2380,
+          "name": "Paraguay",
+          "logo": "https://media.api-sports.io/football/teams/2380.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 0,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 0,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 777,
+    "name": "Türkiye",
+    "code": "TUR",
+    "country": "Turkey",
+    "founded": 1923,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/777.png",
+    "_resolver": {
+      "input": "Turkiye",
+      "matched_query": "Turkiye",
+      "matched_name": "Türkiye",
+      "team_id": 777,
+      "attempted": [
+        "Turkiye"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 2380,
+    "name": "Paraguay",
+    "code": "PAR",
+    "country": "Paraguay",
+    "founded": 1906,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/2380.png",
+    "_resolver": {
+      "input": "Paraguay",
+      "matched_query": "Paraguay",
+      "matched_name": "Paraguay",
+      "team_id": 2380,
+      "attempted": [
+        "Paraguay"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": null
+}

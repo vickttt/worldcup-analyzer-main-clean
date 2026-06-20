@@ -14,7 +14,7 @@ if str(ROOT) not in sys.path:
 from modules.match_parser import parse_match
 from modules.odds_client import request_json
 from modules.result_distribution import build_result_distribution
-from modules.schedule_client import fetch_world_cup_schedule
+from modules.schedule_client import fetch_world_cup_schedule, fixture_local_datetime
 from modules.user_odds import build_market_candidates, build_recommendation_slots
 from modules.worldcup_db import data_completeness, load_match_database, parse_api_football_winner_and_totals
 from scripts.refresh_match_prematch_snapshot import (
@@ -230,7 +230,7 @@ def build_match_database(entry):
     odds = fetch_the_odds_force(match, entry["date"])
 
     try:
-        home_team, away_team, api_fixture_raw, api_fixture_message = fetch_api_football_fixture(match)
+        home_team, away_team, api_fixture_raw, api_fixture_message = fetch_api_football_fixture(match, entry.get("date"))
     except Exception as error:
         home_team, away_team, api_fixture_raw, api_fixture_message = None, None, None, str(error)
 
@@ -377,16 +377,36 @@ def main():
         default="today",
         help="today=2026-06-19 matches, history=priority finished matches, all=both",
     )
+    parser.add_argument(
+        "--date",
+        help="Use schedule fixtures for a specific local date, for example 2026-06-20.",
+    )
     args = parser.parse_args()
 
     entries = []
-    if args.scope in {"today", "all"}:
+    if args.date:
+        schedule = fetch_world_cup_schedule(force_refresh=True)
+        for fixture in schedule.get("fixtures") or []:
+            local_time = fixture_local_datetime(fixture)
+            if not local_time or local_time.strftime("%Y-%m-%d") != args.date:
+                continue
+            home = ((fixture.get("home_team") or {}).get("name") or "").strip()
+            away = ((fixture.get("away_team") or {}).get("name") or "").strip()
+            if home and away:
+                entries.append({
+                    "source_id": fixture.get("fixture_id") or f"{args.date}-{home}-{away}",
+                    "date": args.date,
+                    "match": f"{home} vs {away}",
+                })
+    elif args.scope in {"today", "all"}:
         entries.extend(MATCHES)
     if args.scope in {"history", "all"}:
         entries.extend(HISTORY_MATCHES)
 
     summary = [build_match_database(entry) for entry in entries]
     summary_name = "history_backfill_summary" if args.scope == "history" else "2026_06_19_refresh_summary"
+    if args.date:
+        summary_name = f"{args.date.replace('-', '_')}_refresh_summary"
     if args.scope == "all":
         summary_name = "all_refresh_summary"
     out = ROOT / "data" / "worldcup2026" / f"{summary_name}.json"

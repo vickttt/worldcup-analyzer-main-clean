@@ -1,0 +1,16 @@
+{
+  "source_id": "34",
+  "match": {
+    "home_cn": "Ecuador",
+    "away_cn": "Curaçao",
+    "home_en": "Ecuador",
+    "away_en": "Curacao",
+    "display_name": "Ecuador vs Curaçao"
+  },
+  "created_at": "2026-06-20T20:36:07.741452+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "status": "pending_post_match",
+  "post_match": null
+}

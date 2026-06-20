@@ -1,0 +1,16 @@
+{
+  "source_id": "760442",
+  "match": {
+    "home_cn": "United States",
+    "away_cn": "Australia",
+    "home_en": "USA",
+    "away_en": "Australia",
+    "display_name": "United States vs Australia"
+  },
+  "created_at": "2026-06-20T20:30:57.440165+08:00",
+  "schedule_source": "ESPN",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "status": "pending_post_match",
+  "post_match": null
+}

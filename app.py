@@ -3159,61 +3159,67 @@ def strategy_score(
     sharpe_ratio,
     stability_score,
 ):
-    if ev_yield >= 0.06:
-        ev_points = 32
-    elif ev_yield >= 0.03:
-        ev_points = 26
-    elif ev_yield >= 0:
-        ev_points = 18
-    elif ev_yield >= -0.03:
-        ev_points = 8
+    # 组合评分统一按五项权重计算：
+    # EV/ROI 30%，风险控制 20%，剧本一致性 30%，赔率价值 10%，组合简洁度 10%。
+    if ev_yield >= 0.08:
+        ev_roi_score = 100
+    elif ev_yield >= 0.04:
+        ev_roi_score = 85
+    elif ev_yield >= 0.01:
+        ev_roi_score = 70
+    elif ev_yield >= -0.02:
+        ev_roi_score = 50
+    elif ev_yield >= -0.06:
+        ev_roi_score = 25
     else:
-        ev_points = 2
-    hit_points = min(28, hit_rate * 38)
-    rr_points = min(10, max(0, risk_reward) * 3.5)
+        ev_roi_score = 5
+
     loss_ratio = max_loss / total_stake if total_stake else 1
-    if loss_ratio <= 0.50:
-        loss_points = 10
+    if loss_ratio <= 0.35:
+        loss_score = 100
+    elif loss_ratio <= 0.55:
+        loss_score = 80
     elif loss_ratio <= 0.75:
-        loss_points = 7
+        loss_score = 55
+    elif loss_ratio <= 0.95:
+        loss_score = 30
     else:
-        loss_points = 3
-    direction_points = direction_alignment * 16
-    strategic_points = strategic_value * 18
-    consistency_points = consistency_score * 24
-    sharpe_points = max(0, min(8, (sharpe_ratio + 0.2) * 10))
-    stability_points = max(0, min(8, stability_score / 12.5))
-    concentration_points = max(0, (1 - concentration) * 8)
-    raw_total = (
-        ev_points
-        + hit_points
-        + rr_points
-        + loss_points
-        + direction_points
-        + strategic_points
-        + consistency_points
-        + sharpe_points
-        + stability_points
-        + concentration_points
+        loss_score = 10
+    concentration_penalty = min(30, concentration * 30)
+    risk_control_score = clamp(loss_score - concentration_penalty)
+
+    script_consistency_score = clamp(
+        consistency_score * 55
+        + direction_alignment * 25
+        + strategic_value * 20
     )
-    total = round(50 + (raw_total - 50) * 1.35)
-    if direction_alignment < 0.45:
-        total = min(total, 80)
-    if strategic_value < 0.45:
-        total = min(total, 82)
-    if consistency_score < 0.50:
-        total = min(total, 74)
+
+    odds_value_score = clamp(ev_roi_score * 0.70 + max(0, min(100, risk_reward * 25)) * 0.30)
+
+    if concentration <= 0.25:
+        simplicity_score = 100
+    elif concentration <= 0.45:
+        simplicity_score = 80
+    elif concentration <= 0.65:
+        simplicity_score = 60
+    elif concentration <= 0.85:
+        simplicity_score = 38
+    else:
+        simplicity_score = 20
+
+    total = round(
+        ev_roi_score * 0.30
+        + risk_control_score * 0.20
+        + script_consistency_score * 0.30
+        + odds_value_score * 0.10
+        + simplicity_score * 0.10
+    )
     return clamp(total), {
-        "方向一致性": round(direction_points),
-        "战略价值": round(strategic_points),
-        "路径一致性": round(consistency_points),
-        "Sharpe": round(sharpe_points),
-        "稳定性": round(stability_points),
-        "命中率": round(hit_points),
-        "EV": round(ev_points),
-        "风险收益比": round(rr_points),
-        "最大亏损控制": round(loss_points),
-        "路径分散度": round(concentration_points),
+        "EV/ROI": round(ev_roi_score * 0.30),
+        "风险控制": round(risk_control_score * 0.20),
+        "剧本一致性": round(script_consistency_score * 0.30),
+        "赔率价值": round(odds_value_score * 0.10),
+        "组合简洁度": round(simplicity_score * 0.10),
     }
 
 
@@ -4442,17 +4448,52 @@ def strategy_difference(strategy, baseline):
     return "；".join(parts) or "资金比例不同"
 
 
+def strategy_asset_names(strategy, item_type):
+    names = []
+    for item in strategy.get("items") or []:
+        if item.get("type") == item_type and item.get("type") != "empty":
+            amount = item.get("amount")
+            suffix = f"({int(amount)}元)" if amount else ""
+            names.append(f"{item.get('name') or item.get('selection') or '-'}{suffix}")
+    return " / ".join(names) or "-"
+
+
+def strategy_main_script(strategy):
+    items = [item for item in strategy.get("items") or [] if item.get("type") != "empty"]
+    if not items:
+        return "-"
+    winner = next((item for item in items if item.get("type") == "winner"), None)
+    handicap = next((item for item in items if item.get("type") == "handicap"), None)
+    total = next((item for item in items if item.get("type") == "total"), None)
+    correct_scores = [item for item in items if item.get("type") == "correct_score"]
+
+    parts = []
+    if winner:
+        parts.append(winner.get("name") or winner.get("selection") or "独赢")
+    if handicap:
+        parts.append(handicap.get("name") or handicap.get("selection") or "让球")
+    if total:
+        parts.append(total.get("name") or total.get("selection") or "大小球")
+    if correct_scores:
+        scores = " / ".join((item.get("selection") or item.get("name") or "-") for item in correct_scores[:2])
+        parts.append(f"波胆 {scores}")
+    return " + ".join(parts[:4]) or "混合剧本"
+
+
 def portfolio_ranking_rows(strategies, baseline=None):
     rows = []
     for index, strategy in enumerate(strategies or [], start=1):
         metrics = strategy.get("metrics") or {}
-        style = strategy.get("portfolio_style") or {}
-        item_names = strategy_item_names(strategy)
         rows.append({
-            "排名": index,
             "组合名称": normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1),
+            "主剧本": strategy_main_script(strategy),
+            "让球资产": strategy_asset_names(strategy, "handicap"),
+            "大小球资产": strategy_asset_names(strategy, "total"),
+            "波胆资产": strategy_asset_names(strategy, "correct_score"),
             "EV": f"{int(metrics.get('expected_profit', strategy.get('expected_profit', 0))):+d}元",
             "ROI": percent(metrics.get("expected_yield", strategy.get("expected_yield", 0))),
+            "最大亏损": f"-{int(metrics.get('max_loss', strategy.get('max_loss', 0)))}元",
+            "剧本一致性评分": f"{round(strategy.get('consistency_score', 0) * 100)}",
             "综合评分": strategy.get("score", "-"),
         })
     return rows

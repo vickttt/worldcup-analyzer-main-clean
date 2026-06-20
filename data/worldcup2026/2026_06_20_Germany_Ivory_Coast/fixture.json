@@ -1,0 +1,208 @@
+{
+  "source_id": "33",
+  "match": {
+    "home_cn": "Germany",
+    "away_cn": "Ivory Coast",
+    "home_en": "Germany",
+    "away_en": "Ivory Coast",
+    "display_name": "Germany vs Ivory Coast"
+  },
+  "created_at": "2026-06-20T20:35:31.963021+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "33",
+    "home_team": {
+      "id": "17",
+      "name": "Germany",
+      "logo": "https://flagcdn.com/w80/de.png"
+    },
+    "away_team": {
+      "id": "19",
+      "name": "Ivory Coast",
+      "logo": "https://flagcdn.com/w80/ci.png"
+    },
+    "kickoff_utc": "06/20/2026 16:00",
+    "kickoff_display": "06/20/2026 16:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "E",
+    "venue_name": "Toronto Stadium",
+    "venue_city": "Toronto, Canada",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1489393,
+    "kickoff_utc": "2026-06-20T20:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 2",
+    "venue": "BMO Field",
+    "city": "Toronto",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1489393,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-06-20T20:00:00+00:00",
+        "timestamp": 1781985600,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": 312,
+          "name": "BMO Field",
+          "city": "Toronto"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 2",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 25,
+          "name": "Germany",
+          "logo": "https://media.api-sports.io/football/teams/25.png",
+          "winner": null
+        },
+        "away": {
+          "id": 1501,
+          "name": "Ivory Coast",
+          "logo": "https://media.api-sports.io/football/teams/1501.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 25,
+    "name": "Germany",
+    "code": "GER",
+    "country": "Germany",
+    "founded": 1900,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/25.png",
+    "_resolver": {
+      "input": "Germany",
+      "matched_query": "Germany",
+      "matched_name": "Germany",
+      "team_id": 25,
+      "attempted": [
+        "Germany"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 1501,
+    "name": "Ivory Coast",
+    "code": "CIV",
+    "country": "Ivory-Coast",
+    "founded": 1960,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/1501.png",
+    "_resolver": {
+      "input": "Ivory Coast",
+      "matched_query": "Ivory Coast",
+      "matched_name": "Ivory Coast",
+      "team_id": 1501,
+      "attempted": [
+        "Ivory Coast"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group E",
+    "rows": [
+      {
+        "team": "Germany",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 7,
+        "ga": 1,
+        "gd": 6,
+        "points": 3
+      },
+      {
+        "team": "Ivory Coast",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 1,
+        "ga": 0,
+        "gd": 1,
+        "points": 3
+      },
+      {
+        "team": "Ecuador",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 0,
+        "ga": 1,
+        "gd": -1,
+        "points": 0
+      },
+      {
+        "team": "Curaçao",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 1,
+        "ga": 7,
+        "gd": -6,
+        "points": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-06-20T20:29:43.122710+08:00",
+  "match": "美国 vs 澳大利亚",
+  "raw_text": "独赢，美国，1300\n波胆，2:0，200",
+  "items": [
+    {
+      "slot": "独赢",
+      "type": "winner",
+      "selection": "United States",
+      "name": "United States独赢",
+      "standard_odds": 1.66,
+      "probability": 0.5994208494208495,
+      "base_score": 69.98841698841699,
+      "source": "市场胜平负赔率",
+      "actual_odds": null,
+      "effective_odds": 1.66,
+      "edge": null,
+      "actual_selection": null,
+      "market_value_factor": 1.0,
+      "standard_ev": -0.004961389961389839,
+      "actual_ev": -0.004961389961389839,
+      "ev_lift": 0.0,
+      "path_match_score": 0,
+      "path_match_reason": "",
+      "coverage_rate": 0.6693229846722688,
+      "direction_alignment_score": 8,
+      "score": 93,
+      "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+      "recommended": true,
+      "ev_rank": 1,
+      "share": 1.0,
+      "odds": 1.66,
+      "amount": 1300,
+      "matched": true,
+      "raw_input": "独赢，美国，1300"
+    },
+    {
+      "type": "correct_score",
+      "selection": "2:0",
+      "name": "2:0",
+      "amount": 200,
+      "odds": null,
+      "standard_odds": null,
+      "effective_odds": null,
+      "matched": false,
+      "match_error": "未找到对应波胆赔率。",
+      "raw_input": "波胆，2:0，200"
+    }
+  ]
+}

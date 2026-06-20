@@ -1,0 +1,6668 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "pre_match_snapshot",
+  "created_at": "2026-06-20T20:26:59.472105+08:00",
+  "match": {
+    "home": "Netherlands",
+    "away": "Sweden",
+    "display": "荷兰 vs 瑞典"
+  },
+  "fixture": {
+    "fixture_id": "35",
+    "home_team": {
+      "id": "21",
+      "name": "Netherlands",
+      "logo": "https://flagcdn.com/w80/nl.png"
+    },
+    "away_team": {
+      "id": "23",
+      "name": "Sweden",
+      "logo": "https://flagcdn.com/w80/se.png"
+    },
+    "kickoff_utc": "06/20/2026 12:00",
+    "kickoff_display": "06/20/2026 12:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "F",
+    "venue_name": "Houston Stadium",
+    "venue_city": "Houston, United States",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "model_versions": {
+    "model_version": "v1.61",
+    "probability_engine_version": "score_distribution_v1",
+    "optimizer_version": "portfolio_optimizer_v1",
+    "asset_framework_version": "multi_role_asset_framework_v1",
+    "audit_version": "prediction_audit_v1"
+  },
+  "match_info": {
+    "odds_date_key": "2026-06-20",
+    "report_path": "outputs/reports/Netherlands_vs_Sweden_20260620_202659.md"
+  },
+  "odds": {
+    "found": true,
+    "home_win": 1.72,
+    "draw": 4.1,
+    "away_win": 4.7,
+    "over_under_line": 2.5,
+    "asian_handicap": [],
+    "over_under": [
+      {
+        "line": 2.5,
+        "over_odds": 1.57,
+        "under_odds": 2.2,
+        "bookmaker": "PMU (FR)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.62,
+        "under_odds": 2.25,
+        "bookmaker": "Unibet (NL)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.64,
+        "under_odds": 2.28,
+        "bookmaker": "Unibet (SE)"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.65,
+        "under_odds": 2.28,
+        "bookmaker": "GTbets"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.66,
+        "under_odds": 2.3,
+        "bookmaker": "1xBet"
+      },
+      {
+        "line": 3.0,
+        "over_odds": 2.06,
+        "under_odds": 1.77,
+        "bookmaker": "MyBookie.ag"
+      },
+      {
+        "line": 3.0,
+        "over_odds": 2.05,
+        "under_odds": 1.83,
+        "bookmaker": "Coolbet"
+      },
+      {
+        "line": 3.0,
+        "over_odds": 2.08,
+        "under_odds": 1.84,
+        "bookmaker": "Pinnacle"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.65,
+        "under_odds": 2.36,
+        "bookmaker": "BetOnline.ag"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.65,
+        "under_odds": 2.15,
+        "bookmaker": "William Hill"
+      },
+      {
+        "line": 3.5,
+        "over_odds": 2.65,
+        "under_odds": 1.51,
+        "bookmaker": "BetAnything"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.69,
+        "under_odds": 2.44,
+        "bookmaker": "Matchbook"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.65,
+        "under_odds": 2.28,
+        "bookmaker": "Nordic Bet"
+      },
+      {
+        "line": 2.5,
+        "over_odds": 1.65,
+        "under_odds": 2.28,
+        "bookmaker": "Betsson"
+      }
+    ],
+    "raw_probabilities": {
+      "home_win": 0.5813953488372093,
+      "draw": 0.24390243902439027,
+      "away_win": 0.2127659574468085
+    },
+    "implied_probabilities": {
+      "home_win": 0.560076730802767,
+      "draw": 0.23495901877579495,
+      "away_win": 0.20496425042143812
+    },
+    "source": "The Odds API / PMU (FR)",
+    "event_title": "Netherlands vs Sweden",
+    "event_id": "4f0c518545b0096c68326daf25bffc1e",
+    "message": "已找到 The Odds API h2h 真实赔率。",
+    "cache": {
+      "source": "fresh api response",
+      "sport_key": "soccer_fifa_world_cup",
+      "date_key": "2026-06-20",
+      "events_count": 2
+    }
+  },
+  "api_football_data": {
+    "fixture_result": {
+      "fixture": {
+        "id": 256658,
+        "name": "Netherlands vs Sweden",
+        "home_team": {
+          "id": 1118,
+          "name": "Netherlands",
+          "logo": "https://media.api-sports.io/football/teams/1118.png",
+          "winner": true
+        },
+        "away_team": {
+          "id": 5,
+          "name": "Sweden",
+          "logo": "https://media.api-sports.io/football/teams/5.png",
+          "winner": false
+        },
+        "raw": {
+          "fixture": {
+            "id": 256658,
+            "referee": "S. Karasev",
+            "timezone": "UTC",
+            "date": "2017-10-10T18:45:00+00:00",
+            "timestamp": 1507661100,
+            "periods": {
+              "first": 1507661100,
+              "second": 1507664700
+            },
+            "venue": {
+              "id": null,
+              "name": "Johan Cruijff Arena",
+              "city": "Amsterdam"
+            },
+            "status": {
+              "long": "Match Finished",
+              "short": "FT",
+              "elapsed": 90,
+              "extra": null
+            }
+          },
+          "league": {
+            "id": 32,
+            "name": "World Cup - Qualification Europe",
+            "country": "World",
+            "logo": "https://media.api-sports.io/football/leagues/32.png",
+            "flag": null,
+            "season": 2018,
+            "round": "1st Round - 10",
+            "standings": false
+          },
+          "teams": {
+            "home": {
+              "id": 1118,
+              "name": "Netherlands",
+              "logo": "https://media.api-sports.io/football/teams/1118.png",
+              "winner": true
+            },
+            "away": {
+              "id": 5,
+              "name": "Sweden",
+              "logo": "https://media.api-sports.io/football/teams/5.png",
+              "winner": false
+            }
+          },
+          "goals": {
+            "home": 2,
+            "away": 0
+          },
+          "score": {
+            "halftime": {
+              "home": 2,
+              "away": 0
+            },
+            "fulltime": {
+              "home": 2,
+              "away": 0
+            },
+            "extratime": {
+              "home": null,
+              "away": null
+            },
+            "penalty": {
+              "home": null,
+              "away": null
+            }
+          }
+        }
+      },
+      "home_team": {
+        "id": 1118,
+        "name": "Netherlands",
+        "code": "NED",
+        "country": "Netherlands",
+        "founded": 1889,
+        "national": true,
+        "logo": "https://media.api-sports.io/football/teams/1118.png",
+        "_resolver": {
+          "input": "Netherlands",
+          "matched_query": "Netherlands",
+          "matched_name": "Netherlands",
+          "team_id": 1118,
+          "attempted": [
+            "Netherlands"
+          ],
+          "cache_status": "api_resolved"
+        }
+      },
+      "away_team": {
+        "id": 5,
+        "name": "Sweden",
+        "code": "SWE",
+        "country": "Sweden",
+        "founded": 1904,
+        "national": true,
+        "logo": "https://media.api-sports.io/football/teams/5.png",
+        "_resolver": {
+          "input": "Sweden",
+          "matched_query": "Sweden",
+          "matched_name": "Sweden",
+          "team_id": 5,
+          "attempted": [
+            "Sweden"
+          ],
+          "cache_status": "api_resolved"
+        }
+      },
+      "competition_pair": {
+        "id": 32,
+        "name": "World Cup - Qualification Europe",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/32.png",
+        "flag": null,
+        "season": 2018,
+        "round": "1st Round - 10",
+        "standings": false
+      },
+      "message": "已通过 API-Football head-to-head 找到对应比赛。"
+    },
+    "fixture": {
+      "id": 256658,
+      "name": "Netherlands vs Sweden",
+      "home_team": {
+        "id": 1118,
+        "name": "Netherlands",
+        "logo": "https://media.api-sports.io/football/teams/1118.png",
+        "winner": true
+      },
+      "away_team": {
+        "id": 5,
+        "name": "Sweden",
+        "logo": "https://media.api-sports.io/football/teams/5.png",
+        "winner": false
+      },
+      "raw": {
+        "fixture": {
+          "id": 256658,
+          "referee": "S. Karasev",
+          "timezone": "UTC",
+          "date": "2017-10-10T18:45:00+00:00",
+          "timestamp": 1507661100,
+          "periods": {
+            "first": 1507661100,
+            "second": 1507664700
+          },
+          "venue": {
+            "id": null,
+            "name": "Johan Cruijff Arena",
+            "city": "Amsterdam"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2018,
+          "round": "1st Round - 10",
+          "standings": false
+        },
+        "teams": {
+          "home": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": true
+          },
+          "away": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 2,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      }
+    },
+    "odds": {
+      "found": false,
+      "home_win": null,
+      "draw": null,
+      "away_win": null,
+      "over_under_line": null,
+      "raw_probabilities": null,
+      "implied_probabilities": null,
+      "source": "API-Football 免费版",
+      "event_title": "Netherlands vs Sweden",
+      "event_id": 256658,
+      "message": "API-Football 免费版无法获取 2026 World Cup odds：Free plans do not have access to this season。"
+    },
+    "asian_handicap": {
+      "found": false,
+      "source": "API-Football / Asian Handicap",
+      "bookmakers": [],
+      "rows": [],
+      "message": "API-Football 没有返回该比赛的真实亚洲让球盘。"
+    },
+    "correct_score": {
+      "found": false,
+      "source": "API-Football / Exact Score",
+      "bookmakers": [],
+      "rows": [],
+      "message": "API-Football 没有返回该比赛的真实波胆盘口。"
+    },
+    "injuries": [],
+    "lineups": [
+      {
+        "team": {
+          "id": 1118,
+          "name": "Netherlands",
+          "logo": "https://media.api-sports.io/football/teams/1118.png",
+          "colors": null
+        },
+        "coach": {
+          "id": 3104,
+          "name": "D. Advocaat",
+          "photo": "https://media.api-sports.io/football/coachs/3104.png"
+        },
+        "formation": "4-3-3",
+        "startXI": [
+          {
+            "player": {
+              "id": 124,
+              "name": "J. Cillessen",
+              "number": 1,
+              "pos": "G",
+              "grid": "1:1"
+            }
+          },
+          {
+            "player": {
+              "id": 531,
+              "name": "D. Blind",
+              "number": 6,
+              "pos": "D",
+              "grid": "2:4"
+            }
+          },
+          {
+            "player": {
+              "id": 25345,
+              "name": "K. Rekik",
+              "number": 4,
+              "pos": "D",
+              "grid": "2:3"
+            }
+          },
+          {
+            "player": {
+              "id": 18861,
+              "name": "N. Aké",
+              "number": 5,
+              "pos": "D",
+              "grid": "2:2"
+            }
+          },
+          {
+            "player": {
+              "id": 290,
+              "name": "V. van Dijk",
+              "number": 3,
+              "pos": "D",
+              "grid": "2:1"
+            }
+          },
+          {
+            "player": {
+              "id": 657,
+              "name": "K. Tete",
+              "number": 2,
+              "pos": "D",
+              "grid": "3:3"
+            }
+          },
+          {
+            "player": {
+              "id": 516,
+              "name": "A. Robben",
+              "number": 11,
+              "pos": "M",
+              "grid": "3:2"
+            }
+          },
+          {
+            "player": {
+              "id": 300,
+              "name": "G. Wijnaldum",
+              "number": 10,
+              "pos": "M",
+              "grid": "3:1"
+            }
+          },
+          {
+            "player": {
+              "id": 37157,
+              "name": "T. Vilhena",
+              "number": 8,
+              "pos": "M",
+              "grid": "4:3"
+            }
+          },
+          {
+            "player": {
+              "id": 19034,
+              "name": "R. Babel",
+              "number": 7,
+              "pos": "M",
+              "grid": "4:2"
+            }
+          },
+          {
+            "player": {
+              "id": 183,
+              "name": "V. Janssen",
+              "number": 9,
+              "pos": "F",
+              "grid": "4:1"
+            }
+          }
+        ],
+        "substitutes": [
+          {
+            "player": {
+              "id": 1497,
+              "name": "B. Dost",
+              "number": 21,
+              "pos": "F",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 25321,
+              "name": "D. Klaassen",
+              "number": 20,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 18796,
+              "name": "D. Janmaat",
+              "number": 12,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 537,
+              "name": "J. Veltman",
+              "number": 15,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 47430,
+              "name": "W. Hoedt",
+              "number": 14,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 532,
+              "name": "M. de Ligt",
+              "number": 13,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 667,
+              "name": "M. Depay",
+              "number": 17,
+              "pos": "F",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 18756,
+              "name": "M. Stekelenburg",
+              "number": 22,
+              "pos": "G",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 224,
+              "name": "J. Zoet",
+              "number": 23,
+              "pos": "G",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 93587,
+              "name": "M. van Ginkel",
+              "number": 18,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 547,
+              "name": "D. van de Beek",
+              "number": 16,
+              "pos": "M",
+              "grid": null
+            }
+          }
+        ]
+      },
+      {
+        "team": {
+          "id": 5,
+          "name": "Sweden",
+          "logo": "https://media.api-sports.io/football/teams/5.png",
+          "colors": null
+        },
+        "coach": {
+          "id": 189,
+          "name": "J. Andersson",
+          "photo": "https://media.api-sports.io/football/coachs/189.png"
+        },
+        "formation": "4-4-2",
+        "startXI": [
+          {
+            "player": {
+              "id": 766,
+              "name": "R. Olsen",
+              "number": 1,
+              "pos": "G",
+              "grid": "1:1"
+            }
+          },
+          {
+            "player": {
+              "id": 2853,
+              "name": "A. Granqvist",
+              "number": 4,
+              "pos": "D",
+              "grid": "2:4"
+            }
+          },
+          {
+            "player": {
+              "id": 1113,
+              "name": "M. Lustig",
+              "number": 2,
+              "pos": "D",
+              "grid": "2:3"
+            }
+          },
+          {
+            "player": {
+              "id": 889,
+              "name": "V. Lindelöf",
+              "number": 3,
+              "pos": "D",
+              "grid": "2:2"
+            }
+          },
+          {
+            "player": {
+              "id": 2852,
+              "name": "L. Augustinsson",
+              "number": 6,
+              "pos": "D",
+              "grid": "2:1"
+            }
+          },
+          {
+            "player": {
+              "id": 2212,
+              "name": "J. Johansson",
+              "number": 13,
+              "pos": "M",
+              "grid": "3:4"
+            }
+          },
+          {
+            "player": {
+              "id": 2859,
+              "name": "S. Larsson",
+              "number": 7,
+              "pos": "M",
+              "grid": "3:3"
+            }
+          },
+          {
+            "player": {
+              "id": 1152,
+              "name": "E. Forsberg",
+              "number": 10,
+              "pos": "M",
+              "grid": "3:2"
+            }
+          },
+          {
+            "player": {
+              "id": 2080,
+              "name": "V. Claesson",
+              "number": 17,
+              "pos": "M",
+              "grid": "3:1"
+            }
+          },
+          {
+            "player": {
+              "id": 2863,
+              "name": "M. Berg",
+              "number": 9,
+              "pos": "F",
+              "grid": "4:2"
+            }
+          },
+          {
+            "player": {
+              "id": 6868,
+              "name": "O. Toivonen",
+              "number": 20,
+              "pos": "F",
+              "grid": "4:1"
+            }
+          }
+        ],
+        "substitutes": [
+          {
+            "player": {
+              "id": 2861,
+              "name": "G. Svensson",
+              "number": 15,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 988,
+              "name": "I. Thelin",
+              "number": 21,
+              "pos": "F",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 19319,
+              "name": "M. Olsson",
+              "number": 5,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 2850,
+              "name": "K. Johnsson",
+              "number": 12,
+              "pos": "G",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 2854,
+              "name": "F. Helander",
+              "number": 14,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 53649,
+              "name": "S. Holmén",
+              "number": 18,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 30996,
+              "name": "M. Rohdén",
+              "number": 19,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 2855,
+              "name": "E. Krafth",
+              "number": 16,
+              "pos": "D",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 2858,
+              "name": "A. Ekdal",
+              "number": 8,
+              "pos": "M",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 47371,
+              "name": "J. Guidetti",
+              "number": 11,
+              "pos": "F",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 2851,
+              "name": "K. Nordfeldt",
+              "number": 23,
+              "pos": "G",
+              "grid": null
+            }
+          },
+          {
+            "player": {
+              "id": 2860,
+              "name": "K. Sema",
+              "number": 22,
+              "pos": "M",
+              "grid": null
+            }
+          }
+        ]
+      }
+    ],
+    "home_recent": [
+      {
+        "fixture": {
+          "id": 1366323,
+          "referee": "L. M. Branco Godinho",
+          "timezone": "UTC",
+          "date": "2025-11-17T19:45:00+00:00",
+          "timestamp": 1763408700,
+          "periods": {
+            "first": 1763408700,
+            "second": 1763412300
+          },
+          "venue": {
+            "id": null,
+            "name": "Johan Cruijff Arena",
+            "city": "Amsterdam"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 4
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 10",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": true
+          },
+          "away": {
+            "id": 1097,
+            "name": "Lithuania",
+            "logo": "https://media.api-sports.io/football/teams/1097.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 4,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 4,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1366315,
+          "referee": "M. Mariani",
+          "timezone": "UTC",
+          "date": "2025-11-14T19:45:00+00:00",
+          "timestamp": 1763149500,
+          "periods": {
+            "first": 1763149500,
+            "second": 1763153100
+          },
+          "venue": {
+            "id": null,
+            "name": "PGE Narodowy",
+            "city": "Warsaw"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 7
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 9",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 24,
+            "name": "Poland",
+            "logo": "https://media.api-sports.io/football/teams/24.png",
+            "winner": null
+          },
+          "away": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": null
+          }
+        },
+        "goals": {
+          "home": 1,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 1,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1366303,
+          "referee": "S. Vincic",
+          "timezone": "UTC",
+          "date": "2025-10-12T16:00:00+00:00",
+          "timestamp": 1760284800,
+          "periods": {
+            "first": 1760284800,
+            "second": 1760288400
+          },
+          "venue": {
+            "id": null,
+            "name": "Johan Cruijff Arena",
+            "city": "Amsterdam"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 1
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 8",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": true
+          },
+          "away": {
+            "id": 1099,
+            "name": "Finland",
+            "logo": "https://media.api-sports.io/football/teams/1099.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 4,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 3,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 4,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1366296,
+          "referee": "D. Strukan",
+          "timezone": "UTC",
+          "date": "2025-10-09T18:45:00+00:00",
+          "timestamp": 1760035500,
+          "periods": {
+            "first": 1760035500,
+            "second": 1760039100
+          },
+          "venue": {
+            "id": 2614,
+            "name": "Ta'Qali National Stadium",
+            "city": "Ta'Qali"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 4
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 7",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1112,
+            "name": "Malta",
+            "logo": "https://media.api-sports.io/football/teams/1112.png",
+            "winner": false
+          },
+          "away": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 4
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 4
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1366287,
+          "referee": "E. Masiyev",
+          "timezone": "UTC",
+          "date": "2025-09-07T16:00:00+00:00",
+          "timestamp": 1757260800,
+          "periods": {
+            "first": 1757260800,
+            "second": 1757264400
+          },
+          "venue": {
+            "id": 2612,
+            "name": "S. Dariaus ir S. Girėno stadionas",
+            "city": "Kaunas"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 4
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 6",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1097,
+            "name": "Lithuania",
+            "logo": "https://media.api-sports.io/football/teams/1097.png",
+            "winner": false
+          },
+          "away": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 3
+        },
+        "score": {
+          "halftime": {
+            "home": 2,
+            "away": 2
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 3
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1366281,
+          "referee": "S. Sozza",
+          "timezone": "UTC",
+          "date": "2025-09-04T18:45:00+00:00",
+          "timestamp": 1757011500,
+          "periods": {
+            "first": 1757011500,
+            "second": 1757015100
+          },
+          "venue": {
+            "id": null,
+            "name": "De Kuip",
+            "city": "Rotterdam"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 5
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 5",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": null
+          },
+          "away": {
+            "id": 24,
+            "name": "Poland",
+            "logo": "https://media.api-sports.io/football/teams/24.png",
+            "winner": null
+          }
+        },
+        "goals": {
+          "home": 1,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 1,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1366278,
+          "referee": "R. De Burgos",
+          "timezone": "UTC",
+          "date": "2025-06-10T18:45:00+00:00",
+          "timestamp": 1749581100,
+          "periods": {
+            "first": 1749581100,
+            "second": 1749584700
+          },
+          "venue": {
+            "id": null,
+            "name": "Euroborg",
+            "city": "Groningen"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 4
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 4",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": true
+          },
+          "away": {
+            "id": 1112,
+            "name": "Malta",
+            "logo": "https://media.api-sports.io/football/teams/1112.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 8,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 3,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 8,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1366275,
+          "referee": "D. Siebert",
+          "timezone": "UTC",
+          "date": "2025-06-07T18:45:00+00:00",
+          "timestamp": 1749321900,
+          "periods": {
+            "first": 1749321900,
+            "second": 1749325500
+          },
+          "venue": {
+            "id": null,
+            "name": "Helsinki Olympic Stadium",
+            "city": "Helsinki"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 4
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 3",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1099,
+            "name": "Finland",
+            "logo": "https://media.api-sports.io/football/teams/1099.png",
+            "winner": false
+          },
+          "away": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 2
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1316546,
+          "referee": "Clement Turpin, France",
+          "timezone": "UTC",
+          "date": "2025-03-23T19:45:00+00:00",
+          "timestamp": 1742759100,
+          "periods": {
+            "first": 1742759100,
+            "second": 1742762700
+          },
+          "venue": {
+            "id": 1497,
+            "name": "Estadio de Mestalla",
+            "city": "Valencia"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "PEN",
+            "elapsed": 120,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 5,
+          "name": "UEFA Nations League",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/5.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Quarter-finals",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 9,
+            "name": "Spain",
+            "logo": "https://media.api-sports.io/football/teams/9.png",
+            "winner": true
+          },
+          "away": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 3,
+          "away": 3
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 2
+          },
+          "extratime": {
+            "home": 1,
+            "away": 1
+          },
+          "penalty": {
+            "home": 5,
+            "away": 4
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1316545,
+          "referee": "Glenn Nyberg, Sweden",
+          "timezone": "UTC",
+          "date": "2025-03-20T19:45:00+00:00",
+          "timestamp": 1742499900,
+          "periods": {
+            "first": 1742499900,
+            "second": 1742503500
+          },
+          "venue": {
+            "id": 1128,
+            "name": "Stadion Feijenoord",
+            "city": "Rotterdam"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 6
+          }
+        },
+        "league": {
+          "id": 5,
+          "name": "UEFA Nations League",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/5.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Quarter-finals",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png",
+            "winner": null
+          },
+          "away": {
+            "id": 9,
+            "name": "Spain",
+            "logo": "https://media.api-sports.io/football/teams/9.png",
+            "winner": null
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      }
+    ],
+    "away_recent": [
+      {
+        "fixture": {
+          "id": 1537581,
+          "referee": "S. Vincic",
+          "timezone": "UTC",
+          "date": "2026-03-31T18:45:00+00:00",
+          "timestamp": 1774982700,
+          "periods": {
+            "first": 1774982700,
+            "second": 1774986300
+          },
+          "venue": {
+            "id": null,
+            "name": "Strawberry Arena",
+            "city": "Solna"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 5
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Final",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": true
+          },
+          "away": {
+            "id": 24,
+            "name": "Poland",
+            "logo": "https://media.api-sports.io/football/teams/24.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 3,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 2,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 3,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1487928,
+          "referee": "J. Pinheiro",
+          "timezone": "UTC",
+          "date": "2026-03-26T19:45:00+00:00",
+          "timestamp": 1774554300,
+          "periods": {
+            "first": 1774554300,
+            "second": 1774557900
+          },
+          "venue": {
+            "id": null,
+            "name": "Ciudad de Valencia",
+            "city": "Valencia"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 6
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Semi-finals",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 772,
+            "name": "Ukraine",
+            "logo": "https://media.api-sports.io/football/teams/772.png",
+            "winner": false
+          },
+          "away": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 1,
+          "away": 3
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 1,
+            "away": 3
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1323368,
+          "referee": "M. Mariani",
+          "timezone": "UTC",
+          "date": "2025-11-18T19:45:00+00:00",
+          "timestamp": 1763495100,
+          "periods": {
+            "first": 1763495100,
+            "second": 1763498700
+          },
+          "venue": {
+            "id": null,
+            "name": "Strawberry Arena",
+            "city": "Solna"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 7
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 10",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": null
+          },
+          "away": {
+            "id": 1091,
+            "name": "Slovenia",
+            "logo": "https://media.api-sports.io/football/teams/1091.png",
+            "winner": null
+          }
+        },
+        "goals": {
+          "home": 1,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 1,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1323356,
+          "referee": "E. Lambrechts",
+          "timezone": "UTC",
+          "date": "2025-11-15T19:45:00+00:00",
+          "timestamp": 1763235900,
+          "periods": {
+            "first": 1763235900,
+            "second": 1763239500
+          },
+          "venue": {
+            "id": null,
+            "name": "Stade de Genève",
+            "city": "Geneva"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 6
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 9",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 15,
+            "name": "Switzerland",
+            "logo": "https://media.api-sports.io/football/teams/15.png",
+            "winner": true
+          },
+          "away": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 4,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 4,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1323334,
+          "referee": "D. Makkelie",
+          "timezone": "UTC",
+          "date": "2025-10-13T18:45:00+00:00",
+          "timestamp": 1760381100,
+          "periods": {
+            "first": 1760381100,
+            "second": 1760384700
+          },
+          "venue": {
+            "id": null,
+            "name": "Nya Ullevi",
+            "city": "Gothenburg"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 6
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 8",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": false
+          },
+          "away": {
+            "id": 1111,
+            "name": "Kosovo",
+            "logo": "https://media.api-sports.io/football/teams/1111.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1323319,
+          "referee": "A. Taylor",
+          "timezone": "UTC",
+          "date": "2025-10-10T18:45:00+00:00",
+          "timestamp": 1760121900,
+          "periods": {
+            "first": 1760121900,
+            "second": 1760125500
+          },
+          "venue": {
+            "id": null,
+            "name": "Strawberry Arena",
+            "city": "Solna"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 6
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 7",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": false
+          },
+          "away": {
+            "id": 15,
+            "name": "Switzerland",
+            "logo": "https://media.api-sports.io/football/teams/15.png",
+            "winner": true
+          }
+        },
+        "goals": {
+          "home": 0,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 0,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1323300,
+          "referee": "A. Lindhout",
+          "timezone": "UTC",
+          "date": "2025-09-08T18:45:00+00:00",
+          "timestamp": 1757357100,
+          "periods": {
+            "first": 1757357100,
+            "second": 1757360700
+          },
+          "venue": {
+            "id": null,
+            "name": "Stadiumi Fadil Vokrri",
+            "city": "Pristina"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 7
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 6",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1111,
+            "name": "Kosovo",
+            "logo": "https://media.api-sports.io/football/teams/1111.png",
+            "winner": true
+          },
+          "away": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 2,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1323284,
+          "referee": "J. Sanchez",
+          "timezone": "UTC",
+          "date": "2025-09-05T18:45:00+00:00",
+          "timestamp": 1757097900,
+          "periods": {
+            "first": 1757097900,
+            "second": 1757101500
+          },
+          "venue": {
+            "id": 1442,
+            "name": "Stadion Stozice",
+            "city": "Ljubljana"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 4
+          }
+        },
+        "league": {
+          "id": 32,
+          "name": "World Cup - Qualification Europe",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/32.png",
+          "flag": null,
+          "season": 2024,
+          "round": "Group Stage - 5",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1091,
+            "name": "Slovenia",
+            "logo": "https://media.api-sports.io/football/teams/1091.png",
+            "winner": null
+          },
+          "away": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": null
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 2
+        },
+        "score": {
+          "halftime": {
+            "home": 0,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 2
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1173028,
+          "referee": "Paweł Raczkowski, Poland",
+          "timezone": "UTC",
+          "date": "2024-11-19T19:45:00+00:00",
+          "timestamp": 1732045500,
+          "periods": {
+            "first": 1732045500,
+            "second": 1732049100
+          },
+          "venue": {
+            "id": 21411,
+            "name": "Strawberry Arena",
+            "city": "Solna"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 3
+          }
+        },
+        "league": {
+          "id": 5,
+          "name": "UEFA Nations League",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/5.png",
+          "flag": null,
+          "season": 2024,
+          "round": "League C - 6",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": true
+          },
+          "away": {
+            "id": 1096,
+            "name": "Azerbaijan",
+            "logo": "https://media.api-sports.io/football/teams/1096.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 6,
+          "away": 0
+        },
+        "score": {
+          "halftime": {
+            "home": 3,
+            "away": 0
+          },
+          "fulltime": {
+            "home": 6,
+            "away": 0
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      },
+      {
+        "fixture": {
+          "id": 1173021,
+          "referee": "Mykola Balakin, Ukraine",
+          "timezone": "UTC",
+          "date": "2024-11-16T19:45:00+00:00",
+          "timestamp": 1731786300,
+          "periods": {
+            "first": 1731786300,
+            "second": 1731789900
+          },
+          "venue": {
+            "id": 21411,
+            "name": "Strawberry Arena",
+            "city": "Solna"
+          },
+          "status": {
+            "long": "Match Finished",
+            "short": "FT",
+            "elapsed": 90,
+            "extra": 5
+          }
+        },
+        "league": {
+          "id": 5,
+          "name": "UEFA Nations League",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/5.png",
+          "flag": null,
+          "season": 2024,
+          "round": "League C - 5",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 5,
+            "name": "Sweden",
+            "logo": "https://media.api-sports.io/football/teams/5.png",
+            "winner": true
+          },
+          "away": {
+            "id": 773,
+            "name": "Slovakia",
+            "logo": "https://media.api-sports.io/football/teams/773.png",
+            "winner": false
+          }
+        },
+        "goals": {
+          "home": 2,
+          "away": 1
+        },
+        "score": {
+          "halftime": {
+            "home": 1,
+            "away": 1
+          },
+          "fulltime": {
+            "home": 2,
+            "away": 1
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      }
+    ],
+    "error": null
+  },
+  "polymarket": {
+    "found": true,
+    "home_win": 0.565,
+    "draw": 0.235,
+    "away_win": 0.205,
+    "volume": 2488574.296540032,
+    "liquidity": 4818854.1132,
+    "source": "Polymarket Gamma API 真实数据",
+    "event_title": "Netherlands vs. Sweden",
+    "event_slug": "fifwc-nld-swe-2026-06-20",
+    "event_url": "https://polymarket.com/event/fifwc-nld-swe-2026-06-20",
+    "message": "已找到对应 Polymarket 市场。"
+  },
+  "actual_odds": {
+    "items": [],
+    "by_type": {},
+    "raw": ""
+  },
+  "my_portfolio": {},
+  "recommendation_combo": [
+    {
+      "slot": "独赢",
+      "type": "winner",
+      "selection": "Netherlands",
+      "name": "Netherlands独赢",
+      "standard_odds": 1.72,
+      "probability": 0.560076730802767,
+      "base_score": 69.20153461605534,
+      "source": "市场胜平负赔率",
+      "actual_odds": null,
+      "effective_odds": 1.72,
+      "edge": null,
+      "actual_selection": null,
+      "market_value_factor": 1.0,
+      "standard_ev": -0.03666802301924077,
+      "actual_ev": -0.03666802301924077,
+      "ev_lift": 0.0,
+      "path_match_score": 0,
+      "path_match_reason": "",
+      "coverage_rate": 0.6411034083021612,
+      "market_center_reason": "",
+      "direction_alignment_score": 8,
+      "score": 92,
+      "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+      "recommended": true,
+      "ev_rank": 1,
+      "share": 1.0,
+      "odds": 1.72,
+      "amount": 100
+    },
+    {
+      "slot": "大小球",
+      "type": "total",
+      "selection": "Over 2.5",
+      "name": "大于 2.5 球",
+      "standard_odds": 1.643,
+      "base_score": 50,
+      "source": "The Odds API 大小球均值",
+      "actual_odds": null,
+      "effective_odds": 1.643,
+      "edge": null,
+      "actual_selection": null,
+      "probability": 0.6086427267194157,
+      "market_value_factor": 0.55,
+      "standard_ev": -1.1102230246251565e-16,
+      "actual_ev": -1.1102230246251565e-16,
+      "ev_lift": 0.0,
+      "path_match_score": 0,
+      "path_match_reason": "",
+      "coverage_rate": 0.39835551583823603,
+      "market_center_reason": "",
+      "direction_alignment_score": -12,
+      "score": 48,
+      "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+      "recommended": false,
+      "not_recommended_reason": "综合分 48，未达到推荐阈值 55。",
+      "ev_rank": 2,
+      "share": 0,
+      "odds": 1.643,
+      "amount": 0
+    },
+    {
+      "slot": "大小球",
+      "type": "total",
+      "selection": "Under 2.5",
+      "name": "小于 2.5 球",
+      "standard_odds": 2.282,
+      "base_score": 40,
+      "source": "The Odds API 大小球均值",
+      "actual_odds": null,
+      "effective_odds": 2.282,
+      "edge": null,
+      "actual_selection": null,
+      "probability": 0.43821209465381245,
+      "market_value_factor": 0.55,
+      "standard_ev": 0.0,
+      "actual_ev": 0.0,
+      "ev_lift": 0.0,
+      "path_match_score": 0,
+      "path_match_reason": "",
+      "coverage_rate": 0.4852804562281009,
+      "market_center_reason": "",
+      "direction_alignment_score": -12,
+      "score": 40,
+      "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+      "recommended": false,
+      "not_recommended_reason": "综合分 40，未达到推荐阈值 55。",
+      "ev_rank": 3,
+      "share": 0,
+      "odds": 2.282,
+      "amount": 0
+    },
+    {
+      "slot": "空位4",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位5",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    }
+  ],
+  "strategy_snapshot": {
+    "strategies": [
+      {
+        "code": "A",
+        "name": "当前推荐组合",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "Netherlands",
+            "name": "Netherlands独赢",
+            "standard_odds": 1.72,
+            "probability": 0.560076730802767,
+            "base_score": 69.20153461605534,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.72,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.03666802301924077,
+            "actual_ev": -0.03666802301924077,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6411034083021612,
+            "market_center_reason": "",
+            "direction_alignment_score": 8,
+            "score": 92,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.72,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6411034083021612,
+        "expected_profit": 10.269786227971728,
+        "expected_yield": 0.10269786227971728,
+        "capital_efficiency": 0.10269786227971728,
+        "max_profit": 72,
+        "max_loss": 100,
+        "volatility": 82.50440883036833,
+        "sharpe_ratio": 0.12447560528658211,
+        "risk_reward": 0.72,
+        "coverage": 0.6411034083021612,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "consistency_score": 0.88,
+        "role_constraint": {
+          "adjustment": -72,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "25.0% - 55.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 22.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 82.50440883036833
+        },
+        "stability_score": 35,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 6,
+          "战略价值": 14,
+          "路径一致性": 21,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 24,
+          "EV": 32,
+          "风险收益比": 3,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          }
+        ],
+        "original_name": "当前推荐组合",
+        "rank_name": "推荐组合"
+      },
+      {
+        "code": "D",
+        "name": "独赢策略",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "Netherlands",
+            "name": "Netherlands独赢",
+            "standard_odds": 1.72,
+            "probability": 0.560076730802767,
+            "base_score": 69.20153461605534,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.72,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.03666802301924077,
+            "actual_ev": -0.03666802301924077,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6411034083021612,
+            "market_center_reason": "",
+            "direction_alignment_score": 8,
+            "score": 92,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.72,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6411034083021612,
+        "expected_profit": 10.269786227971728,
+        "expected_yield": 0.10269786227971728,
+        "capital_efficiency": 0.10269786227971728,
+        "max_profit": 72,
+        "max_loss": 100,
+        "volatility": 82.50440883036833,
+        "sharpe_ratio": 0.12447560528658211,
+        "risk_reward": 0.72,
+        "coverage": 0.6411034083021612,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "consistency_score": 0.88,
+        "role_constraint": {
+          "adjustment": -72,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "25.0% - 55.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 22.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 82.50440883036833
+        },
+        "stability_score": 35,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 6,
+          "战略价值": 14,
+          "路径一致性": 21,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 24,
+          "EV": 32,
+          "风险收益比": 3,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          }
+        ],
+        "original_name": "独赢策略",
+        "rank_name": "第2组合"
+      },
+      {
+        "code": "F",
+        "name": "独赢 + 让球",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "Netherlands",
+            "name": "Netherlands独赢",
+            "standard_odds": 1.72,
+            "probability": 0.560076730802767,
+            "base_score": 69.20153461605534,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.72,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.03666802301924077,
+            "actual_ev": -0.03666802301924077,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6411034083021612,
+            "market_center_reason": "",
+            "direction_alignment_score": 8,
+            "score": 92,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.72,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6411034083021612,
+        "expected_profit": 10.269786227971728,
+        "expected_yield": 0.10269786227971728,
+        "capital_efficiency": 0.10269786227971728,
+        "max_profit": 72,
+        "max_loss": 100,
+        "volatility": 82.50440883036833,
+        "sharpe_ratio": 0.12447560528658211,
+        "risk_reward": 0.72,
+        "coverage": 0.6411034083021612,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "consistency_score": 0.88,
+        "role_constraint": {
+          "adjustment": -72,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "25.0% - 55.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 22.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 82.50440883036833
+        },
+        "stability_score": 35,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 6,
+          "战略价值": 14,
+          "路径一致性": 21,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 24,
+          "EV": 32,
+          "风险收益比": 3,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          }
+        ],
+        "original_name": "独赢 + 让球",
+        "rank_name": "第3组合"
+      },
+      {
+        "code": "G",
+        "name": "独赢 + 波胆",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "Netherlands",
+            "name": "Netherlands独赢",
+            "standard_odds": 1.72,
+            "probability": 0.560076730802767,
+            "base_score": 69.20153461605534,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.72,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.03666802301924077,
+            "actual_ev": -0.03666802301924077,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6411034083021612,
+            "market_center_reason": "",
+            "direction_alignment_score": 8,
+            "score": 92,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.72,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6411034083021612,
+        "expected_profit": 10.269786227971728,
+        "expected_yield": 0.10269786227971728,
+        "capital_efficiency": 0.10269786227971728,
+        "max_profit": 72,
+        "max_loss": 100,
+        "volatility": 82.50440883036833,
+        "sharpe_ratio": 0.12447560528658211,
+        "risk_reward": 0.72,
+        "coverage": 0.6411034083021612,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "consistency_score": 0.88,
+        "role_constraint": {
+          "adjustment": -72,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "25.0% - 55.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 22.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 82.50440883036833
+        },
+        "stability_score": 35,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 6,
+          "战略价值": 14,
+          "路径一致性": 21,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 24,
+          "EV": 32,
+          "风险收益比": 3,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          }
+        ],
+        "original_name": "独赢 + 波胆",
+        "rank_name": "第4组合"
+      },
+      {
+        "code": "O",
+        "name": "赔率分布优化器",
+        "items": [
+          {
+            "slot": "独赢",
+            "type": "winner",
+            "selection": "Netherlands",
+            "name": "Netherlands独赢",
+            "standard_odds": 1.72,
+            "probability": 0.560076730802767,
+            "base_score": 69.20153461605534,
+            "source": "市场胜平负赔率",
+            "actual_odds": null,
+            "effective_odds": 1.72,
+            "edge": null,
+            "actual_selection": null,
+            "market_value_factor": 1.0,
+            "standard_ev": -0.03666802301924077,
+            "actual_ev": -0.03666802301924077,
+            "ev_lift": 0.0,
+            "path_match_score": 0,
+            "path_match_reason": "",
+            "coverage_rate": 0.6411034083021612,
+            "market_center_reason": "",
+            "direction_alignment_score": 8,
+            "score": 92,
+            "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+            "recommended": true,
+            "ev_rank": 1,
+            "share": 1.0,
+            "odds": 1.72,
+            "amount": 100
+          }
+        ],
+        "hit_rate": 0.6411034083021612,
+        "expected_profit": 10.269786227971728,
+        "expected_yield": 0.10269786227971728,
+        "capital_efficiency": 0.10269786227971728,
+        "max_profit": 72,
+        "max_loss": 100,
+        "volatility": 82.50440883036833,
+        "sharpe_ratio": 0.12447560528658211,
+        "risk_reward": 0.72,
+        "coverage": 0.6411034083021612,
+        "concentration": 0,
+        "direction_alignment": 0.38,
+        "strategic_value": 0.78,
+        "consistency_score": 0.88,
+        "role_constraint": {
+          "adjustment": -72,
+          "rows": [
+            {
+              "资产角色": "保险资产",
+              "当前占比": "100.0%",
+              "目标区间": "20.0% - 40.0%",
+              "状态": "偏高"
+            },
+            {
+              "资产角色": "收益资产",
+              "当前占比": "0.0%",
+              "目标区间": "30.0% - 60.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "方向资产",
+              "当前占比": "0.0%",
+              "目标区间": "25.0% - 55.0%",
+              "状态": "偏低"
+            },
+            {
+              "资产角色": "节奏资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 22.0%",
+              "状态": "合理"
+            },
+            {
+              "资产角色": "尾部资产",
+              "当前占比": "0.0%",
+              "目标区间": "0.0% - 15.0%",
+              "状态": "合理"
+            }
+          ]
+        },
+        "portfolio_style": {
+          "style": "Conservative",
+          "style_cn": "保守型",
+          "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+          "role_exposure": {
+            "保险资产": 1.0
+          },
+          "return_share": 0,
+          "insurance_share": 1.0,
+          "tail_share": 0,
+          "tempo_share": 0,
+          "correlation": 0,
+          "volatility": 82.50440883036833
+        },
+        "stability_score": 35,
+        "score": 80,
+        "score_components": {
+          "方向一致性": 6,
+          "战略价值": 14,
+          "路径一致性": 21,
+          "Sharpe": 3,
+          "稳定性": 3,
+          "命中率": 24,
+          "EV": 32,
+          "风险收益比": 3,
+          "最大亏损控制": 3,
+          "路径分散度": 8
+        },
+        "score_rows": [
+          {
+            "比分": "1:0",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:1",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "3:2",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "4:3",
+            "路径": "热门方胜1球主路径",
+            "比分概率": "6.1%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "6.1% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 4.369462064350651
+          },
+          {
+            "比分": "2:0",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "3:1",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "4:2",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "5:3",
+            "路径": "热门方胜2球主路径",
+            "比分概率": "5.3%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "5.3% × +72",
+            "EV贡献": "+4",
+            "_total": 72,
+            "_ev_contribution": 3.8092746202031322
+          },
+          {
+            "比分": "0:0",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "1:1",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "2:2",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:3",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "4:4",
+            "路径": "平局风险路径",
+            "比分概率": "4.9%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "4.9% × -100",
+            "EV贡献": "-5",
+            "_total": -100,
+            "_ev_contribution": -4.850651275283516
+          },
+          {
+            "比分": "3:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "4:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "5:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "6:2",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:0",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "7:1",
+            "路径": "热门方胜3球以上极端路径",
+            "比分概率": "1.7%",
+            "独赢收益": "+72",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "+72",
+            "概率×收益": "1.7% × +72",
+            "EV贡献": "+1",
+            "_total": 72,
+            "_ev_contribution": 1.2222271508673153
+          },
+          {
+            "比分": "0:1",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "0:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:2",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "1:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:3",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "2:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:4",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          },
+          {
+            "比分": "3:5",
+            "路径": "弱势方爆冷路径",
+            "比分概率": "0.8%",
+            "独赢收益": "-100",
+            "让球收益": "+0",
+            "大小球收益": "+0",
+            "波胆收益": "+0",
+            "组合收益": "-100",
+            "概率×收益": "0.8% × -100",
+            "EV贡献": "-1",
+            "_total": -100,
+            "_ev_contribution": -0.8311716280975932
+          }
+        ],
+        "original_name": "赔率分布优化器",
+        "rank_name": "第5组合"
+      }
+    ],
+    "strategy_table": [
+      {
+        "组合": "推荐组合",
+        "来源": "当前推荐组合",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "64.1%",
+        "EV": "+10",
+        "预期收益率": "+10.3%",
+        "资金效率": "+10.3%",
+        "最大盈利": "+72",
+        "最大亏损": "-100",
+        "盈亏波动": "83",
+        "Sharpe": "0.12",
+        "稳定性": "35 / 100",
+        "风险收益比": "0.72",
+        "覆盖率": "64.1%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "路径一致性": "88.0%",
+        "综合评分": 80
+      },
+      {
+        "组合": "第2组合",
+        "来源": "独赢策略",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "64.1%",
+        "EV": "+10",
+        "预期收益率": "+10.3%",
+        "资金效率": "+10.3%",
+        "最大盈利": "+72",
+        "最大亏损": "-100",
+        "盈亏波动": "83",
+        "Sharpe": "0.12",
+        "稳定性": "35 / 100",
+        "风险收益比": "0.72",
+        "覆盖率": "64.1%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "路径一致性": "88.0%",
+        "综合评分": 80
+      },
+      {
+        "组合": "第3组合",
+        "来源": "独赢 + 让球",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "64.1%",
+        "EV": "+10",
+        "预期收益率": "+10.3%",
+        "资金效率": "+10.3%",
+        "最大盈利": "+72",
+        "最大亏损": "-100",
+        "盈亏波动": "83",
+        "Sharpe": "0.12",
+        "稳定性": "35 / 100",
+        "风险收益比": "0.72",
+        "覆盖率": "64.1%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "路径一致性": "88.0%",
+        "综合评分": 80
+      },
+      {
+        "组合": "第4组合",
+        "来源": "独赢 + 波胆",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "64.1%",
+        "EV": "+10",
+        "预期收益率": "+10.3%",
+        "资金效率": "+10.3%",
+        "最大盈利": "+72",
+        "最大亏损": "-100",
+        "盈亏波动": "83",
+        "Sharpe": "0.12",
+        "稳定性": "35 / 100",
+        "风险收益比": "0.72",
+        "覆盖率": "64.1%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "路径一致性": "88.0%",
+        "综合评分": 80
+      },
+      {
+        "组合": "第5组合",
+        "来源": "赔率分布优化器",
+        "风格": "保守型",
+        "角色结构": "保险资产 100.0%",
+        "命中率": "64.1%",
+        "EV": "+10",
+        "预期收益率": "+10.3%",
+        "资金效率": "+10.3%",
+        "最大盈利": "+72",
+        "最大亏损": "-100",
+        "盈亏波动": "83",
+        "Sharpe": "0.12",
+        "稳定性": "35 / 100",
+        "风险收益比": "0.72",
+        "覆盖率": "64.1%",
+        "路径集中度": "0.0%",
+        "方向一致性": "38.0%",
+        "战略价值": "78.0%",
+        "路径一致性": "88.0%",
+        "综合评分": 80
+      }
+    ],
+    "insurance_cost": [],
+    "correlation_matrix": [
+      {
+        "投注": "Netherlands独赢",
+        "Netherlands独赢": "100%"
+      }
+    ],
+    "kelly": [
+      {
+        "投注": "Netherlands独赢",
+        "Kelly": "0.0%",
+        "25% Kelly": "0元",
+        "50% Kelly": "0元",
+        "当前仓位": "100元",
+        "偏离25% Kelly": "+100元"
+      }
+    ],
+    "return_matrix": [
+      {
+        "比分": "1:0",
+        "路径": "热门方胜1球主路径",
+        "比分概率": "6.1%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "6.1% × +72",
+        "EV贡献": "+4",
+        "_total": 72,
+        "_ev_contribution": 4.369462064350651
+      },
+      {
+        "比分": "2:1",
+        "路径": "热门方胜1球主路径",
+        "比分概率": "6.1%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "6.1% × +72",
+        "EV贡献": "+4",
+        "_total": 72,
+        "_ev_contribution": 4.369462064350651
+      },
+      {
+        "比分": "3:2",
+        "路径": "热门方胜1球主路径",
+        "比分概率": "6.1%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "6.1% × +72",
+        "EV贡献": "+4",
+        "_total": 72,
+        "_ev_contribution": 4.369462064350651
+      },
+      {
+        "比分": "4:3",
+        "路径": "热门方胜1球主路径",
+        "比分概率": "6.1%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "6.1% × +72",
+        "EV贡献": "+4",
+        "_total": 72,
+        "_ev_contribution": 4.369462064350651
+      },
+      {
+        "比分": "2:0",
+        "路径": "热门方胜2球主路径",
+        "比分概率": "5.3%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "5.3% × +72",
+        "EV贡献": "+4",
+        "_total": 72,
+        "_ev_contribution": 3.8092746202031322
+      },
+      {
+        "比分": "3:1",
+        "路径": "热门方胜2球主路径",
+        "比分概率": "5.3%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "5.3% × +72",
+        "EV贡献": "+4",
+        "_total": 72,
+        "_ev_contribution": 3.8092746202031322
+      },
+      {
+        "比分": "4:2",
+        "路径": "热门方胜2球主路径",
+        "比分概率": "5.3%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "5.3% × +72",
+        "EV贡献": "+4",
+        "_total": 72,
+        "_ev_contribution": 3.8092746202031322
+      },
+      {
+        "比分": "5:3",
+        "路径": "热门方胜2球主路径",
+        "比分概率": "5.3%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "5.3% × +72",
+        "EV贡献": "+4",
+        "_total": 72,
+        "_ev_contribution": 3.8092746202031322
+      },
+      {
+        "比分": "0:0",
+        "路径": "平局风险路径",
+        "比分概率": "4.9%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.9% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.850651275283516
+      },
+      {
+        "比分": "1:1",
+        "路径": "平局风险路径",
+        "比分概率": "4.9%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.9% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.850651275283516
+      },
+      {
+        "比分": "2:2",
+        "路径": "平局风险路径",
+        "比分概率": "4.9%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.9% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.850651275283516
+      },
+      {
+        "比分": "3:3",
+        "路径": "平局风险路径",
+        "比分概率": "4.9%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.9% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.850651275283516
+      },
+      {
+        "比分": "4:4",
+        "路径": "平局风险路径",
+        "比分概率": "4.9%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "4.9% × -100",
+        "EV贡献": "-5",
+        "_total": -100,
+        "_ev_contribution": -4.850651275283516
+      },
+      {
+        "比分": "3:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "4:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "4:1",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "5:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "5:1",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "5:2",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "6:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "6:1",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "6:2",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "7:0",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "7:1",
+        "路径": "热门方胜3球以上极端路径",
+        "比分概率": "1.7%",
+        "独赢收益": "+72",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "+72",
+        "概率×收益": "1.7% × +72",
+        "EV贡献": "+1",
+        "_total": 72,
+        "_ev_contribution": 1.2222271508673153
+      },
+      {
+        "比分": "0:1",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "0:2",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "0:3",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "0:4",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "0:5",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "1:2",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "1:3",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "1:4",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "1:5",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "2:3",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "2:4",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "2:5",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "3:4",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      },
+      {
+        "比分": "3:5",
+        "路径": "弱势方爆冷路径",
+        "比分概率": "0.8%",
+        "独赢收益": "-100",
+        "让球收益": "+0",
+        "大小球收益": "+0",
+        "波胆收益": "+0",
+        "组合收益": "-100",
+        "概率×收益": "0.8% × -100",
+        "EV贡献": "-1",
+        "_total": -100,
+        "_ev_contribution": -0.8311716280975932
+      }
+    ],
+    "role_constraints": [
+      {
+        "资产角色": "保险资产",
+        "当前占比": "100.0%",
+        "目标区间": "20.0% - 40.0%",
+        "状态": "偏高"
+      },
+      {
+        "资产角色": "收益资产",
+        "当前占比": "0.0%",
+        "目标区间": "30.0% - 60.0%",
+        "状态": "偏低"
+      },
+      {
+        "资产角色": "方向资产",
+        "当前占比": "0.0%",
+        "目标区间": "25.0% - 55.0%",
+        "状态": "偏低"
+      },
+      {
+        "资产角色": "节奏资产",
+        "当前占比": "0.0%",
+        "目标区间": "0.0% - 22.0%",
+        "状态": "合理"
+      },
+      {
+        "资产角色": "尾部资产",
+        "当前占比": "0.0%",
+        "目标区间": "0.0% - 15.0%",
+        "状态": "合理"
+      }
+    ],
+    "portfolio_style": {
+      "style": "Conservative",
+      "style_cn": "保守型",
+      "reason": "保险资产占比较高，组合更重视覆盖和回撤控制。",
+      "role_exposure": {
+        "保险资产": 1.0
+      },
+      "return_share": 0,
+      "insurance_share": 1.0,
+      "tail_share": 0,
+      "tempo_share": 0,
+      "correlation": 0,
+      "volatility": 82.50440883036833
+    }
+  },
+  "decision": {
+    "market_disagreement": {
+      "score": 2,
+      "level": "低分歧",
+      "direction": "Netherlands",
+      "difference": 0.002112323923601167,
+      "odds_probability": 0.560076730802767,
+      "polymarket_probability": 0.5621890547263682,
+      "reason": "最大市场价差出现在Netherlands方向。"
+    },
+    "contrarian": {
+      "score": 75,
+      "level": "较高",
+      "popular_side": "Netherlands",
+      "reason": "热门球队与多市场一致预期可能带来拥挤定价。"
+    },
+    "upset_index": {
+      "score": 40,
+      "meaning": "低爆冷风险",
+      "reason": "小组赛阶段与弱势方属性提高了爆冷敏感度。"
+    },
+    "recent_form": {
+      "score": 55,
+      "reason": "近期状态可用，V1 框架给予轻微信号。"
+    },
+    "elo_rating": {
+      "score": 50,
+      "reason": "ELO评分 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "injury_impact": {
+      "score": 50,
+      "reason": "暂无公开伤病信息，采用中性分。"
+    },
+    "team_value": {
+      "score": 50,
+      "reason": "球队身价 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "direction_confidence": {
+      "score": 40,
+      "level": "观望",
+      "components": [
+        {
+          "name": "胜平负方向",
+          "points": 22,
+          "max_points": 30,
+          "reason": "荷兰市场概率 56.0%。"
+        },
+        {
+          "name": "亚洲让球盘",
+          "points": 0,
+          "max_points": 30,
+          "reason": "亚洲让球盘缺失。"
+        },
+        {
+          "name": "大小球",
+          "points": 8,
+          "max_points": 8,
+          "reason": "大小球主盘口 2.5，市场略偏向大球。"
+        },
+        {
+          "name": "波胆结构",
+          "points": 0,
+          "max_points": 22,
+          "reason": "真实波胆盘口缺失。"
+        },
+        {
+          "name": "Polymarket",
+          "points": 10,
+          "max_points": 10,
+          "reason": "Polymarket 同样支持荷兰，概率 56.2%。"
+        }
+      ],
+      "summary": "市场普遍认为荷兰占优，亚洲让球盘缺失，真实波胆盘口缺失，因此方向把握观望。",
+      "reason": "荷兰方向把握由胜平负、亚洲盘、大小球、真实波胆和 Polymarket 共同决定。"
+    },
+    "odds_value": {
+      "score": 32,
+      "rating": "D",
+      "label": "荷兰",
+      "market_probability": 0.560076730802767,
+      "model_probability": 0.5621890547263682,
+      "difference": 0.002112323923601167,
+      "margin": 0.03806374530840806,
+      "components": [
+        {
+          "name": "市场价差",
+          "points": 1,
+          "max_points": 10,
+          "reason": "Polymarket 与赔率市场差异 +0.2%，只作为辅助。"
+        },
+        {
+          "name": "盘口一致性",
+          "points": 16,
+          "max_points": 30,
+          "reason": "胜平负主方向为荷兰。亚洲让球盘缺失。 大小球主盘口 2.5，市场略偏向大球。"
+        },
+        {
+          "name": "亚洲盘结构",
+          "points": 0,
+          "max_points": 25,
+          "reason": "亚洲让球盘缺失。"
+        },
+        {
+          "name": "波胆结构",
+          "points": 0,
+          "max_points": 20,
+          "reason": "真实波胆盘口缺失。"
+        },
+        {
+          "name": "庄家利润率",
+          "points": 15,
+          "max_points": 15,
+          "reason": "庄家利润率约 3.8%，抽水较低。"
+        }
+      ],
+      "reason": "荷兰方向：市场概率 56.0%，Polymarket 56.2%，差异 +0.2%；盘口、波胆与抽水综合得分 32 / 100。"
+    },
+    "participation_advice": {
+      "advice": "放弃",
+      "reason": "方向把握 40 / 100，赔率价值 D，爆冷指数 40 / 100。"
+    },
+    "recommended_stake": {
+      "amount": 100,
+      "base": 0,
+      "adjustment": -100,
+      "reason": "方向把握 40 分，对应基础仓位 0；赔率价值 D，调整 -100。"
+    },
+    "final_confidence_score": 40,
+    "value_rating": "D",
+    "value_rating_score": 32,
+    "value_rating_breakdown": [
+      {
+        "name": "市场价差",
+        "points": 1,
+        "max_points": 10,
+        "reason": "Polymarket 与赔率市场差异 +0.2%，只作为辅助。"
+      },
+      {
+        "name": "盘口一致性",
+        "points": 16,
+        "max_points": 30,
+        "reason": "胜平负主方向为荷兰。亚洲让球盘缺失。 大小球主盘口 2.5，市场略偏向大球。"
+      },
+      {
+        "name": "亚洲盘结构",
+        "points": 0,
+        "max_points": 25,
+        "reason": "亚洲让球盘缺失。"
+      },
+      {
+        "name": "波胆结构",
+        "points": 0,
+        "max_points": 20,
+        "reason": "真实波胆盘口缺失。"
+      },
+      {
+        "name": "庄家利润率",
+        "points": 15,
+        "max_points": 15,
+        "reason": "庄家利润率约 3.8%，抽水较低。"
+      }
+    ],
+    "value_rating_meaning": "赔率价值 32 / 100，评级 D：价值有限",
+    "final_recommendation": {
+      "bet": "Netherlands",
+      "reason": [
+        "暂未发现强逆向让球机会",
+        "当前仅将市场方向作为参考"
+      ]
+    },
+    "stake_suggestion": {
+      "Conservative": 100,
+      "Standard": 300,
+      "Aggressive": 500
+    },
+    "weights": {
+      "方向把握": "胜平负30 + 亚洲让球30 + 大小球8 + 波胆22 + Polymarket10",
+      "赔率价值": "输入实际赔率后：实际赔率优势45 + 推荐覆盖20 + 盘口结构15 + 庄家利润率10 + Polymarket辅助10；未输入时使用市场标准盘口评估。",
+      "参与建议": "方向把握 + 赔率价值 + 风险暴露",
+      "推荐仓位": "方向把握为主，赔率价值微调"
+    }
+  },
+  "probability_distribution": {
+    "available": true,
+    "favorite": "荷兰",
+    "underdog": "瑞典",
+    "rows": [
+      {
+        "label": "荷兰小胜（1球）",
+        "probability": 0.24274789246392509,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+      },
+      {
+        "label": "平局区间",
+        "probability": 0.24253256376417578,
+        "meaning": "比赛进入低分差或胶着路径。"
+      },
+      {
+        "label": "荷兰赢2球",
+        "probability": 0.2116263677890629,
+        "meaning": "盘口边界路径，决定让球盘输赢。"
+      },
+      {
+        "label": "荷兰赢3球以上",
+        "probability": 0.18672914804917315,
+        "meaning": "强队大胜路径，过去版本容易低估。"
+      },
+      {
+        "label": "瑞典不败",
+        "probability": 0.11636402793366306,
+        "meaning": "爆冷或热门方向失效路径。"
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "荷兰 -1.5",
+      "lose_paths": [
+        "荷兰只赢1球",
+        "平局",
+        "瑞典胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "荷兰小胜（1球）",
+    "boundary_path": "荷兰赢2球",
+    "extreme_path": "荷兰赢3球以上",
+    "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+  },
+  "value_analysis": {
+    "available": true,
+    "message": "No major value gap detected",
+    "rows": [
+      {
+        "label": "Netherlands",
+        "odds_api": 0.560076730802767,
+        "polymarket": 0.5621890547263682,
+        "difference": 0.002112323923601167,
+        "is_value": false
+      },
+      {
+        "label": "Draw",
+        "odds_api": 0.23495901877579495,
+        "polymarket": 0.2338308457711443,
+        "difference": -0.001128173004650651,
+        "is_value": false
+      },
+      {
+        "label": "Sweden",
+        "odds_api": 0.20496425042143812,
+        "polymarket": 0.20398009950248758,
+        "difference": -0.0009841509189505437,
+        "is_value": false
+      }
+    ],
+    "has_value": false
+  },
+  "betting_opinion": {
+    "match_winner": "Lean Netherlands",
+    "asian_handicap": "No view",
+    "over_under": "Lean Over 2.5",
+    "risk_level": "Low",
+    "confidence": 72,
+    "match_winner_reason": "Market consensus and Polymarket both favor Netherlands.",
+    "asian_handicap_reason": "Handicap market is not available.",
+    "over_under_reason": "Over odds are slightly favored by the market.",
+    "summary": "Market generally supports Netherlands.",
+    "result_distribution": {
+      "available": true,
+      "favorite": "荷兰",
+      "underdog": "瑞典",
+      "rows": [
+        {
+          "label": "荷兰小胜（1球）",
+          "probability": 0.24274789246392509,
+          "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+        },
+        {
+          "label": "平局区间",
+          "probability": 0.24253256376417578,
+          "meaning": "比赛进入低分差或胶着路径。"
+        },
+        {
+          "label": "荷兰赢2球",
+          "probability": 0.2116263677890629,
+          "meaning": "盘口边界路径，决定让球盘输赢。"
+        },
+        {
+          "label": "荷兰赢3球以上",
+          "probability": 0.18672914804917315,
+          "meaning": "强队大胜路径，过去版本容易低估。"
+        },
+        {
+          "label": "瑞典不败",
+          "probability": 0.11636402793366306,
+          "meaning": "爆冷或热门方向失效路径。"
+        }
+      ],
+      "risk_exposure": {
+        "example_bet": "荷兰 -1.5",
+        "lose_paths": [
+          "荷兰只赢1球",
+          "平局",
+          "瑞典胜"
+        ],
+        "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+      },
+      "main_path": "荷兰小胜（1球）",
+      "boundary_path": "荷兰赢2球",
+      "extreme_path": "荷兰赢3球以上",
+      "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+    }
+  }
+}

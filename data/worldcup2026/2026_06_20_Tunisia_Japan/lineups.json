@@ -1,0 +1,17 @@
+{
+  "source_id": "36",
+  "match": {
+    "home_cn": "Tunisia",
+    "away_cn": "Japan",
+    "home_en": "Tunisia",
+    "away_en": "Japan",
+    "display_name": "Tunisia vs Japan"
+  },
+  "created_at": "2026-06-20T20:36:44.459099+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [],
+  "error": null
+}

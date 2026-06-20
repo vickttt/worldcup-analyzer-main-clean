@@ -1,0 +1,208 @@
+{
+  "source_id": "35",
+  "match": {
+    "home_cn": "Netherlands",
+    "away_cn": "Sweden",
+    "home_en": "Netherlands",
+    "away_en": "Sweden",
+    "display_name": "Netherlands vs Sweden"
+  },
+  "created_at": "2026-06-20T20:35:03.687641+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "35",
+    "home_team": {
+      "id": "21",
+      "name": "Netherlands",
+      "logo": "https://flagcdn.com/w80/nl.png"
+    },
+    "away_team": {
+      "id": "23",
+      "name": "Sweden",
+      "logo": "https://flagcdn.com/w80/se.png"
+    },
+    "kickoff_utc": "06/20/2026 12:00",
+    "kickoff_display": "06/20/2026 12:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "F",
+    "venue_name": "Houston Stadium",
+    "venue_city": "Houston, United States",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1539007,
+    "kickoff_utc": "2026-06-20T17:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 2",
+    "venue": "NRG Stadium",
+    "city": "Houston",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1539007,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-06-20T17:00:00+00:00",
+        "timestamp": 1781974800,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": null,
+          "name": "NRG Stadium",
+          "city": "Houston"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 2",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 1118,
+          "name": "Netherlands",
+          "logo": "https://media.api-sports.io/football/teams/1118.png",
+          "winner": null
+        },
+        "away": {
+          "id": 5,
+          "name": "Sweden",
+          "logo": "https://media.api-sports.io/football/teams/5.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 1118,
+    "name": "Netherlands",
+    "code": "NED",
+    "country": "Netherlands",
+    "founded": 1889,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/1118.png",
+    "_resolver": {
+      "input": "Netherlands",
+      "matched_query": "Netherlands",
+      "matched_name": "Netherlands",
+      "team_id": 1118,
+      "attempted": [
+        "Netherlands"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 5,
+    "name": "Sweden",
+    "code": "SWE",
+    "country": "Sweden",
+    "founded": 1904,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/5.png",
+    "_resolver": {
+      "input": "Sweden",
+      "matched_query": "Sweden",
+      "matched_name": "Sweden",
+      "team_id": 5,
+      "attempted": [
+        "Sweden"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group F",
+    "rows": [
+      {
+        "team": "Sweden",
+        "played": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "gf": 5,
+        "ga": 1,
+        "gd": 4,
+        "points": 3
+      },
+      {
+        "team": "Japan",
+        "played": 1,
+        "wins": 0,
+        "draws": 1,
+        "losses": 0,
+        "gf": 2,
+        "ga": 2,
+        "gd": 0,
+        "points": 1
+      },
+      {
+        "team": "Netherlands",
+        "played": 1,
+        "wins": 0,
+        "draws": 1,
+        "losses": 0,
+        "gf": 2,
+        "ga": 2,
+        "gd": 0,
+        "points": 1
+      },
+      {
+        "team": "Tunisia",
+        "played": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "gf": 1,
+        "ga": 5,
+        "gd": -4,
+        "points": 0
+      }
+    ]
+  }
+}

@@ -1,7 +1,8 @@
 {
   "schema_version": 1,
   "matches": {
-    "2026_06_18_Switzerland_Bosnia_and_Herzegovina": "2026-06-19T12:49:05.004799+08:00"
+    "2026_06_18_Switzerland_Bosnia_and_Herzegovina": "2026-06-19T12:49:05.004799+08:00",
+    "2026_06_19_United_States_Australia": "2026-06-20T20:28:31.447374+08:00"
   },
   "portfolios": {
     "备选组合3": {
@@ -102,6 +103,51 @@
       "max_drawdown": -1200,
       "roi": -1.0,
       "win_rate": 0.0
+    },
+    "推荐组合": {
+      "matches": 1,
+      "stake": 100,
+      "profit": 66,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.66,
+      "win_rate": 1.0
+    },
+    "第2组合": {
+      "matches": 1,
+      "stake": 100,
+      "profit": 66,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.66,
+      "win_rate": 1.0
+    },
+    "第3组合": {
+      "matches": 1,
+      "stake": 100,
+      "profit": 66,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.66,
+      "win_rate": 1.0
+    },
+    "第4组合": {
+      "matches": 1,
+      "stake": 100,
+      "profit": 66,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.66,
+      "win_rate": 1.0
+    },
+    "第5组合": {
+      "matches": 1,
+      "stake": 100,
+      "profit": 66,
+      "wins": 1,
+      "max_drawdown": 0,
+      "roi": 0.66,
+      "win_rate": 1.0
     }
   }
 }
