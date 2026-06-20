@@ -2,6 +2,8 @@
 
 ## 2026-06-21
 
+- Added `SCENARIO_ENGINE_AUTOMATION_PLAN.md` to define a read-only automation plan for repeatable Scenario Engine reporting.
+- Defined Scenario Engine automation inputs, outputs, workflow, data dependencies, degraded mode, Recommendation Auditor handoff, future Portfolio Ranking fields, and risk controls.
 - Added `SCENARIO_ENGINE_PROTOTYPE_REPORT.md`, a v0.1 Scenario Engine sample report for Germany vs Ivory Coast using existing local data only.
 - Added `SCENARIO_ENGINE_V1_PLAN.md` to define Scenario Engine v1.
 - Designed Main, Secondary, and Upset Scenario structures, asset mapping rules, Scenario Consistency Score, Recommendation Auditor collaboration, and Portfolio Ranking integration.

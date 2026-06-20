@@ -175,6 +175,33 @@
   - `docs/CHANGELOG.md`
   - `docs/QA_REPORT.md`
 
+## 2026-06-21 Scenario Engine Read-Only Automation Plan
+
+## Scope
+
+- Designed the read-only automation plan for repeatable Scenario Engine reporting.
+- Added `SCENARIO_ENGINE_AUTOMATION_PLAN.md`.
+- Updated `docs/CHANGELOG.md`.
+- No implementation code was written.
+- No business code, UI, recommendation logic, Portfolio Ranking logic, data file, branch operation, Git commit, push, app run, API refresh, or product automation was performed.
+
+## Checks
+
+- Read `SCENARIO_ENGINE_V1_PLAN.md`.
+- Read `SCENARIO_ENGINE_PROTOTYPE_REPORT.md`.
+- Read `RECOMMENDATION_AUDITOR_PLAN.md`.
+- Confirmed automation is specified as read-only.
+- Confirmed allowed output is limited to report files.
+- Confirmed missing-field degraded mode is defined.
+- Confirmed Recommendation Auditor handoff and future Portfolio Ranking fields are defined.
+
+## Result
+
+- Passed. Final Git status shows only documentation changes:
+  - `SCENARIO_ENGINE_AUTOMATION_PLAN.md`
+  - `docs/CHANGELOG.md`
+  - `docs/QA_REPORT.md`
+
 ## Required QA For Future Development
 
 - Every development task must update this file.
