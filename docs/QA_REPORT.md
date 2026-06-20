@@ -202,6 +202,57 @@
   - `docs/CHANGELOG.md`
   - `docs/QA_REPORT.md`
 
+## 2026-06-21 Scenario Engine Read-Only Script v0.1
+
+## Scope
+
+- Implemented `scripts/generate_scenario_engine_report.py`.
+- Ran the script once.
+- Generated `SCENARIO_ENGINE_REPORT.md`.
+- Updated `docs/CHANGELOG.md`.
+- No business code, UI, recommendation logic, Portfolio Ranking logic, data file, branch operation, Git commit, push, API refresh, or Streamlit app run was performed.
+
+## Checks
+
+- Confirmed current branch is `dev`.
+- Confirmed the working tree was clean before implementation.
+- Confirmed the script reads only local saved files for Germany vs Ivory Coast.
+- Confirmed the script restricts v0.1 output to `SCENARIO_ENGINE_REPORT.md`.
+- Confirmed report includes Match, Source Snapshot Summary, Main Scenario, Secondary Scenario, Upset Scenario, Asset Mapping, Scenario Consistency Score, Score Breakdown, Recommendation Auditor Handoff, Portfolio Ranking Implication, and Automation Verdict.
+
+## Result
+
+- Passed. Final Git status shows only the read-only script, generated report, and governance documentation changes:
+  - `scripts/generate_scenario_engine_report.py`
+  - `SCENARIO_ENGINE_REPORT.md`
+  - `docs/CHANGELOG.md`
+  - `docs/QA_REPORT.md`
+
+## 2026-06-21 Scenario Engine Asset Mapping Correction
+
+## Scope
+
+- Corrected Scenario Engine read-only script asset mapping for high-score correct-score bets.
+- Regenerated `SCENARIO_ENGINE_REPORT.md`.
+- Updated `docs/CHANGELOG.md`.
+- No business code, UI, recommendation logic, Portfolio Ranking logic, data file, branch operation, Git commit, push, API refresh, or Streamlit app run was performed.
+
+## Checks
+
+- Confirmed `2:0`, `3:0`, and `3:1` remain Main Scenario Return Assets.
+- Confirmed `4:0`, `4:1`, and `4:2` are marked as Aggressive Return Asset / Tail Upside.
+- Confirmed `5:0`, `5:1`, `5:2`, and `5:3` are marked as Tail Asset / Extreme Upside.
+- Confirmed new Scenario Consistency Score is 82 / 100.
+- Confirmed high-score correct scores no longer act as core Main Scenario evidence.
+
+## Result
+
+- Passed. Final Git status shows only the allowed script, generated report, and governance documentation changes:
+  - `scripts/generate_scenario_engine_report.py`
+  - `SCENARIO_ENGINE_REPORT.md`
+  - `docs/CHANGELOG.md`
+  - `docs/QA_REPORT.md`
+
 ## Required QA For Future Development
 
 - Every development task must update this file.
