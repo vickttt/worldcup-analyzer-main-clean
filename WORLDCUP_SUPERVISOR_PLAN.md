@@ -8,12 +8,16 @@ WorldCup Supervisor does not change business code, does not create branches, doe
 
 ## Responsibilities
 
-WorldCup Supervisor must perform four daily duties:
+WorldCup Supervisor must perform these duties:
 
-1. Check project status.
-2. Read the required governance files.
-3. Generate `docs/DAILY_REPORT.md`.
-4. Report governance risks and recommended next actions.
+1. Read `docs/GPT_CONTEXT.md`.
+2. Read `docs/TASK_QUEUE.md`.
+3. Read `docs/KNOWN_BUGS.md`.
+4. Generate `docs/DAILY_REPORT.md`.
+5. Check whether development is happening on `main`.
+6. Check whether `docs/CHANGELOG.md` is updated for the latest work.
+7. Check whether uncommitted changes exist.
+8. Recommend the next development step.
 
 ## Required Inputs
 
@@ -22,10 +26,10 @@ WorldCup Supervisor must read these files before producing any report:
 - `docs/GPT_CONTEXT.md`
 - `docs/TASK_QUEUE.md`
 - `docs/KNOWN_BUGS.md`
-- `AGENTS.md`
 
 Recommended additional reads:
 
+- `AGENTS.md`
 - `docs/PRODUCT_PRINCIPLES.md`
 - `docs/CHANGELOG.md`
 - `docs/QA_REPORT.md`
@@ -97,7 +101,9 @@ Current expected priority order:
 
 ## Daily Report Output
 
-Supervisor must generate `docs/DAILY_REPORT.md` using this structure:
+Supervisor must generate `docs/DAILY_REPORT.md`. If a caller refers to `DAILY_REPORT.md` without a directory, treat that as `docs/DAILY_REPORT.md` for this project.
+
+Use this structure:
 
 ```markdown
 # Daily Report
@@ -201,4 +207,3 @@ WorldCup Supervisor is ready when:
 - The changelog and task queue sync checks are defined.
 - The agent boundaries are explicit.
 - No business code changes are required.
-

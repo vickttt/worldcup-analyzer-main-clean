@@ -2,6 +2,8 @@
 
 ## 2026-06-21
 
+- Ran WorldCup Supervisor once and regenerated `docs/DAILY_REPORT.md`.
+- Refined `WORLDCUP_SUPERVISOR_PLAN.md` so the Supervisor responsibilities directly match the requested project-manager duties.
 - Added `WORLDCUP_SUPERVISOR_PLAN.md` to define the WorldCup Supervisor project-manager agent.
 - Defined daily governance checks, required reads, daily report format, main-branch warning, changelog check, and task queue sync rules.
 - Initialized project governance documentation under `docs/`.
