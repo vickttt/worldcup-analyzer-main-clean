@@ -2,6 +2,9 @@
 
 ## 2026-06-21
 
+- Implemented Visible Shadow Mode MVP in `app.py`.
+- Portfolio Ranking now displays only `Scenario Rank` and `Shadow Verdict` from `strategy["shadow"]`.
+- Attached Shadow metadata after the existing Legacy score sort so Legacy Ranking order, scores, recommendation logic, default recommendation, and data files remain unchanged.
 - Implemented Shadow Metadata v0.1 as a metadata-only helper in `modules/shadow_metadata.py`.
 - Added `scripts/generate_shadow_metadata_report.py` to validate `strategy["shadow"]` generation on Germany vs Ivory Coast, Scotland vs Morocco, and Brazil vs Haiti saved snapshots.
 - Generated `SHADOW_METADATA_REPORT.md`.

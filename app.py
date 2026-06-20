@@ -66,6 +66,7 @@ from modules.user_odds import (
 from modules.value_model import analyze_value
 from modules.weather_client import weather_for_fixture
 from modules.perf_logger import perf_timer, read_recent_events
+from modules.shadow_metadata import attach_shadow_metadata
 from modules.worldcup_db import (
     db_api_football_data,
     db_odds,
@@ -4484,8 +4485,11 @@ def portfolio_ranking_rows(strategies, baseline=None):
     rows = []
     for index, strategy in enumerate(strategies or [], start=1):
         metrics = strategy.get("metrics") or {}
+        shadow = strategy.get("shadow") or {}
         rows.append({
             "组合名称": normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1),
+            "Scenario Rank": shadow.get("scenario_rank", "-"),
+            "Shadow Verdict": shadow.get("shadow_verdict", "-"),
             "主剧本": strategy_main_script(strategy),
             "让球资产": strategy_asset_names(strategy, "handicap"),
             "大小球资产": strategy_asset_names(strategy, "total"),
@@ -4601,9 +4605,14 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None)
         if my_strategy:
             comparison.append(my_strategy)
         comparison = sorted(comparison, key=lambda item: item.get("score", 0), reverse=True)
+        comparison = attach_shadow_metadata(comparison, match, distribution)
         shown = comparison[:6]
         if my_strategy and all(item.get("code") != "my_portfolio" for item in shown):
-            shown = shown[:5] + [my_strategy]
+            shadowed_my_strategy = next(
+                (item for item in comparison if item.get("code") == "my_portfolio"),
+                my_strategy,
+            )
+            shown = shown[:5] + [shadowed_my_strategy]
         baseline = strategies[0] if strategies else None
         st.dataframe(pd.DataFrame(portfolio_ranking_rows(shown, baseline)), use_container_width=True, hide_index=True)
         if my_strategy:

@@ -358,3 +358,27 @@
 ## Result
 
 - Passed. Shadow Metadata v0.1 is available for report-only validation.
+
+## 2026-06-21 Visible Shadow Mode MVP Implementation
+
+## Scope
+
+- Implemented the minimum Visible Shadow Mode display in Portfolio Ranking.
+- Added only `Scenario Rank` and `Shadow Verdict` columns.
+- The Portfolio Ranking table reads only `strategy.get("shadow") or {}` for Shadow fields.
+- Missing Shadow metadata displays `-`.
+- No Scenario Score, Tail Exposure, Rank Difference, Conflict Flags, or Scenario Rank Reason is displayed.
+- No Legacy Ranking sort, default recommendation, score, recommendation logic, data file, branch operation, Git commit, push, API refresh, or Streamlit app run was performed.
+
+## Checks
+
+- Confirmed current branch is `dev`.
+- Confirmed initial working tree only had the prior `VISIBLE_SHADOW_MODE_MVP_PLAN.md` documentation file.
+- Confirmed the existing `comparison = sorted(... score ...)` Legacy Ranking sort remains unchanged.
+- Confirmed `attach_shadow_metadata(...)` runs after Legacy Ranking sorting.
+- Confirmed displayed Portfolio rows read only `strategy["shadow"]` fields for `Scenario Rank` and `Shadow Verdict`.
+- Ran `python3 -m py_compile app.py modules/shadow_metadata.py`.
+
+## Result
+
+- Passed. Visible Shadow Mode MVP is implemented as display-only metadata and does not change ranking, recommendations, scores, or data files.
