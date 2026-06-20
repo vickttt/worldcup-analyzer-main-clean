@@ -4489,7 +4489,7 @@ def portfolio_ranking_rows(strategies, baseline=None):
         rows.append({
             "组合名称": normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1),
             "Scenario Rank": shadow.get("scenario_rank", "-"),
-            "Shadow Verdict": shadow.get("shadow_verdict", "-"),
+            "Shadow Verdict": shadow_verdict_label(shadow.get("shadow_verdict")),
             "主剧本": strategy_main_script(strategy),
             "让球资产": strategy_asset_names(strategy, "handicap"),
             "大小球资产": strategy_asset_names(strategy, "total"),
@@ -4501,6 +4501,16 @@ def portfolio_ranking_rows(strategies, baseline=None):
             "综合评分": strategy.get("score", "-"),
         })
     return rows
+
+
+def shadow_verdict_label(verdict):
+    labels = {
+        "Agreement": "一致",
+        "Watch": "观察",
+        "Disagreement": "分歧",
+        "Blocker Candidate": "高风险观察",
+    }
+    return labels.get(verdict, "-")
 
 
 def strategy_difference_rows(strategy, baseline):
@@ -4600,6 +4610,7 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None)
 
     with perf_timer("detail", "render_portfolio_ranking", {"shown": min(6, len(strategies)), "total": len(strategies)}):
         st.markdown("**组合排行**")
+        st.caption("Legacy 排名仍为正式排序；Scenario Rank 仅供观察，不影响推荐。")
         my_strategy = evaluated_my_portfolio_strategy(my_portfolio, match, distribution)
         comparison = list(strategies)
         if my_strategy:

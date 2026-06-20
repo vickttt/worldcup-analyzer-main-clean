@@ -382,3 +382,28 @@
 ## Result
 
 - Passed. Visible Shadow Mode MVP is implemented as display-only metadata and does not change ranking, recommendations, scores, or data files.
+
+## 2026-06-21 Visible Shadow Mode MVP Display Refinement
+
+## Scope
+
+- Added one Portfolio Ranking caption: `Legacy 排名仍为正式排序；Scenario Rank 仅供观察，不影响推荐。`
+- Localized `Shadow Verdict` display values:
+  - `Agreement` -> `一致`
+  - `Watch` -> `观察`
+  - `Disagreement` -> `分歧`
+  - `Blocker Candidate` -> `高风险观察`
+- Kept the MVP display limited to `Scenario Rank` and `Shadow Verdict`.
+- Did not display Scenario Score, Tail Exposure, Rank Difference, Conflict Flags, or Scenario Rank Reason.
+- No Legacy Ranking sort, default recommendation, score, recommendation logic, `strategy_score(...)`, `evaluate_allocation(...)`, `strategy_comparison(...)`, data file, branch operation, Git commit, push, or API refresh was changed.
+
+## Checks
+
+- Confirmed Portfolio Ranking still sorts by Legacy `score` before Shadow metadata is attached.
+- Confirmed `portfolio_ranking_rows(...)` still reads only `strategy.get("shadow") or {}` for Shadow fields.
+- Confirmed missing Shadow verdict displays `-`.
+- Ran `python3 -m py_compile app.py modules/shadow_metadata.py`.
+
+## Result
+
+- Passed. Visible Shadow Mode MVP display copy is refined without changing ranking, recommendations, scores, or data files.

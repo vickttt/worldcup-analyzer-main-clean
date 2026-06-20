@@ -2,6 +2,9 @@
 
 ## 2026-06-21
 
+- Refined Visible Shadow Mode MVP display copy.
+- Added Portfolio Ranking caption: Legacy ranking remains official; Scenario Rank is observation-only and does not affect recommendations.
+- Localized `Shadow Verdict` display values to Chinese while keeping only the two MVP columns.
 - Implemented Visible Shadow Mode MVP in `app.py`.
 - Portfolio Ranking now displays only `Scenario Rank` and `Shadow Verdict` from `strategy["shadow"]`.
 - Attached Shadow metadata after the existing Legacy score sort so Legacy Ranking order, scores, recommendation logic, default recommendation, and data files remain unchanged.
