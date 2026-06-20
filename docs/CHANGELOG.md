@@ -2,6 +2,10 @@
 
 ## 2026-06-21
 
+- Implemented Shadow Metadata v0.1 as a metadata-only helper in `modules/shadow_metadata.py`.
+- Added `scripts/generate_shadow_metadata_report.py` to validate `strategy["shadow"]` generation on Germany vs Ivory Coast, Scotland vs Morocco, and Brazil vs Haiti saved snapshots.
+- Generated `SHADOW_METADATA_REPORT.md`.
+- Added only in-memory `strategy["shadow"]` fields during report generation; did not change Legacy Ranking, scores, recommendation logic, UI, or data files.
 - Added `INTEGRATION_PLAN_V1.md` to design Scenario Engine, Recommendation Auditor, and Portfolio Ranking 2.0 integration points.
 - Mapped current data, recommendation logic, ranking, UI entry points, phased implementation order, and integration risks.
 - Added `PORTFOLIO_RANKING_V2_PLAN.md` to define scenario-aware Portfolio Ranking 2.0.

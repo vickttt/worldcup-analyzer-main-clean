@@ -334,3 +334,27 @@
 - Every development task must update this file.
 - Recommendation logic changes must include path consistency checks.
 - Portfolio Ranking changes must verify scenario consistency and user decision efficiency.
+
+## 2026-06-21 Shadow Metadata v0.1 Implementation
+
+## Scope
+
+- Implemented `attach_shadow_metadata(...)` as a metadata-only helper.
+- Added a read-only validation report script.
+- Generated `SHADOW_METADATA_REPORT.md`.
+- No UI, Legacy Ranking sort, recommendation logic, `strategy_score(...)`, `evaluate_allocation(...)`, data file, branch operation, Git commit, push, API refresh, or Streamlit app run was performed.
+
+## Checks
+
+- Ran `python3 scripts/generate_shadow_metadata_report.py`.
+- Ran `python3 -m py_compile modules/shadow_metadata.py scripts/generate_shadow_metadata_report.py`.
+- Validated Germany vs Ivory Coast from `data/history/2026_06_20_Germany_Ivory_Coast_pre.json`.
+- Validated Scotland vs Morocco from `data/history/2026_06_20_Scotland_Morocco_pre.json`.
+- Validated Brazil vs Haiti from `data/history/2026_06_20_Brazil_Haiti_pre.json`.
+- Confirmed every strategy in all three snapshots received `strategy["shadow"]`.
+- Confirmed generated fields include `legacy_rank`, `legacy_score`, `scenario_rank`, `scenario_score`, `rank_difference`, `shadow_verdict`, and `scenario_rank_reason`.
+- Confirmed report states Legacy order, Legacy score, recommendation logic, UI, and data files were not changed.
+
+## Result
+
+- Passed. Shadow Metadata v0.1 is available for report-only validation.
