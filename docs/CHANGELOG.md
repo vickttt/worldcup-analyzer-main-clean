@@ -2,6 +2,10 @@
 
 ## 2026-06-21
 
+- Added `INTEGRATION_PLAN_V1.md` to design Scenario Engine, Recommendation Auditor, and Portfolio Ranking 2.0 integration points.
+- Mapped current data, recommendation logic, ranking, UI entry points, phased implementation order, and integration risks.
+- Added `PORTFOLIO_RANKING_V2_PLAN.md` to define scenario-aware Portfolio Ranking 2.0.
+- Designed ranking dimensions, Portfolio Score formula, guardrails, Tail Exposure handling, User Decision Complexity, and My Portfolio parity scoring.
 - Ran Recommendation Auditor v0.1 on `SCENARIO_ENGINE_REPORT.md` and generated `docs/RECOMMENDATION_AUDIT_REPORT.md`.
 - Refined Scenario Engine read-only script asset mapping so 4-goal correct scores are aggressive upside and 5-goal correct scores are tail/extreme upside, lowering the generated consistency score to 82.
 - Added `scripts/generate_scenario_engine_report.py`, a read-only Scenario Engine report generator for saved local snapshots.

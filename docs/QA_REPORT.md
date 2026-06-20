@@ -281,6 +281,54 @@
   - `docs/CHANGELOG.md`
   - `docs/QA_REPORT.md`
 
+## 2026-06-21 Portfolio Ranking 2.0 Design
+
+## Scope
+
+- Designed Portfolio Ranking 2.0.
+- Added `PORTFOLIO_RANKING_V2_PLAN.md`.
+- Updated `docs/CHANGELOG.md`.
+- No business code, UI, recommendation logic, Portfolio Ranking logic, data file, branch operation, Git commit, push, API refresh, or Streamlit app run was performed.
+
+## Checks
+
+- Read `docs/RECOMMENDATION_AUDIT_REPORT.md`.
+- Read `SCENARIO_ENGINE_REPORT.md`.
+- Read `docs/PRODUCT_PRINCIPLES.md`.
+- Confirmed the design uses Scenario Consistency Score, Asset Role Balance, Tail Exposure, User Decision Complexity, Main Scenario Coverage, and Secondary Insurance Coverage.
+- Confirmed My Portfolio uses the same scoring framework as system portfolios.
+
+## Result
+
+- Passed. Final Git status shows only Portfolio Ranking design documentation and governance documentation changes:
+  - `PORTFOLIO_RANKING_V2_PLAN.md`
+  - `docs/CHANGELOG.md`
+  - `docs/QA_REPORT.md`
+
+## 2026-06-21 Scenario Auditor Ranking Integration Plan
+
+## Scope
+
+- Designed Scenario Engine, Recommendation Auditor, and Portfolio Ranking 2.0 integration plan.
+- Added `INTEGRATION_PLAN_V1.md`.
+- Updated `docs/CHANGELOG.md`.
+- No business code, UI, recommendation logic, Portfolio Ranking logic, data file, branch operation, Git commit, push, API refresh, or Streamlit app run was performed.
+
+## Checks
+
+- Inspected current `app.py` recommendation, role, optimizer, ranking, My Portfolio, snapshot, and UI entry points.
+- Inspected current `scripts/` report/data-center script structure.
+- Confirmed plan uses phased integration to avoid changing current recommendation behavior in Phase 1.
+- Confirmed risk areas are identified before implementation.
+
+## Result
+
+- Passed. Final Git status shows only integration/ranking design documentation and governance documentation changes:
+  - `INTEGRATION_PLAN_V1.md`
+  - `PORTFOLIO_RANKING_V2_PLAN.md`
+  - `docs/CHANGELOG.md`
+  - `docs/QA_REPORT.md`
+
 ## Required QA For Future Development
 
 - Every development task must update this file.
