@@ -2,6 +2,13 @@
 
 ## 2026-06-21
 
+- Updated post-match validation dataset with 12 new `data/history/*_post.json` result files.
+- Regenerated `POST_MATCH_VALIDATION_REPORT.md` after the result update.
+- Added `VALIDATION_UPDATE_SUMMARY.md` for the validation update summary.
+- Added `SCENARIO_GUARDRAILS_REVIEW.md` after the validation count reached the 5-match promotion threshold.
+- Post-match validation metrics: 12 valid validations, Legacy Wins 3, Scenario Wins 3, Draws 6, Legacy ROI -40.8%, Scenario ROI -2.1%.
+- Promotion Status: `Enter Scenario Guardrails Phase`.
+
 - Connected standalone My Portfolio history files to post-match validation.
 - `scripts/generate_post_match_validation_report.py` now reads `data/history/my_portfolios/<match_slug>.json` before falling back to embedded pre-snapshot My Portfolio data.
 - Regenerated `POST_MATCH_VALIDATION_REPORT.md` with My Portfolio rows for Switzerland vs Bosnia and Herzegovina and United States vs Australia.

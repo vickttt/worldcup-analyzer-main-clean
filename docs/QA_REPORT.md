@@ -515,3 +515,33 @@
 ## Result
 
 - Passed. My Portfolio is now connected to post-match validation through read-only standalone history files.
+
+## 2026-06-21 Result Update And Post-Match Validation
+
+## Scope
+
+- Added 12 post-match result files under `data/history/*_post.json`.
+- Regenerated `POST_MATCH_VALIDATION_REPORT.md`.
+- Added `VALIDATION_UPDATE_SUMMARY.md`.
+- Added `SCENARIO_GUARDRAILS_REVIEW.md`.
+- Did not modify code, ranking logic, recommendation logic, UI, or existing data logic.
+
+## Validation Metrics
+
+- Valid validations: 12.
+- Legacy Wins: 3.
+- Scenario Wins: 3.
+- Draws: 6.
+- Legacy ROI: -40.8%.
+- Scenario ROI: -2.1%.
+- Promotion Status: `Enter Scenario Guardrails Phase`.
+
+## Checks
+
+- Confirmed `POST_MATCH_VALIDATION_REPORT.md` was regenerated.
+- Confirmed the validation count reached the 5-match promotion threshold.
+- Confirmed this update does not change `strategy_score(...)`, `evaluate_allocation(...)`, `strategy_comparison(...)`, sorting logic, recommendation logic, score, or UI.
+
+## Result
+
+- Passed. The project should enter Scenario Guardrails review while keeping Legacy Ranking as the official production ranking for now.

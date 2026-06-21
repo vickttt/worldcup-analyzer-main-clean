@@ -1,0 +1,107 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "post_match_snapshot",
+  "created_at": "2026-06-21T10:08:30.691351+00:00",
+  "updated_at": "2026-06-21T10:08:30.691351+00:00",
+  "match": {
+    "home": "Brazil",
+    "away": "Haiti",
+    "display": "巴西 vs 海地"
+  },
+  "fixture": {
+    "fixture_id": "29",
+    "home_team": {
+      "id": "9",
+      "name": "Brazil",
+      "logo": "https://flagcdn.com/w80/br.png"
+    },
+    "away_team": {
+      "id": "11",
+      "name": "Haiti",
+      "logo": "https://flagcdn.com/w80/ht.png"
+    },
+    "kickoff_utc": "06/19/2026 21:00",
+    "kickoff_display": "06/19/2026 21:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "C",
+    "venue_name": "Philadelphia Stadium",
+    "venue_city": "Philadelphia, United States",
+    "status": "FT",
+    "status_text": "已结束",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "model_versions": {
+    "model_version": "v1.61",
+    "probability_engine_version": "score_distribution_v1",
+    "optimizer_version": "portfolio_optimizer_v1",
+    "asset_framework_version": "multi_role_asset_framework_v1",
+    "audit_version": "prediction_audit_v1"
+  },
+  "final_score": "3:0",
+  "final_result": {
+    "home": 3,
+    "away": 0
+  },
+  "pre_match_snapshot": "data/history/2026_06_19_Brazil_Haiti_pre.json",
+  "result_source": {
+    "type": "manual_result_update",
+    "note": "Brazil defeated Haiti 3-0; verified via external Group C scenario report."
+  },
+  "probability_distribution": {
+    "available": true,
+    "favorite": "巴西",
+    "underdog": "海地",
+    "rows": [
+      {
+        "label": "巴西小胜（1球）",
+        "probability": 0.3766289026746669,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+      },
+      {
+        "label": "巴西赢2球",
+        "probability": 0.3048900640699685,
+        "meaning": "盘口边界路径，决定让球盘输赢。"
+      },
+      {
+        "label": "巴西赢3球以上",
+        "probability": 0.2152165158140954,
+        "meaning": "强队大胜路径，过去版本容易低估。"
+      },
+      {
+        "label": "平局区间",
+        "probability": 0.0828841655649344,
+        "meaning": "比赛进入低分差或胶着路径。"
+      },
+      {
+        "label": "海地不败",
+        "probability": 0.02038035187633479,
+        "meaning": "爆冷或热门方向失效路径。"
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "巴西 -1.5",
+      "lose_paths": [
+        "巴西只赢1球",
+        "平局",
+        "海地胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "巴西小胜（1球）",
+    "boundary_path": "巴西赢2球",
+    "extreme_path": "巴西赢3球以上",
+    "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+  },
+  "strategies": [],
+  "my_portfolio": {
+    "raw_text": "",
+    "items": []
+  }
+}
