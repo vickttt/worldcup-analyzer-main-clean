@@ -2,6 +2,9 @@
 
 ## 2026-06-21
 
+- Added `scripts/generate_post_match_validation_report.py` for read-only post-match validation of Legacy Top vs Scenario Top.
+- Generated `POST_MATCH_VALIDATION_REPORT.md` from existing post-match result files.
+- Added the 5-Match Promotion Rule for entering Scenario Guardrails Phase without replacing Legacy score sorting.
 - Slimmed the default Portfolio Ranking decision table.
 - Removed `让球资产`, `大小球资产`, and `波胆资产` from the main table to reduce decision noise.
 - Kept Legacy score sorting, recommendation logic, default recommendation, scores, detail dialog, and data files unchanged.

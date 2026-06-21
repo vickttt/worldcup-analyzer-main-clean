@@ -442,3 +442,43 @@
 ## Result
 
 - Passed. Portfolio Ranking main table is slimmer while preserving ranking, recommendations, scores, and data behavior.
+
+## 2026-06-21 Post-Match Validation Automation v0.1
+
+## Scope
+
+- Added read-only post-match validation automation script:
+  - `scripts/generate_post_match_validation_report.py`
+- Generated:
+  - `POST_MATCH_VALIDATION_REPORT.md`
+- The script reads existing pre-match snapshots and post-match final scores.
+- The script identifies:
+  - Legacy Top Portfolio
+  - Scenario Top Portfolio
+  - Current Recommendation
+  - My Portfolio when available
+- The script calculates:
+  - hit status
+  - P/L
+  - ROI
+  - max drawdown
+  - Legacy vs Scenario Winner
+- The report includes the 5-Match Promotion Rule and Scenario Guardrails Phase conditions.
+- Did not replace `strategy_score(...)`.
+- Did not change sorting.
+- Did not change recommendation logic.
+- Did not change default recommendation.
+- Did not modify historical data files.
+
+## Checks
+
+- Ran `python3 scripts/generate_post_match_validation_report.py`.
+- Confirmed `POST_MATCH_VALIDATION_REPORT.md` was generated.
+- Confirmed 2 post-match files were discovered.
+- Confirmed 2 valid comparisons were generated.
+- Confirmed current promotion status is `Keep Shadow Mode` because only 2 / 5 valid validations exist.
+- Ran Python syntax compilation check for `scripts/generate_post_match_validation_report.py` and `modules/shadow_metadata.py` without writing bytecode caches.
+
+## Result
+
+- Passed. Post-match validation automation v0.1 is report-only and does not change ranking, recommendations, scores, UI, or data files.
