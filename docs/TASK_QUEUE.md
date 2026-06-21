@@ -1,35 +1,31 @@
 # Task Queue
 
-## P0 项目治理与版本安全
+## P0 Commit hygiene and governance sync
 
-- 建立 AI 协作规则。
-- 建立产品原则、任务队列、已知问题、QA 报告、日报、变更记录。
-- 建立版本体检报告。
-- 建议创建 `backup-before-automation` 分支。
-- 建议创建 `dev` 分支。
+- Group current uncommitted files by theme before any further development.
+- Keep performance logs out of normal feature commits.
+- Keep historical `data/history/*_pre.json` and `data/history/my_portfolios/*.json` in separate data commits only when explicitly approved.
+- Keep `docs/CHANGELOG.md`, `docs/QA_REPORT.md`, and `docs/DAILY_REPORT.md` synchronized with completed governance and validation work.
+- Do not modify production ranking, recommendation logic, UI, or data refresh code during cleanup.
 
-## P1 Scenario Engine
+## P1 Historical odds backfill plan
 
-- 建立主剧本、次剧本、冷门剧本结构。
-- 将投注资产绑定到剧本路径。
+- Use `API_FOOTBALL_HISTORICAL_ODDS_CHECK.md` as the capability baseline.
+- Design a safe backfill pipeline that reads API-Football odds by official fixture/date, not by stale local fixture IDs.
+- Store backfilled snapshots only in an isolated directory such as `data/history/backfill/`.
+- Do not overwrite existing manual history snapshots.
+- Require `odds_timestamp < kickoff_time` before marking a snapshot as true pre-match data.
 
-## P2 Path Consistency Score
+## P2 Hybrid Ranking benchmark
 
-- 检查推荐组合内部路径是否一致。
-- 阻止明显冲突路径成为主推荐。
+- Continue Phase A report-only validation for Hybrid Ranking.
+- Compare Legacy Top, Scenario Top, and Hybrid Top across historical snapshots.
+- Use benchmark results before changing production sorting.
+- Keep `strategy_score(...)`, `evaluate_allocation(...)`, and `strategy_comparison(...)` production behavior unchanged until an explicit implementation task is approved.
 
-## P3 Portfolio Ranking 2.0
+## P3 Scenario Guardrails UI / eligibility design
 
-- 降低对 EV/ROI/Sharpe 的单点依赖。
-- 将剧本一致性、风险路径、组合解释力纳入排名。
-
-## P4 My Portfolio Audit
-
-- 对用户手动组合进行自动排名、结算和复盘。
-- 将用户组合与系统推荐组合并列审计。
-
-## P5 Team Intelligence Enhancement
-
-- 增强球队信息、阵容、伤病、近期状态和赛后验证能力。
-- 支撑推荐剧本和组合解释。
-
+- Design how Scenario Guardrails should appear in the Portfolio Ranking UI.
+- Keep Legacy ranking visible as reference during any transition.
+- Add warnings for `Shadow Verdict = Disagreement`, tail-heavy portfolios, pure-tempo portfolios, and low-consistency portfolios.
+- Do not promote Scenario or Hybrid signals into default recommendation eligibility without explicit review.
