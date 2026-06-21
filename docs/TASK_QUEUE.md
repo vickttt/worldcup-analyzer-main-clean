@@ -1,16 +1,21 @@
 # Task Queue
 
-## P0 Commit hygiene and governance sync
+## P0 Commit hygiene and GitHub agent workflow adoption
 
 - Group current uncommitted files by theme before any further development.
 - Keep performance logs out of normal feature commits.
 - Keep historical `data/history/*_pre.json` and `data/history/my_portfolios/*.json` in separate data commits only when explicitly approved.
 - Keep `docs/CHANGELOG.md`, `docs/QA_REPORT.md`, and `docs/DAILY_REPORT.md` synchronized with completed governance and validation work.
+- Use GitHub Issues as the default task source for new agent work.
+- Use Pull Requests as the default review and approval path.
+- Require GitHub Actions QA before merge once `.github/workflows/agent-qa.yml` is pushed.
 - Do not modify production ranking, recommendation logic, UI, or data refresh code during cleanup.
 
 ## P1 Historical odds backfill plan
 
 - Use `API_FOOTBALL_HISTORICAL_ODDS_CHECK.md` as the capability baseline.
+- Use `WORLD_CUP_HISTORICAL_ODDS_BACKFILL_PLAN.md` as the safety and benchmark design baseline.
+- Next implementation gate: Phase A, historical odds quality check on 3 sample matches only.
 - Design a safe backfill pipeline that reads API-Football odds by official fixture/date, not by stale local fixture IDs.
 - Store backfilled snapshots only in an isolated directory such as `data/history/backfill/`.
 - Do not overwrite existing manual history snapshots.
