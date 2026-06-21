@@ -62,30 +62,30 @@ jobs:
           set -euo pipefail
           if grep -q '^app.py$' /tmp/changed_files.txt; then
             python - <<'PY' > /tmp/ranking_function_changes.txt
-import os
-import re
-import subprocess
-from pathlib import Path
+          import os
+          import re
+          import subprocess
+          from pathlib import Path
 
-base_ref = os.environ["BASE_REF"]
-functions = ["strategy_score", "strategy_comparison", "evaluate_allocation"]
-head_text = Path("app.py").read_text(encoding="utf-8")
-base_text = subprocess.check_output(["git", "show", f"{base_ref}:app.py"], text=True)
+          base_ref = os.environ["BASE_REF"]
+          functions = ["strategy_score", "strategy_comparison", "evaluate_allocation"]
+          head_text = Path("app.py").read_text(encoding="utf-8")
+          base_text = subprocess.check_output(["git", "show", f"{base_ref}:app.py"], text=True)
 
-def extract_function(text, name):
-    pattern = re.compile(rf"^def {re.escape(name)}\(", re.M)
-    match = pattern.search(text)
-    if not match:
-        return ""
-    start = match.start()
-    next_match = re.search(r"^def |\nclass ", text[match.end():], re.M)
-    end = match.end() + next_match.start() if next_match else len(text)
-    return text[start:end]
+          def extract_function(text, name):
+              pattern = re.compile(rf"^def {re.escape(name)}\(", re.M)
+              match = pattern.search(text)
+              if not match:
+                  return ""
+              start = match.start()
+              next_match = re.search(r"^def |\nclass ", text[match.end():], re.M)
+              end = match.end() + next_match.start() if next_match else len(text)
+              return text[start:end]
 
-for fn in functions:
-    if extract_function(base_text, fn) != extract_function(head_text, fn):
-        print(fn)
-PY
+          for fn in functions:
+              if extract_function(base_text, fn) != extract_function(head_text, fn):
+                  print(fn)
+          PY
           fi
 
           if [[ -s /tmp/ranking_function_changes.txt ]]; then
