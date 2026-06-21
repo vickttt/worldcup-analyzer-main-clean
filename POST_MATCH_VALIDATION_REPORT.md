@@ -5,6 +5,7 @@ Date: 2026-06-21
 ## Scope
 
 - Reads existing pre-match snapshots and post-match final scores.
+- Reads standalone My Portfolio history files from `data/history/my_portfolios/` when available.
 - Settles Legacy Top, Scenario Top, Current Recommendation, and My Portfolio when available.
 - Generates this report only.
 - Does not modify sorting, recommendation logic, scores, UI, or data files.
@@ -23,12 +24,14 @@ Date: 2026-06-21
 - Legacy Top Portfolio: 推荐组合（当前最优）
 - Scenario Top Portfolio: 备选组合4
 - Current Recommendation: 推荐组合（当前最优）
+- My Portfolio source: `data/history/my_portfolios/2026_06_18_Switzerland_Bosnia_and_Herzegovina.json`
 
 | Portfolio | Type | Legacy Rank | Scenario Rank | Shadow Verdict | Hit | P/L | ROI | Max Drawdown |
 | --- | --- | ---: | ---: | --- | --- | ---: | ---: | ---: |
 | 推荐组合（当前最优） | Legacy Top | 1 | 3 | Watch | hit | +906 | 75.5% | -0 |
 | 备选组合4 | Scenario Top | 5 | 1 | Disagreement | hit | +660 | 55.0% | -0 |
 | 推荐组合（当前最优） | Current Recommendation | 1 | 3 | Watch | hit | +906 | 75.5% | -0 |
+| My Portfolio | My Portfolio | - | - | - | miss | -1500 | -100.0% | -1500 |
 
 ### Legacy vs Scenario
 
@@ -44,12 +47,14 @@ Date: 2026-06-21
 - Legacy Top Portfolio: 推荐组合（当前最优）
 - Scenario Top Portfolio: 推荐组合（当前最优）
 - Current Recommendation: 推荐组合（当前最优）
+- My Portfolio source: `data/history/my_portfolios/2026_06_19_United_States_Australia.json`
 
 | Portfolio | Type | Legacy Rank | Scenario Rank | Shadow Verdict | Hit | P/L | ROI | Max Drawdown |
 | --- | --- | ---: | ---: | --- | --- | ---: | ---: | ---: |
 | 推荐组合（当前最优） | Legacy Top | 1 | 1 | Agreement | hit | +66 | 66.0% | -0 |
 | 推荐组合（当前最优） | Scenario Top | 1 | 1 | Agreement | hit | +66 | 66.0% | -0 |
 | 推荐组合（当前最优） | Current Recommendation | 1 | 1 | Agreement | hit | +66 | 66.0% | -0 |
+| My Portfolio | My Portfolio | - | - | - | hit | +858 | 57.2% | -0 |
 
 ### Legacy vs Scenario
 

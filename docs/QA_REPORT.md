@@ -482,3 +482,36 @@
 ## Result
 
 - Passed. Post-match validation automation v0.1 is report-only and does not change ranking, recommendations, scores, UI, or data files.
+
+## 2026-06-21 Connect My Portfolio To Post-Match Validation v0.1
+
+## Scope
+
+- Updated `scripts/generate_post_match_validation_report.py` to read standalone My Portfolio history files.
+- The script now checks `data/history/my_portfolios/<match_slug>.json` first.
+- If standalone My Portfolio data exists and has non-empty `items`, the report uses it.
+- If standalone My Portfolio data is missing or empty, the script falls back to `pre_snapshot["my_portfolio"]`.
+- Regenerated `POST_MATCH_VALIDATION_REPORT.md`.
+- Did not modify historical data files.
+- Did not change ranking, sorting, recommendation logic, score, UI, or `strategy_score(...)`.
+
+## Checks
+
+- Ran `python3 scripts/generate_post_match_validation_report.py`.
+- Confirmed `POST_MATCH_VALIDATION_REPORT.md` includes My Portfolio rows.
+- Confirmed Switzerland vs Bosnia and Herzegovina includes My Portfolio:
+  - Hit: `miss`
+  - P/L: `-1500`
+  - ROI: `-100.0%`
+  - Max Drawdown: `-1500`
+- Confirmed United States vs Australia includes My Portfolio:
+  - Hit: `hit`
+  - P/L: `+858`
+  - ROI: `57.2%`
+  - Max Drawdown: `-0`
+- Confirmed My Portfolio sources are listed from `data/history/my_portfolios/`.
+- Ran Python syntax compilation check for `scripts/generate_post_match_validation_report.py` and `modules/shadow_metadata.py` without writing bytecode caches.
+
+## Result
+
+- Passed. My Portfolio is now connected to post-match validation through read-only standalone history files.

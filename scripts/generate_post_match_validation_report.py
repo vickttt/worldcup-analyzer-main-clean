@@ -18,6 +18,7 @@ from modules.shadow_metadata import attach_shadow_metadata
 
 REPORT_PATH = ROOT / "POST_MATCH_VALIDATION_REPORT.md"
 HISTORY_DIR = ROOT / "data/history"
+MY_PORTFOLIOS_DIR = HISTORY_DIR / "my_portfolios"
 MATERIAL_ROI_GAP = 0.02
 
 
@@ -195,6 +196,37 @@ def pre_snapshot_path(post_path: Path, post_snapshot: dict[str, Any]) -> Path | 
     return None
 
 
+def match_slug_from_path(path: Path) -> str:
+    name = path.name
+    for suffix in ("_pre.json", "_post.json", ".json"):
+        if name.endswith(suffix):
+            return name[: -len(suffix)]
+    return path.stem
+
+
+def my_portfolio_path_candidates(pre_path: Path, post_path: Path, post_snapshot: dict[str, Any]) -> list[Path]:
+    slugs = [match_slug_from_path(pre_path), match_slug_from_path(post_path)]
+    raw = post_snapshot.get("pre_match_snapshot")
+    if raw:
+        slugs.append(match_slug_from_path(Path(str(raw))))
+
+    candidates: list[Path] = []
+    for slug in dict.fromkeys(slugs):
+        candidates.append(MY_PORTFOLIOS_DIR / f"{slug}.json")
+    return candidates
+
+
+def load_standalone_my_portfolio(pre_path: Path, post_path: Path, post_snapshot: dict[str, Any]) -> tuple[dict[str, Any] | None, Path | None]:
+    for candidate in my_portfolio_path_candidates(pre_path, post_path, post_snapshot):
+        if not candidate.exists():
+            continue
+        my_portfolio = load_json(candidate)
+        items = my_portfolio.get("items") if isinstance(my_portfolio, dict) else None
+        if items:
+            return my_portfolio, candidate
+    return None, None
+
+
 def strategies_from_pre_snapshot(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
     strategies = (snapshot.get("strategy_snapshot") or {}).get("strategies")
     if not isinstance(strategies, list):
@@ -202,8 +234,8 @@ def strategies_from_pre_snapshot(snapshot: dict[str, Any]) -> list[dict[str, Any
     return [strategy for strategy in strategies if isinstance(strategy, dict)]
 
 
-def my_portfolio_strategy(snapshot: dict[str, Any]) -> dict[str, Any] | None:
-    my_portfolio = snapshot.get("my_portfolio") or {}
+def my_portfolio_strategy(my_portfolio: dict[str, Any] | None) -> dict[str, Any] | None:
+    my_portfolio = my_portfolio or {}
     items = my_portfolio.get("items") if isinstance(my_portfolio, dict) else None
     if not items:
         return None
@@ -265,7 +297,10 @@ def validation_for_post(post_path: Path) -> dict[str, Any]:
     legacy_top = shadowed[0]
     scenario_top = min(shadowed, key=lambda item: (item.get("shadow") or {}).get("scenario_rank", 999))
     current_recommendation = pick_current_recommendation(shadowed)
-    my_strategy = my_portfolio_strategy(pre_snapshot)
+    standalone_my_portfolio, standalone_my_portfolio_path = load_standalone_my_portfolio(pre_path, post_path, post_snapshot)
+    embedded_my_portfolio = pre_snapshot.get("my_portfolio") if isinstance(pre_snapshot.get("my_portfolio"), dict) else {}
+    my_portfolio_source = standalone_my_portfolio_path or "pre_snapshot.my_portfolio"
+    my_strategy = my_portfolio_strategy(standalone_my_portfolio or embedded_my_portfolio)
 
     selected = [
         ("Legacy Top", legacy_top),
@@ -311,6 +346,7 @@ def validation_for_post(post_path: Path) -> dict[str, Any]:
         "legacy_top": portfolio_name(legacy_top),
         "scenario_top": portfolio_name(scenario_top),
         "current_recommendation": portfolio_name(current_recommendation),
+        "my_portfolio_source": str(Path(my_portfolio_source).relative_to(ROOT)) if isinstance(my_portfolio_source, Path) else my_portfolio_source,
         "portfolios": portfolios,
         "legacy_vs_scenario": result,
         "legacy_vs_scenario_reason": reason,
@@ -427,6 +463,7 @@ def build_report() -> str:
         "## Scope",
         "",
         "- Reads existing pre-match snapshots and post-match final scores.",
+        "- Reads standalone My Portfolio history files from `data/history/my_portfolios/` when available.",
         "- Settles Legacy Top, Scenario Top, Current Recommendation, and My Portfolio when available.",
         "- Generates this report only.",
         "- Does not modify sorting, recommendation logic, scores, UI, or data files.",
@@ -462,6 +499,7 @@ def build_report() -> str:
                 f"- Legacy Top Portfolio: {item['legacy_top']}",
                 f"- Scenario Top Portfolio: {item['scenario_top']}",
                 f"- Current Recommendation: {item['current_recommendation']}",
+                f"- My Portfolio source: `{item['my_portfolio_source']}`",
                 "",
                 *portfolio_table(item["portfolios"]),
                 "",

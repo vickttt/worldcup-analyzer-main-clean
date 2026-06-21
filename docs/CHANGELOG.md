@@ -2,6 +2,9 @@
 
 ## 2026-06-21
 
+- Connected standalone My Portfolio history files to post-match validation.
+- `scripts/generate_post_match_validation_report.py` now reads `data/history/my_portfolios/<match_slug>.json` before falling back to embedded pre-snapshot My Portfolio data.
+- Regenerated `POST_MATCH_VALIDATION_REPORT.md` with My Portfolio rows for Switzerland vs Bosnia and Herzegovina and United States vs Australia.
 - Added `scripts/generate_post_match_validation_report.py` for read-only post-match validation of Legacy Top vs Scenario Top.
 - Generated `POST_MATCH_VALIDATION_REPORT.md` from existing post-match result files.
 - Added the 5-Match Promotion Rule for entering Scenario Guardrails Phase without replacing Legacy score sorting.
