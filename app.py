@@ -4486,10 +4486,13 @@ def portfolio_ranking_rows(strategies, baseline=None):
     for index, strategy in enumerate(strategies or [], start=1):
         metrics = strategy.get("metrics") or {}
         shadow = strategy.get("shadow") or {}
+        hybrid_v2 = strategy.get("hybrid_v2") or {}
         rows.append({
             "组合名称": normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1),
             "Scenario Rank": shadow.get("scenario_rank", "-"),
             "Shadow Verdict": shadow_verdict_label(shadow.get("shadow_verdict")),
+            "Sleeve %": hybrid_v2_sleeve_share_label(hybrid_v2.get("sleeve_share")),
+            "Sleeve Status": hybrid_v2_status_label(hybrid_v2.get("sleeve_status")),
             "主剧本": strategy_main_script(strategy),
             "EV": f"{int(metrics.get('expected_profit', strategy.get('expected_profit', 0))):+d}元",
             "ROI": percent(metrics.get("expected_yield", strategy.get("expected_yield", 0))),
@@ -4508,6 +4511,107 @@ def shadow_verdict_label(verdict):
         "Blocker Candidate": "高风险观察",
     }
     return labels.get(verdict, "-")
+
+
+def hybrid_v2_sleeve_share_label(value):
+    if value is None:
+        return "-"
+    try:
+        return f"{float(value) * 100:.0f}%"
+    except (TypeError, ValueError):
+        return "-"
+
+
+def hybrid_v2_status_label(status):
+    labels = {
+        "Scenario-Supported Aggressive Upside": "剧本支持上行",
+        "Watch: Small Upside Sleeve": "小仓观察",
+        "Uncontrolled Tail": "无控制尾部",
+        "Blocked Tail": "尾部阻断",
+        "No Sleeve": "无上行袖仓",
+    }
+    return labels.get(status, "-")
+
+
+def portfolio_display_name(strategy):
+    return strategy.get("rank_name") or strategy.get("name") or "-"
+
+
+def hybrid_v2_sleeve_share(match, distribution):
+    sample_type = str((match or {}).get("sample_type") or "")
+    main_path = str((distribution or {}).get("main_path") or "")
+    if "低比分" in sample_type or "平局" in main_path:
+        return 0.05
+    if "冷门风险" in sample_type or "不败" in main_path:
+        return 0.10
+    if "强队深盘" in sample_type and "高比分" in sample_type:
+        return 0.20
+    if "高比分" in sample_type or "3球以上" in main_path:
+        return 0.20
+    if "强队深盘" in sample_type:
+        return 0.15
+    return 0.15
+
+
+def hybrid_v2_sleeve_status(match, distribution, sleeve_share):
+    sample_type = str((match or {}).get("sample_type") or "")
+    main_path = str((distribution or {}).get("main_path") or "")
+    if sleeve_share <= 0:
+        return "No Sleeve"
+    if "低比分" in sample_type or "平局" in main_path:
+        return "Watch: Small Upside Sleeve"
+    if "冷门风险" in sample_type or "不败" in main_path:
+        return "Watch: Small Upside Sleeve"
+    if "高比分" in sample_type or "强队深盘" in sample_type or "3球以上" in main_path:
+        return "Scenario-Supported Aggressive Upside"
+    return "Watch: Small Upside Sleeve"
+
+
+def hybrid_v2_sleeve_reason(match, distribution, sleeve_share):
+    sample_type = str((match or {}).get("sample_type") or "")
+    main_path = str((distribution or {}).get("main_path") or "")
+    if "低比分" in sample_type or "平局" in main_path:
+        return "低比分或胶着路径，只保留小仓观察，不影响正式推荐。"
+    if "冷门风险" in sample_type or "不败" in main_path:
+        return "存在冷门/不败路径，上行袖仓仅作为小仓观察。"
+    if "高比分" in sample_type and "强队深盘" in sample_type:
+        return "强队深盘且存在高比分路径，允许受限进攻上行观察。"
+    if "高比分" in sample_type or "3球以上" in main_path:
+        return "高比分路径下观察受限上行袖仓，用于避免完全错过进攻收益。"
+    if "强队深盘" in sample_type:
+        return "强队深盘路径下观察打穿盘口的受限上行暴露。"
+    return "Hybrid v0.2 观察用袖仓，不影响正式排序或推荐。"
+
+
+def attach_hybrid_v2_visible_metadata(strategies, match, distribution):
+    if not strategies:
+        return strategies
+    core = min(strategies, key=lambda item: (item.get("shadow") or {}).get("scenario_rank", 999))
+    sleeve = next((item for item in strategies if "Tail Upside" in str(portfolio_display_name(item))), None)
+    legacy_tail = next((item for item in strategies if "Legacy Value" in str(portfolio_display_name(item))), None)
+    sleeve_share = hybrid_v2_sleeve_share(match, distribution)
+    sleeve_status = hybrid_v2_sleeve_status(match, distribution, sleeve_share)
+    sleeve_reason = hybrid_v2_sleeve_reason(match, distribution, sleeve_share)
+    core_name = portfolio_display_name(core)
+    sleeve_name = portfolio_display_name(sleeve) if sleeve else "-"
+    legacy_tail_name = portfolio_display_name(legacy_tail) if legacy_tail else "-"
+
+    for strategy in strategies:
+        name = portfolio_display_name(strategy)
+        is_legacy_tail = legacy_tail is not None and strategy is legacy_tail
+        strategy["hybrid_v2"] = {
+            "core_portfolio": core_name,
+            "upside_sleeve": sleeve_name,
+            "legacy_tail_heavy_portfolio": legacy_tail_name,
+            "sleeve_share": 1.0 if is_legacy_tail else sleeve_share,
+            "sleeve_status": "Blocked Tail" if is_legacy_tail else sleeve_status,
+            "sleeve_reason": (
+                "Legacy Tail-Heavy 可能捕捉更高收益，但回撤显著更大；本阶段仅观察。"
+                if is_legacy_tail
+                else sleeve_reason
+            ),
+        }
+    return strategies
 
 
 def strategy_difference_rows(strategy, baseline):
@@ -4583,11 +4687,22 @@ def render_strategy_detail_dialog(strategy, index, match, distribution, baseline
     @st.dialog(f"{name}详情")
     def show_detail():
         metrics = strategy.get("metrics") or {}
+        hybrid_v2 = strategy.get("hybrid_v2") or {}
         if baseline:
             st.markdown("**与推荐组合差异**")
             st.dataframe(pd.DataFrame(strategy_difference_rows(strategy, baseline)), use_container_width=True, hide_index=True)
         st.markdown("**投注内容**")
         render_portfolio_detail_bundle(strategy, match, distribution)
+        st.markdown("**Hybrid v0.2 Diagnostic**")
+        st.caption("Hybrid v0.2 仅为观察，不影响正式排序、默认推荐或评分。")
+        diagnostic_rows = [
+            {"项目": "Core Portfolio", "内容": hybrid_v2.get("core_portfolio", "-")},
+            {"项目": "Upside Sleeve", "内容": hybrid_v2.get("upside_sleeve", "-")},
+            {"项目": "Sleeve %", "内容": hybrid_v2_sleeve_share_label(hybrid_v2.get("sleeve_share"))},
+            {"项目": "Sleeve Status", "内容": hybrid_v2_status_label(hybrid_v2.get("sleeve_status"))},
+            {"项目": "Sleeve Reason", "内容": hybrid_v2.get("sleeve_reason", "-")},
+        ]
+        st.dataframe(pd.DataFrame(diagnostic_rows), use_container_width=True, hide_index=True)
         cols = st.columns(4)
         cols[0].metric("EV", f"{int(metrics.get('expected_profit', strategy.get('expected_profit', 0))):+d}元")
         cols[1].metric("ROI", percent(metrics.get("expected_yield", strategy.get("expected_yield", 0))))
@@ -4608,12 +4723,14 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None)
     with perf_timer("detail", "render_portfolio_ranking", {"shown": min(6, len(strategies)), "total": len(strategies)}):
         st.markdown("**组合排行**")
         st.caption("Legacy 排名仍为正式排序；Scenario Rank 仅供观察，不影响推荐。")
+        st.caption("Hybrid v0.2 仅为观察，不影响正式排序、默认推荐或评分。")
         my_strategy = evaluated_my_portfolio_strategy(my_portfolio, match, distribution)
         comparison = list(strategies)
         if my_strategy:
             comparison.append(my_strategy)
         comparison = sorted(comparison, key=lambda item: item.get("score", 0), reverse=True)
         comparison = attach_shadow_metadata(comparison, match, distribution)
+        comparison = attach_hybrid_v2_visible_metadata(comparison, match, distribution)
         shown = comparison[:6]
         if my_strategy and all(item.get("code") != "my_portfolio" for item in shown):
             shadowed_my_strategy = next(

@@ -1,5 +1,114 @@
 # QA Report
 
+## 2026-06-21 Hybrid v0.2 Visible Diagnostic MVP
+
+## Scope
+
+- Updated `app.py` display layer only.
+- Added Portfolio Ranking table columns:
+  - `Sleeve %`
+  - `Sleeve Status`
+- Added Portfolio Ranking caption:
+  - `Hybrid v0.2 仅为观察，不影响正式排序、默认推荐或评分。`
+- Added `Hybrid v0.2 Diagnostic` section to the strategy detail dialog.
+- The detail section shows Core Portfolio, Upside Sleeve, Sleeve %, Sleeve Status, and Sleeve Reason.
+- Did not add Benchmark ROI, Legacy ROI, Core ROI, Core+Upside ROI, Hybrid Rank, or Core+Upside Rank.
+
+## Checks
+
+- Ran syntax check: `PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m py_compile app.py`.
+- Confirmed `comparison = sorted(comparison, key=lambda item: item.get("score", 0), reverse=True)` remains unchanged.
+- Confirmed `strategy_score(...)`, `evaluate_allocation(...)`, and `strategy_comparison(...)` definitions were not modified.
+- Confirmed the new fields read display-only `strategy["hybrid_v2"]` metadata and fall back to `-` when missing.
+- Confirmed no data files were intentionally modified by this task.
+
+## Result
+
+- Passed. Hybrid v0.2 Visible Diagnostic MVP is implemented as display-only metadata.
+- Production ranking, recommendation logic, default recommendation, scores, and data files remain unchanged.
+
+## 2026-06-21 Hybrid v0.2 Report-Only Implementation
+
+## Scope
+
+- Added `scripts/generate_hybrid_v2_report_only.py`.
+- Generated `HYBRID_V2_REPORT_ONLY_REPORT.md`.
+- Read existing `data/history/backfill/` snapshots only.
+- Compared report-only Core, Core + Upside Sleeve, and Legacy Tail-Heavy structures.
+- Updated this QA report and `docs/CHANGELOG.md`.
+- Did not modify `app.py`, production sorting, recommendation logic, UI, score functions, or existing source data.
+
+## Checks
+
+- Ran syntax check: `PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m py_compile scripts/generate_hybrid_v2_report_only.py`.
+- Ran report generation: `PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/generate_hybrid_v2_report_only.py`.
+- Confirmed `HYBRID_V2_REPORT_ONLY_REPORT.md` was generated.
+- Confirmed the script reads `data/history/backfill/` and writes only the report.
+- Confirmed no production ranking or recommendation functions were modified.
+
+## Result
+
+- Matches evaluated: 10.
+- Core ROI: 18.2%.
+- Core + Upside ROI: 20.6%.
+- Legacy Tail-Heavy ROI: 46.5%.
+- Recommendation: `Enter Visible Diagnostic`.
+
+## Verdict
+
+- Passed. Hybrid v0.2 should remain report-only until a separate Visible Diagnostic task is approved.
+
+## 2026-06-21 Phase B Historical Odds Backfill 10-Match Pilot
+
+## Scope
+
+- Added `scripts/generate_world_cup_backfill_benchmark.py`.
+- Wrote 10 isolated backfill snapshots under `data/history/backfill/`.
+- Generated `WORLD_CUP_BACKTEST_PORTFOLIOS.md`.
+- Generated `WORLD_CUP_RANKING_BENCHMARK_REPORT.md`.
+- Updated this QA report and `docs/CHANGELOG.md`.
+- Did not modify `app.py`, production ranking, recommendation logic, UI, score functions, or original `data/history/` pre/post/my_portfolio files.
+
+## Sample Matches
+
+- France vs Senegal.
+- Argentina vs Algeria.
+- Portugal vs Congo DR.
+- England vs Croatia.
+- Canada vs Qatar.
+- Scotland vs Morocco.
+- Brazil vs Haiti.
+- Netherlands vs Sweden.
+- Germany vs Ivory Coast.
+- Ecuador vs Curaçao.
+
+## Checks
+
+- Ran syntax check: `./.venv/bin/python -m py_compile scripts/generate_world_cup_backfill_benchmark.py`.
+- Ran the pilot script with API-Football historical odds.
+- Confirmed all 10 generated snapshots are marked `true_pre_match`.
+- Confirmed all 10 matches include Match Winner, Asian Handicap, Over/Under, and Correct Score markets.
+- Confirmed `odds_update_timestamp < kickoff_timestamp` for each market in each valid snapshot.
+- Confirmed benchmark deduplicates by match and counts each sample once.
+
+## Benchmark Result
+
+- Valid matches: 10.
+- Invalid odds matches: 0.
+- Legacy Wins: 3.
+- Scenario Wins: 0.
+- Hybrid Wins: 0.
+- Draws: 7.
+- Legacy ROI: 46.5%.
+- Scenario ROI: 18.2%.
+- Hybrid ROI: 18.2%.
+- Best system in this 10-match pilot: `Legacy`.
+
+## Result
+
+- Passed. Phase B confirms the historical odds backfill path is technically usable for true pre-match benchmark data.
+- Phase C is recommended as a report-only full completed-match benchmark, but Hybrid should not be promoted from this pilot alone because Legacy outperformed in this 10-match sample.
+
 ## 2026-06-21 Governance Setup
 
 ## Scope
@@ -593,3 +702,34 @@
 ## Result
 
 - Passed with constraints. Historical odds backfill planning may proceed, but every backfilled snapshot must include `source`, `odds_timestamp`, `kickoff_time`, `is_true_pre_match`, and `data_quality`.
+
+## 2026-06-21 Historical Odds Backfill + Ranking Benchmark Plan
+
+## Scope
+
+- Added `WORLD_CUP_HISTORICAL_ODDS_BACKFILL_PLAN.md`.
+- Designed a safe historical odds backfill and ranking benchmark readiness plan.
+- Defined isolated storage under `data/history/backfill/`.
+- Defined required odds quality fields:
+  - `odds_source`
+  - `odds_update_timestamp`
+  - `kickoff_timestamp`
+  - `is_before_kickoff`
+  - `data_quality`
+- Defined benchmark outputs for Legacy Top, Scenario Top, and Hybrid Top.
+- Did not write backfill code.
+- Did not call full API pulls.
+- Did not write backfill data.
+- Did not modify production ranking, recommendation logic, UI, app code, or existing data files.
+
+## Checks
+
+- Confirmed plan requires `update < kickoff` before a snapshot can be used for strict historical backtest.
+- Confirmed backfilled snapshots must be written only under `data/history/backfill/`.
+- Confirmed existing `data/history/` pre/post/my_portfolio files must not be overwritten.
+- Confirmed benchmark must deduplicate by match, not by snapshot count.
+- Confirmed Phase A should start with 3 sample matches before any 10-match or full backfill.
+
+## Result
+
+- Passed. The project is ready for Phase A planning only: a 3-match historical odds quality check. Full backfill and benchmark implementation remain blocked until sample quality is verified.

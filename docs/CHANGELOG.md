@@ -2,6 +2,25 @@
 
 ## 2026-06-21
 
+- Implemented Hybrid v0.2 Visible Diagnostic MVP in `app.py`.
+- Portfolio Ranking now displays `Sleeve %` and `Sleeve Status` as observation-only Hybrid v0.2 fields.
+- Strategy detail dialog now includes a `Hybrid v0.2 Diagnostic` section with Core Portfolio, Upside Sleeve, Sleeve %, Sleeve Status, and Sleeve Reason.
+- Added the warning copy that Hybrid v0.2 does not affect official sorting, default recommendation, or score.
+- Kept production sorting, recommendation logic, default recommendation, `strategy_score(...)`, `evaluate_allocation(...)`, and `strategy_comparison(...)` unchanged.
+- Added `scripts/generate_hybrid_v2_report_only.py` for Hybrid v0.2 report-only evaluation.
+- Generated `HYBRID_V2_REPORT_ONLY_REPORT.md` from existing `data/history/backfill/` snapshots.
+- Hybrid v0.2 report-only result: Core ROI 18.2%, Core + Upside ROI 20.6%, Legacy Tail-Heavy ROI 46.5%.
+- Confirmed Core + Upside improves over Core while keeping average max drawdown materially lower than Legacy Tail-Heavy.
+- Recommendation from report-only stage: `Enter Visible Diagnostic`; no production sorting, recommendation logic, UI, or source data changes were made.
+- Added `scripts/generate_world_cup_backfill_benchmark.py` for Phase B historical odds backfill and ranking benchmark pilot.
+- Backfilled 10 completed World Cup matches into isolated `data/history/backfill/` snapshots.
+- Generated `WORLD_CUP_BACKTEST_PORTFOLIOS.md` and `WORLD_CUP_RANKING_BENCHMARK_REPORT.md`.
+- Phase B data quality result: 10 valid true pre-match snapshots, 0 invalid odds matches, all four markets available for every sample match.
+- Phase B benchmark result: Legacy Wins 3, Scenario Wins 0, Hybrid Wins 0, Draws 7; Legacy ROI 46.5%, Scenario ROI 18.2%, Hybrid ROI 18.2%.
+- Confirmed this pilot did not modify production sorting, recommendation logic, UI, score functions, or existing `data/history/` source snapshots.
+- Added `WORLD_CUP_HISTORICAL_ODDS_BACKFILL_PLAN.md` to define the safe historical odds backfill and ranking benchmark readiness plan.
+- Defined isolated backfill storage under `data/history/backfill/`, true pre-match quality rules, deduplication rules, and Legacy vs Scenario vs Hybrid benchmark outputs.
+- Confirmed this phase is design-only: no backfill code, no full API pull, no data writes, no ranking changes, and no UI changes.
 - Added `API_FOOTBALL_HISTORICAL_ODDS_CHECK.md` to verify whether API-Football can support historical pre-match odds backfill.
 - Confirmed API-Football odds market IDs for Match Winner, Asian Handicap, Goals Over/Under, and Exact Score.
 - Confirmed historical odds backfill is feasible only when each odds row has `update < kickoff`; no full backfill code or data pull was performed.
