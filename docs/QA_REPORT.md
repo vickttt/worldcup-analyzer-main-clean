@@ -407,3 +407,38 @@
 ## Result
 
 - Passed. Visible Shadow Mode MVP display copy is refined without changing ranking, recommendations, scores, or data files.
+
+## 2026-06-21 Portfolio Ranking Decision Table Slimming v0.1
+
+## Scope
+
+- Slimmed the default Portfolio Ranking table into a main decision table.
+- Kept default visible columns:
+  - `组合名称`
+  - `Scenario Rank`
+  - `Shadow Verdict`
+  - `主剧本`
+  - `EV`
+  - `ROI`
+  - `最大亏损`
+  - `剧本一致性评分`
+  - `综合评分`
+- Removed from the main table:
+  - `让球资产`
+  - `大小球资产`
+  - `波胆资产`
+- Kept the caption: `Legacy 排名仍为正式排序；Scenario Rank 仅供观察，不影响推荐。`
+- Did not modify the detail dialog.
+- Did not add any new metric.
+- Did not change Legacy Ranking sort, recommendation logic, default recommendation, score, `strategy_score(...)`, `evaluate_allocation(...)`, `strategy_comparison(...)`, or data files.
+
+## Checks
+
+- Confirmed `portfolio_ranking_rows(...)` no longer outputs the three asset-detail columns in the main table.
+- Confirmed Portfolio Ranking still sorts by Legacy `score` before Shadow metadata is attached.
+- Confirmed `render_portfolio_ranking(...)` still displays the observation-only caption above the table.
+- Ran Python syntax compilation check for `app.py` and `modules/shadow_metadata.py` without writing bytecode caches.
+
+## Result
+
+- Passed. Portfolio Ranking main table is slimmer while preserving ranking, recommendations, scores, and data behavior.

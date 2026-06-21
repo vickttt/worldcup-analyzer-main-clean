@@ -2,6 +2,9 @@
 
 ## 2026-06-21
 
+- Slimmed the default Portfolio Ranking decision table.
+- Removed `让球资产`, `大小球资产`, and `波胆资产` from the main table to reduce decision noise.
+- Kept Legacy score sorting, recommendation logic, default recommendation, scores, detail dialog, and data files unchanged.
 - Refined Visible Shadow Mode MVP display copy.
 - Added Portfolio Ranking caption: Legacy ranking remains official; Scenario Rank is observation-only and does not affect recommendations.
 - Localized `Shadow Verdict` display values to Chinese while keeping only the two MVP columns.
