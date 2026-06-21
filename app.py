@@ -4432,6 +4432,83 @@ def strategy_item_names(strategy):
     ]
 
 
+def active_portfolio_items(strategy):
+    items = []
+    for item in (strategy or {}).get("items") or []:
+        if item.get("type") == "empty":
+            continue
+        try:
+            amount = float(item.get("amount") or 0)
+        except (TypeError, ValueError):
+            amount = 0
+        if amount <= 0:
+            continue
+        items.append(item)
+    return items
+
+
+def normalized_duplicate_value(value):
+    if value is None:
+        return ""
+    if isinstance(value, float):
+        return round(value, 4)
+    return str(value).strip().lower()
+
+
+def portfolio_item_duplicate_key(item, match, distribution):
+    role = "-"
+    try:
+        role = asset_role_key(item, match, distribution)
+    except Exception:
+        role = "-"
+    try:
+        amount = round(float(item.get("amount") or 0), 2)
+    except (TypeError, ValueError):
+        amount = 0
+    odds = item.get("odds") or item.get("effective_odds") or item.get("standard_odds") or ""
+    try:
+        odds = round(float(odds), 4)
+    except (TypeError, ValueError):
+        odds = normalized_duplicate_value(odds)
+    return (
+        normalized_duplicate_value(item.get("type")),
+        normalized_duplicate_value(item.get("selection") or item.get("name")),
+        normalized_duplicate_value(item.get("line") or item.get("handicap") or item.get("point") or item.get("total_line")),
+        odds,
+        amount,
+        normalized_duplicate_value(role),
+    )
+
+
+def portfolio_duplicate_key(strategy, match, distribution):
+    items = active_portfolio_items(strategy)
+    return tuple(sorted(portfolio_item_duplicate_key(item, match, distribution) for item in items))
+
+
+def dedupe_portfolios_for_display(strategies, match, distribution):
+    seen = {}
+    display = []
+    duplicate_groups = []
+    for index, strategy in enumerate(strategies or [], start=1):
+        key = portfolio_duplicate_key(strategy, match, distribution)
+        if not key:
+            display.append(strategy)
+            continue
+        display_name = normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1)
+        if key not in seen:
+            seen[key] = {"strategy": strategy, "names": [display_name]}
+            display.append(strategy)
+            continue
+        seen[key]["names"].append(display_name)
+
+    for group in seen.values():
+        names = group["names"]
+        if len(names) > 1:
+            duplicate_groups.append(" / ".join(names))
+            group["strategy"]["duplicate_group_names"] = names
+    return display, duplicate_groups
+
+
 def strategy_difference(strategy, baseline):
     base_names = set(strategy_item_names(baseline or {}))
     current_names = set(strategy_item_names(strategy or {}))
@@ -4620,6 +4697,9 @@ def match_betting_score(strategies):
             "score": 0,
             "decision": "不建议投注",
             "reason": "没有可用组合，无法形成投注判断。",
+            "positive_reasons": [],
+            "negative_reasons": ["没有可用组合，无法形成投注判断。"],
+            "final_judgement": "当前缺少可执行组合，不建议下注。",
             "risk_mode": "Balanced",
         }
     official = strategies[0]
@@ -4632,41 +4712,68 @@ def match_betting_score(strategies):
         consistency = 60
 
     score = 50
+    positive_reasons = []
+    negative_reasons = []
+
     score += min(20, max(0, (consistency - 55) * 0.45))
     score += min(15, max(0, (legacy_score - 60) * 0.30))
+    if consistency >= 75:
+        positive_reasons.append(f"剧本一致性较高（{round(consistency)}分）")
+    elif consistency < 60:
+        negative_reasons.append(f"剧本一致性不足（{round(consistency)}分）")
+    else:
+        positive_reasons.append(f"剧本一致性可接受（{round(consistency)}分）")
+
+    if legacy_score >= 75:
+        positive_reasons.append(f"综合评分较强（{round(legacy_score)}）")
+    elif legacy_score < 55:
+        negative_reasons.append(f"综合评分偏弱（{round(legacy_score)}）")
 
     verdict = shadow.get("shadow_verdict")
     if verdict == "Agreement":
         score += 10
+        positive_reasons.append("Legacy 与 Scenario 判断一致")
     elif verdict == "Watch":
         score += 4
+        positive_reasons.append("Scenario 仅提示观察，没有直接阻断")
     elif verdict == "Disagreement":
         score -= 10
+        negative_reasons.append("Legacy 与 Scenario 存在分歧")
     elif verdict == "Blocker Candidate":
         score -= 25
+        negative_reasons.append("Scenario 标记为高风险观察")
 
     sleeve_status = hybrid_v2.get("sleeve_status")
     if sleeve_status == "Scenario-Supported Aggressive Upside":
         score += 4
+        positive_reasons.append("上行袖仓有剧本支持")
     elif sleeve_status == "Watch: Small Upside Sleeve":
         score += 1
+        positive_reasons.append("上行袖仓仅小仓观察")
     elif sleeve_status in {"Uncontrolled Tail", "Blocked Tail"}:
         score -= 18
+        negative_reasons.append("尾部风险未被充分控制")
 
     if max_loss <= 500:
         score += 8
+        positive_reasons.append(f"最大亏损可控（约{int(max_loss)}元）")
     elif max_loss <= 1000:
         score += 3
+        positive_reasons.append(f"最大亏损处于可接受区间（约{int(max_loss)}元）")
     elif max_loss >= 1600:
         score -= 12
+        negative_reasons.append(f"最大亏损偏高（约{int(max_loss)}元）")
 
     score = clamp(score, 0, 100)
     if score >= 80:
         decision = "值得投注"
+        final_judgement = "主组合具备较好的剧本一致性和风险控制，可以作为正式下注候选。"
     elif score >= 60:
         decision = "小注观察"
+        final_judgement = "可以小仓参与，但 Scenario 或风险信号仍需要观察。"
     else:
         decision = "不建议投注"
+        final_judgement = "当前组合信号不足或风险过高，不适合作为正式下注。"
 
     reasons = []
     reasons.append(f"剧本一致性 {round(consistency)} 分")
@@ -4677,6 +4784,9 @@ def match_betting_score(strategies):
         "score": score,
         "decision": decision,
         "reason": "；".join(reasons),
+        "positive_reasons": positive_reasons or ["暂无明显加分项"],
+        "negative_reasons": negative_reasons or ["暂无明显扣分项"],
+        "final_judgement": final_judgement,
         "risk_mode": "Balanced",
     }
 
@@ -4686,16 +4796,22 @@ def recommended_stake_mvp(match_score):
     decision = match_score.get("decision")
     if decision == "不建议投注" or score < 50:
         amount = 0
+        amount_rule = "0元：不建议投注，分数不足或风险信号过重。"
     elif score < 60:
         amount = 300
+        amount_rule = "300元：边缘观察局，只允许极小仓验证判断。"
     elif score < 70:
         amount = 500
+        amount_rule = "500元：小注观察，剧本成立但信心不足。"
     elif score < 80:
         amount = 800
+        amount_rule = "800元：普通可投，仍需控制最大亏损。"
     elif score < 90:
         amount = 1200
+        amount_rule = "1200元：高信心区间，要求剧本和风险同时过关。"
     else:
         amount = 1500
+        amount_rule = "1500元：极高信心上限，本阶段不自动建议超过1500元。"
     amount = min(2000, max(0, round_to_hundred(amount)))
     if amount == 0:
         reason = "当前分数不足或风险较高，不建议下注。"
@@ -4710,6 +4826,7 @@ def recommended_stake_mvp(match_score):
     return {
         "amount": amount,
         "risk_mode": match_score.get("risk_mode", "Balanced"),
+        "amount_rule": amount_rule,
         "reason": f"{reason} {match_score.get('reason', '')}",
     }
 
@@ -4722,12 +4839,15 @@ def render_match_decision_cards(strategies):
         with st.container(border=True):
             st.markdown("**Match Summary**")
             st.metric("Match Betting Score", f"{score['score']} / 100", score["decision"])
-            st.caption(score["reason"])
+            st.caption("加分原因：" + "；".join(score.get("positive_reasons") or ["-"]))
+            st.caption("扣分原因：" + "；".join(score.get("negative_reasons") or ["-"]))
+            st.caption("最终判断：" + score.get("final_judgement", score.get("decision", "-")))
     with cols[1]:
         with st.container(border=True):
             st.markdown("**Recommended Stake**")
             st.metric("推荐金额", f"{stake['amount']} 元", stake["risk_mode"])
-            st.caption(stake["reason"])
+            st.caption("金额规则：" + stake.get("amount_rule", "-"))
+            st.caption("推荐原因：" + stake["reason"])
 
 
 def strategy_difference_rows(strategy, baseline):
@@ -4797,38 +4917,78 @@ def evaluated_my_portfolio_strategy(my_portfolio, match, distribution):
     return evaluated
 
 
-def render_strategy_detail_dialog(strategy, index, match, distribution, baseline=None):
-    name = normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1)
+def portfolio_goal_text(strategy):
+    main_script = strategy_main_script(strategy)
+    shadow = strategy.get("shadow") or {}
+    verdict = shadow_verdict_label(shadow.get("shadow_verdict"))
+    return f"围绕 `{main_script}` 构建组合；Scenario 判断：{verdict}。"
 
-    @st.dialog(f"{name}详情")
-    def show_detail():
-        metrics = strategy.get("metrics") or {}
-        hybrid_v2 = strategy.get("hybrid_v2") or {}
-        if baseline:
-            st.markdown("**与推荐组合差异**")
-            st.dataframe(pd.DataFrame(strategy_difference_rows(strategy, baseline)), use_container_width=True, hide_index=True)
-        st.markdown("**投注内容**")
-        render_portfolio_detail_bundle(strategy, match, distribution)
-        st.markdown("**Hybrid v0.2 Diagnostic**")
-        st.caption("Hybrid v0.2 仅为观察，不影响正式排序、默认推荐或评分。")
-        diagnostic_rows = [
-            {"项目": "Core Portfolio", "内容": hybrid_v2.get("core_portfolio", "-")},
-            {"项目": "Upside Sleeve", "内容": hybrid_v2.get("upside_sleeve", "-")},
-            {"项目": "Sleeve %", "内容": hybrid_v2_sleeve_share_label(hybrid_v2.get("sleeve_share"))},
-            {"项目": "Sleeve Status", "内容": hybrid_v2_status_label(hybrid_v2.get("sleeve_status"))},
-            {"项目": "Sleeve Reason", "内容": hybrid_v2.get("sleeve_reason", "-")},
-        ]
-        st.dataframe(pd.DataFrame(diagnostic_rows), use_container_width=True, hide_index=True)
-        cols = st.columns(4)
-        cols[0].metric("EV", f"{int(metrics.get('expected_profit', strategy.get('expected_profit', 0))):+d}元")
-        cols[1].metric("ROI", percent(metrics.get("expected_yield", strategy.get("expected_yield", 0))))
-        cols[2].metric("最大亏损", f"-{int(metrics.get('max_loss', strategy.get('max_loss', 0)))}元")
-        cols[3].metric("评分", strategy.get("score", "-"))
-        if st.button("关闭", key=f"close_strategy_{index}_{strategy.get('code', '')}"):
-            st.rerun()
 
-    if st.button(f"查看详情：{name}", key=f"strategy_detail_{index}_{strategy.get('code', '')}"):
-        show_detail()
+def portfolio_downgrade_reason(strategy):
+    shadow = strategy.get("shadow") or {}
+    hybrid_v2 = strategy.get("hybrid_v2") or {}
+    reasons = []
+    scenario_reason = shadow.get("scenario_rank_reason")
+    if scenario_reason:
+        reasons.append(str(scenario_reason))
+    sleeve_reason = hybrid_v2.get("sleeve_reason")
+    if sleeve_reason:
+        reasons.append(str(sleeve_reason))
+    if shadow.get("shadow_verdict") in {"Disagreement", "Blocker Candidate"}:
+        reasons.append("Shadow Verdict 提示该组合与剧本排序存在分歧，需要降级观察。")
+    return reasons or ["当前没有明确降级信号，主要按组合结构和剧本一致性观察。"]
+
+
+def render_portfolio_detail_expanders(strategies, match, distribution):
+    if not strategies:
+        return
+    st.markdown("**组合详情**")
+    st.caption("以下详情默认折叠，主表用于一眼决策，展开后查看投注内容、资产角色和风险说明。")
+    for index, strategy in enumerate(strategies, start=1):
+        name = normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1)
+        with st.expander(f"{name} 详情", expanded=False):
+            st.markdown("**组合目标**")
+            st.caption(portfolio_goal_text(strategy))
+
+            st.markdown("**投注资产**")
+            asset_rows = settlement_preview_rows(strategy, match, distribution)
+            if asset_rows:
+                st.dataframe(pd.DataFrame(asset_rows), use_container_width=True, hide_index=True)
+            else:
+                st.caption("暂无投注资产。")
+
+            st.markdown("**资产角色**")
+            role_rows = role_allocation_rows(strategy.get("items") or [], match, distribution)
+            if role_rows:
+                st.dataframe(pd.DataFrame(role_rows), use_container_width=True, hide_index=True)
+            else:
+                st.caption("暂无资产角色。")
+
+            st.markdown("**推荐/降级原因**")
+            for reason in portfolio_downgrade_reason(strategy):
+                st.caption(f"- {reason}")
+            why_rows = why_portfolio_rows(strategy, match, distribution)
+            if why_rows:
+                st.dataframe(pd.DataFrame(why_rows), use_container_width=True, hide_index=True)
+
+            st.markdown("**Hybrid v0.2 Diagnostic**")
+            st.caption("Hybrid v0.2 仅为观察，不影响正式排序、默认推荐或评分。")
+            hybrid_v2 = strategy.get("hybrid_v2") or {}
+            diagnostic_rows = [
+                {"项目": "Core Portfolio", "内容": hybrid_v2.get("core_portfolio", "-")},
+                {"项目": "Upside Sleeve", "内容": hybrid_v2.get("upside_sleeve", "-")},
+                {"项目": "Sleeve %", "内容": hybrid_v2_sleeve_share_label(hybrid_v2.get("sleeve_share"))},
+                {"项目": "Sleeve Status", "内容": hybrid_v2_status_label(hybrid_v2.get("sleeve_status"))},
+                {"项目": "Sleeve Reason", "内容": hybrid_v2.get("sleeve_reason", "-")},
+            ]
+            st.dataframe(pd.DataFrame(diagnostic_rows), use_container_width=True, hide_index=True)
+
+            st.markdown("**风险提示**")
+            risk_rows = risk_path_rows(strategy)
+            if risk_rows:
+                st.dataframe(pd.DataFrame(risk_rows), use_container_width=True, hide_index=True)
+            else:
+                st.caption("暂无可展示风险路径。")
 
 
 def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None):
@@ -4847,23 +5007,24 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None)
         comparison = sorted(comparison, key=lambda item: item.get("score", 0), reverse=True)
         comparison = attach_shadow_metadata(comparison, match, distribution)
         comparison = attach_hybrid_v2_visible_metadata(comparison, match, distribution)
-        render_match_decision_cards(comparison)
-        shown = comparison[:6]
+        display_comparison, duplicate_groups = dedupe_portfolios_for_display(comparison, match, distribution)
+        render_match_decision_cards(display_comparison)
+        shown = display_comparison[:6]
         if my_strategy and all(item.get("code") != "my_portfolio" for item in shown):
             shadowed_my_strategy = next(
-                (item for item in comparison if item.get("code") == "my_portfolio"),
-                my_strategy,
+                (item for item in display_comparison if item.get("code") == "my_portfolio"),
+                None,
             )
-            shown = shown[:5] + [shadowed_my_strategy]
+            if shadowed_my_strategy:
+                shown = shown[:5] + [shadowed_my_strategy]
         baseline = strategies[0] if strategies else None
+        if duplicate_groups:
+            st.caption("已合并重复组合：" + "；".join(duplicate_groups))
         st.dataframe(pd.DataFrame(portfolio_ranking_rows(shown, baseline)), use_container_width=True, hide_index=True)
         if my_strategy:
             my_rank = next((idx for idx, item in enumerate(comparison, start=1) if item.get("code") == "my_portfolio"), None)
             st.caption(f"我的组合当前排名：第 {my_rank} / {len(comparison)}。")
-        detail_cols = st.columns(min(3, len(shown)))
-        for index, strategy in enumerate(shown, start=1):
-            with detail_cols[(index - 1) % len(detail_cols)]:
-                render_strategy_detail_dialog(strategy, index, match, distribution, baseline)
+        render_portfolio_detail_expanders(shown, match, distribution)
 
 
 def render_actual_market_odds_summary(initial_combo):

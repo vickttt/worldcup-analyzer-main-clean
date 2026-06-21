@@ -2,6 +2,20 @@
 
 ## 2026-06-21
 
+- Implemented GitHub Agent Workflow Infrastructure v1.
+- Added `.github/ISSUE_TEMPLATE/agent_task.md` for Issue-driven agent tasks with scope, allowed/forbidden changes, QA, risk, and approval fields.
+- Added `.github/pull_request_template.md` with summary, linked issue, changes, QA, safety check, and manual review sections.
+- Added `.github/workflows/agent-qa.yml` to run Python syntax checks, ranking-sensitive function guardrails, protected history data checks, and docs synchronization checks.
+- Added `docs/AGENT_WORKFLOW_RUNBOOK.md` describing how Jin creates Issues, how agents create branches and PRs, how QA passes, and which actions require manual approval.
+- Updated `docs/TASK_QUEUE.md` to prioritize GitHub agent workflow adoption before further ranking or benchmark work.
+- Did not modify business code, production sorting, recommendation logic, UI behavior, API refresh logic, or `data/history`.
+- Implemented Decision UI Fix v0.1 in `app.py`.
+- Added display-only duplicate portfolio detection after the existing Legacy score sort; identical actual betting assets are merged in the Portfolio Ranking display.
+- Replaced Portfolio Ranking detail pop-up buttons with a centralized default-collapsed detail list below the main table.
+- Added detail sections for portfolio goal, betting assets, asset roles, recommendation/downgrade reasons, Hybrid v0.2 Diagnostic, and risk warnings.
+- Expanded `Match Summary` with positive reasons, negative reasons, and final betting judgement.
+- Expanded `Recommended Stake` with explicit 0 / 300 / 500 / 800 / 1200 / 1500 yuan amount rules and recommendation reasoning.
+- Kept production sorting, recommendation logic, default recommendation, `strategy_score(...)`, `evaluate_allocation(...)`, `strategy_comparison(...)`, UI data sources, and data files unchanged.
 - Implemented Phase A Match Betting Score MVP and Recommended Stake MVP in `app.py`.
 - Added two display-only cards above Portfolio Ranking: `Match Summary` and `Recommended Stake`.
 - Match Betting Score uses existing Scenario Consistency, Shadow Verdict, Sleeve Status, Max Loss, and Legacy score signals.

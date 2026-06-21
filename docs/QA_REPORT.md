@@ -1,5 +1,68 @@
 # QA Report
 
+## 2026-06-21 GitHub Agent Workflow Infrastructure v1
+
+## Scope
+
+- Added GitHub Issue template:
+  - `.github/ISSUE_TEMPLATE/agent_task.md`
+- Added Pull Request template:
+  - `.github/pull_request_template.md`
+- Added GitHub Actions QA workflow:
+  - `.github/workflows/agent-qa.yml`
+- Added agent workflow runbook:
+  - `docs/AGENT_WORKFLOW_RUNBOOK.md`
+- Updated `docs/CHANGELOG.md`, `docs/QA_REPORT.md`, and `docs/TASK_QUEUE.md`.
+- Did not modify business code, ranking logic, recommendation logic, UI behavior, API refresh logic, or `data/history`.
+
+## Checks
+
+- Confirmed the workflow performs Python syntax checks for `app.py` and `scripts/*.py`.
+- Confirmed ranking-sensitive function guardrails cover:
+  - `strategy_score(...)`
+  - `strategy_comparison(...)`
+  - `evaluate_allocation(...)`
+- Confirmed protected history data guardrails cover:
+  - `data/history/*_pre.json`
+  - `data/history/*_post.json`
+  - `data/history/my_portfolios/*.json`
+- Confirmed docs synchronization check requires `docs/CHANGELOG.md` and `docs/QA_REPORT.md` when `app.py` or `scripts/*.py` changes.
+- Confirmed high-risk overrides require explicit PR body tokens:
+  - `approved:ranking`
+  - `approved:data-write`
+
+## Result
+
+- Passed as infrastructure setup. The files are ready for GitHub to execute once pushed to the repository.
+- No local API calls, data writes, commits, or pushes were performed.
+
+## 2026-06-21 Decision UI Fix v0.1
+
+## Scope
+
+- Updated `app.py` display layer only.
+- Added Duplicate Portfolio Detection MVP after the existing Legacy score sort.
+- Merged duplicate portfolios in the display when actual betting assets, selection/line, odds, amount, and asset role match.
+- Removed the active Portfolio Ranking detail pop-up flow and replaced it with a centralized list of default-collapsed expanders below the main table.
+- Expanded Match Betting Score explanation with:
+  - positive reasons
+  - negative reasons
+  - final judgement
+- Expanded Recommended Stake explanation with explicit 0 / 300 / 500 / 800 / 1200 / 1500 yuan amount rules.
+
+## Checks
+
+- Ran syntax check: `PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m py_compile app.py`.
+- Confirmed Portfolio Ranking still sorts by original score:
+  - `comparison = sorted(comparison, key=lambda item: item.get("score", 0), reverse=True)`
+- Confirmed there is no active `st.dialog` / `render_strategy_detail_dialog(...)` Portfolio Ranking detail path.
+- Confirmed `strategy_score(...)`, `evaluate_allocation(...)`, and `strategy_comparison(...)` definitions were not modified.
+- Confirmed no data files were intentionally modified by this task.
+
+## Result
+
+- Passed. Decision UI Fix v0.1 improves duplicate handling and decision explanation without changing production ranking, recommendation logic, default recommendation, scores, or data files.
+
 ## 2026-06-21 Phase A Match Betting Score + Recommended Stake MVP
 
 ## Scope
