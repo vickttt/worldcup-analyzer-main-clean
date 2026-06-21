@@ -1,5 +1,33 @@
 # QA Report
 
+## 2026-06-21 Phase A Match Betting Score + Recommended Stake MVP
+
+## Scope
+
+- Updated `app.py` display layer only.
+- Added `Match Summary` card above Portfolio Ranking.
+- Added `Recommended Stake` card above Portfolio Ranking.
+- Match Betting Score uses existing signals:
+  - Scenario Consistency
+  - Shadow Verdict
+  - Sleeve Status
+  - Max Loss
+  - Legacy comprehensive score
+- Recommended Stake maps Match Betting Score to a 0-2000 yuan display recommendation.
+- Did not implement Duplicate Detection, Detail UI Redesign, or Asset Role Refactor.
+
+## Checks
+
+- Ran syntax check: `PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m py_compile app.py`.
+- Confirmed Portfolio Ranking still sorts by original score:
+  - `comparison = sorted(comparison, key=lambda item: item.get("score", 0), reverse=True)`
+- Confirmed `strategy_score(...)`, `evaluate_allocation(...)`, and `strategy_comparison(...)` definitions were not modified.
+- Confirmed no data files were intentionally modified by this task.
+
+## Result
+
+- Passed. The MVP adds two decision cards without changing sorting, recommendation logic, default recommendation, or existing score functions.
+
 ## 2026-06-21 Hybrid v0.2 Visible Diagnostic MVP
 
 ## Scope

@@ -4614,6 +4614,122 @@ def attach_hybrid_v2_visible_metadata(strategies, match, distribution):
     return strategies
 
 
+def match_betting_score(strategies):
+    if not strategies:
+        return {
+            "score": 0,
+            "decision": "不建议投注",
+            "reason": "没有可用组合，无法形成投注判断。",
+            "risk_mode": "Balanced",
+        }
+    official = strategies[0]
+    shadow = official.get("shadow") or {}
+    hybrid_v2 = official.get("hybrid_v2") or {}
+    max_loss = float(official.get("max_loss") or 0)
+    legacy_score = float(official.get("score") or 0)
+    consistency = float(official.get("consistency_score") or 0) * 100
+    if not consistency:
+        consistency = 60
+
+    score = 50
+    score += min(20, max(0, (consistency - 55) * 0.45))
+    score += min(15, max(0, (legacy_score - 60) * 0.30))
+
+    verdict = shadow.get("shadow_verdict")
+    if verdict == "Agreement":
+        score += 10
+    elif verdict == "Watch":
+        score += 4
+    elif verdict == "Disagreement":
+        score -= 10
+    elif verdict == "Blocker Candidate":
+        score -= 25
+
+    sleeve_status = hybrid_v2.get("sleeve_status")
+    if sleeve_status == "Scenario-Supported Aggressive Upside":
+        score += 4
+    elif sleeve_status == "Watch: Small Upside Sleeve":
+        score += 1
+    elif sleeve_status in {"Uncontrolled Tail", "Blocked Tail"}:
+        score -= 18
+
+    if max_loss <= 500:
+        score += 8
+    elif max_loss <= 1000:
+        score += 3
+    elif max_loss >= 1600:
+        score -= 12
+
+    score = clamp(score, 0, 100)
+    if score >= 80:
+        decision = "值得投注"
+    elif score >= 60:
+        decision = "小注观察"
+    else:
+        decision = "不建议投注"
+
+    reasons = []
+    reasons.append(f"剧本一致性 {round(consistency)} 分")
+    reasons.append(f"Shadow Verdict: {shadow_verdict_label(verdict)}")
+    reasons.append(f"Sleeve Status: {hybrid_v2_status_label(sleeve_status)}")
+    reasons.append(f"最大亏损约 {int(max_loss)} 元")
+    return {
+        "score": score,
+        "decision": decision,
+        "reason": "；".join(reasons),
+        "risk_mode": "Balanced",
+    }
+
+
+def recommended_stake_mvp(match_score):
+    score = match_score.get("score", 0)
+    decision = match_score.get("decision")
+    if decision == "不建议投注" or score < 50:
+        amount = 0
+    elif score < 60:
+        amount = 300
+    elif score < 70:
+        amount = 500
+    elif score < 80:
+        amount = 800
+    elif score < 90:
+        amount = 1200
+    else:
+        amount = 1500
+    amount = min(2000, max(0, round_to_hundred(amount)))
+    if amount == 0:
+        reason = "当前分数不足或风险较高，不建议下注。"
+    elif amount <= 500:
+        reason = "观察局，仅建议小金额验证判断。"
+    elif amount <= 1000:
+        reason = "普通可投，仍需控制风险。"
+    elif amount <= 1500:
+        reason = "高信心区间，但仍受最大亏损和剧本一致性约束。"
+    else:
+        reason = "极高信心区间，仅在严格条件满足时使用。"
+    return {
+        "amount": amount,
+        "risk_mode": match_score.get("risk_mode", "Balanced"),
+        "reason": f"{reason} {match_score.get('reason', '')}",
+    }
+
+
+def render_match_decision_cards(strategies):
+    score = match_betting_score(strategies)
+    stake = recommended_stake_mvp(score)
+    cols = st.columns(2)
+    with cols[0]:
+        with st.container(border=True):
+            st.markdown("**Match Summary**")
+            st.metric("Match Betting Score", f"{score['score']} / 100", score["decision"])
+            st.caption(score["reason"])
+    with cols[1]:
+        with st.container(border=True):
+            st.markdown("**Recommended Stake**")
+            st.metric("推荐金额", f"{stake['amount']} 元", stake["risk_mode"])
+            st.caption(stake["reason"])
+
+
 def strategy_difference_rows(strategy, baseline):
     base_names = strategy_item_names(baseline or {})
     current_names = strategy_item_names(strategy or {})
@@ -4731,6 +4847,7 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None)
         comparison = sorted(comparison, key=lambda item: item.get("score", 0), reverse=True)
         comparison = attach_shadow_metadata(comparison, match, distribution)
         comparison = attach_hybrid_v2_visible_metadata(comparison, match, distribution)
+        render_match_decision_cards(comparison)
         shown = comparison[:6]
         if my_strategy and all(item.get("code") != "my_portfolio" for item in shown):
             shadowed_my_strategy = next(

@@ -2,6 +2,11 @@
 
 ## 2026-06-21
 
+- Implemented Phase A Match Betting Score MVP and Recommended Stake MVP in `app.py`.
+- Added two display-only cards above Portfolio Ranking: `Match Summary` and `Recommended Stake`.
+- Match Betting Score uses existing Scenario Consistency, Shadow Verdict, Sleeve Status, Max Loss, and Legacy score signals.
+- Recommended Stake maps the Match Betting Score to a 0-2000 yuan display recommendation with `Balanced` risk mode.
+- Kept production sorting, default recommendation, recommendation logic, `strategy_score(...)`, `evaluate_allocation(...)`, and `strategy_comparison(...)` unchanged.
 - Implemented Hybrid v0.2 Visible Diagnostic MVP in `app.py`.
 - Portfolio Ranking now displays `Sleeve %` and `Sleeve Status` as observation-only Hybrid v0.2 fields.
 - Strategy detail dialog now includes a `Hybrid v0.2 Diagnostic` section with Core Portfolio, Upside Sleeve, Sleeve %, Sleeve Status, and Sleeve Reason.
