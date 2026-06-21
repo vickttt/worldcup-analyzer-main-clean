@@ -2,6 +2,13 @@
 
 ## 2026-06-21
 
+- Added `API_FOOTBALL_HISTORICAL_ODDS_CHECK.md` to verify whether API-Football can support historical pre-match odds backfill.
+- Confirmed API-Football odds market IDs for Match Winner, Asian Handicap, Goals Over/Under, and Exact Score.
+- Confirmed historical odds backfill is feasible only when each odds row has `update < kickoff`; no full backfill code or data pull was performed.
+- Updated `docs/TASK_QUEUE.md` for the current Commit Hygiene, Historical Odds Backfill, Hybrid Benchmark, and Scenario Guardrails priorities.
+- Added `scripts/generate_hybrid_ranking_report.py` for Phase A Hybrid Ranking report-only validation.
+- Generated `HYBRID_RANKING_REPORT.md` from saved `data/history/` snapshots using in-memory Shadow Metadata and Hybrid Score calculations.
+- Hybrid report compares Legacy Top, Scenario Top, and Hybrid Top without changing production sorting, recommendation logic, UI, score functions, or data files.
 - Updated post-match validation dataset with 12 new `data/history/*_post.json` result files.
 - Regenerated `POST_MATCH_VALIDATION_REPORT.md` after the result update.
 - Added `VALIDATION_UPDATE_SUMMARY.md` for the validation update summary.

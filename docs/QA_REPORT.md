@@ -545,3 +545,51 @@
 ## Result
 
 - Passed. The project should enter Scenario Guardrails review while keeping Legacy Ranking as the official production ranking for now.
+
+## 2026-06-21 Hybrid Ranking Report v0.1
+
+## Scope
+
+- Added `scripts/generate_hybrid_ranking_report.py`.
+- Generated `HYBRID_RANKING_REPORT.md`.
+- The script reads saved `data/history/` snapshots.
+- The script uses `attach_shadow_metadata(...)` in memory to derive Scenario Rank and Shadow Verdict.
+- The script computes report-only `strategy["hybrid"]` metadata in memory.
+- Did not modify production sorting, recommendation logic, UI, score functions, or data files.
+
+## Checks
+
+- Ran `./.venv/bin/python scripts/generate_hybrid_ranking_report.py`.
+- Confirmed `HYBRID_RANKING_REPORT.md` was generated.
+- Ran syntax check with `./.venv/bin/python -m py_compile scripts/generate_hybrid_ranking_report.py`.
+- Confirmed no changes to `app.py`, `strategy_score(...)`, `evaluate_allocation(...)`, `strategy_comparison(...)`, Portfolio Ranking sorting, recommendation logic, UI, or data files.
+
+## Result
+
+- Passed. Hybrid Ranking v0.1 is report-only and ready for review before any UI or sorting migration.
+
+## 2026-06-21 API-Football Historical Odds Check
+
+## Scope
+
+- Added `API_FOOTBALL_HISTORICAL_ODDS_CHECK.md`.
+- Checked whether API-Football can support historical pre-match odds backfill.
+- Confirmed required market IDs:
+  - Match Winner: `1`
+  - Asian Handicap: `4`
+  - Goals Over/Under: `5`
+  - Exact Score / Correct Score: `10`
+- Did not write backfill code.
+- Did not pull full historical data.
+- Did not modify production ranking, recommendation logic, UI, app code, or existing data files.
+
+## Checks
+
+- Confirmed date-based API-Football odds queries can return World Cup 2026 odds rows for historical dates.
+- Confirmed returned odds rows include an `update` timestamp that can be compared with kickoff time.
+- Confirmed strict backtest eligibility requires `odds_timestamp < kickoff_time`.
+- Confirmed current local fixture IDs are not reliable for direct historical odds lookup and need official API-Football fixture mapping.
+
+## Result
+
+- Passed with constraints. Historical odds backfill planning may proceed, but every backfilled snapshot must include `source`, `odds_timestamp`, `kickoff_time`, `is_true_pre_match`, and `data_quality`.
