@@ -2,6 +2,10 @@
 
 ## 2026-06-22
 
+- Added `AUTOMATION_STATUS_REPORT.md` to summarize automation completion, completed/incomplete modules, blockers, roadmap, Issue -> PR flow, and daily Jin/Agent responsibilities.
+- Added `docs/NEXT_ISSUE_DRAFT.md` as the Supervisor-generated draft for the next automation hardening Issue.
+- Created the real GitHub Issue for automation status and commit hygiene as part of the Agent workflow rehearsal.
+- Did not modify business code, `app.py`, production sorting, recommendation logic, API refresh logic, or `data/history`.
 - Added `WORLDCUP.md` as the top-level project context document for agents.
 - Added `SUPERVISOR.md` to define the WorldCup Supervisor agent responsibilities, required reads, risk levels, and approval gates.
 - Added `docs/TODAY_NEXT_ACTION.md` to define the current stage, highest priority, recommended next Issue, allowed files, forbidden files, and approval requirement.
