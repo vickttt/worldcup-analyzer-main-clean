@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-06-22
+
+- Added `WORLDCUP.md` as the top-level project context document for agents.
+- Added `SUPERVISOR.md` to define the WorldCup Supervisor agent responsibilities, required reads, risk levels, and approval gates.
+- Added `docs/TODAY_NEXT_ACTION.md` to define the current stage, highest priority, recommended next Issue, allowed files, forbidden files, and approval requirement.
+- Added `docs/SUBAGENTS.md` to define supervisor, workflow, QA, benchmark, validation, UI, and data subagents.
+- Added `docs/HOOKS_GUARDRAILS_PLAN.md` to design future PreToolUse, PreCommit, PostToolUse, SessionStart, and PR guardrails.
+- Updated `docs/TASK_QUEUE.md` to prioritize Agent Automation Context Layer and the first real Issue -> Branch -> PR rehearsal.
+- Did not modify business code, `app.py`, production sorting, recommendation logic, API refresh logic, or `data/history`.
+
 ## 2026-06-21
 
 - Implemented GitHub Agent Workflow Infrastructure v1.
