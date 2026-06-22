@@ -20,6 +20,19 @@ GitHub Actions QA
 Jin Review
 ```
 
+
+## Rehearsal Execution
+
+Issue: https://github.com/vickttt/worldcup-analyzer/issues/1
+
+Branch:
+
+```text
+codex/1-agent-workflow-smoke-test
+```
+
+Expected PR status: open for Jin review, not merged by the agent.
+
 ## 1. Test Issue Content
 
 Recommended GitHub Issue title:
