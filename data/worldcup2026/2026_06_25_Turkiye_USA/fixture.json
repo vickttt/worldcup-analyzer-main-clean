@@ -1,0 +1,135 @@
+{
+  "source_id": "58",
+  "match": {
+    "home_cn": "Turkey",
+    "away_cn": "United States",
+    "home_en": "Turkiye",
+    "away_en": "USA",
+    "display_name": "Turkey vs United States"
+  },
+  "created_at": "2026-06-25T20:12:44.691451+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": null,
+  "api_football_fixture": {
+    "fixture_id": 1539012,
+    "kickoff_utc": "2026-06-26T02:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 3",
+    "venue": "SoFi Stadium",
+    "city": "Los Angeles",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1539012,
+        "referee": "M. Ghorbal",
+        "timezone": "UTC",
+        "date": "2026-06-26T02:00:00+00:00",
+        "timestamp": 1782439200,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": null,
+          "name": "SoFi Stadium",
+          "city": "Los Angeles"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 3",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 777,
+          "name": "Türkiye",
+          "logo": "https://media.api-sports.io/football/teams/777.png",
+          "winner": null
+        },
+        "away": {
+          "id": 2384,
+          "name": "USA",
+          "logo": "https://media.api-sports.io/football/teams/2384.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 777,
+    "name": "Türkiye",
+    "code": "TUR",
+    "country": "Turkey",
+    "founded": 1923,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/777.png",
+    "_resolver": {
+      "input": "Turkiye",
+      "matched_query": "Turkiye",
+      "matched_name": "Türkiye",
+      "team_id": 777,
+      "attempted": [
+        "Turkiye"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 2384,
+    "name": "USA",
+    "code": "USA",
+    "country": "USA",
+    "founded": 1913,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/2384.png",
+    "_resolver": {
+      "input": "USA",
+      "matched_query": "USA",
+      "matched_name": "USA",
+      "team_id": 2384,
+      "attempted": [
+        "USA"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": null
+}

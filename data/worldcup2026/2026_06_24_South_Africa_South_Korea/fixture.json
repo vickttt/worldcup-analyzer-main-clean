@@ -1,0 +1,208 @@
+{
+  "source_id": "51",
+  "match": {
+    "home_cn": "South Africa",
+    "away_cn": "South Korea",
+    "home_en": "South Africa",
+    "away_en": "South Korea",
+    "display_name": "South Africa vs South Korea"
+  },
+  "created_at": "2026-06-24T17:16:19.453851+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "51",
+    "home_team": {
+      "id": "2",
+      "name": "South Africa",
+      "logo": "https://flagcdn.com/w80/za.png"
+    },
+    "away_team": {
+      "id": "3",
+      "name": "South Korea",
+      "logo": "https://flagcdn.com/w80/kr.png"
+    },
+    "kickoff_utc": "06/24/2026 19:00",
+    "kickoff_display": "06/24/2026 19:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "A",
+    "venue_name": "Estadio Monterrey",
+    "venue_city": "Monterrey (Guadalupe), Mexico",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1489407,
+    "kickoff_utc": "2026-06-25T01:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 3",
+    "venue": "Estadio BBVA",
+    "city": "Monterrey",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1489407,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-06-25T01:00:00+00:00",
+        "timestamp": 1782349200,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": 11905,
+          "name": "Estadio BBVA",
+          "city": "Monterrey"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 3",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 1531,
+          "name": "South Africa",
+          "logo": "https://media.api-sports.io/football/teams/1531.png",
+          "winner": null
+        },
+        "away": {
+          "id": 17,
+          "name": "South Korea",
+          "logo": "https://media.api-sports.io/football/teams/17.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 1531,
+    "name": "South Africa",
+    "code": "RSA",
+    "country": "South-Africa",
+    "founded": 1991,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/1531.png",
+    "_resolver": {
+      "input": "South Africa",
+      "matched_query": "South Africa",
+      "matched_name": "South Africa",
+      "team_id": 1531,
+      "attempted": [
+        "South Africa"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 17,
+    "name": "South Korea",
+    "code": "KOR",
+    "country": "South-Korea",
+    "founded": 1933,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/17.png",
+    "_resolver": {
+      "input": "South Korea",
+      "matched_query": "South Korea",
+      "matched_name": "South Korea",
+      "team_id": 17,
+      "attempted": [
+        "South Korea"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group A",
+    "rows": [
+      {
+        "team": "Mexico",
+        "played": 2,
+        "wins": 2,
+        "draws": 0,
+        "losses": 0,
+        "gf": 3,
+        "ga": 0,
+        "gd": 3,
+        "points": 6
+      },
+      {
+        "team": "South Korea",
+        "played": 2,
+        "wins": 1,
+        "draws": 0,
+        "losses": 1,
+        "gf": 2,
+        "ga": 2,
+        "gd": 0,
+        "points": 3
+      },
+      {
+        "team": "Czech Republic",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 2,
+        "ga": 3,
+        "gd": -1,
+        "points": 1
+      },
+      {
+        "team": "South Africa",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 1,
+        "ga": 3,
+        "gd": -2,
+        "points": 1
+      }
+    ]
+  }
+}

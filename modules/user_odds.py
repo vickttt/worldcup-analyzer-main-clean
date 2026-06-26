@@ -3,6 +3,7 @@ import re
 from io import StringIO
 
 from modules.market_utils import asian_handicap_summary, correct_score_summary, totals_summary
+from modules.portfolio_engine import handicap_line_from_text, normalize_handicap_line
 from modules.team_resolver import canonical_name
 
 
@@ -55,6 +56,9 @@ def standardize_selection(item_type, selection):
         if side and line is not None:
             return f"{side.title()} {line:g}"
     if item_type == "handicap":
+        line = handicap_line_from_text(text)
+        if line.get("decimal_line") is not None:
+            return re.sub(r"([+-]?\d+(?:\.\d+)?(?:/[+-]?\d+(?:\.\d+)?)?)", line.get("display_line"), text, count=1)
         return re.sub(r"\s+", " ", text)
     return text
 
@@ -134,6 +138,11 @@ def number_in_text(value):
     return float(match.group(1)) if match else None
 
 
+def handicap_decimal_in_text(value):
+    line = handicap_line_from_text(value)
+    return line.get("decimal_line")
+
+
 def total_side_and_line(value):
     text = normalize(value)
     side = None
@@ -157,8 +166,8 @@ def selection_matches(candidate, item):
         actual_side, actual_line = total_side_and_line(actual_selection)
         return candidate_side == actual_side and candidate_line == actual_line
     if item_type == "handicap":
-        candidate_line = number_in_text(candidate_selection)
-        actual_line = number_in_text(actual_selection)
+        candidate_line = handicap_decimal_in_text(candidate_selection)
+        actual_line = handicap_decimal_in_text(actual_selection)
         if candidate_line is None or actual_line is None:
             return False
         return abs(candidate_line - actual_line) < 0.001

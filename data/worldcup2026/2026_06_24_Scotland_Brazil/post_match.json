@@ -1,0 +1,16 @@
+{
+  "source_id": "1489406",
+  "match": {
+    "home_cn": "Scotland",
+    "away_cn": "Brazil",
+    "home_en": "Scotland",
+    "away_en": "Brazil",
+    "display_name": "Scotland vs Brazil"
+  },
+  "created_at": "2026-06-24T16:51:05.790584+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "status": "pending_post_match",
+  "post_match": null
+}

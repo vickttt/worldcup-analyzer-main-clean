@@ -10,6 +10,7 @@ from modules.schedule_client import fixture_local_datetime
 LOCAL_TZ = ZoneInfo("Asia/Shanghai")
 ROOT = Path(__file__).resolve().parents[1]
 DB_ROOT = ROOT / "data" / "worldcup2026"
+INDEX_PATH = DB_ROOT / "index.json"
 
 
 def slug(value):
@@ -31,11 +32,73 @@ def match_dir(match, selected_fixture=None):
     return DB_ROOT / f"{date_key}_{home}_{away}"
 
 
+def match_pair_suffix(match):
+    home = slug(match.get("home_en") or match.get("home_cn"))
+    away = slug(match.get("away_en") or match.get("away_cn"))
+    return f"{home}_{away}"
+
+
+def database_fixture_datetime(path):
+    payload = read_json(path / "fixture.json") or {}
+    fixture = payload.get("api_football_fixture") or {}
+    raw = fixture.get("raw") or {}
+    kickoff = fixture.get("kickoff_utc") or ((raw.get("fixture") or {}).get("date"))
+    if not kickoff:
+        return None
+    try:
+        return datetime.fromisoformat(str(kickoff).replace("Z", "+00:00")).astimezone(LOCAL_TZ)
+    except ValueError:
+        return None
+
+
+def match_dir_sort_key(path, selected_fixture=None):
+    selected_time = fixture_local_datetime(selected_fixture) if selected_fixture else None
+    db_time = database_fixture_datetime(path)
+    if selected_time and db_time:
+        return (0, abs((db_time - selected_time).total_seconds()))
+    return (1, -path.stat().st_mtime)
+
+
+def candidate_match_dirs(match, selected_fixture=None):
+    exact = match_dir(match, selected_fixture)
+    candidates = [exact]
+
+    suffix = match_pair_suffix(match)
+    if DB_ROOT.exists() and suffix:
+        for path in sorted(DB_ROOT.glob(f"*_{suffix}"), key=lambda item: match_dir_sort_key(item, selected_fixture)):
+            if path not in candidates:
+                candidates.append(path)
+
+    return candidates
+
+
 def read_json(path):
     if not path.exists():
         return None
     with path.open("r", encoding="utf-8") as file:
         return json.load(file)
+
+
+def indexed_match_dir(match, selected_fixture=None):
+    index = read_json(INDEX_PATH) or {}
+    items = index.get("matches") or []
+    fixture_id = str((selected_fixture or {}).get("fixture_id") or "")
+    home = slug(match.get("home_en") or match.get("home_cn"))
+    away = slug(match.get("away_en") or match.get("away_cn"))
+    date_key = match_date_key(selected_fixture)
+    for item in items:
+        if fixture_id and str(item.get("fixture_id") or "") == fixture_id:
+            path = ROOT / str(item.get("database_dir") or "")
+            if path.exists():
+                return path
+        item_home = slug(item.get("home"))
+        item_away = slug(item.get("away"))
+        item_date = str(item.get("date") or "").replace("-", "_")
+        if item_date == date_key and item_home == home and item_away == away:
+            path = ROOT / str(item.get("database_dir") or "")
+            if path.exists():
+                return path
+    return None
 
 
 def parse_price(value):
@@ -126,9 +189,11 @@ def parse_api_football_winner_and_totals(api_football):
     }
 
 
-def load_match_database(match, selected_fixture=None):
-    base = match_dir(match, selected_fixture)
-    if not base.exists():
+def load_match_database(match, selected_fixture=None, full=True):
+    base = indexed_match_dir(match, selected_fixture)
+    if not base:
+        base = next((path for path in candidate_match_dirs(match, selected_fixture) if path.exists()), None)
+    if not base:
         return None
     payload = {
         "base_dir": base,
@@ -136,15 +201,52 @@ def load_match_database(match, selected_fixture=None):
         "odds": read_json(base / "odds.json"),
         "lineups": read_json(base / "lineups.json"),
         "injuries": read_json(base / "injuries.json"),
-        "players": read_json(base / "players.json"),
-        "events": read_json(base / "events.json"),
-        "match_stats": read_json(base / "match_stats.json"),
         "team_stats": read_json(base / "team_stats.json"),
-        "pre_match": read_json(base / "pre_match.json"),
-        "post_match": read_json(base / "post_match.json"),
     }
+    if full:
+        payload.update({
+            "players": read_json(base / "players.json"),
+            "events": read_json(base / "events.json"),
+            "match_stats": read_json(base / "match_stats.json"),
+            "pre_match": read_json(base / "pre_match.json"),
+            "post_match": read_json(base / "post_match.json"),
+        })
     payload["completeness"] = data_completeness(payload)
     return payload
+
+
+def db_polymarket(db):
+    base = (db or {}).get("base_dir")
+    pre_match = (db or {}).get("pre_match")
+    if pre_match is None and base:
+        pre_match = read_json(Path(base) / "pre_match.json") or {}
+
+    payload = (pre_match or {}).get("polymarket")
+    if isinstance(payload, dict):
+        result = dict(payload)
+        result["cache"] = result.get("cache") or {
+            "source": "World Cup Database pre_match",
+            "path": str(Path(base) / "pre_match.json") if base else None,
+        }
+        return result
+
+    return {
+        "found": False,
+        "home_win": None,
+        "draw": None,
+        "away_win": None,
+        "volume": None,
+        "liquidity": None,
+        "event_title": None,
+        "event_id": None,
+        "event_url": None,
+        "source": "Local cache",
+        "message": "本地数据库没有 Polymarket 数据；为避免重复请求，本次未实时调用 API。",
+        "cache": {
+            "source": "World Cup Database",
+            "path": str(Path(base) / "pre_match.json") if base else None,
+        },
+    }
 
 
 def db_odds(db):
@@ -174,15 +276,19 @@ def db_api_football_data(db):
     fixture_payload = (db or {}).get("fixture") or {}
     odds_payload = (db or {}).get("odds") or {}
     api_markets = odds_payload.get("api_football") or {}
+    api_fixture = dict(fixture_payload.get("api_football_fixture") or {})
+    if api_fixture.get("fixture_id") and not api_fixture.get("id"):
+        api_fixture["id"] = api_fixture.get("fixture_id")
     return {
+        "schedule_fixture": fixture_payload.get("schedule_fixture"),
         "fixture_result": {
-            "fixture": fixture_payload.get("api_football_fixture"),
+            "fixture": api_fixture,
             "home_team": fixture_payload.get("home_team"),
             "away_team": fixture_payload.get("away_team"),
             "message": fixture_payload.get("api_football_fixture_message"),
             "cache_status": "History Database",
         },
-        "fixture": fixture_payload.get("api_football_fixture"),
+        "fixture": api_fixture,
         "home_team": fixture_payload.get("home_team"),
         "away_team": fixture_payload.get("away_team"),
         "asian_handicap": api_markets.get("asian_handicap"),

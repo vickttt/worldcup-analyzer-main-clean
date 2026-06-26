@@ -7,6 +7,7 @@ import streamlit as st
 WEATHER_TTL = 6 * 60 * 60
 GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
+WEATHER_TIMEOUT = 2
 
 
 def clean_city(value):
@@ -39,7 +40,7 @@ def geocode_city(city):
     response = requests.get(
         GEOCODE_URL,
         params={"name": city, "count": 1, "language": "en", "format": "json"},
-        timeout=12,
+        timeout=WEATHER_TIMEOUT,
     )
     response.raise_for_status()
     results = response.json().get("results") or []
@@ -97,7 +98,7 @@ def fetch_weather(city, kickoff_value):
             "end_date": date_text,
             "timezone": "auto",
         },
-        timeout=12,
+        timeout=WEATHER_TIMEOUT,
     )
     response.raise_for_status()
     hourly = response.json().get("hourly") or {}

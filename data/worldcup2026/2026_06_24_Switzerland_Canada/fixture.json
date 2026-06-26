@@ -1,0 +1,208 @@
+{
+  "source_id": "1489408",
+  "match": {
+    "home_cn": "Switzerland",
+    "away_cn": "Canada",
+    "home_en": "Switzerland",
+    "away_en": "Canada",
+    "display_name": "Switzerland vs Canada"
+  },
+  "created_at": "2026-06-24T16:49:58.886700+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "54",
+    "home_team": {
+      "id": "8",
+      "name": "Switzerland",
+      "logo": "https://flagcdn.com/w80/ch.png"
+    },
+    "away_team": {
+      "id": "5",
+      "name": "Canada",
+      "logo": "https://flagcdn.com/w80/ca.png"
+    },
+    "kickoff_utc": "06/24/2026 12:00",
+    "kickoff_display": "06/24/2026 12:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "B",
+    "venue_name": "BC Place Vancouver",
+    "venue_city": "Vancouver, Canada",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1489408,
+    "kickoff_utc": "2026-06-24T19:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 3",
+    "venue": "BC Place",
+    "city": "Vancouver",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1489408,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-06-24T19:00:00+00:00",
+        "timestamp": 1782327600,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": 19445,
+          "name": "BC Place",
+          "city": "Vancouver"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 3",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 15,
+          "name": "Switzerland",
+          "logo": "https://media.api-sports.io/football/teams/15.png",
+          "winner": null
+        },
+        "away": {
+          "id": 5529,
+          "name": "Canada",
+          "logo": "https://media.api-sports.io/football/teams/5529.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 15,
+    "name": "Switzerland",
+    "code": "SUI",
+    "country": "Switzerland",
+    "founded": 1895,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/15.png",
+    "_resolver": {
+      "input": "Switzerland",
+      "matched_query": "Switzerland",
+      "matched_name": "Switzerland",
+      "team_id": 15,
+      "attempted": [
+        "Switzerland"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 5529,
+    "name": "Canada",
+    "code": "CAN",
+    "country": "Canada",
+    "founded": 1912,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/5529.png",
+    "_resolver": {
+      "input": "Canada",
+      "matched_query": "Canada",
+      "matched_name": "Canada",
+      "team_id": 5529,
+      "attempted": [
+        "Canada"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group B",
+    "rows": [
+      {
+        "team": "Canada",
+        "played": 2,
+        "wins": 1,
+        "draws": 1,
+        "losses": 0,
+        "gf": 7,
+        "ga": 1,
+        "gd": 6,
+        "points": 4
+      },
+      {
+        "team": "Switzerland",
+        "played": 2,
+        "wins": 1,
+        "draws": 1,
+        "losses": 0,
+        "gf": 5,
+        "ga": 2,
+        "gd": 3,
+        "points": 4
+      },
+      {
+        "team": "Bosnia and Herzegovina",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 2,
+        "ga": 5,
+        "gd": -3,
+        "points": 1
+      },
+      {
+        "team": "Qatar",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 1,
+        "ga": 7,
+        "gd": -6,
+        "points": 1
+      }
+    ]
+  }
+}

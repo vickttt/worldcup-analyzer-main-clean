@@ -1,0 +1,46 @@
+{
+  "source_id": "59",
+  "match": {
+    "home_cn": "Japan",
+    "away_cn": "Sweden",
+    "home_en": "Japan",
+    "away_en": "Sweden",
+    "display_name": "Japan vs Sweden"
+  },
+  "created_at": "2026-06-25T20:11:52.826392+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "player": {
+        "id": 106851,
+        "name": "S. Machino",
+        "photo": "https://media.api-sports.io/football/players/106851.png",
+        "type": "Missing Fixture",
+        "reason": "Illness"
+      },
+      "team": {
+        "id": 12,
+        "name": "Japan",
+        "logo": "https://media.api-sports.io/football/teams/12.png"
+      },
+      "fixture": {
+        "id": 1539011,
+        "timezone": "UTC",
+        "date": "2026-06-25T23:00:00+00:00",
+        "timestamp": 1782428400
+      },
+      "league": {
+        "id": 1,
+        "season": 2026,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null
+      }
+    }
+  ],
+  "error": null
+}

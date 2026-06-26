@@ -37,6 +37,12 @@
 埃及:
   canonical: Egypt
   aliases: [Egypt]
+哥伦比亚:
+  canonical: Colombia
+  aliases: [Colombia]
+Colombia:
+  canonical: Colombia
+  aliases: [Colombia]
 葡萄牙:
   canonical: Portugal
   aliases: [Portugal]

@@ -2,7 +2,13 @@
   "schema_version": 1,
   "matches": {
     "2026_06_18_Switzerland_Bosnia_and_Herzegovina": "2026-06-19T12:49:05.004799+08:00",
-    "2026_06_19_United_States_Australia": "2026-06-20T20:28:31.447374+08:00"
+    "2026_06_19_United_States_Australia": "2026-06-20T20:28:31.447374+08:00",
+    "2026_06_24_South_Africa_South_Korea": "2026-06-25T11:25:38.060596+08:00",
+    "2026_06_24_Bosnia_and_Herzegovina_Qatar": "2026-06-25T19:20:08.216387+08:00",
+    "2026_06_24_Switzerland_Canada": "2026-06-25T19:26:25.330296+08:00",
+    "2026_06_24_Morocco_Haiti": "2026-06-25T19:27:57.879307+08:00",
+    "2026_06_24_Scotland_Brazil": "2026-06-25T19:28:30.416044+08:00",
+    "2026_06_24_Czech_Republic_Mexico": "2026-06-25T19:30:01.946850+08:00"
   },
   "portfolios": {
     "备选组合3": {
@@ -105,49 +111,121 @@
       "win_rate": 0.0
     },
     "推荐组合": {
-      "matches": 1,
-      "stake": 100,
-      "profit": 66,
-      "wins": 1,
-      "max_drawdown": 0,
-      "roi": 0.66,
-      "win_rate": 1.0
+      "matches": 7,
+      "stake": 5600,
+      "profit": 2352,
+      "wins": 4,
+      "max_drawdown": -300,
+      "roi": 0.42,
+      "win_rate": 0.5714285714285714
     },
     "第2组合": {
-      "matches": 1,
-      "stake": 100,
-      "profit": 66,
-      "wins": 1,
-      "max_drawdown": 0,
-      "roi": 0.66,
-      "win_rate": 1.0
+      "matches": 7,
+      "stake": 5600,
+      "profit": 1021,
+      "wins": 4,
+      "max_drawdown": -710,
+      "roi": 0.18232142857142858,
+      "win_rate": 0.5714285714285714
     },
     "第3组合": {
-      "matches": 1,
-      "stake": 100,
-      "profit": 66,
-      "wins": 1,
-      "max_drawdown": 0,
-      "roi": 0.66,
-      "win_rate": 1.0
+      "matches": 7,
+      "stake": 5600,
+      "profit": 461,
+      "wins": 4,
+      "max_drawdown": -1100,
+      "roi": 0.08232142857142857,
+      "win_rate": 0.5714285714285714
     },
     "第4组合": {
-      "matches": 1,
-      "stake": 100,
-      "profit": 66,
-      "wins": 1,
-      "max_drawdown": 0,
-      "roi": 0.66,
-      "win_rate": 1.0
+      "matches": 7,
+      "stake": 5600,
+      "profit": -90,
+      "wins": 3,
+      "max_drawdown": -1500,
+      "roi": -0.01607142857142857,
+      "win_rate": 0.42857142857142855
     },
     "第5组合": {
-      "matches": 1,
-      "stake": 100,
-      "profit": 66,
+      "matches": 7,
+      "stake": 5600,
+      "profit": 1868,
+      "wins": 5,
+      "max_drawdown": -300,
+      "roi": 0.3335714285714286,
+      "win_rate": 0.7142857142857143
+    },
+    "第10组合": {
+      "matches": 5,
+      "stake": 5400,
+      "profit": -4735,
       "wins": 1,
-      "max_drawdown": 0,
-      "roi": 0.66,
-      "win_rate": 1.0
+      "max_drawdown": -1800,
+      "roi": -0.8768518518518519,
+      "win_rate": 0.2
+    },
+    "第7组合": {
+      "matches": 6,
+      "stake": 5500,
+      "profit": 17,
+      "wins": 2,
+      "max_drawdown": -714,
+      "roi": 0.0030909090909090908,
+      "win_rate": 0.3333333333333333
+    },
+    "第8组合": {
+      "matches": 6,
+      "stake": 5500,
+      "profit": -2448,
+      "wins": 1,
+      "max_drawdown": -1800,
+      "roi": -0.4450909090909091,
+      "win_rate": 0.16666666666666666
+    },
+    "第6组合": {
+      "matches": 6,
+      "stake": 5500,
+      "profit": 1152,
+      "wins": 3,
+      "max_drawdown": -640,
+      "roi": 0.20945454545454545,
+      "win_rate": 0.5
+    },
+    "第9组合": {
+      "matches": 6,
+      "stake": 5500,
+      "profit": -4688,
+      "wins": 0,
+      "max_drawdown": -1500,
+      "roi": -0.8523636363636363,
+      "win_rate": 0.0
+    },
+    "我的组合": {
+      "matches": 5,
+      "stake": 5400,
+      "profit": -1047,
+      "wins": 2,
+      "max_drawdown": -1400,
+      "roi": -0.1938888888888889,
+      "win_rate": 0.4
+    },
+    "第11组合": {
+      "matches": 1,
+      "stake": 1100,
+      "profit": -450,
+      "wins": 0,
+      "max_drawdown": -450,
+      "roi": -0.4090909090909091,
+      "win_rate": 0.0
+    },
+    "第12组合": {
+      "matches": 1,
+      "stake": 1100,
+      "profit": -1100,
+      "wins": 0,
+      "max_drawdown": -1100,
+      "roi": -1.0,
+      "win_rate": 0.0
     }
   }
 }

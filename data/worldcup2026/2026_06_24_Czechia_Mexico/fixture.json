@@ -1,0 +1,135 @@
+{
+  "source_id": "52",
+  "match": {
+    "home_cn": "Czech Republic",
+    "away_cn": "Mexico",
+    "home_en": "Czechia",
+    "away_en": "Mexico",
+    "display_name": "Czech Republic vs Mexico"
+  },
+  "created_at": "2026-06-24T17:16:44.983362+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": null,
+  "api_football_fixture": {
+    "fixture_id": 1539010,
+    "kickoff_utc": "2026-06-25T01:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 3",
+    "venue": "Estadio Azteca",
+    "city": "Mexico City",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1539010,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-06-25T01:00:00+00:00",
+        "timestamp": 1782349200,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": 1069,
+          "name": "Estadio Azteca",
+          "city": "Mexico City"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 3",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 770,
+          "name": "Czechia",
+          "logo": "https://media.api-sports.io/football/teams/770.png",
+          "winner": null
+        },
+        "away": {
+          "id": 16,
+          "name": "Mexico",
+          "logo": "https://media.api-sports.io/football/teams/16.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 770,
+    "name": "Czechia",
+    "code": "CZE",
+    "country": "Czech-Republic",
+    "founded": 1901,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/770.png",
+    "_resolver": {
+      "input": "Czechia",
+      "matched_query": "Czechia",
+      "matched_name": "Czechia",
+      "team_id": 770,
+      "attempted": [
+        "Czechia"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 16,
+    "name": "Mexico",
+    "code": "MEX",
+    "country": "Mexico",
+    "founded": 1927,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/16.png",
+    "_resolver": {
+      "input": "Mexico",
+      "matched_query": "Mexico",
+      "matched_name": "Mexico",
+      "team_id": 16,
+      "attempted": [
+        "Mexico"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": null
+}

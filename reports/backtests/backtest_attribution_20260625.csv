@@ -1,0 +1,162 @@
+match_name,actual_score,portfolio_name,portfolio_style,pre_match_rank,profit,roi,failure_pattern,favorite_margin,handicap_depth,actual_score_covered,underdog_goal_tail_included,draw_path_included,qualification_pressure_type,recommended_fix
+Switzerland vs Bosnia and Herzegovina,4:1,第4组合,System,,1152.0,0.96,profitable,three_plus_goal_win,1.0,,False,False,,No tuning action from this row alone.
+Switzerland vs Bosnia and Herzegovina,4:1,推荐组合,Recommendation / Rank #1,1,906.0,0.755,profitable,three_plus_goal_win,1.0,,False,False,,No tuning action from this row alone.
+Switzerland vs Bosnia and Herzegovina,4:1,第5组合,System,,660.0,0.55,profitable,three_plus_goal_win,0.0,,False,False,,No tuning action from this row alone.
+Switzerland vs Bosnia and Herzegovina,4:1,第2组合,System,,596.0,0.497,profitable,three_plus_goal_win,1.0,,True,False,,No tuning action from this row alone.
+Switzerland vs Bosnia and Herzegovina,4:1,第3组合,System,,172.0,0.143,profitable,three_plus_goal_win,1.0,,False,True,,No tuning action from this row alone.
+Switzerland vs Bosnia and Herzegovina,4:1,第7组合,System,,-270.0,-0.225,correct_score_over_concentrated;underdog_goal_broke_clean_sheet,three_plus_goal_win,0.0,,False,True,,Add or reweight underdog-goal adjacent score paths.
+Switzerland vs Bosnia and Herzegovina,4:1,第10组合,System,,-653.0,-0.544,correct_score_over_concentrated;over_under_wrong,three_plus_goal_win,1.0,,True,True,,Limit clean-sheet correct-score concentration.
+Switzerland vs Bosnia and Herzegovina,4:1,第6组合,System,,-1200.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;underdog_goal_broke_clean_sheet,three_plus_goal_win,0.0,,False,True,,Add or reweight underdog-goal adjacent score paths.
+Switzerland vs Bosnia and Herzegovina,4:1,第8组合,System,,-1200.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;underdog_goal_broke_clean_sheet,three_plus_goal_win,0.0,,False,True,,Add or reweight underdog-goal adjacent score paths.
+Switzerland vs Bosnia and Herzegovina,4:1,第9组合,System,,-1200.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.0,,True,False,,Limit clean-sheet correct-score concentration.
+Switzerland vs Bosnia and Herzegovina,4:1,第11组合,System,,-1200.0,-1.0,low_odds_false_safety;over_under_wrong,three_plus_goal_win,0.0,,False,False,,Check totals signal against score grid and pressure context.
+Switzerland vs Bosnia and Herzegovina,4:1,我的组合,My Portfolio,,-1500.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.0,,True,True,,Limit clean-sheet correct-score concentration.
+土耳其 vs 巴拉圭,0:1,推荐组合,Recommendation / Rank #1,1,-100.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第2组合,System,2,-100.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第3组合,System,3,-100.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第4组合,System,4,-100.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,推荐组合,Recommendation / Rank #1,5,-100.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第6组合,System,6,-100.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第7组合,System,7,869.55,8.6955,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+土耳其 vs 巴拉圭,0:1,第8组合,System,8,869.55,8.6955,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+土耳其 vs 巴拉圭,0:1,第9组合,System,9,869.55,8.6955,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,我的组合,My Portfolio,,858.0,0.572,profitable,two_goal_win,0.0,,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,推荐组合,Recommendation / Rank #1,1,66.0,0.66,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,第2组合,System,2,66.0,0.66,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,第3组合,System,3,66.0,0.66,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,第4组合,System,4,66.0,0.66,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,第5组合,System,5,66.0,0.66,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+巴西 vs 海地,3:0,推荐组合,Recommendation / Rank #1,1,-100.0,-1.0,low_odds_false_safety,three_plus_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+巴西 vs 海地,3:0,第2组合,System,2,-100.0,-1.0,low_odds_false_safety,three_plus_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+巴西 vs 海地,3:0,推荐组合,Recommendation / Rank #1,3,8.0,0.08,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+巴西 vs 海地,3:0,第4组合,System,4,8.0,0.08,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+巴西 vs 海地,3:0,第5组合,System,5,8.0,0.08,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+巴西 vs 海地,3:0,第6组合,System,6,8.0,0.08,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+厄瓜多尔 vs 库拉索,0:0,推荐组合,Recommendation / Rank #1,1,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+厄瓜多尔 vs 库拉索,0:0,第2组合,System,2,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+厄瓜多尔 vs 库拉索,0:0,第3组合,System,3,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+厄瓜多尔 vs 库拉索,0:0,第4组合,System,4,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+厄瓜多尔 vs 库拉索,0:0,第5组合,System,5,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+厄瓜多尔 vs 库拉索,0:0,第6组合,System,6,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+厄瓜多尔 vs 库拉索,0:0,第7组合,System,7,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+厄瓜多尔 vs 库拉索,0:0,第8组合,System,8,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+厄瓜多尔 vs 库拉索,0:0,第9组合,System,9,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+厄瓜多尔 vs 库拉索,0:0,第10组合,System,10,-1800.0,-1.0,draw_path_missed;low_odds_false_safety,draw,0.0,False,False,False,,Review draw/under coverage in pressure-sensitive games.
+德国 vs 科特迪瓦,2:1,推荐组合,Recommendation / Rank #1,1,-1800.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+德国 vs 科特迪瓦,2:1,第2组合,System,2,-441.0,-0.245,market_direction_wrong,one_goal_win,0.0,False,False,False,,No tuning action from this row alone.
+德国 vs 科特迪瓦,2:1,第3组合,System,3,12.0,0.0067,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+德国 vs 科特迪瓦,2:1,第4组合,System,4,-1800.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+德国 vs 科特迪瓦,2:1,第5组合,System,5,-1347.0,-0.7483,market_direction_wrong,one_goal_win,0.0,False,False,False,,No tuning action from this row alone.
+德国 vs 科特迪瓦,2:1,第6组合,System,6,-1498.0,-0.8322,market_direction_wrong,one_goal_win,0.0,False,False,False,,No tuning action from this row alone.
+德国 vs 科特迪瓦,2:1,第7组合,System,7,-1800.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+德国 vs 科特迪瓦,2:1,第8组合,System,8,-1800.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+德国 vs 科特迪瓦,2:1,第9组合,System,9,-1800.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+德国 vs 科特迪瓦,2:1,第10组合,System,10,918.0,0.51,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+荷兰 vs 瑞典,5:1,推荐组合,Recommendation / Rank #1,1,72.0,0.72,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+荷兰 vs 瑞典,5:1,第2组合,System,2,72.0,0.72,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+荷兰 vs 瑞典,5:1,第3组合,System,3,72.0,0.72,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+荷兰 vs 瑞典,5:1,第4组合,System,4,72.0,0.72,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+荷兰 vs 瑞典,5:1,第5组合,System,5,72.0,0.72,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,推荐组合,Recommendation / Rank #1,1,593.75,1.9792,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,第2组合,System,2,210.0,0.7,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,第3组合,System,3,210.0,0.7,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,推荐组合,Recommendation / Rank #1,4,253.75,0.8458,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,第5组合,System,5,-300.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+苏格兰 vs 摩洛哥,0:1,第6组合,System,6,-130.0,-0.4333,market_direction_wrong,one_goal_win,0.0,False,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,第7组合,System,7,1361.25,4.5375,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,第8组合,System,8,807.5,2.6917,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,第9组合,System,9,253.75,0.8458,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,第10组合,System,10,253.75,0.8458,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 摩洛哥,0:1,第11组合,System,11,197.84,0.6595,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+土耳其 vs 巴拉圭,0:1,推荐组合,Recommendation / Rank #1,1,-1500.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第2组合,System,2,-1500.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第3组合,System,3,-1500.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第4组合,System,4,-1500.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第5组合,System,5,2378.18,1.5855,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+土耳其 vs 巴拉圭,0:1,第6组合,System,6,2378.18,1.5855,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+土耳其 vs 巴拉圭,0:1,第7组合,System,7,-1500.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+土耳其 vs 巴拉圭,0:1,第8组合,System,8,13043.18,8.6955,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+土耳其 vs 巴拉圭,0:1,第9组合,System,9,6256.36,4.1709,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+土耳其 vs 巴拉圭,0:1,第10组合,System,10,1181.54,0.7877,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+土耳其 vs 巴拉圭,0:1,推荐组合,Recommendation / Rank #1,11,-351.69,-0.2345,market_direction_wrong,one_goal_win,0.0,False,False,False,,No tuning action from this row alone.
+突尼斯 vs 日本,0:4,推荐组合,Recommendation / Rank #1,1,350.0,0.5,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+突尼斯 vs 日本,0:4,第2组合,System,2,350.0,0.5,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+突尼斯 vs 日本,0:4,第3组合,System,3,-100.0,-0.1429,market_direction_wrong,three_plus_goal_win,0.0,False,False,False,,No tuning action from this row alone.
+突尼斯 vs 日本,0:4,第4组合,System,4,-700.0,-1.0,low_odds_false_safety,three_plus_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+突尼斯 vs 日本,0:4,第5组合,System,5,-700.0,-1.0,low_odds_false_safety,three_plus_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+突尼斯 vs 日本,0:4,第6组合,System,6,-250.0,-0.3571,market_direction_wrong,three_plus_goal_win,0.0,False,False,False,,No tuning action from this row alone.
+突尼斯 vs 日本,0:4,第7组合,System,7,-400.0,-0.5714,market_direction_wrong,three_plus_goal_win,0.0,False,False,False,,No tuning action from this row alone.
+突尼斯 vs 日本,0:4,第8组合,System,8,-700.0,-1.0,low_odds_false_safety,three_plus_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+突尼斯 vs 日本,0:4,第9组合,System,9,-700.0,-1.0,low_odds_false_safety,three_plus_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+突尼斯 vs 日本,0:4,第10组合,System,10,-700.0,-1.0,low_odds_false_safety,three_plus_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+美国 vs 澳大利亚,2:0,推荐组合,Recommendation / Rank #1,1,60.0,0.6,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,第2组合,System,2,60.0,0.6,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,第3组合,System,3,60.0,0.6,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,第4组合,System,4,60.0,0.6,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+美国 vs 澳大利亚,2:0,第5组合,System,5,60.0,0.6,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+波黑 vs 卡塔尔,3:1,推荐组合,Recommendation / Rank #1,1,1545.0,1.03,profitable,two_goal_win,1.5,True,False,False,,No tuning action from this row alone.
+波黑 vs 卡塔尔,3:1,第2组合,System,2,1545.0,1.03,profitable,two_goal_win,1.5,True,False,False,,No tuning action from this row alone.
+波黑 vs 卡塔尔,3:1,第6组合,System,6,1009.0,0.673,profitable,two_goal_win,1.5,True,False,False,,No tuning action from this row alone.
+波黑 vs 卡塔尔,3:1,第5组合,System,5,540.0,0.36,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+波黑 vs 卡塔尔,3:1,第3组合,System,3,327.0,0.218,profitable,two_goal_win,1.5,True,False,False,,No tuning action from this row alone.
+波黑 vs 卡塔尔,3:1,我的组合,My Portfolio,,-100.0,-0.111,correct_score_over_concentrated;underdog_goal_broke_clean_sheet,two_goal_win,0.0,,False,False,,Add or reweight underdog-goal adjacent score paths.
+波黑 vs 卡塔尔,3:1,第7组合,System,7,-144.0,-0.096,correct_score_over_concentrated;underdog_goal_broke_clean_sheet,two_goal_win,1.5,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+波黑 vs 卡塔尔,3:1,第8组合,System,8,-276.0,-0.184,correct_score_over_concentrated;underdog_goal_broke_clean_sheet,two_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+波黑 vs 卡塔尔,3:1,第4组合,System,4,-1500.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;underdog_goal_broke_clean_sheet,two_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+波黑 vs 卡塔尔,3:1,第9组合,System,9,-1500.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;underdog_goal_broke_clean_sheet,two_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+波黑 vs 卡塔尔,3:1,第10组合,System,10,-1500.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;underdog_goal_broke_clean_sheet,two_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+捷克 vs 墨西哥,0:3,我的组合,My Portfolio,,0.0,0.0,profitable,three_plus_goal_win,0.0,,False,False,,No tuning action from this row alone.
+捷克 vs 墨西哥,0:3,推荐组合,Recommendation / Rank #1,1,-100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+捷克 vs 墨西哥,0:3,第2组合,System,2,-100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+捷克 vs 墨西哥,0:3,第3组合,System,3,-100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+捷克 vs 墨西哥,0:3,第4组合,System,4,-100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+捷克 vs 墨西哥,0:3,第5组合,System,5,-100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+捷克 vs 墨西哥,0:3,第6组合,System,6,-100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.5,False,True,False,,Limit clean-sheet correct-score concentration.
+捷克 vs 墨西哥,0:3,第7组合,System,7,-100.0,-1.0,low_odds_false_safety,three_plus_goal_win,0.5,False,False,False,,Reduce false safety from low-odds single-path assets.
+捷克 vs 墨西哥,0:3,第8组合,System,8,-100.0,-1.0,low_odds_false_safety,three_plus_goal_win,0.5,False,False,False,,Reduce false safety from low-odds single-path assets.
+捷克 vs 墨西哥,0:3,第9组合,System,9,-100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.5,False,True,False,,Limit clean-sheet correct-score concentration.
+摩洛哥 vs 海地,4:2,第5组合,System,5,992.0,0.551,profitable,two_goal_win,1.5,True,False,False,,No tuning action from this row alone.
+摩洛哥 vs 海地,4:2,第3组合,System,3,640.0,0.356,profitable,two_goal_win,1.5,True,False,False,,No tuning action from this row alone.
+摩洛哥 vs 海地,4:2,第2组合,System,2,288.0,0.16,profitable,two_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+摩洛哥 vs 海地,4:2,推荐组合,Recommendation / Rank #1,1,-94.0,-0.052,correct_score_over_concentrated;underdog_goal_broke_clean_sheet,two_goal_win,1.5,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+摩洛哥 vs 海地,4:2,第4组合,System,4,-445.0,-0.247,correct_score_over_concentrated;underdog_goal_broke_clean_sheet,two_goal_win,1.5,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+摩洛哥 vs 海地,4:2,第6组合,System,6,-640.0,-0.356,correct_score_over_concentrated;underdog_goal_broke_clean_sheet,two_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+摩洛哥 vs 海地,4:2,第7组合,Aggressive,7,-714.0,-0.397,correct_score_over_concentrated;underdog_goal_broke_clean_sheet,two_goal_win,1.5,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+摩洛哥 vs 海地,4:2,第9组合,Tail Hedge,9,-988.0,-0.549,correct_score_over_concentrated;underdog_goal_broke_clean_sheet,two_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+摩洛哥 vs 海地,4:2,第8组合,System,8,-1800.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;underdog_goal_broke_clean_sheet,two_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+摩洛哥 vs 海地,4:2,第10组合,System,10,-1800.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;underdog_goal_broke_clean_sheet,two_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+苏格兰 vs 巴西,0:3,第4组合,System,4,1230.0,1.118,profitable,three_plus_goal_win,0.0,True,True,False,,No tuning action from this row alone.
+苏格兰 vs 巴西,0:3,第7组合,Tail Hedge,7,843.0,0.766,profitable,three_plus_goal_win,0.0,True,True,False,,No tuning action from this row alone.
+苏格兰 vs 巴西,0:3,第6组合,System,6,713.0,0.648,profitable,three_plus_goal_win,1.5,True,True,False,,No tuning action from this row alone.
+苏格兰 vs 巴西,0:3,第5组合,Aggressive,5,453.0,0.412,profitable,three_plus_goal_win,1.5,True,True,False,,No tuning action from this row alone.
+苏格兰 vs 巴西,0:3,推荐组合,Recommendation / Rank #1,1,330.0,0.3,profitable,three_plus_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+苏格兰 vs 巴西,0:3,我的组合,My Portfolio,,77.0,0.11,profitable,three_plus_goal_win,0.0,,True,False,,No tuning action from this row alone.
+苏格兰 vs 巴西,0:3,第8组合,System,8,-190.0,-0.173,correct_score_over_concentrated,three_plus_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+苏格兰 vs 巴西,0:3,第11组合,System,11,-450.0,-0.409,market_direction_wrong,three_plus_goal_win,1.5,False,False,False,,No tuning action from this row alone.
+苏格兰 vs 巴西,0:3,第2组合,Conservative,2,-710.0,-0.645,correct_score_over_concentrated,three_plus_goal_win,1.5,False,True,False,,Limit clean-sheet correct-score concentration.
+苏格兰 vs 巴西,0:3,第3组合,System,3,-1100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,1.5,False,True,False,,Limit clean-sheet correct-score concentration.
+苏格兰 vs 巴西,0:3,第9组合,System,9,-1100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+苏格兰 vs 巴西,0:3,第10组合,System,10,-1100.0,-1.0,low_odds_false_safety,three_plus_goal_win,1.5,False,False,False,,Reduce false safety from low-odds single-path assets.
+苏格兰 vs 巴西,0:3,第12组合,System,12,-1100.0,-1.0,correct_score_over_concentrated;low_odds_false_safety,three_plus_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+南非 vs 韩国,1:0,第10组合,System,10,365.0,1.217,profitable,one_goal_win,0.5,True,False,False,,No tuning action from this row alone.
+南非 vs 韩国,1:0,第7组合,System,7,144.0,0.48,profitable,one_goal_win,0.5,True,True,False,,No tuning action from this row alone.
+南非 vs 韩国,1:0,第8组合,System,8,144.0,0.48,profitable,one_goal_win,0.5,True,False,False,,No tuning action from this row alone.
+南非 vs 韩国,1:0,第6组合,Aggressive,6,-78.0,-0.26,correct_score_over_concentrated;market_direction_wrong,one_goal_win,0.5,False,True,False,,Limit clean-sheet correct-score concentration.
+南非 vs 韩国,1:0,推荐组合,Recommendation / Rank #1,1,-300.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+南非 vs 韩国,1:0,第2组合,System,2,-300.0,-1.0,low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,False,False,,Reduce false safety from low-odds single-path assets.
+南非 vs 韩国,1:0,第3组合,System,3,-300.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;market_direction_wrong,one_goal_win,0.5,False,True,False,,Limit clean-sheet correct-score concentration.
+南非 vs 韩国,1:0,第4组合,Tail Hedge,4,-300.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+南非 vs 韩国,1:0,第5组合,System,5,-300.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+南非 vs 韩国,1:0,第9组合,System,9,-300.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;market_direction_wrong,one_goal_win,0.0,False,True,False,,Limit clean-sheet correct-score concentration.
+南非 vs 韩国,1:0,我的组合,My Portfolio,,-1400.0,-0.609,correct_score_over_concentrated;market_direction_wrong;over_under_wrong,one_goal_win,0.0,,True,False,,Limit clean-sheet correct-score concentration.
+瑞士 vs 加拿大,2:1,第4组合,System,4,959.0,1.37,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+瑞士 vs 加拿大,2:1,第3组合,System,3,928.0,1.326,profitable,one_goal_win,0.5,True,False,False,,No tuning action from this row alone.
+瑞士 vs 加拿大,2:1,推荐组合,Recommendation / Rank #1,1,905.0,1.293,profitable,one_goal_win,0.5,True,False,False,,No tuning action from this row alone.
+瑞士 vs 加拿大,2:1,我的组合,My Portfolio,,376.0,0.376,profitable,one_goal_win,0.5,,False,False,,No tuning action from this row alone.
+瑞士 vs 加拿大,2:1,第6组合,System,6,248.0,0.354,profitable,one_goal_win,0.0,True,False,False,,No tuning action from this row alone.
+瑞士 vs 加拿大,2:1,第2组合,System,2,232.0,0.331,profitable,one_goal_win,0.5,True,False,False,,No tuning action from this row alone.
+瑞士 vs 加拿大,2:1,第5组合,System,5,217.0,0.31,profitable,one_goal_win,0.5,True,False,False,,No tuning action from this row alone.
+瑞士 vs 加拿大,2:1,第7组合,Aggressive,7,-12.0,-0.017,correct_score_over_concentrated;market_direction_wrong;underdog_goal_broke_clean_sheet,one_goal_win,0.5,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+瑞士 vs 加拿大,2:1,第8组合,Tail Hedge,8,-226.0,-0.323,correct_score_over_concentrated;market_direction_wrong;underdog_goal_broke_clean_sheet,one_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+瑞士 vs 加拿大,2:1,第9组合,System,9,-700.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;market_direction_wrong;underdog_goal_broke_clean_sheet,one_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.
+瑞士 vs 加拿大,2:1,第10组合,System,10,-700.0,-1.0,correct_score_over_concentrated;low_odds_false_safety;market_direction_wrong;underdog_goal_broke_clean_sheet,one_goal_win,0.0,False,False,False,,Add or reweight underdog-goal adjacent score paths.

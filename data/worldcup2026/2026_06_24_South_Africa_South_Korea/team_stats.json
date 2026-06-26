@@ -1,0 +1,65 @@
+{
+  "source_id": "51",
+  "match": {
+    "home_cn": "South Africa",
+    "away_cn": "South Korea",
+    "home_en": "South Africa",
+    "away_en": "South Korea",
+    "display_name": "South Africa vs South Korea"
+  },
+  "created_at": "2026-06-24T17:16:19.453851+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "standings": {
+    "group": "Group A",
+    "rows": [
+      {
+        "team": "Mexico",
+        "played": 2,
+        "wins": 2,
+        "draws": 0,
+        "losses": 0,
+        "gf": 3,
+        "ga": 0,
+        "gd": 3,
+        "points": 6
+      },
+      {
+        "team": "South Korea",
+        "played": 2,
+        "wins": 1,
+        "draws": 0,
+        "losses": 1,
+        "gf": 2,
+        "ga": 2,
+        "gd": 0,
+        "points": 3
+      },
+      {
+        "team": "Czech Republic",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 2,
+        "ga": 3,
+        "gd": -1,
+        "points": 1
+      },
+      {
+        "team": "South Africa",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 1,
+        "ga": 3,
+        "gd": -2,
+        "points": 1
+      }
+    ]
+  },
+  "home_recent": [],
+  "away_recent": []
+}

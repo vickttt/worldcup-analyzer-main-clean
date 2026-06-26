@@ -1,0 +1,208 @@
+{
+  "source_id": "1489406",
+  "match": {
+    "home_cn": "Scotland",
+    "away_cn": "Brazil",
+    "home_en": "Scotland",
+    "away_en": "Brazil",
+    "display_name": "Scotland vs Brazil"
+  },
+  "created_at": "2026-06-24T16:51:05.790584+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "49",
+    "home_team": {
+      "id": "12",
+      "name": "Scotland",
+      "logo": "https://flagcdn.com/w80/gb-sct.png"
+    },
+    "away_team": {
+      "id": "9",
+      "name": "Brazil",
+      "logo": "https://flagcdn.com/w80/br.png"
+    },
+    "kickoff_utc": "06/24/2026 18:00",
+    "kickoff_display": "06/24/2026 18:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "C",
+    "venue_name": "Miami Stadium",
+    "venue_city": "Miami (Miami Gardens), United States",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1489406,
+    "kickoff_utc": "2026-06-24T22:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 3",
+    "venue": "Hard Rock Stadium",
+    "city": "Miami",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1489406,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-06-24T22:00:00+00:00",
+        "timestamp": 1782338400,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": null,
+          "name": "Hard Rock Stadium",
+          "city": "Miami"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 3",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 1108,
+          "name": "Scotland",
+          "logo": "https://media.api-sports.io/football/teams/1108.png",
+          "winner": null
+        },
+        "away": {
+          "id": 6,
+          "name": "Brazil",
+          "logo": "https://media.api-sports.io/football/teams/6.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 1108,
+    "name": "Scotland",
+    "code": "SCO",
+    "country": "Scotland",
+    "founded": 1873,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/1108.png",
+    "_resolver": {
+      "input": "Scotland",
+      "matched_query": "Scotland",
+      "matched_name": "Scotland",
+      "team_id": 1108,
+      "attempted": [
+        "Scotland"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 6,
+    "name": "Brazil",
+    "code": "BRA",
+    "country": "Brazil",
+    "founded": 1914,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/6.png",
+    "_resolver": {
+      "input": "Brazil",
+      "matched_query": "Brazil",
+      "matched_name": "Brazil",
+      "team_id": 6,
+      "attempted": [
+        "Brazil"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group C",
+    "rows": [
+      {
+        "team": "Brazil",
+        "played": 2,
+        "wins": 1,
+        "draws": 1,
+        "losses": 0,
+        "gf": 4,
+        "ga": 1,
+        "gd": 3,
+        "points": 4
+      },
+      {
+        "team": "Morocco",
+        "played": 2,
+        "wins": 1,
+        "draws": 1,
+        "losses": 0,
+        "gf": 2,
+        "ga": 1,
+        "gd": 1,
+        "points": 4
+      },
+      {
+        "team": "Scotland",
+        "played": 2,
+        "wins": 1,
+        "draws": 0,
+        "losses": 1,
+        "gf": 1,
+        "ga": 1,
+        "gd": 0,
+        "points": 3
+      },
+      {
+        "team": "Haiti",
+        "played": 2,
+        "wins": 0,
+        "draws": 0,
+        "losses": 2,
+        "gf": 0,
+        "ga": 4,
+        "gd": -4,
+        "points": 0
+      }
+    ]
+  }
+}

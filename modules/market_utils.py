@@ -1,6 +1,8 @@
 import re
 from collections import Counter, defaultdict
 
+from modules.pregame_content import team_cn
+
 
 def safe_float(value):
     try:
@@ -12,6 +14,31 @@ def safe_float(value):
 def mean(values):
     clean = [value for value in values if value is not None]
     return sum(clean) / len(clean) if clean else None
+
+
+def _fmt_line(value):
+    if value is None:
+        return "-"
+    return f"{float(value):+g}"
+
+
+def _team_label(match, side):
+    if not match:
+        return side.title()
+    value = match.get("home_cn" if side == "home" else "away_cn") or match.get("home" if side == "home" else "away") or side.title()
+    return team_cn(value)
+
+
+def favorite_side_from_winner_odds(odds):
+    if not odds:
+        return None
+    home = safe_float(odds.get("home_win"))
+    away = safe_float(odds.get("away_win"))
+    if home is None or away is None:
+        return None
+    if abs(home - away) < 0.03:
+        return None
+    return "home" if home < away else "away"
 
 
 def parse_handicap_value(value):
@@ -31,7 +58,7 @@ def parse_handicap_value(value):
     }
 
 
-def asian_handicap_summary(rows):
+def _parsed_handicap_rows(rows):
     parsed_rows = []
     for row in rows or []:
         parsed = parse_handicap_value(row.get("value"))
@@ -39,6 +66,131 @@ def asian_handicap_summary(rows):
         if not parsed or odd is None:
             continue
         parsed_rows.append({**row, **parsed, "odd": odd})
+    return parsed_rows
+
+
+def identify_handicap_center(handicap_rows, user_odds=None, odds=None, match=None):
+    """Identify the market handicap center without treating coverage as direction."""
+    parsed_rows = _parsed_handicap_rows(handicap_rows)
+    if not parsed_rows:
+        return {
+            "available": False,
+            "center_label": "No handicap center",
+            "direction_label": "No view",
+            "coverage_label": "No coverage candidate",
+            "outlier_count": 0,
+            "warning": "No Asian handicap rows were available.",
+        }
+
+    favorite_side = favorite_side_from_winner_odds(odds)
+    normalized_same_sign = 0
+    if favorite_side:
+        by_book_line = defaultdict(dict)
+        for row in parsed_rows:
+            if row["line"] > 0:
+                by_book_line[(row.get("bookmaker"), row["line"])][row["side"]] = row
+        for pair in by_book_line.values():
+            favorite_row = pair.get(favorite_side)
+            other_row = pair.get("away" if favorite_side == "home" else "home")
+            if favorite_row and other_row and favorite_row["odd"] < other_row["odd"]:
+                favorite_row["line"] = -abs(favorite_row["line"])
+                favorite_row["abs_line"] = abs(favorite_row["line"])
+                favorite_row["label"] = f"{favorite_row['side'].title()} {favorite_row['line']:+g}"
+                normalized_same_sign += 1
+
+    outliers = [
+        row for row in parsed_rows
+        if row["odd"] < 1.18 or row["odd"] > 5.8 or row["abs_line"] > 2.5
+    ]
+    center_rows = [
+        row for row in parsed_rows
+        if 1.18 <= row["odd"] <= 5.8 and row["abs_line"] <= 1.25
+    ]
+    if not center_rows:
+        center_rows = parsed_rows
+
+    favorite_rows = []
+    if favorite_side:
+        favorite_rows = [
+            row for row in center_rows
+            if row["side"] == favorite_side and row["line"] <= 0 and row["abs_line"] <= 0.75
+        ]
+    if not favorite_rows:
+        favorite_rows = [
+            row for row in center_rows
+            if row["abs_line"] <= 0.75 and 1.25 <= row["odd"] <= 2.6
+        ]
+
+    grouped = defaultdict(list)
+    for row in favorite_rows or center_rows:
+        grouped[(row["side"], row["line"])].append(row)
+
+    def group_score(item):
+        (side, line), rows = item
+        avg_odd = mean([row["odd"] for row in rows]) or 9
+        shallow_score = max(0, 1.0 - abs(abs(line) - 0.5))
+        balance_score = max(0, 1.0 - min(abs(avg_odd - 1.9), 1.2) / 1.2)
+        favorite_score = 0.35 if favorite_side and side == favorite_side and line <= 0 else 0
+        return len(rows) * 0.2 + shallow_score + balance_score + favorite_score
+
+    best_key, best_rows = max(grouped.items(), key=group_score)
+    center_side, center_line = best_key
+
+    center_lines = sorted({
+        row["line"] for row in favorite_rows
+        if row["side"] == center_side and row["line"] <= 0 and row["abs_line"] <= 0.75
+    }, key=lambda line: (abs(abs(line) - 0.5), abs(line)))
+    if len(center_lines) >= 2:
+        display_lines = sorted(center_lines[:2])
+        line_text = " / ".join(f"{_team_label(match, center_side)} {_fmt_line(line)}" for line in display_lines)
+    else:
+        line_text = f"{_team_label(match, center_side)} {_fmt_line(center_line)}"
+
+    coverage_side = "away" if center_side == "home" else "home"
+    coverage_rows = [
+        row for row in center_rows
+        if row["side"] == coverage_side and row["line"] >= 0 and row["abs_line"] <= 0.75
+    ]
+    if coverage_rows:
+        coverage_line = sorted(
+            {row["line"] for row in coverage_rows},
+            key=lambda value: (abs(abs(value) - 0.5), -value),
+        )[0]
+        coverage_label = f"{_team_label(match, coverage_side)} {_fmt_line(coverage_line)}"
+    else:
+        coverage_line = None
+        coverage_label = "No coverage candidate"
+
+    avg_odds = mean([row["odd"] for row in best_rows])
+    warning = ""
+    if outliers:
+        warning = f"{len(outliers)} possible outlier handicap rows were filtered from center detection."
+    if normalized_same_sign:
+        suffix = f"{normalized_same_sign} same-sign favorite handicap rows were normalized for center detection."
+        warning = f"{warning} {suffix}".strip()
+
+    return {
+        "available": True,
+        "favorite_side": favorite_side,
+        "center_side": center_side,
+        "center_line": center_line,
+        "center_label": line_text,
+        "direction_label": f"盘口中心：{line_text}",
+        "coverage_side": coverage_side,
+        "coverage_line": coverage_line,
+        "coverage_label": coverage_label,
+        "avg_odds": avg_odds,
+        "best_odds": max([row["odd"] for row in best_rows], default=None),
+        "bookmakers": sorted({row.get("bookmaker") for row in best_rows if row.get("bookmaker")}),
+        "rows": best_rows,
+        "outlier_count": len(outliers),
+        "normalized_same_sign_count": normalized_same_sign,
+        "warning": warning,
+    }
+
+
+def asian_handicap_summary(rows):
+    parsed_rows = _parsed_handicap_rows(rows)
 
     if not parsed_rows:
         return {
@@ -66,6 +218,90 @@ def asian_handicap_summary(rows):
         "best_odds": max(odds) if odds else None,
         "bookmakers": sorted({row.get("bookmaker") for row in selected if row.get("bookmaker")}),
         "rows": selected,
+    }
+
+
+def identify_total_center(total_rows, user_odds=None):
+    if not total_rows:
+        return {
+            "available": False,
+            "center_label": "No totals center",
+            "market_bias": "Totals market is not available.",
+            "recommended_interpretation": "Do not infer goals direction without a totals market.",
+        }
+
+    grouped = defaultdict(list)
+    for row in total_rows:
+        line = safe_float(row.get("line"))
+        over = safe_float(row.get("over_odds"))
+        under = safe_float(row.get("under_odds"))
+        if line is None or over is None or under is None:
+            continue
+        if over < 1.03 or under < 1.03 or over > 20 or under > 20:
+            continue
+        grouped[line].append({**row, "line": line, "over_odds": over, "under_odds": under})
+
+    summaries = []
+    for line, rows in grouped.items():
+        avg_over = mean([row["over_odds"] for row in rows])
+        avg_under = mean([row["under_odds"] for row in rows])
+        if avg_over is None or avg_under is None:
+            continue
+        balance = abs(avg_over - avg_under)
+        summaries.append({
+            "line": line,
+            "rows": rows,
+            "avg_over": avg_over,
+            "avg_under": avg_under,
+            "balance": balance,
+            "count": len(rows),
+        })
+
+    if not summaries:
+        return {
+            "available": False,
+            "center_label": "No totals center",
+            "market_bias": "Totals rows were present but could not be parsed.",
+            "recommended_interpretation": "Validate the totals market before using it.",
+        }
+
+    summaries.sort(key=lambda item: (item["balance"], -item["count"], abs(item["line"] - 2.5)))
+    center = summaries[0]
+    line_25 = next((item for item in summaries if abs(item["line"] - 2.5) < 0.001), None)
+    nearby = []
+    if line_25 and abs(center["line"] - 2.5) <= 0.25:
+        nearby = [line_25]
+    else:
+        nearby = [
+            item for item in summaries
+            if item is not center and abs(item["line"] - center["line"]) <= 0.25 and item["count"] >= 2
+        ]
+    if nearby:
+        lines = sorted({center["line"], nearby[0]["line"]})
+        center_label = f"{lines[0]:g}-{lines[-1]:g}"
+    else:
+        center_label = f"{center['line']:g}"
+
+    if line_25 and line_25["avg_over"] < line_25["avg_under"]:
+        market_bias = f"2.5 盘口略偏大球，但在 {center_label} 附近趋于均衡。"
+    elif center["avg_over"] < center["avg_under"] and center["balance"] > 0.08:
+        market_bias = f"{center_label} 附近略偏大球，但不是激进大球信号。"
+    elif center["avg_under"] < center["avg_over"] and center["balance"] > 0.08:
+        market_bias = f"{center_label} 附近略偏小球，但不是激进小球信号。"
+    else:
+        market_bias = f"市场在 {center_label} 附近趋于均衡。"
+
+    return {
+        "available": True,
+        "center_line": center["line"],
+        "center_label": center_label,
+        "avg_over": center["avg_over"],
+        "avg_under": center["avg_under"],
+        "bookmakers": sorted({row.get("bookmaker") for row in center["rows"] if row.get("bookmaker")}),
+        "rows": center["rows"],
+        "market_bias": market_bias,
+        "game_behavior_note": "如果出线形势提示轮换或控节奏风险，应降低激进大球信心。",
+        "recommended_interpretation": "存在大球尾部，但进球数观点应以盘口中心为准，不能机械追大 2.5。",
     }
 
 

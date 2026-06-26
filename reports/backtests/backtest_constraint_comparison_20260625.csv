@@ -1,0 +1,9 @@
+metric,before,after,delta,status,note
+total_roi,-13.8%,-13.8%,0.0pp,UNCHANGED,Current backtest settles saved historical portfolios; it does not fully replay newly generated eligible portfolios.
+rank1_profit_rate,52.4%,52.4%,0.0pp,UNCHANGED,Historical Rank #1 rows are mostly from saved snapshots.
+zero_risk_trigger_count,65,65,0,UNCHANGED,Zero Risk Gate is now attached to current generation path but old snapshot failures remain in attribution.
+low_odds_false_safety_count,65,65,0,UNCHANGED,Existing attribution rows still reflect pre-constraint saved portfolios.
+correct_score_concentration_count,42,42,0,UNCHANGED,Correct Score exposure control is active for new evaluations; historical rows were not regenerated.
+portfolio_score_weights,unchanged,unchanged,0,PASS,No Portfolio Score weight changes were made.
+rank1_eligibility_layer,absent,present,+1,PASS,Rank #1 now requires risk gate/exposure/pressure fit eligibility.
+pressure_template_generation,scoring_only,generation_and_scoring,+1,PASS,Qualification pressure can now add pressure-specific portfolio templates.

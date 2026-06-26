@@ -1,0 +1,77 @@
+{
+  "created_at": "2026-06-25T12:29:45.880161+00:00",
+  "matches": [
+    {
+      "match": "Curacao vs Ivory Coast",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_25_Curacao_Ivory_Coast",
+      "found": true,
+      "event_title": "Curaçao vs. Côte d'Ivoire",
+      "home_win": 0.0515,
+      "draw": 0.1165,
+      "away_win": 0.8305,
+      "volume": 1791174.201809995,
+      "liquidity": 1648470.70686,
+      "message": "已找到对应 Polymarket 市场。"
+    },
+    {
+      "match": "Ecuador vs Germany",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_25_Ecuador_Germany",
+      "found": true,
+      "event_title": "Ecuador vs. Germany",
+      "home_win": 0.1795,
+      "draw": 0.1885,
+      "away_win": 0.6305,
+      "volume": 10005126.219995001,
+      "liquidity": 2193365.3546,
+      "message": "已找到对应 Polymarket 市场。"
+    },
+    {
+      "match": "Japan vs Sweden",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_25_Japan_Sweden",
+      "found": true,
+      "event_title": "Japan vs. Sweden",
+      "home_win": 0.5105,
+      "draw": 0.2795,
+      "away_win": 0.2125,
+      "volume": 4542774.416554036,
+      "liquidity": 1671943.53702,
+      "message": "已找到对应 Polymarket 市场。"
+    },
+    {
+      "match": "Paraguay vs Australia",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_25_Paraguay_Australia",
+      "found": true,
+      "event_title": "Paraguay vs. Australia",
+      "home_win": 0.355,
+      "draw": 0.425,
+      "away_win": 0.225,
+      "volume": 1140912.5965609956,
+      "liquidity": 2452885.1506,
+      "message": "已找到对应 Polymarket 市场。"
+    },
+    {
+      "match": "Tunisia vs Netherlands",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_25_Tunisia_Netherlands",
+      "found": true,
+      "event_title": "Tunisia vs. Netherlands",
+      "home_win": 0.0295,
+      "draw": 0.085,
+      "away_win": 0.895,
+      "volume": 2142864.2740150006,
+      "liquidity": 2916172.3959,
+      "message": "已找到对应 Polymarket 市场。"
+    },
+    {
+      "match": "Turkiye vs USA",
+      "directory": "/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer/data/worldcup2026/2026_06_25_Turkiye_USA",
+      "found": true,
+      "event_title": "Türkiye vs. United States",
+      "home_win": 0.255,
+      "draw": 0.225,
+      "away_win": 0.525,
+      "volume": 6251220.171934058,
+      "liquidity": 2805439.492,
+      "message": "已找到对应 Polymarket 市场。"
+    }
+  ]
+}

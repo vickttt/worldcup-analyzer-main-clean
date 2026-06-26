@@ -12,12 +12,14 @@ from modules.cache_config import (
     CORRECT_SCORE_DATA_TTL,
     MATCH_DATA_TTL,
     ODDS_DATA_TTL,
+    SCHEDULE_DATA_TTL,
     TEAM_DATA_TTL,
 )
 from modules.team_resolver import normalize_text, resolve_team as search_team
 
 
 API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
+API_REQUEST_TIMEOUT = 6
 EXACT_SCORE_BET_ID = 10
 ASIAN_HANDICAP_BET_ID = 4
 PREFERRED_CORRECT_SCORE_BOOKMAKERS = {
@@ -88,7 +90,7 @@ def request_json(path, params=None):
     response = requests.get(
         f"{API_FOOTBALL_BASE}{path}",
         params=params or {},
-        timeout=20,
+        timeout=API_REQUEST_TIMEOUT,
         headers={
             "x-apisports-key": api_key,
             "Accept": "application/json",
@@ -118,6 +120,10 @@ def fixture_cache_path():
 
 def api_football_market_cache_path(fixture_id, bet_id):
     return cache_dir() / f"api_football_market_{fixture_id}_{bet_id}.json"
+
+
+def api_football_standings_cache_path(league_id, season):
+    return cache_dir() / f"api_football_standings_{league_id}_{season}.json"
 
 
 def read_fixture_cache_payload():
@@ -181,6 +187,93 @@ def write_api_football_market_cache(fixture_id, bet_id, result):
         "result": result,
     }
     with api_football_market_cache_path(fixture_id, bet_id).open("w", encoding="utf-8") as file:
+        json.dump(payload, file, ensure_ascii=False, indent=2)
+
+
+def flatten_standings_response(response):
+    groups = []
+    rows = []
+    for competition in response or []:
+        league = competition.get("league") or {}
+        for group_rows in league.get("standings") or []:
+            normalized_group = []
+            for row in group_rows or []:
+                all_stats = row.get("all") or {}
+                goals = all_stats.get("goals") or {}
+                normalized = {
+                    "rank": row.get("rank"),
+                    "group": row.get("group"),
+                    "team": row.get("team") or {},
+                    "points": row.get("points"),
+                    "goals_diff": row.get("goalsDiff"),
+                    "form": row.get("form"),
+                    "status": row.get("status"),
+                    "description": row.get("description"),
+                    "played": all_stats.get("played"),
+                    "win": all_stats.get("win"),
+                    "draw": all_stats.get("draw"),
+                    "lose": all_stats.get("lose"),
+                    "goals_for": goals.get("for"),
+                    "goals_against": goals.get("against"),
+                    "raw": row,
+                }
+                normalized_group.append(normalized)
+                rows.append(normalized)
+            if normalized_group:
+                groups.append({
+                    "name": normalized_group[0].get("group") or f"Group {len(groups) + 1}",
+                    "rows": normalized_group,
+                })
+    return {"groups": groups, "rows": rows}
+
+
+def read_api_football_standings_cache(league_id, season, ttl=SCHEDULE_DATA_TTL):
+    path = api_football_standings_cache_path(league_id, season)
+    if not path.exists():
+        return None
+    with path.open("r", encoding="utf-8") as file:
+        payload = json.load(file)
+    fetched_at = parse_cache_datetime(payload.get("fetched_at"))
+    if not fetched_at:
+        return None
+    age = (datetime.now(timezone.utc) - fetched_at.astimezone(timezone.utc)).total_seconds()
+    result = payload.get("result")
+    if isinstance(result, dict) and age <= ttl:
+        result["cache"] = {
+            "status": "file_cache",
+            "age_hours": round(age / 3600, 2),
+            "path": path.name,
+        }
+        return result
+    return None
+
+
+def read_stale_api_football_standings_cache(league_id, season):
+    path = api_football_standings_cache_path(league_id, season)
+    if not path.exists():
+        return None
+    with path.open("r", encoding="utf-8") as file:
+        payload = json.load(file)
+    result = payload.get("result")
+    if isinstance(result, dict):
+        result["cache"] = {
+            "status": "stale_file_cache",
+            "path": path.name,
+        }
+        return result
+    return None
+
+
+def write_api_football_standings_cache(league_id, season, result):
+    if not result or not result.get("found"):
+        return
+    payload = {
+        "league_id": league_id,
+        "season": season,
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "result": result,
+    }
+    with api_football_standings_cache_path(league_id, season).open("w", encoding="utf-8") as file:
         json.dump(payload, file, ensure_ascii=False, indent=2)
 
 
@@ -600,6 +693,54 @@ def fetch_odds(match):
     return fetch_odds_for_fixture(fixture)
 
 
+def empty_standings_result(reason, league_id=None, season=None):
+    return {
+        "found": False,
+        "source": "API-Football / Standings",
+        "league_id": league_id,
+        "season": season,
+        "groups": [],
+        "rows": [],
+        "message": reason,
+    }
+
+
+@st.cache_data(ttl=SCHEDULE_DATA_TTL, show_spinner=False)
+def fetch_standings_for_league(league_id, season):
+    if not league_id or not season:
+        return empty_standings_result("缺少 league_id 或 season，无法查询 API-Football 积分榜。", league_id, season)
+
+    cached = read_api_football_standings_cache(league_id, season, SCHEDULE_DATA_TTL)
+    if cached:
+        return cached
+
+    try:
+        response = request_json("/standings", {"league": league_id, "season": season})
+    except (requests.RequestException, RuntimeError) as error:
+        stale = read_stale_api_football_standings_cache(league_id, season)
+        if stale:
+            stale["message"] = f"{stale.get('message', '已读取缓存积分榜。')} API暂不可用，使用已保存缓存。"
+            return stale
+        return empty_standings_result(f"API-Football Standings 暂不可用：{error}", league_id, season)
+
+    flattened = flatten_standings_response(response)
+    if not flattened["rows"]:
+        return empty_standings_result("API-Football 没有返回该赛事积分榜。", league_id, season)
+
+    result = {
+        "found": True,
+        "source": "API-Football / Standings",
+        "league_id": league_id,
+        "season": season,
+        "groups": flattened["groups"],
+        "rows": flattened["rows"],
+        "raw": response,
+        "message": "已获取 API-Football 小组积分榜。",
+    }
+    write_api_football_standings_cache(league_id, season, result)
+    return result
+
+
 @st.cache_data(ttl=TEAM_DATA_TTL, show_spinner=False)
 def fetch_injuries_for_fixture(fixture_id):
     return request_json("/injuries", {"fixture": fixture_id})
@@ -747,6 +888,7 @@ def fetch_match_data(match, data_flow_version="team_resolver_v2"):
         "lineups": [],
         "home_recent": [],
         "away_recent": [],
+        "standings": None,
         "error": None,
     }
 
@@ -768,6 +910,16 @@ def fetch_match_data(match, data_flow_version="team_resolver_v2"):
 
         data["correct_score"] = fetch_correct_score_odds_for_fixture(fixture["id"])
         data["asian_handicap"] = fetch_asian_handicap_odds_for_fixture(fixture["id"])
+
+        raw_league = ((fixture or {}).get("raw") or {}).get("league") or {}
+        try:
+            data["standings"] = fetch_standings_for_league(raw_league.get("id"), raw_league.get("season"))
+        except (requests.RequestException, RuntimeError) as error:
+            data["standings"] = empty_standings_result(
+                f"API-Football Standings 暂不可用：{error}",
+                raw_league.get("id"),
+                raw_league.get("season"),
+            )
 
         try:
             data["injuries"] = fetch_injuries_for_fixture(fixture["id"])
@@ -801,6 +953,12 @@ def fetch_match_data(match, data_flow_version="team_resolver_v2"):
             )
             data["correct_score"] = empty_correct_score_result("缺少 API-Football fixture_id，无法查询真实波胆盘口。")
             data["asian_handicap"] = empty_asian_handicap_result("缺少 API-Football fixture_id，无法查询真实亚洲让球盘。")
+            raw_league = ((known_fixture["fixture"] or {}).get("raw") or {}).get("league") or {}
+            data["standings"] = empty_standings_result(
+                "备用 fixture 没有可验证的 API-Football standings。",
+                raw_league.get("id"),
+                raw_league.get("season"),
+            )
             data["error"] = str(error)
             try:
                 data["home_recent"] = fetch_recent_fixtures(known_fixture["home_team"]["id"], count=10)

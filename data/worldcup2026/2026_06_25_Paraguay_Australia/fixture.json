@@ -1,0 +1,208 @@
+{
+  "source_id": "57",
+  "match": {
+    "home_cn": "Paraguay",
+    "away_cn": "Australia",
+    "home_en": "Paraguay",
+    "away_en": "Australia",
+    "display_name": "Paraguay vs Australia"
+  },
+  "created_at": "2026-06-25T20:15:51.947049+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "57",
+    "home_team": {
+      "id": "14",
+      "name": "Paraguay",
+      "logo": "https://flagcdn.com/w80/py.png"
+    },
+    "away_team": {
+      "id": "15",
+      "name": "Australia",
+      "logo": "https://flagcdn.com/w80/au.png"
+    },
+    "kickoff_utc": "06/25/2026 19:00",
+    "kickoff_display": "06/25/2026 19:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "D",
+    "venue_name": "San Francisco Bay Area Stadium",
+    "venue_city": "San Francisco Bay Area (Santa Clara), United States",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1489411,
+    "kickoff_utc": "2026-06-26T02:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 3",
+    "venue": "Levi's Stadium",
+    "city": "San Francisco Bay Area",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1489411,
+        "referee": "C. Turpin",
+        "timezone": "UTC",
+        "date": "2026-06-26T02:00:00+00:00",
+        "timestamp": 1782439200,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": null,
+          "name": "Levi's Stadium",
+          "city": "San Francisco Bay Area"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 3",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 2380,
+          "name": "Paraguay",
+          "logo": "https://media.api-sports.io/football/teams/2380.png",
+          "winner": null
+        },
+        "away": {
+          "id": 20,
+          "name": "Australia",
+          "logo": "https://media.api-sports.io/football/teams/20.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 2380,
+    "name": "Paraguay",
+    "code": "PAR",
+    "country": "Paraguay",
+    "founded": 1906,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/2380.png",
+    "_resolver": {
+      "input": "Paraguay",
+      "matched_query": "Paraguay",
+      "matched_name": "Paraguay",
+      "team_id": 2380,
+      "attempted": [
+        "Paraguay"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 20,
+    "name": "Australia",
+    "code": "AUS",
+    "country": "Australia",
+    "founded": 1961,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/20.png",
+    "_resolver": {
+      "input": "Australia",
+      "matched_query": "Australia",
+      "matched_name": "Australia",
+      "team_id": 20,
+      "attempted": [
+        "Australia"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group D",
+    "rows": [
+      {
+        "team": "United States",
+        "played": 2,
+        "wins": 2,
+        "draws": 0,
+        "losses": 0,
+        "gf": 6,
+        "ga": 1,
+        "gd": 5,
+        "points": 6
+      },
+      {
+        "team": "Australia",
+        "played": 2,
+        "wins": 1,
+        "draws": 0,
+        "losses": 1,
+        "gf": 2,
+        "ga": 2,
+        "gd": 0,
+        "points": 3
+      },
+      {
+        "team": "Paraguay",
+        "played": 2,
+        "wins": 1,
+        "draws": 0,
+        "losses": 1,
+        "gf": 2,
+        "ga": 4,
+        "gd": -2,
+        "points": 3
+      },
+      {
+        "team": "Turkey",
+        "played": 2,
+        "wins": 0,
+        "draws": 0,
+        "losses": 2,
+        "gf": 0,
+        "ga": 3,
+        "gd": -3,
+        "points": 0
+      }
+    ]
+  }
+}

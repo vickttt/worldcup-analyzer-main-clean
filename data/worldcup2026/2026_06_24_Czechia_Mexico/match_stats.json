@@ -1,0 +1,17 @@
+{
+  "source_id": "52",
+  "match": {
+    "home_cn": "Czech Republic",
+    "away_cn": "Mexico",
+    "home_en": "Czechia",
+    "away_en": "Mexico",
+    "display_name": "Czech Republic vs Mexico"
+  },
+  "created_at": "2026-06-24T17:16:44.983362+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [],
+  "error": null
+}

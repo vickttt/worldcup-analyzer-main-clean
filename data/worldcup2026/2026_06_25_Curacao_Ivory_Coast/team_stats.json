@@ -1,0 +1,17 @@
+{
+  "source_id": "55",
+  "match": {
+    "home_cn": "Curaçao",
+    "away_cn": "Ivory Coast",
+    "home_en": "Curacao",
+    "away_en": "Ivory Coast",
+    "display_name": "Curaçao vs Ivory Coast"
+  },
+  "created_at": "2026-06-25T20:11:08.923362+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "standings": null,
+  "home_recent": [],
+  "away_recent": []
+}

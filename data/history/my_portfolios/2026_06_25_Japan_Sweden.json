@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-06-25T21:06:51.635056+08:00",
+  "match": "日本 vs 瑞典",
+  "raw_text": "独赢，日本，500\n",
+  "items": [
+    {
+      "slot": "独赢",
+      "type": "winner",
+      "selection": "Japan",
+      "name": "Japan独赢",
+      "standard_odds": 1.92,
+      "probability": 0.5094702644734974,
+      "base_score": 68.18940528946995,
+      "source": "市场胜平负赔率",
+      "actual_odds": null,
+      "effective_odds": 1.92,
+      "edge": null,
+      "actual_selection": null,
+      "market_value_factor": 1.0,
+      "standard_ev": -0.021817092210885014,
+      "actual_ev": -0.021817092210885014,
+      "ev_lift": 0.0,
+      "path_match_score": 0,
+      "path_match_reason": "",
+      "coverage_rate": 0.590469704702376,
+      "market_center_reason": "",
+      "direction_alignment_score": 8,
+      "score": 90,
+      "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+      "recommended": true,
+      "ev_rank": 27,
+      "share": 0.20363403369742136,
+      "bet_id": "winner|japan|1.9200",
+      "amount": 500,
+      "odds": 1.92,
+      "matched": true,
+      "raw_input": "独赢，日本，500"
+    }
+  ]
+}

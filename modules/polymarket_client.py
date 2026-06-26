@@ -1,5 +1,7 @@
 import json
 import unicodedata
+from datetime import datetime, timezone
+from pathlib import Path
 
 import requests
 import streamlit as st
@@ -10,6 +12,9 @@ from modules.team_resolver import alias_candidates
 
 GAMMA_API_BASE = "https://gamma-api.polymarket.com"
 SOCCER_TAG_ID = "100350"
+ROOT = Path(__file__).resolve().parents[1]
+CACHE_DIR = ROOT / "data" / "cache" / "polymarket"
+REQUEST_TIMEOUT = 4
 
 
 def normalize_text(value):
@@ -120,8 +125,67 @@ def empty_result(match, reason):
     }
 
 
+def cache_key(match):
+    home = normalize_text(match.get("home_en") or match.get("home_cn")).replace(" ", "_")
+    away = normalize_text(match.get("away_en") or match.get("away_cn")).replace(" ", "_")
+    return f"{home}_{away}".strip("_") or "unknown_match"
+
+
+def cache_path(match):
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    return CACHE_DIR / f"{cache_key(match)}.json"
+
+
+def parse_cache_datetime(value):
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def read_file_cache(match):
+    path = cache_path(match)
+    if not path.exists():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    fetched_at = parse_cache_datetime(payload.get("fetched_at"))
+    result = payload.get("result")
+    if not fetched_at or not isinstance(result, dict):
+        return None
+    age = (datetime.now(timezone.utc) - fetched_at.astimezone(timezone.utc)).total_seconds()
+    if age <= POLYMARKET_DATA_TTL:
+        result["cache"] = {
+            "status": "file_cache",
+            "age_hours": round(age / 3600, 2),
+            "path": path.name,
+        }
+        return result
+    return None
+
+
+def write_file_cache(match, result):
+    if not isinstance(result, dict):
+        return
+    payload = {
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "result": result,
+    }
+    try:
+        cache_path(match).write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    except OSError:
+        return
+
+
 @st.cache_data(ttl=POLYMARKET_DATA_TTL, show_spinner=False)
 def fetch_polymarket(match, limit=100):
+    cached = read_file_cache(match)
+    if cached:
+        return cached
     try:
         response = requests.get(
             f"{GAMMA_API_BASE}/events",
@@ -134,37 +198,43 @@ def fetch_polymarket(match, limit=100):
                 "order": "volume",
                 "ascending": "false",
             },
-            timeout=20,
+            timeout=REQUEST_TIMEOUT,
         )
         response.raise_for_status()
     except requests.RequestException as error:
-        return empty_result(match, f"无法连接 Polymarket API：{error}")
+        result = empty_result(match, f"无法连接 Polymarket API：{error}")
+        write_file_cache(match, result)
+        return result
 
     events = response.json()
     matches = [event for event in events if event_matches(event, match)]
 
     if not matches:
-        return empty_result(
+        result = empty_result(
             match,
             f"未找到 {match['home_cn']} vs {match['away_cn']} 对应的 Polymarket 活跃市场。",
         )
+        write_file_cache(match, result)
+        return result
 
     event = matches[0]
     mapped = map_binary_markets(event, match)
     required_prices = [mapped["home_win"], mapped["draw"], mapped["away_win"]]
 
     if any(price is None for price in required_prices):
-        return empty_result(
+        result = empty_result(
             match,
             f"找到了 Polymarket 事件“{event.get('title')}”，但没有完整的主胜/平局/客胜价格。",
         )
+        write_file_cache(match, result)
+        return result
 
     selected_markets = [mapped["home_market"], mapped["draw_market"], mapped["away_market"]]
     volume = parse_float(event.get("volume")) or market_total(selected_markets, "volume")
     liquidity = parse_float(event.get("liquidity")) or market_total(selected_markets, "liquidity")
     slug = event.get("slug")
 
-    return {
+    result = {
         "found": True,
         "home_win": mapped["home_win"],
         "draw": mapped["draw"],
@@ -177,3 +247,5 @@ def fetch_polymarket(match, limit=100):
         "event_url": f"https://polymarket.com/event/{slug}" if slug else None,
         "message": "已找到对应 Polymarket 市场。",
     }
+    write_file_cache(match, result)
+    return result

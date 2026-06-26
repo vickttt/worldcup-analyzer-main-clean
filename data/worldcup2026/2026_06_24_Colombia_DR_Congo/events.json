@@ -1,0 +1,17 @@
+{
+  "source_id": "manual_20260624_colombia_dr_congo",
+  "match": {
+    "home_cn": "Colombia",
+    "away_cn": "Democratic Republic of the Congo",
+    "home_en": "Colombia",
+    "away_en": "DR Congo",
+    "display_name": "Colombia vs Democratic Republic of the Congo"
+  },
+  "created_at": "2026-06-24T09:45:12.599028+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [],
+  "error": null
+}
