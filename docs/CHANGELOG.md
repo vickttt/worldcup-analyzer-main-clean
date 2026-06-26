@@ -1,7 +1,67 @@
 # Changelog
 
+## 2026-06-27
+
+- Added `reports/phase1_to_phase5_checkpoint_summary.md` as the checkpoint report before further modularization work.
+- Validated the accumulated module skeleton, app decomposition reports, odds/strategy extraction, Phase 1 hardening, golden v1/v2 locks, portfolio shadow system, golden assertion gate, and risk semantics layer.
+- Confirmed `PORTFOLIO_EXTRACTION: BLOCKED` and `BACKTEST_READY: NO`.
+- Confirmed no canonical `risk_score` exists yet and risk semantics remain distributed across strategy score, portfolio score, risk gate, correct-score exposure control, stake display, and UI risk display.
+- Confirmed moved odds/strategy functions match `HEAD:app.py` source and are no longer defined in current `app.py`.
+- Confirmed `modules.portfolio.shadow` is not imported by runtime code.
+- Confirmed no `data/`, `data/history/`, or `data/worldcup2026/` files are modified.
+- Prepared checkpoint commit for `dev-clean`.
+
 ## 2026-06-26
 
+- Added read-only risk semantics layer reports.
+- Added `reports/risk_feature_extraction_v1.md` to extract current distributed risk features from strategy scoring, portfolio scoring, stake sizing, clamps/caps, volatility, and disagreement signals.
+- Added `reports/risk_semantics_map.md` to map strategy score, implicit risk fields, decision stake, and portfolio weights across all golden v2 scenarios.
+- Added `reports/risk_consistency_check.md` to classify risk-to-stake and risk-to-allocation consistency rules.
+- Added `reports/risk_gap_analysis.md` and classified current risk semantics as `HIGH RISK GAP (BLOCKER)`.
+- Added `reports/backtest_re_evaluation.md` and kept `BACKTEST_READY: NO`.
+- Did not implement a risk model, modify portfolio logic, adjust golden outputs, connect shadow to runtime, or change production code.
+- Added read-only golden assertion gate reports for portfolio shadow validation.
+- Added `reports/portfolio_shadow_vs_production_diff.md` to compare golden v2 production reference outputs against shadow replay for ranking order, stake allocation, portfolio selection, and risk weighting.
+- Added `reports/golden_assertion_gate_v1.md` to validate ranking, selection, and allocation stability across golden v2 and the shadow system.
+- Added `reports/portfolio_risk_final_gate.md` and classified portfolio extraction as blocked due to strategy scoring, UI state, implicit global, and risk payload coverage dependencies.
+- Added `reports/backtest_final_gate_check.md` and marked `BACKTEST_READY: NO`.
+- Confirmed no code changes, no runtime shadow wiring, no portfolio extraction, and no golden output changes were made in this gate step.
+- Added non-intrusive portfolio shadow system in `modules/portfolio/shadow.py` for read-only observation of current portfolio stake, allocation, ranking, and risk-weighting behavior.
+- Added `reports/portfolio_shadow_output_v1.md` to record shadow output across all golden v2 matches.
+- Added `reports/portfolio_shadow_deviation.md` to compare saved strategy ranking, capital allocation, decision stake, and shadow replay output across the five locked scenarios.
+- Added `reports/portfolio_shadow_coupling_map.md` to identify hidden strategy-score, normalization, odds, and UI coupling before portfolio extraction.
+- Confirmed the shadow module is not imported by `app.py` or runtime code.
+- Did not extract portfolio logic, modify production portfolio behavior, change golden outputs, or write data files.
+- Expanded the golden output lock to a five-match multi-scenario dataset before portfolio/backtest extraction.
+- Added `reports/golden_dataset_v2_manifest.md` to document selected representative saved snapshots for high odds mismatch, balanced market, low-volatility favorite, upset-prone favorite/handicap tension, and incomplete odds scenarios.
+- Added `reports/golden_output_snapshot_v2.json` by serializing existing saved outputs only from selected `data/history/*_pre.json` snapshots.
+- Added `reports/golden_consistency_check.md` to compare saved ranking, score variance, allocation drift, and odds-vs-strategy disagreement across the v2 scenarios.
+- Added `reports/portfolio_exposure_pre_map.md` to identify allocation sizing, stake scaling, risk adjustment, caps, clamps, and high-risk portfolio coupling points.
+- Added `reports/backtest_expansion_readiness.md` and marked backtest expansion as not ready until a diff-based golden assertion gate exists.
+- Did not change ranking logic, portfolio logic, strategy scoring, odds calculation, recommendation ordering, business code, or data files.
+- Added golden output lock reports before portfolio/backtest extraction.
+- Added `reports/golden_output_functions.md` to identify ranking, scoring, allocation, recommendation, summary, and backtest output functions.
+- Added `reports/golden_output_snapshot_v1.json` by serializing existing saved pre-match output from `data/history/2026_06_19_Turkey_Paraguay_pre.json` without recomputation.
+- Added `reports/portfolio_dependency_trace.md` to trace direct/indirect portfolio dependencies and shared contract risks.
+- Added `reports/backtest_entry_points.md` to identify historical simulation, evaluation, and prediction-vs-result comparison entry points.
+- Added `reports/extraction_readiness_gate.md` and marked portfolio extraction and backtest split as not ready.
+- Did not refactor portfolio logic, move backtest logic, optimize scoring, change ranking order, or write data files.
+- Added Phase 1 stabilization reports for extracted odds and strategy modules.
+- Added `reports/phase1_module_isolation_audit.md` to audit dependencies, hidden state, cross-module calls, and readiness.
+- Added `reports/post_extraction_dependency_graph.md` to document app/module import graph and circular dependency status after extraction.
+- Added `reports/app_responsibility_shrink_report.md` to evaluate how much responsibility moved out of `app.py`.
+- Did not modify runtime code during stabilization; this step is report-only.
+- Extracted first odds helpers from `app.py` into `modules/odds/core.py` as a pure move refactor.
+- Extracted first strategy helpers from `app.py` into `modules/strategy/core.py` as a pure move refactor.
+- Updated `app.py` imports to wire moved odds and strategy functions back into the existing runtime path.
+- Verified moved function source matches `HEAD:app.py` for 23 moved functions.
+- Updated module mapping and dependency snapshot reports for the new odds/strategy core files.
+- Did not change formulas, algorithms, function signatures, Portfolio Score behavior, recommendation logic, data files, or existing function internals.
+- Added module skeleton packages under `modules/analysis`, `modules/odds`, `modules/portfolio`, `modules/strategy`, `modules/backtest`, `modules/data`, and `modules/ui`.
+- Added `reports/module_mapping_v1.md` to classify current files by future module boundary without moving code.
+- Added `reports/entry_points.md` to identify runtime, UI, data pipeline, backtest, validation, and maintenance entry points.
+- Added `reports/dependency_snapshot.md` to document high-level imports, coupling points, and circular dependency check results.
+- Did not modify business logic, formulas, algorithms, recommendation logic, Portfolio Score logic, data files, or existing function bodies.
 - Added `docs/GIT_SYNC_CHECK_REPORT.md` after confirming `dev-clean` is clean, `git pull origin dev-clean` is up to date, and `docs/CHANGELOG.md` contains the latest governance records.
 - Did not modify business code, `app.py`, modules, reports, production sorting, recommendation logic, API refresh logic, or data files.
 - Added `docs/MERGE_PRECHECK_REPORT.md` after PR #7 was merged and local branches were synchronized.

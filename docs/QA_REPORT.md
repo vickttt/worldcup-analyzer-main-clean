@@ -1,5 +1,332 @@
 # QA Report
 
+## 2026-06-27 Phase 1-5 Checkpoint Commit
+
+## Scope
+
+- Added `reports/phase1_to_phase5_checkpoint_summary.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+- Prepared accumulated Phase 1-5 refactor-preparation changes for checkpoint commit.
+
+## Checks
+
+- Confirmed current branch is `dev-clean`.
+- Ran `git status`.
+- Ran `python3 -m py_compile app.py modules/odds/core.py modules/strategy/core.py modules/portfolio/shadow.py`.
+- Ran `git diff --check`.
+- Reviewed `git diff -- app.py`.
+- Ran `git diff -- modules/odds/core.py`.
+- Ran `git diff -- modules/strategy/core.py`.
+- Ran `git diff -- modules/portfolio/shadow.py`.
+- Verified 23 moved odds/strategy functions match their `HEAD:app.py` source.
+- Verified moved functions are not still defined in current `app.py`.
+- Verified `modules.portfolio.shadow` is not imported by runtime code.
+- Verified no `data/`, `data/history/`, or `data/worldcup2026/` files are modified.
+
+## Result
+
+- Passed checkpoint validation.
+- Production behavior affected: No intended behavior change beyond pure move extraction already validated.
+- Portfolio Score affected: No intended behavior change.
+- `data/history` affected: No.
+- Golden outputs affected: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: No.
+
+## 2026-06-26 Risk Semantics Layer
+
+## Scope
+
+- Added `reports/risk_feature_extraction_v1.md`.
+- Added `reports/risk_semantics_map.md`.
+- Added `reports/risk_consistency_check.md`.
+- Added `reports/risk_gap_analysis.md`.
+- Added `reports/backtest_re_evaluation.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Extracted current risk semantics from `modules/strategy/core.py`, `app.py`, `modules/portfolio_engine.py`, `modules/portfolio/shadow.py`, and `reports/golden_output_snapshot_v2.json`.
+- Mapped implicit risk fields including max loss, volatility, concentration, risk-control score component, portfolio score components, market disagreement, upset index, and decision stake.
+- Confirmed no single canonical `risk_score` currently links strategy, portfolio, stake, allocation, and backtest behavior.
+- Checked golden v2 consistency across score-to-stake, direction-confidence-to-stake, market-disagreement-to-stake, volatility, allocation, and rank-gate behavior.
+- Classified risk semantics gap as `HIGH RISK GAP (BLOCKER)`.
+- Kept backtest readiness conservative: `BACKTEST_READY: NO`.
+- Ran `python3 -m py_compile app.py modules/portfolio/shadow.py modules/odds/core.py modules/strategy/core.py`.
+- Ran `git diff --check`.
+
+## Result
+
+- Passed as read-only risk modeling and documentation.
+- Production code behavior affected: No.
+- Portfolio Score affected: No behavior change in this step.
+- `data/history` affected: No writes.
+- Golden outputs affected: No.
+- Runtime shadow wiring affected: No.
+- BACKTEST_READY: No.
+
+## 2026-06-26 Golden Assertion Gate v1
+
+## Scope
+
+- Added `reports/portfolio_shadow_vs_production_diff.md`.
+- Added `reports/golden_assertion_gate_v1.md`.
+- Added `reports/portfolio_risk_final_gate.md`.
+- Added `reports/backtest_final_gate_check.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Compared golden v2 saved production-reference output against shadow replay output for all five locked scenarios.
+- Checked ranking order, stake allocation, portfolio selection, and available risk weighting fields.
+- Confirmed all five golden v2 scenarios matched shadow replay on available saved fields with deviation score 100 / 100.
+- Identified risk payload coverage gap: golden v2 does not include full `risk_gate` payloads for all strategy rows.
+- Confirmed portfolio extraction remains blocked due to strategy scoring coupling, app/UI state coupling, implicit globals, and incomplete post-match/backtest coverage.
+- Confirmed backtest is not ready to run independently of `app.py` and cannot use shadow portfolio only.
+- Ran `python3 -m py_compile app.py modules/portfolio/shadow.py modules/odds/core.py modules/strategy/core.py`.
+- Ran `git diff --check`.
+- Confirmed no runtime import of `modules.portfolio.shadow` outside the shadow module itself.
+
+## Result
+
+- Golden assertion gate: PASS_WITH_COVERAGE_GAP.
+- Portfolio extraction status: BLOCKED.
+- BACKTEST_READY: No.
+- Production code behavior affected: No.
+- Portfolio Score affected: No behavior change in this step.
+- `data/history` affected: No writes.
+- Golden outputs affected: No.
+
+## 2026-06-26 Portfolio Shadow System
+
+## Scope
+
+- Added `modules/portfolio/shadow.py`.
+- Added `reports/portfolio_shadow_output_v1.md`.
+- Added `reports/portfolio_shadow_deviation.md`.
+- Added `reports/portfolio_shadow_coupling_map.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Created a read-only shadow module that mirrors current stake sizing, strategy scoring, ranking key, strategy item allocation, correct-score floor, and correlation-weighting rules for observation.
+- Confirmed the shadow module is not imported by `app.py`.
+- Confirmed no runtime wiring was added.
+- Generated shadow output reports from `reports/golden_output_snapshot_v2.json`.
+- Compared saved top strategy stake, positive combo stake, decision stake, and shadow replay allocation across all five golden v2 scenarios.
+- Identified hidden coupling around strategy score fields, implicit amount normalization, odds-derived value fields, and UI orchestration.
+- Ran `python3 -m py_compile modules/portfolio/shadow.py app.py modules/odds/core.py modules/strategy/core.py`.
+- Did not modify golden output snapshots.
+- Did not write `data/history` or `data/worldcup2026`.
+
+## Result
+
+- Passed as non-intrusive shadow/observation layer.
+- Production code behavior affected: No.
+- Portfolio Score affected: No behavior change in this step.
+- `data/history` affected: Read only through existing golden v2 report input; no data files were written.
+- Runtime import of shadow module: No.
+- Portfolio extraction status: Still blocked until a diff-based golden assertion gate exists.
+
+## 2026-06-26 Golden Output Expansion v2
+
+## Scope
+
+- Added `reports/golden_dataset_v2_manifest.md`.
+- Added `reports/golden_output_snapshot_v2.json`.
+- Added `reports/golden_consistency_check.md`.
+- Added `reports/portfolio_exposure_pre_map.md`.
+- Added `reports/backtest_expansion_readiness.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Selected five existing saved pre-match snapshots from `data/history/` for multi-scenario coverage.
+- Covered high actual-odds mismatch, balanced market, low-exposure favorite, upset-prone favorite/handicap tension, and incomplete odds scenarios.
+- Serialized existing saved output fields only: odds output, actual odds, probability distribution, strategy snapshot, recommendation combo, portfolio selection, and final decision.
+- Confirmed the v2 snapshot was generated without recomputing ranking, allocation, odds, strategy, or portfolio logic.
+- Created cross-scenario consistency notes for ranking stability, strategy score variance, portfolio allocation drift, and odds-vs-strategy disagreement.
+- Created a portfolio exposure pre-map for allocation size, stake scaling, risk adjustment, constraints, caps, clamps, and high-risk coupling points.
+- Marked backtest expansion as not ready until a diff-based golden assertion gate exists.
+- Ran `python3 -m py_compile app.py modules/odds/core.py modules/strategy/core.py`.
+- Ran `git diff --check`.
+
+## Result
+
+- Passed as multi-scenario behavior-lock documentation and saved-output serialization.
+- Portfolio Score affected: No behavior change in this step.
+- `data/history` affected: Read only; no data files were written.
+- Business logic affected: No.
+- Ranking/order logic affected: No.
+- READY_FOR_BACKTEST_EXPANSION: No.
+
+## 2026-06-26 Golden Output Lock
+
+## Scope
+
+- Added `reports/golden_output_functions.md`.
+- Added `reports/golden_output_snapshot_v1.json`.
+- Added `reports/portfolio_dependency_trace.md`.
+- Added `reports/backtest_entry_points.md`.
+- Added `reports/extraction_readiness_gate.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Identified golden output functions for ranking, scoring, allocation, recommendation ordering, summary generation, and backtest behavior.
+- Serialized an existing saved pre-match snapshot from `data/history/2026_06_19_Turkey_Paraguay_pre.json` into `reports/golden_output_snapshot_v1.json`.
+- Confirmed the golden snapshot was generated without recomputing portfolio or ranking logic.
+- Traced portfolio dependencies across `app.py`, `modules.strategy.core`, `modules.odds.core`, `modules.user_odds`, and `modules.portfolio_engine`.
+- Identified backtest and validation entry points.
+- Created extraction readiness gate and marked portfolio/backtest extraction as not ready.
+- Ran `python3 -m py_compile app.py modules/odds/core.py modules/strategy/core.py`.
+- Did not refactor portfolio logic, move backtest logic, optimize scoring, change ranking order, or write data files.
+
+## Result
+
+- Passed as behavior-lock documentation and snapshot generation.
+- Portfolio Score affected: No new behavior change in this step.
+- `data/history` affected: No writes; one existing pre-match snapshot was read.
+- READY FOR PORTFOLIO EXTRACTION: No.
+- READY FOR BACKTEST MODULE SPLIT: No.
+
+## 2026-06-26 Phase 1 Stabilization and Coupling Control
+
+## Scope
+
+- Added `reports/phase1_module_isolation_audit.md`.
+- Added `reports/post_extraction_dependency_graph.md`.
+- Added `reports/app_responsibility_shrink_report.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+- Did not modify runtime code during this stabilization step.
+
+## Checks
+
+- Audited `modules/odds/core.py` dependencies and hidden state.
+- Audited `modules/strategy/core.py` dependencies and hidden state.
+- Confirmed odds module does not import strategy module.
+- Confirmed strategy module does not import odds module.
+- Confirmed neither extracted module imports `app.py`.
+- Confirmed neither extracted module imports Streamlit directly.
+- Generated post-extraction dependency graph.
+- Evaluated `app.py` responsibility shrink after Phase 1.
+- Ran `python3 -m py_compile app.py modules/odds/core.py modules/strategy/core.py`.
+- Ran `git diff --check`.
+
+## Result
+
+- Passed as stabilization/report-only hardening.
+- Circular imports introduced: No direct circular imports detected.
+- Portfolio Score affected: No new behavior change in this step.
+- `data/history` affected: No.
+- READY FOR PORTFOLIO EXTRACTION: No.
+- READY FOR BACKTEST MODULE SPLIT: No.
+
+## 2026-06-26 Phase 1 Odds and Strategy Extraction
+
+## Scope
+
+- Added `modules/odds/core.py`.
+- Added `modules/strategy/core.py`.
+- Updated `app.py` imports and removed moved function definitions from `app.py`.
+- Updated `reports/module_mapping_v1.md`.
+- Updated `reports/dependency_snapshot.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Moved Function Groups
+
+- Odds:
+  - `fmt_odds`
+  - `market_odds_overview_rows`
+  - `actual_odds_completeness`
+  - `actual_odds_completeness_for_match`
+  - `parse_handicap_selection`
+  - `parse_total_selection`
+  - `winner_outcome`
+  - `handicap_outcome`
+  - `handicap_profit_value`
+  - `total_outcome`
+  - `correct_score_outcome`
+- Strategy:
+  - `clamp`
+  - `round_to_hundred`
+  - `confidence_reason`
+  - `market_disagreement_reason`
+  - `shadow_verdict_label`
+  - `hybrid_v2_status_label`
+  - `match_betting_score`
+  - `recommended_stake_mvp`
+  - `item_path_consistency`
+  - `strategy_path_consistency`
+  - `strategy_score`
+  - `rank_key_with_eligibility`
+
+## Checks
+
+- Ran `python3 -m py_compile app.py`.
+- Ran `python3 -m py_compile modules/odds/core.py`.
+- Ran `python3 -m py_compile modules/strategy/core.py`.
+- Verified moved function source matches `HEAD:app.py` for 23 moved functions.
+- Confirmed `modules.strategy.core` imports successfully in the current environment.
+- Attempted lightweight runtime dependency check; current system Python is missing `streamlit`, so app startup/import was not run.
+- Confirmed no data files were modified.
+
+## Result
+
+- Passed as pure move refactor preparation.
+- Portfolio Score affected: No intended behavior change; `strategy_score` source was moved unchanged.
+- `data/history` affected: No.
+- App startup check: Skipped because runtime dependency `streamlit` is not installed in the current system Python environment.
+
+## 2026-06-26 Module Architecture Skeleton and Mapping
+
+## Scope
+
+- Added package boundary placeholders:
+  - `modules/analysis/__init__.py`
+  - `modules/odds/__init__.py`
+  - `modules/portfolio/__init__.py`
+  - `modules/strategy/__init__.py`
+  - `modules/backtest/__init__.py`
+  - `modules/data/__init__.py`
+  - `modules/ui/__init__.py`
+- Added `reports/module_mapping_v1.md`.
+- Added `reports/entry_points.md`.
+- Added `reports/dependency_snapshot.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Confirmed current branch is `dev-clean`.
+- Confirmed worktree was clean before edits.
+- Scanned Python files under `app.py`, `modules/`, `scripts/`, and `test_api.py`.
+- Built a logical mapping without moving source files.
+- Identified current entry points without changing runtime behavior.
+- Generated a lightweight static import snapshot.
+- Confirmed no direct circular imports among current `modules/*.py` files by static import inspection.
+- Did not edit existing business logic, formulas, algorithms, recommendation logic, Portfolio Score logic, data files, or existing function bodies.
+- Ran `git diff --check`.
+- Ran Python syntax check for the new package boundary `__init__.py` files.
+- Ran `git status`.
+- Attempted `tree -L 3`; command was unavailable in this environment.
+- Used `find . -maxdepth 3 -type d` as the directory structure fallback.
+
+## Result
+
+- Passed as structural preparation.
+- Portfolio Score affected: No.
+- `data/history` affected: No.
+- `tree` affected: Not run because the command is not installed.
+
 ## 2026-06-26 Git Sync Check
 
 ## Scope

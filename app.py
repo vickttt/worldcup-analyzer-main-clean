@@ -56,9 +56,7 @@ from modules.score_model import recommend_scores
 from modules.the_odds_client import fetch_odds
 from modules.team_profile_client import fetch_team_profile
 from modules.user_odds import (
-    build_market_candidates,
     build_recommendation_slots,
-    candidate_with_actual,
     enrich_candidate,
     apply_path_consistency,
     normalize_score,
@@ -93,6 +91,33 @@ from modules.worldcup_db import (
     load_match_database,
     match_dir as db_match_dir,
 )
+from modules.odds.core import (
+    actual_odds_completeness,
+    actual_odds_completeness_for_match,
+    correct_score_outcome,
+    fmt_odds,
+    handicap_outcome,
+    handicap_profit_value,
+    market_odds_overview_rows,
+    parse_handicap_selection,
+    parse_total_selection,
+    total_outcome,
+    winner_outcome,
+)
+from modules.strategy.core import (
+    clamp,
+    confidence_reason,
+    hybrid_v2_status_label,
+    item_path_consistency,
+    market_disagreement_reason,
+    match_betting_score,
+    rank_key_with_eligibility,
+    recommended_stake_mvp,
+    round_to_hundred,
+    shadow_verdict_label,
+    strategy_path_consistency,
+    strategy_score,
+)
 
 
 MODEL_VERSION_TRACKING = {
@@ -116,17 +141,6 @@ def fmt(value):
     return str(value)
 
 
-def fmt_odds(value):
-    if value is None:
-        return "-"
-    try:
-        return f"{float(value):.2f}"
-    except (TypeError, ValueError):
-        return str(value)
-
-
-def clamp(value, low=0, high=100):
-    return max(low, min(high, round(value)))
 
 
 def money(value):
@@ -1123,9 +1137,6 @@ def recommendation_combo(match, odds, api_football_data=None, distribution=None,
     return build_recommendation_slots(match, odds, api_football_data, actual_odds or {}, distribution)
 
 
-def round_to_hundred(value):
-    return int(round(value / 100) * 100)
-
 
 def recommended_total_stake(decision):
     stake = decision.get("recommended_stake") or {}
@@ -1205,20 +1216,6 @@ def render_recommended_combo(match, odds, api_football_data, distribution):
         render_betting_structure(distribution)
 
 
-def confidence_reason(decision, odds):
-    direction = decision.get("direction_confidence") or {}
-    score = direction.get("score", decision["final_confidence_score"])
-    if not odds.get("found"):
-        return "信心受限于赔率盘口数据不足。"
-    return direction.get("reason", f"方向把握 {score} / 100。")
-
-
-def market_disagreement_reason(disagreement):
-    if disagreement["score"] >= 67:
-        return "不同市场存在明显分歧，说明当前定价并不统一。"
-    if disagreement["score"] >= 34:
-        return "Polymarket 与传统赔率存在一定差异，需要观察临场变化。"
-    return "Polymarket 与传统赔率观点基本一致。"
 
 
 def profit_text(amount, odds, outcome):
@@ -1337,82 +1334,7 @@ def correlation_matrix_rows(combo):
     return rows
 
 
-def market_odds_overview_rows(combo):
-    rows = []
-    for item in combo:
-        if item.get("type") in {"empty"}:
-            continue
-        actual = item.get("actual_odds")
-        market = item.get("standard_odds")
-        if actual is None or market is None:
-            status = "⚪ 未输入实际赔率"
-        elif actual > market:
-            status = "🟢 实际赔率更优"
-        elif actual < market:
-            status = "🔴 实际赔率偏低"
-        else:
-            status = "⚪ 与市场一致"
-        rows.append({
-            "投注": item.get("name", "-"),
-            "实际赔率": fmt_odds(actual),
-            "市场赔率": fmt_odds(market),
-            "差异": f"{(item.get('edge') or 0) * 100:+.1f}%" if item.get("edge") is not None else "-",
-            "EV提升": f"{(item.get('ev_lift') or 0) * 100:+.1f}%" if item.get("ev_lift") is not None else "-",
-            "_ev_lift": item.get("ev_lift") if item.get("ev_lift") is not None else -999,
-            "状态": status,
-        })
-    return rows
 
-
-def actual_odds_completeness(combo):
-    candidates = [item for item in combo if item.get("type") != "empty"]
-    if not candidates:
-        return {"entered": 0, "total": 0, "ratio": 0, "missing": []}
-    entered = [item for item in candidates if item.get("actual_odds")]
-    missing = [item.get("name", "-") for item in candidates if not item.get("actual_odds")]
-    return {
-        "entered": len(entered),
-        "total": len(candidates),
-        "ratio": len(entered) / len(candidates),
-        "missing": missing,
-    }
-
-
-def actual_odds_completeness_for_match(match, odds, api_football_data, actual_odds, fallback_combo):
-    raw_candidates = build_market_candidates(match, odds, api_football_data)
-    if not raw_candidates:
-        return actual_odds_completeness(fallback_combo)
-
-    required = []
-    seen = set()
-    for candidate in raw_candidates:
-        key = (candidate.get("type"), candidate.get("slot"))
-        if candidate.get("type") == "total":
-            key = ("total", "主大小球")
-            if key in seen:
-                continue
-            total_candidates = [
-                candidate_with_actual(item, actual_odds)
-                for item in raw_candidates
-                if item.get("type") == "total"
-            ]
-            matched_total = next((item for item in total_candidates if item.get("actual_odds")), None)
-            required.append(matched_total or {**candidate, "name": "大小球主盘口", "actual_odds": None})
-            seen.add(key)
-            continue
-        if key in seen:
-            continue
-        seen.add(key)
-        required.append(candidate_with_actual(candidate, actual_odds))
-
-    entered = [item for item in required if item.get("actual_odds")]
-    missing = [item.get("name", "-") for item in required if not item.get("actual_odds")]
-    return {
-        "entered": len(entered),
-        "total": len(required),
-        "ratio": len(entered) / len(required) if required else 0,
-        "missing": missing,
-    }
 
 
 def optimized_strategy_reason_rows(strategy, match, distribution):
@@ -2293,69 +2215,11 @@ def optimize_betting_portfolio(match, distribution, combo, total_stake, risk_pro
     }
 
 
-def parse_handicap_selection(selection):
-    text = str(selection or "")
-    match = re.search(r"\b(Home|Away)\b\s*([+-]?\d+(?:\.\d+)?(?:/[+-]?\d+(?:\.\d+)?)?)", text, re.I)
-    if match:
-        line_info = normalize_handicap_line(match.group(2))
-        return match.group(1).lower(), line_info.get("decimal_line")
-    return None, None
 
 
-def parse_total_selection(selection):
-    text = str(selection or "")
-    match = re.search(r"(Under|Over|小于|大于)\s*([0-9]+(?:\.[0-9]+)?)", text, re.I)
-    if not match:
-        return None, None
-    side = "under" if match.group(1).lower() in {"under", "小于"} else "over"
-    return side, float(match.group(2))
 
 
-def winner_outcome(item, match, home_goals, away_goals):
-    selection = str(item.get("selection") or item.get("name") or "")
-    if home_goals == away_goals:
-        result = "平局"
-    elif home_goals > away_goals:
-        result = match["home_cn"]
-    else:
-        result = match["away_cn"]
-    return "win" if result in selection else "lose"
 
-
-def handicap_outcome(item, home_goals, away_goals):
-    side, line = parse_handicap_selection(item.get("selection") or item.get("name"))
-    if side is None:
-        return None
-    adjusted = home_goals + line if side == "home" else away_goals + line
-    opponent = away_goals if side == "home" else home_goals
-    if abs(adjusted - opponent) < 0.001:
-        return "push"
-    return "win" if adjusted > opponent else "lose"
-
-
-def handicap_profit_value(item, match, score, amount=None):
-    odds_value = item.get("odds") or item.get("effective_odds") or item.get("standard_odds")
-    if not odds_value:
-        return 0
-    side, line = parse_handicap_selection(item.get("selection") or item.get("name"))
-    if side is None:
-        return 0
-    line_info = item.get("handicap_line") or normalize_handicap_line(line)
-    return round(settle_asian_handicap(score, side, line_info.get("split_legs"), odds_value, amount if amount is not None else item.get("amount", 0)))
-
-
-def total_outcome(item, home_goals, away_goals):
-    side, line = parse_total_selection(item.get("selection") or item.get("name"))
-    if side is None:
-        return None
-    total_goals = home_goals + away_goals
-    if side == "under":
-        return "win" if total_goals < line else "lose"
-    return "win" if total_goals > line else "lose"
-
-
-def correct_score_outcome(item, home_goals, away_goals):
-    return "win" if str(item.get("selection")) == f"{home_goals}:{away_goals}" else "lose"
 
 
 def score_profit_row(match, distribution, combo, score):
@@ -3158,107 +3022,7 @@ def strategy_strategic_value(items, match, distribution):
     return weighted / sum(weights)
 
 
-def item_path_consistency(item):
-    if item.get("type") == "correct_score":
-        raw = 55 + item.get("path_consistency_score", 0) - item.get("path_conflict_penalty", 0)
-        return max(0, min(1, raw / 100))
-    if item.get("type") in {"winner", "handicap"}:
-        return 0.88
-    if item.get("type") == "total":
-        return 0.58
-    return 0.45
 
-
-def strategy_path_consistency(items):
-    if not items:
-        return 0
-    weights = [max(item.get("amount", 0), 1) for item in items]
-    weighted = sum(item_path_consistency(item) * weight for item, weight in zip(items, weights))
-    base = weighted / sum(weights)
-    severe_conflicts = [
-        item for item in items
-        if item.get("type") == "correct_score" and item.get("path_conflict_penalty", 0) >= 35
-    ]
-    if severe_conflicts:
-        base = min(base, 0.35)
-    return base
-
-
-def strategy_score(
-    ev_yield,
-    hit_rate,
-    risk_reward,
-    max_loss,
-    total_stake,
-    concentration,
-    direction_alignment,
-    strategic_value,
-    consistency_score,
-    sharpe_ratio,
-    stability_score,
-):
-    # 组合评分统一按五项权重计算：
-    # EV/ROI 30%，风险控制 20%，剧本一致性 30%，赔率价值 10%，组合简洁度 10%。
-    if ev_yield >= 0.08:
-        ev_roi_score = 100
-    elif ev_yield >= 0.04:
-        ev_roi_score = 85
-    elif ev_yield >= 0.01:
-        ev_roi_score = 70
-    elif ev_yield >= -0.02:
-        ev_roi_score = 50
-    elif ev_yield >= -0.06:
-        ev_roi_score = 25
-    else:
-        ev_roi_score = 5
-
-    loss_ratio = max_loss / total_stake if total_stake else 1
-    if loss_ratio <= 0.35:
-        loss_score = 100
-    elif loss_ratio <= 0.55:
-        loss_score = 80
-    elif loss_ratio <= 0.75:
-        loss_score = 55
-    elif loss_ratio <= 0.95:
-        loss_score = 30
-    else:
-        loss_score = 10
-    concentration_penalty = min(30, concentration * 30)
-    risk_control_score = clamp(loss_score - concentration_penalty)
-
-    script_consistency_score = clamp(
-        consistency_score * 55
-        + direction_alignment * 25
-        + strategic_value * 20
-    )
-
-    odds_value_score = clamp(ev_roi_score * 0.70 + max(0, min(100, risk_reward * 25)) * 0.30)
-
-    if concentration <= 0.25:
-        simplicity_score = 100
-    elif concentration <= 0.45:
-        simplicity_score = 80
-    elif concentration <= 0.65:
-        simplicity_score = 60
-    elif concentration <= 0.85:
-        simplicity_score = 38
-    else:
-        simplicity_score = 20
-
-    total = round(
-        ev_roi_score * 0.30
-        + risk_control_score * 0.20
-        + script_consistency_score * 0.30
-        + odds_value_score * 0.10
-        + simplicity_score * 0.10
-    )
-    return clamp(total), {
-        "EV/ROI": round(ev_roi_score * 0.30),
-        "风险控制": round(risk_control_score * 0.20),
-        "剧本一致性": round(script_consistency_score * 0.30),
-        "赔率价值": round(odds_value_score * 0.10),
-        "组合简洁度": round(simplicity_score * 0.10),
-    }
 
 
 def portfolio_constraint_variants(items):
@@ -3416,20 +3180,6 @@ def evaluate_strategy(strategy, match, distribution, total_stake):
     )[:5]
     return result
 
-
-def rank_key_with_eligibility(strategy):
-    eligibility = strategy.get("rank1_eligibility") or {}
-    gate = strategy.get("risk_gate") or {}
-    exposure = strategy.get("correct_score_exposure") or {}
-    eligible = bool(eligibility.get("rank1_eligible"))
-    risk_rank = {"LOW": 3, "MEDIUM": 2, "HIGH": 1, "CRITICAL": 0}.get(gate.get("risk_level"), 1)
-    exposure_penalty = float(exposure.get("stake_share") or 0)
-    return (
-        1 if eligible else 0,
-        risk_rank,
-        -exposure_penalty,
-        strategy.get("score", 0),
-    )
 
 
 def strategy_comparison(match, distribution, combo, total_stake):
@@ -4911,15 +4661,6 @@ def portfolio_ranking_rows(strategies, baseline=None):
     return rows
 
 
-def shadow_verdict_label(verdict):
-    labels = {
-        "Agreement": "一致",
-        "Watch": "观察",
-        "Disagreement": "分歧",
-        "Blocker Candidate": "高风险观察",
-    }
-    return labels.get(verdict, "-")
-
 
 def hybrid_v2_sleeve_share_label(value):
     if value is None:
@@ -4929,16 +4670,6 @@ def hybrid_v2_sleeve_share_label(value):
     except (TypeError, ValueError):
         return "-"
 
-
-def hybrid_v2_status_label(status):
-    labels = {
-        "Scenario-Supported Aggressive Upside": "剧本支持上行",
-        "Watch: Small Upside Sleeve": "小仓观察",
-        "Uncontrolled Tail": "无控制尾部",
-        "Blocked Tail": "尾部阻断",
-        "No Sleeve": "无上行袖仓",
-    }
-    return labels.get(status, "-")
 
 
 def portfolio_display_name(strategy):
@@ -5022,144 +4753,6 @@ def attach_hybrid_v2_visible_metadata(strategies, match, distribution):
     return strategies
 
 
-def match_betting_score(strategies):
-    if not strategies:
-        return {
-            "score": 0,
-            "decision": "不建议投注",
-            "reason": "没有可用组合，无法形成投注判断。",
-            "positive_reasons": [],
-            "negative_reasons": ["没有可用组合，无法形成投注判断。"],
-            "final_judgement": "当前缺少可执行组合，不建议下注。",
-            "risk_mode": "Balanced",
-        }
-    official = strategies[0]
-    shadow = official.get("shadow") or {}
-    hybrid_v2 = official.get("hybrid_v2") or {}
-    max_loss = float(official.get("max_loss") or 0)
-    legacy_score = float(official.get("score") or 0)
-    consistency = float(official.get("consistency_score") or 0) * 100
-    if not consistency:
-        consistency = 60
-
-    score = 50
-    positive_reasons = []
-    negative_reasons = []
-
-    score += min(20, max(0, (consistency - 55) * 0.45))
-    score += min(15, max(0, (legacy_score - 60) * 0.30))
-    if consistency >= 75:
-        positive_reasons.append(f"剧本一致性较高（{round(consistency)}分）")
-    elif consistency < 60:
-        negative_reasons.append(f"剧本一致性不足（{round(consistency)}分）")
-    else:
-        positive_reasons.append(f"剧本一致性可接受（{round(consistency)}分）")
-
-    if legacy_score >= 75:
-        positive_reasons.append(f"综合评分较强（{round(legacy_score)}）")
-    elif legacy_score < 55:
-        negative_reasons.append(f"综合评分偏弱（{round(legacy_score)}）")
-
-    verdict = shadow.get("shadow_verdict")
-    if verdict == "Agreement":
-        score += 10
-        positive_reasons.append("Legacy 与 Scenario 判断一致")
-    elif verdict == "Watch":
-        score += 4
-        positive_reasons.append("Scenario 仅提示观察，没有直接阻断")
-    elif verdict == "Disagreement":
-        score -= 10
-        negative_reasons.append("Legacy 与 Scenario 存在分歧")
-    elif verdict == "Blocker Candidate":
-        score -= 25
-        negative_reasons.append("Scenario 标记为高风险观察")
-
-    sleeve_status = hybrid_v2.get("sleeve_status")
-    if sleeve_status == "Scenario-Supported Aggressive Upside":
-        score += 4
-        positive_reasons.append("上行袖仓有剧本支持")
-    elif sleeve_status == "Watch: Small Upside Sleeve":
-        score += 1
-        positive_reasons.append("上行袖仓仅小仓观察")
-    elif sleeve_status in {"Uncontrolled Tail", "Blocked Tail"}:
-        score -= 18
-        negative_reasons.append("尾部风险未被充分控制")
-
-    if max_loss <= 500:
-        score += 8
-        positive_reasons.append(f"最大亏损可控（约{int(max_loss)}元）")
-    elif max_loss <= 1000:
-        score += 3
-        positive_reasons.append(f"最大亏损处于可接受区间（约{int(max_loss)}元）")
-    elif max_loss >= 1600:
-        score -= 12
-        negative_reasons.append(f"最大亏损偏高（约{int(max_loss)}元）")
-
-    score = clamp(score, 0, 100)
-    if score >= 80:
-        decision = "值得投注"
-        final_judgement = "主组合具备较好的剧本一致性和风险控制，可以作为正式下注候选。"
-    elif score >= 60:
-        decision = "小注观察"
-        final_judgement = "可以小仓参与，但 Scenario 或风险信号仍需要观察。"
-    else:
-        decision = "不建议投注"
-        final_judgement = "当前组合信号不足或风险过高，不适合作为正式下注。"
-
-    reasons = []
-    reasons.append(f"剧本一致性 {round(consistency)} 分")
-    reasons.append(f"Shadow Verdict: {shadow_verdict_label(verdict)}")
-    reasons.append(f"Sleeve Status: {hybrid_v2_status_label(sleeve_status)}")
-    reasons.append(f"最大亏损约 {int(max_loss)} 元")
-    return {
-        "score": score,
-        "decision": decision,
-        "reason": "；".join(reasons),
-        "positive_reasons": positive_reasons or ["暂无明显加分项"],
-        "negative_reasons": negative_reasons or ["暂无明显扣分项"],
-        "final_judgement": final_judgement,
-        "risk_mode": "Balanced",
-    }
-
-
-def recommended_stake_mvp(match_score):
-    score = match_score.get("score", 0)
-    decision = match_score.get("decision")
-    if decision == "不建议投注" or score < 50:
-        amount = 0
-        amount_rule = "0元：不建议投注，分数不足或风险信号过重。"
-    elif score < 60:
-        amount = 300
-        amount_rule = "300元：边缘观察局，只允许极小仓验证判断。"
-    elif score < 70:
-        amount = 500
-        amount_rule = "500元：小注观察，剧本成立但信心不足。"
-    elif score < 80:
-        amount = 800
-        amount_rule = "800元：普通可投，仍需控制最大亏损。"
-    elif score < 90:
-        amount = 1200
-        amount_rule = "1200元：高信心区间，要求剧本和风险同时过关。"
-    else:
-        amount = 1500
-        amount_rule = "1500元：极高信心上限，本阶段不自动建议超过1500元。"
-    amount = min(2000, max(0, round_to_hundred(amount)))
-    if amount == 0:
-        reason = "当前分数不足或风险较高，不建议下注。"
-    elif amount <= 500:
-        reason = "观察局，仅建议小金额验证判断。"
-    elif amount <= 1000:
-        reason = "普通可投，仍需控制风险。"
-    elif amount <= 1500:
-        reason = "高信心区间，但仍受最大亏损和剧本一致性约束。"
-    else:
-        reason = "极高信心区间，仅在严格条件满足时使用。"
-    return {
-        "amount": amount,
-        "risk_mode": match_score.get("risk_mode", "Balanced"),
-        "amount_rule": amount_rule,
-        "reason": f"{reason} {match_score.get('reason', '')}",
-    }
 
 
 def render_match_decision_cards(strategies, match=None, distribution=None, data_context=None):
