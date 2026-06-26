@@ -80,6 +80,7 @@ Note: `pip freeze` emitted a local cache warning because the user-level pip cach
 - `ANTHROPIC_MODEL` override: supported
 - Default model: `claude-haiku-4-5-20251001`
 - Claude smoke-test script created: yes
+- Local gitignored `.env` loading: supported through `python-dotenv`
 - Claude API status: READY
 - Smoke-test result with local key available: `CLAUDE_API_READY: YES`
 
@@ -92,13 +93,16 @@ Do not write real keys into repository files, Markdown, GitHub Issues, or PRs.
 - `.env`: ignored
 - `.env.*`: ignored
 - `*.env`: added and ignored
+- Local `.env` file present in this Codex workspace check: yes, ignored by Git
+- Local `.env.save` backup file: removed after cleanup
 - Real API keys written to repo: no
-- The Claude smoke test reads only the local process environment and never prints keys.
+- The Claude smoke test reads only local environment sources and never prints keys.
 
 ## Smoke Test Scripts
 
 - `scripts/check_claude_api_connection.py`
-  - Reads `ANTHROPIC_API_KEY` from environment.
+  - Loads gitignored local `.env` values before checking the process environment.
+  - Reads the Anthropic key from local environment sources only.
   - Uses `ANTHROPIC_MODEL` when set, otherwise defaults to `claude-haiku-4-5-20251001`.
   - Sends only the prompt `Reply with OK.` when a key exists.
   - Fails gracefully with `CLAUDE_API_READY: NO_KEY` when no key exists.
@@ -115,6 +119,12 @@ Do not write real keys into repository files, Markdown, GitHub Issues, or PRs.
 - Updated Claude smoke-test default model from `claude-3-5-haiku-20241022` to `claude-haiku-4-5-20251001` after the dated Haiku 3.5 model returned 404 for the user.
 - `source .venv/bin/activate` then `python scripts/check_claude_api_connection.py`: returned `CLAUDE_API_READY: NO_KEY`; no live API request was made because no local key is set.
 - Latest key-enabled smoke test status provided for checkpoint: `CLAUDE_API_READY: YES`.
+- Added `python-dotenv` loading to the smoke-test script so an ignored local `.env` can supply the Anthropic key without committing secrets.
+- Follow-up smoke test in this Codex workspace returned `CLAUDE_API_READY: NO_KEY` because no local `.env` file is present.
+- After the ignored local `.env` was created, the smoke test returned `CLAUDE_API_READY: YES` with response `OK.`
+- Removed local ignored `.env.save` backup file and reran the smoke test successfully.
+- Reran the Claude review dry run successfully after cleanup.
+- Secret scan after cleanup found no real secrets outside ignored `.env`; only existing workflow regex guard patterns matched.
 - `bash -n scripts/check_github_cli_connection.sh`: passed
 - `.venv/bin/python scripts/check_claude_api_connection.py`: returned `CLAUDE_API_READY: NO_KEY`, expected until a local key is set
 - `./scripts/check_github_cli_connection.sh`: passed
@@ -130,5 +140,5 @@ Do not write real keys into repository files, Markdown, GitHub Issues, or PRs.
 - Codex operating GitHub smoothly: yes for authenticated read operations.
 - Branch/commit/PR readiness via GitHub CLI: partially ready; auth and repo detection work, but write operations were not tested because this audit is read-only.
 - Reading and modifying project files safely: yes; only environment docs, scripts, `.gitignore`, and required QA/changelog docs were touched.
-- Calling Claude API through local scripts: ready when `ANTHROPIC_API_KEY` is present in the executing shell.
+- Calling Claude API through local scripts: ready when the Anthropic key is present in the executing shell or ignored local `.env`.
 - Future Codex to GitHub to Claude workflow: ready for the next controlled setup step.

@@ -2,6 +2,24 @@
 
 ## 2026-06-27
 
+- Removed local ignored `.env.save` backup file after the secret scan found a real key there.
+- Confirmed `.env` still exists locally and remains ignored by Git.
+- Reran Claude smoke test successfully: `CLAUDE_API_READY: YES`.
+- Reran harmless Claude review dry run successfully at `reports/claude_reviews/claude_review_20260626T171709Z.md`.
+- Reran secret scan after cleanup and found no real secrets outside ignored `.env`; only existing workflow regex guard patterns matched.
+- Confirmed product code, `app.py`, modules, data, golden outputs, ranking, odds, strategy, portfolio, and backtest logic remain untouched.
+- Added `scripts/claude_review_diff.py` for read-only Claude review of controlled diffs, commits, PRs, or selected files.
+- Added `scripts/run_claude_review_cycle.py` for one safe round of the five-round Codex-Claude review loop without auto-applying suggestions.
+- Added `docs/CLAUDE_REVIEW_PROMPT_TEMPLATE.md` to constrain Claude to review-only output and next-task recommendations.
+- Added `docs/CODEX_CLAUDE_REVIEW_LOOP.md` to define the five-round Codex implementation and Claude review protocol.
+- Added `reports/claude_reviews/test_review_input.md` and generated a harmless file-mode Claude review dry run at `reports/claude_reviews/claude_review_20260626T171357Z.md`.
+- Confirmed local ignored `.env` is recognized by Git, Claude smoke test returned `CLAUDE_API_READY: YES`, and the dry-run review returned `CLAUDE_REVIEW_READY: YES`.
+- Kept Claude review read-only: no code generation, patch application, portfolio extraction, backtest enablement, product logic, `app.py`, modules, data, or golden output changes.
+- Updated `scripts/check_claude_api_connection.py` to load a local gitignored `.env` through `python-dotenv` before checking environment variables.
+- Confirmed `.gitignore` already includes `.env`, `.env.*`, and `*.env`.
+- Reran the Claude smoke test; it returned `CLAUDE_API_READY: NO_KEY` in this Codex workspace because no local `.env` file is present.
+- Updated environment docs to document local `.env` support, no-secret rules, and that Claude remains ready when the Anthropic key is available through the shell or ignored local `.env`.
+- Did not modify `app.py`, modules, data, reports/golden output snapshots, ranking, recommendation, odds, strategy, portfolio, or backtest logic.
 - Recorded the environment checkpoint after Claude API smoke test readiness.
 - Updated `docs/ENVIRONMENT_GITHUB_CLAUDE_AUDIT.md` and `docs/GITHUB_CLAUDE_CODEX_SETUP_PLAN.md` with Claude API status `READY`, default model `claude-haiku-4-5-20251001`, `ANTHROPIC_MODEL` override support, and Claude CLI optional status.
 - Reconfirmed GitHub CLI authentication and read-only issue/PR checks.

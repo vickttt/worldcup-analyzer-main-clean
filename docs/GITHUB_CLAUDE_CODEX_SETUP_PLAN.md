@@ -18,6 +18,7 @@ Scope: safe environment workflow for Codex, GitHub CLI, and Claude API integrati
 
 - GitHub CLI auth through `gh auth login`.
 - Local Anthropic API key in the shell environment.
+- Optional local `.env` file for the Anthropic key, kept gitignored and never committed.
 - Claude API smoke test status: READY when `ANTHROPIC_API_KEY` is present in the executing shell.
 - Default Claude smoke-test model: `claude-haiku-4-5-20251001`.
 - `ANTHROPIC_MODEL` can override the default model for future compatibility.
@@ -27,6 +28,7 @@ Credential rules:
 - Do not commit API keys, tokens, passwords, or local secret files.
 - Do not write real keys into code, Markdown, GitHub Issues, or PRs.
 - Keep secret values local to the terminal, shell profile, or a gitignored local environment file.
+- Do not print, inspect, or copy local `.env` contents during validation.
 
 ## Safe Communication Model
 
@@ -38,6 +40,7 @@ Credential rules:
 - Claude output is saved to reports only after secret scanning and scope checks.
 - No secrets are sent to GitHub or committed to the repository.
 - Claude CLI remains optional; the Python SDK is the default controlled integration path.
+- Local scripts may load gitignored `.env` values with `python-dotenv`, but generated reports must never include secret values.
 
 ## Future Automation
 
@@ -49,6 +52,6 @@ Credential rules:
 
 ## Next Gate
 
-- Build a read-only Claude review script for PR diffs or selected reports.
-- Keep the script local-first, credential-safe, and explicit about which project context is sent.
+- Use the read-only Claude review script for PR diffs or selected reports.
+- Keep review inputs local-first, credential-safe, and explicit about which project context is sent.
 - Do not enable portfolio extraction or backtest automation in this step.

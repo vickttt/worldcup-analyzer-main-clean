@@ -1,0 +1,18 @@
+{
+  "git_branch": "dev-clean",
+  "git_commit": "2ac5186528df46fa7bcd772f15dc2ad0ed3f5bd1",
+  "input_source": "reports/claude_reviews/test_review_input.md",
+  "mode": "file",
+  "model": "claude-haiku-4-5-20251001",
+  "output_markdown_path": "reports/claude_reviews/claude_review_20260626T171709Z.md",
+  "safety_exclusions_used": [
+    "data/**",
+    "reports/golden_output_snapshot_v1.json",
+    "reports/golden_output_snapshot_v2.json",
+    "reports/golden_risk_contract_v1.json",
+    ".env",
+    ".env.*",
+    "*.env"
+  ],
+  "timestamp": "20260626T171709Z"
+}

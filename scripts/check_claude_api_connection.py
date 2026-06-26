@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Smoke test for Claude API connectivity.
 
-This script never stores or prints API keys. It reads credentials only from the
-local process environment.
+This script never stores or prints API keys. It reads credentials only from
+local environment sources.
 """
 
 from __future__ import annotations
@@ -10,12 +10,16 @@ from __future__ import annotations
 import os
 
 from anthropic import Anthropic
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 def main() -> int:
     if not os.getenv("ANTHROPIC_API_KEY"):
         print("CLAUDE_API_READY: NO_KEY")
-        print("Set ANTHROPIC_API_KEY in your local shell before running this check.")
+        print("Set ANTHROPIC_API_KEY in your local shell or gitignored local .env before running this check.")
         return 1
 
     try:

@@ -1,5 +1,127 @@
 # QA Report
 
+## 2026-06-27 Secret Cleanup After Claude Review Dry Run
+
+## Scope
+
+- Removed local ignored `.env.save` backup file.
+- Updated `docs/ENVIRONMENT_GITHUB_CLAUDE_AUDIT.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Confirmed `.env` exists locally.
+- Confirmed `.env` is ignored by Git.
+- Confirmed `.env.save` was removed.
+- Ran `source .venv/bin/activate` then `python scripts/check_claude_api_connection.py`; result was `CLAUDE_API_READY: YES`.
+- Reran `python scripts/claude_review_diff.py --mode file --input-file reports/claude_reviews/test_review_input.md`; result was `CLAUDE_REVIEW_READY: YES`.
+- Confirmed fresh Claude review output path: `reports/claude_reviews/claude_review_20260626T171709Z.md`.
+- Confirmed fresh Claude review metadata path: `reports/claude_reviews/claude_review_20260626T171709Z.json`.
+- Reran secret scans while excluding `.git`, `.venv`, and local `.env`.
+- Confirmed no real secrets were found outside ignored `.env`; only existing workflow regex guard patterns matched.
+- Ran `python3 -m py_compile scripts/claude_review_diff.py`.
+- Ran `python3 -m py_compile scripts/run_claude_review_cycle.py`.
+- Ran `git diff --check`.
+- Verified no diffs for `app.py`, `modules`, `data`, `reports/golden_output_snapshot_v1.json`, `reports/golden_output_snapshot_v2.json`, and `reports/golden_risk_contract_v1.json`.
+
+## Result
+
+- `.env.save` removed: Yes.
+- `.env` ignored: Yes.
+- Claude smoke test: READY.
+- Claude review dry run: READY.
+- Secret scan: Passed.
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Data files affected: No.
+- Golden output files affected: No.
+- Portfolio extraction performed: No.
+- Backtest enabled: No.
+- Ready for five-round Codex-Claude loop: Yes.
+
+## 2026-06-27 Claude Review Loop V1
+
+## Scope
+
+- Added `scripts/claude_review_diff.py`.
+- Added `scripts/run_claude_review_cycle.py`.
+- Added `docs/CLAUDE_REVIEW_PROMPT_TEMPLATE.md`.
+- Added `docs/CODEX_CLAUDE_REVIEW_LOOP.md`.
+- Added `reports/claude_reviews/test_review_input.md`.
+- Generated `reports/claude_reviews/claude_review_20260626T171357Z.md`.
+- Generated `reports/claude_reviews/claude_review_20260626T171357Z.json`.
+- Updated `docs/ENVIRONMENT_GITHUB_CLAUDE_AUDIT.md`.
+- Updated `docs/GITHUB_CLAUDE_CODEX_SETUP_PLAN.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Confirmed `.env` is ignored by Git.
+- Ran `source .venv/bin/activate` then `python scripts/check_claude_api_connection.py`; result was `CLAUDE_API_READY: YES`.
+- Ran `python scripts/claude_review_diff.py --mode file --input-file reports/claude_reviews/test_review_input.md`; result was `CLAUDE_REVIEW_READY: YES`.
+- Confirmed Claude dry-run output path: `reports/claude_reviews/claude_review_20260626T171357Z.md`.
+- Confirmed Claude dry-run metadata path: `reports/claude_reviews/claude_review_20260626T171357Z.json`.
+- Confirmed the review script supports `working-diff`, `last-commit`, `file`, and `pr` modes.
+- Confirmed the review script excludes `data/**`, golden output JSON files, and local environment secret files from default diff review.
+- Confirmed Claude review scripts save artifacts only under `reports/claude_reviews/`.
+- Confirmed Claude does not write code or apply patches through these scripts.
+
+## Result
+
+- Claude dry-run review: Passed.
+- Dry-run verdict: PASS.
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Data files affected: No.
+- Golden output files affected: No.
+- Portfolio extraction performed: No.
+- Backtest enabled: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: NO.
+- Ready for five-round Codex-Claude loop: Yes, with manual review before implementation.
+
+## 2026-06-27 Local Env Claude Key Loading
+
+## Scope
+
+- Updated `scripts/check_claude_api_connection.py`.
+- Updated `docs/ENVIRONMENT_GITHUB_CLAUDE_AUDIT.md`.
+- Updated `docs/GITHUB_CLAUDE_CODEX_SETUP_PLAN.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Confirmed `.gitignore` includes `.env`, `.env.*`, and `*.env`.
+- Confirmed no local `.env` file is present in this Codex workspace before testing.
+- Added `python-dotenv` loading to the Claude smoke-test script.
+- Preserved default model `claude-haiku-4-5-20251001`.
+- Preserved `ANTHROPIC_MODEL` override support.
+- Ran `source .venv/bin/activate` then `python scripts/check_claude_api_connection.py`; result was `CLAUDE_API_READY: NO_KEY` because no local `.env` file is present.
+- Ran `python3 -m py_compile scripts/check_claude_api_connection.py`.
+- Ran `git diff --check`.
+- Verified no diffs for `app.py`, `modules`, `data`, `reports/golden_output_snapshot_v1.json`, `reports/golden_output_snapshot_v2.json`, and `reports/golden_risk_contract_v1.json`.
+- Ran requested secret scans while excluding `.git`, `.venv`, and local `.env`.
+- Confirmed the only token-pattern matches are existing regex guard patterns in `.github/workflows/claude-review.yml` and `.github/workflows/claude-review 2.yml`, not real token values.
+- Did not print, inspect, store, or commit any API key.
+
+## Result
+
+- Local `.env` loading support: Added.
+- `.env` ignored: Yes.
+- Claude smoke test status in this Codex workspace: `NO_KEY`.
+- Secret scan result: No real secrets found.
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Data files affected: No.
+- Golden output files affected: No.
+- Ranking/recommendation/odds/strategy/portfolio/backtest logic affected: No.
+
 ## 2026-06-27 Environment Checkpoint Commit
 
 ## Scope
