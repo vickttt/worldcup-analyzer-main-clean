@@ -2,6 +2,49 @@
 
 ## 2026-06-27
 
+- Added GitHub-mediated Claude review infrastructure with artifact-only workflow `.github/workflows/claude-review.yml`.
+- Added `scripts/github_claude_review.py` to run Claude review from a sanitized packet inside GitHub Actions using the repository Actions secret.
+- Added `scripts/prepare_claude_review_packet.py` to generate small sanitized packet files under `reports/claude_reviews/`.
+- Added `scripts/fetch_claude_review_result.py` to fetch Claude review artifacts with GitHub CLI, with manual download as fallback.
+- Updated review-loop and setup docs so GitHub-mediated review is the default path when direct Codex-to-Claude review of repository-derived content is blocked.
+- Documented Jin setup requirement for GitHub Actions repository secret `ANTHROPIC_API_KEY`; the workflow was not triggered.
+- Added stateless-by-default Claude review rules: each review must rely only on the current review packet, not memory, prior Claude replies, or long historical context.
+- Clarified that Claude must not create or manage branches, worktrees, or conversations; Codex owns Git operations and Jin remains final approver.
+- Added external review block policy: do not retry automatically, do not work around blocked external review, record the block, continue local validation, and ask Jin for an approved review path.
+- Added `reports/claude_reviews/round_1_external_review_blocked.md` to record the Round 1 external Claude review block after local validator success.
+- Added `reports/claude_reviews/round_1_review_packet.md` as a sanitized Round 1 review packet for Claude review.
+- Updated Claude review-loop policy so sanitized file-mode review packets are the default review input, auto-loop rounds pass only small packets to Claude, `working-diff` mode is optional, and raw working diffs require Jin approval.
+- Attempted Claude file-mode review of the sanitized packet; the environment blocked the call because repository-derived packet content was classified as external data exposure.
+- Added read-only `scripts/validate_golden_risk_contract_v1.py` for golden risk contract coverage validation.
+- Generated `reports/golden_risk_contract_v1_validation_report.md` from `reports/golden_risk_contract_v1.json` without modifying golden data.
+- Confirmed validator output keeps `PORTFOLIO_EXTRACTION: BLOCKED` because Rank #1 eligibility and `correct_score_limit` coverage are missing, and keeps `BACKTEST_READY: NO` because `post_match_risk_outcome` is null for all contracts.
+- Stopped the 3-round Claude loop after Round 1 implementation because the environment blocked sending the working diff to the external Claude API as an external data exposure risk.
+- Updated Claude review-loop rules to V2 as a docs/protocol-only change.
+- Changed the auto-loop policy default from five rounds to three rounds before Jin review to reduce drift risk, low-value task chains, and token/API cost.
+- Added token budget and context pollution prevention rules requiring small scoped inputs, concise Claude output, and no full `app.py`, full `modules/`, full `data/history`, full golden JSON, full repository dump, long historical changelog, or large report review unless Jin explicitly approves.
+- Added Codex capability recommendation policy for optional use of Codex agent mode, GitHub CLI, feature branches, worktrees, local app checks, browser/computer-use for UI-only checks, cache/performance profiling, validation scripts, report generation, and Claude checkpoint review.
+- Added app/browser/API usage rules forbidding browser/computer-use for secrets and requiring safe credentials, approved output paths, and Jin approval for paid or high-volume API usage.
+- Updated Claude output format to include token/context safety and Codex capability recommendation sections.
+- Ran a harmless file-mode Claude review dry run against `reports/claude_reviews/auto_loop_initial_task.md`; it returned `CLAUDE_REVIEW_READY: YES` and generated `reports/claude_reviews/claude_review_20260626T175153Z.md`.
+- Added Git, branch, worktree, GitHub operation, and Codex final reply quality checks to the Claude review prompt.
+- Added guarded auto-run mode documentation for up to five Codex-Claude rounds with hard stops for protected file changes, secret findings, unsafe gate suggestions, direct `main-clean` edits, merge/PR suggestions without Jin approval, validation failure, and unparsable next tasks.
+- Created feature branch `feature/claude-auto-loop-v1` for the automated review-loop experiment.
+- Expanded `scripts/run_claude_review_cycle.py` with `--auto`, `--max-rounds`, `--dry-run`, and `--start-task-file` support while keeping Claude review-only and Codex as the implementation agent.
+- Increased Claude review output allowance in `scripts/claude_review_diff.py` so required review sections are less likely to truncate.
+- Added `reports/claude_reviews/auto_loop_initial_task.md` as a token-light governance-only starting task for the guarded auto-run experiment.
+- Ran guarded one-round dry run successfully; it produced round 1 artifacts and stopped after one dry-run round.
+- Ran guarded auto-run from the governance task; it completed three rounds and stopped because Claude's next task omitted required safety fields and redirected work to Jin instead of Codex.
+- Confirmed the auto-run stop condition worked as intended; product code, data files, golden outputs, portfolio extraction, and backtest enablement remain untouched.
+- Reran syntax checks, whitespace diff check, protected-file diff checks, `.env` ignore check, and path-only secret scan; no real secrets were found.
+- Expanded the Claude review prompt into a strategic review-only advisor prompt.
+- Added long-term goal alignment requirements for model quality, calculation architecture, football-api refresh safety and efficiency, app open speed, cache design, UI decision clarity, risk contract/golden validation, and engineering safety.
+- Required Claude to recommend only one small, reversible, high-leverage next Codex task and explain which long-term goal it supports.
+- Added token-safety guidance forbidding requests to review full `data/history`, full `app.py`, full golden JSON, or other large files unless Jin explicitly approves.
+- Reran harmless file-mode Claude review dry run after strategic prompt update and generated `reports/claude_reviews/claude_review_20260626T172926Z.md`.
+- Tightened the Claude review prompt template to explicitly state that Claude must not write code, Codex remains the implementation agent, and Jin remains the final approver.
+- Clarified that Claude must keep `PORTFOLIO_EXTRACTION` blocked and `BACKTEST_READY` no unless the supplied evidence explicitly satisfies the gates.
+- Reviewed `scripts/claude_review_diff.py` and confirmed it sends Claude the review-only prompt template plus controlled review input.
+- Reran harmless file-mode Claude review dry run after prompt tightening and generated `reports/claude_reviews/claude_review_20260626T172411Z.md`.
 - Removed local ignored `.env.save` backup file after the secret scan found a real key there.
 - Confirmed `.env` still exists locally and remains ignored by Git.
 - Reran Claude smoke test successfully: `CLAUDE_API_READY: YES`.
