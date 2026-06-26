@@ -1,6 +1,6 @@
 # WorldCup Analyzer Development Workflow
 
-## 1. Current Project Structure
+## 1. Project Directory Rules
 
 - `worldcup-analyzer-main-clean` is the new clean primary development directory.
 - The old `worldcup-analyzer` directory is a dirty archive and must not be used for new development.
@@ -13,13 +13,17 @@
 - `main` / `origin/main`: stable release branch. Update only through pull requests.
 - `main-clean-local`: local stable view of `origin/main`. Do not develop directly on it.
 - `dev-clean`: daily integration branch for normal development.
+- `feature/*`: single-purpose branches created from `dev-clean` unless the task explicitly says otherwise.
+- `freeze/*`: historical frozen recovery branches. Do not develop directly on them.
+- `backup/*`: historical backup branches. Do not develop directly on them.
+
+### Feature Branch Categories
+
 - `feature/ui-*`: page, layout, report, and reading-experience work.
 - `feature/model-*`: algorithms, scoring, scenario logic, and portfolio ranking work.
 - `feature/odds-*`: market odds parsing, real user odds, and odds matching work.
 - `feature/backtest-*`: backtests, attribution, validation, and audit work.
 - `feature/data-*`: API refresh, cache behavior, data schema, and snapshot work.
-- `freeze/*`: historical frozen recovery branches. Do not develop directly on them.
-- `backup/*`: historical backup branches. Do not develop directly on them.
 
 ## 3. Codex Task Rules
 
@@ -36,10 +40,11 @@ Every Codex task must state:
 
 ## 4. Single-Task Isolation
 
-- UI tasks must not casually change Portfolio Engine logic.
-- Model tasks must not casually change report UI.
-- Backtest tasks must not casually change pages.
-- Data/API tasks must not casually change algorithms.
+- UI tasks must not change Portfolio Engine logic unless explicitly approved.
+- Model tasks must not change report UI unless explicitly approved.
+- Odds/market tasks must not change UI, model scoring, backtests, or historical data unless explicitly approved.
+- Backtest tasks must not change pages, model defaults, or data refresh behavior unless explicitly approved.
+- Data/API tasks must not change algorithms, UI, or backtest assumptions unless explicitly approved.
 - One task should have one owner area and one clear acceptance target.
 
 ## 5. Commit Rules
@@ -56,13 +61,31 @@ Use scoped commit messages:
 ## 6. Pull Request Rules
 
 - `main` must be updated only through pull requests.
-- Pull requests must pass CI.
 - Do not push directly to `main`.
+- CI is a required check before merging into `main`.
 - Claude Review is currently auxiliary and is not a required gate.
 - Agent QA is currently auxiliary and is not a required gate.
 - One pull request should solve one topic.
 
-## 7. Prohibited Actions
+## 7. Secrets And Environment Safety
+
+- Do not write API keys, tokens, passwords, `.env` values, or other secrets into code.
+- Do not write API keys, tokens, passwords, `.env` values, or other secrets into Markdown.
+- Use local environment variables or ignored local files for secrets.
+- Do not paste secrets into changelogs, QA reports, task notes, or issue/PR templates.
+
+## 8. Completion Report Rules
+
+Every completed task must output:
+
+- Modified files.
+- Test/check results.
+- Whether Portfolio Score was affected.
+- Whether `data/history` was affected.
+- Whether any data refresh, API pull, or report generation touched protected data.
+- Any skipped checks and the reason they were skipped.
+
+## 9. Prohibited Actions
 
 - Do not develop directly on `main`.
 - Do not continue development in the old `worldcup-analyzer` dirty archive.
@@ -71,7 +94,7 @@ Use scoped commit messages:
 - Do not run `git clean`, delete stash entries, or delete branches unless explicitly confirmed.
 - Do not overwrite `data/history` snapshots.
 
-## 8. Standard Development Flow
+## 10. Standard Development Flow
 
 ```bash
 git switch dev-clean
@@ -84,7 +107,7 @@ git push -u origin feature/report-readability
 # open PR to dev-clean or main, depending on release scope
 ```
 
-## 9. Current Status
+## 11. Current Status
 
 - `origin/main` is now the merged v1.81-dev recovery version.
 - `dev-clean` was created from `origin/main`.
