@@ -35,7 +35,9 @@
 - Ran `python3 scripts/validate_claude_review_packet.py reports/claude_reviews/round_8_review_packet.md`: pass.
 - Ran protected-path diff check for modules/ranking, modules/portfolio, modules/strategy, modules/backtest, data, and golden JSON: pass, no output.
 - Ran secret-shaped token scan on changed files: pass, no matches.
-- Pending validation: one GitHub Actions Claude Review workflow round, if available.
+- Ran GitHub Actions Claude Review workflow once: run `28268415491`, artifact downloaded to `reports/claude_reviews/round_8_freshness_panel_claude_review_artifact/`.
+- Claude verdict: `PASS`.
+- Claude findings: no material findings; no code follow-up required.
 
 ## Safety Checklist
 
@@ -54,7 +56,7 @@
 
 ## Result
 
-- Pending Claude review. Local validation passes. The implementation is UI-only and uses conservative freshness labels.
+- Passed. Local validation and Claude review passed. The implementation is UI-only and uses conservative freshness labels.
 
 ## 2026-06-27 Claude Packet Budget Guard
 

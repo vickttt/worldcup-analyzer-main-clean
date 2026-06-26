@@ -1,0 +1,9 @@
+{
+  "input_file": "reports/claude_reviews/round_8_review_packet.md",
+  "model": "claude-haiku-4-5-20251001",
+  "output_mode": "artifact-only",
+  "review_markdown": "reports/claude_reviews/round_8_claude_review.md",
+  "reviewer": "github-actions-claude",
+  "round": 8,
+  "timestamp": "2026-06-26T22:18:43Z"
+}
