@@ -2,7 +2,7 @@
 
 ## Packet
 
-- Path: `reports/claude_reviews/round_1_review_packet.md`
+- Path: `reports/claude_reviews/round_7_review_packet.md`
 - Exists: yes
 - Under `reports/claude_reviews/`: yes
 - Filename ends with `_review_packet.md`: yes
@@ -14,9 +14,37 @@
 
 ## Size
 
-- Size bytes: 1537
+- Size bytes: 2395
 - Maximum bytes: 20480
 - Size result: PASS
+
+## Cost Budget Estimate
+
+- Packet character count: 2395
+- Estimated input tokens: 599
+- Expected output tokens: 1200
+- Assumed model class: haiku
+- Input price per 1M tokens: $1.00
+- Output price per 1M tokens: $5.00
+- Estimated input cost: $0.000599
+- Estimated output cost: $0.006000
+- Estimated cost per round: $0.006599
+- Per-round threshold: $0.20
+- Budget status: PASS
+- Override used: no
+- Large packet warning: no
+- Reminder: $0.20 is the per-round guardrail. $20 is the total planning budget.
+
+## Cost Policy
+
+- Haiku is default for docs/report-only review.
+- Sonnet should be reserved for product-code or high-risk API/cache/security changes.
+- Do not send full repo, full data files, golden JSON, old logs, or full prior Claude artifacts.
+- Round 2/3 should send only incremental diff or a short previous findings checklist.
+
+## Budget Configuration Findings
+
+- none
 
 ## Missing Sections
 
@@ -39,3 +67,4 @@
 ## Recommendation
 
 - SAFE_FOR_CLAUDE_REVIEW: YES
+- Budget action: none

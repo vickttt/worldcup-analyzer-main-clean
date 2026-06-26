@@ -2,6 +2,11 @@
 
 ## 2026-06-27
 
+- Added a Claude review packet budget guard to `scripts/validate_claude_review_packet.py`.
+- Added estimated packet input tokens, expected output tokens, model class, estimated per-round cost, threshold, override status, and cost policy text to `reports/claude_reviews/packet_validation_report.md`.
+- Validated the round 7 packet at an estimated `$0.006599` per review round, below the `$0.20` per-round guardrail.
+- Confirmed the over-budget path fails validation unless an explicit approved override is set.
+- No product code, data, model logic, golden JSON, ranking, portfolio, strategy, odds, or backtest logic was modified for the packet budget guard.
 - Completed the first real 3-round Codex-GitHub-Claude auto loop for risk contract provenance analysis.
 - Recorded Claude PASS verdicts for the provenance map, source availability matrix, and field readiness classification rounds.
 - Downloaded Claude review artifacts for rounds 3, 4, and 5 and prepared them for checkpointing under `reports/claude_reviews/`.

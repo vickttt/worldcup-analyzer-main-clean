@@ -1,5 +1,66 @@
 # QA Report
 
+## 2026-06-27 Claude Packet Budget Guard
+
+## Scope
+
+- Branch: `codex/claude-packet-budget-guard`.
+- Changed `scripts/validate_claude_review_packet.py`.
+- Generated `reports/claude_reviews/packet_validation_report.md`.
+- Added `reports/claude_reviews/round_7_review_packet.md` for the task's Claude review packet.
+- Updated `docs/CHANGELOG.md` and `docs/QA_REPORT.md`.
+- Added packet token and cost estimate reporting before GitHub-mediated Claude review.
+- Added a default `$0.20` per-round budget guard with explicit over-budget override support.
+
+## Files Changed
+
+- `scripts/validate_claude_review_packet.py`
+- `reports/claude_reviews/packet_validation_report.md`
+- `reports/claude_reviews/round_7_review_packet.md`
+- `docs/CHANGELOG.md`
+- `docs/QA_REPORT.md`
+
+## Budget Guard Result
+
+- Default model class: `haiku`.
+- Expected output tokens: `1200`.
+- Per-round threshold: `$0.20`.
+- Total planning budget reminder: `$20`.
+- Sample packet: `reports/claude_reviews/round_7_review_packet.md`.
+- Estimated input tokens: `599`.
+- Estimated cost per round: `$0.006599`.
+- Budget status: `PASS`.
+- Override used: `no`.
+- Forced low-threshold failure check: pass, validation failed safely when threshold was set below estimated cost.
+
+## Checks
+
+- Ran `python3 -m py_compile scripts/validate_claude_review_packet.py`: pass.
+- Ran `python3 scripts/validate_claude_review_packet.py reports/claude_reviews/round_7_review_packet.md`: pass.
+- Ran forced over-budget check with a tiny threshold: pass, validator failed safely and printed the budget action.
+- Ran `git diff --check`: pass.
+- Ran protected-file diff check for `app.py`, `modules`, `data`, and golden JSON: pass, no output.
+- Pending validation: quick changed-file token-pattern scan before commit.
+- Pending validation: one GitHub Actions Claude Review round, if available.
+
+## Safety Checklist
+
+- `app.py` unchanged.
+- `modules` unchanged.
+- `data` unchanged.
+- Golden JSON unchanged.
+- Ranking unchanged.
+- Portfolio unchanged.
+- Strategy unchanged.
+- Odds unchanged.
+- Backtest not enabled.
+- No API secrets printed.
+- No real API refresh performed.
+
+## Result
+
+- Pending Claude review. Local validation passes and the budget guard protects the `$0.20` per-round threshold while treating `$20` only as the total planning budget.
+
 ## 2026-06-27 First 3-Round Claude Auto Loop Artifact Checkpoint
 
 ## Scope
