@@ -1,5 +1,36 @@
 # QA Report
 
+## 2026-06-27 First 3-Round Claude Auto Loop Artifact Checkpoint
+
+## Scope
+
+- Recorded downloaded Claude review artifacts for rounds 3, 4, and 5.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Confirmed the first real Codex-GitHub-Claude auto loop completed three rounds.
+- Claude verdicts: PASS, PASS, PASS.
+- Artifact directories: `reports/claude_reviews/round_3_claude_review_artifact/`, `reports/claude_reviews/round_4_claude_review_artifact/`, and `reports/claude_reviews/round_5_claude_review_artifact/`.
+- Ran path-only artifact checks for Anthropic and GitHub token patterns.
+- Ran `git diff --check`.
+- Verified no diffs for `app.py`, `modules`, `data`, `reports/golden_output_snapshot_v1.json`, `reports/golden_output_snapshot_v2.json`, and `reports/golden_risk_contract_v1.json`.
+
+## Result
+
+- Artifacts safe to checkpoint: Yes.
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Data files affected: No.
+- Golden output files affected: No.
+- Portfolio extraction enabled: No.
+- Backtest enabled: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: NO.
+- Next recommended phase: read-only replay boundary design.
+
 ## 2026-06-27 Risk Contract Field Provenance Map
 
 ## Scope

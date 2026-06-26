@@ -2,6 +2,10 @@
 
 ## 2026-06-27
 
+- Completed the first real 3-round Codex-GitHub-Claude auto loop for risk contract provenance analysis.
+- Recorded Claude PASS verdicts for the provenance map, source availability matrix, and field readiness classification rounds.
+- Downloaded Claude review artifacts for rounds 3, 4, and 5 and prepared them for checkpointing under `reports/claude_reviews/`.
+- Confirmed product code remained untouched and `PORTFOLIO_EXTRACTION: BLOCKED`, `BACKTEST_READY: NO` remain unchanged.
 - Added `reports/risk_contract_field_provenance_map.md` to map missing risk contract fields to likely source functions, reports, and extraction blockers.
 - Restored `scripts/validate_golden_risk_contract_v1.py` as a read-only validation helper for the existing golden risk contract fixture.
 - Added `scripts/validate_source_availability.py` and `reports/risk_contract_source_availability_matrix.md` to check current fixture coverage for mapped risk contract source keys without replaying or rewriting golden data.
