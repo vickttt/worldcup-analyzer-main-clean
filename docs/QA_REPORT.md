@@ -34,6 +34,35 @@
 - PORTFOLIO_EXTRACTION: BLOCKED.
 - BACKTEST_READY: NO.
 
+## 2026-06-27 Risk Contract Source Availability Matrix
+
+## Scope
+
+- Added `scripts/validate_source_availability.py`.
+- Generated `reports/risk_contract_source_availability_matrix.md`.
+- Added a sanitized Claude review packet for the source availability task.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Read existing `reports/golden_risk_contract_v1.json`.
+- Counted source-key availability for mapped risk contract fields without writing golden JSON.
+- Did not replay portfolio logic.
+- Kept `PORTFOLIO_EXTRACTION: BLOCKED` and `BACKTEST_READY: NO`.
+
+## Result
+
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Data files affected: No.
+- Golden output files affected: No.
+- Portfolio extraction enabled: No.
+- Backtest enabled: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: NO.
+
 ## 2026-06-27 Claude Review Workflow Auto Trigger
 
 ## Scope
