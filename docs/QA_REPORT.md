@@ -63,6 +63,35 @@
 - PORTFOLIO_EXTRACTION: BLOCKED.
 - BACKTEST_READY: NO.
 
+## 2026-06-27 Field Readiness Classification
+
+## Scope
+
+- Added `scripts/classify_field_readiness.py`.
+- Generated `reports/field_readiness_classification.md`.
+- Added a sanitized Claude review packet for the readiness classification task.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Classified mapped missing fields into readiness categories.
+- Kept canonical risk score as requiring approved formula design.
+- Kept post-match risk outcome as requiring settled post-match design.
+- Did not replay portfolio logic or write golden JSON.
+
+## Result
+
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Data files affected: No.
+- Golden output files affected: No.
+- Portfolio extraction enabled: No.
+- Backtest enabled: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: NO.
+
 ## 2026-06-27 Claude Review Workflow Auto Trigger
 
 ## Scope
