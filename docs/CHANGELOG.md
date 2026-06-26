@@ -10,6 +10,10 @@
 - Clarified that Claude Review and Agent QA are auxiliary checks, not required gates.
 - Added secrets rules forbidding API keys, `.env` values, tokens, and passwords in code or Markdown.
 - Added required completion output fields for modified files, test/check results, Portfolio Score impact, `data/history` impact, protected data touches, and skipped checks.
+- Clarified that large features must use a dedicated `feature/*` branch or worktree before merging through `dev-clean`.
+- Clarified that every completed modification must update `docs/CHANGELOG.md` and `docs/QA_REPORT.md`.
+- Added `.env` and `.env.*` to `.gitignore` to keep local environment files out of version control.
+- Added `docs/PR_CREATION_REPORT.md` for the workflow PR creation record.
 - Did not modify business code, `app.py`, modules, reports, production sorting, recommendation logic, API refresh logic, or data files.
 
 ## 2026-06-22

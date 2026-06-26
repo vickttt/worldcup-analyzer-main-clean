@@ -14,6 +14,7 @@
 - `main-clean-local`: local stable view of `origin/main`. Do not develop directly on it.
 - `dev-clean`: daily integration branch for normal development.
 - `feature/*`: single-purpose branches created from `dev-clean` unless the task explicitly says otherwise.
+- Large feature work must use a dedicated `feature/*` branch or worktree, then merge back through `dev-clean` before release promotion.
 - `freeze/*`: historical frozen recovery branches. Do not develop directly on them.
 - `backup/*`: historical backup branches. Do not develop directly on them.
 
@@ -37,6 +38,7 @@ Every Codex task must state:
 - Whether `.github/workflows` may change.
 - Whether new APIs may be added.
 - Whether `pytest` must be run.
+- Every completed modification must update `docs/CHANGELOG.md` and `docs/QA_REPORT.md`.
 
 ## 4. Single-Task Isolation
 
@@ -72,6 +74,7 @@ Use scoped commit messages:
 - Do not write API keys, tokens, passwords, `.env` values, or other secrets into code.
 - Do not write API keys, tokens, passwords, `.env` values, or other secrets into Markdown.
 - Use local environment variables or ignored local files for secrets.
+- `.env` and local environment variants must remain ignored by `.gitignore`.
 - Do not paste secrets into changelogs, QA reports, task notes, or issue/PR templates.
 
 ## 8. Completion Report Rules
