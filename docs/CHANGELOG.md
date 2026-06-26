@@ -2,6 +2,10 @@
 
 ## 2026-06-27
 
+- Added `scripts/validate_claude_review_packet.py` to validate sanitized Claude review packets before GitHub-mediated review.
+- Added `reports/claude_reviews/round_1_review_packet.md` as the Round 1 sanitized packet for reviewing the packet validator task.
+- Generated `reports/claude_reviews/packet_validation_report.md` with `SAFE_FOR_CLAUDE_REVIEW: YES`.
+- Kept the packet-validator task read-only with no product code, `app.py`, modules, data, golden outputs, portfolio extraction, or backtest enablement changes.
 - Recorded successful GitHub Actions Claude Review workflow test from manual dispatch run `28264315109`.
 - Downloaded and checkpointed the artifact-only Claude review output under `reports/claude_reviews/github_action_round_1_artifact/`.
 - Claude verdict for the GitHub-mediated test packet: `PASS`.

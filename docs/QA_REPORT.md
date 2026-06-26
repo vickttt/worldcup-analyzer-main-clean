@@ -1,5 +1,43 @@
 # QA Report
 
+## 2026-06-27 Claude Review Packet Validator
+
+## Scope
+
+- Added `scripts/validate_claude_review_packet.py`.
+- Added `reports/claude_reviews/round_1_review_packet.md`.
+- Generated `reports/claude_reviews/packet_validation_report.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Created a read-only validator for `reports/claude_reviews/*_review_packet.md` files.
+- Validator checks path scope, filename suffix, file size, required sections, forbidden token patterns, raw diff markers, patch blocks, large-file content indicators, and required gate fields.
+- Created a token-light sanitized Round 1 packet for GitHub-mediated Claude review.
+- The packet records product-code impact as no, protected files as untouched, secret-scan intent, gate status, and one proposed next task.
+- Ran `python3 scripts/validate_claude_review_packet.py reports/claude_reviews/round_1_review_packet.md`.
+- Packet validation result: PASS.
+- SAFE_FOR_CLAUDE_REVIEW: YES.
+- Ran `python3 -m py_compile scripts/validate_claude_review_packet.py`.
+- Ran `git diff --check`.
+- Verified no diffs for `app.py`, `modules`, `data`, `reports/golden_output_snapshot_v1.json`, `reports/golden_output_snapshot_v2.json`, and `reports/golden_risk_contract_v1.json`.
+- Ran path-only secret scans while excluding `.git`, `.venv`, `__pycache__`, and `.env`.
+
+## Result
+
+- Packet validator ready: Yes.
+- Round 1 packet safe for Claude review: Yes.
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Data files affected: No.
+- Golden output files affected: No.
+- Portfolio extraction enabled: No.
+- Backtest enabled: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: NO.
+
 ## 2026-06-27 GitHub Actions Claude Review Workflow Test
 
 ## Scope
