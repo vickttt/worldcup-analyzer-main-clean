@@ -2,6 +2,25 @@
 
 ## 2026-06-27
 
+- Recorded the environment checkpoint after Claude API smoke test readiness.
+- Updated `docs/ENVIRONMENT_GITHUB_CLAUDE_AUDIT.md` and `docs/GITHUB_CLAUDE_CODEX_SETUP_PLAN.md` with Claude API status `READY`, default model `claude-haiku-4-5-20251001`, `ANTHROPIC_MODEL` override support, and Claude CLI optional status.
+- Reconfirmed GitHub CLI authentication and read-only issue/PR checks.
+- Reconfirmed no API keys, key prefixes, `.env` files, product code, `app.py`, modules, data files, golden output files, ranking, recommendation, odds, portfolio, or strategy logic are included in the environment checkpoint.
+- Updated `scripts/check_claude_api_connection.py` to default to `claude-haiku-4-5-20251001` while keeping `ANTHROPIC_MODEL` override support.
+- Re-ran the Claude smoke test through the local `.venv`; it stopped safely with `CLAUDE_API_READY: NO_KEY` because no local `ANTHROPIC_API_KEY` is set.
+- Confirmed no product code, `app.py`, modules, reports, data, ranking, portfolio, strategy, odds, or recommendation logic was modified.
+- Updated `scripts/check_claude_api_connection.py` to default to stable model `claude-3-5-haiku-20241022` while keeping `ANTHROPIC_MODEL` override support.
+- Re-ran the Claude smoke test without printing or storing API keys.
+- Confirmed no product code, modules, reports, data, ranking, portfolio, strategy, odds, or recommendation logic was modified.
+- Added `docs/ENVIRONMENT_GITHUB_CLAUDE_AUDIT.md` for the Codex, GitHub CLI, and Claude API environment audit.
+- Added `docs/GITHUB_CLAUDE_CODEX_SETUP_PLAN.md` to define the safe future Codex ↔ GitHub ↔ Claude workflow.
+- Added `scripts/check_claude_api_connection.py` as a local-only Claude API smoke test that reads credentials only from the environment.
+- Added `scripts/check_github_cli_connection.sh` for read-only GitHub CLI auth, repo, PR, and issue checks.
+- Created local `.venv` and installed small Python API/client packages: `anthropic`, `python-dotenv`, `requests`, `pydantic`, and `rich`.
+- Added `*.env` to `.gitignore`.
+- Confirmed GitHub CLI is authenticated for `vickttt`, current repo detection works, and read-only issue/PR checks succeed.
+- Confirmed Claude API status is `NO_KEY` until `ANTHROPIC_API_KEY` is set locally.
+- Did not modify `app.py`, modules, reports, data, ranking, portfolio, strategy, odds, or recommendation logic.
 - Added `scripts/generate_golden_risk_contract_v1.py` as a read-only serializer for canonical risk contract fixtures.
 - Generated `reports/golden_risk_contract_v1.json` from existing golden v2 saved pre-match outputs without recomputing rankings or allocations.
 - Generated `reports/golden_risk_contract_v1_serializer_report.md` documenting source files, contract counts, missing fields, invariant summary, and coverage gaps.

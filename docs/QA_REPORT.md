@@ -1,5 +1,130 @@
 # QA Report
 
+## 2026-06-27 Environment Checkpoint Commit
+
+## Scope
+
+- Updated `docs/ENVIRONMENT_GITHUB_CLAUDE_AUDIT.md`.
+- Updated `docs/GITHUB_CLAUDE_CODEX_SETUP_PLAN.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+- Prepared environment setup files for checkpoint commit.
+
+## Checks
+
+- Read required governance docs before work: `docs/GPT_CONTEXT.md`, `docs/PRODUCT_PRINCIPLES.md`, `docs/TASK_QUEUE.md`, `docs/KNOWN_BUGS.md`, `docs/CHANGELOG.md`, and `docs/QA_REPORT.md`.
+- Recorded Claude API status as `READY` for the environment checkpoint.
+- Confirmed default smoke-test model is `claude-haiku-4-5-20251001`.
+- Confirmed `ANTHROPIC_MODEL` override support remains in `scripts/check_claude_api_connection.py`.
+- Confirmed GitHub CLI remains authenticated.
+- Confirmed Claude CLI remains optional and not required.
+- Ran `git status`.
+- Ran `git diff --check`.
+- Ran `python3 -m py_compile scripts/check_claude_api_connection.py`.
+- Ran `bash -n scripts/check_github_cli_connection.sh`.
+- Ran `./scripts/check_github_cli_connection.sh`; GitHub auth, repo metadata, PR list, and issue list checks passed.
+- Checked the Codex commit shell for `ANTHROPIC_API_KEY` without printing it; the key was not present in this process, so no live Claude call was made from this shell during the commit validation.
+- Verified no diffs for `app.py`, `modules`, `data`, `reports/golden_output_snapshot_v1.json`, `reports/golden_output_snapshot_v2.json`, and `reports/golden_risk_contract_v1.json`.
+- Ran requested secret scans for Anthropic and GitHub token patterns.
+- Confirmed the only token-pattern matches are existing regex guard patterns in `.github/workflows/claude-review.yml` and `.github/workflows/claude-review 2.yml`, not real token values.
+- Confirmed no API keys or key prefixes were printed, stored, or added to docs.
+
+## Result
+
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Reports/golden outputs affected: No.
+- Data files affected: No.
+- Portfolio Score affected: No.
+- Ranking/recommendation logic affected: No.
+- Claude API status: READY.
+- Secret scan result: No real secrets found.
+
+## 2026-06-27 Claude Smoke Test Model Fix
+
+## Scope
+
+- Updated `scripts/check_claude_api_connection.py`.
+- Updated `docs/ENVIRONMENT_GITHUB_CLAUDE_AUDIT.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Read required governance docs before work: `docs/GPT_CONTEXT.md`, `docs/PRODUCT_PRINCIPLES.md`, `docs/TASK_QUEUE.md`, `docs/KNOWN_BUGS.md`, `docs/CHANGELOG.md`, and `docs/QA_REPORT.md`.
+- Changed the default smoke-test model from `claude-3-5-haiku-latest` to `claude-3-5-haiku-20241022`.
+- Changed the default smoke-test model from `claude-3-5-haiku-20241022` to `claude-haiku-4-5-20251001`.
+- Preserved `ANTHROPIC_MODEL` environment override support.
+- Ran `python3 -m py_compile scripts/check_claude_api_connection.py`.
+- Ran `.venv/bin/python scripts/check_claude_api_connection.py`; result was `CLAUDE_API_READY: NO_KEY` because no local `ANTHROPIC_API_KEY` is set.
+- Ran `source .venv/bin/activate` then `python scripts/check_claude_api_connection.py`; result was `CLAUDE_API_READY: NO_KEY` because no local `ANTHROPIC_API_KEY` is set.
+- Ran protected-path diff checks for `app.py`, `modules`, `data`, and `reports`.
+- Ran a secret scan for common Anthropic/GitHub token patterns outside `.git` and `.venv`; no matches found.
+- Did not print, store, or write API keys.
+
+## Result
+
+- Product code affected: No.
+- Portfolio Score affected: No.
+- `data/history` affected: No.
+- `data/worldcup2026` affected: No.
+- Ranking/recommendation logic affected: No.
+- Claude smoke test rerun: Yes, stopped safely at `NO_KEY`.
+
+## 2026-06-27 Environment GitHub Claude Audit
+
+## Scope
+
+- Added `docs/ENVIRONMENT_GITHUB_CLAUDE_AUDIT.md`.
+- Added `docs/GITHUB_CLAUDE_CODEX_SETUP_PLAN.md`.
+- Added `scripts/check_claude_api_connection.py`.
+- Added `scripts/check_github_cli_connection.sh`.
+- Updated `.gitignore`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+- Created local `.venv` and installed small Python API/client packages.
+
+## Checks
+
+- Read required governance docs before work: `docs/GPT_CONTEXT.md`, `docs/PRODUCT_PRINCIPLES.md`, `docs/TASK_QUEUE.md`, `docs/KNOWN_BUGS.md`, `docs/CHANGELOG.md`, and `docs/QA_REPORT.md`.
+- Confirmed current branch is `dev-clean`.
+- Confirmed starting working tree was clean.
+- Ran core tool checks for `git`, `gh`, `python3`, `pip3`, `node`, `npm`, `jq`, `curl`, `brew`, `code`, `claude`, and `codex`.
+- Verified GitHub CLI authentication with `gh auth status`.
+- Verified repo detection with `gh repo view --json nameWithOwner,defaultBranchRef,url`.
+- Verified read-only GitHub access with `gh issue list --limit 5` and `gh pr list --limit 5`.
+- Created and verified local `.venv`.
+- Installed and imported `anthropic`, `python-dotenv`, `requests`, `pydantic`, and `rich`.
+- Checked `ANTHROPIC_API_KEY` presence without printing any key.
+- Confirmed `.gitignore` covers `.env`, `.env.*`, and `*.env`.
+- Ran `python3 -m py_compile scripts/check_claude_api_connection.py`.
+- Ran `bash -n scripts/check_github_cli_connection.sh`.
+- Ran `.venv/bin/python scripts/check_claude_api_connection.py` and confirmed expected `CLAUDE_API_READY: NO_KEY` result.
+- Ran `./scripts/check_github_cli_connection.sh` and confirmed read-only GitHub checks pass.
+- Ran `git diff --check`.
+- Ran `git diff -- app.py`.
+- Ran `git diff -- modules`.
+- Ran `git diff -- data`.
+- Ran `git diff -- reports`.
+- Ran a secret scan for common Anthropic/GitHub token patterns outside `.git` and `.venv`; no matches found.
+
+## Result
+
+- Environment audit completed.
+- GitHub CLI auth: Yes.
+- GitHub repo detected: Yes, `vickttt/worldcup-analyzer-main-clean`.
+- GitHub read-only issue/PR checks: Passed.
+- Claude SDK installed: Yes.
+- Claude API smoke test status: `NO_KEY`.
+- Product code affected: No.
+- Portfolio Score affected: No.
+- `data/history` affected: No.
+- `data/worldcup2026` affected: No.
+- Ranking/recommendation logic affected: No.
+- Secrets found in repo: No.
+- No commits were created.
+
 ## 2026-06-27 Golden Risk Contract v1 Serializer
 
 ## Scope
