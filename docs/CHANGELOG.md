@@ -2,6 +2,10 @@
 
 ## 2026-06-27
 
+- Updated `.github/workflows/claude-review.yml` to auto-trigger on push to `dev-clean` when sanitized Claude review packets are added or changed.
+- Kept `workflow_dispatch` as a manual fallback while documenting that Codex should not manually trigger it unless Jin explicitly asks.
+- Updated GitHub-mediated review docs so Codex creates and validates a packet, commits and pushes it, then inspects the automatically created GitHub Actions run.
+- Confirmed the auto-trigger path reviews sanitized packet files only and does not send raw git diffs.
 - Added `scripts/validate_claude_review_packet.py` to validate sanitized Claude review packets before GitHub-mediated review.
 - Added `reports/claude_reviews/round_1_review_packet.md` as the Round 1 sanitized packet for reviewing the packet validator task.
 - Generated `reports/claude_reviews/packet_validation_report.md` with `SAFE_FOR_CLAUDE_REVIEW: YES`.

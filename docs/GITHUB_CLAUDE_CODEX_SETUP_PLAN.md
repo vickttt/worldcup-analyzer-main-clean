@@ -51,17 +51,20 @@ Default flow for review-loop automation:
 1. Codex creates `reports/claude_reviews/round_<n>_review_packet.md`.
 2. Codex commits and pushes the packet to the active branch only after Jin approves the checkpoint.
 3. Jin adds GitHub Actions repository secret `ANTHROPIC_API_KEY`.
-4. Codex triggers `.github/workflows/claude-review.yml` with `workflow_dispatch`.
-5. GitHub Actions reads only the sanitized packet path.
+4. Push to `dev-clean` auto-triggers `.github/workflows/claude-review.yml` when a sanitized review packet is added or changed.
+5. GitHub Actions detects the latest changed `reports/claude_reviews/*_review_packet.md` file and reads only that sanitized packet path.
 6. GitHub Actions calls Claude using `secrets.ANTHROPIC_API_KEY`.
 7. GitHub Actions uploads artifact `claude-review-round-<n>`.
 8. Codex fetches the artifact with `scripts/fetch_claude_review_result.py`, or Jin downloads it manually.
+
+`workflow_dispatch` remains available as a manual fallback. Jin does not need to manually run the workflow each round after a packet is committed and pushed to `dev-clean`. Codex should create and validate the packet, commit and push, then inspect the automatically created GitHub Actions run. Codex must not use `gh workflow run` unless Jin explicitly asks.
 
 Version 1 is artifact-only:
 
 - No auto-commit from workflow.
 - No write permission granted to workflow.
 - No raw diff review by default.
+- Auto-trigger reviews sanitized packets only, not raw diffs.
 - No secret values in code, docs, reports, issues, PR text, or logs.
 
 Manual setup for Jin:
@@ -72,7 +75,7 @@ Manual setup for Jin:
 - Paste the key only into the GitHub secret value field.
 - Do not paste the key into any file, issue, pull request, report, or chat transcript.
 
-Do not trigger the workflow until Jin confirms the secret is added.
+Do not manually trigger the workflow until Jin confirms the secret is added and explicitly asks for manual dispatch.
 
 ## Future Automation
 

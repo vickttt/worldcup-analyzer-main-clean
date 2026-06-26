@@ -130,13 +130,15 @@ When direct Codex-to-Claude review of repository-derived content is blocked, the
 
 1. Codex creates a sanitized packet at `reports/claude_reviews/round_<n>_review_packet.md`.
 2. Codex commits and pushes the packet to the active feature branch after Jin approves the checkpoint.
-3. Codex triggers `.github/workflows/claude-review.yml` only after Jin confirms the GitHub Actions secret is configured.
-4. GitHub Actions checks out the requested branch.
+3. Push to `dev-clean` auto-triggers `.github/workflows/claude-review.yml` when a sanitized review packet is added or changed.
+4. GitHub Actions detects the latest changed `reports/claude_reviews/*_review_packet.md` file and sends only that packet to Claude.
 5. GitHub Actions calls Claude with `secrets.ANTHROPIC_API_KEY`.
 6. GitHub Actions uploads artifact `claude-review-round-<n>`.
 7. The artifact contains `round_<n>_claude_review.md` and `round_<n>_claude_review.json`.
 8. Codex fetches the artifact with `scripts/fetch_claude_review_result.py` or Jin downloads it manually from GitHub.
 9. Codex reads the review output, extracts one next Codex task, validates safety, and continues only if the verdict is `PASS` or `PASS_WITH_NOTES`.
+
+`workflow_dispatch` remains available as a manual fallback. Codex must not use `gh workflow run` unless Jin explicitly asks. The auto-trigger reviews sanitized packets only, never raw diffs.
 
 Version 1 is artifact-only. The workflow must not auto-commit review output back to the branch.
 
@@ -146,7 +148,7 @@ Required GitHub secret:
 - Location: GitHub repository settings, Secrets and variables, Actions, New repository secret.
 
 Do not paste the key into files, issues, PRs, reports, or local command output.
-Do not trigger the workflow until Jin confirms the repository secret is added.
+Do not manually trigger the workflow until Jin confirms the repository secret is added and explicitly asks for manual dispatch.
 
 ## Codex Capability Suggestions
 

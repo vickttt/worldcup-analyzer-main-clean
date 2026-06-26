@@ -1,19 +1,28 @@
 name: Claude Review
 
 on:
+  push:
+    branches:
+      - dev-clean
+    paths:
+      - "reports/claude_reviews/*_review_packet.md"
+      - ".github/workflows/claude-review.yml"
   workflow_dispatch:
     inputs:
       input_file:
         description: "Sanitized review packet path"
         required: true
+        default: "reports/claude_reviews/github_action_test_packet.md"
         type: string
       round:
         description: "Review round number"
         required: true
+        default: "1"
         type: string
       branch:
         description: "Branch containing the review packet"
         required: true
+        default: "dev-clean"
         type: string
 
 permissions:
@@ -29,8 +38,34 @@ jobs:
       - name: Checkout requested branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch }}
-          fetch-depth: 1
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Select sanitized review packet
+        id: packet
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            input_file="${{ inputs.input_file }}"
+            round="${{ inputs.round }}"
+          else
+            input_file="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" -- 'reports/claude_reviews/*_review_packet.md' | sort | tail -n 1 || true)"
+            if [[ -z "${input_file}" ]]; then
+              input_file="reports/claude_reviews/github_action_test_packet.md"
+            fi
+            if [[ "${input_file}" =~ round_([0-9]+)_review_packet\.md$ ]]; then
+              round="${BASH_REMATCH[1]}"
+            else
+              round="1"
+            fi
+          fi
+          case "${input_file}" in
+            reports/claude_reviews/*_review_packet.md|reports/claude_reviews/github_action_test_packet.md) ;;
+            *) echo "Refusing non-packet input path: ${input_file}" >&2; exit 1 ;;
+          esac
+          echo "input_file=${input_file}" >> "$GITHUB_OUTPUT"
+          echo "round=${round}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -46,15 +81,15 @@ jobs:
           ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
         run: |
           python scripts/github_claude_review.py \
-            --input-file "${{ inputs.input_file }}" \
-            --round "${{ inputs.round }}"
+            --input-file "${{ steps.packet.outputs.input_file }}" \
+            --round "${{ steps.packet.outputs.round }}"
 
       - name: Upload Claude review artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: claude-review-round-${{ inputs.round }}
+          name: claude-review-round-${{ steps.packet.outputs.round }}
           path: |
-            reports/claude_reviews/round_${{ inputs.round }}_claude_review.md
-            reports/claude_reviews/round_${{ inputs.round }}_claude_review.json
+            reports/claude_reviews/round_${{ steps.packet.outputs.round }}_claude_review.md
+            reports/claude_reviews/round_${{ steps.packet.outputs.round }}_claude_review.json
           if-no-files-found: error

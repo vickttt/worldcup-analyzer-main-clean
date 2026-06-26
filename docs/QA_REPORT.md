@@ -1,5 +1,44 @@
 # QA Report
 
+## 2026-06-27 Claude Review Workflow Auto Trigger
+
+## Scope
+
+- Updated `.github/workflows/claude-review.yml`.
+- Updated `docs/CODEX_CLAUDE_REVIEW_LOOP.md`.
+- Updated `docs/GITHUB_CLAUDE_CODEX_SETUP_PLAN.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+- Added `reports/claude_reviews/round_1_claude_review_artifact/` if still untracked and safe.
+
+## Checks
+
+- Added a push trigger for `dev-clean` when sanitized review packets or the workflow file change.
+- Kept `workflow_dispatch` as manual fallback.
+- Added workflow packet selection for the latest changed `reports/claude_reviews/*_review_packet.md` on push.
+- Kept review input restricted to sanitized packet paths, not raw git diffs.
+- Documented that Codex should create and validate a packet, commit and push, then inspect the automatically created GitHub Actions run.
+- Documented that Codex must not use `gh workflow run` unless Jin explicitly asks.
+- Ran `python3 -m py_compile scripts/github_claude_review.py`.
+- Ran `git diff --check`.
+- Verified no diffs for `app.py`, `modules`, `data`, `reports/golden_output_snapshot_v1.json`, `reports/golden_output_snapshot_v2.json`, and `reports/golden_risk_contract_v1.json`.
+- Ran path-only secret scans while excluding `.git`, `.venv`, `__pycache__`, and `.env`.
+- Secret scan result: no real secrets found; matches were limited to guard-pattern literals in validator/helper files and the older workflow copy.
+
+## Result
+
+- Workflow auto-trigger added: Yes.
+- Manual fallback retained: Yes.
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Data files affected: No.
+- Golden output files affected: No.
+- Portfolio extraction enabled: No.
+- Backtest enabled: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: NO.
+
 ## 2026-06-27 Claude Review Packet Validator
 
 ## Scope
