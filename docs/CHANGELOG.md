@@ -14,6 +14,7 @@
 - Clarified that every completed modification must update `docs/CHANGELOG.md` and `docs/QA_REPORT.md`.
 - Added `.env` and `.env.*` to `.gitignore` to keep local environment files out of version control.
 - Added `docs/PR_CREATION_REPORT.md` for the workflow PR creation record.
+- Created PR #7 from `dev-clean` to `main` for user review; the PR was not merged.
 - Did not modify business code, `app.py`, modules, reports, production sorting, recommendation logic, API refresh logic, or data files.
 
 ## 2026-06-22

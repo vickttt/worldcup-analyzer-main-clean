@@ -5,6 +5,8 @@
 - Current branch: `dev-clean`
 - PR target: `main`
 - PR title: `docs(workflow): add development workflow rules`
+- PR URL: `https://github.com/vickttt/worldcup-analyzer/pull/7`
+- PR status: Created and left unmerged for user review.
 - Involved files:
   - `.gitignore`
   - `docs/DEVELOPMENT_WORKFLOW.md`
@@ -40,6 +42,5 @@
 
 ## Next Steps
 
-- Open PR from `dev-clean` to `main`.
 - Wait for GitHub CI and user review.
 - User approves and merges through GitHub after review.
