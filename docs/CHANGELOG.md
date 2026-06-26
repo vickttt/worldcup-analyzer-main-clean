@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-06-26
+
+- Updated `docs/DEVELOPMENT_WORKFLOW.md` with explicit branch rules for `main`, `dev-clean`, and `feature/*` work.
+- Clarified that the old `worldcup-analyzer` directory is an archive and must not be used for new development.
+- Added Codex task declaration rules for allowed files, forbidden files, Portfolio Score impact, `data/history` impact, workflow changes, API changes, and required checks.
+- Added single-task isolation rules for UI, model, odds, backtest, and data/API work.
+- Clarified that `main` updates only through PRs and that CI is required before merging to `main`.
+- Clarified that Claude Review and Agent QA are auxiliary checks, not required gates.
+- Added secrets rules forbidding API keys, `.env` values, tokens, and passwords in code or Markdown.
+- Added required completion output fields for modified files, test/check results, Portfolio Score impact, `data/history` impact, protected data touches, and skipped checks.
+- Clarified that large features must use a dedicated `feature/*` branch or worktree before merging through `dev-clean`.
+- Clarified that every completed modification must update `docs/CHANGELOG.md` and `docs/QA_REPORT.md`.
+- Added `.env` and `.env.*` to `.gitignore` to keep local environment files out of version control.
+- Added `docs/PR_CREATION_REPORT.md` for the workflow PR creation record.
+- Created PR #7 from `dev-clean` to `main` for user review; the PR was not merged.
+- Did not modify business code, `app.py`, modules, reports, production sorting, recommendation logic, API refresh logic, or data files.
+
 ## 2026-06-22
 
 - Added `AUTOMATION_STATUS_REPORT.md` to summarize automation completion, completed/incomplete modules, blockers, roadmap, Issue -> PR flow, and daily Jin/Agent responsibilities.

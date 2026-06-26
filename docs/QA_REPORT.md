@@ -1,5 +1,42 @@
 # QA Report
 
+## 2026-06-26 Development Workflow Rules
+
+## Scope
+
+- Updated `docs/DEVELOPMENT_WORKFLOW.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+- Did not modify `app.py`, `modules/`, `data/`, or `reports/`.
+
+## Checks
+
+- Confirmed the current branch is `dev-clean`.
+- Confirmed this task is documentation-only.
+- Confirmed workflow rules cover `main`, `dev-clean`, and `feature/*` branches.
+- Confirmed large feature work requires a dedicated `feature/*` branch or worktree before merging through `dev-clean`.
+- Confirmed the old `worldcup-analyzer` directory is marked as an archive and not a development target.
+- Confirmed Codex task rules require allowed files and forbidden files to be declared.
+- Confirmed every completed modification must update `docs/CHANGELOG.md` and `docs/QA_REPORT.md`.
+- Confirmed UI, model, odds, backtest, and data/API tasks are separated.
+- Confirmed `main` is PR-only and CI is required before merge.
+- Confirmed Claude Review and Agent QA are auxiliary, not required gates.
+- Confirmed API keys, `.env` values, tokens, passwords, and secrets are forbidden in code and Markdown.
+- Confirmed `.env` and `.env.*` are ignored by `.gitignore`.
+- Confirmed completion reports must state modified files, test/check results, Portfolio Score impact, `data/history` impact, protected data touches, and skipped checks.
+- Confirmed `docs/PR_CREATION_REPORT.md` records current branch, PR target, involved files, QA status, high-risk actions avoided, and next steps.
+- Ran `git diff --check`.
+- Ran Python syntax check with system `python3 -B -m py_compile` for `app.py` and `scripts/*.py`.
+- Created PR #7 from `dev-clean` to `main` and left it unmerged for user review.
+
+## Result
+
+- Passed. Documentation-only governance update.
+- Portfolio Score affected: No.
+- `data/history` affected: No.
+- `.venv/bin/python` was not present, so the Python syntax check used the available system `python3`.
+- PR status: Created, pending GitHub review and merge.
+
 ## 2026-06-22 Automation Status Report and Supervisor Issue Draft
 
 ## Scope
