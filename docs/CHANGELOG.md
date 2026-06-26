@@ -2,6 +2,9 @@
 
 ## 2026-06-27
 
+- Added `reports/risk_contract_field_provenance_map.md` to map missing risk contract fields to likely source functions, reports, and extraction blockers.
+- Restored `scripts/validate_golden_risk_contract_v1.py` as a read-only validation helper for the existing golden risk contract fixture.
+- Kept the provenance map report-only: no runtime logic, ranking, data, golden JSON, portfolio extraction, or backtest changes.
 - Updated `.github/workflows/claude-review.yml` to auto-trigger on push to `dev-clean` when sanitized Claude review packets are added or changed.
 - Kept `workflow_dispatch` as a manual fallback while documenting that Codex should not manually trigger it unless Jin explicitly asks.
 - Updated GitHub-mediated review docs so Codex creates and validates a packet, commits and pushes it, then inspects the automatically created GitHub Actions run.

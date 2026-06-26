@@ -1,5 +1,39 @@
 # QA Report
 
+## 2026-06-27 Risk Contract Field Provenance Map
+
+## Scope
+
+- Added `reports/risk_contract_field_provenance_map.md`.
+- Added `scripts/validate_golden_risk_contract_v1.py`.
+- Added a sanitized Claude review packet for this report-only mapping task.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Read existing serializer, risk design, risk feature, and portfolio engine sources.
+- Mapped missing risk contract fields to likely source functions and reports without recomputing ranking.
+- Restored a read-only golden risk contract validation helper because the requested validation script was absent in this checkout.
+- Kept `PORTFOLIO_EXTRACTION: BLOCKED` and `BACKTEST_READY: NO`.
+- Ran `git diff --check`.
+- Ran `python3 -m py_compile scripts/validate_golden_risk_contract_v1.py`.
+- Ran `python3 -m py_compile scripts/validate_claude_review_packet.py`.
+- Ran `python3 scripts/validate_golden_risk_contract_v1.py`.
+- Verified no diffs for `app.py`, `modules`, `data`, `reports/golden_output_snapshot_v1.json`, `reports/golden_output_snapshot_v2.json`, and `reports/golden_risk_contract_v1.json`.
+
+## Result
+
+- Product code affected: No.
+- `app.py` affected: No.
+- Modules affected: No.
+- Data files affected: No.
+- Golden output files affected: No.
+- Portfolio extraction enabled: No.
+- Backtest enabled: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: NO.
+
 ## 2026-06-27 Claude Review Workflow Auto Trigger
 
 ## Scope
