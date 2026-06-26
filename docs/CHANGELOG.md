@@ -2,6 +2,11 @@
 
 ## 2026-06-27
 
+- Added a read-only `Data Freshness / Refresh Status` panel before Portfolio Ranking, Match Investment Score, and Recommended Stake outputs.
+- The panel reads only bounded local file metadata and shows conservative Fresh / Possibly stale / Unknown labels.
+- Added local snapshot warnings that no external API refresh is performed by the panel and recommendations should be checked against latest market/API data before action.
+- No recommendation, ranking, portfolio, strategy, odds, data, golden JSON, or backtest logic was changed for the freshness panel.
+- No real API refresh was performed.
 - Added a Claude review packet budget guard to `scripts/validate_claude_review_packet.py`.
 - Added estimated packet input tokens, expected output tokens, model class, estimated per-round cost, threshold, override status, and cost policy text to `reports/claude_reviews/packet_validation_report.md`.
 - Validated the round 7 packet at an estimated `$0.006599` per review round, below the `$0.20` per-round guardrail.

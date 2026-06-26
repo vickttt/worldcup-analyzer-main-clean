@@ -1,5 +1,61 @@
 # QA Report
 
+## 2026-06-27 Data Freshness Panel
+
+## Scope
+
+- Branch: `codex/ui-cache-api-freshness-panel`.
+- Added a read-only Streamlit `Data Freshness / Refresh Status` panel.
+- Panel location: inside the `核心决策` container, after `Qualification & Game Behavior` and betting opinion, before Portfolio Ranking, Match Investment Score, and Recommended Stake.
+- The panel reads bounded local file metadata only:
+  - current World Cup database match files when a local database is loaded
+  - current match pre-snapshot file as a conservative fallback
+- The panel does not call Football API, The Odds API, Polymarket, or any refresh function.
+
+## Files Changed
+
+- `app.py`
+- `docs/CHANGELOG.md`
+- `docs/QA_REPORT.md`
+- `reports/claude_reviews/round_8_review_packet.md`
+- `reports/claude_reviews/packet_validation_report.md`
+
+## Budget Guard Result
+
+- Review packet: `reports/claude_reviews/round_8_review_packet.md`.
+- Estimated input tokens: `509`.
+- Estimated cost per round: `$0.006509`.
+- Per-round threshold: `$0.20`.
+- Budget status: `PASS`.
+
+## Checks
+
+- Ran `python3 -m py_compile app.py`: pass.
+- Ran `git diff --check`: pass.
+- Ran `python3 scripts/validate_claude_review_packet.py reports/claude_reviews/round_8_review_packet.md`: pass.
+- Ran protected-path diff check for modules/ranking, modules/portfolio, modules/strategy, modules/backtest, data, and golden JSON: pass, no output.
+- Ran secret-shaped token scan on changed files: pass, no matches.
+- Pending validation: one GitHub Actions Claude Review workflow round, if available.
+
+## Safety Checklist
+
+- `app.py` business logic unchanged except UI-only freshness panel and local metadata helper.
+- `modules` unchanged.
+- `data` unchanged.
+- Golden JSON unchanged.
+- Ranking unchanged.
+- Portfolio unchanged.
+- Strategy unchanged.
+- Odds unchanged.
+- Backtest not enabled.
+- Portfolio extraction still blocked.
+- No API secrets printed.
+- No real API refresh performed.
+
+## Result
+
+- Pending Claude review. Local validation passes. The implementation is UI-only and uses conservative freshness labels.
+
 ## 2026-06-27 Claude Packet Budget Guard
 
 ## Scope

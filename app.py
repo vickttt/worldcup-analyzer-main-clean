@@ -3919,6 +3919,143 @@ def load_post_match_snapshot(match, selected_fixture=None):
         return None
 
 
+def repo_relative_path(path):
+    if not path:
+        return "-"
+    try:
+        return Path(path).resolve().relative_to(Path.cwd().resolve()).as_posix()
+    except (OSError, ValueError):
+        return str(path)
+
+
+def local_file_modified_time(path):
+    if not path:
+        return None
+    try:
+        return datetime.fromtimestamp(Path(path).stat().st_mtime).astimezone()
+    except OSError:
+        return None
+
+
+def source_type_from_context(selected_fixture=None, source_path=None, reliable_source=False):
+    if selected_fixture and is_live(selected_fixture):
+        return "live"
+    if selected_fixture and is_finished(selected_fixture):
+        return "post-match"
+    if source_path:
+        name = Path(source_path).name
+        if name.endswith("_post.json") or name == "post_match.json":
+            return "post-match"
+        if name.endswith("_pre.json") or name in {"fixture.json", "odds.json", "lineups.json", "injuries.json", "team_stats.json"}:
+            return "pre-match" if reliable_source else "unknown"
+    return "unknown"
+
+
+def freshness_window_for_source(source_type):
+    return {
+        "live": timedelta(hours=2),
+        "pre-match": timedelta(hours=24),
+        "post-match": timedelta(days=7),
+        "static": timedelta(days=30),
+    }.get(source_type)
+
+
+def build_data_freshness_context(match, selected_fixture=None, local_db=None, snapshot_file=None):
+    source_path = None
+    reliable_source = False
+    refresh_mode = "unknown"
+
+    base_dir = (local_db or {}).get("base_dir")
+    if base_dir:
+        candidate_paths = [
+            Path(base_dir) / name
+            for name in ["fixture.json", "odds.json", "lineups.json", "injuries.json", "team_stats.json"]
+        ]
+        existing_paths = [path for path in candidate_paths if path.exists()]
+        if existing_paths:
+            source_path = max(existing_paths, key=lambda path: path.stat().st_mtime)
+            reliable_source = True
+            refresh_mode = "local snapshot"
+
+    if source_path is None and snapshot_file:
+        snapshot_candidate = Path(snapshot_file)
+        if snapshot_candidate.exists():
+            source_path = snapshot_candidate
+            refresh_mode = "manual refresh available"
+
+    modified_at = local_file_modified_time(source_path)
+    source_type = source_type_from_context(selected_fixture, source_path, reliable_source)
+    expected_window = freshness_window_for_source(source_type)
+    status = "Unknown"
+    warning = "Freshness unknown — source timestamp unavailable."
+    if modified_at and reliable_source and expected_window:
+        age = datetime.now().astimezone() - modified_at
+        if age <= expected_window:
+            status = "Fresh"
+            warning = ""
+        else:
+            status = "Possibly stale"
+            warning = "Local source metadata is older than the expected freshness window."
+    elif modified_at and not reliable_source:
+        warning = "Freshness unknown — the local snapshot time does not prove source-market freshness."
+
+    return {
+        "source_path": repo_relative_path(source_path),
+        "modified_at": modified_at.isoformat(timespec="seconds") if modified_at else "-",
+        "source_type": source_type,
+        "status": status,
+        "refresh_mode": refresh_mode,
+        "warning": warning,
+        "expected_window": str(expected_window) if expected_window else "-",
+        "reliable_source": reliable_source,
+        "dry_run_status": "no dry-run mode detected",
+    }
+
+
+def render_data_freshness_panel(freshness):
+    freshness = freshness or {
+        "source_path": "-",
+        "modified_at": "-",
+        "source_type": "unknown",
+        "status": "Unknown",
+        "refresh_mode": "unknown",
+        "warning": "Freshness unknown — source timestamp unavailable.",
+        "expected_window": "-",
+        "dry_run_status": "no dry-run mode detected",
+    }
+    status = freshness.get("status") or "Unknown"
+    source_type = freshness.get("source_type") or "unknown"
+    modified_at = freshness.get("modified_at") or "-"
+    warning = freshness.get("warning") or ""
+
+    with st.container(border=True):
+        st.markdown("**Data Freshness / Refresh Status**")
+        summary = f"Data freshness: {status} · source type: {source_type} · modified: {modified_at}"
+        if status == "Fresh":
+            st.info(summary)
+        else:
+            st.warning(summary)
+        if warning:
+            st.caption(warning)
+        st.caption(
+            "Freshness is based on local snapshot metadata only. "
+            "This panel did not perform an external API refresh. "
+            "Check latest market/API data before acting on recommendations."
+        )
+        with st.expander("Show freshness details", expanded=False):
+            detail_rows = [
+                {"Item": "Last loaded local data file", "Value": freshness.get("source_path") or "-"},
+                {"Item": "Local file modified time", "Value": modified_at},
+                {"Item": "Data source type", "Value": source_type},
+                {"Item": "Freshness label", "Value": status},
+                {"Item": "Current refresh mode", "Value": freshness.get("refresh_mode") or "unknown"},
+                {"Item": "Dry-run mode", "Value": freshness.get("dry_run_status") or "no dry-run mode detected"},
+                {"Item": "Expected freshness window", "Value": freshness.get("expected_window") or "-"},
+                {"Item": "Verification warning", "Value": warning or "None"},
+            ]
+            st.dataframe(pd.DataFrame(detail_rows), use_container_width=True, hide_index=True)
+
+
 def my_portfolio_example():
     return """独赢,瑞士,600
 让球,瑞士,-1,600
@@ -5220,7 +5357,7 @@ def render_qualification_behavior(distribution):
         st.caption("行为因子：" + " · ".join(f"{key} {value:+}" for key, value in compact.items()))
 
 
-def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None):
+def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, freshness_context=None):
     combo = recommendation_combo(match, odds, api_football_data, distribution, actual_odds)
     my_portfolio_candidates = portfolio_market_candidates(combo, odds, api_football_data, match, distribution)
     if my_portfolio and my_portfolio.get("raw_text"):
@@ -5235,6 +5372,7 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
         st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
         render_qualification_behavior(distribution)
         render_betting_opinion(betting_opinion, odds, polymarket, match)
+        render_data_freshness_panel(freshness_context)
         render_portfolio_ranking(
             strategies,
             match,
@@ -6534,6 +6672,7 @@ def render_analysis_page(match_text):
         }
         with perf_timer("detail", "save_match_snapshot"):
             snapshot_file, snapshot_created = save_match_snapshot(match, selected_fixture, snapshot_payload)
+        freshness_context = build_data_freshness_context(match, selected_fixture, local_db, snapshot_file)
         snapshot_status = (
             f"Match Snapshot：{'已创建' if snapshot_created else '已存在'} · "
             f"{snapshot_file}"
@@ -6560,6 +6699,7 @@ def render_analysis_page(match_text):
                     selected_fixture,
                     my_portfolio,
                     polymarket,
+                    freshness_context,
                 )
 
         with team_tab:
