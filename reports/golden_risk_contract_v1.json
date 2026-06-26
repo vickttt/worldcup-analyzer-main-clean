@@ -1,0 +1,1185 @@
+{
+  "schema_version": 1,
+  "contract_version": "risk_contract_v1",
+  "contract_status": "observed",
+  "generated_at": "2026-06-26T16:25:16+00:00",
+  "generation_rule": "Read-only serialization from reports/golden_output_snapshot_v2.json; no ranking or allocation recomputation.",
+  "source_files_read": [
+    "data/history/2026_06_21_New_Zealand_Egypt_pre.json",
+    "data/history/2026_06_21_Tunisia_Japan_pre.json",
+    "data/history/2026_06_24_Scotland_Brazil_pre.json",
+    "data/history/2026_06_25_Ecuador_Germany_pre.json",
+    "data/history/2026_06_25_Japan_Sweden_pre.json",
+    "reports/golden_output_snapshot_v2.json"
+  ],
+  "match_count": 5,
+  "contract_count": 10,
+  "source_snapshot_checks": [
+    {
+      "source_path": "data/history/2026_06_21_Tunisia_Japan_pre.json",
+      "exists": true,
+      "sha256": "161e299a5464b0b5e07951ed758e1259b4076cc2b4015657093bc02d9dfc8f1e",
+      "matches_expected_sha256": true
+    },
+    {
+      "source_path": "data/history/2026_06_25_Japan_Sweden_pre.json",
+      "exists": true,
+      "sha256": "072ea635726bfd7ce5044b543cf0d8087b380e1b95683db1b061bbbabd2dfaba",
+      "matches_expected_sha256": true
+    },
+    {
+      "source_path": "data/history/2026_06_25_Ecuador_Germany_pre.json",
+      "exists": true,
+      "sha256": "9775cb19df3153669ced752c07a2d80f01cc2847e4bc9b58459a6cadfca17762",
+      "matches_expected_sha256": true
+    },
+    {
+      "source_path": "data/history/2026_06_24_Scotland_Brazil_pre.json",
+      "exists": true,
+      "sha256": "05a2479eeef95952dfba17d3fe7feb5e5f23e9fff0fd4d0959048ea25bc9e51c",
+      "matches_expected_sha256": true
+    },
+    {
+      "source_path": "data/history/2026_06_21_New_Zealand_Egypt_pre.json",
+      "exists": true,
+      "sha256": "97b8f865a304e222e432cf87bf5c704d7ac043d4a71c3780ba30c41d16520510",
+      "matches_expected_sha256": true
+    }
+  ],
+  "contracts": [
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_21_Tunisia_Japan_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_21_Tunisia_Japan_pre",
+        "home_team": "Tunisia",
+        "away_team": "Japan",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "B",
+        "strategy_name": "只买最佳波胆",
+        "rank_position": 1,
+        "asset_count": 1,
+        "asset_types": [
+          "correct_score"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 300,
+        "max_loss": 300,
+        "loss_ratio": 1.0,
+        "volatility": 669.3468944750953,
+        "concentration": 0,
+        "risk_reward": 5.0,
+        "expected_profit": -1.643361848650008,
+        "expected_yield": -0.0054778728288333595,
+        "sharpe_ratio": -0.002455172142000807,
+        "stability_score": 25
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": null,
+        "zero_loss_coverage": null,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.99,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 64,
+        "market_disagreement": 46,
+        "upset_index": 63,
+        "value_rating": "C",
+        "liquidity_quality": "unknown",
+        "data_completeness": "complete"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 300,
+        "correct_score_share": 1.0,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 1.0
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 300,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 300,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 2,
+        "portfolio_risk_adjusted_value": null,
+        "portfolio_drawdown_zero_risk": null,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": false,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "risk_score_components.portfolio_drawdown_zero_risk",
+          "risk_score_components.portfolio_risk_adjusted_value",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.main_path_positive_coverage",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness",
+          "scenario_risk.zero_loss_coverage"
+        ]
+      },
+      "post_match_risk_outcome": null
+    },
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_21_Tunisia_Japan_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_21_Tunisia_Japan_pre",
+        "home_team": "Tunisia",
+        "away_team": "Japan",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "D",
+        "strategy_name": "独赢策略",
+        "rank_position": 2,
+        "asset_count": 1,
+        "asset_types": [
+          "winner"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 300,
+        "max_loss": 300,
+        "loss_ratio": 1.0,
+        "volatility": 199.55323383532573,
+        "concentration": 0,
+        "risk_reward": 0.45,
+        "expected_profit": 4.014489340594212,
+        "expected_yield": 0.01338163113531404,
+        "sharpe_ratio": 0.02011738553887344,
+        "stability_score": 43
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": null,
+        "zero_loss_coverage": null,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.88,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 64,
+        "market_disagreement": 46,
+        "upset_index": 63,
+        "value_rating": "C",
+        "liquidity_quality": "unknown",
+        "data_completeness": "complete"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 0,
+        "correct_score_share": 0.0,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 1.0
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 300,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 300,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 2,
+        "portfolio_risk_adjusted_value": null,
+        "portfolio_drawdown_zero_risk": null,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": null,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "risk_score_components.portfolio_drawdown_zero_risk",
+          "risk_score_components.portfolio_risk_adjusted_value",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.main_path_positive_coverage",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness",
+          "scenario_risk.zero_loss_coverage"
+        ]
+      },
+      "post_match_risk_outcome": null
+    },
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_25_Japan_Sweden_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_25_Japan_Sweden_pre",
+        "home_team": "Japan",
+        "away_team": "Sweden",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "E",
+        "strategy_name": "让球策略",
+        "rank_position": 1,
+        "asset_count": 1,
+        "asset_types": [
+          "handicap"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 1200,
+        "max_loss": 1200,
+        "loss_ratio": 1.0,
+        "volatility": 1098.812374128293,
+        "concentration": 0,
+        "risk_reward": 0.8533333333333334,
+        "expected_profit": 82.74942595085012,
+        "expected_yield": 0.06895785495904178,
+        "sharpe_ratio": 0.07530805795347607,
+        "stability_score": 30
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": 0.0,
+        "zero_loss_coverage": 0.34910832150581445,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.88,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 79,
+        "market_disagreement": 21,
+        "upset_index": 47,
+        "value_rating": "A",
+        "liquidity_quality": "unknown",
+        "data_completeness": "partial"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 0,
+        "correct_score_share": 0.0,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 1.0
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 1200,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 1200,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 2,
+        "portfolio_risk_adjusted_value": 53,
+        "portfolio_drawdown_zero_risk": 29,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": false,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness"
+        ]
+      },
+      "post_match_risk_outcome": null
+    },
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_25_Japan_Sweden_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_25_Japan_Sweden_pre",
+        "home_team": "Japan",
+        "away_team": "Sweden",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "F",
+        "strategy_name": "独赢 + 让球",
+        "rank_position": 2,
+        "asset_count": 2,
+        "asset_types": [
+          "winner",
+          "handicap"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 1200,
+        "max_loss": 1200,
+        "loss_ratio": 1.0,
+        "volatility": 1118.5751866126145,
+        "concentration": 0.9,
+        "risk_reward": 0.8866666666666667,
+        "expected_profit": 105.82045879169284,
+        "expected_yield": 0.08818371565974403,
+        "sharpe_ratio": 0.09460290202945529,
+        "stability_score": 7
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": 0.0,
+        "zero_loss_coverage": 0.34910832150581445,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.88,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 79,
+        "market_disagreement": 21,
+        "upset_index": 47,
+        "value_rating": "A",
+        "liquidity_quality": "unknown",
+        "data_completeness": "partial"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 0,
+        "correct_score_share": 0.0,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 0.5
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 1200,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 1200,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 0,
+        "portfolio_risk_adjusted_value": 57,
+        "portfolio_drawdown_zero_risk": 29,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": null,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness"
+        ]
+      },
+      "post_match_risk_outcome": null
+    },
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_25_Ecuador_Germany_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_25_Ecuador_Germany_pre",
+        "home_team": "Ecuador",
+        "away_team": "Germany",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "D",
+        "strategy_name": "独赢策略",
+        "rank_position": 1,
+        "asset_count": 1,
+        "asset_types": [
+          "winner"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 200,
+        "max_loss": 200,
+        "loss_ratio": 1.0,
+        "volatility": 150.95629328861324,
+        "concentration": 0,
+        "risk_reward": 0.6,
+        "expected_profit": 13.030156671107415,
+        "expected_yield": 0.06515078335553708,
+        "sharpe_ratio": 0.08631741272419208,
+        "stability_score": 39
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": 1.0,
+        "zero_loss_coverage": 0.16342706556489586,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.88,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 57,
+        "market_disagreement": 0,
+        "upset_index": 52,
+        "value_rating": "C",
+        "liquidity_quality": "unknown",
+        "data_completeness": "partial"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 0,
+        "correct_score_share": 0.0,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 1.0
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 200,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 200,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 2,
+        "portfolio_risk_adjusted_value": 55,
+        "portfolio_drawdown_zero_risk": 38,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": false,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness"
+        ]
+      },
+      "post_match_risk_outcome": null
+    },
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_25_Ecuador_Germany_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_25_Ecuador_Germany_pre",
+        "home_team": "Ecuador",
+        "away_team": "Germany",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "G",
+        "strategy_name": "独赢 + 波胆",
+        "rank_position": 2,
+        "asset_count": 2,
+        "asset_types": [
+          "winner",
+          "correct_score"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 200,
+        "max_loss": 200,
+        "loss_ratio": 1.0,
+        "volatility": 295.8370046888225,
+        "concentration": 0.95,
+        "risk_reward": 4.05,
+        "expected_profit": 4.497503753497531,
+        "expected_yield": 0.022487518767487655,
+        "sharpe_ratio": 0.015202640921233808,
+        "stability_score": 7
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": 0.35164255241896414,
+        "zero_loss_coverage": 0.6472259509889053,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.785,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 57,
+        "market_disagreement": 0,
+        "upset_index": 52,
+        "value_rating": "C",
+        "liquidity_quality": "unknown",
+        "data_completeness": "partial"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 100,
+        "correct_score_share": 0.5,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 0.5
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 200,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 200,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 0,
+        "portfolio_risk_adjusted_value": 28,
+        "portfolio_drawdown_zero_risk": 16,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": null,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness"
+        ]
+      },
+      "post_match_risk_outcome": null
+    },
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_24_Scotland_Brazil_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_24_Scotland_Brazil_pre",
+        "home_team": "Scotland",
+        "away_team": "Brazil",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "D",
+        "strategy_name": "独赢策略",
+        "rank_position": 1,
+        "asset_count": 1,
+        "asset_types": [
+          "winner"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 1100,
+        "max_loss": 1100,
+        "loss_ratio": 1.0,
+        "volatility": 599.5757887065893,
+        "concentration": 0,
+        "risk_reward": 0.3,
+        "expected_profit": 4.530324361110235,
+        "expected_yield": 0.004118476691918396,
+        "sharpe_ratio": 0.007555882753176367,
+        "stability_score": 49
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": 1.0,
+        "zero_loss_coverage": 0.1393064697228194,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.88,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 76,
+        "market_disagreement": 8,
+        "upset_index": 60,
+        "value_rating": "B",
+        "liquidity_quality": "unknown",
+        "data_completeness": "partial"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 0,
+        "correct_score_share": 0.0,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 1.0
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 1100,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 1100,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 2,
+        "portfolio_risk_adjusted_value": 44,
+        "portfolio_drawdown_zero_risk": 39,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": false,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness"
+        ]
+      },
+      "post_match_risk_outcome": null
+    },
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_24_Scotland_Brazil_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_24_Scotland_Brazil_pre",
+        "home_team": "Scotland",
+        "away_team": "Brazil",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "style_conservative",
+        "strategy_name": "Conservative Portfolio",
+        "rank_position": 2,
+        "asset_count": 4,
+        "asset_types": [
+          "winner",
+          "handicap",
+          "correct_score"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 1100,
+        "max_loss": 710,
+        "loss_ratio": 0.6454545454545455,
+        "volatility": 667.327168227971,
+        "concentration": 0.8563636363636363,
+        "risk_reward": 1.6859154929577465,
+        "expected_profit": -153.05459141898638,
+        "expected_yield": -0.13914053765362397,
+        "sharpe_ratio": -0.2293546534684171,
+        "stability_score": 28
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": 0.5297199472133931,
+        "zero_loss_coverage": 0.4450910710880834,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.8109090909090909,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 76,
+        "market_disagreement": 8,
+        "upset_index": 60,
+        "value_rating": "B",
+        "liquidity_quality": "unknown",
+        "data_completeness": "partial"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 400,
+        "correct_score_share": 0.36363636363636365,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 0.36363636363636365
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 1100,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 1100,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 6,
+        "portfolio_risk_adjusted_value": 5,
+        "portfolio_drawdown_zero_risk": 44,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": null,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness"
+        ]
+      },
+      "post_match_risk_outcome": null
+    },
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_21_New_Zealand_Egypt_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_21_New_Zealand_Egypt_pre",
+        "home_team": "New Zealand",
+        "away_team": "Egypt",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "B",
+        "strategy_name": "只买最佳波胆",
+        "rank_position": 1,
+        "asset_count": 1,
+        "asset_types": [
+          "correct_score"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 100,
+        "max_loss": 100,
+        "loss_ratio": 1.0,
+        "volatility": 213.0082507042393,
+        "concentration": 0,
+        "risk_reward": 4.9,
+        "expected_profit": -9.089404751740865,
+        "expected_yield": -0.09089404751740865,
+        "sharpe_ratio": -0.042671608830596196,
+        "stability_score": 25
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": null,
+        "zero_loss_coverage": null,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.87,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 0,
+        "market_disagreement": 0,
+        "upset_index": 47,
+        "value_rating": "C",
+        "liquidity_quality": "unknown",
+        "data_completeness": "missing"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 100,
+        "correct_score_share": 1.0,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 1.0
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 100,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 100,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 2,
+        "portfolio_risk_adjusted_value": null,
+        "portfolio_drawdown_zero_risk": null,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": false,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "risk_score_components.portfolio_drawdown_zero_risk",
+          "risk_score_components.portfolio_risk_adjusted_value",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.main_path_positive_coverage",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness",
+          "scenario_risk.zero_loss_coverage"
+        ]
+      },
+      "post_match_risk_outcome": null
+    },
+    {
+      "contract_version": "risk_contract_v1",
+      "contract_status": "observed",
+      "producer": {
+        "name": "worldcup-analyzer",
+        "mode": "golden_v2_read_only_serializer",
+        "code_ref": "dbe7cf39729fa2e98be65aa1eaa184f32392d432"
+      },
+      "source_snapshot_id": "2026_06_21_New_Zealand_Egypt_pre",
+      "generated_at": "2026-06-26T16:25:16+00:00",
+      "match": {
+        "match_id": "2026_06_21_New_Zealand_Egypt_pre",
+        "home_team": "New Zealand",
+        "away_team": "Egypt",
+        "kickoff_time": null,
+        "snapshot_phase": "pre"
+      },
+      "strategy_identity": {
+        "strategy_id": "C",
+        "strategy_name": "双波胆组合",
+        "rank_position": 2,
+        "asset_count": 2,
+        "asset_types": [
+          "correct_score"
+        ]
+      },
+      "risk_inputs": {
+        "total_stake": 100,
+        "max_loss": 100,
+        "loss_ratio": 1.0,
+        "volatility": 206.59369202574666,
+        "concentration": 0,
+        "risk_reward": 4.9,
+        "expected_profit": -15.580261219257963,
+        "expected_yield": -0.15580261219257963,
+        "sharpe_ratio": -0.07541499000519473,
+        "stability_score": 25
+      },
+      "scenario_risk": {
+        "main_path_positive_coverage": null,
+        "zero_loss_coverage": null,
+        "failed_scenario_probability": null,
+        "adjacent_path_failure": null,
+        "narrow_exact_score_dependency": null,
+        "pressure_strictness": null,
+        "scenario_consistency_score": 0.87,
+        "shadow_verdict": "unknown"
+      },
+      "market_risk": {
+        "direction_confidence": 0,
+        "market_disagreement": 0,
+        "upset_index": 47,
+        "value_rating": "C",
+        "liquidity_quality": "unknown",
+        "data_completeness": "missing"
+      },
+      "exposure_risk": {
+        "correct_score_stake": 100,
+        "correct_score_share": 1.0,
+        "correct_score_limit": null,
+        "correct_score_limit_source": "unknown",
+        "tail_asset_stake": 0,
+        "tail_asset_share": 0,
+        "dominant_asset_share": 1.0
+      },
+      "risk_gate": {
+        "risk_level": "UNKNOWN",
+        "rank1_eligible": null,
+        "gate_reasons": [],
+        "hard_blockers": [],
+        "soft_warnings": []
+      },
+      "stake_contract": {
+        "decision_stake": 100,
+        "decision_stake_source": "decision.recommended_stake.amount",
+        "display_stake": null,
+        "rounding_unit": 100,
+        "rounding_residue_target": "largest_share_or_highest_weight_item",
+        "allocation_total": 100,
+        "allocation_matches_decision_stake": true
+      },
+      "risk_score_components": {
+        "strategy_risk_control": 2,
+        "portfolio_risk_adjusted_value": null,
+        "portfolio_drawdown_zero_risk": null,
+        "canonical_risk_score": null
+      },
+      "invariants": {
+        "allocation_total_equals_decision_stake": true,
+        "loss_ratio_matches_max_loss_over_total_stake": true,
+        "correct_score_share_within_limit": null,
+        "rank1_eligibility_has_gate_payload": null,
+        "missing_required_fields": [
+          "exposure_risk.correct_score_limit",
+          "risk_gate.gate_reasons",
+          "risk_gate.hard_blockers",
+          "risk_gate.rank1_eligible",
+          "risk_gate.risk_level",
+          "risk_gate.soft_warnings",
+          "risk_score_components.canonical_risk_score",
+          "risk_score_components.portfolio_drawdown_zero_risk",
+          "risk_score_components.portfolio_risk_adjusted_value",
+          "scenario_risk.adjacent_path_failure",
+          "scenario_risk.failed_scenario_probability",
+          "scenario_risk.main_path_positive_coverage",
+          "scenario_risk.narrow_exact_score_dependency",
+          "scenario_risk.pressure_strictness",
+          "scenario_risk.zero_loss_coverage"
+        ]
+      },
+      "post_match_risk_outcome": null
+    }
+  ],
+  "summary": {
+    "missing_fields": {
+      "exposure_risk.correct_score_limit": 10,
+      "risk_gate.gate_reasons": 10,
+      "risk_gate.hard_blockers": 10,
+      "risk_gate.rank1_eligible": 10,
+      "risk_gate.risk_level": 10,
+      "risk_gate.soft_warnings": 10,
+      "risk_score_components.canonical_risk_score": 10,
+      "risk_score_components.portfolio_drawdown_zero_risk": 4,
+      "risk_score_components.portfolio_risk_adjusted_value": 4,
+      "scenario_risk.adjacent_path_failure": 10,
+      "scenario_risk.failed_scenario_probability": 10,
+      "scenario_risk.main_path_positive_coverage": 4,
+      "scenario_risk.narrow_exact_score_dependency": 10,
+      "scenario_risk.pressure_strictness": 10,
+      "scenario_risk.zero_loss_coverage": 4
+    },
+    "invariants": {
+      "allocation_total_equals_decision_stake": {
+        "true": 10
+      },
+      "loss_ratio_matches_max_loss_over_total_stake": {
+        "true": 10
+      },
+      "correct_score_share_within_limit": {
+        "null": 10
+      },
+      "rank1_eligibility_has_gate_payload": {
+        "false": 5,
+        "null": 5
+      }
+    }
+  }
+}

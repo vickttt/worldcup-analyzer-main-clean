@@ -1,5 +1,45 @@
 # QA Report
 
+## 2026-06-27 Golden Risk Contract v1 Serializer
+
+## Scope
+
+- Added `scripts/generate_golden_risk_contract_v1.py`.
+- Generated `reports/golden_risk_contract_v1.json`.
+- Generated `reports/golden_risk_contract_v1_serializer_report.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Checks
+
+- Read required governance docs before work: `docs/GPT_CONTEXT.md`, `docs/PRODUCT_PRINCIPLES.md`, `docs/TASK_QUEUE.md`, `docs/KNOWN_BUGS.md`, `docs/CHANGELOG.md`, and `docs/QA_REPORT.md`.
+- Read `reports/canonical_risk_contract_design.md`.
+- Confirmed serializer does not import Streamlit, `app.py`, or runtime modules.
+- Ran `python3 scripts/generate_golden_risk_contract_v1.py`.
+- Ran `python3 -m json.tool reports/golden_risk_contract_v1.json > /tmp/golden_risk_contract_v1_check.json`.
+- Ran `python3 -m py_compile scripts/generate_golden_risk_contract_v1.py`.
+- Ran `git diff --check`.
+- Ran `git diff -- app.py`.
+- Ran `git diff -- modules/odds/core.py`.
+- Ran `git diff -- modules/strategy/core.py`.
+- Ran `git diff -- modules/portfolio/shadow.py`.
+- Ran `git diff -- reports/golden_output_snapshot_v2.json`.
+- Ran `git diff -- data/history`.
+- Ran `git diff -- data/worldcup2026`.
+
+## Result
+
+- Passed as read-only serializer and fixture generation.
+- Runtime logic affected: No.
+- Portfolio Score affected: No.
+- `data/history` affected: No.
+- `data/worldcup2026` affected: No.
+- Golden v1/v2 affected: No.
+- Portfolio extraction performed: No.
+- Backtest enabled: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: No.
+
 ## 2026-06-27 Canonical Risk Contract Design
 
 ## Scope

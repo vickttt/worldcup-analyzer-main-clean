@@ -2,6 +2,10 @@
 
 ## 2026-06-27
 
+- Added `scripts/generate_golden_risk_contract_v1.py` as a read-only serializer for canonical risk contract fixtures.
+- Generated `reports/golden_risk_contract_v1.json` from existing golden v2 saved pre-match outputs without recomputing rankings or allocations.
+- Generated `reports/golden_risk_contract_v1_serializer_report.md` documenting source files, contract counts, missing fields, invariant summary, and coverage gaps.
+- Confirmed no runtime logic, golden v1/v2 snapshots, or data files were modified; `PORTFOLIO_EXTRACTION: BLOCKED` and `BACKTEST_READY: NO` remain unchanged.
 - Added `reports/canonical_risk_contract_design.md` to define the canonical risk contract before portfolio extraction or backtest enablement.
 - Defined `risk_contract_v1` payload fields, required schema groups, golden fixture requirements, fixture invariants, post-match risk outcome shape, and migration gates.
 - Kept the task design-only: no runtime logic changes, no portfolio extraction, no backtest enablement, no ranking/recommendation changes, and no golden output rewrites.
