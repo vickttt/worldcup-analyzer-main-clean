@@ -1,5 +1,34 @@
 # QA Report
 
+## 2026-06-27 Canonical Risk Contract Design
+
+## Scope
+
+- Added `reports/canonical_risk_contract_design.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+- Defined the design-only `risk_contract_v1` payload, required fields, golden fixture requirements, fixture invariants, post-match outcome shape, and migration gates.
+
+## Checks
+
+- Read required governance docs before work: `docs/GPT_CONTEXT.md`, `docs/PRODUCT_PRINCIPLES.md`, `docs/TASK_QUEUE.md`, `docs/KNOWN_BUGS.md`, `docs/CHANGELOG.md`, and `docs/QA_REPORT.md`.
+- Read existing risk reports: `reports/risk_feature_extraction_v1.md`, `reports/risk_semantics_map.md`, `reports/risk_consistency_check.md`, and `reports/risk_gap_analysis.md`.
+- Confirmed prior risk classification remains `HIGH RISK GAP (BLOCKER)`.
+- Confirmed the new artifact is documentation-only and does not modify runtime modules.
+- Confirmed no portfolio extraction was performed.
+- Confirmed backtest was not enabled.
+- Confirmed existing golden output snapshots were not modified.
+
+## Result
+
+- Passed as contract-design documentation.
+- Runtime logic affected: No.
+- Portfolio Score affected: No.
+- `data/history` affected: No.
+- Golden outputs affected: No.
+- PORTFOLIO_EXTRACTION: BLOCKED.
+- BACKTEST_READY: No.
+
 ## 2026-06-27 Phase 1-5 Checkpoint Commit
 
 ## Scope

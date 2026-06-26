@@ -2,6 +2,10 @@
 
 ## 2026-06-27
 
+- Added `reports/canonical_risk_contract_design.md` to define the canonical risk contract before portfolio extraction or backtest enablement.
+- Defined `risk_contract_v1` payload fields, required schema groups, golden fixture requirements, fixture invariants, post-match risk outcome shape, and migration gates.
+- Kept the task design-only: no runtime logic changes, no portfolio extraction, no backtest enablement, no ranking/recommendation changes, and no golden output rewrites.
+- Confirmed `PORTFOLIO_EXTRACTION: BLOCKED` and `BACKTEST_READY: NO` remain unchanged.
 - Added `reports/phase1_to_phase5_checkpoint_summary.md` as the checkpoint report before further modularization work.
 - Validated the accumulated module skeleton, app decomposition reports, odds/strategy extraction, Phase 1 hardening, golden v1/v2 locks, portfolio shadow system, golden assertion gate, and risk semantics layer.
 - Confirmed `PORTFOLIO_EXTRACTION: BLOCKED` and `BACKTEST_READY: NO`.
