@@ -41,6 +41,38 @@ Credential rules:
 - No secrets are sent to GitHub or committed to the repository.
 - Claude CLI remains optional; the Python SDK is the default controlled integration path.
 - Local scripts may load gitignored `.env` values with `python-dotenv`, but generated reports must never include secret values.
+- Direct Codex-to-Claude review of repository-derived content may be blocked by local environment data-exposure policy.
+- When direct review is blocked, use GitHub-mediated Claude review with sanitized packets and GitHub Actions secrets.
+
+## GitHub-Mediated Claude Review
+
+Default flow for review-loop automation:
+
+1. Codex creates `reports/claude_reviews/round_<n>_review_packet.md`.
+2. Codex commits and pushes the packet to the active branch only after Jin approves the checkpoint.
+3. Jin adds GitHub Actions repository secret `ANTHROPIC_API_KEY`.
+4. Codex triggers `.github/workflows/claude-review.yml` with `workflow_dispatch`.
+5. GitHub Actions reads only the sanitized packet path.
+6. GitHub Actions calls Claude using `secrets.ANTHROPIC_API_KEY`.
+7. GitHub Actions uploads artifact `claude-review-round-<n>`.
+8. Codex fetches the artifact with `scripts/fetch_claude_review_result.py`, or Jin downloads it manually.
+
+Version 1 is artifact-only:
+
+- No auto-commit from workflow.
+- No write permission granted to workflow.
+- No raw diff review by default.
+- No secret values in code, docs, reports, issues, PR text, or logs.
+
+Manual setup for Jin:
+
+- Open GitHub repository settings.
+- Go to Secrets and variables, Actions.
+- Add a new repository secret named `ANTHROPIC_API_KEY`.
+- Paste the key only into the GitHub secret value field.
+- Do not paste the key into any file, issue, pull request, report, or chat transcript.
+
+Do not trigger the workflow until Jin confirms the secret is added.
 
 ## Future Automation
 
