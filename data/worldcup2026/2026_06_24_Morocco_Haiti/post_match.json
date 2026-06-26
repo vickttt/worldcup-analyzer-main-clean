@@ -1,0 +1,16 @@
+{
+  "source_id": "1489405",
+  "match": {
+    "home_cn": "Morocco",
+    "away_cn": "Haiti",
+    "home_en": "Morocco",
+    "away_en": "Haiti",
+    "display_name": "Morocco vs Haiti"
+  },
+  "created_at": "2026-06-24T16:50:46.205981+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "status": "pending_post_match",
+  "post_match": null
+}

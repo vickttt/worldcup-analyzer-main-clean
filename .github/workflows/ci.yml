@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          if [[ -f requirements.txt ]]; then
+            pip install -r requirements.txt
+          fi
+          if [[ -f requirements-dev.txt ]]; then
+            pip install -r requirements-dev.txt
+          fi
+
+      - name: Python syntax check
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            app.py \
+            modules/portfolio_engine.py \
+            modules/game_behavior_engine.py \
+            modules/user_odds.py \
+            modules/market_utils.py \
+            modules/betting_opinion.py \
+            modules/report_generator.py
+
+      - name: Portfolio engine smoke test
+        run: python scripts/test_portfolio_engine.py
+
+      - name: Pytest
+        run: python -m pytest

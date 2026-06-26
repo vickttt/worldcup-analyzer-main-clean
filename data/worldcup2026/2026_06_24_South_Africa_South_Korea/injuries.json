@@ -1,0 +1,46 @@
+{
+  "source_id": "51",
+  "match": {
+    "home_cn": "South Africa",
+    "away_cn": "South Korea",
+    "home_en": "South Africa",
+    "away_en": "South Korea",
+    "display_name": "South Africa vs South Korea"
+  },
+  "created_at": "2026-06-24T17:16:19.453851+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "player": {
+        "id": 3287,
+        "name": "T. Mokoena",
+        "photo": "https://media.api-sports.io/football/players/3287.png",
+        "type": "Missing Fixture",
+        "reason": "Yellow card suspension"
+      },
+      "team": {
+        "id": 1531,
+        "name": "South Africa",
+        "logo": "https://media.api-sports.io/football/teams/1531.png"
+      },
+      "fixture": {
+        "id": 1489407,
+        "timezone": "UTC",
+        "date": "2026-06-25T01:00:00+00:00",
+        "timestamp": 1782349200
+      },
+      "league": {
+        "id": 1,
+        "season": 2026,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null
+      }
+    }
+  ],
+  "error": null
+}

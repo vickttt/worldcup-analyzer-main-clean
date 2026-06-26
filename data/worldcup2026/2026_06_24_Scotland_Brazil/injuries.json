@@ -1,0 +1,74 @@
+{
+  "source_id": "1489406",
+  "match": {
+    "home_cn": "Scotland",
+    "away_cn": "Brazil",
+    "home_en": "Scotland",
+    "away_en": "Brazil",
+    "display_name": "Scotland vs Brazil"
+  },
+  "created_at": "2026-06-24T16:51:05.790584+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "player": {
+        "id": 276,
+        "name": "Neymar",
+        "photo": "https://media.api-sports.io/football/players/276.png",
+        "type": "Missing Fixture",
+        "reason": "Calf Injury"
+      },
+      "team": {
+        "id": 6,
+        "name": "Brazil",
+        "logo": "https://media.api-sports.io/football/teams/6.png"
+      },
+      "fixture": {
+        "id": 1489406,
+        "timezone": "UTC",
+        "date": "2026-06-24T22:00:00+00:00",
+        "timestamp": 1782338400
+      },
+      "league": {
+        "id": 1,
+        "season": 2026,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null
+      }
+    },
+    {
+      "player": {
+        "id": 1496,
+        "name": "Raphinha",
+        "photo": "https://media.api-sports.io/football/players/1496.png",
+        "type": "Missing Fixture",
+        "reason": "Hamstring muscle injury"
+      },
+      "team": {
+        "id": 6,
+        "name": "Brazil",
+        "logo": "https://media.api-sports.io/football/teams/6.png"
+      },
+      "fixture": {
+        "id": 1489406,
+        "timezone": "UTC",
+        "date": "2026-06-24T22:00:00+00:00",
+        "timestamp": 1782338400
+      },
+      "league": {
+        "id": 1,
+        "season": 2026,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null
+      }
+    }
+  ],
+  "error": null
+}

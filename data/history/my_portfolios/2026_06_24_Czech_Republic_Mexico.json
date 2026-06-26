@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-06-24T19:48:26.393460+08:00",
+  "match": "捷克 vs 墨西哥",
+  "raw_text": "让球，墨西哥，-1，500",
+  "items": [
+    {
+      "slot": "让球",
+      "type": "handicap",
+      "selection": "Away -1",
+      "name": "Away -1",
+      "handicap_line": {
+        "original_line": "-1",
+        "decimal_line": -1.0,
+        "split_legs": [
+          -1.0
+        ],
+        "display_line": "-1",
+        "is_split": false
+      },
+      "handicap_side": "away",
+      "standard_odds": 1.08,
+      "probability": 0.9259259259259258,
+      "source": "API-Football 亚洲盘完整盘口",
+      "actual_odds": null,
+      "effective_odds": 1.08,
+      "edge": null,
+      "actual_selection": null,
+      "market_value_factor": 1.35,
+      "standard_ev": 0.0,
+      "actual_ev": 0.0,
+      "ev_lift": 0.0,
+      "path_match_score": 0,
+      "path_match_reason": "",
+      "coverage_rate": 0.5861748198006242,
+      "market_center_reason": "",
+      "direction_alignment_score": 22,
+      "score": 36,
+      "reason": "未输入实际赔率，暂按市场标准赔率评估。",
+      "recommended": false,
+      "not_recommended_reason": "综合分 36，未达到推荐阈值 55。",
+      "bet_id": "handicap|away|-1.0000|1.0800",
+      "amount": 500,
+      "odds": 1.08,
+      "matched": true,
+      "raw_input": "让球，墨西哥，-1，500"
+    }
+  ]
+}

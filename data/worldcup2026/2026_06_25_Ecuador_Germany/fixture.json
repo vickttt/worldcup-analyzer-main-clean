@@ -1,0 +1,208 @@
+{
+  "source_id": "56",
+  "match": {
+    "home_cn": "Ecuador",
+    "away_cn": "Germany",
+    "home_en": "Ecuador",
+    "away_en": "Germany",
+    "display_name": "Ecuador vs Germany"
+  },
+  "created_at": "2026-06-25T20:11:33.800152+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": "56",
+    "home_team": {
+      "id": "20",
+      "name": "Ecuador",
+      "logo": "https://flagcdn.com/w80/ec.png"
+    },
+    "away_team": {
+      "id": "17",
+      "name": "Germany",
+      "logo": "https://flagcdn.com/w80/de.png"
+    },
+    "kickoff_utc": "06/25/2026 16:00",
+    "kickoff_display": "06/25/2026 16:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "E",
+    "venue_name": "New York/New Jersey Stadium",
+    "venue_city": "New York/New Jersey (East Rutherford), United States",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1489410,
+    "kickoff_utc": "2026-06-25T20:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 3",
+    "venue": "MetLife Stadium",
+    "city": "New York New Jersey",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1489410,
+        "referee": "T. Penso",
+        "timezone": "UTC",
+        "date": "2026-06-25T20:00:00+00:00",
+        "timestamp": 1782417600,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": null,
+          "name": "MetLife Stadium",
+          "city": "New York New Jersey"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 3",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 2382,
+          "name": "Ecuador",
+          "logo": "https://media.api-sports.io/football/teams/2382.png",
+          "winner": null
+        },
+        "away": {
+          "id": 25,
+          "name": "Germany",
+          "logo": "https://media.api-sports.io/football/teams/25.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 2382,
+    "name": "Ecuador",
+    "code": "ECU",
+    "country": "Ecuador",
+    "founded": 1925,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/2382.png",
+    "_resolver": {
+      "input": "Ecuador",
+      "matched_query": "Ecuador",
+      "matched_name": "Ecuador",
+      "team_id": 2382,
+      "attempted": [
+        "Ecuador"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 25,
+    "name": "Germany",
+    "code": "GER",
+    "country": "Germany",
+    "founded": 1900,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/25.png",
+    "_resolver": {
+      "input": "Germany",
+      "matched_query": "Germany",
+      "matched_name": "Germany",
+      "team_id": 25,
+      "attempted": [
+        "Germany"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": {
+    "group": "Group E",
+    "rows": [
+      {
+        "team": "Germany",
+        "played": 2,
+        "wins": 2,
+        "draws": 0,
+        "losses": 0,
+        "gf": 9,
+        "ga": 2,
+        "gd": 7,
+        "points": 6
+      },
+      {
+        "team": "Ivory Coast",
+        "played": 2,
+        "wins": 1,
+        "draws": 0,
+        "losses": 1,
+        "gf": 2,
+        "ga": 2,
+        "gd": 0,
+        "points": 3
+      },
+      {
+        "team": "Ecuador",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 0,
+        "ga": 1,
+        "gd": -1,
+        "points": 1
+      },
+      {
+        "team": "Curaçao",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 1,
+        "ga": 7,
+        "gd": -6,
+        "points": 1
+      }
+    ]
+  }
+}

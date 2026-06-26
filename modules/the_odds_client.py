@@ -340,7 +340,7 @@ def fetch_daily_events(sport_key, date_key):
             "commenceTimeFrom": start_utc,
             "commenceTimeTo": end_utc,
         },
-        timeout=20,
+        timeout=6,
     )
     if response.status_code == 404:
         return {

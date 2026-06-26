@@ -1,10 +1,113 @@
 # Changelog
 
+## 2026-06-22
+
+- Added `AUTOMATION_STATUS_REPORT.md` to summarize automation completion, completed/incomplete modules, blockers, roadmap, Issue -> PR flow, and daily Jin/Agent responsibilities.
+- Added `docs/NEXT_ISSUE_DRAFT.md` as the Supervisor-generated draft for the next automation hardening Issue.
+- Created the real GitHub Issue for automation status and commit hygiene as part of the Agent workflow rehearsal.
+- Did not modify business code, `app.py`, production sorting, recommendation logic, API refresh logic, or `data/history`.
+- Added `WORLDCUP.md` as the top-level project context document for agents.
+- Added `SUPERVISOR.md` to define the WorldCup Supervisor agent responsibilities, required reads, risk levels, and approval gates.
+- Added `docs/TODAY_NEXT_ACTION.md` to define the current stage, highest priority, recommended next Issue, allowed files, forbidden files, and approval requirement.
+- Added `docs/SUBAGENTS.md` to define supervisor, workflow, QA, benchmark, validation, UI, and data subagents.
+- Added `docs/HOOKS_GUARDRAILS_PLAN.md` to design future PreToolUse, PreCommit, PostToolUse, SessionStart, and PR guardrails.
+- Updated `docs/TASK_QUEUE.md` to prioritize Agent Automation Context Layer and the first real Issue -> Branch -> PR rehearsal.
+- Did not modify business code, `app.py`, production sorting, recommendation logic, API refresh logic, or `data/history`.
+
 ## 2026-06-21
 
+- Implemented GitHub Agent Workflow Infrastructure v1.
+- Added `.github/ISSUE_TEMPLATE/agent_task.md` for Issue-driven agent tasks with scope, allowed/forbidden changes, QA, risk, and approval fields.
+- Added `.github/pull_request_template.md` with summary, linked issue, changes, QA, safety check, and manual review sections.
+- Added `.github/workflows/agent-qa.yml` to run Python syntax checks, ranking-sensitive function guardrails, protected history data checks, and docs synchronization checks.
+- Added `docs/AGENT_WORKFLOW_RUNBOOK.md` describing how Jin creates Issues, how agents create branches and PRs, how QA passes, and which actions require manual approval.
+- Updated `docs/TASK_QUEUE.md` to prioritize GitHub agent workflow adoption before further ranking or benchmark work.
+- Did not modify business code, production sorting, recommendation logic, UI behavior, API refresh logic, or `data/history`.
+- Implemented Decision UI Fix v0.1 in `app.py`.
+- Added display-only duplicate portfolio detection after the existing Legacy score sort; identical actual betting assets are merged in the Portfolio Ranking display.
+- Replaced Portfolio Ranking detail pop-up buttons with a centralized default-collapsed detail list below the main table.
+- Added detail sections for portfolio goal, betting assets, asset roles, recommendation/downgrade reasons, Hybrid v0.2 Diagnostic, and risk warnings.
+- Expanded `Match Summary` with positive reasons, negative reasons, and final betting judgement.
+- Expanded `Recommended Stake` with explicit 0 / 300 / 500 / 800 / 1200 / 1500 yuan amount rules and recommendation reasoning.
+- Kept production sorting, recommendation logic, default recommendation, `strategy_score(...)`, `evaluate_allocation(...)`, `strategy_comparison(...)`, UI data sources, and data files unchanged.
+- Implemented Phase A Match Betting Score MVP and Recommended Stake MVP in `app.py`.
+- Added two display-only cards above Portfolio Ranking: `Match Summary` and `Recommended Stake`.
+- Match Betting Score uses existing Scenario Consistency, Shadow Verdict, Sleeve Status, Max Loss, and Legacy score signals.
+- Recommended Stake maps the Match Betting Score to a 0-2000 yuan display recommendation with `Balanced` risk mode.
+- Kept production sorting, default recommendation, recommendation logic, `strategy_score(...)`, `evaluate_allocation(...)`, and `strategy_comparison(...)` unchanged.
+- Implemented Hybrid v0.2 Visible Diagnostic MVP in `app.py`.
+- Portfolio Ranking now displays `Sleeve %` and `Sleeve Status` as observation-only Hybrid v0.2 fields.
+- Strategy detail dialog now includes a `Hybrid v0.2 Diagnostic` section with Core Portfolio, Upside Sleeve, Sleeve %, Sleeve Status, and Sleeve Reason.
+- Added the warning copy that Hybrid v0.2 does not affect official sorting, default recommendation, or score.
+- Kept production sorting, recommendation logic, default recommendation, `strategy_score(...)`, `evaluate_allocation(...)`, and `strategy_comparison(...)` unchanged.
+- Added `scripts/generate_hybrid_v2_report_only.py` for Hybrid v0.2 report-only evaluation.
+- Generated `HYBRID_V2_REPORT_ONLY_REPORT.md` from existing `data/history/backfill/` snapshots.
+- Hybrid v0.2 report-only result: Core ROI 18.2%, Core + Upside ROI 20.6%, Legacy Tail-Heavy ROI 46.5%.
+- Confirmed Core + Upside improves over Core while keeping average max drawdown materially lower than Legacy Tail-Heavy.
+- Recommendation from report-only stage: `Enter Visible Diagnostic`; no production sorting, recommendation logic, UI, or source data changes were made.
+- Added `scripts/generate_world_cup_backfill_benchmark.py` for Phase B historical odds backfill and ranking benchmark pilot.
+- Backfilled 10 completed World Cup matches into isolated `data/history/backfill/` snapshots.
+- Generated `WORLD_CUP_BACKTEST_PORTFOLIOS.md` and `WORLD_CUP_RANKING_BENCHMARK_REPORT.md`.
+- Phase B data quality result: 10 valid true pre-match snapshots, 0 invalid odds matches, all four markets available for every sample match.
+- Phase B benchmark result: Legacy Wins 3, Scenario Wins 0, Hybrid Wins 0, Draws 7; Legacy ROI 46.5%, Scenario ROI 18.2%, Hybrid ROI 18.2%.
+- Confirmed this pilot did not modify production sorting, recommendation logic, UI, score functions, or existing `data/history/` source snapshots.
+- Added `WORLD_CUP_HISTORICAL_ODDS_BACKFILL_PLAN.md` to define the safe historical odds backfill and ranking benchmark readiness plan.
+- Defined isolated backfill storage under `data/history/backfill/`, true pre-match quality rules, deduplication rules, and Legacy vs Scenario vs Hybrid benchmark outputs.
+- Confirmed this phase is design-only: no backfill code, no full API pull, no data writes, no ranking changes, and no UI changes.
+- Added `API_FOOTBALL_HISTORICAL_ODDS_CHECK.md` to verify whether API-Football can support historical pre-match odds backfill.
+- Confirmed API-Football odds market IDs for Match Winner, Asian Handicap, Goals Over/Under, and Exact Score.
+- Confirmed historical odds backfill is feasible only when each odds row has `update < kickoff`; no full backfill code or data pull was performed.
+- Updated `docs/TASK_QUEUE.md` for the current Commit Hygiene, Historical Odds Backfill, Hybrid Benchmark, and Scenario Guardrails priorities.
+- Added `scripts/generate_hybrid_ranking_report.py` for Phase A Hybrid Ranking report-only validation.
+- Generated `HYBRID_RANKING_REPORT.md` from saved `data/history/` snapshots using in-memory Shadow Metadata and Hybrid Score calculations.
+- Hybrid report compares Legacy Top, Scenario Top, and Hybrid Top without changing production sorting, recommendation logic, UI, score functions, or data files.
+- Updated post-match validation dataset with 12 new `data/history/*_post.json` result files.
+- Regenerated `POST_MATCH_VALIDATION_REPORT.md` after the result update.
+- Added `VALIDATION_UPDATE_SUMMARY.md` for the validation update summary.
+- Added `SCENARIO_GUARDRAILS_REVIEW.md` after the validation count reached the 5-match promotion threshold.
+- Post-match validation metrics: 12 valid validations, Legacy Wins 3, Scenario Wins 3, Draws 6, Legacy ROI -40.8%, Scenario ROI -2.1%.
+- Promotion Status: `Enter Scenario Guardrails Phase`.
+
+- Connected standalone My Portfolio history files to post-match validation.
+- `scripts/generate_post_match_validation_report.py` now reads `data/history/my_portfolios/<match_slug>.json` before falling back to embedded pre-snapshot My Portfolio data.
+- Regenerated `POST_MATCH_VALIDATION_REPORT.md` with My Portfolio rows for Switzerland vs Bosnia and Herzegovina and United States vs Australia.
+- Added `scripts/generate_post_match_validation_report.py` for read-only post-match validation of Legacy Top vs Scenario Top.
+- Generated `POST_MATCH_VALIDATION_REPORT.md` from existing post-match result files.
+- Added the 5-Match Promotion Rule for entering Scenario Guardrails Phase without replacing Legacy score sorting.
+- Slimmed the default Portfolio Ranking decision table.
+- Removed `让球资产`, `大小球资产`, and `波胆资产` from the main table to reduce decision noise.
+- Kept Legacy score sorting, recommendation logic, default recommendation, scores, detail dialog, and data files unchanged.
+- Refined Visible Shadow Mode MVP display copy.
+- Added Portfolio Ranking caption: Legacy ranking remains official; Scenario Rank is observation-only and does not affect recommendations.
+- Localized `Shadow Verdict` display values to Chinese while keeping only the two MVP columns.
+- Implemented Visible Shadow Mode MVP in `app.py`.
+- Portfolio Ranking now displays only `Scenario Rank` and `Shadow Verdict` from `strategy["shadow"]`.
+- Attached Shadow metadata after the existing Legacy score sort so Legacy Ranking order, scores, recommendation logic, default recommendation, and data files remain unchanged.
+- Implemented Shadow Metadata v0.1 as a metadata-only helper in `modules/shadow_metadata.py`.
+- Added `scripts/generate_shadow_metadata_report.py` to validate `strategy["shadow"]` generation on Germany vs Ivory Coast, Scotland vs Morocco, and Brazil vs Haiti saved snapshots.
+- Generated `SHADOW_METADATA_REPORT.md`.
+- Added only in-memory `strategy["shadow"]` fields during report generation; did not change Legacy Ranking, scores, recommendation logic, UI, or data files.
+- Added `INTEGRATION_PLAN_V1.md` to design Scenario Engine, Recommendation Auditor, and Portfolio Ranking 2.0 integration points.
+- Mapped current data, recommendation logic, ranking, UI entry points, phased implementation order, and integration risks.
+- Added `PORTFOLIO_RANKING_V2_PLAN.md` to define scenario-aware Portfolio Ranking 2.0.
+- Designed ranking dimensions, Portfolio Score formula, guardrails, Tail Exposure handling, User Decision Complexity, and My Portfolio parity scoring.
+- Ran Recommendation Auditor v0.1 on `SCENARIO_ENGINE_REPORT.md` and generated `docs/RECOMMENDATION_AUDIT_REPORT.md`.
+- Refined Scenario Engine read-only script asset mapping so 4-goal correct scores are aggressive upside and 5-goal correct scores are tail/extreme upside, lowering the generated consistency score to 82.
+- Added `scripts/generate_scenario_engine_report.py`, a read-only Scenario Engine report generator for saved local snapshots.
+- Generated `SCENARIO_ENGINE_REPORT.md` for Germany vs Ivory Coast using existing local data only.
+- Added `SCENARIO_ENGINE_AUTOMATION_PLAN.md` to define a read-only automation plan for repeatable Scenario Engine reporting.
+- Defined Scenario Engine automation inputs, outputs, workflow, data dependencies, degraded mode, Recommendation Auditor handoff, future Portfolio Ranking fields, and risk controls.
+- Added `SCENARIO_ENGINE_PROTOTYPE_REPORT.md`, a v0.1 Scenario Engine sample report for Germany vs Ivory Coast using existing local data only.
+- Added `SCENARIO_ENGINE_V1_PLAN.md` to define Scenario Engine v1.
+- Designed Main, Secondary, and Upset Scenario structures, asset mapping rules, Scenario Consistency Score, Recommendation Auditor collaboration, and Portfolio Ranking integration.
+- Added `RECOMMENDATION_AUDITOR_PLAN.md` to define the Recommendation Auditor audit agent.
+- Defined recommendation scenario conflict checks, path conflict rules, asset role alignment checks, Portfolio Ranking dependency checks, user/system parity checks, audit report format, prohibited actions, and future read-only automation path.
+- Ran WorldCup Supervisor once and regenerated `docs/DAILY_REPORT.md`.
+- Refined `WORLDCUP_SUPERVISOR_PLAN.md` so the Supervisor responsibilities directly match the requested project-manager duties.
+- Added `WORLDCUP_SUPERVISOR_PLAN.md` to define the WorldCup Supervisor project-manager agent.
+- Defined daily governance checks, required reads, daily report format, main-branch warning, changelog check, and task queue sync rules.
 - Initialized project governance documentation under `docs/`.
 - Added AI collaboration rules through root `AGENTS.md`.
 - Added product principles, task queue, known bugs, QA report, daily report, and setup report.
 - Recorded Git baseline and version-risk assessment.
 - Did not modify business code, recommendation logic, data scripts, UI pages, or data files.
-

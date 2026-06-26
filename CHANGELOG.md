@@ -1,5 +1,81 @@
 # Changelog
 
+## 2026-06-25
+
+- Added `scripts/backtest_attribution.py` for Backtest Attribution Review without changing model weights.
+- Generated `reports/backtests/backtest_attribution_20260625.md` and `reports/backtests/backtest_attribution_20260625.csv`.
+- Attribution review decomposes the initial -13.8% ROI by portfolio style, Rank #1 failures, failure pattern, My Portfolio comparison, and qualification pressure availability.
+- Top attribution labels in the current report are low-odds false safety, correct-score concentration, market-direction error, underdog-goal clean-sheet break, draw-path miss, and over/under miss.
+- Confirmed this round made no Portfolio Score weight changes and no algorithm tuning.
+- Added `docs/MODEL_ALGORITHM.md` documenting the current recommendation algorithm, Portfolio Ranking flow, inputs, weights, outputs, and limitations.
+- Added `docs/GAME_BEHAVIOR_MODEL.md` documenting Qualification Pressure / Game Behavior current status as IMPLEMENTED / PARTIAL.
+- Added `scripts/backtest_portfolio_engine.py` as the first backtest/replay entrypoint for saved pre/post snapshots.
+- Added backtest report outputs under `reports/backtests/`.
+- Generated `reports/backtests/backtest_summary_20260625.md` and `reports/backtests/backtest_results_20260625.csv`.
+- Initial backtest scanned 17 matches and 161 portfolio rows, with aggregate ROI -13.8%; this is an evaluation baseline, not a tuning change.
+- Confirmed Portfolio Score weights and Match Investment Score weights in documentation match current implementation.
+- Added Qualification Pressure Engine v1 with 0-5 pressure scores for qualified, draw-acceptable, must-win, and low-motivation teams.
+- Added `data/worldcup2026/qualification_context_2026_06_24.json` as third-round group-stage seed data for Groups A-L.
+- Added match pressure classification for qualified favorite vs must-win underdog, both-draw-acceptable, direct second-place battles, must-win vs must-win, qualified vs qualified, favorite must-win, and low-motivation matches.
+- Connected behavior adjustments into Scenario / Coverage scoring through deep handicap risk, small-win weight, underdog goal tail, draw, under/over, late volatility, rotation risk, tempo control, and chaos risk deltas.
+- Added Qualification & Game Behavior display to the Core Decision page.
+- Added Pressure Fit to Portfolio Ranking and portfolio detail explanations.
+- Match Investment Score external risk and data-quality notes now include qualification pressure context.
+- Added regression tests for Germany vs Ecuador, Switzerland vs Canada, Bosnia vs Qatar, Morocco vs Haiti, Japan vs Sweden, and England vs Panama qualification-pressure cases.
+- Verified `.venv/bin/python scripts/test_portfolio_engine.py` and `.venv/bin/python -m pytest` pass with 17 tests.
+- Changed match detail loading so an existing `data/worldcup2026` match database is treated as the authoritative source for that match click.
+- Prevented previously fetched matches from making live Polymarket requests during detail-page rendering; local database Polymarket data is used when present, otherwise a local-only empty result is shown.
+- Prevented live weather requests for matches already loaded from the local World Cup database to avoid repeated page-click delays.
+- Added `db_polymarket()` to centralize local Polymarket restoration and make the no-live-API behavior explicit.
+
+## 2026-06-24
+
+- Optimized match detail loading by using `data/worldcup2026/index.json` to locate the match database directly instead of scanning directories.
+- Changed detail-page database loading to lightweight mode so large `players`, `events`, `match_stats`, `pre_match`, and `post_match` JSON files are not read during initial pre-match render.
+- Added Polymarket file cache under `data/cache/polymarket` and reduced its page-blocking request timeout to 4 seconds.
+- Reduced page-triggered network timeouts for API-Football, The Odds API, team resolver, schedule APIs, and weather APIs to prevent long UI stalls.
+- Reduced weather lookup timeout to 2 seconds so match overview cannot block the page for 10+ seconds.
+- Added `STARTUP_RECOVERY.md` as the permanent recovery protocol for localhost startup failures.
+- Documented the Codex recovery rule: open `START_APP.command`, then verify `lsof -i :8502` and `curl -I http://localhost:8502/`.
+- Removed the broken LaunchAgent approach because macOS blocks background services from reading this project inside Documents.
+- Changed `START_APP.command` to start Streamlit with `nohup` from Terminal, write a PID/log file, and keep the app alive after the launcher exits.
+- Added `START_APP.command` as a one-click local launcher for non-technical startup.
+- Upgraded `scripts/start_streamlit_8502.command` into a self-checking launcher that verifies app.py, virtualenv, Streamlit, port 8502, stale processes, health check, browser opening, and logs.
+- Added Game Behavior Engine v1 for qualification-pressure-aware match behavior adjustments.
+- Added pressure score mapping from 0 to 5 for eliminated, qualified, draw acceptable, avoid loss, must win, and must win big states.
+- Result distribution now applies pressure-based shifts for tempo, goal distribution, upset probability, and handicap movement bias.
+- Added regression test verifying rotation risk increases conservative paths and must-win pressure increases attacking variance.
+- Installed `pytest` in the local virtual environment and added `requirements-dev.txt`.
+- Verified `.venv/bin/python -m pytest` passes with 9 tests.
+- Updated `QA_REPORT.md` to replace the previous "pytest not configured" status with passing pytest output.
+- Advanced Portfolio Ranking acceptance fixes from PARTIAL toward verifiable PASS items.
+- Match Investment Score now uses fixed weights: Market Clarity 20%, Scenario Clarity 25%, Directional Odds Value 20%, Coverage Quality 20%, External Risk 10%, and Data Quality / Timing 5%.
+- Data Quality / Timing now explicitly reflects Polymarket completeness, API odds completeness, user actual odds coverage, and timing status.
+- Coverage Efficiency now reports base/new EV, ROI, max loss, zero risk, one-goal risk, coverage gains, stake cost, penalties, and Add/Replace/Add Small/Do Not Add recommendation.
+- Directional Odds Value now exposes price edge, scenario alignment, plausibility, market support, noise penalty, weighted edge, included edges, and ignored noise edges.
+- Score scenario grid now includes raw implied probability, devig probability, handicap alignment, total alignment, final scenario weight, confidence, and classification.
+- Added regression tests proving user actual odds can change portfolio ranking while extreme noise odds do not lift main recommendation value.
+- Added regression tests confirming generated style portfolios keep correct-score bets at four or fewer.
+- Completed strict acceptance audit for Portfolio Ranking and My Portfolio analysis refactor.
+- Updated `QA_REPORT.md` with PASS / PARTIAL / FAIL requirement matrix, evidence, test output, fixes, and remaining risks.
+- Added score scenario grid and scenario classification interfaces for coverage analysis.
+- Added portfolio PnL by score and candidate-level coverage efficiency checks.
+- Fixed bet deduplication so repeated equivalent bets merge role tags instead of losing them.
+- Expanded `scripts/test_portfolio_engine.py` to cover fractional Asian handicap parsing, split-leg settlement, dedupe, score grid, noise filtering, and candidate coverage efficiency.
+- Added `modules/portfolio_engine.py` as the shared portfolio decision engine.
+- Added Asian handicap fraction parsing for lines such as `-1/2`, `-1/1.5`, `-2.5/3`, and positive equivalents.
+- Added split-leg Asian handicap settlement so EV, ROI, score-path simulation, settlement, and ranking use the same calculation.
+- Added stable bet identity and portfolio identity deduplication so role tags no longer create duplicate bets or duplicate portfolios.
+- Added scenario-weighted directional odds value to reduce noise from extreme high-odds score paths.
+- Added portfolio coverage metrics for main scenario, adjacent scenario, tail scenario, one-goal deviation risk, and zero-risk paths.
+- Added coverage efficiency scoring so extra bets are evaluated by coverage gain versus EV, complexity, and noise cost.
+- Reweighted Portfolio Score into Risk-Adjusted Value, Scenario Consistency, Coverage Quality, Coverage Efficiency, Directional Odds Value, Drawdown / Zero Risk, and Simplicity.
+- Added style portfolio generation for Conservative, Main Scenario, Aggressive, and Tail Hedge portfolios with max four correct-score bets.
+- Rebuilt Portfolio Ranking columns to show style, main scenario, handicap bets, totals, correct scores, coverage summary, EV, ROI, max loss, consistency, coverage, efficiency, zero risk, and final score.
+- Updated My Portfolio and Actual Odds handicap matching to use the same normalized handicap line logic as the portfolio engine.
+- Added `scripts/test_portfolio_engine.py` for regression checks covering handicap parsing, settlement, dedupe, score range, and noise filtering.
+- Added `QA_REPORT.md` with the current validation summary.
+
 ## 2026-06-19
 
 - Collapsed My Actual Odds, My Portfolio, and Actual-vs-Market Value Analysis by default to keep Core Decision focused on Portfolio Ranking and risk notes.
@@ -37,6 +113,10 @@
 - Added The Odds API daily-cache fallback when a live refresh fails after data was already saved.
 - Refreshed the 2026-06-19 database for USA vs Australia, Scotland vs Morocco, Brazil vs Haiti, and Turkiye vs Paraguay.
 - Backfilled priority finished matches: France vs Senegal, Portugal vs Congo DR, England vs Croatia, and Switzerland vs Bosnia and Herzegovina.
+- Connected API-Football standings into Game Behavior Engine qualification pressure mapping.
+- Added 24-hour file cache for API-Football standings by league and season.
+- Added standings-derived pressure reasons for already qualified, draw acceptable, must win, must win big, and eliminated states.
+- Added tests for standings-to-pressure mapping and eliminated-team pressure handling.
 - Fixed the market odds tab crash by pinning Altair to 4.2.2 for Python 3.14 compatibility.
 - Replaced detail-page nested expanders with checkbox toggles so one failed section cannot crash the tab.
 - Added a market tab Debug Summary covering fixture, winner odds, Asian handicap, totals, correct score, and Polymarket status.
@@ -117,3 +197,19 @@
 - Increased direction and handicap priority while reducing tempo asset influence in candidate scoring and portfolio scoring.
 - Added Direction Path, Tempo Path, Score Path, and Handicap Confidence to Core Decision.
 - Added market-center deviation labels to portfolio detail rows for correct score bets.
+- Added Risk Gate as a hard Rank #1 eligibility layer; zero-risk collapse is no longer only a soft score component.
+- Added Correct Score Exposure Control with style-specific stake-share limits, dependency checks, and clean-sheet cluster warnings.
+- Added pressure-based portfolio templates so Qualification Pressure can change generated candidate portfolios, not only final scores.
+- Added Rank #1 Eligibility checks after Portfolio Score; high-score fragile portfolios can be alternatives but cannot automatically become Recommendation.
+- Added Portfolio Marginal Utility comparisons for structural variants such as shallower handicap replacement and clean-sheet score replacement.
+- Kept Portfolio Score weights unchanged: 15/20/20/15/10/10/10.
+- Generated `reports/backtests/backtest_constraint_comparison_20260625.md` and `.csv`; historical aggregate ROI is unchanged because saved snapshots were not regenerated.
+- Fixed Turkey vs United States exported report explanation layer: Match Overview no longer shows `- vs -`, Betting Opinion separates Match Direction from Coverage / Insurance Candidate, Turkey +0.5 is coverage only, Asian Handicap center filters outlier rows, Total Center reports `2.5-2.75`, Value Analysis is scoped to Winner Market Value, and Data Quality Notes are included.
+- Globalized Betting Opinion v2 across reports and the Core Decision page, converted user-facing report/page labels to Chinese, fixed fixture metadata export for competition/stage/kickoff/venue, normalized same-sign API-Football handicap rows for center detection, and added `scripts/validate_report_exports.py` plus `reports/validation/report_export_validation_20260625.md` for six-match report validation.
+- Fixed exported report readability: portfolio summary now shows a real portfolio name, core bets, portfolio style, risk gate result, risk level, Rank #1 eligibility, and pass/blocker reasons instead of the placeholder `推荐组合：推荐组合`.
+- Split report risk messaging into `风险门槛结果` and `风险等级`.
+- Mapped Asian Handicap report rows from raw Home/Away labels to actual team names in both visible market rows and full details.
+- Reorganized Asian Handicap and Over/Under report sections into core summary, nearby market rows, and full Markdown `<details>` market disclosure.
+- Added user actual odds status to Data Quality Notes so reports state whether user-entered odds participated in final portfolio ranking.
+- Added six-match report readability validation output at `reports/validation/report_readability_validation_20260625.md`.
+- Adjusted `scripts/start_streamlit_8502.command` so the one-click launcher starts Streamlit directly through the project virtualenv and can be opened through macOS Terminal when the Codex shell would otherwise reap background child processes.

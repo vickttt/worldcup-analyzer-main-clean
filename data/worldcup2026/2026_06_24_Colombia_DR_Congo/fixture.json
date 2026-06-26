@@ -1,0 +1,136 @@
+{
+  "source_id": "manual_20260624_colombia_dr_congo",
+  "match": {
+    "home_cn": "Colombia",
+    "away_cn": "Democratic Republic of the Congo",
+    "home_en": "Colombia",
+    "away_en": "DR Congo",
+    "display_name": "Colombia vs Democratic Republic of the Congo"
+  },
+  "created_at": "2026-06-24T09:45:12.599028+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": null,
+  "api_football_fixture": {
+    "fixture_id": 1539008,
+    "kickoff_utc": "2026-06-24T02:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Group Stage - 2",
+    "venue": "Estadio Akron",
+    "city": "Guadalajara",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1539008,
+        "referee": "Maurizio Mariani, Italy",
+        "timezone": "UTC",
+        "date": "2026-06-24T02:00:00+00:00",
+        "timestamp": 1782266400,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": 1076,
+          "name": "Estadio Akron",
+          "city": "Guadalajara"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Group Stage - 2",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 8,
+          "name": "Colombia",
+          "logo": "https://media.api-sports.io/football/teams/8.png",
+          "winner": null
+        },
+        "away": {
+          "id": 1508,
+          "name": "Congo DR",
+          "logo": "https://media.api-sports.io/football/teams/1508.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 8,
+    "name": "Colombia",
+    "code": "COL",
+    "country": "Colombia",
+    "founded": 1924,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/8.png",
+    "_resolver": {
+      "input": "Colombia",
+      "matched_query": "Colombia",
+      "matched_name": "Colombia",
+      "team_id": 8,
+      "attempted": [
+        "Colombia"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 1508,
+    "name": "Congo DR",
+    "code": "CGO",
+    "country": "Congo-DR",
+    "founded": 1919,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/1508.png",
+    "_resolver": {
+      "input": "DR Congo",
+      "matched_query": "Congo DR",
+      "matched_name": "Congo DR",
+      "team_id": 1508,
+      "attempted": [
+        "DR Congo",
+        "Congo DR"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": null
+}

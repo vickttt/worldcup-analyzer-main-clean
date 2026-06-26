@@ -1,0 +1,141 @@
+name: Agent QA
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  agent-qa:
+    name: Agent QA
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Collect changed files
+        id: changed
+        shell: bash
+        run: |
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          git diff --name-only "origin/${{ github.base_ref }}...HEAD" > /tmp/changed_files.txt
+          echo "Changed files:"
+          cat /tmp/changed_files.txt
+
+      - name: Python syntax check
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=()
+          if [[ -f app.py ]]; then
+            files+=("app.py")
+          fi
+          while IFS= read -r file; do
+            [[ -f "$file" ]] || continue
+            files+=("$file")
+          done < <(find scripts -maxdepth 1 -type f -name "*.py" 2>/dev/null | sort)
+
+          if [[ ${#files[@]} -eq 0 ]]; then
+            echo "No Python files found for syntax check."
+            exit 0
+          fi
+
+          python -m py_compile "${files[@]}"
+
+      - name: Forbidden ranking function diff check
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_REF: origin/${{ github.base_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -q '^app.py$' /tmp/changed_files.txt; then
+            python - <<'PY' > /tmp/ranking_function_changes.txt
+          import os
+          import re
+          import subprocess
+          from pathlib import Path
+
+          base_ref = os.environ["BASE_REF"]
+          functions = ["strategy_score", "strategy_comparison", "evaluate_allocation"]
+          head_text = Path("app.py").read_text(encoding="utf-8")
+          base_text = subprocess.check_output(["git", "show", f"{base_ref}:app.py"], text=True)
+
+          def extract_function(text, name):
+              pattern = re.compile(rf"^def {re.escape(name)}\(", re.M)
+              match = pattern.search(text)
+              if not match:
+                  return ""
+              start = match.start()
+              next_match = re.search(r"^def |\nclass ", text[match.end():], re.M)
+              end = match.end() + next_match.start() if next_match else len(text)
+              return text[start:end]
+
+          for fn in functions:
+              if extract_function(base_text, fn) != extract_function(head_text, fn):
+                  print(fn)
+          PY
+          fi
+
+          if [[ -s /tmp/ranking_function_changes.txt ]]; then
+            echo "Ranking-sensitive functions changed:"
+            cat /tmp/ranking_function_changes.txt
+            if [[ "${PR_BODY}" != *"approved:ranking"* ]]; then
+              echo "::error::Ranking-sensitive functions changed without approved:ranking in the PR body."
+              exit 1
+            fi
+            echo "approved:ranking found in PR body."
+          else
+            echo "No ranking-sensitive function body changes detected."
+          fi
+
+      - name: Data safety check
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          protected_changes="$(grep -E '^data/history/([^/]+_(pre|post)\.json|my_portfolios/.*\.json)$' /tmp/changed_files.txt || true)"
+          if [[ -z "$protected_changes" ]]; then
+            echo "No protected history data changes detected."
+            exit 0
+          fi
+
+          echo "Protected history data changed:"
+          echo "$protected_changes"
+          if [[ "${PR_BODY}" != *"approved:data-write"* ]]; then
+            echo "::error::Protected history data changed without approved:data-write in the PR body."
+            exit 1
+          fi
+          echo "approved:data-write found in PR body."
+
+      - name: Docs check for code changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          code_changes="$(grep -E '^(app\.py|scripts/.*\.py)$' /tmp/changed_files.txt || true)"
+          if [[ -z "$code_changes" ]]; then
+            echo "No app.py or scripts/*.py changes detected."
+            exit 0
+          fi
+
+          missing=0
+          if ! grep -q '^docs/CHANGELOG\.md$' /tmp/changed_files.txt; then
+            echo "::error::Code changed but docs/CHANGELOG.md was not updated."
+            missing=1
+          fi
+          if ! grep -q '^docs/QA_REPORT\.md$' /tmp/changed_files.txt; then
+            echo "::error::Code changed but docs/QA_REPORT.md was not updated."
+            missing=1
+          fi
+          exit "$missing"

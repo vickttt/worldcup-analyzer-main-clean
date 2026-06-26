@@ -1,0 +1,473 @@
+{
+  "source_id": "51",
+  "match": {
+    "home_cn": "South Africa",
+    "away_cn": "South Korea",
+    "home_en": "South Africa",
+    "away_en": "South Korea",
+    "display_name": "South Africa vs South Korea"
+  },
+  "created_at": "2026-06-24T17:16:19.453851+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "fixture_players": {
+    "ok": true,
+    "response": [],
+    "error": null
+  },
+  "home_team_assets": {
+    "squad": {
+      "ok": true,
+      "response": [
+        {
+          "team": {
+            "id": 1531,
+            "name": "South Africa",
+            "logo": "https://media.api-sports.io/football/teams/1531.png"
+          },
+          "players": [
+            {
+              "id": 46417,
+              "name": "S. Chaine",
+              "age": 29,
+              "number": 16,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/46417.png"
+            },
+            {
+              "id": 46245,
+              "name": "R. Goss",
+              "age": 31,
+              "number": 22,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/46245.png"
+            },
+            {
+              "id": 3275,
+              "name": "R. Williams",
+              "age": 33,
+              "number": 1,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/3275.png"
+            },
+            {
+              "id": 163041,
+              "name": "B. Cross",
+              "age": 24,
+              "number": 26,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/163041.png"
+            },
+            {
+              "id": 430078,
+              "name": "S. Kabini",
+              "age": 21,
+              "number": 18,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/430078.png"
+            },
+            {
+              "id": 392387,
+              "name": "O. Makhanya",
+              "age": 21,
+              "number": 24,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/392387.png"
+            },
+            {
+              "id": 510799,
+              "name": "M. Mbokazi",
+              "age": 20,
+              "number": 14,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/510799.png"
+            },
+            {
+              "id": 46334,
+              "name": "A. Modiba",
+              "age": 30,
+              "number": 6,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/46334.png"
+            },
+            {
+              "id": 46601,
+              "name": "K. Mudau",
+              "age": 30,
+              "number": 20,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/46601.png"
+            },
+            {
+              "id": 474630,
+              "name": "K. Ndamane",
+              "age": 21,
+              "number": 3,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/474630.png"
+            },
+            {
+              "id": 406752,
+              "name": "I. Okon",
+              "age": 21,
+              "number": 21,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/406752.png"
+            },
+            {
+              "id": 46458,
+              "name": "N. Sibisi",
+              "age": 30,
+              "number": 19,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/46458.png"
+            },
+            {
+              "id": 330174,
+              "name": "T. Matuludi",
+              "age": 26,
+              "number": 2,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/330174.png"
+            },
+            {
+              "id": 268710,
+              "name": "J. Adams",
+              "age": 24,
+              "number": 23,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/268710.png"
+            },
+            {
+              "id": 194430,
+              "name": "T. Mbatha",
+              "age": 25,
+              "number": 5,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/194430.png"
+            },
+            {
+              "id": 3287,
+              "name": "T. Mokoena",
+              "age": 28,
+              "number": 4,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/3287.png"
+            },
+            {
+              "id": 158433,
+              "name": "S. Sithole",
+              "age": 26,
+              "number": 13,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/158433.png"
+            },
+            {
+              "id": 3289,
+              "name": "T. Zwane",
+              "age": 36,
+              "number": 11,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/3289.png"
+            },
+            {
+              "id": 179893,
+              "name": "O. Appollis",
+              "age": 24,
+              "number": 7,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/179893.png"
+            },
+            {
+              "id": 98936,
+              "name": "L. Foster",
+              "age": 25,
+              "number": 9,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/98936.png"
+            },
+            {
+              "id": 201354,
+              "name": "E. Makgopa",
+              "age": 25,
+              "number": 99,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/201354.png"
+            },
+            {
+              "id": 354831,
+              "name": "T. Maseko",
+              "age": 22,
+              "number": 12,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/354831.png"
+            },
+            {
+              "id": 414149,
+              "name": "R. Mofokeng",
+              "age": 21,
+              "number": 10,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/414149.png"
+            },
+            {
+              "id": 295977,
+              "name": "T. Moremi",
+              "age": 25,
+              "number": 8,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/295977.png"
+            },
+            {
+              "id": 127429,
+              "name": "I. Rayners",
+              "age": 30,
+              "number": 15,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/127429.png"
+            },
+            {
+              "id": 359561,
+              "name": "K. Sebelebele",
+              "age": 23,
+              "number": 25,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/359561.png"
+            }
+          ]
+        }
+      ],
+      "error": null
+    },
+    "team_id": 1531,
+    "name": "South Africa"
+  },
+  "away_team_assets": {
+    "squad": {
+      "ok": true,
+      "response": [
+        {
+          "team": {
+            "id": 17,
+            "name": "South Korea",
+            "logo": "https://media.api-sports.io/football/teams/17.png"
+          },
+          "players": [
+            {
+              "id": 2890,
+              "name": "Jo Hyeon-Woo",
+              "age": 34,
+              "number": 21,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/2890.png"
+            },
+            {
+              "id": 2892,
+              "name": "Kim Seung-Gyu",
+              "age": 35,
+              "number": 1,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/2892.png"
+            },
+            {
+              "id": 34374,
+              "name": "Song Bum-Keun",
+              "age": 28,
+              "number": 12,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/34374.png"
+            },
+            {
+              "id": 547307,
+              "name": "Cho Wi-Je",
+              "age": 24,
+              "number": 14,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/547307.png"
+            },
+            {
+              "id": 2897,
+              "name": "Kim Min-Jae",
+              "age": 29,
+              "number": 4,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/2897.png"
+            },
+            {
+              "id": 2912,
+              "name": "Kim Moon-Hwan",
+              "age": 30,
+              "number": 15,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/2912.png"
+            },
+            {
+              "id": 34418,
+              "name": "Kim Tae-Hyeon",
+              "age": 25,
+              "number": 5,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/34418.png"
+            },
+            {
+              "id": 237218,
+              "name": "Lee Han-Beom",
+              "age": 23,
+              "number": 2,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/237218.png"
+            },
+            {
+              "id": 99211,
+              "name": "Park Jin-Seop",
+              "age": 30,
+              "number": 16,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/99211.png"
+            },
+            {
+              "id": 237220,
+              "name": "Lee Tae-Seok",
+              "age": 23,
+              "number": 13,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/237220.png"
+            },
+            {
+              "id": 197985,
+              "name": "Seol Young-Woo",
+              "age": 27,
+              "number": 22,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/197985.png"
+            },
+            {
+              "id": 280358,
+              "name": "J. Castrop",
+              "age": 22,
+              "number": 23,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/280358.png"
+            },
+            {
+              "id": 304951,
+              "name": "Lee Gi-Hyuk",
+              "age": 25,
+              "number": 3,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/304951.png"
+            },
+            {
+              "id": 357286,
+              "name": "Bae Jun-Ho",
+              "age": 22,
+              "number": 17,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/357286.png"
+            },
+            {
+              "id": 237050,
+              "name": "Eom Ji-Sung",
+              "age": 23,
+              "number": 25,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/237050.png"
+            },
+            {
+              "id": 2901,
+              "name": "Hwang In-Beom",
+              "age": 29,
+              "number": 6,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/2901.png"
+            },
+            {
+              "id": 34168,
+              "name": "Kim Jin-Gyu",
+              "age": 28,
+              "number": 24,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/34168.png"
+            },
+            {
+              "id": 34431,
+              "name": "Lee Dong-Gyeong",
+              "age": 28,
+              "number": 26,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/34431.png"
+            },
+            {
+              "id": 2906,
+              "name": "Lee Jae-Sung",
+              "age": 33,
+              "number": 10,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/2906.png"
+            },
+            {
+              "id": 927,
+              "name": "Lee Kang-In",
+              "age": 24,
+              "number": 19,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/927.png"
+            },
+            {
+              "id": 2909,
+              "name": "Paik Seung-Ho",
+              "age": 28,
+              "number": 8,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/2909.png"
+            },
+            {
+              "id": 304958,
+              "name": "Yang Hyun-Jun",
+              "age": 23,
+              "number": 20,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/304958.png"
+            },
+            {
+              "id": 24888,
+              "name": "Hwang Hee-Chan",
+              "age": 29,
+              "number": 11,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/24888.png"
+            },
+            {
+              "id": 34211,
+              "name": "Cho Gue-Sung",
+              "age": 28,
+              "number": 9,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/34211.png"
+            },
+            {
+              "id": 34710,
+              "name": "Oh Hyeon-Gyu",
+              "age": 24,
+              "number": 18,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/34710.png"
+            },
+            {
+              "id": 186,
+              "name": "Son Heung-Min",
+              "age": 33,
+              "number": 7,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/186.png"
+            }
+          ]
+        }
+      ],
+      "error": null
+    },
+    "team_id": 17,
+    "name": "South Korea"
+  }
+}

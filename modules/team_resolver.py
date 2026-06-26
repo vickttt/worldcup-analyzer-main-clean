@@ -114,7 +114,7 @@ def request_teams(query):
     response = requests.get(
         f"{API_FOOTBALL_BASE}/teams",
         params={"search": query},
-        timeout=20,
+        timeout=6,
         headers={"x-apisports-key": api_key, "Accept": "application/json"},
     )
     response.raise_for_status()

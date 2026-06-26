@@ -6,11 +6,11 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 CONTEXT_FILE = ROOT / "GPT_CONTEXT.md"
 LATEST_FILE = ROOT / "LATEST.md"
-VERSION = "v1.64-dev"
+VERSION = "v1.81-dev"
 URL = "http://localhost:8502"
 CURRENT_BEST_PORTFOLIO = "推荐组合（当前最优）"
 CURRENT_UTILITY = "Calculated per selected match"
-TOP_ISSUE = "Validate Market Center Score and direction-over-tempo weighting on Brazil vs Haiti and future deep-favorite matches."
+TOP_ISSUE = "Report readability layer is fixed; next focus is live Streamlit export spot-checks after user odds are entered."
 
 
 def run(command):
@@ -113,6 +113,8 @@ Enabled:
 - Efficient Frontier
 - Portfolio Optimizer
 - Odds Distribution Optimizer
+- Game Behavior Engine v1
+- Qualification Pressure Engine v1
 - Betting Asset Role Framework
 - Multi-Role Asset Allocation
 - Role-Driven Portfolio Optimizer
@@ -130,11 +132,17 @@ Enabled:
 ## Current Problems
 
 {numbered([
+    "Backtest attribution shows low-odds false safety, correct-score concentration, and handicap/path failures as the leading failure patterns.",
+    "Report explanation layer must stay aligned with Portfolio Ranking so coverage assets are not described as directional leans.",
+    "Live Streamlit report export should be spot-checked after page interaction to confirm Portfolio Eligibility carries actual top-strategy status.",
+    "New Risk Gate and Rank #1 Eligibility are active, but historical backtest aggregate is unchanged because saved portfolios were not regenerated.",
+    "Qualification Pressure Engine uses manual third-round seed data and still needs live standings automation.",
     "Pre-match decision cockpit needs validation against finished matches and saved snapshots.",
     "Score probability distribution still needs calibration against real match results.",
     "Correct score marginal EV depends on bookmaker implied probability and may need de-vig adjustment.",
-    "Insurance, return, directional, tempo, and tail role sizing needs more live-match validation.",
-    "Some matches still lack full API-Football handicap or correct score coverage.",
+    "Coverage Engine still needs stronger joint calibration from handicap/totals/correct-score odds.",
+    "Qualification pressure now uses API-Football standings when available, but live coverage still needs match-day validation.",
+    "Directional Odds Value noise filtering is improved but remains heuristic without liquidity and price-stability inputs.",
     "API data refresh should be executed through terminal scripts first, then saved to cache/history.",
     "Prediction Audit and Recommendation Audit need validation on finished matches.",
     "Portfolio Style statistics need more post-match samples.",
@@ -144,12 +152,69 @@ Enabled:
 
 {bullet([
     "Do not use estimated correct score odds.",
+    "Current model has been documented in docs/MODEL_ALGORITHM.md.",
+    "Game behavior / qualification pressure model status is documented in docs/GAME_BEHAVIOR_MODEL.md.",
+    "Backtest framework created under scripts/backtest_portfolio_engine.py.",
+    "Backtest reports are saved under reports/backtests.",
+    "Backtest attribution report has been generated.",
+    "Turkey vs United States report no longer exports '- vs -' in Match Overview.",
+    "Betting Opinion now separates Match Direction, Handicap Market Direction, Coverage / Insurance Candidate, Goals View, and Match Investment View.",
+    "Turkey +0.5 is treated as coverage / insurance, not as the main market direction.",
+    "Handicap center detection filters outlier API-Football rows and prefers shallow favorite-market centers.",
+    "Total center detection identifies ranges such as 2.5-2.75 instead of mechanically outputting Lean Over 2.5.",
+    "Value Analysis is scoped to Winner Market Value when comparing The Odds API with Polymarket.",
+    "Report Data Quality Notes now flag missing lineups, Polymarket winner-only scope, handicap outliers, and pre-lineup injury ambiguity.",
+    "Betting Opinion v2 is now global across match reports, not only Turkey vs USA.",
+    "Match Direction, Handicap Market Direction, Coverage Candidate, Goals View, and Match Investment View are separated globally.",
+    "Report export validates fixture metadata and avoids silent '-' fields for teams, competition, stage, kickoff, and venue.",
+    "Value Analysis is scoped to winner-market comparison when using Polymarket.",
+    "Portfolio Eligibility summary is included in report export when available; otherwise the report states why it is not available.",
+    "Streamlit page and exported Markdown reports use Chinese user-facing labels.",
+    "Same-sign API-Football Asian Handicap rows are normalized for favorite-side center detection when they would otherwise mislead the handicap center.",
+    "Six-match report export validation is saved under reports/validation/report_export_validation_20260625.md.",
+    "Report readability validation is saved under reports/validation/report_readability_validation_20260625.md.",
+    "Exported reports now show real portfolio names, core bets, portfolio style, risk gate result, risk level, Rank #1 eligibility, and blockers/pass reasons.",
+    "Asian Handicap and Over/Under report sections now show core summaries first, 3-5 nearby market rows, and full market details inside Markdown details blocks.",
+    "Asian Handicap report rows map Home/Away labels to actual team names in visible summaries and full details.",
+    "Data Quality Notes now state whether user-entered actual odds participated in final portfolio ranking.",
+    "Risk Gate and Rank #1 Eligibility are now active for current portfolio generation.",
+    "Zero Risk is now a rank eligibility gate, not only a score component.",
+    "Correct Score exposure is controlled by stake share and dependency checks.",
+    "Qualification Pressure now changes portfolio templates, not only scoring.",
+    "Rank #1 requires eligibility checks beyond score.",
+    "Portfolio Score weights remain unchanged in this round.",
+    "Current priority is constraint-layer validation before tuning.",
+    "Do not change Portfolio Score weights until Rank #1 eligibility behavior is validated.",
+    "Initial negative ROI should be decomposed by style, pressure type, failure pattern, and constraint gate status.",
+    "Current model should not be further tuned until initial backtest results are reviewed.",
+    "Third-round group-stage qualification pressure is now part of Scenario Engine.",
+    "Qualification Pressure Score affects external risk, coverage, handicap depth, tail score selection, and Match Investment Score.",
+    "Already-qualified favorites receive deep-handicap risk adjustment.",
+    "Must-win underdogs lift underdog goal tail and late volatility.",
+    "Both-draw-acceptable matches lift draw/under paths and lower aggressive portfolio scores.",
     "Use real odds only for Match Winner, Asian Handicap, Over/Under, and Correct Score.",
     "Every betting item can carry multiple weighted asset roles, not just one market type.",
     "Correct Score can carry Return, Directional, Tail, or Insurance roles depending on score path and odds.",
     "Match Winner, Asian Handicap, and Over/Under can carry Insurance, Directional, Tempo, or Return roles depending on context.",
     "Recommended portfolio is generated by the optimizer, not by fixed slots.",
     "Pre-match page now mirrors post-match structure: ranking, role allocation, settlement preview, risk paths, and outcome preview.",
+    "Portfolio Ranking and My Portfolio now share the same scoring path through evaluate_strategy.",
+    "Match Investment Score uses fixed 20/25/20/20/10/5 weights and explicit Data Quality / Timing.",
+    "Coverage Efficiency now reports EV/ROI/max-loss/zero-risk deltas and supports Add/Replace/Add Small/Do Not Add.",
+    "User actual odds A/B regression proves ranking can change while extreme noise odds are filtered.",
+    "Generated style portfolios are verified to keep correct-score bets at four or fewer.",
+    "Pytest is installed as a dev dependency and currently passes 12 portfolio engine tests.",
+    "Game Behavior Engine v1 adjusts tempo, goal distribution, upset probability, and handicap bias from API-Football standings-derived qualification pressure when available.",
+    "API-Football standings are cached for 24 hours by league and season.",
+    "Local app startup is protected by START_APP.command with port checks, stale-process cleanup, health check, browser open, PID file, and log output.",
+    "Do not use LaunchAgent for this project while it remains inside Documents because macOS blocks background access to the virtualenv.",
+    "When localhost is down, Codex should open START_APP.command first, then verify lsof -i :8502 and curl -I http://localhost:8502/.",
+    "Detail page now uses indexed lightweight database loading instead of eager full JSON loading.",
+    "Polymarket uses file cache and a 4-second page timeout to avoid blocking the decision page.",
+    "Page-triggered network requests have shorter timeouts; full API refresh should still be done through terminal refresh scripts.",
+    "Fractional Asian handicap settlement supports split-leg lines such as -1/1.5 and +2/2.5.",
+    "Equivalent bets now deduplicate by normalized bet_id and merge role tags.",
+    "Extreme correct-score paths can be filtered from Directional Odds Value as noise.",
     "Optimizer now adjusts utility based on asset role balance.",
     "Portfolio naming is unified as Recommendation and Alternatives.",
     "Odds data should be cached for at least 24 hours per match.",
@@ -168,6 +233,9 @@ Enabled:
 ## Next Step
 
 {numbered([
+    "Review reports/backtests/backtest_attribution_20260625.md before changing weights.",
+    "Inspect Rank #1 failure rows for low-odds false safety, correct-score concentration, and missing adjacent paths.",
+    "Validate Qualification Pressure Engine on real third-round finished matches.",
     "Validate Pre-Match Decision Cockpit on finished matches.",
     "Validate multi-role Betting Asset Framework on finished matches.",
     "Validate Post Match Analysis on finished matches.",
@@ -182,7 +250,9 @@ Enabled:
 ## GPT Focus
 
 {numbered([
-    "Does the pre-match strategy ranking predict which strategy performs best after the match?",
+    "Which rank #1 failure pattern should be addressed first without overfitting?",
+    "Is low-odds false safety caused by too much confidence in single-path assets?",
+    "Does Qualification Pressure improve Rank #1 outcomes in third-round matches?",
     "Are multi-role weights correctly assigned for winner, handicap, total, and correct score bets?",
     "Does post-match role contribution correctly explain which asset roles helped or hurt?",
 ])}

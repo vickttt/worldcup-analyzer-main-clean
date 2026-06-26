@@ -49,6 +49,7 @@ TEAM_CN = {
     "Switzerland": "瑞士",
     "Tunisia": "突尼斯",
     "Turkey": "土耳其",
+    "Turkiye": "土耳其",
     "Türkiye": "土耳其",
     "Uruguay": "乌拉圭",
     "Uzbekistan": "乌兹别克斯坦",
@@ -57,6 +58,7 @@ TEAM_CN = {
     "DR Congo": "刚果（金）",
     "Congo DR": "刚果（金）",
     "United States": "美国",
+    "USA": "美国",
     "Draw": "平局",
 }
 

@@ -1,0 +1,17 @@
+{
+  "source_id": "1489408",
+  "match": {
+    "home_cn": "Switzerland",
+    "away_cn": "Canada",
+    "home_en": "Switzerland",
+    "away_en": "Canada",
+    "display_name": "Switzerland vs Canada"
+  },
+  "created_at": "2026-06-24T16:49:58.886700+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [],
+  "error": null
+}

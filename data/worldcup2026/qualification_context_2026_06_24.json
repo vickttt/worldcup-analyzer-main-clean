@@ -1,0 +1,136 @@
+{
+  "source": "Manual qualification seed 2026-06-24",
+  "updated_at": "2026-06-25",
+  "rules": "Top 2 in each group qualify directly; best 8 third-place teams also qualify. Four points are broadly safe; three points depend on goal difference.",
+  "groups": {
+    "A": {
+      "teams": {
+        "Mexico": {"rank": 1, "points": 6, "goal_difference": 4, "goals_for": 5, "goals_against": 1, "matches_played": 2, "pressure_score": 1, "pressure_label": "already_qualified_rotation_risk", "qualification_note": "Mexico already qualified; deep handicap risk rises due to possible rotation and tempo control.", "motivation_tags": ["already_qualified", "rotation_risk", "deep_handicap_risk"]},
+        "South Korea": {"rank": 2, "points": 3, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 3, "qualification_note": "Korea has motivation and must avoid loss, but should not be priced as a pure blowout favorite.", "motivation_tags": ["must_avoid_loss", "qualification_motivation"]},
+        "Korea": {"rank": 2, "points": 3, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 3, "qualification_note": "Korea has motivation and must avoid loss.", "motivation_tags": ["must_avoid_loss"]},
+        "Czechia": {"rank": 3, "points": 1, "goal_difference": -2, "goals_for": 1, "goals_against": 3, "matches_played": 2, "pressure_score": 5, "qualification_note": "Czechia needs a major result and help from other results.", "motivation_tags": ["must_win_big", "depends_on_others"]},
+        "South Africa": {"rank": 4, "points": 1, "goal_difference": -2, "goals_for": 1, "goals_against": 3, "matches_played": 2, "pressure_score": 4, "qualification_note": "South Africa must win and should carry attacking urgency.", "motivation_tags": ["must_win", "attacking_urgency"]}
+      }
+    },
+    "B": {
+      "teams": {
+        "Canada": {"rank": 1, "points": 4, "goal_difference": 2, "goals_for": 3, "goals_against": 1, "matches_played": 2, "pressure_score": 2, "qualification_note": "Canada can likely accept a draw.", "motivation_tags": ["draw_acceptable", "tempo_control"]},
+        "Switzerland": {"rank": 2, "points": 4, "goal_difference": 1, "goals_for": 3, "goals_against": 2, "matches_played": 2, "pressure_score": 2, "qualification_note": "Switzerland can likely accept a draw.", "motivation_tags": ["draw_acceptable", "tempo_control"]},
+        "Bosnia and Herzegovina": {"rank": 3, "points": 1, "goal_difference": -1, "goals_for": 1, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Bosnia must win to keep qualification hopes alive.", "motivation_tags": ["must_win", "late_volatility"]},
+        "Bosnia & Herzegovina": {"rank": 3, "points": 1, "goal_difference": -1, "goals_for": 1, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Bosnia must win to keep qualification hopes alive.", "motivation_tags": ["must_win", "late_volatility"]},
+        "Qatar": {"rank": 4, "points": 1, "goal_difference": -2, "goals_for": 1, "goals_against": 3, "matches_played": 2, "pressure_score": 4, "qualification_note": "Qatar must win to keep qualification hopes alive.", "motivation_tags": ["must_win", "late_volatility"]}
+      }
+    },
+    "C": {
+      "teams": {
+        "Brazil": {"rank": 1, "points": 4, "goal_difference": 3, "goals_for": 4, "goals_against": 1, "matches_played": 2, "pressure_score": 2, "qualification_note": "Brazil is strong but may not need a blowout; draw can be enough.", "motivation_tags": ["draw_acceptable", "avoid_deep_handicap_overconfidence"]},
+        "Morocco": {"rank": 2, "points": 4, "goal_difference": 2, "goals_for": 3, "goals_against": 1, "matches_played": 2, "pressure_score": 3, "qualification_note": "Morocco has qualification motivation but should not require extreme blowout assumptions.", "motivation_tags": ["must_avoid_loss", "main_direction_valid"]},
+        "Scotland": {"rank": 3, "points": 3, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Scotland must fight for points and can lift underdog goal tails.", "motivation_tags": ["must_win", "underdog_goal_tail"]},
+        "Haiti": {"rank": 4, "points": 0, "goal_difference": -5, "goals_for": 0, "goals_against": 5, "matches_played": 2, "pressure_score": 5, "qualification_note": "Haiti has theoretical pressure but low quality; deep defense remains likely.", "motivation_tags": ["must_win_big", "low_quality", "deep_defense"]}
+      }
+    },
+    "D": {
+      "teams": {
+        "USA": {"rank": 1, "points": 6, "goal_difference": 4, "goals_for": 5, "goals_against": 1, "matches_played": 2, "pressure_score": 1, "qualification_note": "USA already qualified; rotation and deep handicap risk rise.", "motivation_tags": ["already_qualified", "rotation_risk", "tempo_control"]},
+        "United States": {"rank": 1, "points": 6, "goal_difference": 4, "goals_for": 5, "goals_against": 1, "matches_played": 2, "pressure_score": 1, "qualification_note": "USA already qualified; rotation and deep handicap risk rise.", "motivation_tags": ["already_qualified", "rotation_risk", "tempo_control"]},
+        "Australia": {"rank": 2, "points": 3, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 3, "qualification_note": "Australia cannot casually lose; draw may be more useful than for Paraguay.", "motivation_tags": ["must_avoid_loss", "draw_has_value"]},
+        "Paraguay": {"rank": 3, "points": 3, "goal_difference": -1, "goals_for": 2, "goals_against": 3, "matches_played": 2, "pressure_score": 4, "qualification_note": "Paraguay likely needs to push for a win in direct second-place battle.", "motivation_tags": ["must_win", "direct_battle"]},
+        "Turkey": {"rank": 4, "points": 0, "goal_difference": -4, "goals_for": 1, "goals_against": 5, "matches_played": 2, "pressure_score": 5, "qualification_note": "Turkey needs a large result and help; chaos tail rises.", "motivation_tags": ["must_win_big", "depends_on_others"]},
+        "Turkiye": {"rank": 4, "points": 0, "goal_difference": -4, "goals_for": 1, "goals_against": 5, "matches_played": 2, "pressure_score": 5, "qualification_note": "Türkiye needs a large result and help; chaos tail rises.", "motivation_tags": ["must_win_big", "depends_on_others"]}
+      }
+    },
+    "E": {
+      "teams": {
+        "Germany": {"rank": 1, "points": 6, "goal_difference": 7, "goals_for": 9, "goals_against": 2, "matches_played": 2, "pressure_score": 1, "pressure_label": "already_qualified_rotation_risk", "qualification_note": "Germany already qualified; deep handicap risk rises due to possible rotation and tempo control.", "motivation_tags": ["already_qualified", "rotation_risk", "tempo_control", "deep_handicap_risk"]},
+        "Ivory Coast": {"rank": 2, "points": 3, "goal_difference": 1, "goals_for": 3, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Ivory Coast has clear qualification motivation.", "motivation_tags": ["must_win", "qualification_motivation"]},
+        "Cote d'Ivoire": {"rank": 2, "points": 3, "goal_difference": 1, "goals_for": 3, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Ivory Coast has clear qualification motivation.", "motivation_tags": ["must_win", "qualification_motivation"]},
+        "Ecuador": {"rank": 3, "points": 1, "goal_difference": -3, "goals_for": 1, "goals_against": 4, "matches_played": 2, "pressure_score": 4, "qualification_note": "Ecuador must win and should lift underdog scoring tail.", "motivation_tags": ["must_win", "underdog_goal_tail"]},
+        "Curacao": {"rank": 4, "points": 1, "goal_difference": -5, "goals_for": 1, "goals_against": 6, "matches_played": 2, "pressure_score": 5, "qualification_note": "Curacao likely needs a major result and help.", "motivation_tags": ["must_win_big", "depends_on_others"]}
+      }
+    },
+    "F": {
+      "teams": {
+        "Netherlands": {"rank": 1, "points": 4, "goal_difference": 3, "goals_for": 4, "goals_against": 1, "matches_played": 2, "pressure_score": 2, "qualification_note": "Netherlands direction is okay but rotation and low tempo should be watched.", "motivation_tags": ["draw_acceptable", "tempo_control"]},
+        "Japan": {"rank": 2, "points": 4, "goal_difference": 1, "goals_for": 3, "goals_against": 2, "matches_played": 2, "pressure_score": 2, "qualification_note": "Japan draw is likely enough; not necessarily a must-blowout spot.", "motivation_tags": ["draw_acceptable"]},
+        "Sweden": {"rank": 3, "points": 3, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Sweden must push for a result.", "motivation_tags": ["must_win", "late_volatility"]},
+        "Tunisia": {"rank": 4, "points": 0, "goal_difference": -4, "goals_for": 0, "goals_against": 4, "matches_played": 2, "pressure_score": 5, "qualification_note": "Tunisia has theoretical pressure but faces a quality gap.", "motivation_tags": ["must_win_big", "low_quality"]}
+      }
+    },
+    "G": {
+      "teams": {
+        "Egypt": {"rank": 1, "points": 4, "goal_difference": 1, "goals_for": 2, "goals_against": 1, "matches_played": 2, "pressure_score": 2, "qualification_note": "Egypt may accept a draw.", "motivation_tags": ["draw_acceptable"]},
+        "Iran": {"rank": 2, "points": 2, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 3, "qualification_note": "Iran remains in an open group and must avoid loss.", "motivation_tags": ["must_avoid_loss"]},
+        "Belgium": {"rank": 3, "points": 2, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Belgium must win.", "motivation_tags": ["must_win", "favorite_pressure"]},
+        "New Zealand": {"rank": 4, "points": 1, "goal_difference": -1, "goals_for": 1, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "New Zealand still has a chance and needs a result.", "motivation_tags": ["must_win", "underdog_tail"]}
+      }
+    },
+    "H": {
+      "teams": {
+        "Spain": {"rank": 1, "points": 4, "goal_difference": 2, "goals_for": 3, "goals_against": 1, "matches_played": 2, "pressure_score": 2, "qualification_note": "Spain draw likely enough; not necessarily a blowout need.", "motivation_tags": ["draw_acceptable", "avoid_deep_handicap_overconfidence"]},
+        "Uruguay": {"rank": 2, "points": 2, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Uruguay must push.", "motivation_tags": ["must_win", "late_volatility"]},
+        "Cape Verde": {"rank": 3, "points": 2, "goal_difference": 0, "goals_for": 1, "goals_against": 1, "matches_played": 2, "pressure_score": 4, "qualification_note": "Cape Verde survival game.", "motivation_tags": ["must_win", "survival_game"]},
+        "Saudi Arabia": {"rank": 4, "points": 1, "goal_difference": -2, "goals_for": 1, "goals_against": 3, "matches_played": 2, "pressure_score": 4, "qualification_note": "Saudi Arabia survival game.", "motivation_tags": ["must_win", "survival_game"]}
+      }
+    },
+    "I": {
+      "teams": {
+        "France": {"rank": 1, "points": 6, "goal_difference": 4, "goals_for": 5, "goals_against": 1, "matches_played": 2, "pressure_score": 1, "qualification_note": "France already qualified; strong-vs-strong can be conservative.", "motivation_tags": ["already_qualified", "tempo_control"]},
+        "Norway": {"rank": 2, "points": 6, "goal_difference": 3, "goals_for": 4, "goals_against": 1, "matches_played": 2, "pressure_score": 1, "qualification_note": "Norway already qualified; strong-vs-strong can be conservative.", "motivation_tags": ["already_qualified", "tempo_control"]},
+        "Senegal": {"rank": 3, "points": 0, "goal_difference": -3, "goals_for": 1, "goals_against": 4, "matches_played": 2, "pressure_score": 0, "qualification_note": "Senegal low motivation except third-place theory.", "motivation_tags": ["low_motivation"]},
+        "Iraq": {"rank": 4, "points": 0, "goal_difference": -4, "goals_for": 0, "goals_against": 4, "matches_played": 2, "pressure_score": 0, "qualification_note": "Iraq low motivation except third-place theory.", "motivation_tags": ["low_motivation"]}
+      }
+    },
+    "J": {
+      "teams": {
+        "Argentina": {"rank": 1, "points": 6, "goal_difference": 5, "goals_for": 6, "goals_against": 1, "matches_played": 2, "pressure_score": 1, "qualification_note": "Argentina already qualified; rotation and deep handicap risk rise.", "motivation_tags": ["already_qualified", "rotation_risk"]},
+        "Austria": {"rank": 2, "points": 3, "goal_difference": 1, "goals_for": 3, "goals_against": 2, "matches_played": 2, "pressure_score": 3, "qualification_note": "Austria may benefit from draw due to goal difference.", "motivation_tags": ["must_avoid_loss", "draw_has_value"]},
+        "Algeria": {"rank": 3, "points": 3, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Algeria likely must push in direct battle.", "motivation_tags": ["must_win", "direct_battle"]},
+        "Jordan": {"rank": 4, "points": 0, "goal_difference": -6, "goals_for": 0, "goals_against": 6, "matches_played": 2, "pressure_score": 5, "qualification_note": "Jordan needs a major upset and help.", "motivation_tags": ["must_win_big", "low_quality"]}
+      }
+    },
+    "K": {
+      "teams": {
+        "Colombia": {"rank": 1, "points": 6, "goal_difference": 3, "goals_for": 4, "goals_against": 1, "matches_played": 2, "pressure_score": 1, "qualification_note": "Colombia already qualified.", "motivation_tags": ["already_qualified", "rotation_risk"]},
+        "Portugal": {"rank": 2, "points": 4, "goal_difference": 2, "goals_for": 3, "goals_against": 1, "matches_played": 2, "pressure_score": 2, "qualification_note": "Portugal draw likely enough.", "motivation_tags": ["draw_acceptable"]},
+        "DR Congo": {"rank": 3, "points": 1, "goal_difference": -2, "goals_for": 1, "goals_against": 3, "matches_played": 2, "pressure_score": 4, "qualification_note": "DR Congo must win to chase third-place hope.", "motivation_tags": ["must_win"]},
+        "Congo DR": {"rank": 3, "points": 1, "goal_difference": -2, "goals_for": 1, "goals_against": 3, "matches_played": 2, "pressure_score": 4, "qualification_note": "DR Congo must win to chase third-place hope.", "motivation_tags": ["must_win"]},
+        "Uzbekistan": {"rank": 4, "points": 0, "goal_difference": -3, "goals_for": 0, "goals_against": 3, "matches_played": 2, "pressure_score": 5, "qualification_note": "Uzbekistan needs a win and help.", "motivation_tags": ["must_win_big"]}
+      }
+    },
+    "L": {
+      "teams": {
+        "England": {"rank": 1, "points": 4, "goal_difference": 2, "goals_for": 3, "goals_against": 1, "matches_played": 2, "pressure_score": 2, "qualification_note": "England draw likely enough; deep blowout should not be automatic.", "motivation_tags": ["draw_acceptable", "avoid_deep_handicap_overconfidence"]},
+        "Ghana": {"rank": 2, "points": 4, "goal_difference": 1, "goals_for": 3, "goals_against": 2, "matches_played": 2, "pressure_score": 2, "qualification_note": "Ghana may accept draw.", "motivation_tags": ["draw_acceptable"]},
+        "Croatia": {"rank": 3, "points": 3, "goal_difference": 0, "goals_for": 2, "goals_against": 2, "matches_played": 2, "pressure_score": 4, "qualification_note": "Croatia must win.", "motivation_tags": ["must_win", "direct_battle"]},
+        "Panama": {"rank": 4, "points": 0, "goal_difference": -3, "goals_for": 1, "goals_against": 4, "matches_played": 2, "pressure_score": 5, "qualification_note": "Panama needs a major upset and help.", "motivation_tags": ["must_win_big", "low_quality"]}
+      }
+    }
+  },
+  "matches": [
+    {"home": "Czechia", "away": "Mexico", "home_pressure_score": 5, "away_pressure_score": 1, "match_pressure_type": "qualified_favorite_vs_must_win_underdog"},
+    {"home": "South Africa", "away": "Korea", "home_pressure_score": 4, "away_pressure_score": 3, "match_pressure_type": "direct_second_place_battle"},
+    {"home": "Switzerland", "away": "Canada", "home_pressure_score": 2, "away_pressure_score": 2, "match_pressure_type": "both_draw_acceptable"},
+    {"home": "Bosnia and Herzegovina", "away": "Qatar", "home_pressure_score": 4, "away_pressure_score": 4, "match_pressure_type": "must_win_vs_must_win"},
+    {"home": "Scotland", "away": "Brazil", "home_pressure_score": 4, "away_pressure_score": 2, "match_pressure_type": "direct_second_place_battle"},
+    {"home": "Morocco", "away": "Haiti", "home_pressure_score": 4, "away_pressure_score": 5, "match_pressure_type": "favorite_must_win"},
+    {"home": "Turkey", "away": "USA", "home_pressure_score": 5, "away_pressure_score": 1, "match_pressure_type": "qualified_favorite_vs_must_win_underdog"},
+    {"home": "Turkiye", "away": "USA", "home_pressure_score": 5, "away_pressure_score": 1, "match_pressure_type": "qualified_favorite_vs_must_win_underdog"},
+    {"home": "Paraguay", "away": "Australia", "home_pressure_score": 4, "away_pressure_score": 3, "match_pressure_type": "direct_second_place_battle"},
+    {"home": "Ecuador", "away": "Germany", "home_pressure_score": 4, "away_pressure_score": 1, "match_pressure_type": "qualified_favorite_vs_must_win_underdog"},
+    {"home": "Curacao", "away": "Ivory Coast", "home_pressure_score": 5, "away_pressure_score": 4, "match_pressure_type": "must_win_vs_must_win"},
+    {"home": "Japan", "away": "Sweden", "home_pressure_score": 2, "away_pressure_score": 4, "match_pressure_type": "direct_second_place_battle"},
+    {"home": "Tunisia", "away": "Netherlands", "home_pressure_score": 5, "away_pressure_score": 2, "match_pressure_type": "favorite_must_win"},
+    {"home": "Egypt", "away": "Iran", "home_pressure_score": 2, "away_pressure_score": 3, "match_pressure_type": "direct_second_place_battle"},
+    {"home": "New Zealand", "away": "Belgium", "home_pressure_score": 4, "away_pressure_score": 4, "match_pressure_type": "must_win_vs_must_win"},
+    {"home": "Cape Verde", "away": "Saudi Arabia", "home_pressure_score": 4, "away_pressure_score": 4, "match_pressure_type": "must_win_vs_must_win"},
+    {"home": "Uruguay", "away": "Spain", "home_pressure_score": 4, "away_pressure_score": 2, "match_pressure_type": "direct_second_place_battle"},
+    {"home": "Norway", "away": "France", "home_pressure_score": 1, "away_pressure_score": 1, "match_pressure_type": "qualified_vs_qualified"},
+    {"home": "Senegal", "away": "Iraq", "home_pressure_score": 0, "away_pressure_score": 0, "match_pressure_type": "dead_rubber_or_low_motivation"},
+    {"home": "Algeria", "away": "Austria", "home_pressure_score": 4, "away_pressure_score": 3, "match_pressure_type": "direct_second_place_battle"},
+    {"home": "Jordan", "away": "Argentina", "home_pressure_score": 5, "away_pressure_score": 1, "match_pressure_type": "qualified_favorite_vs_must_win_underdog"},
+    {"home": "Colombia", "away": "Portugal", "home_pressure_score": 1, "away_pressure_score": 2, "match_pressure_type": "qualified_vs_qualified"},
+    {"home": "DR Congo", "away": "Uzbekistan", "home_pressure_score": 4, "away_pressure_score": 5, "match_pressure_type": "must_win_vs_must_win"},
+    {"home": "Panama", "away": "England", "home_pressure_score": 5, "away_pressure_score": 2, "match_pressure_type": "favorite_must_win"},
+    {"home": "Croatia", "away": "Ghana", "home_pressure_score": 4, "away_pressure_score": 2, "match_pressure_type": "direct_second_place_battle"}
+  ]
+}

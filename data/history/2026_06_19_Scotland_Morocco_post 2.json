@@ -1,0 +1,162 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "post_match_snapshot",
+  "created_at": "2026-06-21T10:08:30.691351+00:00",
+  "updated_at": "2026-06-21T10:08:30.691351+00:00",
+  "match": {
+    "home_cn": "Scotland",
+    "away_cn": "Morocco",
+    "home_en": "Scotland",
+    "away_en": "Morocco",
+    "display_name": "Scotland vs Morocco"
+  },
+  "fixture": {
+    "api_football": {
+      "fixture_id": 1489390,
+      "kickoff_utc": "2026-06-19T22:00:00+00:00",
+      "league_id": 1,
+      "league": "World Cup",
+      "season": 2026,
+      "round": "Group Stage - 2",
+      "venue": "Gillette Stadium",
+      "city": "Boston",
+      "status": "NS",
+      "raw": {
+        "fixture": {
+          "id": 1489390,
+          "referee": null,
+          "timezone": "UTC",
+          "date": "2026-06-19T22:00:00+00:00",
+          "timestamp": 1781906400,
+          "periods": {
+            "first": null,
+            "second": null
+          },
+          "venue": {
+            "id": 1618,
+            "name": "Gillette Stadium",
+            "city": "Boston"
+          },
+          "status": {
+            "long": "Not Started",
+            "short": "NS",
+            "elapsed": null,
+            "extra": null
+          }
+        },
+        "league": {
+          "id": 1,
+          "name": "World Cup",
+          "country": "World",
+          "logo": "https://media.api-sports.io/football/leagues/1.png",
+          "flag": null,
+          "season": 2026,
+          "round": "Group Stage - 2",
+          "standings": true
+        },
+        "teams": {
+          "home": {
+            "id": 1108,
+            "name": "Scotland",
+            "logo": "https://media.api-sports.io/football/teams/1108.png",
+            "winner": null
+          },
+          "away": {
+            "id": 31,
+            "name": "Morocco",
+            "logo": "https://media.api-sports.io/football/teams/31.png",
+            "winner": null
+          }
+        },
+        "goals": {
+          "home": null,
+          "away": null
+        },
+        "score": {
+          "halftime": {
+            "home": null,
+            "away": null
+          },
+          "fulltime": {
+            "home": null,
+            "away": null
+          },
+          "extratime": {
+            "home": null,
+            "away": null
+          },
+          "penalty": {
+            "home": null,
+            "away": null
+          }
+        }
+      }
+    },
+    "api_football_message": "API-Football head-to-head 已返回 fixture。",
+    "api_football_error": null,
+    "status": "FT",
+    "status_text": "已结束",
+    "score": {
+      "home": 0,
+      "away": 1
+    }
+  },
+  "model_versions": {},
+  "final_score": "0:1",
+  "final_result": {
+    "home": 0,
+    "away": 1
+  },
+  "pre_match_snapshot": "data/history/2026_06_19_Scotland_Morocco_pre.json",
+  "result_source": {
+    "type": "manual_result_update",
+    "note": "Morocco defeated Scotland 1-0; verified via external Group C scenario report."
+  },
+  "probability_distribution": {
+    "available": true,
+    "favorite": "摩洛哥",
+    "underdog": "苏格兰",
+    "rows": [
+      {
+        "label": "摩洛哥小胜（1球）",
+        "probability": 0.29172680663148837,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+      },
+      {
+        "label": "平局区间",
+        "probability": 0.279929643351671,
+        "meaning": "比赛进入低分差或胶着路径。"
+      },
+      {
+        "label": "摩洛哥赢2球",
+        "probability": 0.21103641330788522,
+        "meaning": "盘口边界路径，决定让球盘输赢。"
+      },
+      {
+        "label": "摩洛哥赢3球以上",
+        "probability": 0.11793211331911231,
+        "meaning": "强队大胜路径，过去版本容易低估。"
+      },
+      {
+        "label": "苏格兰不败",
+        "probability": 0.09937502338984319,
+        "meaning": "爆冷或热门方向失效路径。"
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "摩洛哥 -1.5",
+      "lose_paths": [
+        "摩洛哥只赢1球",
+        "平局",
+        "苏格兰胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "摩洛哥小胜（1球）",
+    "boundary_path": "摩洛哥赢2球",
+    "extreme_path": "摩洛哥赢3球以上",
+    "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+  },
+  "strategies": [],
+  "my_portfolio": {}
+}

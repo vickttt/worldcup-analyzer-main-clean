@@ -1,0 +1,17 @@
+{
+  "source_id": "60",
+  "match": {
+    "home_cn": "Tunisia",
+    "away_cn": "Netherlands",
+    "home_en": "Tunisia",
+    "away_en": "Netherlands",
+    "display_name": "Tunisia vs Netherlands"
+  },
+  "created_at": "2026-06-25T20:12:13.119680+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [],
+  "error": null
+}

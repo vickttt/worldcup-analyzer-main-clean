@@ -1,3 +1,4 @@
+from modules.game_behavior_engine import apply_behavior_to_distribution, game_behavior_engine
 from modules.pregame_content import team_cn
 
 
@@ -88,7 +89,7 @@ def handicap_signal(odds):
     return abs(float(line))
 
 
-def build_result_distribution(match, odds, polymarket):
+def build_result_distribution(match, odds, polymarket, match_context=None):
     probs = blended_probabilities(odds, polymarket)
     home_prob = probs["home_win"]
     draw_prob = probs["draw"]
@@ -153,6 +154,8 @@ def build_result_distribution(match, odds, polymarket):
         },
     ]
     rows = normalize(rows)
+    game_behavior = game_behavior_engine(match_context)
+    rows = apply_behavior_to_distribution(rows, game_behavior)
     rows.sort(key=lambda row: row["probability"], reverse=True)
     main_path = rows[0]["label"]
     boundary_path = f"{favorite}赢2球"
@@ -167,6 +170,7 @@ def build_result_distribution(match, odds, polymarket):
         "main_path": main_path,
         "boundary_path": boundary_path,
         "extreme_path": extreme_path,
+        "game_behavior": game_behavior,
         "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。",
     }
 

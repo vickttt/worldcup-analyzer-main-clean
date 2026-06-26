@@ -139,7 +139,7 @@ def parse_worldcup_scorers(value):
 
 
 def worldcup_request(path):
-    response = requests.get(f"{WORLDCUP2026_BASE}{path}", timeout=20)
+    response = requests.get(f"{WORLDCUP2026_BASE}{path}", timeout=6)
     response.raise_for_status()
     return response.json()
 
@@ -440,7 +440,7 @@ def fetch_espn_scoreboard():
     fixtures = []
     latest_update = None
     for date_value in dates:
-        response = requests.get(ESPN_SCOREBOARD_URL, params={"dates": date_value}, timeout=20)
+        response = requests.get(ESPN_SCOREBOARD_URL, params={"dates": date_value}, timeout=6)
         response.raise_for_status()
         payload = response.json()
         latest_update = payload.get("timestamp") or latest_update
@@ -456,7 +456,7 @@ def fetch_espn_scoreboard():
 
 def fetch_espn_standings():
     try:
-        response = requests.get(ESPN_STANDINGS_URL, timeout=20)
+        response = requests.get(ESPN_STANDINGS_URL, timeout=6)
         response.raise_for_status()
         payload = response.json()
     except requests.RequestException:

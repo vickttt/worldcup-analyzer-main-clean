@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-06-19T17:24:04.884518+08:00",
+  "created_at": "2026-06-25T20:16:20.824500+08:00",
   "source": "WorldCup2026 API",
-  "schedule_updated_at": "2026-06-19 16:57 CST",
+  "schedule_updated_at": "2026-06-25 20:14 CST",
   "matches": [
     {
       "fixture_id": "1",
@@ -82,19 +82,6 @@
       "checks": []
     },
     {
-      "fixture_id": "5",
-      "date": "2026-06-13",
-      "match": "Haiti vs Scotland",
-      "home": "Haiti",
-      "away": "Scotland",
-      "status": "FT",
-      "status_text": "已结束",
-      "database_dir": "data/worldcup2026/2026_06_13_Haiti_Scotland",
-      "snapshot_exists": false,
-      "data_completeness": 0,
-      "checks": []
-    },
-    {
       "fixture_id": "6",
       "date": "2026-06-13",
       "match": "Australia vs Turkey",
@@ -103,6 +90,19 @@
       "status": "FT",
       "status_text": "已结束",
       "database_dir": "data/worldcup2026/2026_06_13_Australia_Turkiye",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "5",
+      "date": "2026-06-13",
+      "match": "Haiti vs Scotland",
+      "home": "Haiti",
+      "away": "Scotland",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_13_Haiti_Scotland",
       "snapshot_exists": false,
       "data_completeness": 0,
       "checks": []
@@ -186,19 +186,6 @@
       "checks": []
     },
     {
-      "fixture_id": "13",
-      "date": "2026-06-15",
-      "match": "Iran vs New Zealand",
-      "home": "Iran",
-      "away": "New Zealand",
-      "status": "FT",
-      "status_text": "已结束",
-      "database_dir": "data/worldcup2026/2026_06_15_Iran_New_Zealand",
-      "snapshot_exists": false,
-      "data_completeness": 0,
-      "checks": []
-    },
-    {
       "fixture_id": "16",
       "date": "2026-06-15",
       "match": "Saudi Arabia vs Uruguay",
@@ -207,6 +194,19 @@
       "status": "FT",
       "status_text": "已结束",
       "database_dir": "data/worldcup2026/2026_06_15_Saudi_Arabia_Uruguay",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "13",
+      "date": "2026-06-15",
+      "match": "Iran vs New Zealand",
+      "home": "Iran",
+      "away": "New Zealand",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_15_Iran_New_Zealand",
       "snapshot_exists": false,
       "data_completeness": 0,
       "checks": []
@@ -521,8 +521,8 @@
       "match": "United States vs Australia",
       "home": "USA",
       "away": "Australia",
-      "status": "NS",
-      "status_text": "未开始",
+      "status": "FT",
+      "status_text": "已结束",
       "database_dir": "data/worldcup2026/2026_06_19_USA_Australia",
       "snapshot_exists": true,
       "data_completeness": 67,
@@ -571,8 +571,8 @@
       "match": "Scotland vs Morocco",
       "home": "Scotland",
       "away": "Morocco",
-      "status": "NS",
-      "status_text": "未开始",
+      "status": "FT",
+      "status_text": "已结束",
       "database_dir": "data/worldcup2026/2026_06_19_Scotland_Morocco",
       "snapshot_exists": true,
       "data_completeness": 67,
@@ -621,8 +621,8 @@
       "match": "Turkey vs Paraguay",
       "home": "Turkiye",
       "away": "Paraguay",
-      "status": "NS",
-      "status_text": "未开始",
+      "status": "FT",
+      "status_text": "已结束",
       "database_dir": "data/worldcup2026/2026_06_19_Turkiye_Paraguay",
       "snapshot_exists": true,
       "data_completeness": 56,
@@ -671,9 +671,1002 @@
       "match": "Brazil vs Haiti",
       "home": "Brazil",
       "away": "Haiti",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_19_Brazil_Haiti",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "35",
+      "date": "2026-06-20",
+      "match": "Netherlands vs Sweden",
+      "home": "Netherlands",
+      "away": "Sweden",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_20_Netherlands_Sweden",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "33",
+      "date": "2026-06-20",
+      "match": "Germany vs Ivory Coast",
+      "home": "Germany",
+      "away": "Ivory Coast",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_20_Germany_Ivory_Coast",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "34",
+      "date": "2026-06-20",
+      "match": "Ecuador vs Curaçao",
+      "home": "Ecuador",
+      "away": "Curacao",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_20_Ecuador_Curacao",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "36",
+      "date": "2026-06-20",
+      "match": "Tunisia vs Japan",
+      "home": "Tunisia",
+      "away": "Japan",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_20_Tunisia_Japan",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "39",
+      "date": "2026-06-21",
+      "match": "Spain vs Saudi Arabia",
+      "home": "Spain",
+      "away": "Saudi Arabia",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_21_Spain_Saudi_Arabia",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "37",
+      "date": "2026-06-21",
+      "match": "Belgium vs Iran",
+      "home": "Belgium",
+      "away": "Iran",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_21_Belgium_Iran",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "38",
+      "date": "2026-06-21",
+      "match": "New Zealand vs Egypt",
+      "home": "New Zealand",
+      "away": "Egypt",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_21_New_Zealand_Egypt",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "40",
+      "date": "2026-06-21",
+      "match": "Uruguay vs Cape Verde",
+      "home": "Uruguay",
+      "away": "Cape Verde",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_21_Uruguay_Cape_Verde",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "43",
+      "date": "2026-06-22",
+      "match": "Argentina vs Austria",
+      "home": "Argentina",
+      "away": "Austria",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_22_Argentina_Austria",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "41",
+      "date": "2026-06-22",
+      "match": "France vs Iraq",
+      "home": "France",
+      "away": "Iraq",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_22_France_Iraq",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "42",
+      "date": "2026-06-22",
+      "match": "Norway vs Senegal",
+      "home": "Norway",
+      "away": "Senegal",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_22_Norway_Senegal",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "44",
+      "date": "2026-06-22",
+      "match": "Jordan vs Algeria",
+      "home": "Jordan",
+      "away": "Algeria",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_22_Jordan_Algeria",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "45",
+      "date": "2026-06-23",
+      "match": "Portugal vs Uzbekistan",
+      "home": "Portugal",
+      "away": "Uzbekistan",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_23_Portugal_Uzbekistan",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "48",
+      "date": "2026-06-23",
+      "match": "England vs Ghana",
+      "home": "England",
+      "away": "Ghana",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_23_England_Ghana",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "46",
+      "date": "2026-06-23",
+      "match": "Panama vs Croatia",
+      "home": "Panama",
+      "away": "Croatia",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_23_Panama_Croatia",
+      "snapshot_exists": false,
+      "data_completeness": 0,
+      "checks": []
+    },
+    {
+      "fixture_id": "47",
+      "date": "2026-06-23",
+      "match": "Colombia vs Democratic Republic of the Congo",
+      "home": "Colombia",
+      "away": "DR Congo",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_23_Colombia_DR_Congo",
+      "snapshot_exists": false,
+      "data_completeness": 78,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": true
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "53",
+      "date": "2026-06-24",
+      "match": "Bosnia and Herzegovina vs Qatar",
+      "home": "Bosnia and Herzegovina",
+      "away": "Qatar",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_24_Bosnia_and_Herzegovina_Qatar",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "54",
+      "date": "2026-06-24",
+      "match": "Switzerland vs Canada",
+      "home": "Switzerland",
+      "away": "Canada",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_24_Switzerland_Canada",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "50",
+      "date": "2026-06-24",
+      "match": "Morocco vs Haiti",
+      "home": "Morocco",
+      "away": "Haiti",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_24_Morocco_Haiti",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "49",
+      "date": "2026-06-24",
+      "match": "Scotland vs Brazil",
+      "home": "Scotland",
+      "away": "Brazil",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_24_Scotland_Brazil",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "52",
+      "date": "2026-06-24",
+      "match": "Czech Republic vs Mexico",
+      "home": "Czechia",
+      "away": "Mexico",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_24_Czechia_Mexico",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "51",
+      "date": "2026-06-24",
+      "match": "South Africa vs South Korea",
+      "home": "South Africa",
+      "away": "South Korea",
+      "status": "FT",
+      "status_text": "已结束",
+      "database_dir": "data/worldcup2026/2026_06_24_South_Africa_South_Korea",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "55",
+      "date": "2026-06-25",
+      "match": "Curaçao vs Ivory Coast",
+      "home": "Curacao",
+      "away": "Ivory Coast",
       "status": "NS",
       "status_text": "未开始",
-      "database_dir": "data/worldcup2026/2026_06_19_Brazil_Haiti",
+      "database_dir": "data/worldcup2026/2026_06_25_Curacao_Ivory_Coast",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "56",
+      "date": "2026-06-25",
+      "match": "Ecuador vs Germany",
+      "home": "Ecuador",
+      "away": "Germany",
+      "status": "NS",
+      "status_text": "未开始",
+      "database_dir": "data/worldcup2026/2026_06_25_Ecuador_Germany",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "59",
+      "date": "2026-06-25",
+      "match": "Japan vs Sweden",
+      "home": "Japan",
+      "away": "Sweden",
+      "status": "NS",
+      "status_text": "未开始",
+      "database_dir": "data/worldcup2026/2026_06_25_Japan_Sweden",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "60",
+      "date": "2026-06-25",
+      "match": "Tunisia vs Netherlands",
+      "home": "Tunisia",
+      "away": "Netherlands",
+      "status": "NS",
+      "status_text": "未开始",
+      "database_dir": "data/worldcup2026/2026_06_25_Tunisia_Netherlands",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "58",
+      "date": "2026-06-25",
+      "match": "Turkey vs United States",
+      "home": "Turkiye",
+      "away": "USA",
+      "status": "NS",
+      "status_text": "未开始",
+      "database_dir": "data/worldcup2026/2026_06_25_Turkiye_USA",
+      "snapshot_exists": true,
+      "data_completeness": 67,
+      "checks": [
+        {
+          "item": "Fixture",
+          "ok": true
+        },
+        {
+          "item": "Winner Odds",
+          "ok": true
+        },
+        {
+          "item": "Asian Handicap",
+          "ok": true
+        },
+        {
+          "item": "Totals",
+          "ok": true
+        },
+        {
+          "item": "Correct Score",
+          "ok": true
+        },
+        {
+          "item": "Lineups",
+          "ok": false
+        },
+        {
+          "item": "Injuries",
+          "ok": true
+        },
+        {
+          "item": "Players",
+          "ok": false
+        },
+        {
+          "item": "Match Stats",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "fixture_id": "57",
+      "date": "2026-06-25",
+      "match": "Paraguay vs Australia",
+      "home": "Paraguay",
+      "away": "Australia",
+      "status": "NS",
+      "status_text": "未开始",
+      "database_dir": "data/worldcup2026/2026_06_25_Paraguay_Australia",
       "snapshot_exists": true,
       "data_completeness": 67,
       "checks": [

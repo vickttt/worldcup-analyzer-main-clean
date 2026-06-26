@@ -1,0 +1,17 @@
+{
+  "source_id": "58",
+  "match": {
+    "home_cn": "Turkey",
+    "away_cn": "United States",
+    "home_en": "Turkiye",
+    "away_en": "USA",
+    "display_name": "Turkey vs United States"
+  },
+  "created_at": "2026-06-25T20:12:44.691451+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "standings": null,
+  "home_recent": [],
+  "away_recent": []
+}

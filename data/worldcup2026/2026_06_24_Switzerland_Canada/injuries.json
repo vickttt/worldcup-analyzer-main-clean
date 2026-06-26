@@ -1,0 +1,74 @@
+{
+  "source_id": "1489408",
+  "match": {
+    "home_cn": "Switzerland",
+    "away_cn": "Canada",
+    "home_en": "Switzerland",
+    "away_en": "Canada",
+    "display_name": "Switzerland vs Canada"
+  },
+  "created_at": "2026-06-24T16:49:58.886700+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "player": {
+        "id": 328046,
+        "name": "I. Koné",
+        "photo": "https://media.api-sports.io/football/players/328046.png",
+        "type": "Missing Fixture",
+        "reason": "Fracture of lower leg"
+      },
+      "team": {
+        "id": 5529,
+        "name": "Canada",
+        "logo": "https://media.api-sports.io/football/teams/5529.png"
+      },
+      "fixture": {
+        "id": 1489408,
+        "timezone": "UTC",
+        "date": "2026-06-24T19:00:00+00:00",
+        "timestamp": 1782327600
+      },
+      "league": {
+        "id": 1,
+        "season": 2026,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null
+      }
+    },
+    {
+      "player": {
+        "id": 18938,
+        "name": "A. Jones",
+        "photo": "https://media.api-sports.io/football/players/18938.png",
+        "type": "Missing Fixture",
+        "reason": null
+      },
+      "team": {
+        "id": 5529,
+        "name": "Canada",
+        "logo": "https://media.api-sports.io/football/teams/5529.png"
+      },
+      "fixture": {
+        "id": 1489408,
+        "timezone": "UTC",
+        "date": "2026-06-24T19:00:00+00:00",
+        "timestamp": 1782327600
+      },
+      "league": {
+        "id": 1,
+        "season": 2026,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null
+      }
+    }
+  ],
+  "error": null
+}

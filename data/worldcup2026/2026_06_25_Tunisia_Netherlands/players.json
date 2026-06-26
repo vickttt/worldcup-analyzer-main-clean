@@ -1,0 +1,473 @@
+{
+  "source_id": "60",
+  "match": {
+    "home_cn": "Tunisia",
+    "away_cn": "Netherlands",
+    "home_en": "Tunisia",
+    "away_en": "Netherlands",
+    "display_name": "Tunisia vs Netherlands"
+  },
+  "created_at": "2026-06-25T20:12:13.119680+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "fixture_players": {
+    "ok": true,
+    "response": [],
+    "error": null
+  },
+  "home_team_assets": {
+    "squad": {
+      "ok": true,
+      "response": [
+        {
+          "team": {
+            "id": 28,
+            "name": "Tunisia",
+            "logo": "https://media.api-sports.io/football/teams/28.png"
+          },
+          "players": [
+            {
+              "id": 49423,
+              "name": "S. Ben Hsan",
+              "age": 29,
+              "number": 22,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/49423.png"
+            },
+            {
+              "id": 533394,
+              "name": "C. Abdelmouhib",
+              "age": 24,
+              "number": 1,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/533394.png"
+            },
+            {
+              "id": 49424,
+              "name": "A. Dahmen",
+              "age": 28,
+              "number": 16,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/49424.png"
+            },
+            {
+              "id": 49583,
+              "name": "A. Abdi",
+              "age": 32,
+              "number": 2,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/49583.png"
+            },
+            {
+              "id": 393977,
+              "name": "A. Arous",
+              "age": 21,
+              "number": 5,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/393977.png"
+            },
+            {
+              "id": 135059,
+              "name": "A. Ben Hmida",
+              "age": 30,
+              "number": 21,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/135059.png"
+            },
+            {
+              "id": 2945,
+              "name": "D. Bronn",
+              "age": 30,
+              "number": 6,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/2945.png"
+            },
+            {
+              "id": 533360,
+              "name": "R. Chikhaoui",
+              "age": 21,
+              "number": 24,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/533360.png"
+            },
+            {
+              "id": 375608,
+              "name": "M. Neffati",
+              "age": 21,
+              "number": 23,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/375608.png"
+            },
+            {
+              "id": 163068,
+              "name": "O. Rekik",
+              "age": 24,
+              "number": 4,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/163068.png"
+            },
+            {
+              "id": 50030,
+              "name": "M. Talbi",
+              "age": 27,
+              "number": 3,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/50030.png"
+            },
+            {
+              "id": 18942,
+              "name": "Y. Valery",
+              "age": 26,
+              "number": 20,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/18942.png"
+            },
+            {
+              "id": 49469,
+              "name": "M. Ben Ouanes",
+              "age": 31,
+              "number": 12,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/49469.png"
+            },
+            {
+              "id": 533295,
+              "name": "K. Ayari",
+              "age": 20,
+              "number": 14,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/533295.png"
+            },
+            {
+              "id": 310196,
+              "name": "Ismaël Gharbi",
+              "age": 21,
+              "number": 11,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/310196.png"
+            },
+            {
+              "id": 25300,
+              "name": "R. Khedira",
+              "age": 31,
+              "number": 13,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/25300.png"
+            },
+            {
+              "id": 180560,
+              "name": "H. Mejbri",
+              "age": 22,
+              "number": 10,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/180560.png"
+            },
+            {
+              "id": 21587,
+              "name": "E. Skhiri",
+              "age": 30,
+              "number": 17,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/21587.png"
+            },
+            {
+              "id": 199310,
+              "name": "A. Ben Slimane",
+              "age": 24,
+              "number": 25,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/199310.png"
+            },
+            {
+              "id": 67195,
+              "name": "H. Mahmoud",
+              "age": 25,
+              "number": 15,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/67195.png"
+            },
+            {
+              "id": 57518,
+              "name": "S. Tounekti",
+              "age": 23,
+              "number": 26,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/57518.png"
+            },
+            {
+              "id": 42012,
+              "name": "E. Achouri",
+              "age": 26,
+              "number": 7,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/42012.png"
+            },
+            {
+              "id": 2962,
+              "name": "F. Chaouat",
+              "age": 29,
+              "number": 19,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/2962.png"
+            },
+            {
+              "id": 566059,
+              "name": "R. Elloumi",
+              "age": 18,
+              "number": 18,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/566059.png"
+            },
+            {
+              "id": 344862,
+              "name": "H. Mastouri",
+              "age": 28,
+              "number": 9,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/344862.png"
+            },
+            {
+              "id": 323974,
+              "name": "E. Saad",
+              "age": 26,
+              "number": 8,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/323974.png"
+            }
+          ]
+        }
+      ],
+      "error": null
+    },
+    "team_id": 28,
+    "name": "Tunisia"
+  },
+  "away_team_assets": {
+    "squad": {
+      "ok": true,
+      "response": [
+        {
+          "team": {
+            "id": 1118,
+            "name": "Netherlands",
+            "logo": "https://media.api-sports.io/football/teams/1118.png"
+          },
+          "players": [
+            {
+              "id": 26232,
+              "name": "M. Flekken",
+              "age": 32,
+              "number": 23,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/26232.png"
+            },
+            {
+              "id": 194536,
+              "name": "R. Roefs",
+              "age": 22,
+              "number": 13,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/194536.png"
+            },
+            {
+              "id": 129058,
+              "name": "B. Verbruggen",
+              "age": 23,
+              "number": 1,
+              "position": "Goalkeeper",
+              "photo": "https://media.api-sports.io/football/players/129058.png"
+            },
+            {
+              "id": 18861,
+              "name": "N. Aké",
+              "age": 30,
+              "number": 5,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/18861.png"
+            },
+            {
+              "id": 226,
+              "name": "D. Dumfries",
+              "age": 29,
+              "number": 22,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/226.png"
+            },
+            {
+              "id": 341642,
+              "name": "J. Hato",
+              "age": 19,
+              "number": 25,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/341642.png"
+            },
+            {
+              "id": 37143,
+              "name": "L. Geertruida",
+              "age": 24,
+              "number": 2,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/37143.png"
+            },
+            {
+              "id": 290,
+              "name": "V. van Dijk",
+              "age": 34,
+              "number": 4,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/290.png"
+            },
+            {
+              "id": 38695,
+              "name": "J. van Hecke",
+              "age": 25,
+              "number": 6,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/38695.png"
+            },
+            {
+              "id": 152849,
+              "name": "M. van de Ven",
+              "age": 24,
+              "number": 15,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/152849.png"
+            },
+            {
+              "id": 92993,
+              "name": "M. Wieffer",
+              "age": 26,
+              "number": 12,
+              "position": "Defender",
+              "photo": "https://media.api-sports.io/football/players/92993.png"
+            },
+            {
+              "id": 542,
+              "name": "R. Gravenberch",
+              "age": 23,
+              "number": 8,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/542.png"
+            },
+            {
+              "id": 36899,
+              "name": "T. Koopmeiners",
+              "age": 27,
+              "number": 20,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/36899.png"
+            },
+            {
+              "id": 36902,
+              "name": "T. Reijnders",
+              "age": 27,
+              "number": 14,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/36902.png"
+            },
+            {
+              "id": 36905,
+              "name": "G. Til",
+              "age": 28,
+              "number": 16,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/36905.png"
+            },
+            {
+              "id": 38747,
+              "name": "Q. Timber",
+              "age": 24,
+              "number": 26,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/38747.png"
+            },
+            {
+              "id": 538,
+              "name": "F. de Jong",
+              "age": 28,
+              "number": 21,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/538.png"
+            },
+            {
+              "id": 30432,
+              "name": "M. de Roon",
+              "age": 34,
+              "number": 3,
+              "position": "Midfielder",
+              "photo": "https://media.api-sports.io/football/players/30432.png"
+            },
+            {
+              "id": 792,
+              "name": "J. Kluivert",
+              "age": 26,
+              "number": 7,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/792.png"
+            },
+            {
+              "id": 38750,
+              "name": "B. Brobbey",
+              "age": 23,
+              "number": 19,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/38750.png"
+            },
+            {
+              "id": 667,
+              "name": "M. Depay",
+              "age": 31,
+              "number": 10,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/667.png"
+            },
+            {
+              "id": 247,
+              "name": "C. Gakpo",
+              "age": 26,
+              "number": 11,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/247.png"
+            },
+            {
+              "id": 544,
+              "name": "N. Lang",
+              "age": 26,
+              "number": 17,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/544.png"
+            },
+            {
+              "id": 249,
+              "name": "D. Malen",
+              "age": 26,
+              "number": 18,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/249.png"
+            },
+            {
+              "id": 37724,
+              "name": "C. Summerville",
+              "age": 24,
+              "number": 24,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/37724.png"
+            },
+            {
+              "id": 25416,
+              "name": "W. Weghorst",
+              "age": 33,
+              "number": 9,
+              "position": "Attacker",
+              "photo": "https://media.api-sports.io/football/players/25416.png"
+            }
+          ]
+        }
+      ],
+      "error": null
+    },
+    "team_id": 1118,
+    "name": "Netherlands"
+  }
+}

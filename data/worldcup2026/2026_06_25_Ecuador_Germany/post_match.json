@@ -1,0 +1,16 @@
+{
+  "source_id": "56",
+  "match": {
+    "home_cn": "Ecuador",
+    "away_cn": "Germany",
+    "home_en": "Ecuador",
+    "away_en": "Germany",
+    "display_name": "Ecuador vs Germany"
+  },
+  "created_at": "2026-06-25T20:11:33.800152+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "status": "pending_post_match",
+  "post_match": null
+}

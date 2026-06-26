@@ -510,7 +510,11 @@ def main():
 
     history_dir = ROOT / "data" / "history"
     history_dir.mkdir(parents=True, exist_ok=True)
-    output_path = history_dir / "2026_06_19_Scotland_Morocco_pre.json"
+    output_path = history_dir / (
+        f"{args.date.replace('-', '_')}_{match['home_en'].replace(' ', '_')}_{match['away_en'].replace(' ', '_')}_pre.json"
+        .replace("&", "and")
+        .replace("/", "_")
+    )
     with output_path.open("w", encoding="utf-8") as file:
         json.dump(snapshot, file, ensure_ascii=False, indent=2)
 

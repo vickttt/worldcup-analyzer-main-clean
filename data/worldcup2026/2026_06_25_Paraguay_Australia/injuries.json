@@ -1,0 +1,74 @@
+{
+  "source_id": "57",
+  "match": {
+    "home_cn": "Paraguay",
+    "away_cn": "Australia",
+    "home_en": "Paraguay",
+    "away_en": "Australia",
+    "display_name": "Paraguay vs Australia"
+  },
+  "created_at": "2026-06-25T20:15:51.947049+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "ok": true,
+  "response": [
+    {
+      "player": {
+        "id": 6808,
+        "name": "J. Italiano",
+        "photo": "https://media.api-sports.io/football/players/6808.png",
+        "type": "Missing Fixture",
+        "reason": null
+      },
+      "team": {
+        "id": 20,
+        "name": "Australia",
+        "logo": "https://media.api-sports.io/football/teams/20.png"
+      },
+      "fixture": {
+        "id": 1489411,
+        "timezone": "UTC",
+        "date": "2026-06-26T02:00:00+00:00",
+        "timestamp": 1782439200
+      },
+      "league": {
+        "id": 1,
+        "season": 2026,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null
+      }
+    },
+    {
+      "player": {
+        "id": 2507,
+        "name": "M. Almirón",
+        "photo": "https://media.api-sports.io/football/players/2507.png",
+        "type": "Missing Fixture",
+        "reason": "Red Card"
+      },
+      "team": {
+        "id": 2380,
+        "name": "Paraguay",
+        "logo": "https://media.api-sports.io/football/teams/2380.png"
+      },
+      "fixture": {
+        "id": 1489411,
+        "timezone": "UTC",
+        "date": "2026-06-26T02:00:00+00:00",
+        "timestamp": 1782439200
+      },
+      "league": {
+        "id": 1,
+        "season": 2026,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null
+      }
+    }
+  ],
+  "error": null
+}

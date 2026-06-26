@@ -1,0 +1,65 @@
+{
+  "source_id": "56",
+  "match": {
+    "home_cn": "Ecuador",
+    "away_cn": "Germany",
+    "home_en": "Ecuador",
+    "away_en": "Germany",
+    "display_name": "Ecuador vs Germany"
+  },
+  "created_at": "2026-06-25T20:11:33.800152+08:00",
+  "schedule_source": "WorldCup2026 API",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "standings": {
+    "group": "Group E",
+    "rows": [
+      {
+        "team": "Germany",
+        "played": 2,
+        "wins": 2,
+        "draws": 0,
+        "losses": 0,
+        "gf": 9,
+        "ga": 2,
+        "gd": 7,
+        "points": 6
+      },
+      {
+        "team": "Ivory Coast",
+        "played": 2,
+        "wins": 1,
+        "draws": 0,
+        "losses": 1,
+        "gf": 2,
+        "ga": 2,
+        "gd": 0,
+        "points": 3
+      },
+      {
+        "team": "Ecuador",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 0,
+        "ga": 1,
+        "gd": -1,
+        "points": 1
+      },
+      {
+        "team": "Curaçao",
+        "played": 2,
+        "wins": 0,
+        "draws": 1,
+        "losses": 1,
+        "gf": 1,
+        "ga": 7,
+        "gd": -6,
+        "points": 1
+      }
+    ]
+  },
+  "home_recent": [],
+  "away_recent": []
+}
