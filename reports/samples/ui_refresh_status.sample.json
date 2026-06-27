@@ -3,9 +3,20 @@
   "sample": true,
   "generated_at": null,
   "mode": "sample",
+  "api_provider_policy": "api_football_only",
   "api_called": false,
+  "real_api_refresh_performed": false,
   "network_calls_allowed": false,
   "api_quota_protected": true,
+  "api_football_key_present": false,
+  "api_football_key_status": "sample_unknown",
+  "api_football_key_source": "sample",
+  "refresh_gate_status": "sample_unknown",
+  "odds_api_enabled": false,
+  "odds_api_required": false,
+  "odds_api_status": "disabled_not_used_current_phase",
+  "polymarket_policy": "public_api_not_part_of_task_4",
+  "worldcup2026_schedule_policy": "public_cache_source",
   "refresh_available": "local-only",
   "data_source": "sample",
   "last_local_snapshot_mtime": null,
@@ -19,7 +30,9 @@
   "status": "unknown",
   "warnings": [
     "Sample refresh status only.",
-    "Runtime refresh status is written to .runtime/ui_refresh_status.json."
+    "Runtime refresh status is written to .runtime/ui_refresh_status.json.",
+    "API-Football key value is never displayed.",
+    "Odds API is disabled and not required for the current UI-CACHE-API phase."
   ],
   "checked_paths": [
     "sample only"

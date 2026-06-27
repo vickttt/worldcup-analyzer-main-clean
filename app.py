@@ -3,7 +3,9 @@ from datetime import datetime, timedelta
 from html import escape
 from itertools import combinations
 import json
+import os
 import re
+import tomllib
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -3784,6 +3786,7 @@ HISTORY_DIR = Path("data/history")
 MY_PORTFOLIO_DIR = HISTORY_DIR / "my_portfolios"
 UI_REFRESH_STATUS_RUNTIME_PATH = Path(".runtime/ui_refresh_status.json")
 UI_REFRESH_STATUS_SAMPLE_PATH = Path("reports/samples/ui_refresh_status.sample.json")
+API_FOOTBALL_KEY_NAME = "API_FOOTBALL_KEY"
 
 
 def history_slug(match, selected_fixture=None):
@@ -3939,9 +3942,92 @@ def local_file_modified_time(path):
         return None
 
 
+def key_value_present(value):
+    return bool(str(value or "").strip())
+
+
+def dotenv_key_present(key_name, path=Path(".env")):
+    if not path.exists():
+        return False
+    try:
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return False
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+        name, value = stripped.split("=", 1)
+        name = name.strip().removeprefix("export ").strip()
+        if name != key_name:
+            continue
+        return key_value_present(value.strip().strip("\"'"))
+    return False
+
+
+def streamlit_secret_key_present(key_name):
+    secrets_path = Path(".streamlit/secrets.toml")
+    if not secrets_path.exists():
+        return False
+    try:
+        with secrets_path.open("rb") as file:
+            secrets = tomllib.load(file)
+    except (OSError, tomllib.TOMLDecodeError):
+        return False
+    return key_value_present(secrets.get(key_name) or secrets.get(key_name.lower()))
+
+
+def api_football_key_readiness():
+    if key_value_present(os.getenv(API_FOOTBALL_KEY_NAME)):
+        source = "process_env"
+        present = True
+    elif streamlit_secret_key_present(API_FOOTBALL_KEY_NAME):
+        source = "streamlit_secrets"
+        present = True
+    elif dotenv_key_present(API_FOOTBALL_KEY_NAME):
+        source = "dotenv"
+        present = True
+    else:
+        source = "missing"
+        present = False
+    return {
+        "api_football_key_present": present,
+        "api_football_key_status": "present" if present else "missing",
+        "api_football_key_source": source,
+        "refresh_gate_status": (
+            "ready_for_controlled_api_football_refresh"
+            if present
+            else "blocked_missing_api_football_key"
+        ),
+    }
+
+
+def apply_api_football_readiness(refresh_status):
+    readiness = api_football_key_readiness()
+    warnings = list(refresh_status.get("warnings") or [])
+    if readiness["api_football_key_present"]:
+        warnings.append("API-Football key is present; value is not displayed.")
+    else:
+        warnings.append("API-Football controlled refresh is blocked because API_FOOTBALL_KEY is missing.")
+    warnings.append("Odds API is disabled and not required for the current UI-CACHE-API phase.")
+    return {
+        **refresh_status,
+        "api_provider_policy": "api_football_only",
+        "api_called": refresh_status.get("api_called", False),
+        "real_api_refresh_performed": refresh_status.get("real_api_refresh_performed", False),
+        "odds_api_enabled": False,
+        "odds_api_required": False,
+        "odds_api_status": "disabled_not_used_current_phase",
+        "polymarket_policy": "public_api_not_part_of_task_4",
+        "worldcup2026_schedule_policy": "public_cache_source",
+        **readiness,
+        "warnings": warnings,
+    }
+
+
 def refresh_status_fallback(path=UI_REFRESH_STATUS_RUNTIME_PATH):
     status_path = Path(path)
-    return {
+    return apply_api_football_readiness({
         "report_found": False,
         "is_sample": False,
         "status_file_path": repo_relative_path(status_path),
@@ -3951,7 +4037,7 @@ def refresh_status_fallback(path=UI_REFRESH_STATUS_RUNTIME_PATH):
         "data_source": "unknown",
         "status": "unknown",
         "warnings": ["Refresh status unknown — no local refresh status report found."],
-    }
+    })
 
 
 def load_refresh_status_file(path, *, is_sample=False):
@@ -3988,7 +4074,7 @@ def load_refresh_status_file(path, *, is_sample=False):
             "Sample refresh status only — no runtime refresh status report is available.",
             "Run the dry-run status writer to generate a local runtime status check.",
         ]
-    return {
+    return apply_api_football_readiness({
         **data,
         "report_found": report_found,
         "is_sample": is_sample,
@@ -3999,7 +4085,7 @@ def load_refresh_status_file(path, *, is_sample=False):
         "data_source": "sample" if is_sample else data.get("data_source") or "unknown",
         "status": "unknown" if is_sample else data.get("status") or "unknown",
         "warnings": warnings,
-    }
+    })
 
 
 def load_refresh_status_report():
@@ -4105,11 +4191,23 @@ def render_data_freshness_panel(freshness):
     refresh_warnings = refresh_status.get("warnings") or []
     api_called = refresh_status.get("api_called")
     api_called_label = "No" if api_called is False else ("Yes" if api_called is True else "Unknown")
+    real_refresh = refresh_status.get("real_api_refresh_performed")
+    real_refresh_label = "No" if real_refresh is False else ("Yes" if real_refresh is True else "Unknown")
+    api_football_key_label = "present" if refresh_status.get("api_football_key_present") else "missing"
+    refresh_gate_status = refresh_status.get("refresh_gate_status") or "unknown"
+    controlled_refresh_label = (
+        "ready"
+        if refresh_gate_status == "ready_for_controlled_api_football_refresh"
+        else "blocked"
+        if refresh_gate_status == "blocked_missing_api_football_key"
+        else "unknown"
+    )
     refresh_mode = refresh_status.get("mode") or "unknown"
     refresh_generated_at = refresh_status.get("generated_at") or "-"
     refresh_status_line = (
         f"Refresh mode: {refresh_mode} · API called: {api_called_label} · "
-        f"last check: {refresh_generated_at}"
+        f"API-Football key: {api_football_key_label} · "
+        f"controlled refresh: {controlled_refresh_label} · last check: {refresh_generated_at}"
     )
 
     with st.container(border=True):
@@ -4142,6 +4240,16 @@ def render_data_freshness_panel(freshness):
                 {"Item": "Refresh status generated at", "Value": refresh_generated_at},
                 {"Item": "Refresh mode", "Value": refresh_mode},
                 {"Item": "API called", "Value": api_called_label},
+                {"Item": "Real API refresh performed", "Value": real_refresh_label},
+                {"Item": "API provider policy", "Value": refresh_status.get("api_provider_policy") or "unknown"},
+                {"Item": "API-Football key", "Value": api_football_key_label},
+                {"Item": "API-Football key source", "Value": refresh_status.get("api_football_key_source") or "unknown"},
+                {"Item": "API-Football controlled refresh", "Value": controlled_refresh_label},
+                {"Item": "Refresh gate status", "Value": refresh_gate_status},
+                {"Item": "Odds API", "Value": "disabled / not used in current phase"},
+                {"Item": "Odds API required", "Value": str(refresh_status.get("odds_api_required", False))},
+                {"Item": "Polymarket", "Value": refresh_status.get("polymarket_policy") or "public API / not part of Task 4"},
+                {"Item": "WorldCup2026 schedule", "Value": refresh_status.get("worldcup2026_schedule_policy") or "public cache source"},
                 {"Item": "Refresh data source", "Value": refresh_status.get("data_source") or "unknown"},
                 {"Item": "Refresh status", "Value": refresh_status.get("status") or "unknown"},
                 {"Item": "Refresh availability", "Value": refresh_status.get("refresh_available") or "unknown"},

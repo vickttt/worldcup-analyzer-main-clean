@@ -1,5 +1,85 @@
 # QA Report
 
+## 2026-06-27 API-Football Refresh Readiness Gate
+
+## Scope
+
+- Branch: `codex/ui-cache-api-api-football-refresh-gate`.
+- Added API-Football-only refresh readiness status to the existing `Data Freshness / Refresh Status` panel.
+- Updated `scripts/write_refresh_status_dry_run.py` to write redacted API-Football readiness fields to ignored `.runtime/ui_refresh_status.json`.
+- Updated the tracked sample `reports/samples/ui_refresh_status.sample.json` with stable API-Football-only readiness fields.
+- The Odds API is disabled and not required for current UI-CACHE-API readiness.
+- No real API refresh was performed.
+
+## Files Changed
+
+- `app.py`
+- `scripts/write_refresh_status_dry_run.py`
+- `reports/samples/ui_refresh_status.sample.json`
+- `docs/CHANGELOG.md`
+- `docs/QA_REPORT.md`
+- `reports/claude_reviews/round_13_review_packet.md`
+- `reports/claude_reviews/packet_validation_report.md`
+
+## Key Readiness
+
+- `.env` exists in repo root: yes.
+- `.env` ignored by Git: yes.
+- `API_FOOTBALL_KEY`: present, value redacted.
+- `THE_ODDS_API_KEY`: not required for Task 4.
+- The app displays only present/missing state and never the key value.
+- Streamlit secrets remain supported if present.
+
+## Runtime Status
+
+- Runtime status path: `.runtime/ui_refresh_status.json`.
+- Runtime status ignored by Git: yes.
+- `api_provider_policy`: `api_football_only`.
+- `api_called`: `false`.
+- `real_api_refresh_performed`: `false`.
+- `odds_api_enabled`: `false`.
+- `odds_api_required`: `false`.
+- `refresh_gate_status`: `ready_for_controlled_api_football_refresh` when `API_FOOTBALL_KEY` is present.
+
+## Repeated-Run Churn Test
+
+- Ran `python3 scripts/write_refresh_status_dry_run.py` twice.
+- Both runs wrote `.runtime/ui_refresh_status.json`.
+- Tracked git status remained clean except for intended code/docs/sample changes.
+- No tracked runtime status churn was introduced.
+
+## Checks
+
+- `python3 scripts/write_refresh_status_dry_run.py`: pass, no real API calls.
+- `python3 scripts/write_refresh_status_dry_run.py` again: pass, no tracked runtime churn.
+- `python3 -m py_compile app.py`: pass.
+- `python3 -m py_compile scripts/write_refresh_status_dry_run.py`: pass.
+- `python3 scripts/validate_claude_review_packet.py reports/claude_reviews/round_13_review_packet.md`: pass.
+- Packet budget guard: pass, estimated `$0.006817`.
+- `git diff --check`: pass.
+- Protected-path diff check for modules/ranking, modules/portfolio, modules/strategy, modules/backtest, protected data, and golden JSON: pass, no output.
+- Secret-shaped token scan on changed files: pass, no matches.
+- `.env` ignored and not staged: pass.
+- GitHub Actions Claude Review workflow: pending.
+
+## Safety Checklist
+
+- `app.py` change is UI/readiness-only inside the existing freshness panel.
+- `modules` unchanged.
+- Protected data unchanged.
+- Golden JSON unchanged.
+- Ranking unchanged.
+- Portfolio unchanged.
+- Strategy unchanged.
+- Odds calculation and settlement unchanged.
+- Backtest not enabled.
+- Portfolio extraction still blocked.
+- `BACKTEST_READY` remains `NO`.
+
+## Result
+
+- Pending final validation and Claude review.
+
 ## 2026-06-27 Refresh Status Runtime Churn Cleanup
 
 ## Scope

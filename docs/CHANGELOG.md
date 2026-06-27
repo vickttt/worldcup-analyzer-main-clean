@@ -2,6 +2,13 @@
 
 ## 2026-06-27
 
+- Added an API-Football-only refresh readiness gate for the UI-CACHE-API phase.
+- Added safe redacted `API_FOOTBALL_KEY` presence detection from process environment, Streamlit secrets, or repo `.env`.
+- Marked The Odds API as disabled and not required for current refresh readiness.
+- Updated the dry-run runtime refresh status with API-Football policy, key readiness, refresh gate status, and no-real-refresh fields.
+- Updated the Data Freshness / Refresh Status panel to show API-Football key present/missing, controlled-refresh readiness, Odds API disabled, and real API refresh performed = No.
+- No real API refresh was performed, and no secret values were printed or committed.
+- No recommendation, ranking, portfolio, strategy, odds calculation/settlement, data, golden JSON, or backtest logic was changed for the API-Football readiness gate.
 - Moved refresh dry-run runtime output from tracked reports into ignored `.runtime/ui_refresh_status.json`.
 - Added stable tracked sample `reports/samples/ui_refresh_status.sample.json` for documentation and fallback display.
 - Updated the freshness panel to read runtime status first and treat the sample as unknown/sample-only rather than real freshness evidence.

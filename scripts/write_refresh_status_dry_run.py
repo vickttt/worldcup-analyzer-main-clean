@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import json
+import os
+import tomllib
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -13,6 +15,7 @@ REPORT_PATH = ROOT / ".runtime" / "ui_refresh_status.json"
 HISTORY_DIR = ROOT / "data" / "history"
 WORLDCUP_INDEX_PATH = ROOT / "data" / "worldcup2026" / "index.json"
 STALE_AFTER = timedelta(hours=24)
+API_FOOTBALL_KEY_NAME = "API_FOOTBALL_KEY"
 
 
 def repo_relative(path: Path | None) -> str | None:
@@ -33,6 +36,62 @@ def iso_mtime(path: Path | None) -> str | None:
         return None
 
 
+def key_value_present(value) -> bool:
+    return bool(str(value or "").strip())
+
+
+def dotenv_key_present(key_name: str) -> bool:
+    dotenv_path = ROOT / ".env"
+    if not dotenv_path.exists():
+        return False
+    try:
+        lines = dotenv_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return False
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+        name, value = stripped.split("=", 1)
+        name = name.strip().removeprefix("export ").strip()
+        if name != key_name:
+            continue
+        return key_value_present(value.strip().strip("\"'"))
+    return False
+
+
+def streamlit_secret_key_present(key_name: str) -> bool:
+    secrets_path = ROOT / ".streamlit" / "secrets.toml"
+    if not secrets_path.exists():
+        return False
+    try:
+        with secrets_path.open("rb") as file:
+            secrets = tomllib.load(file)
+    except (OSError, tomllib.TOMLDecodeError):
+        return False
+    return key_value_present(secrets.get(key_name) or secrets.get(key_name.lower()))
+
+
+def api_football_key_readiness() -> dict:
+    if key_value_present(os.getenv(API_FOOTBALL_KEY_NAME)):
+        source = "process_env"
+        present = True
+    elif streamlit_secret_key_present(API_FOOTBALL_KEY_NAME):
+        source = "streamlit_secrets"
+        present = True
+    elif dotenv_key_present(API_FOOTBALL_KEY_NAME):
+        source = "dotenv"
+        present = True
+    else:
+        source = "missing"
+        present = False
+    return {
+        "api_football_key_present": present,
+        "api_football_key_status": "present" if present else "missing",
+        "api_football_key_source": source,
+    }
+
+
 def newest_top_level_pre_snapshot() -> Path | None:
     if not HISTORY_DIR.exists():
         return None
@@ -51,7 +110,18 @@ def build_status() -> dict:
         "No external API refresh was performed.",
         "Freshness is based on local file metadata only.",
         "Use a manual approved refresh before relying on time-sensitive market data.",
+        "API-Football key value is never displayed.",
+        "Odds API is disabled and not required for the current UI-CACHE-API phase.",
     ]
+    key_readiness = api_football_key_readiness()
+    key_present = key_readiness["api_football_key_present"]
+    refresh_gate_status = (
+        "ready_for_controlled_api_football_refresh"
+        if key_present
+        else "blocked_missing_api_football_key"
+    )
+    if not key_present:
+        warnings.append("API-Football controlled refresh is blocked because API_FOOTBALL_KEY is missing.")
 
     status = "unknown"
     stale_data_risk = "unknown"
@@ -76,9 +146,18 @@ def build_status() -> dict:
         "schema_version": 1,
         "generated_at": now.isoformat(timespec="seconds"),
         "mode": "dry_run",
+        "api_provider_policy": "api_football_only",
         "api_called": False,
+        "real_api_refresh_performed": False,
         "network_calls_allowed": False,
         "api_quota_protected": True,
+        **key_readiness,
+        "refresh_gate_status": refresh_gate_status,
+        "odds_api_enabled": False,
+        "odds_api_required": False,
+        "odds_api_status": "disabled_not_used_current_phase",
+        "polymarket_policy": "public_api_not_part_of_task_4",
+        "worldcup2026_schedule_policy": "public_cache_source",
         "refresh_available": "local-only",
         "data_source": "local_snapshot",
         "last_local_snapshot_mtime": latest_mtime,
@@ -106,6 +185,9 @@ def main() -> int:
     print(f"REFRESH_STATUS_DRY_RUN: wrote {repo_relative(REPORT_PATH)}")
     print(f"MODE: {status['mode']}")
     print(f"API_CALLED: {str(status['api_called']).lower()}")
+    print(f"API_FOOTBALL_KEY_PRESENT: {str(status['api_football_key_present']).lower()}")
+    print(f"REFRESH_GATE_STATUS: {status['refresh_gate_status']}")
+    print("THE_ODDS_API_REQUIRED: false")
     print(f"STATUS: {status['status']}")
     print(f"LAST_LOCAL_SNAPSHOT: {status.get('last_local_snapshot_path') or '-'}")
     return 0
