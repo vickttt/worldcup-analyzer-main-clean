@@ -39,6 +39,19 @@ For current UI-CACHE-API work, also read:
 - `docs/UI_CACHE_API_PROTOCOL.md`.
 - `docs/API_REFRESH_SAFETY.md`.
 - `docs/CODEX_CLAUDE_LOOP.md`.
+- `docs/TASK_GRAPH.md`.
+
+## Task Graph Dependency
+
+`docs/TASK_GRAPH.md` is the required execution state machine for graph-governed work.
+
+- The system cannot resolve `NEXT_NODE` without `docs/TASK_GRAPH.md`.
+- Codex must stop if `docs/TASK_GRAPH.md` is missing, invalid, or inconsistent with Git history.
+- `CURRENT_NODE` must come from `docs/TASK_GRAPH.md`.
+- Claude may recommend the next node, but Claude must not edit `docs/TASK_GRAPH.md`.
+- Codex owns task graph updates after a node is actually completed.
+- Git history overrides task graph state when a mismatch exists; mismatch means `SYSTEM_HEALTH: DRIFT` and auto-advance is blocked.
+- Jin is final authority for `NODE 5` and later real execution phases.
 
 ## Branch Rules
 

@@ -1,5 +1,42 @@
 # Changelog
 
+## 2026-06-28
+
+- Added `docs/TASK_GRAPH.md` as the minimal required execution state machine after the missing task graph blocked `NEXT_NODE` resolution.
+- Defined `CURRENT_NODE = NODE 1 - UI-CACHE-API AUDIT`.
+- Added nodes for INIT, UI-CACHE-API audit, MODEL-DESIGN analysis, branch consolidation planning, execution gate design, and first real execution phase.
+- Updated top-level `AGENTS.md` to require `docs/TASK_GRAPH.md` as the state-machine dependency for graph-governed work.
+- Confirmed `docs/AGENTS.md` does not exist; the actual project protocol file is top-level `AGENTS.md`.
+- Confirmed the TASK_GRAPH restore did not modify `app.py`, `modules/`, `data/`, golden JSON, model logic, UI logic, ranking, portfolio, strategy, odds, or backtest logic.
+- Added `docs/EXECUTION_GATE_SYSTEM.md` defining Gate 0 Observation, Gate 1 Planning, Gate 2 Pre-Execution, Gate 3 Controlled Execution Approval, Gate 4 Execution, and Gate 5 Stable System.
+- Bound branch lifecycle and branch context governance to the execution gate system.
+- Confirmed the current system state is `Gate 2 - Pre-Execution`.
+- Confirmed execution readiness is `NO` and merge/delete readiness is `NO`.
+- Added hard block rules for unresolved model-design logic, unstable UI-CACHE-API behavior, incomplete risk/portfolio/backtest gates, golden JSON validation failure, secret scan failure, workflow instability, and missing Jin approval.
+- Confirmed the execution gate design task did not modify `app.py`, `modules/`, `data/`, golden JSON, model logic, UI logic, ranking, portfolio, strategy, odds, or backtest logic.
+- Added `reports/branch_consolidation_execution_plan_v1.md` as the final pre-execution safety plan for branch consolidation.
+- Confirmed no branch is safe to merge into `dev-clean` immediately.
+- Identified stale merged branches as Phase A archive candidates only, with no deletion or merge execution.
+- Classified model-design, active UI-CACHE-API, ops-protocol, old `dev`, `main`, and dirty backup refs as high-risk branches that must not be touched yet.
+- Confirmed the recommended next step is to stop and request Jin approval before any archive marking, merge, deletion, or push.
+- Confirmed the pre-execution review did not modify `app.py`, `modules/`, `data/`, or golden JSON.
+- Added `reports/branch_consolidation_strategy_v1.md` for non-destructive branch system consolidation planning.
+- Mapped branch refs to lifecycle stage, role, risk, and merge-candidate status.
+- Defined the ideal target branch set: `dev-clean`, consolidated model-design, consolidated ui-cache-api, ops-protocol, experimental-sandbox, and `main-clean`.
+- Added consolidation phase rules to `docs/BRANCH_LIFECYCLE_SYSTEM.md`: lifecycle system is stable, next phase is planning only, and no merge or deletion may occur without Jin approval.
+- Confirmed the consolidation strategy task did not modify `app.py`, `modules/`, `data/`, or golden JSON.
+- Added `docs/BRANCH_LIFECYCLE_SYSTEM.md` to define ACTIVE, EXPERIMENTAL, STALE, and ARCHIVED branch stages.
+- Added branch cleanup governance: no automatic deletion, Codex may only propose cleanup, and Jin must approve all remote branch deletion.
+- Added branch creation rules requiring branch type, lifecycle stage, expected lifetime, allowed files, and forbidden files for new tasks.
+- Updated `docs/BRANCH_CONTEXT_MAP.md`, `docs/CODEX.md`, and `docs/CLAUDE.md` with lifecycle-stage checks, stale branch rules, and the 2-3 Codex-Claude loop review timeout for experimental branches.
+- Added `reports/branch_lifecycle_audit_report.md` classifying 49 local and remote branch refs into ACTIVE, EXPERIMENTAL, STALE, and ARCHIVED.
+- Confirmed the branch lifecycle task did not modify `app.py`, `modules/`, `data/`, or golden JSON.
+- Added branch context cleanup documentation to separate `dev-clean` from `codex/model-design-intelligence-system`.
+- Added `docs/BRANCH_CONTEXT_MAP.md` with branch roles, cross-branch safety rules, and context cleanup procedure.
+- Added `docs/CODEX.md` and `docs/CLAUDE.md` with explicit branch-confirmation and no-cross-merge rules.
+- Confirmed `dev-clean` is the stable integration branch and `codex/model-design-intelligence-system` is experimental only.
+- Confirmed no runtime code, modules, golden JSON, or data files were modified.
+
 ## 2026-06-27
 
 - Added project agent/protocol docs in `AGENTS.md`, `docs/CODEX_CLAUDE_LOOP.md`, `docs/UI_CACHE_API_PROTOCOL.md`, and `docs/API_REFRESH_SAFETY.md`.

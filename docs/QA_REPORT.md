@@ -1,5 +1,326 @@
 # QA Report
 
+## 2026-06-28 Missing Task Graph State Machine Fix
+
+## Scope
+
+- Added `docs/TASK_GRAPH.md`.
+- Updated top-level `AGENTS.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## State Machine Result
+
+- `TASK_GRAPH` created: Yes.
+- `CURRENT_NODE` defined: Yes.
+- Current node: `NODE 1 - UI-CACHE-API AUDIT`.
+- System status: `RESTORED_WITH_DIRTY_WORKTREE`.
+- Next executable node: `NODE 1 - UI-CACHE-API AUDIT`.
+- Auto-advance readiness: No, because the working tree still contains uncommitted governance changes.
+
+## Rules Added
+
+- `NEXT_NODE` must always come from `docs/TASK_GRAPH.md`.
+- Codex cannot proceed if `docs/TASK_GRAPH.md` is missing or invalid.
+- Git history overrides task graph state if mismatch exists.
+- Claude cannot change `docs/TASK_GRAPH.md`; Claude may only recommend.
+- Jin is final authority for `NODE 5` and later execution phases.
+
+## AGENTS Integration
+
+- `docs/AGENTS.md` is not present in this repository.
+- The actual project protocol file is top-level `AGENTS.md`.
+- Updated top-level `AGENTS.md` to require `docs/TASK_GRAPH.md` for graph-governed work.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Branch archive action performed: No.
+- Push performed: No.
+- Workflow triggered: No.
+- Claude API triggered: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Model logic affected: No.
+- UI logic affected: No.
+- Ranking/portfolio/strategy/odds/backtest logic affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Checks
+
+- Ran `git status --short --branch`.
+- Checked `docs/AGENTS.md` and `AGENTS.md`.
+- Read top-level `AGENTS.md`.
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+
+## 2026-06-28 Execution Gate System Design
+
+## Scope
+
+- Added `docs/EXECUTION_GATE_SYSTEM.md`.
+- Updated `docs/BRANCH_LIFECYCLE_SYSTEM.md`.
+- Updated `docs/BRANCH_CONTEXT_MAP.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Gate State
+
+- Current system state: `PRE-EXECUTION`.
+- Current gate: `Gate 2 - Pre-Execution`.
+- Execution readiness: No.
+- Merge/delete readiness: No.
+- Next safe step: request Jin approval for a specific Gate 3 readiness review, or continue read-only planning.
+
+## Rules Added
+
+- Defined Gate 0 Observation.
+- Defined Gate 1 Planning.
+- Defined Gate 2 Pre-Execution.
+- Defined Gate 3 Controlled Execution Approval.
+- Defined Gate 4 Execution.
+- Defined Gate 5 Stable System.
+- Added execution entry conditions requiring stable `dev-clean`, at least 3 stable Claude cycles, no high-risk experimental branches in the action set, all validation tiers passing, secret scan passing, golden JSON validation passing, and Jin explicit approval.
+- Added hard block rules for model-design experimental logic, unstable UI-CACHE-API behavior, incomplete risk/portfolio/backtest gates, golden JSON validation failure, secret scan failure, workflow instability, unresolved high-risk divergence, and missing Jin approval.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Branch archive action performed: No.
+- Push performed: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Model logic affected: No.
+- UI logic affected: No.
+- Ranking/portfolio/strategy/odds/backtest logic affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Checks
+
+- Ran `git status --short --branch`.
+- Read `docs/BRANCH_LIFECYCLE_SYSTEM.md`.
+- Read `docs/BRANCH_CONTEXT_MAP.md`.
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+
+## 2026-06-28 Final Branch Consolidation Pre-Execution Review
+
+## Scope
+
+- Added `reports/branch_consolidation_execution_plan_v1.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Inputs Checked
+
+- Read `reports/branch_consolidation_strategy_v1.md`.
+- Read `reports/branch_lifecycle_audit_report.md`.
+- Checked `reports/branch_consolidation_map_v1.md`: file is not present in the current reports directory.
+- Ran `git branch -a`.
+- Ran `git worktree list`.
+- Ran ahead/behind and changed-file sampling for high-risk branches against `dev-clean`.
+
+## Result
+
+- System readiness for execution: No.
+- System readiness for Jin approval review: Yes.
+- Safe merge candidates now: none.
+- Safe archive candidates now: stale merged branches only, pending Jin approval.
+- Safe delete candidates later: stale merged branches only, pending archive marking and Jin approval.
+- High-risk branches must not be touched yet: model-design, active UI-CACHE-API, ops-protocol, old `dev`, `main`, and dirty backup refs.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Push performed: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Checks
+
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+
+## 2026-06-28 Branch Consolidation Strategy Phase 1
+
+## Scope
+
+- Added `reports/branch_consolidation_strategy_v1.md`.
+- Updated `docs/BRANCH_LIFECYCLE_SYSTEM.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Analysis Performed
+
+- Reused `reports/branch_lifecycle_audit_report.md`.
+- Ran `git branch -a`.
+- Mapped branch refs to lifecycle stage, role, risk, and merge-candidate status.
+- Identified duplicated experimental branch families.
+- Identified stale branches and eventual cleanup candidates.
+- Defined high-level target final branch set.
+- Defined the next phase as consolidation planning only.
+
+## Consolidation Result
+
+- Branch system health: `complex`.
+- Consolidation risk level: `medium-high`.
+- Ready for simplification phase: Yes, for planning and review only.
+- Ready for deletion execution: No.
+- Ready for merge execution: No.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Push performed: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Checks
+
+- Ran `git status --short --branch`.
+- Ran `git branch -a`.
+- Read `reports/branch_lifecycle_audit_report.md`.
+- Read `docs/BRANCH_LIFECYCLE_SYSTEM.md`.
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+
+## 2026-06-28 Branch Lifecycle Governance
+
+## Scope
+
+- Added `docs/BRANCH_LIFECYCLE_SYSTEM.md`.
+- Updated `docs/BRANCH_CONTEXT_MAP.md`.
+- Updated `docs/CODEX.md`.
+- Updated `docs/CLAUDE.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+- Added `reports/branch_lifecycle_audit_report.md`.
+
+## Lifecycle Rules Added
+
+- Defined branch lifecycle stages: `ACTIVE`, `EXPERIMENTAL`, `STALE`, and `ARCHIVED`.
+- Defined stale branch handling and cleanup proposal rules.
+- Defined experimental branch timeout: review after 2-3 Codex-Claude loops without merge.
+- Defined new task branch declaration fields: branch type, lifecycle stage, expected lifetime, allowed files, and forbidden files.
+- Confirmed remote branch deletion requires Jin approval.
+- Confirmed Codex must not delete, merge, force push, or rewrite history as part of branch cleanup.
+
+## Branch Classification Result
+
+- Total branch refs excluding `origin/HEAD`: 49.
+- ACTIVE refs: 6.
+- EXPERIMENTAL refs: 22.
+- STALE refs: 16.
+- ARCHIVED refs: 5.
+- Cleanup recommendations were documented only; no cleanup was executed.
+
+## Checks
+
+- Ran `git fetch --all --prune`.
+- Ran `git branch -a`.
+- Ran `git branch -vv`.
+- Ran `git for-each-ref --format='%(refname:short)|%(objectname:short)|%(committerdate:short)|%(upstream:short)|%(subject)' refs/heads refs/remotes/origin`.
+- Ran ahead/behind comparison for all local and remote branch refs against `dev-clean`.
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+
+## Result
+
+- Governance-only branch lifecycle system created.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## 2026-06-28 Branch Context Cleanup
+
+## Scope
+
+- Added `docs/BRANCH_CONTEXT_MAP.md`.
+- Added `docs/CODEX.md`.
+- Added `docs/CLAUDE.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Branch Analysis
+
+- Started on `codex/model-design-intelligence-system`.
+- Found two untracked `data/history/*_pre.json` snapshots on the experimental branch.
+- Stashed those untracked snapshots before switching branches.
+- Switched workspace back to `dev-clean`.
+- Confirmed `dev-clean` is up to date with `origin/dev-clean`.
+- Confirmed `dev-clean` is the merge base for `codex/model-design-intelligence-system`.
+- Confirmed `codex/model-design-intelligence-system` is ahead of `dev-clean` and must remain isolated unless Jin explicitly approves a merge.
+
+## Checks
+
+- Ran `git branch -a`.
+- Ran `git status`.
+- Ran `git log --oneline --graph --all --decorate -10`.
+- Ran `git merge-base dev-clean codex/model-design-intelligence-system`.
+- Ran `git log --oneline dev-clean..codex/model-design-intelligence-system`.
+- Ran `git log --oneline codex/model-design-intelligence-system..dev-clean`.
+- Ran `git diff --check`.
+- Ran `git diff -- app.py`.
+- Ran `git diff -- modules`.
+- Ran `git diff -- data/history`.
+- Ran `git diff -- data/worldcup2026`.
+- Ran `git diff -- reports/golden_output_snapshot_v1.json reports/golden_output_snapshot_v2.json`.
+
+## Result
+
+- Passed as documentation-only branch/context cleanup.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules` affected: No.
+- `data/history` affected: No committed change; untracked experimental-branch snapshots were isolated in stash.
+- `data/worldcup2026` affected: No.
+- Golden JSON affected: No.
+- `dev-clean` safe for continued stable development: Yes.
+- `codex/model-design-intelligence-system` isolated: Yes, with no approved merge into `dev-clean`.
+
 ## 2026-06-27 Protocol Consolidation
 
 ## Scope
