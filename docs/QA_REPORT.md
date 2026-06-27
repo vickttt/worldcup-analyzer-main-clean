@@ -1,12 +1,87 @@
 # QA Report
 
+## 2026-06-27 Refresh Status Runtime Churn Cleanup
+
+## Scope
+
+- Branch: `codex/ui-cache-api-refresh-status-layer`.
+- Moved real refresh dry-run runtime output to ignored `.runtime/ui_refresh_status.json`.
+- Added stable tracked sample `reports/samples/ui_refresh_status.sample.json`.
+- Updated `app.py` so the freshness panel reads runtime status first.
+- If runtime status is absent, the panel may show the tracked sample only as sample/unknown, not as real freshness evidence.
+- Removed tracked runtime output `reports/ui_refresh_status.json`.
+- No real API refresh was performed for this cleanup.
+
+## Files Changed
+
+- `.gitignore`
+- `app.py`
+- `scripts/write_refresh_status_dry_run.py`
+- `reports/samples/ui_refresh_status.sample.json`
+- `reports/ui_refresh_status.json` removed from tracking
+- `docs/CHANGELOG.md`
+- `docs/QA_REPORT.md`
+- `reports/claude_reviews/round_10_review_packet.md`
+- `reports/claude_reviews/packet_validation_report.md`
+
+## Runtime Cleanup
+
+- Restored `data/performance_logs/app_performance.jsonl` to remove Streamlit runtime log churn.
+- Removed untracked generated match snapshot `data history Panama vs England pre-match file`.
+- Removed duplicate local Claude files with ` 2` in their filename.
+- Left pre-existing unrelated `round_2_claude_review_artifact/` untouched.
+
+## Repeated-Run Churn Test
+
+- Ran `python3 scripts/write_refresh_status_dry_run.py` twice.
+- Both runs wrote `.runtime/ui_refresh_status.json`.
+- `.runtime/` is ignored.
+- Tracked git status after repeated runs showed only intended code/docs/sample/deletion changes.
+- No tracked runtime status churn remained.
+
+## Budget Guard Result
+
+- Review packet: `reports/claude_reviews/round_10_review_packet.md`.
+- Estimated input tokens: `785`.
+- Estimated cost per round: `$0.006785`.
+- Per-round threshold: `$0.20`.
+- Budget status: `PASS`.
+
+## Checks
+
+- Ran `python3 -m py_compile app.py`: pass.
+- Ran `python3 -m py_compile scripts/write_refresh_status_dry_run.py`: pass.
+- Ran `python3 scripts/validate_claude_review_packet.py reports/claude_reviews/round_10_review_packet.md`: pass.
+- Ran `git diff --check`: pass.
+- Ran protected-path diff check for modules/ranking, modules/portfolio, modules/strategy, modules/backtest, data, and golden JSON: pass, no output.
+- Ran secret-shaped token scan on changed files: pass, no matches.
+- GitHub Actions Claude Review workflow: pending.
+
+## Safety Checklist
+
+- `app.py` change is limited to UI refresh-status file selection and sample handling.
+- `modules` unchanged.
+- Protected data unchanged.
+- Golden JSON unchanged.
+- Ranking unchanged.
+- Portfolio unchanged.
+- Strategy unchanged.
+- Odds unchanged.
+- Backtest not enabled.
+- Portfolio extraction still blocked.
+- `BACKTEST_READY` remains `NO`.
+
+## Result
+
+- Pending final validation and Claude review.
+
 ## 2026-06-27 Refresh Dry-Run Status Layer
 
 ## Scope
 
 - Branch: `codex/ui-cache-api-refresh-status-layer`.
 - Added a local-only refresh dry-run status layer for the existing `Data Freshness / Refresh Status` panel.
-- Added `scripts/write_refresh_status_dry_run.py` to inspect bounded local file metadata and write only `reports/ui_refresh_status.json`.
+- Added `scripts/write_refresh_status_dry_run.py` to inspect bounded local file metadata and write only `.runtime/ui_refresh_status.json`.
 - Updated `app.py` UI-only freshness panel code to read the local status file when present.
 - Panel location remains inside the `核心决策` container before Portfolio Ranking, Match Investment Score, and Recommended Stake.
 - No real Football API, Odds API, Polymarket, or other external API refresh was performed.
@@ -15,7 +90,8 @@
 
 - `app.py`
 - `scripts/write_refresh_status_dry_run.py`
-- `reports/ui_refresh_status.json`
+- `reports/samples/ui_refresh_status.sample.json`
+- `reports/ui_refresh_status.json` removed from tracking during cleanup
 - `reports/claude_reviews/round_9_review_packet.md`
 - `reports/claude_reviews/packet_validation_report.md`
 - `docs/CHANGELOG.md`
@@ -24,10 +100,11 @@
 ## Status Report
 
 - Status file generated: yes.
-- Status file path: `reports/ui_refresh_status.json`.
+- Runtime status file path: `.runtime/ui_refresh_status.json`.
+- Sample status file path: `reports/samples/ui_refresh_status.sample.json`.
 - Status file mode: `dry_run`.
 - Status file `api_called`: `false`.
-- Status file write scope: `reports/ui_refresh_status.json` only.
+- Status file write scope: `.runtime/ui_refresh_status.json` only.
 - App code touched: yes, UI-only freshness panel reader/display.
 - New script/helper: `scripts/write_refresh_status_dry_run.py`.
 

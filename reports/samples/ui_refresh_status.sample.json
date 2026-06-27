@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "sample": true,
+  "generated_at": null,
+  "mode": "sample",
+  "api_called": false,
+  "network_calls_allowed": false,
+  "api_quota_protected": true,
+  "refresh_available": "local-only",
+  "data_source": "sample",
+  "last_local_snapshot_mtime": null,
+  "last_local_snapshot_path": null,
+  "worldcup_index_mtime": null,
+  "worldcup_index_path": null,
+  "snapshot_age_hours": null,
+  "stale_after_hours": 24,
+  "stale_data_risk": "unknown",
+  "manual_refresh_needed": true,
+  "status": "unknown",
+  "warnings": [
+    "Sample refresh status only.",
+    "Runtime refresh status is written to .runtime/ui_refresh_status.json."
+  ],
+  "checked_paths": [
+    "sample only"
+  ],
+  "write_scope": ".runtime/ui_refresh_status.json only"
+}

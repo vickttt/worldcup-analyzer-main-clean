@@ -2,8 +2,13 @@
 
 ## 2026-06-27
 
+- Moved refresh dry-run runtime output from tracked reports into ignored `.runtime/ui_refresh_status.json`.
+- Added stable tracked sample `reports/samples/ui_refresh_status.sample.json` for documentation and fallback display.
+- Updated the freshness panel to read runtime status first and treat the sample as unknown/sample-only rather than real freshness evidence.
+- Removed tracked runtime output `reports/ui_refresh_status.json` to prevent repeated dry-run timestamp churn before merging Task 3.
+- Cleaned local runtime byproducts from Streamlit/dry-run validation without committing generated match history or duplicate Claude artifact files.
 - Added a local dry-run refresh status layer for the existing `Data Freshness / Refresh Status` panel.
-- Added `scripts/write_refresh_status_dry_run.py` to write `reports/ui_refresh_status.json` from bounded local metadata only.
+- Added `scripts/write_refresh_status_dry_run.py` to write `.runtime/ui_refresh_status.json` from bounded local metadata only.
 - The refresh status report records `mode: dry_run`, `api_called: false`, API quota protection, local snapshot metadata, and conservative stale-data warnings.
 - Updated the UI freshness panel to read the local refresh status report when present and show refresh mode, API-called status, last status-check time, and warnings before Portfolio Ranking, Match Investment Score, and Recommended Stake.
 - Ran one GitHub Actions Claude review round for the refresh dry-run status layer and recorded the PASS result.

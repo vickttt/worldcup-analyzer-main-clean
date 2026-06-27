@@ -3782,7 +3782,8 @@ def current_actual_odds(match):
 
 HISTORY_DIR = Path("data/history")
 MY_PORTFOLIO_DIR = HISTORY_DIR / "my_portfolios"
-UI_REFRESH_STATUS_PATH = Path("reports/ui_refresh_status.json")
+UI_REFRESH_STATUS_RUNTIME_PATH = Path(".runtime/ui_refresh_status.json")
+UI_REFRESH_STATUS_SAMPLE_PATH = Path("reports/samples/ui_refresh_status.sample.json")
 
 
 def history_slug(match, selected_fixture=None):
@@ -3938,10 +3939,11 @@ def local_file_modified_time(path):
         return None
 
 
-def load_refresh_status_report(path=UI_REFRESH_STATUS_PATH):
+def refresh_status_fallback(path=UI_REFRESH_STATUS_RUNTIME_PATH):
     status_path = Path(path)
-    fallback = {
+    return {
         "report_found": False,
+        "is_sample": False,
         "status_file_path": repo_relative_path(status_path),
         "mode": "unknown",
         "api_called": None,
@@ -3950,6 +3952,18 @@ def load_refresh_status_report(path=UI_REFRESH_STATUS_PATH):
         "status": "unknown",
         "warnings": ["Refresh status unknown — no local refresh status report found."],
     }
+
+
+def load_refresh_status_file(path, *, is_sample=False):
+    status_path = Path(path)
+    fallback = refresh_status_fallback(status_path)
+    report_found = status_path.exists() and not is_sample
+    fallback = {
+        **fallback,
+        "report_found": report_found,
+        "is_sample": is_sample,
+        "status_file_path": repo_relative_path(status_path),
+    }
     if not status_path.exists():
         return fallback
     try:
@@ -3957,31 +3971,44 @@ def load_refresh_status_report(path=UI_REFRESH_STATUS_PATH):
     except (OSError, json.JSONDecodeError):
         return {
             **fallback,
-            "report_found": True,
             "status": "warning",
             "warnings": ["Refresh status file exists but could not be read as valid JSON."],
         }
     if not isinstance(data, dict):
         return {
             **fallback,
-            "report_found": True,
             "status": "warning",
             "warnings": ["Refresh status file exists but does not contain a JSON object."],
         }
     warnings = data.get("warnings")
     if not isinstance(warnings, list):
         warnings = []
+    if is_sample:
+        warnings = [
+            "Sample refresh status only — no runtime refresh status report is available.",
+            "Run the dry-run status writer to generate a local runtime status check.",
+        ]
     return {
         **data,
-        "report_found": True,
+        "report_found": report_found,
+        "is_sample": is_sample,
         "status_file_path": repo_relative_path(status_path),
-        "mode": data.get("mode") or "unknown",
-        "api_called": data.get("api_called"),
-        "generated_at": data.get("generated_at") or "-",
-        "data_source": data.get("data_source") or "unknown",
-        "status": data.get("status") or "unknown",
+        "mode": "sample" if is_sample else data.get("mode") or "unknown",
+        "api_called": None if is_sample else data.get("api_called"),
+        "generated_at": "-" if is_sample else data.get("generated_at") or "-",
+        "data_source": "sample" if is_sample else data.get("data_source") or "unknown",
+        "status": "unknown" if is_sample else data.get("status") or "unknown",
         "warnings": warnings,
     }
+
+
+def load_refresh_status_report():
+    runtime_report = load_refresh_status_file(UI_REFRESH_STATUS_RUNTIME_PATH)
+    if runtime_report.get("report_found"):
+        return runtime_report
+    if UI_REFRESH_STATUS_SAMPLE_PATH.exists():
+        return load_refresh_status_file(UI_REFRESH_STATUS_SAMPLE_PATH, is_sample=True)
+    return runtime_report
 
 
 def source_type_from_context(selected_fixture=None, source_path=None, reliable_source=False):

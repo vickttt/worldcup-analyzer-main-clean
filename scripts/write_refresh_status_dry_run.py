@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-REPORT_PATH = ROOT / "reports" / "ui_refresh_status.json"
+REPORT_PATH = ROOT / ".runtime" / "ui_refresh_status.json"
 HISTORY_DIR = ROOT / "data" / "history"
 WORLDCUP_INDEX_PATH = ROOT / "data" / "worldcup2026" / "index.json"
 STALE_AFTER = timedelta(hours=24)
@@ -95,7 +95,7 @@ def build_status() -> dict:
             "data history top-level pre-match snapshots",
             "worldcup2026 local index metadata",
         ],
-        "write_scope": "reports/ui_refresh_status.json only",
+        "write_scope": ".runtime/ui_refresh_status.json only",
     }
 
 
