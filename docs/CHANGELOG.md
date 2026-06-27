@@ -7,6 +7,13 @@
 - Recorded Task 5 completion context: branch `codex/ui-cache-api-api-football-one-time-refresh`, final head `7f447bbad9e70caaf9b0779bf214e0f6f26f21cd`, exactly one API-Football `GET /fixtures?id=1489393` call, and Claude Round 14 PASS.
 - Ran one GitHub Actions Claude review round for protocol consolidation and recorded the PASS result.
 - No product code, API refresh, secrets, modules, data, or golden JSON were changed for the protocol consolidation.
+- Added a controlled one-time API-Football refresh path and audit report.
+- Ran exactly one bounded API-Football `GET /fixtures?id=1489393` refresh call.
+- Wrote API-Football refresh payload and one-time execution marker only under ignored `.runtime/`.
+- Updated `.runtime/ui_refresh_status.json` with real refresh status, call count, endpoint, timestamps, and files written.
+- Updated the Data Freshness / Refresh Status panel so it can display real one-time refresh metadata without adding refresh buttons or auto-refresh.
+- Confirmed no Odds API, no Polymarket refresh, no `data/history`, no golden JSON, and no recommendation/ranking/portfolio/strategy/odds/backtest logic changes for the one-time refresh task.
+- Ran one GitHub Actions Claude review round for the controlled one-time API-Football refresh and recorded the PASS result.
 - Added an API-Football-only refresh readiness gate for the UI-CACHE-API phase.
 - Added safe redacted `API_FOOTBALL_KEY` presence detection from process environment, Streamlit secrets, or repo `.env`.
 - Marked The Odds API as disabled and not required for current refresh readiness.

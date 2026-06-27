@@ -46,6 +46,7 @@
 ## Claude Review
 
 - GitHub Actions Claude Review: pass, run `28289310872`, artifact downloaded to `reports/claude_reviews/round_15_protocol_consolidation_claude_review_artifact/`.
+
 - Claude rounds completed: `1`.
 - Claude verdict: PASS.
 - Material findings: none.
@@ -55,6 +56,85 @@
 ## Result
 
 - Protocol consolidation validation and Claude review passed.
+
+## 2026-06-27 Controlled One-Time API-Football Refresh
+
+## Scope
+
+- Branch: `codex/ui-cache-api-api-football-one-time-refresh`.
+- Added `scripts/run_api_football_refresh_once.py` as an explicit terminal-only, one-time API-Football refresh path.
+- Generated pre-call gate report at `reports/api_football_refresh_gate.md`.
+- Ran exactly one API-Football refresh call after the gate was explicit.
+- Updated the existing Data Freshness / Refresh Status panel to display real one-time refresh metadata when present.
+- No refresh button or auto-refresh was added.
+
+## Refresh Result
+
+- Implementation commit: `3aa15ef7e6e9adbfa74eccf3e599b692c99557ab`.
+- `API_FOOTBALL_KEY`: present, value redacted.
+- API key source label: `dotenv`.
+- API provider used: API-Football only.
+- Endpoint/function: `GET /fixtures` with `id=1489393`.
+- API call count: `1`.
+- Status: `success`.
+- HTTP status: `200`.
+- Response item count: `1`.
+- Runtime status path: `.runtime/ui_refresh_status.json`.
+- Runtime payload path: `.runtime/api_football_refresh/fixture_1489393_status.json`.
+- Runtime marker path: `.runtime/api_football_refresh/one_time_refresh_marker.json`.
+- Tracked audit report: `reports/api_football_one_time_refresh_report.md`.
+
+## File Tracking
+
+- Runtime files are ignored by Git: yes.
+- `.env` is ignored by Git: yes.
+- Runtime files are not staged.
+- Tracked files are limited to code, docs, and audit reports.
+
+## Safety Checklist
+
+- `.env` ignored and not staged: pass.
+- No secrets printed or committed: pass.
+- `THE_ODDS_API_KEY` not required: pass.
+- No Odds API call: pass.
+- No Polymarket refresh: pass.
+- No `data/history` changes: pass.
+- No golden JSON changes: pass.
+- No ranking/portfolio/strategy/odds/backtest logic changes: pass.
+- `PORTFOLIO_EXTRACTION` remains `BLOCKED`.
+- `BACKTEST_READY` remains `NO`.
+
+## Validation
+
+- `python3 -m py_compile app.py`: pass.
+- `python3 -m py_compile scripts/write_refresh_status_dry_run.py`: pass.
+- `python3 -m py_compile scripts/run_api_football_refresh_once.py`: pass.
+- `python3 scripts/run_api_football_refresh_once.py --write-gate`: pass, no real API call.
+- `python3 scripts/run_api_football_refresh_once.py --execute`: pass, exactly one API-Football call.
+- `python3 scripts/write_refresh_status_dry_run.py`: pass, dry-run writes only ignored `.runtime/ui_refresh_status.json`; real refresh status restored afterward without another API call.
+- `python3 scripts/validate_claude_review_packet.py reports/claude_reviews/round_14_review_packet.md`: pass, estimated `$0.007115`.
+- `git diff --check`: pass.
+- Protected-path diff check: pass.
+- Secret-shaped token scan: pass, no matches.
+- `.env` and `.runtime/` ignored and not staged: pass.
+
+## Claude Review
+
+- GitHub Actions Claude Review: pass, run `28289025929`, artifact downloaded to `reports/claude_reviews/round_14_api_football_one_time_refresh_claude_review_artifact/`.
+- Claude rounds completed: `1`.
+- Claude verdict: PASS.
+- Material findings: none.
+- Codex changes after Claude: documentation-only PASS recording and artifact checkpoint.
+
+## Autonomous Progression
+
+- No automatic next task started.
+- Claude recommended next task: add a read-only validator for the controlled API-Football refresh artifact and UI status fields.
+- Do not perform another real API call without a new human checkpoint.
+
+## Result
+
+- Controlled one-time API-Football refresh validation and Claude review passed.
 
 ## 2026-06-27 API-Football Refresh Readiness Gate
 

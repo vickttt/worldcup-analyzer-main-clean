@@ -2,7 +2,7 @@
 
 ## Packet
 
-- Path: `reports/claude_reviews/round_15_review_packet.md`
+- Path: `reports/claude_reviews/round_14_review_packet.md`
 - Exists: yes
 - Under `reports/claude_reviews/`: yes
 - Filename ends with `_review_packet.md`: yes
@@ -14,21 +14,21 @@
 
 ## Size
 
-- Size bytes: 4440
+- Size bytes: 4460
 - Maximum bytes: 20480
 - Size result: PASS
 
 ## Cost Budget Estimate
 
-- Packet character count: 4440
-- Estimated input tokens: 1110
+- Packet character count: 4460
+- Estimated input tokens: 1115
 - Expected output tokens: 1200
 - Assumed model class: haiku
 - Input price per 1M tokens: $1.00
 - Output price per 1M tokens: $5.00
-- Estimated input cost: $0.001110
+- Estimated input cost: $0.001115
 - Estimated output cost: $0.006000
-- Estimated cost per round: $0.007110
+- Estimated cost per round: $0.007115
 - Per-round threshold: $0.20
 - Budget status: PASS
 - Override used: no

@@ -4004,6 +4004,12 @@ def api_football_key_readiness():
 
 def apply_api_football_readiness(refresh_status):
     readiness = api_football_key_readiness()
+    existing_gate_status = refresh_status.get("refresh_gate_status")
+    if existing_gate_status in {
+        "completed_controlled_api_football_refresh",
+        "failed_controlled_api_football_refresh",
+    }:
+        readiness["refresh_gate_status"] = existing_gate_status
     warnings = list(refresh_status.get("warnings") or [])
     if readiness["api_football_key_present"]:
         warnings.append("API-Football key is present; value is not displayed.")
@@ -4198,12 +4204,20 @@ def render_data_freshness_panel(freshness):
     controlled_refresh_label = (
         "ready"
         if refresh_gate_status == "ready_for_controlled_api_football_refresh"
+        else "completed"
+        if refresh_gate_status == "completed_controlled_api_football_refresh"
+        else "failed"
+        if refresh_gate_status == "failed_controlled_api_football_refresh"
         else "blocked"
         if refresh_gate_status == "blocked_missing_api_football_key"
         else "unknown"
     )
     refresh_mode = refresh_status.get("mode") or "unknown"
     refresh_generated_at = refresh_status.get("generated_at") or "-"
+    api_call_count = refresh_status.get("api_call_count")
+    last_api_refresh_at = refresh_status.get("last_api_refresh_at") or refresh_status.get("refresh_finished_at") or "-"
+    files_written = refresh_status.get("files_written") or []
+    files_written_label = "; ".join(map(str, files_written)) if files_written else "-"
     refresh_status_line = (
         f"Refresh mode: {refresh_mode} · API called: {api_called_label} · "
         f"API-Football key: {api_football_key_label} · "
@@ -4222,11 +4236,17 @@ def render_data_freshness_panel(freshness):
         st.caption(refresh_status_line)
         for refresh_warning in refresh_warnings[:3]:
             st.caption(str(refresh_warning))
-        st.caption(
-            "Freshness is based on local snapshot metadata only. "
-            "This panel did not perform an external API refresh. "
-            "Check latest market/API data before acting on recommendations."
-        )
+        if real_refresh is True:
+            st.caption(
+                "This only reflects the last controlled API-Football refresh. "
+                "Check latest market/API data before acting on recommendations."
+            )
+        else:
+            st.caption(
+                "Freshness is based on local snapshot metadata only. "
+                "This panel did not perform an external API refresh. "
+                "Check latest market/API data before acting on recommendations."
+            )
         with st.expander("Show refresh/freshness details", expanded=False):
             detail_rows = [
                 {"Item": "Last loaded local data file", "Value": freshness.get("source_path") or "-"},
@@ -4240,8 +4260,12 @@ def render_data_freshness_panel(freshness):
                 {"Item": "Refresh status generated at", "Value": refresh_generated_at},
                 {"Item": "Refresh mode", "Value": refresh_mode},
                 {"Item": "API called", "Value": api_called_label},
+                {"Item": "API call count", "Value": str(api_call_count) if api_call_count is not None else "-"},
+                {"Item": "Last API refresh time", "Value": last_api_refresh_at},
                 {"Item": "Real API refresh performed", "Value": real_refresh_label},
                 {"Item": "API provider policy", "Value": refresh_status.get("api_provider_policy") or "unknown"},
+                {"Item": "API provider", "Value": refresh_status.get("api_provider") or "unknown"},
+                {"Item": "API endpoint", "Value": refresh_status.get("api_endpoint") or "-"},
                 {"Item": "API-Football key", "Value": api_football_key_label},
                 {"Item": "API-Football key source", "Value": refresh_status.get("api_football_key_source") or "unknown"},
                 {"Item": "API-Football controlled refresh", "Value": controlled_refresh_label},
@@ -4253,6 +4277,7 @@ def render_data_freshness_panel(freshness):
                 {"Item": "Refresh data source", "Value": refresh_status.get("data_source") or "unknown"},
                 {"Item": "Refresh status", "Value": refresh_status.get("status") or "unknown"},
                 {"Item": "Refresh availability", "Value": refresh_status.get("refresh_available") or "unknown"},
+                {"Item": "Refresh files written", "Value": files_written_label},
                 {"Item": "API quota protected", "Value": str(refresh_status.get("api_quota_protected", "unknown"))},
                 {"Item": "Manual refresh needed", "Value": str(refresh_status.get("manual_refresh_needed", "unknown"))},
                 {"Item": "Refresh warnings", "Value": "; ".join(map(str, refresh_warnings)) or "None"},
