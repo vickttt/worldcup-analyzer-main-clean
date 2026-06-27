@@ -1,5 +1,152 @@
 # QA Report
 
+## 2026-06-28 Task Graph Consistency Repair
+
+## Scope
+
+- Updated `docs/TASK_GRAPH.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Repair Result
+
+- TASK_GRAPH consistency: `FIXED`.
+- Final NODE 3 definitions:
+  - `NODE 3A - BRANCH CONSOLIDATION PLANNING`: `COMPLETED`.
+  - `NODE 3B - MODEL-DESIGN ANALYSIS CONTINUATION (READ ONLY)`: `READY_NOT_STARTED`.
+- Execution order: `NODE 1 -> NODE 2 -> NODE 3A -> NODE 3B`.
+- System health: `OK`.
+- Loop readiness: `YES`, subject to normal protected-path validation and explicit loop resume.
+
+## Safety Result
+
+- Model work executed: No.
+- Claude loop triggered: No.
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Branch archive action performed: No.
+- Push performed: No.
+- Workflow triggered: No.
+- Claude API triggered: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Model logic affected: No.
+- UI logic affected: No.
+- Ranking/portfolio/strategy/odds/backtest logic affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+
+## Checks
+
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+- Ran secret-shaped token scan on `AGENTS.md`, docs, and reports: pass, no matches.
+- Verified `docs/TASK_GRAPH.md` now defines `NODE 3A`, `NODE 3B`, and valid `NEXT_NODE`.
+
+## 2026-06-28 Decision Layer Control System
+
+## Scope
+
+- Added `docs/DECISION_LAYER_CONTROL_SYSTEM.md`.
+- Updated `AGENTS.md`.
+- Updated `docs/CLAUDE.md`.
+- Updated `docs/CODEX.md`.
+- Updated `docs/EXECUTION_GATE_SYSTEM.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Decision Result
+
+- System state: `STABLE` for governance, `CONSOLIDATION MODE` for analysis control.
+- Analysis/execution balance: `IMBALANCED`.
+- NODE progression allowed: No.
+- Claude loop triggering allowed: No.
+- Branch operations allowed: No.
+- Next required action: decision layer stabilization only.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Branch archive action performed: No.
+- Push performed: No.
+- Workflow triggered: No.
+- Claude API triggered: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Model logic affected: No.
+- UI logic affected: No.
+- Ranking/portfolio/strategy/odds/backtest logic affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+
+## Checks
+
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+- Ran secret-shaped token scan on `AGENTS.md`, docs, and reports: pass, no matches.
+
+## 2026-06-28 Codex-Claude Loop Report Consolidation Rule
+
+## Scope
+
+- Added `reports/CONSOLIDATED_SYSTEM_ANALYSIS.md`.
+- Updated `AGENTS.md`.
+- Updated `docs/CLAUDE.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Loop Result
+
+- Completed node: `NODE 2 - MODEL-DESIGN ANALYSIS (READ ONLY)`.
+- Branch: `dev-clean`.
+- Commit hash at start: `b358466`.
+- Claude verdict: not invoked.
+- Reason Claude was not invoked: report fragmentation was detected before review, and the new protocol requires consolidation first.
+- `NEXT_NODE`: no automatic transition.
+- `SYSTEM_HEALTH`: `FRAGMENTED` at cycle start; consolidated locally.
+- `AUTO_ADVANCE`: `NO`.
+- `REPORT_CONSOLIDATION_REQUIRED`: `YES`.
+- `REPORT_CONSOLIDATION_STATUS`: completed locally.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Branch archive action performed: No.
+- Push performed: No.
+- Workflow triggered: No.
+- Claude API triggered: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Model logic affected: No.
+- UI logic affected: No.
+- Ranking/portfolio/strategy/odds/backtest logic affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Checks
+
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+- Ran secret-shaped token scan on `AGENTS.md`, docs, and reports: pass, no matches.
+
 ## 2026-06-28 Branch Consolidation Execution Phase 1 Safe Mode
 
 ## Scope

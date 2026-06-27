@@ -72,6 +72,42 @@ Every Claude review must include these structured fields:
 - `BRANCH_OK`: `YES` or `NO`.
 - `NEXT_NODE`: exactly one valid next node from `docs/TASK_GRAPH.md`.
 - `AUTO_ADVANCE`: `YES` or `NO`.
-- `SYSTEM_HEALTH`: `OK`, `DRIFT`, or `BLOCKED`.
+- `SYSTEM_HEALTH`: `OK`, `DRIFT`, `FRAGMENTED`, or `BLOCKED`.
+- `REPORT_CONSOLIDATION_REQUIRED`: `YES` or `NO`.
 
 `BRANCH_OK: YES` is allowed only when branch family, task type, lifecycle stage, changed files, and protected-path checks all match the task packet. Otherwise Claude must set `BRANCH_OK: NO`, `AUTO_ADVANCE: NO`, and explain the mismatch.
+
+## Report Fragmentation Review Rule
+
+Claude must detect whether analysis findings are fragmented across UI, MODEL, API, CACHE, OPS, risk, portfolio, and branch governance reports.
+
+Claude should set `SYSTEM_HEALTH: FRAGMENTED` when:
+
+- overlapping findings are repeated in multiple reports without a consolidated summary.
+- UI, MODEL, and OPS findings cannot be traced to one current system understanding.
+- `reports/CONSOLIDATED_SYSTEM_ANALYSIS.md` is missing, stale, or inconsistent with the latest node reports.
+- the next task would rely on scattered reports instead of a single consolidated analysis source.
+
+Claude must recommend consolidation priority and keep `AUTO_ADVANCE: NO` when fragmentation blocks safe continuation.
+
+Claude must not modify `reports/CONSOLIDATED_SYSTEM_ANALYSIS.md`; Codex owns that file update.
+
+## Decision Layer Review Rule
+
+Claude must apply `docs/DECISION_LAYER_CONTROL_SYSTEM.md` when reviewing graph progression, report consolidation, execution readiness, or branch governance packets.
+
+Claude must check:
+
+- whether the system is in `ANALYSIS MODE`, `CONSOLIDATION MODE`, `EXECUTION READY MODE`, or `EXECUTION LOCKED MODE`.
+- whether analysis is expanding faster than execution readiness.
+- whether a new node would increase fragmentation.
+- whether execution thresholds are fully satisfied before any execution recommendation.
+
+Claude must keep `AUTO_ADVANCE: NO` when:
+
+- `SYSTEM_HEALTH` is `FRAGMENTED`.
+- analysis/execution balance is `IMBALANCED`.
+- the task attempts to enter execution without Jin approval.
+- the task would bypass report consolidation.
+
+Claude must not recommend starting NODE 3 or any execution phase while Decision Layer state is `CONSOLIDATION MODE` or `EXECUTION LOCKED MODE`.
