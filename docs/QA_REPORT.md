@@ -1,5 +1,75 @@
 # QA Report
 
+## 2026-06-27 Refresh Dry-Run Status Layer
+
+## Scope
+
+- Branch: `codex/ui-cache-api-refresh-status-layer`.
+- Added a local-only refresh dry-run status layer for the existing `Data Freshness / Refresh Status` panel.
+- Added `scripts/write_refresh_status_dry_run.py` to inspect bounded local file metadata and write only `reports/ui_refresh_status.json`.
+- Updated `app.py` UI-only freshness panel code to read the local status file when present.
+- Panel location remains inside the `核心决策` container before Portfolio Ranking, Match Investment Score, and Recommended Stake.
+- No real Football API, Odds API, Polymarket, or other external API refresh was performed.
+
+## Files Changed
+
+- `app.py`
+- `scripts/write_refresh_status_dry_run.py`
+- `reports/ui_refresh_status.json`
+- `reports/claude_reviews/round_9_review_packet.md`
+- `reports/claude_reviews/packet_validation_report.md`
+- `docs/CHANGELOG.md`
+- `docs/QA_REPORT.md`
+
+## Status Report
+
+- Status file generated: yes.
+- Status file path: `reports/ui_refresh_status.json`.
+- Status file mode: `dry_run`.
+- Status file `api_called`: `false`.
+- Status file write scope: `reports/ui_refresh_status.json` only.
+- App code touched: yes, UI-only freshness panel reader/display.
+- New script/helper: `scripts/write_refresh_status_dry_run.py`.
+
+## Budget Guard Result
+
+- Review packet: `reports/claude_reviews/round_9_review_packet.md`.
+- Estimated input tokens: `738`.
+- Estimated cost per round: `$0.006738`.
+- Per-round threshold: `$0.20`.
+- Budget status: `PASS`.
+
+## Checks
+
+- Ran `python3 scripts/write_refresh_status_dry_run.py`: pass, local status report generated with `api_called: false`.
+- Ran `python3 -m py_compile app.py`: pass.
+- Ran `python3 -m py_compile scripts/write_refresh_status_dry_run.py`: pass.
+- Ran `python3 scripts/validate_claude_review_packet.py reports/claude_reviews/round_9_review_packet.md`: pass.
+- Ran `git diff --check`: pass.
+- Ran protected-path diff check for modules/ranking, modules/portfolio, modules/strategy, modules/backtest, data, and golden JSON: pass, no output.
+- Ran secret-shaped token scan on changed files: pass, no matches.
+- GitHub Actions Claude Review workflow: pending.
+
+## Safety Checklist
+
+- `app.py` business logic unchanged except UI-only refresh-status display inside the existing freshness panel.
+- `modules` unchanged.
+- `data` unchanged.
+- Golden JSON unchanged.
+- Ranking unchanged.
+- Portfolio unchanged.
+- Strategy unchanged.
+- Odds unchanged.
+- Backtest not enabled.
+- Portfolio extraction still blocked.
+- `BACKTEST_READY` remains `NO`.
+- No API secrets printed.
+- No real API refresh performed.
+
+## Result
+
+- Pending final validation and Claude review.
+
 ## 2026-06-27 Data Freshness Panel
 
 ## Scope

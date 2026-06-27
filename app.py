@@ -3782,6 +3782,7 @@ def current_actual_odds(match):
 
 HISTORY_DIR = Path("data/history")
 MY_PORTFOLIO_DIR = HISTORY_DIR / "my_portfolios"
+UI_REFRESH_STATUS_PATH = Path("reports/ui_refresh_status.json")
 
 
 def history_slug(match, selected_fixture=None):
@@ -3937,6 +3938,52 @@ def local_file_modified_time(path):
         return None
 
 
+def load_refresh_status_report(path=UI_REFRESH_STATUS_PATH):
+    status_path = Path(path)
+    fallback = {
+        "report_found": False,
+        "status_file_path": repo_relative_path(status_path),
+        "mode": "unknown",
+        "api_called": None,
+        "generated_at": "-",
+        "data_source": "unknown",
+        "status": "unknown",
+        "warnings": ["Refresh status unknown — no local refresh status report found."],
+    }
+    if not status_path.exists():
+        return fallback
+    try:
+        data = json.loads(status_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {
+            **fallback,
+            "report_found": True,
+            "status": "warning",
+            "warnings": ["Refresh status file exists but could not be read as valid JSON."],
+        }
+    if not isinstance(data, dict):
+        return {
+            **fallback,
+            "report_found": True,
+            "status": "warning",
+            "warnings": ["Refresh status file exists but does not contain a JSON object."],
+        }
+    warnings = data.get("warnings")
+    if not isinstance(warnings, list):
+        warnings = []
+    return {
+        **data,
+        "report_found": True,
+        "status_file_path": repo_relative_path(status_path),
+        "mode": data.get("mode") or "unknown",
+        "api_called": data.get("api_called"),
+        "generated_at": data.get("generated_at") or "-",
+        "data_source": data.get("data_source") or "unknown",
+        "status": data.get("status") or "unknown",
+        "warnings": warnings,
+    }
+
+
 def source_type_from_context(selected_fixture=None, source_path=None, reliable_source=False):
     if selected_fixture and is_live(selected_fixture):
         return "live"
@@ -4008,7 +4055,7 @@ def build_data_freshness_context(match, selected_fixture=None, local_db=None, sn
         "warning": warning,
         "expected_window": str(expected_window) if expected_window else "-",
         "reliable_source": reliable_source,
-        "dry_run_status": "no dry-run mode detected",
+        "refresh_status": load_refresh_status_report(),
     }
 
 
@@ -4021,12 +4068,22 @@ def render_data_freshness_panel(freshness):
         "refresh_mode": "unknown",
         "warning": "Freshness unknown — source timestamp unavailable.",
         "expected_window": "-",
-        "dry_run_status": "no dry-run mode detected",
+        "refresh_status": load_refresh_status_report(),
     }
     status = freshness.get("status") or "Unknown"
     source_type = freshness.get("source_type") or "unknown"
     modified_at = freshness.get("modified_at") or "-"
     warning = freshness.get("warning") or ""
+    refresh_status = freshness.get("refresh_status") or load_refresh_status_report()
+    refresh_warnings = refresh_status.get("warnings") or []
+    api_called = refresh_status.get("api_called")
+    api_called_label = "No" if api_called is False else ("Yes" if api_called is True else "Unknown")
+    refresh_mode = refresh_status.get("mode") or "unknown"
+    refresh_generated_at = refresh_status.get("generated_at") or "-"
+    refresh_status_line = (
+        f"Refresh mode: {refresh_mode} · API called: {api_called_label} · "
+        f"last check: {refresh_generated_at}"
+    )
 
     with st.container(border=True):
         st.markdown("**Data Freshness / Refresh Status**")
@@ -4037,21 +4094,33 @@ def render_data_freshness_panel(freshness):
             st.warning(summary)
         if warning:
             st.caption(warning)
+        st.caption(refresh_status_line)
+        for refresh_warning in refresh_warnings[:3]:
+            st.caption(str(refresh_warning))
         st.caption(
             "Freshness is based on local snapshot metadata only. "
             "This panel did not perform an external API refresh. "
             "Check latest market/API data before acting on recommendations."
         )
-        with st.expander("Show freshness details", expanded=False):
+        with st.expander("Show refresh/freshness details", expanded=False):
             detail_rows = [
                 {"Item": "Last loaded local data file", "Value": freshness.get("source_path") or "-"},
                 {"Item": "Local file modified time", "Value": modified_at},
                 {"Item": "Data source type", "Value": source_type},
                 {"Item": "Freshness label", "Value": status},
                 {"Item": "Current refresh mode", "Value": freshness.get("refresh_mode") or "unknown"},
-                {"Item": "Dry-run mode", "Value": freshness.get("dry_run_status") or "no dry-run mode detected"},
                 {"Item": "Expected freshness window", "Value": freshness.get("expected_window") or "-"},
                 {"Item": "Verification warning", "Value": warning or "None"},
+                {"Item": "Refresh status file", "Value": refresh_status.get("status_file_path") or "-"},
+                {"Item": "Refresh status generated at", "Value": refresh_generated_at},
+                {"Item": "Refresh mode", "Value": refresh_mode},
+                {"Item": "API called", "Value": api_called_label},
+                {"Item": "Refresh data source", "Value": refresh_status.get("data_source") or "unknown"},
+                {"Item": "Refresh status", "Value": refresh_status.get("status") or "unknown"},
+                {"Item": "Refresh availability", "Value": refresh_status.get("refresh_available") or "unknown"},
+                {"Item": "API quota protected", "Value": str(refresh_status.get("api_quota_protected", "unknown"))},
+                {"Item": "Manual refresh needed", "Value": str(refresh_status.get("manual_refresh_needed", "unknown"))},
+                {"Item": "Refresh warnings", "Value": "; ".join(map(str, refresh_warnings)) or "None"},
             ]
             st.dataframe(pd.DataFrame(detail_rows), use_container_width=True, hide_index=True)
 

@@ -2,6 +2,12 @@
 
 ## 2026-06-27
 
+- Added a local dry-run refresh status layer for the existing `Data Freshness / Refresh Status` panel.
+- Added `scripts/write_refresh_status_dry_run.py` to write `reports/ui_refresh_status.json` from bounded local metadata only.
+- The refresh status report records `mode: dry_run`, `api_called: false`, API quota protection, local snapshot metadata, and conservative stale-data warnings.
+- Updated the UI freshness panel to read the local refresh status report when present and show refresh mode, API-called status, last status-check time, and warnings before Portfolio Ranking, Match Investment Score, and Recommended Stake.
+- No real API refresh was performed, no network calls were added, and no `data` or golden JSON files were modified.
+- No recommendation, ranking, portfolio, strategy, odds, or backtest logic was changed for the refresh dry-run status layer.
 - Added a read-only `Data Freshness / Refresh Status` panel before Portfolio Ranking, Match Investment Score, and Recommended Stake outputs.
 - The panel reads only bounded local file metadata and shows conservative Fresh / Possibly stale / Unknown labels.
 - Added local snapshot warnings that no external API refresh is performed by the panel and recommendations should be checked against latest market/API data before action.
