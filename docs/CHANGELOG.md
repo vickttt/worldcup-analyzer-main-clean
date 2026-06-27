@@ -7,6 +7,7 @@
 - Updated the freshness panel to read runtime status first and treat the sample as unknown/sample-only rather than real freshness evidence.
 - Removed tracked runtime output `reports/ui_refresh_status.json` to prevent repeated dry-run timestamp churn before merging Task 3.
 - Cleaned local runtime byproducts from Streamlit/dry-run validation without committing generated match history or duplicate Claude artifact files.
+- Ran one GitHub Actions Claude review round for the runtime churn cleanup and recorded the PASS result.
 - Added a local dry-run refresh status layer for the existing `Data Freshness / Refresh Status` panel.
 - Added `scripts/write_refresh_status_dry_run.py` to write `.runtime/ui_refresh_status.json` from bounded local metadata only.
 - The refresh status report records `mode: dry_run`, `api_called: false`, API quota protection, local snapshot metadata, and conservative stale-data warnings.
