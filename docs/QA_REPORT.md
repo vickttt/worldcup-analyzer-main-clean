@@ -1,5 +1,59 @@
 # QA Report
 
+## 2026-06-27 Protocol Consolidation
+
+## Scope
+
+- Branch: `codex/protocol-consolidation-agents-md`.
+- Updated `AGENTS.md` into the top-level project operating protocol.
+- Added `docs/CODEX_CLAUDE_LOOP.md`.
+- Added `docs/UI_CACHE_API_PROTOCOL.md`.
+- Added `docs/API_REFRESH_SAFETY.md`.
+- Recorded Task 5 completion context: branch `codex/ui-cache-api-api-football-one-time-refresh`, final head `7f447bbad9e70caaf9b0779bf214e0f6f26f21cd`, exactly one API-Football `GET /fixtures?id=1489393` call, and Claude Round 14 PASS.
+
+## Files Changed
+
+- `AGENTS.md`
+- `docs/CODEX_CLAUDE_LOOP.md`
+- `docs/UI_CACHE_API_PROTOCOL.md`
+- `docs/API_REFRESH_SAFETY.md`
+- `docs/CHANGELOG.md`
+- `docs/QA_REPORT.md`
+- `reports/claude_reviews/round_15_review_packet.md`
+- `reports/claude_reviews/packet_validation_report.md`
+
+## Safety Checklist
+
+- Product code changed: no.
+- `app.py` changed: no.
+- `modules/` changed: no.
+- `data/` changed: no.
+- Golden JSON changed: no.
+- Real API refresh performed: no.
+- Secrets printed: no.
+- `main-clean` modified: no.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Validation
+
+- `git diff --check`: pass.
+- Secret-shaped token scan on changed files: pass, no matches.
+- Protected-path diff check for `app.py`, `modules`, `data`, and golden JSON: pass.
+- Python compile: not required because no Python files were touched.
+- Packet budget guard: pass, estimated `$0.007110`.
+
+## Claude Review
+
+- GitHub Actions Claude Review: pending.
+- Claude rounds completed: pending.
+- Claude verdict: pending.
+- Codex changes after Claude: pending.
+
+## Result
+
+- Pending validation and Claude review.
+
 ## 2026-06-27 API-Football Refresh Readiness Gate
 
 ## Scope

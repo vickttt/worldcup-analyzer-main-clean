@@ -2,6 +2,10 @@
 
 ## 2026-06-27
 
+- Added project agent/protocol docs in `AGENTS.md`, `docs/CODEX_CLAUDE_LOOP.md`, `docs/UI_CACHE_API_PROTOCOL.md`, and `docs/API_REFRESH_SAFETY.md`.
+- Consolidated branch rules, stop conditions, Codex-Claude review loop, UI-CACHE-API route, API/secret policy, validation checklist, and checkpoint summary format so future tasks can reference `AGENTS.md`.
+- Recorded Task 5 completion context: branch `codex/ui-cache-api-api-football-one-time-refresh`, final head `7f447bbad9e70caaf9b0779bf214e0f6f26f21cd`, exactly one API-Football `GET /fixtures?id=1489393` call, and Claude Round 14 PASS.
+- No product code, API refresh, secrets, modules, data, or golden JSON were changed for the protocol consolidation.
 - Added an API-Football-only refresh readiness gate for the UI-CACHE-API phase.
 - Added safe redacted `API_FOOTBALL_KEY` presence detection from process environment, Streamlit secrets, or repo `.env`.
 - Marked The Odds API as disabled and not required for current refresh readiness.
