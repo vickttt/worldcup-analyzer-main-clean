@@ -2,6 +2,29 @@
 
 ## 2026-06-28
 
+- Performed Branch Consolidation Execution Phase 1 in safe mode.
+- Added `reports/branch_consolidation_execution_phase1.md`.
+- Confirmed no safe branch was merged into `dev-clean` because the working tree is dirty and Category A safe-merge list is empty.
+- Classified already-merged stale branches as archive candidates only; no branch deletion, rename, tag, or remote operation was performed.
+- Confirmed high-risk model-design, UI-CACHE-API, ops-protocol, legacy, release, and backup branches were untouched.
+- Confirmed the Phase 1 safe-mode consolidation task did not modify `app.py`, `modules/`, `data/`, golden JSON, model logic, UI logic, ranking, portfolio, strategy, odds, or backtest logic.
+- Completed `NODE 2 - MODEL-DESIGN ANALYSIS (READ ONLY)` as a static model-layer analysis.
+- Added `reports/node2_model_flow_map.md` covering input-to-output model flow, risk-score locations, portfolio construction, ranking decisions, and scenario signal generation.
+- Added `reports/node2_model_dependency_graph.md` covering modules involved, function call chains, `data/history` dependency, golden JSON dependency, UI/API/cache coupling, implicit state dependency, and portfolio extraction blockers.
+- Updated `docs/TASK_GRAPH.md` to mark NODE 2 as `COMPLETED` while keeping NODE 3 as suggestion-only with `AUTO_ADVANCE: NO`.
+- Confirmed model pipeline clarity is `fragmented`, dependency risk is `high`, hidden coupling severity is `high`, and automatic advancement is unsafe.
+- Confirmed the NODE 2 execution did not modify `app.py`, `modules/`, `data/`, golden JSON, model logic, UI logic, ranking, portfolio, strategy, odds, or backtest logic.
+- Added `docs/AUTONOMOUS_BRANCH_GOVERNANCE.md` to define Codex branch self-governance, branch-family routing, stale/experimental lifecycle rules, and `dev-clean` protection.
+- Updated `docs/CLAUDE.md` so Claude validates branch selection, outputs `BRANCH_OK`, checks task graph alignment, detects cross-domain contamination, enforces the 3-round loop limit, and flags over-automation risk.
+- Updated `docs/TASK_GRAPH.md` to define `NODE 2 - MODEL-DESIGN ANALYSIS (READ ONLY)` as the next suggested node with risk scoring flow mapping, portfolio dependency mapping, and ranking system dependency graph scope.
+- Added `reports/model_design_dependency_map.md`, `reports/risk_score_flow_analysis.md`, and `reports/portfolio_pipeline_map.md` for NODE 2 preparation.
+- Confirmed `NODE 1 completed = YES`, `NODE 2 allowed = YES` for read-only analysis only, and `AUTO_ADVANCE = CONDITIONAL_ONLY`.
+- Confirmed this autonomous branch governance and NODE 2 preparation task did not modify `app.py`, `modules/`, `data/`, golden JSON, model logic, UI logic, ranking, portfolio, strategy, odds, or backtest logic.
+- Completed `NODE 1 - UI-CACHE-API AUDIT` as a read-only static audit.
+- Added `reports/ui_cache_api_audit.md`, `reports/streamlit_load_flow_map.md`, `reports/api_refresh_flow_audit.md`, and `reports/cache_opportunity_map.md`.
+- Updated `docs/TASK_GRAPH.md` to mark NODE 1 as `COMPLETED` while keeping NODE 2 as a suggestion only with `AUTO_ADVANCE: NO`.
+- Confirmed no Streamlit server was started, no API call was made, and no workflow or Claude API was triggered.
+- Confirmed the NODE 1 audit did not modify `app.py`, `modules/`, `data/`, golden JSON, model logic, UI logic, ranking, portfolio, strategy, odds, or backtest logic.
 - Added `docs/TASK_GRAPH.md` as the minimal required execution state machine after the missing task graph blocked `NEXT_NODE` resolution.
 - Defined `CURRENT_NODE = NODE 1 - UI-CACHE-API AUDIT`.
 - Added nodes for INIT, UI-CACHE-API audit, MODEL-DESIGN analysis, branch consolidation planning, execution gate design, and first real execution phase.

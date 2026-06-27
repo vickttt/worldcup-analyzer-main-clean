@@ -1,5 +1,228 @@
 # QA Report
 
+## 2026-06-28 Branch Consolidation Execution Phase 1 Safe Mode
+
+## Scope
+
+- Added `reports/branch_consolidation_execution_phase1.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Execution Result
+
+- Branch refs before Phase 1: 49, excluding symbolic `origin/HEAD`.
+- Branch refs after Phase 1: 49, excluding symbolic `origin/HEAD`.
+- Safe merge candidates: none.
+- Branches merged into `dev-clean`: none.
+- Branches deleted: none.
+- Branches archived physically: none.
+- Branches marked as archive candidates in report only: yes.
+- High-risk branches touched: No.
+- Claude/GitHub review loop invoked: No, because no merge execution was started after the clean-worktree stop condition.
+
+## Stop Condition
+
+- Current working tree contains uncommitted docs/reports changes.
+- Existing pre-execution plan states `Safe To Merge Now: none`.
+- Safe-mode merge execution stopped before any branch operation.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Branch archive action performed: No.
+- Push performed: No.
+- Workflow triggered: No.
+- Claude API triggered: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Model logic affected: No.
+- UI logic affected: No.
+- Ranking/portfolio/strategy/odds/backtest logic affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+
+## Checks
+
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+- Ran secret-shaped token scan on docs/reports: pass, no matches.
+- Ran `git log --oneline -10`: confirmed no Phase 1 merge commit was created.
+
+## 2026-06-28 NODE 2 Model-Design Analysis
+
+## Scope
+
+- Added `reports/node2_model_flow_map.md`.
+- Added `reports/node2_model_dependency_graph.md`.
+- Updated `docs/TASK_GRAPH.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Node Result
+
+- `NODE 2 - MODEL-DESIGN ANALYSIS (READ ONLY)`: `COMPLETED`.
+- `CURRENT_NODE`: `NODE 2 - MODEL-DESIGN ANALYSIS (READ ONLY)`.
+- `NEXT_NODE`: `NODE 3 - BRANCH CONSOLIDATION PLANNING` suggestion only.
+- `AUTO_ADVANCE`: `NO`.
+- `SYSTEM_HEALTH`: `OK_WITH_HUMAN_CHECKPOINT_REQUIRED`.
+
+## Findings
+
+- Model pipeline clarity: `fragmented`.
+- Dependency risk level: `high`.
+- Hidden coupling severity: `high`.
+- Readiness for NODE 3: `NO`, unless NODE 3 remains planning-only and Jin explicitly approves.
+- Safe to continue auto-advance: `NO`.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Branch archive action performed: No.
+- Push performed: No.
+- Workflow triggered: No.
+- Claude API triggered: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Model logic affected: No.
+- UI logic affected: No.
+- Ranking/portfolio/strategy/odds/backtest logic affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+
+## Checks
+
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+- Ran secret-shaped token scan on docs/reports: pass, no matches.
+
+## 2026-06-28 Autonomous Branch Governance And NODE 2 Preparation
+
+## Scope
+
+- Added `docs/AUTONOMOUS_BRANCH_GOVERNANCE.md`.
+- Updated `docs/CLAUDE.md`.
+- Updated `docs/TASK_GRAPH.md`.
+- Added `reports/model_design_dependency_map.md`.
+- Added `reports/risk_score_flow_analysis.md`.
+- Added `reports/portfolio_pipeline_map.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Node Result
+
+- `NODE 1 completed`: `YES`.
+- `NODE 2 readiness`: `YES`, read-only only.
+- `NODE 2 status`: `NOT_STARTED`.
+- `NEXT_NODE`: `NODE 2 - MODEL-DESIGN ANALYSIS (READ ONLY)`.
+- `AUTO_ADVANCE`: `CONDITIONAL_ONLY`.
+- `SYSTEM_HEALTH`: `OK`.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Branch archive action performed: No.
+- Push performed: No.
+- Workflow triggered: No.
+- Claude API triggered: No.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Model logic affected: No.
+- UI logic affected: No.
+- Ranking/portfolio/strategy/odds/backtest logic affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Checks
+
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+- Ran secret-shaped token scan on docs/reports: pass, no matches.
+
+## 2026-06-28 NODE 1 UI-CACHE-API Audit
+
+## Scope
+
+- Added `reports/ui_cache_api_audit.md`.
+- Added `reports/streamlit_load_flow_map.md`.
+- Added `reports/api_refresh_flow_audit.md`.
+- Added `reports/cache_opportunity_map.md`.
+- Updated `docs/TASK_GRAPH.md`.
+- Updated `docs/CHANGELOG.md`.
+- Updated `docs/QA_REPORT.md`.
+
+## Node Result
+
+- `NODE 1 - UI-CACHE-API AUDIT`: `COMPLETED`.
+- `CURRENT_NODE`: still `NODE 1 - UI-CACHE-API AUDIT`.
+- `NEXT_NODE`: `NODE 2 - MODEL-DESIGN ANALYSIS` suggestion only.
+- `AUTO_ADVANCE`: `NO`.
+- `SYSTEM_HEALTH`: `OK_WITH_HUMAN_CHECKPOINT_REQUIRED`.
+
+## Audit Method
+
+- Static source review only.
+- No Streamlit server started.
+- No browser test run.
+- No API calls made.
+- No workflow triggered.
+- No Claude API triggered.
+
+## Key Findings
+
+- Detail page is the main performance hotspot because data loading, model computation, portfolio candidate construction, report generation, and tab rendering are assembled in one path.
+- `fetch_match_data()` can fan out into fixture lookup, correct score, Asian handicap, standings, injuries, lineups, and recent fixtures when local DB is missing.
+- Refresh visibility is display-only and reads `.runtime/ui_refresh_status.json` first, then the tracked sample file.
+- Runtime refresh status, sample status, local data freshness, and API key readiness exist as related but separate contracts.
+- Future optimization should focus on read-only diagnostics and derived detail-page payload caching without changing recommendation behavior.
+
+## Safety Result
+
+- Branch deletion performed: No.
+- Branch merge performed: No.
+- Branch archive action performed: No.
+- Push performed after checkpoint only: Yes, checkpoint commit `47a4e14` was pushed before NODE 1 audit.
+- Runtime logic affected: No.
+- `app.py` affected: No.
+- `modules/` affected: No.
+- `data/` affected: No.
+- `data/history/` affected: No.
+- Golden JSON affected: No.
+- Model logic affected: No.
+- UI logic affected: No.
+- Ranking/portfolio/strategy/odds/backtest logic affected: No.
+- API calls performed: No.
+- Secret values printed or committed: No.
+- `PORTFOLIO_EXTRACTION`: `BLOCKED`.
+- `BACKTEST_READY`: `NO`.
+
+## Checks
+
+- Ran `git status`.
+- Ran `git log --oneline -5`.
+- Ran static scans over `app.py`, `modules/*client.py`, refresh scripts, cache config, and sample refresh status.
+- Ran `git diff --check`: pass.
+- Ran protected-path checks for `app.py`, `modules/`, `data/`, and golden JSON: pass, no diff output.
+- Ran secret-shaped token scan on docs/reports: pass, no matches.
+
 ## 2026-06-28 Missing Task Graph State Machine Fix
 
 ## Scope

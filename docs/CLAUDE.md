@@ -45,3 +45,33 @@ Claude must apply `docs/BRANCH_LIFECYCLE_SYSTEM.md` when reviewing branch cleanu
 - Remote deletion always requires Jin approval; Claude must not phrase remote deletion as an agent-owned action.
 
 If a packet claims a branch is `merge-safe`, Claude should verify whether it is already merged into `dev-clean`, protected as a stable branch, or still contains unique commits.
+
+## Autonomous Branch Governance Review Rule
+
+Claude must apply `docs/AUTONOMOUS_BRANCH_GOVERNANCE.md` for every graph-governed task, branch-routing review, consolidation review, or autonomous progression packet.
+
+Claude responsibilities now include:
+
+- validate Codex branch selection correctness.
+- detect wrong branch usage.
+- ensure `docs/TASK_GRAPH.md` alignment.
+- ensure no cross-domain contamination between `UI`, `MODEL`, `OPS`, and `RISK` scopes.
+- enforce the 3-round Codex-Claude loop limit.
+- detect over-automation risk, including repeated self-advancement without a clean graph state or human checkpoint.
+
+Claude must check that:
+
+- UI, cache, refresh, and API work uses the UI-CACHE-API branch family.
+- MODEL, risk, scoring, ranking dependency, and portfolio dependency analysis uses the model-design branch family or remains read-only on an approved governance checkpoint.
+- OPS, GitHub, workflow, and governance-only work uses the ops branch family or an approved docs-only checkpoint on `dev-clean`.
+- mixed tasks are split before execution.
+- `dev-clean` does not receive direct experimental commits.
+
+Every Claude review must include these structured fields:
+
+- `BRANCH_OK`: `YES` or `NO`.
+- `NEXT_NODE`: exactly one valid next node from `docs/TASK_GRAPH.md`.
+- `AUTO_ADVANCE`: `YES` or `NO`.
+- `SYSTEM_HEALTH`: `OK`, `DRIFT`, or `BLOCKED`.
+
+`BRANCH_OK: YES` is allowed only when branch family, task type, lifecycle stage, changed files, and protected-path checks all match the task packet. Otherwise Claude must set `BRANCH_OK: NO`, `AUTO_ADVANCE: NO`, and explain the mismatch.
