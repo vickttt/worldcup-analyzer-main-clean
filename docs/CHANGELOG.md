@@ -2,6 +2,12 @@
 
 ## 2026-06-27
 
+- Added a controlled one-time API-Football refresh path and audit report.
+- Ran exactly one bounded API-Football `GET /fixtures?id=1489393` refresh call.
+- Wrote API-Football refresh payload and one-time execution marker only under ignored `.runtime/`.
+- Updated `.runtime/ui_refresh_status.json` with real refresh status, call count, endpoint, timestamps, and files written.
+- Updated the Data Freshness / Refresh Status panel so it can display real one-time refresh metadata without adding refresh buttons or auto-refresh.
+- Confirmed no Odds API, no Polymarket refresh, no `data/history`, no golden JSON, and no recommendation/ranking/portfolio/strategy/odds/backtest logic changes for the one-time refresh task.
 - Added an API-Football-only refresh readiness gate for the UI-CACHE-API phase.
 - Added safe redacted `API_FOOTBALL_KEY` presence detection from process environment, Streamlit secrets, or repo `.env`.
 - Marked The Odds API as disabled and not required for current refresh readiness.
