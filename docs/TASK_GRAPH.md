@@ -11,7 +11,7 @@ This file is the required execution state machine for World Cup Analyzer.
 Current system status:
 
 - State machine restored.
-- Current executable node: `NODE 2 - MODEL-DESIGN ANALYSIS (READ ONLY)` completed; next node is recommendation-only and must not auto-advance.
+- Current executable node: `NODE 2 - MODEL-DESIGN ANALYSIS (READ ONLY)` completed; next node is `NODE 3B - MODEL-DESIGN ANALYSIS CONTINUATION (READ ONLY)` and must not auto-execute until Claude loop is explicitly resumed.
 - Execution gate: `Gate 2 - Pre-Execution`.
 - Branch: `dev-clean`.
 - `PORTFOLIO_EXTRACTION`: `BLOCKED`.
@@ -23,8 +23,9 @@ Current system status:
 | --- | --- | --- | --- | --- | --- |
 | NODE 0 | INIT | System initialization and protocol bootstrap | `dev-clean` | `COMPLETED` | NODE 1 |
 | NODE 1 | UI-CACHE-API AUDIT | Read-only UI, cache, API, and refresh-safety audit | `dev-clean` or scoped `codex/ui-cache-api-*` | `COMPLETED` | NODE 2 |
-| NODE 2 | MODEL-DESIGN ANALYSIS (READ ONLY) | Risk scoring flow mapping, portfolio dependency mapping, and ranking system dependency graph | `codex/model-design/*` | `COMPLETED` | NODE 3 suggestion only after Jin approval |
-| NODE 3 | BRANCH CONSOLIDATION PLANNING | Branch lifecycle mapping and consolidation planning only | `dev-clean` | `COMPLETED` | NODE 4 |
+| NODE 2 | MODEL-DESIGN ANALYSIS (READ ONLY) | Risk scoring flow mapping, portfolio dependency mapping, and ranking system dependency graph | `codex/model-design/*` | `COMPLETED` | NODE 3A already completed; NODE 3B ready |
+| NODE 3A | BRANCH CONSOLIDATION PLANNING | Branch lifecycle mapping and consolidation planning only | `dev-clean` | `COMPLETED` | NODE 3B |
+| NODE 3B | MODEL-DESIGN ANALYSIS CONTINUATION (READ ONLY) | Risk-score dependency validation, portfolio construction mapping, ranking signal-flow validation, and scenario engine linkage | `codex/model-design/*` | `READY_NOT_STARTED` | NODE 4 after review |
 | NODE 4 | EXECUTION GATE DESIGN | Execution gate and hard-stop design only | `dev-clean` | `COMPLETED` | NODE 5 after Jin approval |
 | NODE 5 | FIRST REAL EXECUTION PHASE | First approved branch/archive/merge execution phase | approved branch only | `NOT_STARTED` | none |
 
@@ -91,9 +92,9 @@ Current system status:
   - hidden coupling severity: `high`.
   - portfolio extraction remains `BLOCKED`.
   - backtest remains `NO`.
-- Auto-advance condition: `NO`; do not advance to NODE 3 automatically.
+- Auto-advance condition: `NO`; do not advance to NODE 3B automatically.
 
-### NODE 3 - BRANCH CONSOLIDATION PLANNING
+### NODE 3A - BRANCH CONSOLIDATION PLANNING
 
 - Purpose: lifecycle mapping and consolidation strategy.
 - Status: `COMPLETED`.
@@ -101,6 +102,30 @@ Current system status:
   - `docs/BRANCH_LIFECYCLE_SYSTEM.md`.
   - `reports/branch_lifecycle_audit_report.md`.
   - `reports/branch_consolidation_strategy_v1.md`.
+
+### NODE 3B - MODEL-DESIGN ANALYSIS CONTINUATION (READ ONLY)
+
+- Purpose: continue model-design read-only analysis without changing runtime behavior.
+- Status: `READY_NOT_STARTED`.
+- Required branch family for execution: `codex/model-design/*`.
+- Allowed work:
+  - risk-score dependency validation.
+  - portfolio construction mapping.
+  - ranking signal-flow validation.
+  - scenario engine linkage analysis.
+  - reports-only analysis.
+- Forbidden work:
+  - model logic changes.
+  - ranking logic changes.
+  - portfolio logic changes.
+  - strategy, odds, or backtest logic changes.
+  - `app.py` runtime behavior changes.
+  - `modules/` changes.
+  - `data/` or `data/history` writes.
+  - golden JSON writes.
+  - branch merge, archive, or deletion.
+- Entry condition: explicit loop resume task plus valid protected-path checks.
+- Execution status: not executed by this repair.
 
 ### NODE 4 - EXECUTION GATE DESIGN
 
@@ -133,6 +158,8 @@ Current system status:
 
 - `NODE 1 completed`: `YES`.
 - `NODE 2 completed`: `YES`.
-- `NEXT_NODE`: `NODE 3 - BRANCH CONSOLIDATION PLANNING` suggestion only; no automatic transition.
+- `NODE 3A branch consolidation completed`: `YES`.
+- `NODE 3B model-design continuation ready`: `YES`, not executed.
+- `NEXT_NODE`: `NODE 3B - MODEL-DESIGN ANALYSIS CONTINUATION (READ ONLY)`.
 - `AUTO_ADVANCE`: `NO`.
-- `SYSTEM_HEALTH`: `OK_WITH_HUMAN_CHECKPOINT_REQUIRED`.
+- `SYSTEM_HEALTH`: `OK`.

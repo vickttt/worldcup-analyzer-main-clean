@@ -152,6 +152,37 @@ See `docs/API_REFRESH_SAFETY.md` for the detailed refresh policy.
 - Run the packet budget guard before Claude review.
 - Store Claude artifacts under `reports/claude_reviews/`.
 
+## Report Consolidation Rule
+
+After every Codex-Claude loop or graph-governed analysis cycle, Codex must run a report consolidation step.
+
+The consolidation step must:
+
+- update `reports/CONSOLIDATED_SYSTEM_ANALYSIS.md`.
+- merge durable UI, MODEL, API, CACHE, OPS, risk, portfolio, and branch-governance findings into one structured summary.
+- avoid duplicating the same finding across node reports.
+- identify unresolved overlaps between UI, MODEL, and OPS domains.
+- confirm whether the system is still in analysis/planning or has explicit approval to enter execution.
+
+Claude must detect report fragmentation and include `REPORT_CONSOLIDATION_REQUIRED: YES/NO` in graph-governed review output.
+
+If report fragmentation is detected, Codex must consolidate reports before continuing to another node.
+
+## Decision Layer Control
+
+`docs/DECISION_LAYER_CONTROL_SYSTEM.md` controls whether the system should continue analysis, consolidate, request execution readiness review, or remain execution-locked.
+
+Decision Layer states:
+
+- `ANALYSIS MODE`: read-only analysis is allowed.
+- `CONSOLIDATION MODE`: only report consolidation and overlap reduction are allowed.
+- `EXECUTION READY MODE`: exact action list may be prepared for Jin approval.
+- `EXECUTION LOCKED MODE`: no execution, merge, branch archive, deletion, or product change is allowed.
+
+If `SYSTEM_HEALTH` is `FRAGMENTED`, Codex must not start a new node, trigger Claude, merge branches, delete branches, or perform branch operations. Codex may only consolidate reports and update governance state.
+
+If analysis output grows faster than execution readiness, Codex must stop and run Decision Layer review before adding more reports or proposing execution.
+
 Claude is usually not required for:
 
 - Pure local operations such as opening a page, checking a port, stopping Streamlit, or confirming localhost.

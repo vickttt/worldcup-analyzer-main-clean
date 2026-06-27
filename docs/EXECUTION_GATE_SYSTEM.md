@@ -4,6 +4,12 @@ This document defines the hard-stop execution gates for branch consolidation, me
 
 The current system state is `Gate 2 - Pre-Execution`.
 
+Decision Layer status:
+
+- Decision Layer document: `docs/DECISION_LAYER_CONTROL_SYSTEM.md`.
+- Current decision mode: `CONSOLIDATION MODE`.
+- Execution remains locked until Decision Layer threshold rules are satisfied.
+
 ## Purpose
 
 The execution gate system prevents branch cleanup from becoming an accidental merge, deletion, push, or production behavior change.
@@ -87,6 +93,8 @@ Gate 3 is future-only.
 
 Gate 3 may be entered only when all conditions are true:
 
+- Decision Layer state is `EXECUTION READY MODE`.
+- Report consolidation is complete and fragmentation level is `LOW`.
 - Claude verdict stability is at least 3 consecutive PASS rounds.
 - No high-risk branch divergence remains unresolved.
 - All validation pipelines are green.
@@ -157,6 +165,9 @@ Execution is forbidden if any condition is true:
 - Golden JSON validation fails.
 - Secret scan fails.
 - Workflow instability exists.
+- Decision Layer state is `ANALYSIS MODE`, `CONSOLIDATION MODE`, or `EXECUTION LOCKED MODE`.
+- `SYSTEM_HEALTH` is `FRAGMENTED`.
+- Analysis/execution balance is `IMBALANCED`.
 - A high-risk branch still has unresolved divergence from `dev-clean`.
 - A branch operation could indirectly modify `dev-clean` through an unreviewed merge chain.
 - Jin has not explicitly approved the exact operation.

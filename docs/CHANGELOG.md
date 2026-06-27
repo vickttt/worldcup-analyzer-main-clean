@@ -2,6 +2,21 @@
 
 ## 2026-06-28
 
+- Fixed `docs/TASK_GRAPH.md` node naming conflict by splitting the old NODE 3 into `NODE 3A - BRANCH CONSOLIDATION PLANNING` and `NODE 3B - MODEL-DESIGN ANALYSIS CONTINUATION (READ ONLY)`.
+- Marked `NODE 3A` as `COMPLETED` and `NODE 3B` as `READY_NOT_STARTED`.
+- Updated execution order to `NODE 1 -> NODE 2 -> NODE 3A -> NODE 3B`.
+- Confirmed the task graph consistency repair did not execute model work, trigger Claude, modify `app.py`, modify `modules/`, modify `data/`, modify golden JSON, or perform branch operations.
+- Added `docs/DECISION_LAYER_CONTROL_SYSTEM.md` to regulate when analysis must stop, when consolidation is required, and when execution readiness may be requested.
+- Updated `AGENTS.md`, `docs/CLAUDE.md`, `docs/CODEX.md`, and `docs/EXECUTION_GATE_SYSTEM.md` with Decision Layer state rules.
+- Defined `ANALYSIS MODE`, `CONSOLIDATION MODE`, `EXECUTION READY MODE`, and `EXECUTION LOCKED MODE`.
+- Added execution threshold rules requiring completed consolidation, low fragmentation, 3 Claude PASS cycles, no unresolved branch conflicts, validation, and Jin approval.
+- Added fragmented-state stop rules: no new NODE execution, no Claude loop triggering, no branch operations, consolidation only.
+- Confirmed this Decision Layer control update did not modify `app.py`, `modules/`, `data/`, golden JSON, model logic, UI logic, ranking, portfolio, strategy, odds, or backtest logic.
+- Added `reports/CONSOLIDATED_SYSTEM_ANALYSIS.md` as the single source of truth for UI-CACHE-API, MODEL-DESIGN, API flow, cache behavior, risk/portfolio dependency, golden validation, and branch-governance findings.
+- Updated `AGENTS.md` and `docs/CLAUDE.md` with mandatory report consolidation rules after every Codex-Claude loop or graph-governed analysis cycle.
+- Added Claude output field `REPORT_CONSOLIDATION_REQUIRED` and extended `SYSTEM_HEALTH` to include `FRAGMENTED`.
+- Confirmed Claude/GitHub review was not triggered in this cycle because report fragmentation was detected before review and consolidation was required first.
+- Confirmed this consolidation protocol update did not modify `app.py`, `modules/`, `data/`, golden JSON, model logic, UI logic, ranking, portfolio, strategy, odds, or backtest logic.
 - Performed Branch Consolidation Execution Phase 1 in safe mode.
 - Added `reports/branch_consolidation_execution_phase1.md`.
 - Confirmed no safe branch was merged into `dev-clean` because the working tree is dirty and Category A safe-merge list is empty.

@@ -63,3 +63,17 @@ Default branch routing:
 - `MODEL`: use `codex/model-design-*`.
 - `OPS`: use `dev-clean` only for tiny docs-only changes; otherwise use a scoped `codex/ops-*` branch.
 - `RISK`: use `codex/risk-*`.
+
+## Decision Layer Rule
+
+Codex must apply `docs/DECISION_LAYER_CONTROL_SYSTEM.md` before starting a new node, triggering Claude, or proposing branch execution.
+
+If the system is in `FRAGMENTED` or `CONSOLIDATION MODE`:
+
+- do not start a new node.
+- do not trigger Claude.
+- do not merge, archive, delete, or push branch operations.
+- do not create more analysis reports unless they directly consolidate existing findings.
+- update `reports/CONSOLIDATED_SYSTEM_ANALYSIS.md` or Decision Layer governance first.
+
+If analysis output is growing faster than execution readiness, Codex must classify analysis/execution balance as `IMBALANCED` and stop for Decision Layer review.
