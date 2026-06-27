@@ -9,6 +9,7 @@
 - Updated the Data Freshness / Refresh Status panel to show API-Football key present/missing, controlled-refresh readiness, Odds API disabled, and real API refresh performed = No.
 - No real API refresh was performed, and no secret values were printed or committed.
 - No recommendation, ranking, portfolio, strategy, odds calculation/settlement, data, golden JSON, or backtest logic was changed for the API-Football readiness gate.
+- Ran one GitHub Actions Claude review round for the API-Football refresh readiness gate and recorded the PASS result.
 - Moved refresh dry-run runtime output from tracked reports into ignored `.runtime/ui_refresh_status.json`.
 - Added stable tracked sample `reports/samples/ui_refresh_status.sample.json` for documentation and fallback display.
 - Updated the freshness panel to read runtime status first and treat the sample as unknown/sample-only rather than real freshness evidence.
