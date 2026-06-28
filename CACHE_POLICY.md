@@ -12,7 +12,7 @@ The project must check cache before adding or calling any external data module.
 - Fixture: 12 hours
 - Match Overview: 12 hours
 
-## The Odds API
+## API-Football
 
 - Match Winner: 15 minutes
 - Asian Handicap: 15 minutes

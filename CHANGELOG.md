@@ -33,7 +33,7 @@
 - Optimized match detail loading by using `data/worldcup2026/index.json` to locate the match database directly instead of scanning directories.
 - Changed detail-page database loading to lightweight mode so large `players`, `events`, `match_stats`, `pre_match`, and `post_match` JSON files are not read during initial pre-match render.
 - Added Polymarket file cache under `data/cache/polymarket` and reduced its page-blocking request timeout to 4 seconds.
-- Reduced page-triggered network timeouts for API-Football, The Odds API, team resolver, schedule APIs, and weather APIs to prevent long UI stalls.
+- Reduced page-triggered network timeouts for API-Football, API-Football, team resolver, schedule APIs, and weather APIs to prevent long UI stalls.
 - Reduced weather lookup timeout to 2 seconds so match overview cannot block the page for 10+ seconds.
 - Added `STARTUP_RECOVERY.md` as the permanent recovery protocol for localhost startup failures.
 - Documented the Codex recovery rule: open `START_APP.command`, then verify `lsof -i :8502` and `curl -I http://localhost:8502/`.
@@ -96,7 +96,7 @@
 - Added backend performance logging for homepage, detail page, data loading, portfolio optimizer, tabs, and team intelligence.
 - Added `scripts/performance_report.py` to summarize recent page timings and slowest modules.
 - Fixed Chinese team-name mapping for Australia, Scotland, Morocco, Haiti, Turkiye, and Paraguay so schedule-card detail pages resolve the correct local database folders.
-- Added API-Football All Odds fallback for Match Winner and Goals Over/Under when The Odds API is missing but local API-Football data exists.
+- Added API-Football All Odds fallback for Match Winner and Goals Over/Under when API-Football is missing but local API-Football data exists.
 - Added `scripts/build_worldcup_index.py` and generated `data/worldcup2026/index.json` for the World Cup archive.
 - Verified local database odds display for USA vs Australia, Scotland vs Morocco, Brazil vs Haiti, and Turkiye vs Paraguay.
 - Added Terminal Fetch Mode entrypoint `scripts/refresh_api_data.py`.
@@ -110,7 +110,7 @@
 - Hardened Team Resolver to reject youth/women variants such as U17 and W teams when resolving senior national teams.
 - Added aliases for USA, United States, Turkey, Turkiye, Türkiye, Paraguay, and Haiti.
 - Reordered DR Congo aliases to prefer `Congo DR`, preventing U17 team matches.
-- Added The Odds API daily-cache fallback when a live refresh fails after data was already saved.
+- Added API-Football daily-cache fallback when a live refresh fails after data was already saved.
 - Refreshed the 2026-06-19 database for USA vs Australia, Scotland vs Morocco, Brazil vs Haiti, and Turkiye vs Paraguay.
 - Backfilled priority finished matches: France vs Senegal, Portugal vs Congo DR, England vs Croatia, and Switzerland vs Bosnia and Herzegovina.
 - Connected API-Football standings into Game Behavior Engine qualification pressure mapping.
@@ -121,7 +121,7 @@
 - Replaced detail-page nested expanders with checkbox toggles so one failed section cannot crash the tab.
 - Added a market tab Debug Summary covering fixture, winner odds, Asian handicap, totals, correct score, and Polymarket status.
 - Added `scripts/refresh_today_odds.py` to refresh and verify today's odds cache.
-- Refreshed The Odds API Match Winner and Over/Under cache for today's matches.
+- Refreshed API-Football Match Winner and Over/Under cache for today's matches.
 - Expanded team aliases for Bosnia-Herzegovina, Australia, Scotland, and Morocco.
 - Confirmed API-Football live refresh is blocked by account suspension, not by local matching logic.
 - Split permanent history snapshots into pre-match `*_pre.json` and post-match `*_post.json`.
@@ -192,7 +192,7 @@
 - Replaced Streamlit tabs on the detail page with a lazy single-section selector to avoid rendering market, source, post-match, and team sections at once.
 - Stopped forced schedule refresh when entering a detail page; detail pages now use cached schedule data unless the user manually refreshes schedule status.
 - Added render performance timers for Portfolio Ranking, actual-vs-market odds, and Advanced Research.
-- Fixed Betting Opinion Asian Handicap to read API-Football handicap data instead of The Odds API handicap fields.
+- Fixed Betting Opinion Asian Handicap to read API-Football handicap data instead of API-Football handicap fields.
 - Added Market Center Score for correct score candidates so core score paths outrank edge score paths unless EV advantage is clear.
 - Increased direction and handicap priority while reducing tempo asset influence in candidate scoring and portfolio scoring.
 - Added Direction Path, Tempo Path, Score Path, and Handicap Confidence to Core Decision.

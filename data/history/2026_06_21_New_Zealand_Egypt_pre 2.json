@@ -54,10 +54,10 @@
     "over_under": [],
     "raw_probabilities": null,
     "implied_probabilities": null,
-    "source": "The Odds API",
+    "source": "API-Football",
     "event_title": null,
     "event_id": null,
-    "message": "未找到盘口数据：The Odds API 当前没有返回该比赛的胜平负或大小球市场。",
+    "message": "未找到盘口数据：API-Football 当前没有返回该比赛的胜平负或大小球市场。",
     "cache": null
   },
   "api_football_data": {
@@ -15517,7 +15517,7 @@
   },
   "value_analysis": {
     "available": false,
-    "message": "Value Analysis requires both The Odds API and Polymarket probabilities.",
+    "message": "Value Analysis requires both API-Football and Polymarket probabilities.",
     "rows": [],
     "has_value": false
   },

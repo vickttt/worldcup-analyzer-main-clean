@@ -11,9 +11,9 @@
   "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
-  "the_odds_api": {
+  "legacy_deprecated_odds": {
     "found": false,
-    "source": "The Odds API",
+    "source": "API-Football",
     "message": "未找到赛事。",
     "asian_handicap": [],
     "over_under": []
@@ -39863,7 +39863,7 @@
     "source": "API-Football / 10Bet",
     "event_title": null,
     "event_id": null,
-    "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。",
+    "message": "API-Football 未返回时，已从 API-Football All Odds 读取胜平负和大小球。",
     "found": true
   }
 }

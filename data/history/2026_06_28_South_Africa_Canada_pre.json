@@ -1,0 +1,821 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "pre_match_snapshot",
+  "created_at": "2026-06-29T02:16:02.662560+08:00",
+  "match": {
+    "home": "South Africa",
+    "away": "Canada",
+    "display": "南非 vs 加拿大"
+  },
+  "fixture": {
+    "fixture_id": "73",
+    "home_team": {
+      "id": "2",
+      "name": "South Africa",
+      "logo": "https://flagcdn.com/w80/za.png"
+    },
+    "away_team": {
+      "id": "5",
+      "name": "Canada",
+      "logo": "https://flagcdn.com/w80/ca.png"
+    },
+    "kickoff_utc": "06/28/2026 12:00",
+    "kickoff_display": "06/28/2026 12:00",
+    "league_name": "World Cup 2026",
+    "round": "r32",
+    "group": "R32",
+    "venue_name": "Los Angeles Stadium",
+    "venue_city": "Los Angeles (Inglewood), United States",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "model_versions": {
+    "model_version": "v1.61",
+    "probability_engine_version": "score_distribution_v1",
+    "optimizer_version": "portfolio_optimizer_v1",
+    "asset_framework_version": "multi_role_asset_framework_v1",
+    "audit_version": "prediction_audit_v1"
+  },
+  "match_info": {
+    "odds_date_key": "2026-06-28",
+    "report_path": "outputs/reports/South_Africa_vs_Canada_20260629_021602.md"
+  },
+  "odds": {
+    "found": false,
+    "home_win": null,
+    "draw": null,
+    "away_win": null,
+    "over_under_line": null,
+    "asian_handicap": [],
+    "over_under": [],
+    "raw_probabilities": null,
+    "implied_probabilities": null,
+    "source": "API-Football",
+    "event_title": null,
+    "event_id": null,
+    "message": "缺少 API-Football Key。请在 .streamlit/secrets.toml 中保存 API_FOOTBALL_KEY。",
+    "cache": null
+  },
+  "api_football_data": {
+    "fixture_result": {
+      "fixture": null,
+      "home_team": null,
+      "away_team": null,
+      "message": "未找到双方国家队信息。"
+    },
+    "fixture": null,
+    "odds": {
+      "found": false,
+      "home_win": null,
+      "draw": null,
+      "away_win": null,
+      "over_under_line": null,
+      "raw_probabilities": null,
+      "implied_probabilities": null,
+      "source": "API-Football 免费版",
+      "event_title": null,
+      "event_id": null,
+      "message": "未找到双方国家队信息。"
+    },
+    "asian_handicap": null,
+    "correct_score": null,
+    "injuries": [],
+    "lineups": [],
+    "home_recent": [],
+    "away_recent": [],
+    "standings": null,
+    "error": "未找到双方国家队信息。"
+  },
+  "polymarket": {
+    "found": true,
+    "home_win": 0.175,
+    "draw": 0.285,
+    "away_win": 0.525,
+    "volume": 24515944.148962993,
+    "liquidity": 13920761.306,
+    "source": "Polymarket Gamma API 真实数据",
+    "event_title": "South Africa vs. Canada",
+    "event_slug": "fifwc-rsa-can-2026-06-28",
+    "event_url": "https://polymarket.com/event/fifwc-rsa-can-2026-06-28",
+    "message": "已找到对应 Polymarket 市场。"
+  },
+  "actual_odds": {
+    "items": [],
+    "by_type": {},
+    "raw": ""
+  },
+  "my_portfolio": {},
+  "recommendation_combo": [
+    {
+      "slot": "空位1",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位2",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位3",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位4",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位5",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    }
+  ],
+  "strategy_snapshot": {
+    "strategies": [],
+    "strategy_table": [],
+    "insurance_cost": [],
+    "correlation_matrix": [],
+    "kelly": [],
+    "return_matrix": [],
+    "role_constraints": [],
+    "portfolio_style": {}
+  },
+  "decision": {
+    "market_disagreement": {
+      "score": 0,
+      "level": "低分歧",
+      "direction": "-",
+      "difference": 0,
+      "odds_probability": null,
+      "polymarket_probability": null,
+      "reason": "缺少可比较的市场数据。"
+    },
+    "contrarian": {
+      "score": 15,
+      "level": "较低",
+      "popular_side": "Canada",
+      "reason": "当前市场结构下，逆向压力有限。"
+    },
+    "upset_index": {
+      "score": 43,
+      "meaning": "低爆冷风险",
+      "reason": "小组赛阶段与弱势方属性提高了爆冷敏感度。"
+    },
+    "recent_form": {
+      "score": 50,
+      "reason": "近期状态暂不可用，采用中性分。"
+    },
+    "elo_rating": {
+      "score": 50,
+      "reason": "ELO评分 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "injury_impact": {
+      "score": 50,
+      "reason": "暂无公开伤病信息，采用中性分。"
+    },
+    "team_value": {
+      "score": 50,
+      "reason": "球队身价 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "direction_confidence": {
+      "score": 0,
+      "level": "观望",
+      "components": [],
+      "reason": "缺少胜平负赔率，无法形成方向把握。"
+    },
+    "odds_value": {
+      "score": 35,
+      "rating": "C",
+      "label": "-",
+      "market_probability": null,
+      "model_probability": null,
+      "difference": 0,
+      "margin": null,
+      "components": [
+        {
+          "name": "市场价差",
+          "points": 0,
+          "max_points": 10,
+          "reason": "缺少 Polymarket 对比数据。"
+        },
+        {
+          "name": "盘口一致性",
+          "points": 12,
+          "max_points": 30,
+          "reason": "缺少完整市场数据，按中性偏低处理。"
+        },
+        {
+          "name": "亚洲盘结构",
+          "points": 0,
+          "max_points": 25,
+          "reason": "亚洲让球盘缺失。"
+        },
+        {
+          "name": "波胆结构",
+          "points": 0,
+          "max_points": 20,
+          "reason": "真实波胆盘口缺失。"
+        },
+        {
+          "name": "庄家利润率",
+          "points": 8,
+          "max_points": 15,
+          "reason": "按中性抽水处理。"
+        }
+      ],
+      "reason": "缺少模型概率与市场概率的可比数据，赔率价值按中性偏低处理。"
+    },
+    "participation_advice": {
+      "advice": "放弃",
+      "reason": "方向把握 0 / 100，赔率价值 C，爆冷指数 43 / 100。"
+    },
+    "recommended_stake": {
+      "amount": 100,
+      "base": 0,
+      "adjustment": 0,
+      "reason": "方向把握 0 分，对应基础仓位 0；赔率价值 C，调整 +0。"
+    },
+    "final_confidence_score": 0,
+    "value_rating": "C",
+    "value_rating_score": 35,
+    "value_rating_breakdown": [
+      {
+        "name": "市场价差",
+        "points": 0,
+        "max_points": 10,
+        "reason": "缺少 Polymarket 对比数据。"
+      },
+      {
+        "name": "盘口一致性",
+        "points": 12,
+        "max_points": 30,
+        "reason": "缺少完整市场数据，按中性偏低处理。"
+      },
+      {
+        "name": "亚洲盘结构",
+        "points": 0,
+        "max_points": 25,
+        "reason": "亚洲让球盘缺失。"
+      },
+      {
+        "name": "波胆结构",
+        "points": 0,
+        "max_points": 20,
+        "reason": "真实波胆盘口缺失。"
+      },
+      {
+        "name": "庄家利润率",
+        "points": 8,
+        "max_points": 15,
+        "reason": "按中性抽水处理。"
+      }
+    ],
+    "value_rating_meaning": "赔率价值 35 / 100，评级 C：价格基本合理",
+    "final_recommendation": {
+      "bet": "观察为主",
+      "reason": [
+        "暂未发现强逆向让球机会",
+        "当前仅将市场方向作为参考"
+      ]
+    },
+    "stake_suggestion": {
+      "Conservative": 0,
+      "Standard": 0,
+      "Aggressive": 0
+    },
+    "weights": {
+      "方向把握": "胜平负30 + 亚洲让球30 + 大小球8 + 波胆22 + Polymarket10",
+      "赔率价值": "输入实际赔率后：实际赔率优势45 + 推荐覆盖20 + 盘口结构15 + 庄家利润率10 + Polymarket辅助10；未输入时使用市场标准盘口评估。",
+      "参与建议": "方向把握 + 赔率价值 + 风险暴露",
+      "推荐仓位": "方向把握为主，赔率价值微调"
+    }
+  },
+  "probability_distribution": {
+    "available": true,
+    "favorite": "加拿大",
+    "underdog": "南非",
+    "rows": [
+      {
+        "label": "平局区间",
+        "probability": 0.3116262223831945,
+        "meaning": "比赛进入低分差或胶着路径。",
+        "behavior_shift": 0.04
+      },
+      {
+        "label": "加拿大小胜（1球）",
+        "probability": 0.2817095255342268,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。",
+        "behavior_shift": 0.06
+      },
+      {
+        "label": "加拿大赢2球",
+        "probability": 0.17025836049740437,
+        "meaning": "盘口边界路径，决定让球盘输赢。",
+        "behavior_shift": -0.015
+      },
+      {
+        "label": "南非不败",
+        "probability": 0.14750694192925273,
+        "meaning": "爆冷或热门方向失效路径。",
+        "behavior_shift": 0.06
+      },
+      {
+        "label": "加拿大赢3球以上",
+        "probability": 0.08889894965592177,
+        "meaning": "强队大胜路径，过去版本容易低估。",
+        "behavior_shift": -0.045
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "加拿大 -1.5",
+      "lose_paths": [
+        "加拿大只赢1球",
+        "平局",
+        "南非胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "平局区间",
+    "boundary_path": "加拿大赢2球",
+    "extreme_path": "加拿大赢3球以上",
+    "game_behavior": {
+      "team_pressure_score": {
+        "0": "already eliminated / no motivation",
+        "1": "already qualified (rotation risk)",
+        "2": "draw acceptable",
+        "3": "must avoid loss",
+        "4": "must win",
+        "5": "must win big / depends on others"
+      },
+      "input": {
+        "team_a_pressure": 4,
+        "team_b_pressure": 2,
+        "home_pressure_score": 4,
+        "away_pressure_score": 2,
+        "group_stage": true,
+        "qualified_already": false,
+        "elimination_risk": true,
+        "goal_difference_pressure": 0,
+        "team_a_pressure_reason": "South Africa must win and should carry attacking urgency.",
+        "team_b_pressure_reason": "Canada can likely accept a draw.",
+        "standings_source": "Manual qualification seed 2026-06-24",
+        "qualification_source": "Manual qualification seed 2026-06-24",
+        "home_context": {
+          "team": "South Africa",
+          "group": "A",
+          "points": 1,
+          "rank": 4,
+          "goal_difference": -2,
+          "goals_for": 1,
+          "goals_against": 3,
+          "matches_played": 2,
+          "pressure_score": 4,
+          "pressure_label": "must win",
+          "qualification_note": "South Africa must win and should carry attacking urgency.",
+          "motivation_tags": [
+            "must_win",
+            "attacking_urgency"
+          ],
+          "source": "Manual qualification seed 2026-06-24",
+          "remaining_opponent": "Canada"
+        },
+        "away_context": {
+          "team": "Canada",
+          "group": "B",
+          "points": 4,
+          "rank": 1,
+          "goal_difference": 2,
+          "goals_for": 3,
+          "goals_against": 1,
+          "matches_played": 2,
+          "pressure_score": 2,
+          "pressure_label": "draw acceptable",
+          "qualification_note": "Canada can likely accept a draw.",
+          "motivation_tags": [
+            "draw_acceptable",
+            "tempo_control"
+          ],
+          "source": "Manual qualification seed 2026-06-24",
+          "remaining_opponent": "South Africa"
+        },
+        "match_pressure_type": "direct_second_place_battle",
+        "behavior_adjustments": {
+          "deep_handicap_risk_delta": 1,
+          "favorite_small_win_weight_delta": 1,
+          "underdog_goal_weight_delta": 1,
+          "draw_weight_delta": 1,
+          "over_weight_delta": 0,
+          "under_weight_delta": 1,
+          "late_goal_volatility_delta": 1,
+          "rotation_risk_delta": 0,
+          "tempo_control_delta": 0,
+          "chaos_risk_delta": 1,
+          "recommended_coverage_shift": [
+            "提高窄比分覆盖",
+            "保留平局路径",
+            "防后段开放",
+            "避免单边大胜过度集中"
+          ]
+        },
+        "behavior_notes": [
+          "Both sides carry qualification risk; early caution and late volatility coexist.",
+          "Narrow-score coverage is more important than blowout concentration."
+        ]
+      },
+      "team_a_pressure_label": "must win",
+      "team_b_pressure_label": "draw acceptable",
+      "home_pressure_score": 4,
+      "away_pressure_score": 2,
+      "home_context": {
+        "team": "South Africa",
+        "group": "A",
+        "points": 1,
+        "rank": 4,
+        "goal_difference": -2,
+        "goals_for": 1,
+        "goals_against": 3,
+        "matches_played": 2,
+        "pressure_score": 4,
+        "pressure_label": "must win",
+        "qualification_note": "South Africa must win and should carry attacking urgency.",
+        "motivation_tags": [
+          "must_win",
+          "attacking_urgency"
+        ],
+        "source": "Manual qualification seed 2026-06-24",
+        "remaining_opponent": "Canada"
+      },
+      "away_context": {
+        "team": "Canada",
+        "group": "B",
+        "points": 4,
+        "rank": 1,
+        "goal_difference": 2,
+        "goals_for": 3,
+        "goals_against": 1,
+        "matches_played": 2,
+        "pressure_score": 2,
+        "pressure_label": "draw acceptable",
+        "qualification_note": "Canada can likely accept a draw.",
+        "motivation_tags": [
+          "draw_acceptable",
+          "tempo_control"
+        ],
+        "source": "Manual qualification seed 2026-06-24",
+        "remaining_opponent": "South Africa"
+      },
+      "qualification_source": "Manual qualification seed 2026-06-24",
+      "match_pressure_type": "direct_second_place_battle",
+      "behavior_adjustments": {
+        "deep_handicap_risk_delta": 1,
+        "favorite_small_win_weight_delta": 1,
+        "underdog_goal_weight_delta": 1,
+        "draw_weight_delta": 1,
+        "over_weight_delta": 0,
+        "under_weight_delta": 1,
+        "late_goal_volatility_delta": 1,
+        "rotation_risk_delta": 0,
+        "tempo_control_delta": 0,
+        "chaos_risk_delta": 1,
+        "recommended_coverage_shift": [
+          "提高窄比分覆盖",
+          "保留平局路径",
+          "防后段开放",
+          "避免单边大胜过度集中"
+        ]
+      },
+      "expected_game_tempo": "slightly open",
+      "expected_goal_distribution_shift": "neutral",
+      "expected_upset_probability_change": 0.060000000000000005,
+      "expected_handicap_movement_bias": "no strong pressure adjustment",
+      "adjustments": {
+        "small_win_shift": 0.06,
+        "two_goal_shift": -0.015,
+        "big_win_shift": -0.045,
+        "draw_shift": 0.04,
+        "underdog_shift": 0.06
+      },
+      "notes": [
+        "Home pressure 4: must win",
+        "South Africa must win and should carry attacking urgency.",
+        "Away pressure 2: draw acceptable",
+        "Canada can likely accept a draw.",
+        "Pressure type: direct_second_place_battle",
+        "Tempo: slightly open",
+        "Handicap bias: no strong pressure adjustment",
+        "Both sides carry qualification risk; early caution and late volatility coexist.",
+        "Narrow-score coverage is more important than blowout concentration."
+      ]
+    },
+    "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+  },
+  "value_analysis": {
+    "available": false,
+    "message": "Value Analysis requires both API-Football and Polymarket probabilities.",
+    "rows": [],
+    "has_value": false
+  },
+  "betting_opinion": {
+    "match_winner": "No view",
+    "match_direction": "No view",
+    "asian_handicap": "No view",
+    "handicap_market_direction": "No view",
+    "coverage_candidate": "No coverage candidate",
+    "coverage_reason": "未识别到覆盖候选。",
+    "recommended_use": "Handicap market is not available.",
+    "over_under": "暂无观点",
+    "total_center": "-",
+    "goals_market_bias": "大小球盘口不可用。",
+    "goals_game_behavior_note": "-",
+    "goals_recommended_interpretation": "缺少大小球盘口时，不应推断进球数方向。",
+    "risk_level": "High",
+    "confidence": 55,
+    "market_direction_confidence": 55,
+    "betting_confidence": 37,
+    "data_quality": "Medium",
+    "data_quality_notes": [
+      "官方首发尚未公布。",
+      "Polymarket 对比仅支持胜平负市场；亚洲盘、大小球和波胆需要单独验证。",
+      "大小球盘口中心不可用。",
+      "暂无公开伤病信息不等于确认全员可用，需等待首发。"
+    ],
+    "match_winner_reason": "胜平负市场数据不足，暂不形成明确主方向。",
+    "asian_handicap_reason": "No Asian handicap rows were available.",
+    "over_under_reason": "大小球盘口不可用。",
+    "summary": "市场数据不足，暂不形成明确观点。",
+    "handicap_center": {
+      "available": false,
+      "center_label": "No handicap center",
+      "direction_label": "No view",
+      "coverage_label": "No coverage candidate",
+      "outlier_count": 0,
+      "warning": "No Asian handicap rows were available."
+    },
+    "total_center_detail": {
+      "available": false,
+      "center_label": "No totals center",
+      "market_bias": "Totals market is not available.",
+      "recommended_interpretation": "Do not infer goals direction without a totals market."
+    },
+    "result_distribution": {
+      "available": true,
+      "favorite": "加拿大",
+      "underdog": "南非",
+      "rows": [
+        {
+          "label": "平局区间",
+          "probability": 0.3116262223831945,
+          "meaning": "比赛进入低分差或胶着路径。",
+          "behavior_shift": 0.04
+        },
+        {
+          "label": "加拿大小胜（1球）",
+          "probability": 0.2817095255342268,
+          "meaning": "市场主路径之一，强队赢但不打穿深盘。",
+          "behavior_shift": 0.06
+        },
+        {
+          "label": "加拿大赢2球",
+          "probability": 0.17025836049740437,
+          "meaning": "盘口边界路径，决定让球盘输赢。",
+          "behavior_shift": -0.015
+        },
+        {
+          "label": "南非不败",
+          "probability": 0.14750694192925273,
+          "meaning": "爆冷或热门方向失效路径。",
+          "behavior_shift": 0.06
+        },
+        {
+          "label": "加拿大赢3球以上",
+          "probability": 0.08889894965592177,
+          "meaning": "强队大胜路径，过去版本容易低估。",
+          "behavior_shift": -0.045
+        }
+      ],
+      "risk_exposure": {
+        "example_bet": "加拿大 -1.5",
+        "lose_paths": [
+          "加拿大只赢1球",
+          "平局",
+          "南非胜"
+        ],
+        "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+      },
+      "main_path": "平局区间",
+      "boundary_path": "加拿大赢2球",
+      "extreme_path": "加拿大赢3球以上",
+      "game_behavior": {
+        "team_pressure_score": {
+          "0": "already eliminated / no motivation",
+          "1": "already qualified (rotation risk)",
+          "2": "draw acceptable",
+          "3": "must avoid loss",
+          "4": "must win",
+          "5": "must win big / depends on others"
+        },
+        "input": {
+          "team_a_pressure": 4,
+          "team_b_pressure": 2,
+          "home_pressure_score": 4,
+          "away_pressure_score": 2,
+          "group_stage": true,
+          "qualified_already": false,
+          "elimination_risk": true,
+          "goal_difference_pressure": 0,
+          "team_a_pressure_reason": "South Africa must win and should carry attacking urgency.",
+          "team_b_pressure_reason": "Canada can likely accept a draw.",
+          "standings_source": "Manual qualification seed 2026-06-24",
+          "qualification_source": "Manual qualification seed 2026-06-24",
+          "home_context": {
+            "team": "South Africa",
+            "group": "A",
+            "points": 1,
+            "rank": 4,
+            "goal_difference": -2,
+            "goals_for": 1,
+            "goals_against": 3,
+            "matches_played": 2,
+            "pressure_score": 4,
+            "pressure_label": "must win",
+            "qualification_note": "South Africa must win and should carry attacking urgency.",
+            "motivation_tags": [
+              "must_win",
+              "attacking_urgency"
+            ],
+            "source": "Manual qualification seed 2026-06-24",
+            "remaining_opponent": "Canada"
+          },
+          "away_context": {
+            "team": "Canada",
+            "group": "B",
+            "points": 4,
+            "rank": 1,
+            "goal_difference": 2,
+            "goals_for": 3,
+            "goals_against": 1,
+            "matches_played": 2,
+            "pressure_score": 2,
+            "pressure_label": "draw acceptable",
+            "qualification_note": "Canada can likely accept a draw.",
+            "motivation_tags": [
+              "draw_acceptable",
+              "tempo_control"
+            ],
+            "source": "Manual qualification seed 2026-06-24",
+            "remaining_opponent": "South Africa"
+          },
+          "match_pressure_type": "direct_second_place_battle",
+          "behavior_adjustments": {
+            "deep_handicap_risk_delta": 1,
+            "favorite_small_win_weight_delta": 1,
+            "underdog_goal_weight_delta": 1,
+            "draw_weight_delta": 1,
+            "over_weight_delta": 0,
+            "under_weight_delta": 1,
+            "late_goal_volatility_delta": 1,
+            "rotation_risk_delta": 0,
+            "tempo_control_delta": 0,
+            "chaos_risk_delta": 1,
+            "recommended_coverage_shift": [
+              "提高窄比分覆盖",
+              "保留平局路径",
+              "防后段开放",
+              "避免单边大胜过度集中"
+            ]
+          },
+          "behavior_notes": [
+            "Both sides carry qualification risk; early caution and late volatility coexist.",
+            "Narrow-score coverage is more important than blowout concentration."
+          ]
+        },
+        "team_a_pressure_label": "must win",
+        "team_b_pressure_label": "draw acceptable",
+        "home_pressure_score": 4,
+        "away_pressure_score": 2,
+        "home_context": {
+          "team": "South Africa",
+          "group": "A",
+          "points": 1,
+          "rank": 4,
+          "goal_difference": -2,
+          "goals_for": 1,
+          "goals_against": 3,
+          "matches_played": 2,
+          "pressure_score": 4,
+          "pressure_label": "must win",
+          "qualification_note": "South Africa must win and should carry attacking urgency.",
+          "motivation_tags": [
+            "must_win",
+            "attacking_urgency"
+          ],
+          "source": "Manual qualification seed 2026-06-24",
+          "remaining_opponent": "Canada"
+        },
+        "away_context": {
+          "team": "Canada",
+          "group": "B",
+          "points": 4,
+          "rank": 1,
+          "goal_difference": 2,
+          "goals_for": 3,
+          "goals_against": 1,
+          "matches_played": 2,
+          "pressure_score": 2,
+          "pressure_label": "draw acceptable",
+          "qualification_note": "Canada can likely accept a draw.",
+          "motivation_tags": [
+            "draw_acceptable",
+            "tempo_control"
+          ],
+          "source": "Manual qualification seed 2026-06-24",
+          "remaining_opponent": "South Africa"
+        },
+        "qualification_source": "Manual qualification seed 2026-06-24",
+        "match_pressure_type": "direct_second_place_battle",
+        "behavior_adjustments": {
+          "deep_handicap_risk_delta": 1,
+          "favorite_small_win_weight_delta": 1,
+          "underdog_goal_weight_delta": 1,
+          "draw_weight_delta": 1,
+          "over_weight_delta": 0,
+          "under_weight_delta": 1,
+          "late_goal_volatility_delta": 1,
+          "rotation_risk_delta": 0,
+          "tempo_control_delta": 0,
+          "chaos_risk_delta": 1,
+          "recommended_coverage_shift": [
+            "提高窄比分覆盖",
+            "保留平局路径",
+            "防后段开放",
+            "避免单边大胜过度集中"
+          ]
+        },
+        "expected_game_tempo": "slightly open",
+        "expected_goal_distribution_shift": "neutral",
+        "expected_upset_probability_change": 0.060000000000000005,
+        "expected_handicap_movement_bias": "no strong pressure adjustment",
+        "adjustments": {
+          "small_win_shift": 0.06,
+          "two_goal_shift": -0.015,
+          "big_win_shift": -0.045,
+          "draw_shift": 0.04,
+          "underdog_shift": 0.06
+        },
+        "notes": [
+          "Home pressure 4: must win",
+          "South Africa must win and should carry attacking urgency.",
+          "Away pressure 2: draw acceptable",
+          "Canada can likely accept a draw.",
+          "Pressure type: direct_second_place_battle",
+          "Tempo: slightly open",
+          "Handicap bias: no strong pressure adjustment",
+          "Both sides carry qualification risk; early caution and late volatility coexist.",
+          "Narrow-score coverage is more important than blowout concentration."
+        ]
+      },
+      "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+    }
+  }
+}

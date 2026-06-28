@@ -19,7 +19,7 @@ This report is a logical mapping only. No existing source files were moved, rewr
 - `modules/market_utils.py`
 - `modules/odds_client.py`
 - `modules/polymarket_client.py`
-- `modules/the_odds_client.py`
+- `removed legacy odds client`
 - `modules/user_odds.py`
 - `test_api.py`
 

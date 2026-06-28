@@ -2,8 +2,8 @@ import requests
 import streamlit as st
 
 from modules.cache_config import TEAM_PROFILE_TTL
-from modules.odds_client import search_team
 from modules.pregame_content import profile_for
+from modules.team_resolver import resolve_team
 
 
 PENDING_VALUES = {"待接入", "后续扩展", "", None}
@@ -22,12 +22,15 @@ def fetch_team_profile(team_name):
     api_error = None
 
     try:
-        api_team = search_team(team_name)
+        api_team = resolve_team(team_name)
     except (requests.RequestException, RuntimeError) as error:
         api_error = str(error)
 
+    resolved = bool(api_team)
     profile = {
         "name": (api_team or {}).get("name") or team_name,
+        "status": "resolved" if resolved else "unresolved",
+        "message": None if resolved else "Team profile temporarily unavailable",
         "country": (api_team or {}).get("country"),
         "code": (api_team or {}).get("code"),
         "founded": (api_team or {}).get("founded"),
@@ -42,9 +45,8 @@ def fetch_team_profile(team_name):
         "world_cup_appearances": clean_value(static_profile.get("world_cup_appearances")),
         "team_value_number": static_profile.get("team_value_number", 0),
         "colors": static_profile.get("colors", ("#64748b", "#94a3b8")),
-        "source": "API-Football + 本地公开资料补充" if api_team else "本地公开资料补充",
+        "source": "API-Football + 本地公开资料补充" if resolved else "本地公开资料补充",
         "cache_ttl": "7天",
         "api_error": api_error,
     }
     return profile
-

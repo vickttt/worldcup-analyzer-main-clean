@@ -17,13 +17,13 @@
       "data_completeness": 67,
       "fetch_rows": [
         {
-          "source": "The Odds API",
+          "source": "API-Football",
           "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
           "dataset": "Winner Odds / Totals",
           "success": true,
           "records": 26,
           "empty": false,
-          "message": "已强制刷新 The Odds API 胜平负、让球、大小球。"
+          "message": "已强制刷新 API-Football 胜平负、让球、大小球。"
         },
         {
           "source": "API-Football",
@@ -95,13 +95,13 @@
       "data_completeness": 67,
       "fetch_rows": [
         {
-          "source": "The Odds API",
+          "source": "API-Football",
           "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
           "dataset": "Winner Odds / Totals",
           "success": true,
           "records": 25,
           "empty": false,
-          "message": "已强制刷新 The Odds API 胜平负、让球、大小球。"
+          "message": "已强制刷新 API-Football 胜平负、让球、大小球。"
         },
         {
           "source": "API-Football",
@@ -173,7 +173,7 @@
       "data_completeness": 44,
       "fetch_rows": [
         {
-          "source": "The Odds API",
+          "source": "API-Football",
           "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
           "dataset": "Winner Odds / Totals",
           "success": false,
@@ -251,7 +251,7 @@
       "data_completeness": 33,
       "fetch_rows": [
         {
-          "source": "The Odds API",
+          "source": "API-Football",
           "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
           "dataset": "Winner Odds / Totals",
           "success": false,

@@ -4,7 +4,7 @@ PASS
 
 ## 2. Scope Check
 
-The change stayed within the requested scope. Task 4 is scoped to API-Football-only key loading and refresh readiness gate. The diff touched only the Data Freshness panel in `app.py`, a dry-run script, a sample output JSON, and documentation. No ranking, portfolio, backtest, or settlement logic was altered. No Odds API integration was added. No real API calls were performed.
+The change stayed within the requested scope. Task 4 is scoped to API-Football-only key loading and refresh readiness gate. The diff touched only the Data Freshness panel in `app.py`, a dry-run script, a sample output JSON, and documentation. No ranking, portfolio, backtest, or settlement logic was altered. No API-Football integration was added. No real API calls were performed.
 
 ## 3. Product Code Safety
 
@@ -15,7 +15,7 @@ Product code safety is sound. The `app.py` edits are confined to the UI panel di
 Secret safety is excellent. The validation report confirms:
 - API-Football key presence is checked; the value is redacted.
 - `.env` and local environment files remain ignored and unstaged.
-- `THE_ODDS_API_KEY` is not required for this task; its absence does not block readiness.
+- `API_FOOTBALL_KEY` is required for live API-Football odds refresh for this task; its absence does not block readiness.
 - No secret-shaped tokens appear in changed files.
 - The sample output JSON contains no real credentials.
 
@@ -72,7 +72,7 @@ For the checkpoint commit, Codex should use:
 - `git push` to back up the checkpoint.
 
 For future Task 5 work, Codex may consider:
-- Browser or computer-use to open the Streamlit app locally and verify the Data Freshness panel displays correctly, the Odds API disabled message appears, and the real refresh toggle shows disabled.
+- Browser or computer-use to open the Streamlit app locally and verify the Data Freshness panel displays correctly, external providers disabled; API-Football active message appears, and the real refresh toggle shows disabled.
 - Local `streamlit run app.py` check if quick manual verification is preferred.
 
 Do not use browser/computer-use for secret inspection or to display key values.

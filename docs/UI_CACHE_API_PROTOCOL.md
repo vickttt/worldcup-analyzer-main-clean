@@ -64,8 +64,8 @@ Do not modify unless explicitly approved:
 - API-Football is the only keyed API target for this phase.
 - `API_FOOTBALL_KEY` may be checked only by present/missing state.
 - The key value must never be printed, committed, or included in reports.
-- The Odds API is disabled and not required.
-- `THE_ODDS_API_KEY` must not block current UI-CACHE-API work.
+- API-Football is disabled and not required.
+- `API_FOOTBALL_KEY` must not block current UI-CACHE-API work.
 - Polymarket remains public-only and is not part of API refresh tasks unless explicitly scoped.
 - WorldCup2026 schedule API is public and separate.
 

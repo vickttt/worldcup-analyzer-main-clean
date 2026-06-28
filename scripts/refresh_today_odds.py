@@ -10,13 +10,13 @@ if str(ROOT) not in sys.path:
 
 from modules.match_parser import parse_match
 from modules.odds_client import (
+    fetch_odds,
     fetch_asian_handicap_odds_for_fixture,
     fetch_correct_score_odds_for_fixture,
     find_fixture,
 )
 from modules.schedule_client import fetch_world_cup_schedule, fixture_local_datetime
 from modules.team_resolver import alias_candidates
-from modules.the_odds_client import fetch_odds
 
 
 LOCAL_TZ = ZoneInfo("Asia/Shanghai")
@@ -30,6 +30,26 @@ def match_text(fixture):
     home = (fixture.get("home_team") or {}).get("name") or ""
     away = (fixture.get("away_team") or {}).get("name") or ""
     return f"{home} vs {away}"
+
+
+def match_with_fixture_context(match, fixture):
+    enriched = dict(match)
+    fixture_source = fixture.get("source")
+    fixture_id = fixture.get("fixture_id")
+    enriched.update({
+        "schedule_fixture_id": fixture_id,
+        "schedule_source": fixture_source,
+        "fixture_source": fixture_source,
+        "fixture_home_team": fixture.get("home_team") or {},
+        "fixture_away_team": fixture.get("away_team") or {},
+        "fixture_kickoff_utc": fixture.get("kickoff_utc"),
+        "fixture_league_name": fixture.get("league_name"),
+        "fixture_round": fixture.get("round"),
+    })
+    if fixture_source == "API-Football":
+        enriched["fixture_id"] = fixture_id
+        enriched["api_football_fixture_id"] = fixture_id
+    return enriched
 
 
 def fixture_date_key(fixture):
@@ -85,12 +105,13 @@ def main():
         print(f"{index}. {text}")
         print("Kickoff:", fixture.get("kickoff_utc"), "Local:", fixture_local_datetime(fixture))
         match = parse_match(text)
+        market_match = match_with_fixture_context(match, fixture)
         print("Alias candidates:", resolver_summary(match))
 
         date_key = odds_date_key(fixture)
-        odds = fetch_odds(match, date_key, "manual_refresh_today_24h")
+        odds = fetch_odds(market_match, date_key, "manual_refresh_today_24h")
         print(
-            "The Odds API:",
+            "API-Football Winner Odds:",
             "SUCCESS" if odds.get("found") else "FAILED",
             "| date_key=", date_key,
             "| event=", odds.get("event_title"),
@@ -107,7 +128,7 @@ def main():
         )
 
         try:
-            fixture_result = find_fixture(match)
+            fixture_result = find_fixture(market_match)
         except Exception as error:
             print("API-Football Fixture: FAILED | error=", error)
             continue

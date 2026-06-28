@@ -53,7 +53,7 @@ Recommended quality labels:
 | `data_quality` | Meaning | Benchmark Eligibility |
 | --- | --- | --- |
 | `true_pre_match` | Odds update exists and is before kickoff. | Eligible. |
-| `questionable` | Timestamp exists but market coverage is incomplete, bookmaker count is low, or kickoff mapping is uncertain. | Eligible only for sensitivity analysis, not primary benchmark. |
+| `questionable` | Timestamp exists but market coverage is incomplete, API-Football provider count is low, or kickoff mapping is uncertain. | Eligible only for sensitivity analysis, not primary benchmark. |
 | `invalid` | Odds update is missing, after kickoff, or fixture mapping is unreliable. | Not eligible. |
 
 Market-level status:
@@ -145,7 +145,7 @@ Each generated backfill snapshot should include:
       "correct_score"
     ],
     "missing_markets": [],
-    "bookmaker_count": 14
+    "api_football_provider_count": 14
   },
   "markets": {
     "match_winner": {},
@@ -343,7 +343,7 @@ Priority order:
    - Asian Handicap.
    - Over / Under.
    - Correct Score.
-4. Prefer larger bookmaker coverage if timestamps are equivalent.
+4. Prefer larger API-Football provider coverage if timestamps are equivalent.
 5. Exclude duplicates after selecting the benchmark snapshot.
 
 Do not count by snapshot count.

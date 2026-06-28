@@ -10,7 +10,7 @@ This file is the top-level operating protocol for Codex and other AI agents work
 - Stable branch: `main-clean`.
 - Current phase: `UI-CACHE-API`.
 - Current keyed API target for refresh work: API-Football only.
-- The Odds API is disabled and not required for the current UI-CACHE-API phase.
+- External odds providers are disabled; API-Football is the active odds provider.
 - Polymarket is public-only and not part of current API refresh tasks unless explicitly scoped.
 - WorldCup2026 schedule API is public and separate from keyed API-Football refresh work.
 
@@ -130,8 +130,8 @@ Do not auto-proceed to any task that performs another real API call.
 - `.streamlit/secrets.toml` must be ignored if used.
 - `.runtime/` must be ignored.
 - API-Football is the only keyed API target in the current phase.
-- `THE_ODDS_API_KEY` is not required for the current phase.
-- Odds API is disabled for the current phase.
+- `API_FOOTBALL_KEY` is required for live API-Football odds refresh for the current phase.
+- API-Football is disabled for the current phase.
 - Polymarket is public-only and not part of API refresh work unless explicitly scoped.
 - A real API refresh must be one-time, bounded, logged, and explicitly approved.
 - No repeated refresh loops.

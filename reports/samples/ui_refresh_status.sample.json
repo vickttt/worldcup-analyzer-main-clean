@@ -32,7 +32,7 @@
     "Sample refresh status only.",
     "Runtime refresh status is written to .runtime/ui_refresh_status.json.",
     "API-Football key value is never displayed.",
-    "Odds API is disabled and not required for the current UI-CACHE-API phase."
+    "External odds providers are disabled; API-Football is the active odds provider."
   ],
   "checked_paths": [
     "sample only"

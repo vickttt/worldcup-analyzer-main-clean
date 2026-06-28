@@ -11,10 +11,10 @@
   "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
-  "the_odds_api": {
+  "legacy_deprecated_odds": {
     "found": false,
-    "source": "The Odds API",
-    "message": "无法连接或未找到赛事：401 Client Error: Unauthorized for url: https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds?apiKey=08127d474d4b20a6077ad407bb39ef67&regions=eu%2Cus%2Cuk%2Cau&markets=h2h%2Cspreads%2Ctotals&oddsFormat=decimal&dateFormat=iso&commenceTimeFrom=2026-06-25T00%3A00%3A00Z&commenceTimeTo=2026-06-25T23%3A59%3A59Z",
+    "source": "API-Football",
+    "message": "无法连接或未找到赛事：401 Client Error: Unauthorized for url: https://deprecated.external-odds-provider.invalid/v4/sports/soccer_fifa_world_cup/odds?apiKey=08127d474d4b20a6077ad407bb39ef67&regions=eu%2Cus%2Cuk%2Cau&markets=h2h%2Cspreads%2Ctotals&oddsFormat=decimal&dateFormat=iso&commenceTimeFrom=2026-06-25T00%3A00%3A00Z&commenceTimeTo=2026-06-25T23%3A59%3A59Z",
     "asian_handicap": [],
     "over_under": []
   },
@@ -747,7 +747,7 @@
     "source": "API-Football / 10Bet",
     "event_title": null,
     "event_id": null,
-    "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。",
+    "message": "API-Football 未返回时，已从 API-Football All Odds 读取胜平负和大小球。",
     "found": true
   },
   "api_football": {

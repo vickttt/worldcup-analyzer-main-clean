@@ -24,9 +24,9 @@ Argentina vs Algeria
 - 比赛概览：赛事、时间、地点、阶段
 - 投注观点：胜平负、亚洲让球、大小球
 - 决策引擎 V1：市场分歧、逆向分数、爆冷指数、综合信心分
-- 胜平负赔率：The Odds API
-- 亚洲让球盘：The Odds API
-- 大小球盘口：The Odds API
+- 胜平负赔率：API-Football
+- 亚洲让球盘：API-Football
+- 大小球盘口：API-Football
 - Polymarket 预测市场：概率、成交量、流动性
 - 球队资料：排名、教练、历史成绩、身价估算
 - 近期状态：最近5场 / 最近10场
@@ -36,7 +36,7 @@ Argentina vs Algeria
 ## 数据来源
 
 - API-Football：比赛、球队、伤病、首发、近期赛果
-- The Odds API：胜平负、让球、大小球赔率
+- API-Football：胜平负、让球、大小球赔率
 - Polymarket Gamma API：预测市场价格、成交量、流动性
 - 本地静态资料库：用于免费 API 额度不足时的页面兜底
 - Wikimedia Commons：赛事 Banner 图片
@@ -78,7 +78,6 @@ cp .streamlit/secrets.example.toml .streamlit/secrets.toml
 
 ```toml
 API_FOOTBALL_KEY = "你的 API-Football Key"
-THE_ODDS_API_KEY = "你的 The Odds API Key"
 ```
 
 启动应用：
@@ -110,7 +109,6 @@ Secrets：
 
 ```toml
 API_FOOTBALL_KEY = "你的 API-Football Key"
-THE_ODDS_API_KEY = "你的 The Odds API Key"
 ```
 
 ## 安全说明

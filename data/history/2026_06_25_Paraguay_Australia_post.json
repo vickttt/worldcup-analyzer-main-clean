@@ -1,0 +1,502 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "post_match_snapshot",
+  "created_at": "2026-06-29T02:43:20.071851+08:00",
+  "match": {
+    "home": "Paraguay",
+    "away": "Australia",
+    "display": "巴拉圭 vs 澳大利亚"
+  },
+  "fixture": {
+    "fixture_id": "57",
+    "home_team": {
+      "id": "14",
+      "name": "Paraguay",
+      "logo": "https://flagcdn.com/w80/py.png"
+    },
+    "away_team": {
+      "id": "15",
+      "name": "Australia",
+      "logo": "https://flagcdn.com/w80/au.png"
+    },
+    "kickoff_utc": "06/25/2026 19:00",
+    "kickoff_display": "06/25/2026 19:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "D",
+    "venue_name": "San Francisco Bay Area Stadium",
+    "venue_city": "San Francisco Bay Area (Santa Clara), United States",
+    "status": "FT",
+    "status_text": "已结束",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "market_heat": null,
+    "post_match": {
+      "stats": {},
+      "goals": [],
+      "cards": [],
+      "prematch_review": "待复盘",
+      "odds_review": "赛后赔率复盘待补充。"
+    },
+    "source": "WorldCup2026 API"
+  },
+  "model_versions": {
+    "model_version": "v1.61",
+    "probability_engine_version": "score_distribution_v1",
+    "optimizer_version": "portfolio_optimizer_v1",
+    "asset_framework_version": "multi_role_asset_framework_v1",
+    "audit_version": "prediction_audit_v1"
+  },
+  "final_score": "0:0",
+  "final_result": {
+    "home": 0,
+    "away": 0
+  },
+  "pre_match_snapshot": "data/history/2026_06_25_Paraguay_Australia_pre.json",
+  "probability_distribution": {
+    "available": true,
+    "favorite": "巴拉圭",
+    "underdog": "澳大利亚",
+    "rows": [
+      {
+        "label": "平局区间",
+        "probability": 0.2903225806451613,
+        "meaning": "比赛进入低分差或胶着路径。",
+        "behavior_shift": 0.0
+      },
+      {
+        "label": "巴拉圭小胜（1球）",
+        "probability": 0.22851612903225804,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。",
+        "behavior_shift": 0.0
+      },
+      {
+        "label": "巴拉圭赢2球",
+        "probability": 0.18498924731182798,
+        "meaning": "盘口边界路径，决定让球盘输赢。",
+        "behavior_shift": 0.0
+      },
+      {
+        "label": "澳大利亚不败",
+        "probability": 0.1655913978494624,
+        "meaning": "爆冷或热门方向失效路径。",
+        "behavior_shift": 0.0
+      },
+      {
+        "label": "巴拉圭赢3球以上",
+        "probability": 0.1305806451612903,
+        "meaning": "强队大胜路径，过去版本容易低估。",
+        "behavior_shift": 0.0
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "巴拉圭 -1.5",
+      "lose_paths": [
+        "巴拉圭只赢1球",
+        "平局",
+        "澳大利亚胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "平局区间",
+    "boundary_path": "巴拉圭赢2球",
+    "extreme_path": "巴拉圭赢3球以上",
+    "game_behavior": {
+      "team_pressure_score": {
+        "0": "already eliminated / no motivation",
+        "1": "already qualified (rotation risk)",
+        "2": "draw acceptable",
+        "3": "must avoid loss",
+        "4": "must win",
+        "5": "must win big / depends on others"
+      },
+      "input": {
+        "team_a_pressure": 3,
+        "team_b_pressure": 3,
+        "group_stage": true,
+        "qualified_already": false,
+        "elimination_risk": false,
+        "goal_difference_pressure": 0.0,
+        "team_a_pressure_reason": "No standings context; neutral pressure.",
+        "team_b_pressure_reason": "No standings context; neutral pressure.",
+        "standings_source": null
+      },
+      "team_a_pressure_label": "must avoid loss",
+      "team_b_pressure_label": "must avoid loss",
+      "expected_game_tempo": "balanced",
+      "expected_goal_distribution_shift": "neutral",
+      "expected_upset_probability_change": 0.0,
+      "expected_handicap_movement_bias": "no strong pressure adjustment",
+      "adjustments": {
+        "small_win_shift": 0.0,
+        "two_goal_shift": 0.0,
+        "big_win_shift": 0.0,
+        "draw_shift": 0.0,
+        "underdog_shift": 0.0
+      },
+      "notes": [
+        "Team A pressure 3: must avoid loss",
+        "No standings context; neutral pressure.",
+        "Team B pressure 3: must avoid loss",
+        "No standings context; neutral pressure.",
+        "Tempo: balanced",
+        "Handicap bias: no strong pressure adjustment"
+      ]
+    },
+    "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+  },
+  "strategies": [],
+  "strategy_settlement": [
+    {
+      "组合": "我的组合",
+      "来源": "My Portfolio",
+      "投入": "600元",
+      "盈亏": "+0元",
+      "ROI": "0.0%",
+      "_profit": 0,
+      "_detail": [
+        {
+          "投注": "巴拉圭 -0.5",
+          "资产角色": "保险资产 / 方向资产",
+          "金额": "500元",
+          "赔率": "-",
+          "结果": "未找到赔率",
+          "盈亏": "+0元",
+          "_roles": [
+            {
+              "role": "Insurance Asset",
+              "role_cn": "保险资产",
+              "weight": 0.7058823529411765,
+              "reason": "覆盖赢球边界和受让路径。"
+            },
+            {
+              "role": "Directional Asset",
+              "role_cn": "方向资产",
+              "weight": 0.29411764705882354,
+              "reason": "辅助表达比赛方向。"
+            }
+          ],
+          "_profit": 0,
+          "_amount": 500
+        },
+        {
+          "投注": "1:0",
+          "资产角色": "方向资产 / 收益资产",
+          "金额": "100元",
+          "赔率": "-",
+          "结果": "未找到赔率",
+          "盈亏": "+0元",
+          "_roles": [
+            {
+              "role": "Directional Asset",
+              "role_cn": "方向资产",
+              "weight": 0.5,
+              "reason": "主路径波胆，直接表达比赛主逻辑。"
+            },
+            {
+              "role": "Return Asset",
+              "role_cn": "收益资产",
+              "weight": 0.5,
+              "reason": "赔率较高，用于放大主路径利润。"
+            }
+          ],
+          "_profit": 0,
+          "_amount": 100
+        }
+      ]
+    }
+  ],
+  "my_portfolio": {
+    "raw_text": "巴拉圭-0.5，500；\n1:0，100",
+    "items": [
+      {
+        "type": "handicap",
+        "selection": "Home -0.5",
+        "name": "巴拉圭 -0.5",
+        "handicap_line": {
+          "original_line": "-0.5",
+          "decimal_line": -0.5,
+          "split_legs": [
+            -0.5
+          ],
+          "display_line": "-0.5",
+          "is_split": false
+        },
+        "handicap_side": "home",
+        "amount": 500,
+        "odds": null,
+        "standard_odds": null,
+        "effective_odds": null,
+        "matched": false,
+        "match_error": "未找到对应让球赔率。",
+        "raw_input": "巴拉圭-0.5，500；"
+      },
+      {
+        "type": "correct_score",
+        "selection": "1:0",
+        "name": "1:0",
+        "handicap_line": {},
+        "handicap_side": null,
+        "amount": 100,
+        "odds": null,
+        "standard_odds": null,
+        "effective_odds": null,
+        "matched": false,
+        "match_error": "未找到对应波胆赔率。",
+        "raw_input": "1:0，100"
+      }
+    ]
+  },
+  "role_contribution_by_portfolio": {
+    "我的组合": [
+      {
+        "资产角色": "保险资产",
+        "代表投注": "巴拉圭 -0.5",
+        "投入": "353元",
+        "盈亏": "+0元",
+        "ROI": "0.0%",
+        "结算项": 1,
+        "解释": "降低偏离路径亏损。"
+      },
+      {
+        "资产角色": "方向资产",
+        "代表投注": "巴拉圭 -0.5、1:0",
+        "投入": "197元",
+        "盈亏": "+0元",
+        "ROI": "0.0%",
+        "结算项": 2,
+        "解释": "方向判断未兑现。"
+      },
+      {
+        "资产角色": "收益资产",
+        "代表投注": "1:0",
+        "投入": "50元",
+        "盈亏": "+0元",
+        "ROI": "0.0%",
+        "结算项": 1,
+        "解释": "高波动资产未命中。"
+      }
+    ]
+  },
+  "model_error": "最终比分 0:0 命中模型主路径候选。",
+  "prediction_audit": {},
+  "prediction_audit_by_portfolio": {
+    "我的组合": {
+      "strategy": "我的组合",
+      "final_score": "0:0",
+      "profit": 0,
+      "roi": 0.0,
+      "hit_count": 0,
+      "total_count": 2,
+      "failure_reasons": [
+        "精确比分路径偏离，实际比分 0:0",
+        "赢球幅度或受让边界判断错误"
+      ],
+      "rows": [
+        {
+          "赛前推荐": "巴拉圭 -0.5",
+          "推荐原因": "市场主盘口，决定赢球路径是否打穿。",
+          "赛前风险": "保险资产：覆盖赢球边界和受让路径。；方向资产：辅助表达比赛方向。",
+          "赛前主要路径": "Home -0.5",
+          "赛后真实结果": "0:0",
+          "是否命中": "未命中",
+          "失败原因": "赢球幅度或受让边界判断错误"
+        },
+        {
+          "赛前推荐": "1:0",
+          "推荐原因": "用于覆盖最可能比分路径。",
+          "赛前风险": "方向资产：主路径波胆，直接表达比赛主逻辑。；收益资产：赔率较高，用于放大主路径利润。",
+          "赛前主要路径": "热门方胜1球主路径",
+          "赛后真实结果": "0:0",
+          "是否命中": "未命中",
+          "失败原因": "精确比分路径偏离，实际比分 0:0"
+        }
+      ]
+    }
+  },
+  "recommendation_audit": [
+    {
+      "排名": 1,
+      "组合名称": "我的组合",
+      "组合风格": "用户组合",
+      "具体投注": "巴拉圭 -0.5 500元；1:0 100元",
+      "总投入": "600元",
+      "最终比分": "0:0",
+      "实际盈亏": "+0元",
+      "ROI": "0.0%",
+      "命中情况": "0赢 / 0走 / 2项",
+      "失败原因": "无",
+      "资产角色表现": "保险资产 +0 / 方向资产 +0 / 收益资产 +0"
+    }
+  ],
+  "portfolio_audit_details": {
+    "我的组合": {
+      "settlement": {
+        "组合": "我的组合",
+        "来源": "My Portfolio",
+        "投入": "600元",
+        "盈亏": "+0元",
+        "ROI": "0.0%"
+      },
+      "items": [
+        {
+          "投注": "巴拉圭 -0.5",
+          "资产角色": "保险资产 / 方向资产",
+          "金额": "500元",
+          "盈亏": "+0元",
+          "ROI": "0.0%",
+          "作用": "降低偏离路径亏损。",
+          "结果": "未找到赔率"
+        },
+        {
+          "投注": "1:0",
+          "资产角色": "方向资产 / 收益资产",
+          "金额": "100元",
+          "盈亏": "+0元",
+          "ROI": "0.0%",
+          "作用": "方向判断未兑现。",
+          "结果": "未找到赔率"
+        }
+      ],
+      "prediction_audit": [
+        {
+          "赛前推荐": "巴拉圭 -0.5",
+          "推荐原因": "市场主盘口，决定赢球路径是否打穿。",
+          "赛前风险": "保险资产：覆盖赢球边界和受让路径。；方向资产：辅助表达比赛方向。",
+          "赛前主要路径": "Home -0.5",
+          "赛后真实结果": "0:0",
+          "是否命中": "未命中",
+          "失败原因": "赢球幅度或受让边界判断错误"
+        },
+        {
+          "赛前推荐": "1:0",
+          "推荐原因": "用于覆盖最可能比分路径。",
+          "赛前风险": "方向资产：主路径波胆，直接表达比赛主逻辑。；收益资产：赔率较高，用于放大主路径利润。",
+          "赛前主要路径": "热门方胜1球主路径",
+          "赛后真实结果": "0:0",
+          "是否命中": "未命中",
+          "失败原因": "精确比分路径偏离，实际比分 0:0"
+        }
+      ],
+      "model_error": "最终比分 0:0 命中模型主路径候选。"
+    }
+  },
+  "best_strategy": {
+    "组合": "我的组合",
+    "来源": "My Portfolio",
+    "投入": "600元",
+    "盈亏": "+0元",
+    "ROI": "0.0%",
+    "_profit": 0,
+    "_detail": [
+      {
+        "投注": "巴拉圭 -0.5",
+        "资产角色": "保险资产 / 方向资产",
+        "金额": "500元",
+        "赔率": "-",
+        "结果": "未找到赔率",
+        "盈亏": "+0元",
+        "_roles": [
+          {
+            "role": "Insurance Asset",
+            "role_cn": "保险资产",
+            "weight": 0.7058823529411765,
+            "reason": "覆盖赢球边界和受让路径。"
+          },
+          {
+            "role": "Directional Asset",
+            "role_cn": "方向资产",
+            "weight": 0.29411764705882354,
+            "reason": "辅助表达比赛方向。"
+          }
+        ],
+        "_profit": 0,
+        "_amount": 500
+      },
+      {
+        "投注": "1:0",
+        "资产角色": "方向资产 / 收益资产",
+        "金额": "100元",
+        "赔率": "-",
+        "结果": "未找到赔率",
+        "盈亏": "+0元",
+        "_roles": [
+          {
+            "role": "Directional Asset",
+            "role_cn": "方向资产",
+            "weight": 0.5,
+            "reason": "主路径波胆，直接表达比赛主逻辑。"
+          },
+          {
+            "role": "Return Asset",
+            "role_cn": "收益资产",
+            "weight": 0.5,
+            "reason": "赔率较高，用于放大主路径利润。"
+          }
+        ],
+        "_profit": 0,
+        "_amount": 100
+      }
+    ]
+  },
+  "worst_strategy": {
+    "组合": "我的组合",
+    "来源": "My Portfolio",
+    "投入": "600元",
+    "盈亏": "+0元",
+    "ROI": "0.0%",
+    "_profit": 0,
+    "_detail": [
+      {
+        "投注": "巴拉圭 -0.5",
+        "资产角色": "保险资产 / 方向资产",
+        "金额": "500元",
+        "赔率": "-",
+        "结果": "未找到赔率",
+        "盈亏": "+0元",
+        "_roles": [
+          {
+            "role": "Insurance Asset",
+            "role_cn": "保险资产",
+            "weight": 0.7058823529411765,
+            "reason": "覆盖赢球边界和受让路径。"
+          },
+          {
+            "role": "Directional Asset",
+            "role_cn": "方向资产",
+            "weight": 0.29411764705882354,
+            "reason": "辅助表达比赛方向。"
+          }
+        ],
+        "_profit": 0,
+        "_amount": 500
+      },
+      {
+        "投注": "1:0",
+        "资产角色": "方向资产 / 收益资产",
+        "金额": "100元",
+        "赔率": "-",
+        "结果": "未找到赔率",
+        "盈亏": "+0元",
+        "_roles": [
+          {
+            "role": "Directional Asset",
+            "role_cn": "方向资产",
+            "weight": 0.5,
+            "reason": "主路径波胆，直接表达比赛主逻辑。"
+          },
+          {
+            "role": "Return Asset",
+            "role_cn": "收益资产",
+            "weight": 0.5,
+            "reason": "赔率较高，用于放大主路径利润。"
+          }
+        ],
+        "_profit": 0,
+        "_amount": 100
+      }
+    ]
+  }
+}

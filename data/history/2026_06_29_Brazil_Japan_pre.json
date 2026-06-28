@@ -1,0 +1,817 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "pre_match_snapshot",
+  "created_at": "2026-06-29T02:34:51.809257+08:00",
+  "match": {
+    "home": "Brazil",
+    "away": "Japan",
+    "display": "巴西 vs 日本"
+  },
+  "fixture": {
+    "fixture_id": "76",
+    "home_team": {
+      "id": "9",
+      "name": "Brazil",
+      "logo": "https://flagcdn.com/w80/br.png"
+    },
+    "away_team": {
+      "id": "22",
+      "name": "Japan",
+      "logo": "https://flagcdn.com/w80/jp.png"
+    },
+    "kickoff_utc": "06/29/2026 12:00",
+    "kickoff_display": "06/29/2026 12:00",
+    "league_name": "World Cup 2026",
+    "round": "r32",
+    "group": "R32",
+    "venue_name": "Houston Stadium",
+    "venue_city": "Houston, United States",
+    "status": "NS",
+    "status_text": "未开始",
+    "score": null,
+    "market_heat": null,
+    "post_match": null,
+    "source": "WorldCup2026 API"
+  },
+  "model_versions": {
+    "model_version": "v1.61",
+    "probability_engine_version": "score_distribution_v1",
+    "optimizer_version": "portfolio_optimizer_v1",
+    "asset_framework_version": "multi_role_asset_framework_v1",
+    "audit_version": "prediction_audit_v1"
+  },
+  "match_info": {
+    "odds_date_key": "2026-06-29",
+    "report_path": "outputs/reports/Brazil_vs_Japan_20260629_023451.md"
+  },
+  "odds": {
+    "found": false,
+    "home_win": null,
+    "draw": null,
+    "away_win": null,
+    "over_under_line": null,
+    "asian_handicap": [],
+    "over_under": [],
+    "raw_probabilities": null,
+    "implied_probabilities": null,
+    "source": "API-Football",
+    "event_title": null,
+    "event_id": null,
+    "message": "缺少 API-Football Key。请在 .streamlit/secrets.toml 中保存 API_FOOTBALL_KEY。",
+    "cache": null
+  },
+  "api_football_data": {
+    "fixture_result": {
+      "fixture": null,
+      "home_team": null,
+      "away_team": null,
+      "message": "未找到双方国家队信息。"
+    },
+    "fixture": null,
+    "odds": {
+      "found": false,
+      "home_win": null,
+      "draw": null,
+      "away_win": null,
+      "over_under_line": null,
+      "raw_probabilities": null,
+      "implied_probabilities": null,
+      "source": "API-Football 免费版",
+      "event_title": null,
+      "event_id": null,
+      "message": "未找到双方国家队信息。"
+    },
+    "asian_handicap": null,
+    "correct_score": null,
+    "injuries": [],
+    "lineups": [],
+    "home_recent": [],
+    "away_recent": [],
+    "standings": null,
+    "error": "未找到双方国家队信息。"
+  },
+  "polymarket": {
+    "found": true,
+    "home_win": 0.575,
+    "draw": 0.255,
+    "away_win": 0.185,
+    "volume": 2733773.2951610186,
+    "liquidity": 5690516.6434,
+    "source": "Polymarket Gamma API 真实数据",
+    "event_title": "Brazil vs. Japan",
+    "event_slug": "fifwc-bra-jpn-2026-06-29",
+    "event_url": "https://polymarket.com/event/fifwc-bra-jpn-2026-06-29",
+    "message": "已找到对应 Polymarket 市场。"
+  },
+  "actual_odds": {
+    "items": [],
+    "by_type": {},
+    "raw": ""
+  },
+  "my_portfolio": {},
+  "recommendation_combo": [
+    {
+      "slot": "空位1",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位2",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位3",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位4",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    },
+    {
+      "slot": "空位5",
+      "type": "empty",
+      "recommended": false,
+      "name": "不推荐",
+      "score": 0,
+      "share": 0,
+      "reason": "没有可用的真实盘口数据。",
+      "not_recommended_reason": "没有可用的真实盘口数据。",
+      "odds": null,
+      "amount": 0
+    }
+  ],
+  "strategy_snapshot": {
+    "strategies": [],
+    "strategy_table": [],
+    "insurance_cost": [],
+    "correlation_matrix": [],
+    "kelly": [],
+    "return_matrix": [],
+    "role_constraints": [],
+    "portfolio_style": {}
+  },
+  "decision": {
+    "market_disagreement": {
+      "score": 0,
+      "level": "低分歧",
+      "direction": "-",
+      "difference": 0,
+      "odds_probability": null,
+      "polymarket_probability": null,
+      "reason": "缺少可比较的市场数据。"
+    },
+    "contrarian": {
+      "score": 55,
+      "level": "中等",
+      "popular_side": "Brazil",
+      "reason": "当前市场结构下，逆向压力有限。"
+    },
+    "upset_index": {
+      "score": 47,
+      "meaning": "中等爆冷风险",
+      "reason": "小组赛阶段与弱势方属性提高了爆冷敏感度。"
+    },
+    "recent_form": {
+      "score": 50,
+      "reason": "近期状态暂不可用，采用中性分。"
+    },
+    "elo_rating": {
+      "score": 50,
+      "reason": "ELO评分 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "injury_impact": {
+      "score": 50,
+      "reason": "暂无公开伤病信息，采用中性分。"
+    },
+    "team_value": {
+      "score": 50,
+      "reason": "球队身价 为 V1 框架占位，待后续接入可靠数据源。"
+    },
+    "direction_confidence": {
+      "score": 0,
+      "level": "观望",
+      "components": [],
+      "reason": "缺少胜平负赔率，无法形成方向把握。"
+    },
+    "odds_value": {
+      "score": 35,
+      "rating": "C",
+      "label": "-",
+      "market_probability": null,
+      "model_probability": null,
+      "difference": 0,
+      "margin": null,
+      "components": [
+        {
+          "name": "市场价差",
+          "points": 0,
+          "max_points": 10,
+          "reason": "缺少 Polymarket 对比数据。"
+        },
+        {
+          "name": "盘口一致性",
+          "points": 12,
+          "max_points": 30,
+          "reason": "缺少完整市场数据，按中性偏低处理。"
+        },
+        {
+          "name": "亚洲盘结构",
+          "points": 0,
+          "max_points": 25,
+          "reason": "亚洲让球盘缺失。"
+        },
+        {
+          "name": "波胆结构",
+          "points": 0,
+          "max_points": 20,
+          "reason": "真实波胆盘口缺失。"
+        },
+        {
+          "name": "庄家利润率",
+          "points": 8,
+          "max_points": 15,
+          "reason": "按中性抽水处理。"
+        }
+      ],
+      "reason": "缺少模型概率与市场概率的可比数据，赔率价值按中性偏低处理。"
+    },
+    "participation_advice": {
+      "advice": "放弃",
+      "reason": "方向把握 0 / 100，赔率价值 C，爆冷指数 47 / 100。"
+    },
+    "recommended_stake": {
+      "amount": 100,
+      "base": 0,
+      "adjustment": 0,
+      "reason": "方向把握 0 分，对应基础仓位 0；赔率价值 C，调整 +0。"
+    },
+    "final_confidence_score": 0,
+    "value_rating": "C",
+    "value_rating_score": 35,
+    "value_rating_breakdown": [
+      {
+        "name": "市场价差",
+        "points": 0,
+        "max_points": 10,
+        "reason": "缺少 Polymarket 对比数据。"
+      },
+      {
+        "name": "盘口一致性",
+        "points": 12,
+        "max_points": 30,
+        "reason": "缺少完整市场数据，按中性偏低处理。"
+      },
+      {
+        "name": "亚洲盘结构",
+        "points": 0,
+        "max_points": 25,
+        "reason": "亚洲让球盘缺失。"
+      },
+      {
+        "name": "波胆结构",
+        "points": 0,
+        "max_points": 20,
+        "reason": "真实波胆盘口缺失。"
+      },
+      {
+        "name": "庄家利润率",
+        "points": 8,
+        "max_points": 15,
+        "reason": "按中性抽水处理。"
+      }
+    ],
+    "value_rating_meaning": "赔率价值 35 / 100，评级 C：价格基本合理",
+    "final_recommendation": {
+      "bet": "观察为主",
+      "reason": [
+        "暂未发现强逆向让球机会",
+        "当前仅将市场方向作为参考"
+      ]
+    },
+    "stake_suggestion": {
+      "Conservative": 0,
+      "Standard": 0,
+      "Aggressive": 0
+    },
+    "weights": {
+      "方向把握": "胜平负30 + 亚洲让球30 + 大小球8 + 波胆22 + Polymarket10",
+      "赔率价值": "输入实际赔率后：实际赔率优势45 + 推荐覆盖20 + 盘口结构15 + 庄家利润率10 + Polymarket辅助10；未输入时使用市场标准盘口评估。",
+      "参与建议": "方向把握 + 赔率价值 + 风险暴露",
+      "推荐仓位": "方向把握为主，赔率价值微调"
+    }
+  },
+  "probability_distribution": {
+    "available": true,
+    "favorite": "巴西",
+    "underdog": "日本",
+    "rows": [
+      {
+        "label": "平局区间",
+        "probability": 0.3300248138957817,
+        "meaning": "比赛进入低分差或胶着路径。",
+        "behavior_shift": 0.08
+      },
+      {
+        "label": "巴西小胜（1球）",
+        "probability": 0.31281885856079406,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。",
+        "behavior_shift": 0.06
+      },
+      {
+        "label": "巴西赢2球",
+        "probability": 0.1921079404466501,
+        "meaning": "盘口边界路径，决定让球盘输赢。",
+        "behavior_shift": -0.015
+      },
+      {
+        "label": "巴西赢3球以上",
+        "probability": 0.08328660049627791,
+        "meaning": "强队大胜路径，过去版本容易低估。",
+        "behavior_shift": -0.065
+      },
+      {
+        "label": "日本不败",
+        "probability": 0.0817617866004963,
+        "meaning": "爆冷或热门方向失效路径。",
+        "behavior_shift": -0.02
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "巴西 -1.5",
+      "lose_paths": [
+        "巴西只赢1球",
+        "平局",
+        "日本胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "平局区间",
+    "boundary_path": "巴西赢2球",
+    "extreme_path": "巴西赢3球以上",
+    "game_behavior": {
+      "team_pressure_score": {
+        "0": "already eliminated / no motivation",
+        "1": "already qualified (rotation risk)",
+        "2": "draw acceptable",
+        "3": "must avoid loss",
+        "4": "must win",
+        "5": "must win big / depends on others"
+      },
+      "input": {
+        "team_a_pressure": 2,
+        "team_b_pressure": 2,
+        "home_pressure_score": 2,
+        "away_pressure_score": 2,
+        "group_stage": true,
+        "qualified_already": false,
+        "elimination_risk": false,
+        "goal_difference_pressure": 0,
+        "team_a_pressure_reason": "Brazil is strong but may not need a blowout; draw can be enough.",
+        "team_b_pressure_reason": "Japan draw is likely enough; not necessarily a must-blowout spot.",
+        "standings_source": "Manual qualification seed 2026-06-24",
+        "qualification_source": "Manual qualification seed 2026-06-24",
+        "home_context": {
+          "team": "Brazil",
+          "group": "C",
+          "points": 4,
+          "rank": 1,
+          "goal_difference": 3,
+          "goals_for": 4,
+          "goals_against": 1,
+          "matches_played": 2,
+          "pressure_score": 2,
+          "pressure_label": "draw acceptable",
+          "qualification_note": "Brazil is strong but may not need a blowout; draw can be enough.",
+          "motivation_tags": [
+            "draw_acceptable",
+            "avoid_deep_handicap_overconfidence"
+          ],
+          "source": "Manual qualification seed 2026-06-24",
+          "remaining_opponent": "Japan"
+        },
+        "away_context": {
+          "team": "Japan",
+          "group": "F",
+          "points": 4,
+          "rank": 2,
+          "goal_difference": 1,
+          "goals_for": 3,
+          "goals_against": 2,
+          "matches_played": 2,
+          "pressure_score": 2,
+          "pressure_label": "draw acceptable",
+          "qualification_note": "Japan draw is likely enough; not necessarily a must-blowout spot.",
+          "motivation_tags": [
+            "draw_acceptable"
+          ],
+          "source": "Manual qualification seed 2026-06-24",
+          "remaining_opponent": "Brazil"
+        },
+        "match_pressure_type": "both_draw_acceptable",
+        "behavior_adjustments": {
+          "deep_handicap_risk_delta": 1,
+          "favorite_small_win_weight_delta": 1,
+          "underdog_goal_weight_delta": 0,
+          "draw_weight_delta": 2,
+          "over_weight_delta": -1,
+          "under_weight_delta": 2,
+          "late_goal_volatility_delta": -1,
+          "rotation_risk_delta": 0,
+          "tempo_control_delta": 2,
+          "chaos_risk_delta": -1,
+          "recommended_coverage_shift": [
+            "提高平局权重",
+            "提高小球权重",
+            "降低强攻剧本",
+            "谨慎参与"
+          ]
+        },
+        "behavior_notes": [
+          "Both teams can accept a draw; draw and under paths rise.",
+          "Aggressive one-sided portfolios should be downgraded."
+        ]
+      },
+      "team_a_pressure_label": "draw acceptable",
+      "team_b_pressure_label": "draw acceptable",
+      "home_pressure_score": 2,
+      "away_pressure_score": 2,
+      "home_context": {
+        "team": "Brazil",
+        "group": "C",
+        "points": 4,
+        "rank": 1,
+        "goal_difference": 3,
+        "goals_for": 4,
+        "goals_against": 1,
+        "matches_played": 2,
+        "pressure_score": 2,
+        "pressure_label": "draw acceptable",
+        "qualification_note": "Brazil is strong but may not need a blowout; draw can be enough.",
+        "motivation_tags": [
+          "draw_acceptable",
+          "avoid_deep_handicap_overconfidence"
+        ],
+        "source": "Manual qualification seed 2026-06-24",
+        "remaining_opponent": "Japan"
+      },
+      "away_context": {
+        "team": "Japan",
+        "group": "F",
+        "points": 4,
+        "rank": 2,
+        "goal_difference": 1,
+        "goals_for": 3,
+        "goals_against": 2,
+        "matches_played": 2,
+        "pressure_score": 2,
+        "pressure_label": "draw acceptable",
+        "qualification_note": "Japan draw is likely enough; not necessarily a must-blowout spot.",
+        "motivation_tags": [
+          "draw_acceptable"
+        ],
+        "source": "Manual qualification seed 2026-06-24",
+        "remaining_opponent": "Brazil"
+      },
+      "qualification_source": "Manual qualification seed 2026-06-24",
+      "match_pressure_type": "both_draw_acceptable",
+      "behavior_adjustments": {
+        "deep_handicap_risk_delta": 1,
+        "favorite_small_win_weight_delta": 1,
+        "underdog_goal_weight_delta": 0,
+        "draw_weight_delta": 2,
+        "over_weight_delta": -1,
+        "under_weight_delta": 2,
+        "late_goal_volatility_delta": -1,
+        "rotation_risk_delta": 0,
+        "tempo_control_delta": 2,
+        "chaos_risk_delta": -1,
+        "recommended_coverage_shift": [
+          "提高平局权重",
+          "提高小球权重",
+          "降低强攻剧本",
+          "谨慎参与"
+        ]
+      },
+      "expected_game_tempo": "controlled / rotation risk",
+      "expected_goal_distribution_shift": "draw and under paths up",
+      "expected_upset_probability_change": -0.025,
+      "expected_handicap_movement_bias": "reduce aggressive handicap exposure",
+      "adjustments": {
+        "small_win_shift": 0.06,
+        "two_goal_shift": -0.015,
+        "big_win_shift": -0.065,
+        "draw_shift": 0.08,
+        "underdog_shift": -0.02
+      },
+      "notes": [
+        "Home pressure 2: draw acceptable",
+        "Brazil is strong but may not need a blowout; draw can be enough.",
+        "Away pressure 2: draw acceptable",
+        "Japan draw is likely enough; not necessarily a must-blowout spot.",
+        "Pressure type: both_draw_acceptable",
+        "Tempo: controlled / rotation risk",
+        "Handicap bias: reduce aggressive handicap exposure",
+        "Both teams can accept a draw; draw and under paths rise.",
+        "Aggressive one-sided portfolios should be downgraded."
+      ]
+    },
+    "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+  },
+  "value_analysis": {
+    "available": false,
+    "message": "Value Analysis requires both API-Football and Polymarket probabilities.",
+    "rows": [],
+    "has_value": false
+  },
+  "betting_opinion": {
+    "match_winner": "No view",
+    "match_direction": "No view",
+    "asian_handicap": "No view",
+    "handicap_market_direction": "No view",
+    "coverage_candidate": "No coverage candidate",
+    "coverage_reason": "未识别到覆盖候选。",
+    "recommended_use": "Handicap market is not available.",
+    "over_under": "暂无观点",
+    "total_center": "-",
+    "goals_market_bias": "大小球盘口不可用。",
+    "goals_game_behavior_note": "-",
+    "goals_recommended_interpretation": "缺少大小球盘口时，不应推断进球数方向。",
+    "risk_level": "High",
+    "confidence": 55,
+    "market_direction_confidence": 55,
+    "betting_confidence": 37,
+    "data_quality": "Medium",
+    "data_quality_notes": [
+      "官方首发尚未公布。",
+      "Polymarket 对比仅支持胜平负市场；亚洲盘、大小球和波胆需要单独验证。",
+      "大小球盘口中心不可用。",
+      "暂无公开伤病信息不等于确认全员可用，需等待首发。"
+    ],
+    "match_winner_reason": "胜平负市场数据不足，暂不形成明确主方向。",
+    "asian_handicap_reason": "No Asian handicap rows were available.",
+    "over_under_reason": "大小球盘口不可用。",
+    "summary": "市场数据不足，暂不形成明确观点。",
+    "handicap_center": {
+      "available": false,
+      "center_label": "No handicap center",
+      "direction_label": "No view",
+      "coverage_label": "No coverage candidate",
+      "outlier_count": 0,
+      "warning": "No Asian handicap rows were available."
+    },
+    "total_center_detail": {
+      "available": false,
+      "center_label": "No totals center",
+      "market_bias": "Totals market is not available.",
+      "recommended_interpretation": "Do not infer goals direction without a totals market."
+    },
+    "result_distribution": {
+      "available": true,
+      "favorite": "巴西",
+      "underdog": "日本",
+      "rows": [
+        {
+          "label": "平局区间",
+          "probability": 0.3300248138957817,
+          "meaning": "比赛进入低分差或胶着路径。",
+          "behavior_shift": 0.08
+        },
+        {
+          "label": "巴西小胜（1球）",
+          "probability": 0.31281885856079406,
+          "meaning": "市场主路径之一，强队赢但不打穿深盘。",
+          "behavior_shift": 0.06
+        },
+        {
+          "label": "巴西赢2球",
+          "probability": 0.1921079404466501,
+          "meaning": "盘口边界路径，决定让球盘输赢。",
+          "behavior_shift": -0.015
+        },
+        {
+          "label": "巴西赢3球以上",
+          "probability": 0.08328660049627791,
+          "meaning": "强队大胜路径，过去版本容易低估。",
+          "behavior_shift": -0.065
+        },
+        {
+          "label": "日本不败",
+          "probability": 0.0817617866004963,
+          "meaning": "爆冷或热门方向失效路径。",
+          "behavior_shift": -0.02
+        }
+      ],
+      "risk_exposure": {
+        "example_bet": "巴西 -1.5",
+        "lose_paths": [
+          "巴西只赢1球",
+          "平局",
+          "日本胜"
+        ],
+        "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+      },
+      "main_path": "平局区间",
+      "boundary_path": "巴西赢2球",
+      "extreme_path": "巴西赢3球以上",
+      "game_behavior": {
+        "team_pressure_score": {
+          "0": "already eliminated / no motivation",
+          "1": "already qualified (rotation risk)",
+          "2": "draw acceptable",
+          "3": "must avoid loss",
+          "4": "must win",
+          "5": "must win big / depends on others"
+        },
+        "input": {
+          "team_a_pressure": 2,
+          "team_b_pressure": 2,
+          "home_pressure_score": 2,
+          "away_pressure_score": 2,
+          "group_stage": true,
+          "qualified_already": false,
+          "elimination_risk": false,
+          "goal_difference_pressure": 0,
+          "team_a_pressure_reason": "Brazil is strong but may not need a blowout; draw can be enough.",
+          "team_b_pressure_reason": "Japan draw is likely enough; not necessarily a must-blowout spot.",
+          "standings_source": "Manual qualification seed 2026-06-24",
+          "qualification_source": "Manual qualification seed 2026-06-24",
+          "home_context": {
+            "team": "Brazil",
+            "group": "C",
+            "points": 4,
+            "rank": 1,
+            "goal_difference": 3,
+            "goals_for": 4,
+            "goals_against": 1,
+            "matches_played": 2,
+            "pressure_score": 2,
+            "pressure_label": "draw acceptable",
+            "qualification_note": "Brazil is strong but may not need a blowout; draw can be enough.",
+            "motivation_tags": [
+              "draw_acceptable",
+              "avoid_deep_handicap_overconfidence"
+            ],
+            "source": "Manual qualification seed 2026-06-24",
+            "remaining_opponent": "Japan"
+          },
+          "away_context": {
+            "team": "Japan",
+            "group": "F",
+            "points": 4,
+            "rank": 2,
+            "goal_difference": 1,
+            "goals_for": 3,
+            "goals_against": 2,
+            "matches_played": 2,
+            "pressure_score": 2,
+            "pressure_label": "draw acceptable",
+            "qualification_note": "Japan draw is likely enough; not necessarily a must-blowout spot.",
+            "motivation_tags": [
+              "draw_acceptable"
+            ],
+            "source": "Manual qualification seed 2026-06-24",
+            "remaining_opponent": "Brazil"
+          },
+          "match_pressure_type": "both_draw_acceptable",
+          "behavior_adjustments": {
+            "deep_handicap_risk_delta": 1,
+            "favorite_small_win_weight_delta": 1,
+            "underdog_goal_weight_delta": 0,
+            "draw_weight_delta": 2,
+            "over_weight_delta": -1,
+            "under_weight_delta": 2,
+            "late_goal_volatility_delta": -1,
+            "rotation_risk_delta": 0,
+            "tempo_control_delta": 2,
+            "chaos_risk_delta": -1,
+            "recommended_coverage_shift": [
+              "提高平局权重",
+              "提高小球权重",
+              "降低强攻剧本",
+              "谨慎参与"
+            ]
+          },
+          "behavior_notes": [
+            "Both teams can accept a draw; draw and under paths rise.",
+            "Aggressive one-sided portfolios should be downgraded."
+          ]
+        },
+        "team_a_pressure_label": "draw acceptable",
+        "team_b_pressure_label": "draw acceptable",
+        "home_pressure_score": 2,
+        "away_pressure_score": 2,
+        "home_context": {
+          "team": "Brazil",
+          "group": "C",
+          "points": 4,
+          "rank": 1,
+          "goal_difference": 3,
+          "goals_for": 4,
+          "goals_against": 1,
+          "matches_played": 2,
+          "pressure_score": 2,
+          "pressure_label": "draw acceptable",
+          "qualification_note": "Brazil is strong but may not need a blowout; draw can be enough.",
+          "motivation_tags": [
+            "draw_acceptable",
+            "avoid_deep_handicap_overconfidence"
+          ],
+          "source": "Manual qualification seed 2026-06-24",
+          "remaining_opponent": "Japan"
+        },
+        "away_context": {
+          "team": "Japan",
+          "group": "F",
+          "points": 4,
+          "rank": 2,
+          "goal_difference": 1,
+          "goals_for": 3,
+          "goals_against": 2,
+          "matches_played": 2,
+          "pressure_score": 2,
+          "pressure_label": "draw acceptable",
+          "qualification_note": "Japan draw is likely enough; not necessarily a must-blowout spot.",
+          "motivation_tags": [
+            "draw_acceptable"
+          ],
+          "source": "Manual qualification seed 2026-06-24",
+          "remaining_opponent": "Brazil"
+        },
+        "qualification_source": "Manual qualification seed 2026-06-24",
+        "match_pressure_type": "both_draw_acceptable",
+        "behavior_adjustments": {
+          "deep_handicap_risk_delta": 1,
+          "favorite_small_win_weight_delta": 1,
+          "underdog_goal_weight_delta": 0,
+          "draw_weight_delta": 2,
+          "over_weight_delta": -1,
+          "under_weight_delta": 2,
+          "late_goal_volatility_delta": -1,
+          "rotation_risk_delta": 0,
+          "tempo_control_delta": 2,
+          "chaos_risk_delta": -1,
+          "recommended_coverage_shift": [
+            "提高平局权重",
+            "提高小球权重",
+            "降低强攻剧本",
+            "谨慎参与"
+          ]
+        },
+        "expected_game_tempo": "controlled / rotation risk",
+        "expected_goal_distribution_shift": "draw and under paths up",
+        "expected_upset_probability_change": -0.025,
+        "expected_handicap_movement_bias": "reduce aggressive handicap exposure",
+        "adjustments": {
+          "small_win_shift": 0.06,
+          "two_goal_shift": -0.015,
+          "big_win_shift": -0.065,
+          "draw_shift": 0.08,
+          "underdog_shift": -0.02
+        },
+        "notes": [
+          "Home pressure 2: draw acceptable",
+          "Brazil is strong but may not need a blowout; draw can be enough.",
+          "Away pressure 2: draw acceptable",
+          "Japan draw is likely enough; not necessarily a must-blowout spot.",
+          "Pressure type: both_draw_acceptable",
+          "Tempo: controlled / rotation risk",
+          "Handicap bias: reduce aggressive handicap exposure",
+          "Both teams can accept a draw; draw and under paths rise.",
+          "Aggressive one-sided portfolios should be downgraded."
+        ]
+      },
+      "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+    }
+  }
+}

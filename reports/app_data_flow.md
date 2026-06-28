@@ -27,7 +27,7 @@ Schedule/API/cache/history/user input
 1. Runtime bootstrap initializes Streamlit page config and session state.
 2. Schedule page loads schedule data and sets selected fixture through `open_fixture`.
 3. Analysis page parses selected match text, resolves fixture context, and loads data sources.
-4. Odds and market processing combine API-Football, The Odds API, Polymarket, actual user odds, and market summaries.
+4. Odds and market processing combine API-Football, API-Football, Polymarket, actual user odds, and market summaries.
 5. Analysis pipeline builds match context, result distribution, value analysis, decision engine output, betting opinion, score suggestions, and risk notes.
 6. Portfolio pipeline builds market candidates, recommendation slots, strategy libraries, allocation variants, strategy comparison rows, and visible metadata.
 7. UI renders overview cards, market tabs, strategy ranking, actual odds comparison, my portfolio input, advanced research, and data source notes.
@@ -35,7 +35,7 @@ Schedule/API/cache/history/user input
 
 ## Where Odds Are Computed
 
-- Imported odds clients: `modules.odds_client`, `modules.the_odds_client`, `modules.polymarket_client`.
+- Imported odds clients: `modules.odds_client`, `removed legacy odds client`, `modules.polymarket_client`.
 - In-file odds helpers: `market_odds_overview_rows`, `actual_odds_completeness`, `actual_odds_completeness_for_match`, `render_actual_odds_input`, `current_actual_odds`, `portfolio_market_candidates`, and `render_actual_market_odds_summary`.
 - User odds parsing and enrichment are delegated to `modules.user_odds`, but UI/cache and some matching remain in `app.py`.
 

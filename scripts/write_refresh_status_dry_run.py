@@ -111,7 +111,7 @@ def build_status() -> dict:
         "Freshness is based on local file metadata only.",
         "Use a manual approved refresh before relying on time-sensitive market data.",
         "API-Football key value is never displayed.",
-        "Odds API is disabled and not required for the current UI-CACHE-API phase.",
+        "External odds providers are disabled; API-Football is the active odds provider.",
     ]
     key_readiness = api_football_key_readiness()
     key_present = key_readiness["api_football_key_present"]
@@ -187,7 +187,7 @@ def main() -> int:
     print(f"API_CALLED: {str(status['api_called']).lower()}")
     print(f"API_FOOTBALL_KEY_PRESENT: {str(status['api_football_key_present']).lower()}")
     print(f"REFRESH_GATE_STATUS: {status['refresh_gate_status']}")
-    print("THE_ODDS_API_REQUIRED: false")
+    print("EXTERNAL_ODDS_PROVIDER_REQUIRED: false")
     print(f"STATUS: {status['status']}")
     print(f"LAST_LOCAL_SNAPSHOT: {status.get('last_local_snapshot_path') or '-'}")
     return 0

@@ -7,7 +7,7 @@
 - API provider: API-Football only.
 - `API_FOOTBALL_KEY`: present, value redacted.
 - API key source: `dotenv`.
-- `THE_ODDS_API_KEY`: not required.
+- `API_FOOTBALL_KEY`: required for live API-Football odds refresh.
 - Endpoint/function called: `GET /fixtures` with `id=1489393`.
 - API call count: `1`.
 - Refresh run exactly once: `true`.
@@ -29,7 +29,7 @@
 - `data/history` unchanged by script design.
 - Golden JSON unchanged by script design.
 - Recommendation, ranking, portfolio, strategy, odds settlement, and backtest logic unchanged.
-- The Odds API was not called.
+- API-Football was not called.
 - Polymarket was not called.
 - No API key value was printed or written.
 - One-time marker path: `.runtime/api_football_refresh/one_time_refresh_marker.json`.

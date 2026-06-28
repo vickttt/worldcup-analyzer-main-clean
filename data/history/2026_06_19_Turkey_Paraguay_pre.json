@@ -46,7 +46,7 @@
   },
   "odds": {
     "found": false,
-    "source": "The Odds API",
+    "source": "API-Football",
     "message": "未找到赛事。",
     "asian_handicap": [],
     "over_under": [],
@@ -47677,7 +47677,7 @@
   },
   "value_analysis": {
     "available": false,
-    "message": "Value Analysis requires both The Odds API and Polymarket probabilities.",
+    "message": "Value Analysis requires both API-Football and Polymarket probabilities.",
     "rows": [],
     "has_value": false
   },

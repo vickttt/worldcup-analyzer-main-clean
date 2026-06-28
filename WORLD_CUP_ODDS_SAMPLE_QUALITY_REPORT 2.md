@@ -17,7 +17,7 @@ Reason:
   - Over/Under.
   - Correct Score.
 - Every sampled market had `odds update timestamp < kickoff timestamp`.
-- Bookmaker coverage was strong across all markets.
+- API-Football provider coverage was strong across all markets.
 
 Phase B should still remain limited to 10 completed matches and write only to the isolated `data/history/backfill/` directory.
 
@@ -33,7 +33,7 @@ Quality score rationale:
 
 - 40 points: all required markets available.
 - 40 points: all market update timestamps are before kickoff.
-- 15 points: bookmaker count is strong.
+- 15 points: API-Football provider count is strong.
 - 5 points: fixture identity is confirmed by official API-Football fixture list.
 
 Brazil vs Haiti receives 94 instead of 96 because odds were updated 22 minutes before kickoff, which is valid and useful but should be watched for last-minute market movement sensitivity.
@@ -48,7 +48,7 @@ Match type: Strong favorite / deep handicap.
 - Data quality: `true_pre_match`.
 - Historical Benchmark eligibility: Suitable.
 
-| Market | Available | Odds Update Timestamp | Kickoff Timestamp | update < kickoff | Bookmaker Count | Market Quality |
+| Market | Available | Odds Update Timestamp | Kickoff Timestamp | update < kickoff | API-Football Provider Count | Market Quality |
 | --- | --- | --- | --- | --- | ---: | --- |
 | Match Winner | Yes | `2026-06-20T18:00:19+00:00` | `2026-06-20T20:00:00+00:00` | Yes | 14 | `available_true_pre_match` |
 | Asian Handicap | Yes | `2026-06-20T18:00:19+00:00` | `2026-06-20T20:00:00+00:00` | Yes | 11 | `available_true_pre_match` |
@@ -73,7 +73,7 @@ Match type: Balanced match.
 - Data quality: `true_pre_match`.
 - Historical Benchmark eligibility: Suitable.
 
-| Market | Available | Odds Update Timestamp | Kickoff Timestamp | update < kickoff | Bookmaker Count | Market Quality |
+| Market | Available | Odds Update Timestamp | Kickoff Timestamp | update < kickoff | API-Football Provider Count | Market Quality |
 | --- | --- | --- | --- | --- | ---: | --- |
 | Match Winner | Yes | `2026-06-19T20:07:20+00:00` | `2026-06-19T22:00:00+00:00` | Yes | 14 | `available_true_pre_match` |
 | Asian Handicap | Yes | `2026-06-19T20:07:20+00:00` | `2026-06-19T22:00:00+00:00` | Yes | 11 | `available_true_pre_match` |
@@ -98,7 +98,7 @@ Match type: Upset-risk / crowded favorite.
 - Data quality: `true_pre_match`.
 - Historical Benchmark eligibility: Suitable.
 
-| Market | Available | Odds Update Timestamp | Kickoff Timestamp | update < kickoff | Bookmaker Count | Market Quality |
+| Market | Available | Odds Update Timestamp | Kickoff Timestamp | update < kickoff | API-Football Provider Count | Market Quality |
 | --- | --- | --- | --- | --- | ---: | --- |
 | Match Winner | Yes | `2026-06-20T00:07:25+00:00` | `2026-06-20T00:30:00+00:00` | Yes | 14 | `available_true_pre_match` |
 | Asian Handicap | Yes | `2026-06-20T00:07:25+00:00` | `2026-06-20T00:30:00+00:00` | Yes | 11 | `available_true_pre_match` |

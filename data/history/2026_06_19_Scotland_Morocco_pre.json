@@ -182,7 +182,7 @@
     }
   },
   "odds": {
-    "the_odds_api": {
+    "legacy_deprecated_odds": {
       "found": true,
       "home_win": 5.5,
       "draw": 3.55,
@@ -418,10 +418,10 @@
         "draw": 0.267831566886279,
         "away_win": 0.5592953308507591
       },
-      "source": "The Odds API / Unibet",
+      "source": "API-Football / Unibet",
       "event_title": "Scotland vs Morocco",
       "event_id": "4cd769aa7bae0ad9762bd69b80ef2903",
-      "message": "已强制刷新 The Odds API 胜平负、让球、大小球。",
+      "message": "已强制刷新 API-Football 胜平负、让球、大小球。",
       "cache": {
         "source": "fresh api response",
         "sport_key": "soccer_fifa_world_cup",
@@ -44010,7 +44010,7 @@
       "name": "小于 2.5 球",
       "standard_odds": 1.6594736842105264,
       "base_score": 50,
-      "source": "The Odds API 大小球均值"
+      "source": "API-Football 大小球均值"
     },
     {
       "slot": "大小球",
@@ -44019,7 +44019,7 @@
       "name": "大于 2.5 球",
       "standard_odds": 2.1857894736842107,
       "base_score": 40,
-      "source": "The Odds API 大小球均值"
+      "source": "API-Football 大小球均值"
     },
     {
       "slot": "波胆1",
@@ -44408,7 +44408,7 @@
       "name": "小于 2.5 球",
       "standard_odds": 1.6594736842105264,
       "base_score": 50,
-      "source": "The Odds API 大小球均值",
+      "source": "API-Football 大小球均值",
       "actual_odds": null,
       "effective_odds": 1.6594736842105264,
       "edge": null,
@@ -44435,7 +44435,7 @@
       "name": "大于 2.5 球",
       "standard_odds": 2.1857894736842107,
       "base_score": 40,
-      "source": "The Odds API 大小球均值",
+      "source": "API-Football 大小球均值",
       "actual_odds": null,
       "effective_odds": 2.1857894736842107,
       "edge": null,
@@ -45176,7 +45176,7 @@
           "name": "小于 2.5 球",
           "standard_odds": 1.6594736842105264,
           "base_score": 50,
-          "source": "The Odds API 大小球均值",
+          "source": "API-Football 大小球均值",
           "actual_odds": null,
           "effective_odds": 1.6594736842105264,
           "edge": null,
@@ -45776,7 +45776,7 @@
           "name": "小于 2.5 球",
           "standard_odds": 1.6594736842105264,
           "base_score": 50,
-          "source": "The Odds API 大小球均值",
+          "source": "API-Football 大小球均值",
           "actual_odds": null,
           "effective_odds": 1.6594736842105264,
           "edge": null,

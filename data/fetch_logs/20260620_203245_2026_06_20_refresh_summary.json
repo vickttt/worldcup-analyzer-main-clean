@@ -26,7 +26,7 @@
           "success": true,
           "records": 118,
           "empty": false,
-          "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
+          "message": "API-Football 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
         },
         {
           "source": "API-Football",
@@ -107,7 +107,7 @@
           "success": true,
           "records": 113,
           "empty": false,
-          "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
+          "message": "API-Football 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
         },
         {
           "source": "API-Football",
@@ -188,7 +188,7 @@
           "success": true,
           "records": 134,
           "empty": false,
-          "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
+          "message": "API-Football 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
         },
         {
           "source": "API-Football",
@@ -269,7 +269,7 @@
           "success": true,
           "records": 120,
           "empty": false,
-          "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
+          "message": "API-Football 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
         },
         {
           "source": "API-Football",

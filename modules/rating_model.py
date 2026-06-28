@@ -48,7 +48,7 @@ def rate_opportunity(probabilities, polymarket, news, odds=None):
         return {
             "grade": "放弃",
             "risk_level": "高",
-            "summary": "The Odds API 和 Polymarket 均未返回可比较概率。",
+            "summary": "API-Football 和 Polymarket 均未返回可比较概率。",
             "recommendation": "No bet",
             "value_signal": "No",
             "reason": "缺少可比较市场数据。",
@@ -58,7 +58,7 @@ def rate_opportunity(probabilities, polymarket, news, odds=None):
         return {
             "grade": "C",
             "risk_level": "中高",
-            "summary": "The Odds API 未返回赔率，只能参考 Polymarket。",
+            "summary": "API-Football 未返回赔率，只能参考 Polymarket。",
             "recommendation": "Observe only",
             "value_signal": "No",
             "reason": "缺少博彩公司赔率，无法进行价差比较。",
@@ -68,7 +68,7 @@ def rate_opportunity(probabilities, polymarket, news, odds=None):
         return {
             "grade": "C",
             "risk_level": "中高",
-            "summary": "Polymarket 未返回概率，只能参考 The Odds API。",
+            "summary": "Polymarket 未返回概率，只能参考 API-Football。",
             "recommendation": "Observe only",
             "value_signal": "No",
             "reason": "缺少预测市场价格，无法进行价差比较。",
@@ -104,11 +104,11 @@ def rate_opportunity(probabilities, polymarket, news, odds=None):
     if best_gap > 0:
         reason = (
             f"Polymarket 对 {label_for_direction(best_direction)} 的概率 "
-            f"比 The Odds API 高 {abs_gap * 100:.1f} 个百分点。"
+            f"比 API-Football 高 {abs_gap * 100:.1f} 个百分点。"
         )
     else:
         reason = (
-            f"The Odds API 对 {label_for_direction(best_direction)} 的隐含概率 "
+            f"API-Football 对 {label_for_direction(best_direction)} 的隐含概率 "
             f"比 Polymarket 高 {abs_gap * 100:.1f} 个百分点。"
         )
 

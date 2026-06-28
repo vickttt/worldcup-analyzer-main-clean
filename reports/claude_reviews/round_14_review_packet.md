@@ -25,7 +25,7 @@ Claude should review only and must not write code. Please check API scope, secre
 - Response item count: `1`.
 - Start: `2026-06-27T12:13:33+00:00`.
 - Finish: `2026-06-27T12:13:35+00:00`.
-- The Odds API was not called and is not required.
+- API-Football was not called and is not required.
 - Polymarket was not called.
 - No second API refresh was performed.
 
@@ -97,7 +97,7 @@ Add a read-only validator for the controlled API-Football refresh artifact and U
 
 - Was only API-Football used?
 - Was `API_FOOTBALL_KEY` protected and never printed?
-- Was `THE_ODDS_API_KEY` not required?
+- Was `API_FOOTBALL_KEY` required for live API-Football odds refresh?
 - Was the API call bounded and exactly once?
 - Are written files runtime/ignored or safe tracked reports only?
 - Were `data/history` and golden JSON untouched?

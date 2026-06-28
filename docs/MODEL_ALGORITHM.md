@@ -28,7 +28,7 @@ Missing inputs are not fabricated. Missing odds reduce data quality and may lowe
 
 Current source responsibilities:
 
-- The Odds API: Match Winner and Over/Under when available.
+- API-Football: Match Winner and Over/Under when available.
 - API-Football: Asian Handicap, Correct Score, fixture, lineups, injuries, standings, recent form.
 - Polymarket: market probabilities when a market is found.
 - Local cache/history: previously fetched odds, match snapshots, my portfolios, post-match settlements.
@@ -450,7 +450,7 @@ A portfolio with higher raw EV can lose ranking if it is noisy, too concentrated
 
 - Score-grid probabilities remain a heuristic blend of market structure and rule-based adjustments.
 - Qualification pressure currently uses manual seed data first and standings fallback; full automatic qualification probability is not implemented.
-- Directional Odds Value does not yet include liquidity, bookmaker-count stability, or time-series price movement.
+- Directional Odds Value does not yet include liquidity, API-Football-provider-count stability, or time-series price movement.
 - Correct-score value depends on available real odds. Missing correct-score odds are not estimated.
 - Historical sample size is still small, so model quality must be judged through replay/backtest results before further tuning.
 - The current system should not be tuned further until initial backtest results are reviewed.

@@ -16,8 +16,8 @@ This document defines API, secret, runtime, and failure-safety rules for World C
 
 - Current keyed provider: API-Football only.
 - Current key: `API_FOOTBALL_KEY`.
-- The Odds API is disabled for the current UI-CACHE-API phase.
-- `THE_ODDS_API_KEY` is not required and must not block API-Football readiness.
+- External odds providers are disabled; API-Football is active for odds.
+- `API_FOOTBALL_KEY` is required for live API-Football odds refresh and must not block API-Football readiness.
 - Polymarket is public-only and not part of current API refresh work unless explicitly scoped.
 - WorldCup2026 schedule API is public and separate.
 

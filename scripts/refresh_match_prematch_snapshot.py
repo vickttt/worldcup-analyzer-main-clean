@@ -1,7 +1,7 @@
 import argparse
 import json
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -12,33 +12,19 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from modules.match_parser import parse_match
+from modules.fixture_id_mapper import FixtureIDMapper
 from modules.odds_client import (
     ASIAN_HANDICAP_BET_ID,
     EXACT_SCORE_BET_ID,
     empty_asian_handicap_result,
     empty_correct_score_result,
+    fetch_odds,
     parse_odd,
     request_json,
     write_api_football_market_cache,
 )
 from modules.result_distribution import build_result_distribution
 from modules.schedule_client import fetch_world_cup_schedule, fixture_local_datetime
-from modules.team_resolver import alias_candidates, request_teams, select_team_from_response
-from modules.the_odds_client import (
-    THE_ODDS_API_BASE,
-    WORLD_CUP_SPORT_KEYS,
-    cache_metadata,
-    daily_utc_window,
-    event_matches,
-    extract_h2h_prices,
-    extract_spreads,
-    extract_totals,
-    implied_probabilities,
-    load_the_odds_api_key,
-    raw_probabilities,
-    read_daily_cache,
-    write_daily_cache,
-)
 from modules.user_odds import build_market_candidates, build_recommendation_slots
 from modules.weather_client import weather_for_fixture
 
@@ -60,6 +46,28 @@ def schedule_match(fixture, match):
     return direct or reversed_match
 
 
+def match_with_fixture_context(match, fixture):
+    if not fixture:
+        return match
+    enriched = dict(match)
+    fixture_source = fixture.get("source")
+    fixture_id = fixture.get("fixture_id")
+    enriched.update({
+        "schedule_fixture_id": fixture_id,
+        "schedule_source": fixture_source,
+        "fixture_source": fixture_source,
+        "fixture_home_team": fixture.get("home_team") or {},
+        "fixture_away_team": fixture.get("away_team") or {},
+        "fixture_kickoff_utc": fixture.get("kickoff_utc"),
+        "fixture_league_name": fixture.get("league_name"),
+        "fixture_round": fixture.get("round"),
+    })
+    if fixture_source == "API-Football":
+        enriched["fixture_id"] = fixture_id
+        enriched["api_football_fixture_id"] = fixture_id
+    return enriched
+
+
 def api_error_payload(source, error):
     return {
         "found": False,
@@ -77,121 +85,12 @@ def force_fetch_schedule(match):
     return schedule, fixture
 
 
-def odds_date_candidates(date_key):
-    try:
-        parsed = datetime.strptime(date_key, "%Y-%m-%d").date()
-    except ValueError:
-        return [date_key]
-    return [
-        parsed.strftime("%Y-%m-%d"),
-        (parsed - timedelta(days=1)).strftime("%Y-%m-%d"),
-        (parsed + timedelta(days=1)).strftime("%Y-%m-%d"),
-    ]
-
-
-def fetch_the_odds_force(match, date_key):
-    api_key = load_the_odds_api_key()
-    if not api_key:
-        return {
-            "found": False,
-            "source": "The Odds API",
-            "message": "缺少 THE_ODDS_API_KEY。",
-            "events": [],
-        }
-
-    last_error = None
-    for candidate_date in odds_date_candidates(date_key):
-        for sport_key in WORLD_CUP_SPORT_KEYS:
-            start_utc, end_utc = daily_utc_window(candidate_date)
-            try:
-                response = requests.get(
-                    f"{THE_ODDS_API_BASE}/sports/{sport_key}/odds",
-                    params={
-                        "apiKey": api_key,
-                        "regions": "eu,us,uk,au",
-                        "markets": "h2h,spreads,totals",
-                        "oddsFormat": "decimal",
-                        "dateFormat": "iso",
-                        "commenceTimeFrom": start_utc,
-                        "commenceTimeTo": end_utc,
-                    },
-                    timeout=25,
-                )
-                if response.status_code == 404:
-                    events = []
-                else:
-                    response.raise_for_status()
-                    events = response.json()
-            except requests.RequestException as error:
-                last_error = error
-                cached_payload = read_daily_cache(sport_key, candidate_date)
-                if not cached_payload:
-                    continue
-                events = cached_payload.get("events") or []
-                payload = {
-                    **cached_payload,
-                    "cache_status": "cached fallback after request error",
-                    "request_headers": cached_payload.get("request_headers") or {},
-                }
-            else:
-                payload = {
-                    "source": "The Odds API",
-                    "sport_key": sport_key,
-                    "date_key": candidate_date,
-                    "fetched_at": datetime.now(LOCAL_TZ).isoformat(),
-                    "cache_status": "fresh api response - forced single match refresh",
-                    "events": events,
-                    "request_headers": {
-                        "x-requests-used": response.headers.get("x-requests-used") if "response" in locals() else None,
-                        "x-requests-remaining": response.headers.get("x-requests-remaining") if "response" in locals() else None,
-                        "x-requests-last": response.headers.get("x-requests-last") if "response" in locals() else None,
-                    },
-                }
-                write_daily_cache(sport_key, candidate_date, payload)
-
-            for event in events:
-                if not event_matches(event, match):
-                    continue
-                prices, bookmaker = extract_h2h_prices(event, match)
-                spreads = extract_spreads(event, match)
-                totals = extract_totals(event)
-                if not prices:
-                    return {
-                        "found": False,
-                        "source": "The Odds API",
-                        "event_id": event.get("id"),
-                        "event_title": f"{event.get('home_team')} vs {event.get('away_team')}",
-                        "message": "找到赛事，但没有完整胜平负赔率。",
-                        "asian_handicap": spreads,
-                        "over_under": totals,
-                        "raw_event": event,
-                    }
-                return {
-                    "found": True,
-                    "home_win": prices["home_win"],
-                    "draw": prices["draw"],
-                    "away_win": prices["away_win"],
-                    "over_under_line": totals[0].get("line") if totals else None,
-                    "asian_handicap": spreads,
-                    "over_under": totals,
-                    "raw_probabilities": raw_probabilities(prices["home_win"], prices["draw"], prices["away_win"]),
-                    "implied_probabilities": implied_probabilities(prices["home_win"], prices["draw"], prices["away_win"]),
-                    "source": f"The Odds API / {bookmaker or 'Bookmaker'}",
-                    "event_title": f"{event.get('home_team')} vs {event.get('away_team')}",
-                    "event_id": event.get("id"),
-                    "message": f"已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 {candidate_date}）。",
-                    "cache": cache_metadata("fresh api response", sport_key, candidate_date, events),
-                    "request_headers": payload["request_headers"],
-                    "raw_event": event,
-                }
-
-    return {
-        "found": False,
-        "source": "The Odds API",
-        "message": f"无法连接或未找到赛事：{last_error}" if last_error else "未找到赛事。",
-        "asian_handicap": [],
-        "over_under": [],
-    }
+def fetch_api_football_winner_totals(match, date_key=None):
+    result = fetch_odds(match, date_key, "api_football_snapshot_refresh")
+    result["odds_provider"] = "API-Football"
+    result["asian_handicap"] = result.get("asian_handicap") or []
+    result["over_under"] = result.get("over_under") or []
+    return result
 
 
 def parse_api_football_market(response, bet_id):
@@ -225,72 +124,22 @@ def parse_api_football_market(response, bet_id):
 
 
 def fetch_api_football_fixture(match, date_key=None):
-    team_errors = {}
-
-    def resolve_fresh(team_name):
-        attempted = []
-        last_error = None
-        for candidate in alias_candidates(team_name):
-            attempted.append(candidate)
-            teams = []
-            for attempt in range(3):
-                try:
-                    teams = request_teams(candidate)
-                    break
-                except (RuntimeError, requests.RequestException) as error:
-                    last_error = str(error)
-                    if attempt == 2:
-                        teams = []
-            team = select_team_from_response(candidate, teams)
-            if team:
-                team["_resolver"] = {
-                    "input": team_name,
-                    "matched_query": candidate,
-                    "matched_name": team.get("name"),
-                    "team_id": team.get("id"),
-                    "attempted": attempted,
-                    "cache_status": "fresh api response",
-                }
-                return team, None
-        return None, {
-            "input": team_name,
-            "attempted": attempted,
-            "error": last_error or "API-Football 未返回国家队。",
-        }
-
-    home_team, home_error = resolve_fresh(match["home_en"])
-    away_team, away_error = resolve_fresh(match["away_en"])
-    if home_error:
-        team_errors["home"] = home_error
-    if away_error:
-        team_errors["away"] = away_error
-    if not home_team or not away_team:
-        return home_team, away_team, None, f"未找到双方 Team ID。errors={team_errors}"
-
-    response = request_json("/fixtures/headtohead", {"h2h": f"{home_team['id']}-{away_team['id']}"})
-    candidates = []
-    date_text = str(date_key or "")
-    for item in response:
-        league = item.get("league") or {}
-        fixture = item.get("fixture") or {}
-        teams = item.get("teams") or {}
-        home_id = (teams.get("home") or {}).get("id")
-        away_id = (teams.get("away") or {}).get("id")
-        if {home_id, away_id} != {home_team["id"], away_team["id"]}:
-            continue
-        fixture_date = str(fixture.get("date") or "")
-        exact_date = bool(date_text and date_text in fixture_date)
-        if exact_date and league.get("season") == 2026 and "world cup" in normalize(league.get("name")):
-            candidates.insert(0, item)
-        elif league.get("season") == 2026 and "world cup" in normalize(league.get("name")):
-            candidates.append(item)
-        elif exact_date:
-            candidates.append(item)
-
-    selected = candidates[0] if candidates else (response[0] if response else None)
-    if not selected:
-        return home_team, away_team, None, "API-Football head-to-head 未返回对应 fixture。"
-    return home_team, away_team, selected, "API-Football head-to-head 已返回 fixture。"
+    result = FixtureIDMapper.get_result(match)
+    fixture = result.get("fixture") or {}
+    raw = fixture.get("raw")
+    if not fixture.get("id") or not raw:
+        return (
+            result.get("home_team"),
+            result.get("away_team"),
+            None,
+            result.get("message") or "FixtureIDMapper 未返回 API-Football fixture。",
+        )
+    return (
+        result.get("home_team"),
+        result.get("away_team"),
+        raw,
+        result.get("message") or "FixtureIDMapper 已返回 API-Football fixture。",
+    )
 
 
 def fixture_summary_from_api(item):
@@ -411,6 +260,7 @@ def main():
     print(f"Date: {args.date}")
 
     schedule, schedule_fixture = force_fetch_schedule(match)
+    market_match = match_with_fixture_context(match, schedule_fixture)
     print(f"Schedule source: {schedule.get('source')} / {schedule.get('cache_status')}")
     print(f"Schedule fixture found: {bool(schedule_fixture)}")
 
@@ -419,15 +269,15 @@ def main():
     except Exception as error:
         weather = {"available": False, "summary": "天气暂不可用", "message": str(error)}
 
-    odds = fetch_the_odds_force(match, args.date)
-    print(f"The Odds API found: {odds.get('found')} / {odds.get('message')}")
-    print(f"The Odds API event: {odds.get('event_title')} / {odds.get('event_id')}")
-    print(f"The Odds API spreads: {len(odds.get('asian_handicap') or [])}")
-    print(f"The Odds API totals: {len(odds.get('over_under') or [])}")
+    odds = fetch_api_football_winner_totals(market_match, args.date)
+    print(f"API-Football winner odds found: {odds.get('found')} / {odds.get('message')}")
+    print(f"API-Football event: {odds.get('event_title')} / {odds.get('event_id')}")
+    print(f"API-Football spreads: {len(odds.get('asian_handicap') or [])}")
+    print(f"API-Football totals: {len(odds.get('over_under') or [])}")
 
     api_fixture_error = None
     try:
-        home_team, away_team, api_fixture_raw, api_fixture_message = fetch_api_football_fixture(match)
+        home_team, away_team, api_fixture_raw, api_fixture_message = fetch_api_football_fixture(market_match)
     except Exception as error:
         home_team, away_team, api_fixture_raw, api_fixture_message = None, None, None, str(error)
         api_fixture_error = str(error)
@@ -485,7 +335,7 @@ def main():
             "away": away_team,
         },
         "odds": {
-            "the_odds_api": odds,
+            "api_football_winner_totals": odds,
             "api_football": api_markets,
         },
         "probability_distribution": distribution,

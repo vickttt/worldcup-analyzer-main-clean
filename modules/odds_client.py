@@ -11,11 +11,11 @@ from modules.cache_config import (
     API_FOOTBALL_MARKET_DATA_TTL,
     CORRECT_SCORE_DATA_TTL,
     MATCH_DATA_TTL,
-    ODDS_DATA_TTL,
     SCHEDULE_DATA_TTL,
     TEAM_DATA_TTL,
 )
-from modules.team_resolver import normalize_text, resolve_team as search_team
+from modules.fixture_id_mapper import FixtureIDMapper
+from modules.team_resolver import normalize_text
 
 
 API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
@@ -27,7 +27,33 @@ PREFERRED_CORRECT_SCORE_BOOKMAKERS = {
     8: "Bet365",
     13: "188Bet",
 }
-FIXTURE_CACHE_TTL = 24 * 60 * 60
+
+
+def safe_json_preview(payload, max_chars=2000):
+    text = json.dumps(payload, ensure_ascii=False, default=str)
+    if len(text) <= max_chars:
+        return text
+    return text[:max_chars] + "...[truncated]"
+
+
+def log_api_football_raw_response(path, params, data, status_code=None):
+    response_rows = data.get("response") if isinstance(data, dict) else None
+    preview = {
+        "endpoint": f"{API_FOOTBALL_BASE}{path}",
+        "path": path,
+        "params": params or {},
+        "fixture_id": (params or {}).get("fixture"),
+        "league_id": (params or {}).get("league"),
+        "season": (params or {}).get("season"),
+        "date": (params or {}).get("date"),
+        "status": status_code,
+        "errors": data.get("errors") if isinstance(data, dict) else None,
+        "results": data.get("results") if isinstance(data, dict) else None,
+        "message": data.get("message") if isinstance(data, dict) else None,
+        "response_count": len(response_rows or []) if isinstance(response_rows, list) else None,
+        "response_preview": (response_rows or [])[:2] if isinstance(response_rows, list) else response_rows,
+    }
+    print("[API-Football Raw Response]", safe_json_preview(preview))
 
 
 def load_api_key():
@@ -42,6 +68,16 @@ def load_api_key():
         for key in ["API_FOOTBALL_KEY", "api_football_key"]:
             if secrets.get(key):
                 return str(secrets[key]).strip()
+
+    dotenv_path = Path(__file__).resolve().parents[1] / ".env"
+    if dotenv_path.exists():
+        for line in dotenv_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#") or "=" not in stripped:
+                continue
+            key, value = stripped.split("=", 1)
+            if key.strip() == "API_FOOTBALL_KEY" and value.strip().strip("\"'"):
+                return value.strip().strip("\"'")
 
     return None
 
@@ -84,7 +120,7 @@ def request_json(path, params=None):
     api_key = load_api_key()
     if not api_key:
         raise RuntimeError(
-            "缺少 API-Football Key。请在 .streamlit/secrets.toml 中保存 API_FOOTBALL_KEY。"
+            "缺少 API-Football Key。请在环境变量、.streamlit/secrets.toml 或 .env 中保存 API_FOOTBALL_KEY。"
         )
 
     response = requests.get(
@@ -96,8 +132,15 @@ def request_json(path, params=None):
             "Accept": "application/json",
         },
     )
+    if response.status_code >= 400:
+        try:
+            error_payload = response.json()
+        except ValueError:
+            error_payload = {"error": response.text}
+        log_api_football_raw_response(path, params, error_payload, response.status_code)
     response.raise_for_status()
     data = response.json()
+    log_api_football_raw_response(path, params, data, response.status_code)
 
     errors = data.get("errors")
     if isinstance(errors, dict) and errors:
@@ -114,29 +157,12 @@ def cache_dir():
     return path
 
 
-def fixture_cache_path():
-    return cache_dir() / "fixture_cache.json"
-
-
 def api_football_market_cache_path(fixture_id, bet_id):
     return cache_dir() / f"api_football_market_{fixture_id}_{bet_id}.json"
 
 
 def api_football_standings_cache_path(league_id, season):
     return cache_dir() / f"api_football_standings_{league_id}_{season}.json"
-
-
-def read_fixture_cache_payload():
-    path = fixture_cache_path()
-    if not path.exists():
-        return {}
-    with path.open("r", encoding="utf-8") as file:
-        return json.load(file)
-
-
-def write_fixture_cache_payload(payload):
-    with fixture_cache_path().open("w", encoding="utf-8") as file:
-        json.dump(payload, file, ensure_ascii=False, indent=2)
 
 
 def read_api_football_market_cache(fixture_id, bet_id, ttl):
@@ -277,10 +303,6 @@ def write_api_football_standings_cache(league_id, season, result):
         json.dump(payload, file, ensure_ascii=False, indent=2)
 
 
-def fixture_cache_key(home_team_id, away_team_id):
-    return "-".join(str(team_id) for team_id in sorted([home_team_id, away_team_id]))
-
-
 def parse_cache_datetime(value):
     if not value:
         return None
@@ -290,194 +312,37 @@ def parse_cache_datetime(value):
         return None
 
 
-def read_cached_fixture(home_team, away_team):
-    cache = read_fixture_cache_payload()
-    key = fixture_cache_key(home_team.get("id"), away_team.get("id"))
-    entry = cache.get(key)
-    if not entry:
-        return None
-    fetched_at = parse_cache_datetime(entry.get("fetched_at"))
-    if not fetched_at:
-        return None
-    age = (datetime.now(timezone.utc) - fetched_at.astimezone(timezone.utc)).total_seconds()
-    if age > FIXTURE_CACHE_TTL:
-        return None
-    item = entry.get("fixture_item")
-    if not item:
-        return None
-    return {
-        "fixture": fixture_from_response(item),
-        "home_team": home_team,
-        "away_team": away_team,
-        "competition_pair": item.get("league", {}),
-        "message": "已从 fixture_cache.json 读取对应比赛。",
-        "cache_status": f"fixture_cache（{age / 3600:.1f}小时前）",
-    }
+def log_odds_api_guard(market, fixture_id, reason):
+    print(
+        "[API-Football Odds Guard]",
+        safe_json_preview({
+            "market": market,
+            "resolved_fixture_id": fixture_id,
+            "api_response_status": "skipped",
+            "reason": reason,
+        }),
+    )
 
 
-def write_cached_fixture(home_team, away_team, item, source):
-    cache = read_fixture_cache_payload()
-    key = fixture_cache_key(home_team.get("id"), away_team.get("id"))
-    cache[key] = {
-        "home_team_id": home_team.get("id"),
-        "away_team_id": away_team.get("id"),
-        "fixture_id": (item.get("fixture") or {}).get("id"),
-        "fixture_item": item,
-        "source": source,
-        "fetched_at": datetime.now(timezone.utc).isoformat(),
-    }
-    write_fixture_cache_payload(cache)
-
-
-def fixture_from_response(item):
-    fixture = item.get("fixture", {})
-    teams = item.get("teams", {})
-    home = teams.get("home", {})
-    away = teams.get("away", {})
-    return {
-        "id": fixture.get("id"),
-        "name": f"{home.get('name')} vs {away.get('name')}",
-        "home_team": home,
-        "away_team": away,
-        "raw": item,
-    }
-
-
-def fixture_matches(item, home_team, away_team):
-    teams = item.get("teams", {})
-    home = teams.get("home", {})
-    away = teams.get("away", {})
-    home_id = home.get("id")
-    away_id = away.get("id")
-    wanted_home_id = home_team.get("id")
-    wanted_away_id = away_team.get("id")
-
-    direct = home_id == wanted_home_id and away_id == wanted_away_id
-    reversed_match = home_id == wanted_away_id and away_id == wanted_home_id
-    return direct or reversed_match
-
-
-@st.cache_data(ttl=TEAM_DATA_TTL, show_spinner=False)
-def team_competitions(team_id):
-    competitions = request_json("/leagues", {"team": team_id})
-    pairs = []
-
-    for item in competitions:
-        league = item.get("league", {})
-        for season in item.get("seasons", []):
-            year = season.get("year")
-            if league.get("id") and year:
-                pairs.append({
-                    "league_id": league["id"],
-                    "league_name": league.get("name"),
-                    "season": year,
-                    "current": bool(season.get("current")),
-                })
-
-    pairs.sort(key=lambda item: (not item["current"], -int(item["season"])))
-    return competitions, pairs
-
-
-def competition_key(pair):
-    return pair["league_id"], pair["season"]
-
-
-def common_competition_pairs(home_pairs, away_pairs):
-    away_keys = {competition_key(pair) for pair in away_pairs}
-    common = [pair for pair in home_pairs if competition_key(pair) in away_keys]
-    return common or home_pairs
-
-
-@st.cache_data(ttl=MATCH_DATA_TTL, show_spinner=False)
-def fixtures_for_team_competition(team_id, pair):
-    return request_json(
-        "/fixtures",
-        {
-            "team": team_id,
-            "league": pair["league_id"],
-            "season": pair["season"],
-        },
+def log_odds_api_cache_hit(market, fixture_id, cache):
+    print(
+        "[API-Football Odds Cache]",
+        safe_json_preview({
+            "market": market,
+            "resolved_fixture_id": fixture_id,
+            "api_response_status": "cache_hit",
+            "cache": cache,
+        }),
     )
 
 
 @st.cache_data(ttl=MATCH_DATA_TTL, show_spinner=False)
-def head_to_head_fixtures(home_team_id, away_team_id):
-    return request_json("/fixtures/headtohead", {"h2h": f"{home_team_id}-{away_team_id}"})
-
-
-@st.cache_data(ttl=MATCH_DATA_TTL, show_spinner=False)
 def find_fixture(match):
-    home_team = search_team(match["home_en"])
-    away_team = search_team(match["away_en"])
-
-    for label, team in [("home", home_team), ("away", away_team)]:
-        resolver = (team or {}).get("_resolver") or {}
-        print(
-            "[Team Resolver]",
-            label,
-            "input=", resolver.get("input") or match.get(f"{label}_en"),
-            "matched=", resolver.get("matched_name"),
-            "team_id=", resolver.get("team_id"),
-        )
-
-    if not home_team or not away_team:
-        return {
-            "fixture": None,
-            "home_team": home_team,
-            "away_team": away_team,
-            "message": "未找到双方国家队信息。",
-        }
-
-    cached_fixture = read_cached_fixture(home_team, away_team)
-    if cached_fixture:
-        return cached_fixture
-
-    try:
-        h2h_fixtures = head_to_head_fixtures(home_team["id"], away_team["id"])
-    except (requests.RequestException, RuntimeError):
-        h2h_fixtures = []
-
-    for item in h2h_fixtures:
-        if fixture_matches(item, home_team, away_team):
-            write_cached_fixture(home_team, away_team, item, "API-Football head-to-head")
-            return {
-                "fixture": fixture_from_response(item),
-                "home_team": home_team,
-                "away_team": away_team,
-                "competition_pair": item.get("league", {}),
-                "message": "已通过 API-Football head-to-head 找到对应比赛。",
-            }
-
-    home_competitions, home_pairs = team_competitions(home_team["id"])
-    away_competitions, away_pairs = team_competitions(away_team["id"])
-    pairs = common_competition_pairs(home_pairs, away_pairs)
-
-    fixture_pool = []
-    for pair in pairs:
-        fixture_pool.extend(fixtures_for_team_competition(home_team["id"], pair))
-        fixture_pool.extend(fixtures_for_team_competition(away_team["id"], pair))
-
-    for item in fixture_pool:
-        if fixture_matches(item, home_team, away_team):
-            write_cached_fixture(home_team, away_team, item, "API-Football fixtures")
-            return {
-                "fixture": fixture_from_response(item),
-                "home_team": home_team,
-                "away_team": away_team,
-                "home_competitions_sample": home_competitions[:3],
-                "away_competitions_sample": away_competitions[:3],
-                "competition_pair": item.get("league", {}),
-                "message": "已找到对应比赛。",
-            }
-
-    return {
-        "fixture": None,
-        "home_team": home_team,
-        "away_team": away_team,
-        "home_competitions_sample": home_competitions[:3],
-        "away_competitions_sample": away_competitions[:3],
-        "message": "未找到双方对应比赛。",
-    }
+    fixture_id = FixtureIDMapper.get(match)
+    result = FixtureIDMapper.get_result(match)
+    if not fixture_id:
+        return result
+    return result
 
 
 def parse_odd(value):
@@ -518,10 +383,21 @@ def extract_match_winner_odds(odds_response):
 
 
 def fetch_odds_for_fixture(fixture):
+    fixture_id = (fixture or {}).get("id")
+    if not fixture_id:
+        log_odds_api_guard("match_winner", fixture_id, "missing API-Football fixture_id")
+        return empty_result("缺少 API-Football fixture_id，跳过赔率请求。", fixture)
+
     try:
-        odds_response = request_json("/odds", {"fixture": fixture["id"]})
+        odds_response = request_json("/odds", {"fixture": fixture_id})
     except (requests.RequestException, RuntimeError) as error:
         return empty_result(f"找到了比赛，但无法读取 API-Football 赔率：{error}", fixture)
+
+    if not odds_response:
+        return empty_result(
+            f"API-Football returned 0 odds for this fixture（fixture_id={fixture_id}）。",
+            fixture,
+        )
 
     prices = extract_match_winner_odds(odds_response)
     if not prices:
@@ -569,10 +445,12 @@ def empty_asian_handicap_result(reason):
 @st.cache_data(ttl=API_FOOTBALL_MARKET_DATA_TTL, show_spinner=False)
 def fetch_asian_handicap_odds_for_fixture(fixture_id):
     if not fixture_id:
+        log_odds_api_guard("asian_handicap", fixture_id, "missing API-Football fixture_id")
         return empty_asian_handicap_result("缺少 API-Football fixture_id，无法查询真实亚洲让球盘。")
 
     cached = read_api_football_market_cache(fixture_id, ASIAN_HANDICAP_BET_ID, API_FOOTBALL_MARKET_DATA_TTL)
     if cached:
+        log_odds_api_cache_hit("asian_handicap", fixture_id, cached.get("cache"))
         return cached
 
     try:
@@ -607,7 +485,9 @@ def fetch_asian_handicap_odds_for_fixture(fixture_id):
                         })
 
     if not rows:
-        return empty_asian_handicap_result("API-Football 没有返回该比赛的真实亚洲让球盘。")
+        return empty_asian_handicap_result(
+            f"API-Football returned 0 odds for this fixture（fixture_id={fixture_id}, bet_id={ASIAN_HANDICAP_BET_ID}）。"
+        )
 
     result = {
         "found": True,
@@ -623,10 +503,12 @@ def fetch_asian_handicap_odds_for_fixture(fixture_id):
 @st.cache_data(ttl=CORRECT_SCORE_DATA_TTL, show_spinner=False)
 def fetch_correct_score_odds_for_fixture(fixture_id):
     if not fixture_id:
+        log_odds_api_guard("correct_score", fixture_id, "missing API-Football fixture_id")
         return empty_correct_score_result("缺少 API-Football fixture_id，无法查询真实波胆盘口。")
 
     cached = read_api_football_market_cache(fixture_id, EXACT_SCORE_BET_ID, CORRECT_SCORE_DATA_TTL)
     if cached:
+        log_odds_api_cache_hit("correct_score", fixture_id, cached.get("cache"))
         return cached
 
     try:
@@ -661,7 +543,9 @@ def fetch_correct_score_odds_for_fixture(fixture_id):
                         })
 
     if not rows:
-        return empty_correct_score_result("API-Football 没有返回该比赛的真实波胆盘口。")
+        return empty_correct_score_result(
+            f"API-Football returned 0 odds for this fixture（fixture_id={fixture_id}, bet_id={EXACT_SCORE_BET_ID}）。"
+        )
 
     preferred_ids = set(PREFERRED_CORRECT_SCORE_BOOKMAKERS)
     preferred_rows = [row for row in rows if row.get("bookmaker_id") in preferred_ids]
@@ -680,7 +564,7 @@ def fetch_correct_score_odds_for_fixture(fixture_id):
     return result
 
 
-def fetch_odds(match):
+def fetch_odds(match, date_key=None, data_flow_version="api_football_only"):
     try:
         fixture_result = find_fixture(match)
     except (requests.RequestException, RuntimeError) as error:
@@ -948,7 +832,7 @@ def fetch_match_data(match, data_flow_version="team_resolver_v2"):
             data["fixture_result"] = known_fixture
             data["fixture"] = known_fixture["fixture"]
             data["odds"] = empty_result(
-                "API-Football 免费版当前无法读取 2026 World Cup odds；赔率使用 The Odds API。",
+                "API-Football 当前没有返回该场比赛胜平负赔率。",
                 known_fixture["fixture"],
             )
             data["correct_score"] = empty_correct_score_result("缺少 API-Football fixture_id，无法查询真实波胆盘口。")

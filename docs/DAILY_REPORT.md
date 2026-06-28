@@ -68,7 +68,7 @@ Current uncommitted risk buckets:
   - `modules/result_distribution.py`
   - `modules/schedule_client.py`
   - `modules/team_resolver.py`
-  - `modules/the_odds_client.py`
+  - `removed legacy odds client`
   - `modules/user_odds.py`
   - `modules/weather_client.py`
   - `modules/worldcup_db.py`

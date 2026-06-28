@@ -11,7 +11,7 @@
   "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
-  "the_odds_api": {
+  "legacy_deprecated_odds": {
     "found": true,
     "home_win": 1.16,
     "draw": 7.5,
@@ -247,10 +247,10 @@
       "draw": 0.1268683922712359,
       "away_win": 0.05286183011301495
     },
-    "source": "The Odds API / SportsBet",
+    "source": "API-Football / SportsBet",
     "event_title": "Morocco vs Haiti",
     "event_id": "d1279ce7f33136a33e99ad442fc855e8",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",
@@ -2675,10 +2675,10 @@
       "draw": 0.1268683922712359,
       "away_win": 0.05286183011301495
     },
-    "source": "The Odds API / SportsBet",
+    "source": "API-Football / SportsBet",
     "event_title": "Morocco vs Haiti",
     "event_id": "d1279ce7f33136a33e99ad442fc855e8",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",

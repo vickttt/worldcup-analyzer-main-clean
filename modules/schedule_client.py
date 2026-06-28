@@ -7,7 +7,16 @@ import requests
 import streamlit as st
 
 LOCAL_TZ = ZoneInfo("Asia/Shanghai")
-WORLDCUP2026_BASE = "https://worldcup26.ir"
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+RUNTIME_CONFIG_PATH = BASE_DIR / "config" / "runtime.json"
+
+
+def load_runtime_config():
+    return json.loads(RUNTIME_CONFIG_PATH.read_text(encoding="utf-8"))
+
+
+WORLDCUP2026_BASE = load_runtime_config()["api_base_url"].rstrip("/") + "/"
 ESPN_SCOREBOARD_URL = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard"
 ESPN_STANDINGS_URL = "https://site.web.api.espn.com/apis/v2/sports/soccer/fifa.world/standings"
 LIVE_CACHE_TTL = 5 * 60
@@ -139,7 +148,7 @@ def parse_worldcup_scorers(value):
 
 
 def worldcup_request(path):
-    response = requests.get(f"{WORLDCUP2026_BASE}{path}", timeout=6)
+    response = requests.get(f"{WORLDCUP2026_BASE}{path.lstrip('/')}", timeout=6)
     response.raise_for_status()
     return response.json()
 
@@ -285,10 +294,10 @@ def compute_standings_from_fixtures(fixtures):
 
 
 def fetch_worldcup2026_data():
-    games_payload = worldcup_request("/get/games")
-    groups_payload = worldcup_request("/get/groups")
-    teams_payload = worldcup_request("/get/teams")
-    stadiums_payload = worldcup_request("/get/stadiums")
+    games_payload = worldcup_request("games")
+    groups_payload = worldcup_request("groups")
+    teams_payload = worldcup_request("teams")
+    stadiums_payload = worldcup_request("stadiums")
 
     teams = worldcup_lookup(teams_payload.get("teams") or [])
     stadiums = worldcup_lookup(stadiums_payload.get("stadiums") or [])

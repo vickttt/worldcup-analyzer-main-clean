@@ -786,8 +786,8 @@
 
 - `.env` ignored and not staged: pass.
 - No secrets printed or committed: pass.
-- `THE_ODDS_API_KEY` not required: pass.
-- No Odds API call: pass.
+- `API_FOOTBALL_KEY` required for live API-Football odds refresh: pass.
+- No API-Football call: pass.
 - No Polymarket refresh: pass.
 - No `data/history` changes: pass.
 - No golden JSON changes: pass.
@@ -835,7 +835,7 @@
 - Added API-Football-only refresh readiness status to the existing `Data Freshness / Refresh Status` panel.
 - Updated `scripts/write_refresh_status_dry_run.py` to write redacted API-Football readiness fields to ignored `.runtime/ui_refresh_status.json`.
 - Updated the tracked sample `reports/samples/ui_refresh_status.sample.json` with stable API-Football-only readiness fields.
-- The Odds API is disabled and not required for current UI-CACHE-API readiness.
+- External odds providers are disabled; API-Football readiness is required for live odds.
 - No real API refresh was performed.
 
 ## Files Changed
@@ -853,7 +853,7 @@
 - `.env` exists in repo root: yes.
 - `.env` ignored by Git: yes.
 - `API_FOOTBALL_KEY`: present, value redacted.
-- `THE_ODDS_API_KEY`: not required for Task 4.
+- `API_FOOTBALL_KEY`: required for live API-Football odds refresh for Task 4.
 - The app displays only present/missing state and never the key value.
 - Streamlit secrets remain supported if present.
 
@@ -1001,7 +1001,7 @@
 - Added `scripts/write_refresh_status_dry_run.py` to inspect bounded local file metadata and write only `.runtime/ui_refresh_status.json`.
 - Updated `app.py` UI-only freshness panel code to read the local status file when present.
 - Panel location remains inside the `核心决策` container before Portfolio Ranking, Match Investment Score, and Recommended Stake.
-- No real Football API, Odds API, Polymarket, or other external API refresh was performed.
+- No real Football API, API-Football, Polymarket, or other external API refresh was performed.
 
 ## Files Changed
 
@@ -1077,7 +1077,7 @@
 - The panel reads bounded local file metadata only:
   - current World Cup database match files when a local database is loaded
   - current match pre-snapshot file as a conservative fallback
-- The panel does not call Football API, The Odds API, Polymarket, or any refresh function.
+- The panel does not call Football API, API-Football, Polymarket, or any refresh function.
 
 ## Files Changed
 

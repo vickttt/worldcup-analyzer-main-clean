@@ -60,7 +60,7 @@ This graph reflects the state after Phase 1 odds and strategy extraction. It is 
   - `modules.schedule_client.py`
   - `modules.team_profile_client.py`
   - `modules.team_resolver.py`
-  - `modules.the_odds_client.py`
+  - `removed legacy odds client.py`
   - `modules.weather_client.py`
 
 ## Dependency Risk Summary

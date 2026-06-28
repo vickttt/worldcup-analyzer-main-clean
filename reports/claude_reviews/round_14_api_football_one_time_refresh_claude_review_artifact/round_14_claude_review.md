@@ -11,7 +11,7 @@ Task 5 stayed within scope. The task was: controlled one-time API-Football refre
 Changes confirmed:
 - Only API-Football endpoint called (`GET /fixtures?id=1489393`).
 - Exactly one API call executed; runtime marker prevents accidental repeat.
-- No Odds API, Polymarket, or second refresh attempted.
+- No API-Football, Polymarket, or second refresh attempted.
 - UI panel displays metadata only; no refresh button or auto-refresh added.
 - No recommendation, ranking, portfolio, strategy, odds, or backtest logic touched.
 - `data/history` and golden JSON untouched.

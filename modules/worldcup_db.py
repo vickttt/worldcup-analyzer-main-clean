@@ -184,7 +184,7 @@ def parse_api_football_winner_and_totals(api_football):
         "source": f"API-Football / {winner_bookmaker or 'All Odds'}",
         "event_title": None,
         "event_id": None,
-        "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。",
+        "message": "已从 API-Football All Odds 读取胜平负和大小球。",
         "found": True,
     }
 
@@ -259,7 +259,7 @@ def db_odds(db):
             "path": str(((db or {}).get("base_dir") or Path("")) / "odds.json"),
         }
         return result
-    result = odds.get("the_odds_api") or {}
+    result = odds.get("api_football_winner_totals") or {}
     api_fallback = parse_api_football_winner_and_totals(odds.get("api_football") or {})
     if not result.get("found") and api_fallback:
         result = api_fallback
@@ -311,7 +311,7 @@ def truthy_market(result, rows_key="rows"):
 
 
 def data_completeness(db):
-    odds = ((db or {}).get("odds") or {}).get("the_odds_api") or {}
+    odds = ((db or {}).get("odds") or {}).get("api_football_winner_totals") or {}
     api = ((db or {}).get("odds") or {}).get("api_football") or {}
     api_odds_fallback = parse_api_football_winner_and_totals(api)
     fixture = (db or {}).get("fixture") or {}

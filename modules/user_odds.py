@@ -288,7 +288,7 @@ def build_market_candidates(match, odds, api_football_data):
                     "name": f"{label_cn} {totals.get('line')} 球",
                     "standard_odds": price,
                     "base_score": 50 if market_favored and abs(avg_over - avg_under) > 0.08 else 40,
-                    "source": "The Odds API 大小球均值",
+                    "source": "API-Football 大小球均值",
                 })
 
     correct = correct_score_summary(((api_football_data or {}).get("correct_score") or {}).get("rows") or [], limit=200)

@@ -9193,3 +9193,806 @@
 {"ts": "2026-06-26T18:46:28", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.35, "meta": {}}
 {"ts": "2026-06-26T18:46:28", "page": "home", "module": "cache_notes", "elapsed_ms": 0.29, "meta": {}}
 {"ts": "2026-06-26T18:46:28", "page": "home", "module": "total", "elapsed_ms": 7798.62, "meta": {}}
+{"ts": "2026-06-29T02:14:48", "page": "home", "module": "fetch_schedule", "elapsed_ms": 9137.68, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:14:48", "page": "home", "module": "banner", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-29T02:14:48", "page": "home", "module": "search", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-29T02:14:48", "page": "home", "module": "date_nav", "elapsed_ms": 63.03, "meta": {}}
+{"ts": "2026-06-29T02:14:48", "page": "home", "module": "standings", "elapsed_ms": 81.21, "meta": {}}
+{"ts": "2026-06-29T02:14:48", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-29T02:14:48", "page": "home", "module": "cache_notes", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-29T02:14:48", "page": "home", "module": "total", "elapsed_ms": 9286.53, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.32, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "banner", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "search", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "date_nav", "elapsed_ms": 1.86, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "total", "elapsed_ms": 3.85, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.33, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "banner", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "search", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "date_nav", "elapsed_ms": 13.39, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "standings", "elapsed_ms": 26.45, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.35, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "cache_notes", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-29T02:15:37", "page": "home", "module": "total", "elapsed_ms": 42.8, "meta": {}}
+{"ts": "2026-06-29T02:15:52", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.34, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:15:52", "page": "home", "module": "banner", "elapsed_ms": 0.06, "meta": {}}
+{"ts": "2026-06-29T02:15:52", "page": "home", "module": "search", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:15:52", "page": "home", "module": "date_nav", "elapsed_ms": 2.84, "meta": {}}
+{"ts": "2026-06-29T02:15:52", "page": "home", "module": "total", "elapsed_ms": 4.56, "meta": {}}
+{"ts": "2026-06-29T02:15:52", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 16.46, "meta": {}}
+{"ts": "2026-06-29T02:15:58", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 5803.2, "meta": {}}
+{"ts": "2026-06-29T02:15:58", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5828.34, "meta": {}}
+{"ts": "2026-06-29T02:15:58", "page": "detail", "module": "base_models", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T02:15:58", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.4, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "render_match_overview", "elapsed_ms": 3907.09, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 13.83, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "report_generation", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 9770.59, "meta": {"match": "South Africa vs Canada"}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 1.14, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 28.81, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 2.68, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "tab_market", "elapsed_ms": 1.3, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.62, "meta": {}}
+{"ts": "2026-06-29T02:16:02", "page": "detail", "module": "tab_source", "elapsed_ms": 0.72, "meta": {}}
+{"ts": "2026-06-29T02:16:29", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.38, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:16:29", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T02:16:29", "page": "home", "module": "search", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T02:16:29", "page": "home", "module": "date_nav", "elapsed_ms": 15.29, "meta": {}}
+{"ts": "2026-06-29T02:16:29", "page": "home", "module": "standings", "elapsed_ms": 34.7, "meta": {}}
+{"ts": "2026-06-29T02:16:29", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-29T02:16:29", "page": "home", "module": "cache_notes", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-29T02:16:29", "page": "home", "module": "total", "elapsed_ms": 53.47, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.43, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "banner", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "search", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "date_nav", "elapsed_ms": 3.07, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "total", "elapsed_ms": 5.08, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.42, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "banner", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "search", "elapsed_ms": 0.21, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "date_nav", "elapsed_ms": 15.93, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "standings", "elapsed_ms": 35.48, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "cache_notes", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-29T02:17:37", "page": "home", "module": "total", "elapsed_ms": 55.08, "meta": {}}
+{"ts": "2026-06-29T02:21:48", "page": "home", "module": "fetch_schedule", "elapsed_ms": 1.82, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:21:48", "page": "home", "module": "banner", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T02:21:48", "page": "home", "module": "search", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:21:48", "page": "home", "module": "date_nav", "elapsed_ms": 19.6, "meta": {}}
+{"ts": "2026-06-29T02:21:48", "page": "home", "module": "standings", "elapsed_ms": 41.81, "meta": {}}
+{"ts": "2026-06-29T02:21:48", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-29T02:21:48", "page": "home", "module": "cache_notes", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-29T02:21:48", "page": "home", "module": "total", "elapsed_ms": 66.45, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.56, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:22:10", "page": "home", "module": "banner", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "home", "module": "search", "elapsed_ms": 0.21, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "home", "module": "date_nav", "elapsed_ms": 6.22, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "home", "module": "total", "elapsed_ms": 8.78, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 24.97, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 1.1, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "base_models", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.39, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 6.91, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "report_generation", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 35.51, "meta": {"match": "South Africa vs Canada"}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.04, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 18.56, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 2.4, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "tab_market", "elapsed_ms": 1.21, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-29T02:22:10", "page": "detail", "module": "tab_source", "elapsed_ms": 0.7, "meta": {}}
+{"ts": "2026-06-29T02:34:40", "page": "home", "module": "fetch_schedule", "elapsed_ms": 1.73, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:34:40", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T02:34:40", "page": "home", "module": "search", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-29T02:34:40", "page": "home", "module": "date_nav", "elapsed_ms": 9.57, "meta": {}}
+{"ts": "2026-06-29T02:34:40", "page": "home", "module": "standings", "elapsed_ms": 29.83, "meta": {}}
+{"ts": "2026-06-29T02:34:40", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T02:34:40", "page": "home", "module": "cache_notes", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-29T02:34:40", "page": "home", "module": "total", "elapsed_ms": 44.04, "meta": {}}
+{"ts": "2026-06-29T02:34:42", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.57, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:34:42", "page": "home", "module": "banner", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:34:42", "page": "home", "module": "search", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T02:34:42", "page": "home", "module": "date_nav", "elapsed_ms": 6.61, "meta": {}}
+{"ts": "2026-06-29T02:34:42", "page": "home", "module": "total", "elapsed_ms": 9.12, "meta": {}}
+{"ts": "2026-06-29T02:34:42", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 20.21, "meta": {}}
+{"ts": "2026-06-29T02:34:48", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 5605.02, "meta": {}}
+{"ts": "2026-06-29T02:34:48", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 5628.82, "meta": {}}
+{"ts": "2026-06-29T02:34:48", "page": "detail", "module": "base_models", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T02:34:48", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "render_match_overview", "elapsed_ms": 3184.9, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 14.39, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "report_generation", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 8852.16, "meta": {"match": "Brazil vs Japan"}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.84, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 30.27, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 2.59, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "tab_market", "elapsed_ms": 1.3, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.73, "meta": {}}
+{"ts": "2026-06-29T02:34:51", "page": "detail", "module": "tab_source", "elapsed_ms": 0.72, "meta": {}}
+{"ts": "2026-06-29T02:34:55", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.41, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:34:55", "page": "home", "module": "banner", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-29T02:34:55", "page": "home", "module": "search", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:34:55", "page": "home", "module": "date_nav", "elapsed_ms": 9.22, "meta": {}}
+{"ts": "2026-06-29T02:34:55", "page": "home", "module": "standings", "elapsed_ms": 26.12, "meta": {}}
+{"ts": "2026-06-29T02:34:55", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-29T02:34:55", "page": "home", "module": "cache_notes", "elapsed_ms": 0.35, "meta": {}}
+{"ts": "2026-06-29T02:34:55", "page": "home", "module": "total", "elapsed_ms": 39.84, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.51, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "banner", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "search", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "date_nav", "elapsed_ms": 3.59, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "total", "elapsed_ms": 5.97, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.23, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "banner", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "search", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "date_nav", "elapsed_ms": 10.51, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "standings", "elapsed_ms": 27.66, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "cache_notes", "elapsed_ms": 0.67, "meta": {}}
+{"ts": "2026-06-29T02:34:58", "page": "home", "module": "total", "elapsed_ms": 41.67, "meta": {}}
+{"ts": "2026-06-29T02:35:02", "page": "home", "module": "fetch_schedule", "elapsed_ms": 1.49, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:35:02", "page": "home", "module": "banner", "elapsed_ms": 0.47, "meta": {}}
+{"ts": "2026-06-29T02:35:02", "page": "home", "module": "search", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-29T02:35:02", "page": "home", "module": "date_nav", "elapsed_ms": 6.4, "meta": {}}
+{"ts": "2026-06-29T02:35:02", "page": "home", "module": "total", "elapsed_ms": 12.46, "meta": {}}
+{"ts": "2026-06-29T02:35:23", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.22, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:35:23", "page": "home", "module": "banner", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T02:35:23", "page": "home", "module": "search", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:35:23", "page": "home", "module": "date_nav", "elapsed_ms": 9.73, "meta": {}}
+{"ts": "2026-06-29T02:35:23", "page": "home", "module": "standings", "elapsed_ms": 29.42, "meta": {}}
+{"ts": "2026-06-29T02:35:23", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.71, "meta": {}}
+{"ts": "2026-06-29T02:35:23", "page": "home", "module": "cache_notes", "elapsed_ms": 0.49, "meta": {}}
+{"ts": "2026-06-29T02:35:23", "page": "home", "module": "total", "elapsed_ms": 42.23, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.27, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "banner", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "search", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "date_nav", "elapsed_ms": 1.8, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "total", "elapsed_ms": 3.57, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.32, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "banner", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "search", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "date_nav", "elapsed_ms": 13.74, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "standings", "elapsed_ms": 29.4, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.49, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "cache_notes", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-29T02:35:25", "page": "home", "module": "total", "elapsed_ms": 47.21, "meta": {}}
+{"ts": "2026-06-29T02:35:28", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.74, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:35:28", "page": "home", "module": "banner", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-29T02:35:28", "page": "home", "module": "search", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-29T02:35:28", "page": "home", "module": "date_nav", "elapsed_ms": 6.29, "meta": {}}
+{"ts": "2026-06-29T02:35:28", "page": "home", "module": "total", "elapsed_ms": 11.37, "meta": {}}
+{"ts": "2026-06-29T02:35:33", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.23, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:35:33", "page": "home", "module": "banner", "elapsed_ms": 0.06, "meta": {}}
+{"ts": "2026-06-29T02:35:33", "page": "home", "module": "search", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T02:35:33", "page": "home", "module": "date_nav", "elapsed_ms": 9.34, "meta": {}}
+{"ts": "2026-06-29T02:35:33", "page": "home", "module": "standings", "elapsed_ms": 25.97, "meta": {}}
+{"ts": "2026-06-29T02:35:33", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.61, "meta": {}}
+{"ts": "2026-06-29T02:35:33", "page": "home", "module": "cache_notes", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-29T02:35:33", "page": "home", "module": "total", "elapsed_ms": 37.93, "meta": {}}
+{"ts": "2026-06-29T02:35:40", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.56, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:35:40", "page": "home", "module": "banner", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:35:40", "page": "home", "module": "search", "elapsed_ms": 0.18, "meta": {}}
+{"ts": "2026-06-29T02:35:40", "page": "home", "module": "date_nav", "elapsed_ms": 3.26, "meta": {}}
+{"ts": "2026-06-29T02:35:40", "page": "home", "module": "total", "elapsed_ms": 5.76, "meta": {}}
+{"ts": "2026-06-29T02:35:41", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.34, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:35:41", "page": "home", "module": "banner", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-29T02:35:41", "page": "home", "module": "search", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:35:41", "page": "home", "module": "date_nav", "elapsed_ms": 10.13, "meta": {}}
+{"ts": "2026-06-29T02:35:41", "page": "home", "module": "standings", "elapsed_ms": 24.8, "meta": {}}
+{"ts": "2026-06-29T02:35:41", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.37, "meta": {}}
+{"ts": "2026-06-29T02:35:41", "page": "home", "module": "cache_notes", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-29T02:35:41", "page": "home", "module": "total", "elapsed_ms": 37.81, "meta": {}}
+{"ts": "2026-06-29T02:35:42", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.56, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:35:42", "page": "home", "module": "banner", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:35:42", "page": "home", "module": "search", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-29T02:35:42", "page": "home", "module": "date_nav", "elapsed_ms": 5.99, "meta": {}}
+{"ts": "2026-06-29T02:35:42", "page": "home", "module": "total", "elapsed_ms": 8.63, "meta": {}}
+{"ts": "2026-06-29T02:37:01", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.23, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:37:01", "page": "home", "module": "banner", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T02:37:01", "page": "home", "module": "search", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T02:37:01", "page": "home", "module": "date_nav", "elapsed_ms": 11.45, "meta": {}}
+{"ts": "2026-06-29T02:37:01", "page": "home", "module": "standings", "elapsed_ms": 42.85, "meta": {}}
+{"ts": "2026-06-29T02:37:01", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-29T02:37:01", "page": "home", "module": "cache_notes", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-29T02:37:01", "page": "home", "module": "total", "elapsed_ms": 57.9, "meta": {}}
+{"ts": "2026-06-29T02:37:05", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.47, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:37:05", "page": "home", "module": "banner", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:37:05", "page": "home", "module": "search", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T02:37:05", "page": "home", "module": "date_nav", "elapsed_ms": 6.51, "meta": {}}
+{"ts": "2026-06-29T02:37:05", "page": "home", "module": "total", "elapsed_ms": 10.65, "meta": {}}
+{"ts": "2026-06-29T02:39:26", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.38, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:39:26", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T02:39:26", "page": "home", "module": "search", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:39:26", "page": "home", "module": "date_nav", "elapsed_ms": 10.53, "meta": {}}
+{"ts": "2026-06-29T02:39:26", "page": "home", "module": "standings", "elapsed_ms": 35.11, "meta": {}}
+{"ts": "2026-06-29T02:39:26", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-29T02:39:26", "page": "home", "module": "cache_notes", "elapsed_ms": 0.35, "meta": {}}
+{"ts": "2026-06-29T02:39:26", "page": "home", "module": "total", "elapsed_ms": 48.64, "meta": {}}
+{"ts": "2026-06-29T02:39:29", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.59, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:39:29", "page": "home", "module": "banner", "elapsed_ms": 0.27, "meta": {}}
+{"ts": "2026-06-29T02:39:29", "page": "home", "module": "search", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-29T02:39:29", "page": "home", "module": "date_nav", "elapsed_ms": 20.08, "meta": {}}
+{"ts": "2026-06-29T02:39:29", "page": "home", "module": "total", "elapsed_ms": 25.5, "meta": {}}
+{"ts": "2026-06-29T02:40:32", "page": "home", "module": "fetch_schedule", "elapsed_ms": 1.39, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:40:32", "page": "home", "module": "banner", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-29T02:40:32", "page": "home", "module": "search", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:40:32", "page": "home", "module": "date_nav", "elapsed_ms": 10.28, "meta": {}}
+{"ts": "2026-06-29T02:40:32", "page": "home", "module": "standings", "elapsed_ms": 32.74, "meta": {}}
+{"ts": "2026-06-29T02:40:32", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-29T02:40:32", "page": "home", "module": "cache_notes", "elapsed_ms": 0.72, "meta": {}}
+{"ts": "2026-06-29T02:40:32", "page": "home", "module": "total", "elapsed_ms": 47.46, "meta": {}}
+{"ts": "2026-06-29T02:40:35", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.5, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:40:35", "page": "home", "module": "banner", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T02:40:35", "page": "home", "module": "search", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-29T02:40:35", "page": "home", "module": "date_nav", "elapsed_ms": 17.14, "meta": {}}
+{"ts": "2026-06-29T02:40:35", "page": "home", "module": "total", "elapsed_ms": 21.78, "meta": {}}
+{"ts": "2026-06-29T02:41:26", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.25, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:41:26", "page": "home", "module": "banner", "elapsed_ms": 0.06, "meta": {}}
+{"ts": "2026-06-29T02:41:26", "page": "home", "module": "search", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T02:41:26", "page": "home", "module": "date_nav", "elapsed_ms": 11.25, "meta": {}}
+{"ts": "2026-06-29T02:41:26", "page": "home", "module": "standings", "elapsed_ms": 42.66, "meta": {}}
+{"ts": "2026-06-29T02:41:26", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.4, "meta": {}}
+{"ts": "2026-06-29T02:41:26", "page": "home", "module": "cache_notes", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-29T02:41:26", "page": "home", "module": "total", "elapsed_ms": 57.72, "meta": {}}
+{"ts": "2026-06-29T02:41:29", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.54, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:41:29", "page": "home", "module": "banner", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T02:41:29", "page": "home", "module": "search", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T02:41:29", "page": "home", "module": "date_nav", "elapsed_ms": 20.44, "meta": {}}
+{"ts": "2026-06-29T02:41:29", "page": "home", "module": "total", "elapsed_ms": 23.68, "meta": {}}
+{"ts": "2026-06-29T02:43:16", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.24, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:43:16", "page": "home", "module": "banner", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-29T02:43:16", "page": "home", "module": "search", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T02:43:16", "page": "home", "module": "date_nav", "elapsed_ms": 9.76, "meta": {}}
+{"ts": "2026-06-29T02:43:16", "page": "home", "module": "standings", "elapsed_ms": 27.89, "meta": {}}
+{"ts": "2026-06-29T02:43:16", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-29T02:43:16", "page": "home", "module": "cache_notes", "elapsed_ms": 0.35, "meta": {}}
+{"ts": "2026-06-29T02:43:16", "page": "home", "module": "total", "elapsed_ms": 40.58, "meta": {}}
+{"ts": "2026-06-29T02:43:19", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.49, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:43:19", "page": "home", "module": "banner", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T02:43:19", "page": "home", "module": "search", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T02:43:20", "page": "home", "module": "date_nav", "elapsed_ms": 20.12, "meta": {}}
+{"ts": "2026-06-29T02:43:20", "page": "home", "module": "total", "elapsed_ms": 23.28, "meta": {}}
+{"ts": "2026-06-29T02:43:29", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.25, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:43:29", "page": "home", "module": "banner", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T02:43:29", "page": "home", "module": "search", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-29T02:43:29", "page": "home", "module": "date_nav", "elapsed_ms": 11.01, "meta": {}}
+{"ts": "2026-06-29T02:43:29", "page": "home", "module": "standings", "elapsed_ms": 28.73, "meta": {}}
+{"ts": "2026-06-29T02:43:29", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.37, "meta": {}}
+{"ts": "2026-06-29T02:43:29", "page": "home", "module": "cache_notes", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-29T02:43:29", "page": "home", "module": "total", "elapsed_ms": 42.41, "meta": {}}
+{"ts": "2026-06-29T02:43:33", "page": "home", "module": "total", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-29T02:43:39", "page": "home", "module": "fetch_schedule", "elapsed_ms": 6679.74, "meta": {"force_refresh": true}}
+{"ts": "2026-06-29T02:43:39", "page": "home", "module": "banner", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-29T02:43:39", "page": "home", "module": "search", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T02:43:40", "page": "home", "module": "date_nav", "elapsed_ms": 23.42, "meta": {}}
+{"ts": "2026-06-29T02:43:40", "page": "home", "module": "standings", "elapsed_ms": 35.78, "meta": {}}
+{"ts": "2026-06-29T02:43:40", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.39, "meta": {}}
+{"ts": "2026-06-29T02:43:40", "page": "home", "module": "cache_notes", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-29T02:43:40", "page": "home", "module": "total", "elapsed_ms": 6743.34, "meta": {}}
+{"ts": "2026-06-29T02:55:28", "page": "home", "module": "fetch_schedule", "elapsed_ms": 2.27, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T02:55:28", "page": "home", "module": "banner", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T02:55:28", "page": "home", "module": "search", "elapsed_ms": 0.16, "meta": {}}
+{"ts": "2026-06-29T02:55:28", "page": "home", "module": "date_nav", "elapsed_ms": 14.12, "meta": {}}
+{"ts": "2026-06-29T02:55:28", "page": "home", "module": "standings", "elapsed_ms": 26.94, "meta": {}}
+{"ts": "2026-06-29T02:55:28", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-29T02:55:28", "page": "home", "module": "cache_notes", "elapsed_ms": 0.37, "meta": {}}
+{"ts": "2026-06-29T02:55:28", "page": "home", "module": "total", "elapsed_ms": 48.27, "meta": {}}
+{"ts": "2026-06-29T03:02:23", "page": "home", "module": "fetch_schedule", "elapsed_ms": 1.35, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T03:02:23", "page": "home", "module": "banner", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T03:02:23", "page": "home", "module": "search", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T03:02:23", "page": "home", "module": "date_nav", "elapsed_ms": 5.92, "meta": {}}
+{"ts": "2026-06-29T03:02:23", "page": "home", "module": "standings", "elapsed_ms": 38.42, "meta": {}}
+{"ts": "2026-06-29T03:02:23", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.38, "meta": {}}
+{"ts": "2026-06-29T03:02:23", "page": "home", "module": "cache_notes", "elapsed_ms": 0.37, "meta": {}}
+{"ts": "2026-06-29T03:02:23", "page": "home", "module": "total", "elapsed_ms": 49.57, "meta": {}}
+{"ts": "2026-06-29T03:54:27", "page": "home", "module": "fetch_schedule", "elapsed_ms": 2.01, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T03:54:27", "page": "home", "module": "banner", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-29T03:54:27", "page": "home", "module": "search", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-29T03:54:29", "page": "home", "module": "date_nav", "elapsed_ms": 1687.56, "meta": {}}
+{"ts": "2026-06-29T03:54:29", "page": "home", "module": "standings", "elapsed_ms": 321.88, "meta": {}}
+{"ts": "2026-06-29T03:54:29", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.49, "meta": {}}
+{"ts": "2026-06-29T03:54:29", "page": "home", "module": "cache_notes", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-29T03:54:29", "page": "home", "module": "total", "elapsed_ms": 2016.05, "meta": {}}
+{"ts": "2026-06-29T03:55:43", "page": "home", "module": "total", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-29T03:55:51", "page": "home", "module": "fetch_schedule", "elapsed_ms": 7035.38, "meta": {"force_refresh": true}}
+{"ts": "2026-06-29T03:55:51", "page": "home", "module": "banner", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-29T03:55:51", "page": "home", "module": "search", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-29T03:55:51", "page": "home", "module": "date_nav", "elapsed_ms": 2.84, "meta": {}}
+{"ts": "2026-06-29T03:55:51", "page": "home", "module": "standings", "elapsed_ms": 72.8, "meta": {}}
+{"ts": "2026-06-29T03:55:51", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-29T03:55:51", "page": "home", "module": "cache_notes", "elapsed_ms": 0.51, "meta": {}}
+{"ts": "2026-06-29T03:55:51", "page": "home", "module": "total", "elapsed_ms": 7114.83, "meta": {}}
+{"ts": "2026-06-29T04:20:16", "page": "home", "module": "total", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-29T04:20:18", "page": "home", "module": "fetch_schedule", "elapsed_ms": 4904.15, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:20:18", "page": "home", "module": "banner", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-29T04:20:18", "page": "home", "module": "total", "elapsed_ms": 4905.08, "meta": {}}
+{"ts": "2026-06-29T04:20:20", "page": "home", "module": "fetch_schedule", "elapsed_ms": 4160.34, "meta": {"force_refresh": true}}
+{"ts": "2026-06-29T04:20:20", "page": "home", "module": "banner", "elapsed_ms": 0.49, "meta": {}}
+{"ts": "2026-06-29T04:20:20", "page": "home", "module": "search", "elapsed_ms": 0.5, "meta": {}}
+{"ts": "2026-06-29T04:20:21", "page": "home", "module": "date_nav", "elapsed_ms": 48.29, "meta": {}}
+{"ts": "2026-06-29T04:20:21", "page": "home", "module": "standings", "elapsed_ms": 92.69, "meta": {}}
+{"ts": "2026-06-29T04:20:21", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.49, "meta": {}}
+{"ts": "2026-06-29T04:20:21", "page": "home", "module": "cache_notes", "elapsed_ms": 0.49, "meta": {}}
+{"ts": "2026-06-29T04:20:21", "page": "home", "module": "total", "elapsed_ms": 4306.36, "meta": {}}
+{"ts": "2026-06-29T04:21:58", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.42, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:21:58", "page": "home", "module": "banner", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-29T04:21:58", "page": "home", "module": "search", "elapsed_ms": 0.21, "meta": {}}
+{"ts": "2026-06-29T04:21:58", "page": "home", "module": "date_nav", "elapsed_ms": 7.14, "meta": {}}
+{"ts": "2026-06-29T04:21:58", "page": "home", "module": "total", "elapsed_ms": 9.58, "meta": {}}
+{"ts": "2026-06-29T04:21:58", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 28.5, "meta": {}}
+{"ts": "2026-06-29T04:21:58", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-29T04:21:58", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 18.19, "meta": {}}
+{"ts": "2026-06-29T04:21:58", "page": "detail", "module": "base_models", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T04:21:58", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-29T04:22:00", "page": "detail", "module": "render_match_overview", "elapsed_ms": 2826.3, "meta": {}}
+{"ts": "2026-06-29T04:22:00", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T04:22:00", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 15.1, "meta": {}}
+{"ts": "2026-06-29T04:22:00", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T04:22:00", "page": "detail", "module": "report_generation", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T04:22:00", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 2894.43, "meta": {"match": "Brazil vs Japan"}}
+{"ts": "2026-06-29T04:22:00", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.06, "meta": {}}
+{"ts": "2026-06-29T04:22:01", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 50.96, "meta": {}}
+{"ts": "2026-06-29T04:22:01", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 3.62, "meta": {}}
+{"ts": "2026-06-29T04:22:01", "page": "detail", "module": "tab_market", "elapsed_ms": 2.49, "meta": {}}
+{"ts": "2026-06-29T04:22:01", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.93, "meta": {}}
+{"ts": "2026-06-29T04:22:01", "page": "detail", "module": "tab_source", "elapsed_ms": 0.67, "meta": {}}
+{"ts": "2026-06-29T04:22:51", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.19, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:22:51", "page": "home", "module": "banner", "elapsed_ms": 0.27, "meta": {}}
+{"ts": "2026-06-29T04:22:51", "page": "home", "module": "search", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-29T04:22:51", "page": "home", "module": "date_nav", "elapsed_ms": 7.11, "meta": {}}
+{"ts": "2026-06-29T04:22:51", "page": "home", "module": "standings", "elapsed_ms": 96.66, "meta": {}}
+{"ts": "2026-06-29T04:22:51", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.66, "meta": {}}
+{"ts": "2026-06-29T04:22:51", "page": "home", "module": "cache_notes", "elapsed_ms": 0.42, "meta": {}}
+{"ts": "2026-06-29T04:22:51", "page": "home", "module": "total", "elapsed_ms": 108.37, "meta": {}}
+{"ts": "2026-06-29T04:22:53", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.38, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:22:53", "page": "home", "module": "banner", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T04:22:53", "page": "home", "module": "search", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T04:22:53", "page": "home", "module": "date_nav", "elapsed_ms": 3.7, "meta": {}}
+{"ts": "2026-06-29T04:22:53", "page": "home", "module": "total", "elapsed_ms": 5.86, "meta": {}}
+{"ts": "2026-06-29T04:22:53", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.21, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:22:53", "page": "home", "module": "banner", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T04:22:53", "page": "home", "module": "search", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-29T04:22:53", "page": "home", "module": "date_nav", "elapsed_ms": 2.94, "meta": {}}
+{"ts": "2026-06-29T04:22:54", "page": "home", "module": "standings", "elapsed_ms": 75.05, "meta": {}}
+{"ts": "2026-06-29T04:22:54", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.48, "meta": {}}
+{"ts": "2026-06-29T04:22:54", "page": "home", "module": "cache_notes", "elapsed_ms": 0.43, "meta": {}}
+{"ts": "2026-06-29T04:22:54", "page": "home", "module": "total", "elapsed_ms": 81.53, "meta": {}}
+{"ts": "2026-06-29T04:22:55", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.39, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:22:55", "page": "home", "module": "banner", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T04:22:55", "page": "home", "module": "search", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T04:22:55", "page": "home", "module": "date_nav", "elapsed_ms": 15.44, "meta": {}}
+{"ts": "2026-06-29T04:22:55", "page": "home", "module": "total", "elapsed_ms": 17.5, "meta": {}}
+{"ts": "2026-06-29T04:22:55", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 20.28, "meta": {}}
+{"ts": "2026-06-29T04:22:55", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.47, "meta": {}}
+{"ts": "2026-06-29T04:22:55", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 19.2, "meta": {}}
+{"ts": "2026-06-29T04:22:55", "page": "detail", "module": "base_models", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T04:22:55", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "render_match_overview", "elapsed_ms": 2809.62, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 14.58, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "report_generation", "elapsed_ms": 0.33, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 2866.95, "meta": {"match": "South Africa vs Canada"}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 36.42, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 4.32, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "tab_market", "elapsed_ms": 3.46, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.97, "meta": {}}
+{"ts": "2026-06-29T04:22:58", "page": "detail", "module": "tab_source", "elapsed_ms": 0.75, "meta": {}}
+{"ts": "2026-06-29T04:24:40", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.2, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:24:40", "page": "home", "module": "banner", "elapsed_ms": 0.18, "meta": {}}
+{"ts": "2026-06-29T04:24:40", "page": "home", "module": "search", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-29T04:24:40", "page": "home", "module": "date_nav", "elapsed_ms": 2.29, "meta": {}}
+{"ts": "2026-06-29T04:24:41", "page": "home", "module": "standings", "elapsed_ms": 101.5, "meta": {}}
+{"ts": "2026-06-29T04:24:41", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T04:24:41", "page": "home", "module": "cache_notes", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-29T04:24:41", "page": "home", "module": "total", "elapsed_ms": 107.45, "meta": {}}
+{"ts": "2026-06-29T04:24:44", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.35, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:24:44", "page": "home", "module": "banner", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-29T04:24:44", "page": "home", "module": "search", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-29T04:24:44", "page": "home", "module": "date_nav", "elapsed_ms": 4.38, "meta": {}}
+{"ts": "2026-06-29T04:24:44", "page": "home", "module": "total", "elapsed_ms": 6.79, "meta": {}}
+{"ts": "2026-06-29T04:24:44", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.19, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:24:44", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T04:24:44", "page": "home", "module": "search", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T04:24:44", "page": "home", "module": "date_nav", "elapsed_ms": 10.62, "meta": {}}
+{"ts": "2026-06-29T04:24:45", "page": "home", "module": "standings", "elapsed_ms": 66.47, "meta": {}}
+{"ts": "2026-06-29T04:24:45", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.5, "meta": {}}
+{"ts": "2026-06-29T04:24:45", "page": "home", "module": "cache_notes", "elapsed_ms": 0.4, "meta": {}}
+{"ts": "2026-06-29T04:24:45", "page": "home", "module": "total", "elapsed_ms": 80.46, "meta": {}}
+{"ts": "2026-06-29T04:24:46", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.4, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:24:46", "page": "home", "module": "banner", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-29T04:24:46", "page": "home", "module": "search", "elapsed_ms": 0.27, "meta": {}}
+{"ts": "2026-06-29T04:24:46", "page": "home", "module": "date_nav", "elapsed_ms": 15.5, "meta": {}}
+{"ts": "2026-06-29T04:24:46", "page": "home", "module": "total", "elapsed_ms": 18.53, "meta": {}}
+{"ts": "2026-06-29T04:24:46", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 19.64, "meta": {}}
+{"ts": "2026-06-29T04:24:50", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 3587.47, "meta": {}}
+{"ts": "2026-06-29T04:24:50", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 3606.6, "meta": {}}
+{"ts": "2026-06-29T04:24:50", "page": "detail", "module": "base_models", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T04:24:50", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.23, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "render_match_overview", "elapsed_ms": 2915.95, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 18.64, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "report_generation", "elapsed_ms": 0.31, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 6564.05, "meta": {"match": "Germany vs Paraguay"}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.82, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 26.9, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 2.99, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "tab_market", "elapsed_ms": 2.13, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.75, "meta": {}}
+{"ts": "2026-06-29T04:24:53", "page": "detail", "module": "tab_source", "elapsed_ms": 0.67, "meta": {}}
+{"ts": "2026-06-29T04:24:57", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.16, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:24:57", "page": "home", "module": "banner", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T04:24:57", "page": "home", "module": "search", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T04:24:57", "page": "home", "module": "date_nav", "elapsed_ms": 11.02, "meta": {}}
+{"ts": "2026-06-29T04:24:57", "page": "home", "module": "standings", "elapsed_ms": 79.44, "meta": {}}
+{"ts": "2026-06-29T04:24:57", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.95, "meta": {}}
+{"ts": "2026-06-29T04:24:57", "page": "home", "module": "cache_notes", "elapsed_ms": 0.96, "meta": {}}
+{"ts": "2026-06-29T04:24:57", "page": "home", "module": "total", "elapsed_ms": 94.99, "meta": {}}
+{"ts": "2026-06-29T04:38:22", "page": "home", "module": "fetch_schedule", "elapsed_ms": 4373.25, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:38:22", "page": "home", "module": "banner", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-29T04:38:22", "page": "home", "module": "search", "elapsed_ms": 0.37, "meta": {}}
+{"ts": "2026-06-29T04:38:22", "page": "home", "module": "date_nav", "elapsed_ms": 4.5, "meta": {}}
+{"ts": "2026-06-29T04:38:22", "page": "home", "module": "total", "elapsed_ms": 4380.68, "meta": {}}
+{"ts": "2026-06-29T04:38:22", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.2, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:38:22", "page": "home", "module": "banner", "elapsed_ms": 0.06, "meta": {}}
+{"ts": "2026-06-29T04:38:22", "page": "home", "module": "search", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T04:38:23", "page": "home", "module": "date_nav", "elapsed_ms": 8.78, "meta": {}}
+{"ts": "2026-06-29T04:38:23", "page": "home", "module": "standings", "elapsed_ms": 56.73, "meta": {}}
+{"ts": "2026-06-29T04:38:23", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-29T04:38:23", "page": "home", "module": "cache_notes", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-29T04:38:23", "page": "home", "module": "total", "elapsed_ms": 68.26, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.14, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:38:54", "page": "home", "module": "banner", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "home", "module": "search", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "home", "module": "date_nav", "elapsed_ms": 2.84, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "home", "module": "total", "elapsed_ms": 4.2, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 18.54, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 1.32, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "base_models", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.3, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.18, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 4.37, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "report_generation", "elapsed_ms": 0.29, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 25.98, "meta": {"match": "South Africa vs Canada"}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.04, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 19.02, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 2.44, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "tab_market", "elapsed_ms": 1.83, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.64, "meta": {}}
+{"ts": "2026-06-29T04:38:54", "page": "detail", "module": "tab_source", "elapsed_ms": 0.66, "meta": {}}
+{"ts": "2026-06-29T04:39:29", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.21, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:39:29", "page": "home", "module": "banner", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T04:39:29", "page": "home", "module": "search", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T04:39:29", "page": "home", "module": "date_nav", "elapsed_ms": 3.25, "meta": {}}
+{"ts": "2026-06-29T04:39:29", "page": "home", "module": "standings", "elapsed_ms": 76.97, "meta": {}}
+{"ts": "2026-06-29T04:39:29", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T04:39:29", "page": "home", "module": "cache_notes", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-29T04:39:29", "page": "home", "module": "total", "elapsed_ms": 83.44, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.44, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "banner", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "search", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "date_nav", "elapsed_ms": 3.87, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "total", "elapsed_ms": 6.83, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.21, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "banner", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "search", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "date_nav", "elapsed_ms": 12.67, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "standings", "elapsed_ms": 64.07, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "cache_notes", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-29T04:39:32", "page": "home", "module": "total", "elapsed_ms": 80.23, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.43, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:39:36", "page": "home", "module": "banner", "elapsed_ms": 0.18, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "home", "module": "search", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "home", "module": "date_nav", "elapsed_ms": 7.2, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "home", "module": "total", "elapsed_ms": 10.02, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 20.14, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.06, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 1.54, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "base_models", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.04, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 5.22, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "report_generation", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 28.95, "meta": {"match": "Brazil vs Japan"}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.06, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 21.87, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 3.49, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "tab_market", "elapsed_ms": 1.94, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.71, "meta": {}}
+{"ts": "2026-06-29T04:39:36", "page": "detail", "module": "tab_source", "elapsed_ms": 0.54, "meta": {}}
+{"ts": "2026-06-29T04:39:44", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.23, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:39:44", "page": "home", "module": "banner", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-29T04:39:44", "page": "home", "module": "search", "elapsed_ms": 0.14, "meta": {}}
+{"ts": "2026-06-29T04:39:44", "page": "home", "module": "date_nav", "elapsed_ms": 12.36, "meta": {}}
+{"ts": "2026-06-29T04:39:44", "page": "home", "module": "standings", "elapsed_ms": 63.89, "meta": {}}
+{"ts": "2026-06-29T04:39:44", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-29T04:39:44", "page": "home", "module": "cache_notes", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T04:39:44", "page": "home", "module": "total", "elapsed_ms": 79.76, "meta": {}}
+{"ts": "2026-06-29T04:49:30", "page": "home", "module": "fetch_schedule", "elapsed_ms": 4.54, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:49:30", "page": "home", "module": "banner", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-29T04:49:30", "page": "home", "module": "search", "elapsed_ms": 0.58, "meta": {}}
+{"ts": "2026-06-29T04:49:30", "page": "home", "module": "date_nav", "elapsed_ms": 39.07, "meta": {}}
+{"ts": "2026-06-29T04:49:30", "page": "home", "module": "standings", "elapsed_ms": 79.59, "meta": {}}
+{"ts": "2026-06-29T04:49:30", "page": "home", "module": "tournament_stats", "elapsed_ms": 1.82, "meta": {}}
+{"ts": "2026-06-29T04:49:30", "page": "home", "module": "cache_notes", "elapsed_ms": 2.12, "meta": {}}
+{"ts": "2026-06-29T04:49:30", "page": "home", "module": "total", "elapsed_ms": 130.72, "meta": {}}
+{"ts": "2026-06-29T04:50:38", "page": "home", "module": "fetch_schedule", "elapsed_ms": 7160.58, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:50:38", "page": "home", "module": "banner", "elapsed_ms": 0.42, "meta": {}}
+{"ts": "2026-06-29T04:50:38", "page": "home", "module": "search", "elapsed_ms": 0.36, "meta": {}}
+{"ts": "2026-06-29T04:50:38", "page": "home", "module": "date_nav", "elapsed_ms": 13.07, "meta": {}}
+{"ts": "2026-06-29T04:50:38", "page": "home", "module": "standings", "elapsed_ms": 92.12, "meta": {}}
+{"ts": "2026-06-29T04:50:38", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-29T04:50:38", "page": "home", "module": "cache_notes", "elapsed_ms": 0.42, "meta": {}}
+{"ts": "2026-06-29T04:50:38", "page": "home", "module": "total", "elapsed_ms": 7271.59, "meta": {}}
+{"ts": "2026-06-29T04:53:24", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.16, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:53:24", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T04:53:24", "page": "home", "module": "search", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-29T04:53:24", "page": "home", "module": "date_nav", "elapsed_ms": 3.4, "meta": {}}
+{"ts": "2026-06-29T04:53:24", "page": "home", "module": "standings", "elapsed_ms": 65.97, "meta": {}}
+{"ts": "2026-06-29T04:53:24", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-29T04:53:24", "page": "home", "module": "cache_notes", "elapsed_ms": 0.43, "meta": {}}
+{"ts": "2026-06-29T04:53:24", "page": "home", "module": "total", "elapsed_ms": 73.65, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.43, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "banner", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "search", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "date_nav", "elapsed_ms": 4.85, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "total", "elapsed_ms": 7.77, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.22, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "banner", "elapsed_ms": 0.23, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "search", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "date_nav", "elapsed_ms": 5.12, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "standings", "elapsed_ms": 80.64, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.48, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "cache_notes", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-29T04:53:29", "page": "home", "module": "total", "elapsed_ms": 89.64, "meta": {}}
+{"ts": "2026-06-29T04:53:30", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.46, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:53:30", "page": "home", "module": "banner", "elapsed_ms": 0.21, "meta": {}}
+{"ts": "2026-06-29T04:53:30", "page": "home", "module": "search", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-29T04:53:30", "page": "home", "module": "date_nav", "elapsed_ms": 17.36, "meta": {}}
+{"ts": "2026-06-29T04:53:30", "page": "home", "module": "total", "elapsed_ms": 20.25, "meta": {}}
+{"ts": "2026-06-29T04:53:30", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 21.01, "meta": {}}
+{"ts": "2026-06-29T04:53:30", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 0.96, "meta": {}}
+{"ts": "2026-06-29T04:53:30", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 22.28, "meta": {"match": "South Africa vs Canada"}}
+{"ts": "2026-06-29T04:53:34", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.28, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:53:34", "page": "home", "module": "banner", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T04:53:34", "page": "home", "module": "search", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-29T04:53:34", "page": "home", "module": "date_nav", "elapsed_ms": 2.99, "meta": {}}
+{"ts": "2026-06-29T04:53:34", "page": "home", "module": "standings", "elapsed_ms": 80.83, "meta": {}}
+{"ts": "2026-06-29T04:53:34", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T04:53:34", "page": "home", "module": "cache_notes", "elapsed_ms": 0.47, "meta": {}}
+{"ts": "2026-06-29T04:53:34", "page": "home", "module": "total", "elapsed_ms": 87.39, "meta": {}}
+{"ts": "2026-06-29T04:53:37", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.36, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:53:37", "page": "home", "module": "banner", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-29T04:53:37", "page": "home", "module": "search", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T04:53:37", "page": "home", "module": "date_nav", "elapsed_ms": 16.17, "meta": {}}
+{"ts": "2026-06-29T04:53:37", "page": "home", "module": "total", "elapsed_ms": 18.47, "meta": {}}
+{"ts": "2026-06-29T04:53:37", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 21.95, "meta": {}}
+{"ts": "2026-06-29T04:53:37", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 0.86, "meta": {}}
+{"ts": "2026-06-29T04:53:37", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 23.06, "meta": {"match": "South Africa vs Canada"}}
+{"ts": "2026-06-29T04:54:24", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.2, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:54:24", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T04:54:24", "page": "home", "module": "search", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-29T04:54:24", "page": "home", "module": "date_nav", "elapsed_ms": 6.64, "meta": {}}
+{"ts": "2026-06-29T04:54:24", "page": "home", "module": "standings", "elapsed_ms": 106.07, "meta": {}}
+{"ts": "2026-06-29T04:54:24", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T04:54:24", "page": "home", "module": "cache_notes", "elapsed_ms": 0.51, "meta": {}}
+{"ts": "2026-06-29T04:54:24", "page": "home", "module": "total", "elapsed_ms": 116.64, "meta": {}}
+{"ts": "2026-06-29T04:54:26", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.36, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:54:26", "page": "home", "module": "banner", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-29T04:54:26", "page": "home", "module": "search", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T04:54:26", "page": "home", "module": "date_nav", "elapsed_ms": 3.98, "meta": {}}
+{"ts": "2026-06-29T04:54:26", "page": "home", "module": "total", "elapsed_ms": 6.14, "meta": {}}
+{"ts": "2026-06-29T04:54:27", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.21, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:54:27", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T04:54:27", "page": "home", "module": "search", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-29T04:54:27", "page": "home", "module": "date_nav", "elapsed_ms": 11.09, "meta": {}}
+{"ts": "2026-06-29T04:54:27", "page": "home", "module": "standings", "elapsed_ms": 68.03, "meta": {}}
+{"ts": "2026-06-29T04:54:27", "page": "home", "module": "tournament_stats", "elapsed_ms": 1.23, "meta": {}}
+{"ts": "2026-06-29T04:54:27", "page": "home", "module": "cache_notes", "elapsed_ms": 0.5, "meta": {}}
+{"ts": "2026-06-29T04:54:27", "page": "home", "module": "total", "elapsed_ms": 85.08, "meta": {}}
+{"ts": "2026-06-29T04:54:28", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.5, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:54:28", "page": "home", "module": "banner", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T04:54:28", "page": "home", "module": "search", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-29T04:54:28", "page": "home", "module": "date_nav", "elapsed_ms": 19.96, "meta": {}}
+{"ts": "2026-06-29T04:54:28", "page": "home", "module": "total", "elapsed_ms": 22.23, "meta": {}}
+{"ts": "2026-06-29T04:54:28", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 19.5, "meta": {}}
+{"ts": "2026-06-29T04:54:28", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 0.92, "meta": {}}
+{"ts": "2026-06-29T04:54:28", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 20.69, "meta": {"match": "Brazil vs Japan"}}
+{"ts": "2026-06-29T04:54:29", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.22, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:54:29", "page": "home", "module": "banner", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T04:54:29", "page": "home", "module": "search", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T04:54:29", "page": "home", "module": "date_nav", "elapsed_ms": 11.99, "meta": {}}
+{"ts": "2026-06-29T04:54:30", "page": "home", "module": "standings", "elapsed_ms": 62.88, "meta": {}}
+{"ts": "2026-06-29T04:54:30", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.47, "meta": {}}
+{"ts": "2026-06-29T04:54:30", "page": "home", "module": "cache_notes", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T04:54:30", "page": "home", "module": "total", "elapsed_ms": 78.22, "meta": {}}
+{"ts": "2026-06-29T04:55:06", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.52, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:55:06", "page": "home", "module": "banner", "elapsed_ms": 0.15, "meta": {}}
+{"ts": "2026-06-29T04:55:06", "page": "home", "module": "search", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T04:55:06", "page": "home", "module": "date_nav", "elapsed_ms": 6.47, "meta": {}}
+{"ts": "2026-06-29T04:55:06", "page": "home", "module": "total", "elapsed_ms": 8.98, "meta": {}}
+{"ts": "2026-06-29T04:55:06", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 17.53, "meta": {}}
+{"ts": "2026-06-29T04:55:06", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 0.92, "meta": {}}
+{"ts": "2026-06-29T04:55:06", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 18.81, "meta": {"match": "Brazil vs Japan"}}
+{"ts": "2026-06-29T04:56:13", "page": "home", "module": "fetch_schedule", "elapsed_ms": 3.96, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:56:13", "page": "home", "module": "banner", "elapsed_ms": 0.28, "meta": {}}
+{"ts": "2026-06-29T04:56:13", "page": "home", "module": "search", "elapsed_ms": 0.61, "meta": {}}
+{"ts": "2026-06-29T04:56:13", "page": "home", "module": "date_nav", "elapsed_ms": 38.11, "meta": {}}
+{"ts": "2026-06-29T04:56:13", "page": "home", "module": "standings", "elapsed_ms": 76.57, "meta": {}}
+{"ts": "2026-06-29T04:56:13", "page": "home", "module": "tournament_stats", "elapsed_ms": 1.92, "meta": {}}
+{"ts": "2026-06-29T04:56:13", "page": "home", "module": "cache_notes", "elapsed_ms": 2.06, "meta": {}}
+{"ts": "2026-06-29T04:56:13", "page": "home", "module": "total", "elapsed_ms": 125.93, "meta": {}}
+{"ts": "2026-06-29T04:57:05", "page": "home", "module": "fetch_schedule", "elapsed_ms": 4800.44, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:57:05", "page": "home", "module": "banner", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-29T04:57:05", "page": "home", "module": "search", "elapsed_ms": 0.34, "meta": {}}
+{"ts": "2026-06-29T04:57:05", "page": "home", "module": "date_nav", "elapsed_ms": 12.59, "meta": {}}
+{"ts": "2026-06-29T04:57:06", "page": "home", "module": "standings", "elapsed_ms": 130.32, "meta": {}}
+{"ts": "2026-06-29T04:57:06", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T04:57:06", "page": "home", "module": "cache_notes", "elapsed_ms": 0.46, "meta": {}}
+{"ts": "2026-06-29T04:57:06", "page": "home", "module": "total", "elapsed_ms": 4948.36, "meta": {}}
+{"ts": "2026-06-29T04:57:22", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.45, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:57:22", "page": "home", "module": "banner", "elapsed_ms": 0.17, "meta": {}}
+{"ts": "2026-06-29T04:57:22", "page": "home", "module": "search", "elapsed_ms": 0.22, "meta": {}}
+{"ts": "2026-06-29T04:57:22", "page": "home", "module": "date_nav", "elapsed_ms": 7.64, "meta": {}}
+{"ts": "2026-06-29T04:57:22", "page": "home", "module": "total", "elapsed_ms": 10.25, "meta": {}}
+{"ts": "2026-06-29T04:57:22", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 16.5, "meta": {}}
+{"ts": "2026-06-29T04:57:22", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 1.12, "meta": {}}
+{"ts": "2026-06-29T04:57:22", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 18.05, "meta": {"match": "Germany vs Paraguay"}}
+{"ts": "2026-06-29T04:58:02", "page": "home", "module": "fetch_schedule", "elapsed_ms": 1.29, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:58:02", "page": "home", "module": "banner", "elapsed_ms": 0.07, "meta": {}}
+{"ts": "2026-06-29T04:58:02", "page": "home", "module": "search", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T04:58:02", "page": "home", "module": "date_nav", "elapsed_ms": 12.13, "meta": {}}
+{"ts": "2026-06-29T04:58:02", "page": "home", "module": "standings", "elapsed_ms": 94.13, "meta": {}}
+{"ts": "2026-06-29T04:58:02", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.49, "meta": {}}
+{"ts": "2026-06-29T04:58:02", "page": "home", "module": "cache_notes", "elapsed_ms": 0.44, "meta": {}}
+{"ts": "2026-06-29T04:58:02", "page": "home", "module": "total", "elapsed_ms": 110.68, "meta": {}}
+{"ts": "2026-06-29T04:58:06", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.29, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:58:06", "page": "home", "module": "banner", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T04:58:06", "page": "home", "module": "search", "elapsed_ms": 0.13, "meta": {}}
+{"ts": "2026-06-29T04:58:06", "page": "home", "module": "date_nav", "elapsed_ms": 3.13, "meta": {}}
+{"ts": "2026-06-29T04:58:06", "page": "home", "module": "total", "elapsed_ms": 4.91, "meta": {}}
+{"ts": "2026-06-29T04:58:06", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 16.41, "meta": {}}
+{"ts": "2026-06-29T04:58:13", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 1.12, "meta": {}}
+{"ts": "2026-06-29T04:58:13", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 6503.73, "meta": {}}
+{"ts": "2026-06-29T04:58:13", "page": "detail", "module": "base_models", "elapsed_ms": 1.09, "meta": {}}
+{"ts": "2026-06-29T04:58:13", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.87, "meta": {}}
+{"ts": "2026-06-29T04:58:16", "page": "detail", "module": "render_match_overview", "elapsed_ms": 3329.76, "meta": {}}
+{"ts": "2026-06-29T04:58:16", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.08, "meta": {}}
+{"ts": "2026-06-29T04:58:16", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 166.17, "meta": {}}
+{"ts": "2026-06-29T04:58:16", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 16.28, "meta": {}}
+{"ts": "2026-06-29T04:58:16", "page": "detail", "module": "report_generation", "elapsed_ms": 0.86, "meta": {}}
+{"ts": "2026-06-29T04:58:16", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 10038.06, "meta": {"match": "Germany vs Paraguay"}}
+{"ts": "2026-06-29T04:58:16", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.04, "meta": {}}
+{"ts": "2026-06-29T04:58:17", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 9.58, "meta": {"shown": 6, "total": 8}}
+{"ts": "2026-06-29T04:58:17", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 1.11, "meta": {"rows": 25}}
+{"ts": "2026-06-29T04:58:17", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 914.94, "meta": {}}
+{"ts": "2026-06-29T04:58:17", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 5.46, "meta": {}}
+{"ts": "2026-06-29T04:58:17", "page": "detail", "module": "tab_market", "elapsed_ms": 4.38, "meta": {}}
+{"ts": "2026-06-29T04:58:17", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.71, "meta": {}}
+{"ts": "2026-06-29T04:58:17", "page": "detail", "module": "tab_source", "elapsed_ms": 0.91, "meta": {}}
+{"ts": "2026-06-29T04:58:54", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.25, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:58:54", "page": "home", "module": "banner", "elapsed_ms": 0.41, "meta": {}}
+{"ts": "2026-06-29T04:58:54", "page": "home", "module": "search", "elapsed_ms": 0.16, "meta": {}}
+{"ts": "2026-06-29T04:58:54", "page": "home", "module": "date_nav", "elapsed_ms": 10.52, "meta": {}}
+{"ts": "2026-06-29T04:58:54", "page": "home", "module": "standings", "elapsed_ms": 86.88, "meta": {}}
+{"ts": "2026-06-29T04:58:54", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.42, "meta": {}}
+{"ts": "2026-06-29T04:58:54", "page": "home", "module": "cache_notes", "elapsed_ms": 0.95, "meta": {}}
+{"ts": "2026-06-29T04:58:54", "page": "home", "module": "total", "elapsed_ms": 102.73, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.22, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T04:58:59", "page": "home", "module": "banner", "elapsed_ms": 0.09, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "home", "module": "search", "elapsed_ms": 0.12, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "home", "module": "date_nav", "elapsed_ms": 2.9, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "home", "module": "total", "elapsed_ms": 4.46, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 16.11, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 1.33, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "base_models", "elapsed_ms": 0.24, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.35, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.35, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 150.94, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 16.31, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "report_generation", "elapsed_ms": 0.7, "meta": {}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 187.72, "meta": {"match": "Germany vs Paraguay"}}
+{"ts": "2026-06-29T04:58:59", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.1, "meta": {}}
+{"ts": "2026-06-29T04:59:00", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 9.16, "meta": {"shown": 6, "total": 8}}
+{"ts": "2026-06-29T04:59:00", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 1.72, "meta": {"rows": 25}}
+{"ts": "2026-06-29T04:59:00", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 878.64, "meta": {}}
+{"ts": "2026-06-29T04:59:00", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 4.64, "meta": {}}
+{"ts": "2026-06-29T04:59:00", "page": "detail", "module": "tab_market", "elapsed_ms": 3.8, "meta": {}}
+{"ts": "2026-06-29T04:59:00", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.75, "meta": {}}
+{"ts": "2026-06-29T04:59:00", "page": "detail", "module": "tab_source", "elapsed_ms": 0.56, "meta": {}}
+{"ts": "2026-06-29T05:00:44", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.41, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T05:00:44", "page": "home", "module": "banner", "elapsed_ms": 0.19, "meta": {}}
+{"ts": "2026-06-29T05:00:44", "page": "home", "module": "search", "elapsed_ms": 0.59, "meta": {}}
+{"ts": "2026-06-29T05:00:44", "page": "home", "module": "date_nav", "elapsed_ms": 12.86, "meta": {}}
+{"ts": "2026-06-29T05:00:44", "page": "home", "module": "standings", "elapsed_ms": 65.71, "meta": {}}
+{"ts": "2026-06-29T05:00:44", "page": "home", "module": "tournament_stats", "elapsed_ms": 0.43, "meta": {}}
+{"ts": "2026-06-29T05:00:44", "page": "home", "module": "cache_notes", "elapsed_ms": 0.42, "meta": {}}
+{"ts": "2026-06-29T05:00:44", "page": "home", "module": "total", "elapsed_ms": 83.72, "meta": {}}
+{"ts": "2026-06-29T05:00:47", "page": "home", "module": "fetch_schedule", "elapsed_ms": 0.44, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T05:00:47", "page": "home", "module": "banner", "elapsed_ms": 0.18, "meta": {}}
+{"ts": "2026-06-29T05:00:47", "page": "home", "module": "search", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-29T05:00:47", "page": "home", "module": "date_nav", "elapsed_ms": 5.42, "meta": {}}
+{"ts": "2026-06-29T05:00:47", "page": "home", "module": "total", "elapsed_ms": 8.07, "meta": {}}
+{"ts": "2026-06-29T05:00:47", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 23.29, "meta": {}}
+{"ts": "2026-06-29T05:01:01", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 2.81, "meta": {}}
+{"ts": "2026-06-29T05:01:01", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 13537.78, "meta": {}}
+{"ts": "2026-06-29T05:01:01", "page": "detail", "module": "base_models", "elapsed_ms": 0.71, "meta": {}}
+{"ts": "2026-06-29T05:01:01", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.73, "meta": {}}
+{"ts": "2026-06-29T05:01:05", "page": "detail", "module": "render_match_overview", "elapsed_ms": 3658.88, "meta": {}}
+{"ts": "2026-06-29T05:01:05", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T05:01:05", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 160.06, "meta": {}}
+{"ts": "2026-06-29T05:01:05", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 17.0, "meta": {}}
+{"ts": "2026-06-29T05:01:05", "page": "detail", "module": "report_generation", "elapsed_ms": 0.72, "meta": {}}
+{"ts": "2026-06-29T05:01:05", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 17400.75, "meta": {"match": "Brazil vs Japan"}}
+{"ts": "2026-06-29T05:01:05", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T05:01:06", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 12.82, "meta": {"shown": 6, "total": 9}}
+{"ts": "2026-06-29T05:01:06", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 1.45, "meta": {"rows": 25}}
+{"ts": "2026-06-29T05:01:06", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 866.42, "meta": {}}
+{"ts": "2026-06-29T05:01:06", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 4.05, "meta": {}}
+{"ts": "2026-06-29T05:01:06", "page": "detail", "module": "tab_market", "elapsed_ms": 4.51, "meta": {}}
+{"ts": "2026-06-29T05:01:06", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.66, "meta": {}}
+{"ts": "2026-06-29T05:01:06", "page": "detail", "module": "tab_source", "elapsed_ms": 0.53, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 36.21, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.11, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 2.51, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "base_models", "elapsed_ms": 0.5, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.45, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.32, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 160.21, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 17.05, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "report_generation", "elapsed_ms": 0.73, "meta": {}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 219.45, "meta": {"match": "Brazil vs Japan"}}
+{"ts": "2026-06-29T05:02:33", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.04, "meta": {}}
+{"ts": "2026-06-29T05:02:34", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 12.28, "meta": {"shown": 6, "total": 9}}
+{"ts": "2026-06-29T05:02:34", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 1.09, "meta": {"rows": 25}}
+{"ts": "2026-06-29T05:02:34", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 864.74, "meta": {}}
+{"ts": "2026-06-29T05:02:34", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 3.05, "meta": {}}
+{"ts": "2026-06-29T05:02:34", "page": "detail", "module": "tab_market", "elapsed_ms": 4.52, "meta": {}}
+{"ts": "2026-06-29T05:02:34", "page": "detail", "module": "tab_post_match", "elapsed_ms": 0.77, "meta": {}}
+{"ts": "2026-06-29T05:02:34", "page": "detail", "module": "tab_source", "elapsed_ms": 0.64, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "parse_and_fixture", "elapsed_ms": 43.19, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "fetch_polymarket", "elapsed_ms": 0.05, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "load_worldcup_database", "elapsed_ms": 1.26, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "base_models", "elapsed_ms": 0.26, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "result_distribution", "elapsed_ms": 0.25, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "render_match_overview", "elapsed_ms": 0.2, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "decision_engine", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "portfolio_candidates", "elapsed_ms": 170.89, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "portfolio_optimizer", "elapsed_ms": 16.98, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "report_generation", "elapsed_ms": 0.72, "meta": {}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "pre_tab_total", "elapsed_ms": 235.04, "meta": {"match": "Brazil vs Japan"}}
+{"ts": "2026-06-29T05:03:08", "page": "detail", "module": "save_match_snapshot", "elapsed_ms": 0.03, "meta": {}}
+{"ts": "2026-06-29T05:03:09", "page": "detail", "module": "render_portfolio_ranking", "elapsed_ms": 12.63, "meta": {"shown": 6, "total": 9}}
+{"ts": "2026-06-29T05:03:09", "page": "detail", "module": "render_actual_vs_market", "elapsed_ms": 1.28, "meta": {"rows": 25}}
+{"ts": "2026-06-29T05:03:09", "page": "detail", "module": "tab_core_decision", "elapsed_ms": 848.73, "meta": {}}
+{"ts": "2026-06-29T05:03:15", "page": "detail", "module": "tab_team_intelligence", "elapsed_ms": 6000.82, "meta": {}}
+{"ts": "2026-06-29T05:03:15", "page": "detail", "module": "tab_market", "elapsed_ms": 9.42, "meta": {}}
+{"ts": "2026-06-29T05:03:15", "page": "detail", "module": "tab_post_match", "elapsed_ms": 1.34, "meta": {}}
+{"ts": "2026-06-29T05:03:15", "page": "detail", "module": "tab_source", "elapsed_ms": 1.1, "meta": {}}
+{"ts": "2026-06-29T05:08:50", "page": "home", "module": "fetch_schedule", "elapsed_ms": 1.32, "meta": {"force_refresh": false}}
+{"ts": "2026-06-29T05:08:50", "page": "home", "module": "banner", "elapsed_ms": 0.37, "meta": {}}
+{"ts": "2026-06-29T05:08:50", "page": "home", "module": "search", "elapsed_ms": 0.78, "meta": {}}
+{"ts": "2026-06-29T05:08:50", "page": "home", "module": "date_nav", "elapsed_ms": 41.91, "meta": {}}
+{"ts": "2026-06-29T05:08:50", "page": "home", "module": "standings", "elapsed_ms": 89.26, "meta": {}}
+{"ts": "2026-06-29T05:08:50", "page": "home", "module": "tournament_stats", "elapsed_ms": 2.77, "meta": {}}
+{"ts": "2026-06-29T05:08:50", "page": "home", "module": "cache_notes", "elapsed_ms": 2.69, "meta": {}}
+{"ts": "2026-06-29T05:08:50", "page": "home", "module": "total", "elapsed_ms": 142.27, "meta": {}}

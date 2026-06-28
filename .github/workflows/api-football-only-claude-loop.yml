@@ -1,0 +1,187 @@
+name: API-Football Only Claude Loop
+
+on:
+  pull_request:
+    paths:
+      - "app.py"
+      - "modules/**"
+      - "scripts/**"
+      - ".github/workflows/api-football-only-claude-loop.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  round-1-legacy-route-gate:
+    name: Round 1 legacy route gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          if [[ -f requirements.txt ]]; then pip install -r requirements.txt; fi
+          python -m pip install anthropic python-dotenv
+
+      - name: Validate no legacy route
+        shell: bash
+        run: |
+          set +e
+          python scripts/validate_api_football_only.py --round 1 > round_1_validation.log
+          status=$?
+          set -e
+          mkdir -p reports/claude_reviews
+          {
+            echo "# API-Football Only Round 1 Review Packet"
+            echo
+            echo "## Scope"
+            echo "- Detect legacy odds provider usage."
+            echo "- Confirm runtime route is API-Football only."
+            echo
+            echo "## Validation Log"
+            echo '```json'
+            cat round_1_validation.log
+            echo '```'
+          } > reports/claude_reviews/round_1_review_packet.md
+          exit "$status"
+
+      - name: Claude review round 1
+        if: always()
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+        run: python scripts/github_claude_review.py --input-file reports/claude_reviews/round_1_review_packet.md --round 1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-football-only-round-1
+          path: |
+            round_1_validation.log
+            reports/api_football_only/round_1.json
+            reports/claude_reviews/round_1_review_packet.md
+            reports/claude_reviews/round_1_claude_review.*
+
+  round-2-fixture-mapping-gate:
+    name: Round 2 fixture mapping gate
+    runs-on: ubuntu-latest
+    needs: round-1-legacy-route-gate
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          if [[ -f requirements.txt ]]; then pip install -r requirements.txt; fi
+          python -m pip install anthropic python-dotenv
+
+      - name: Validate fixture mapping and odds endpoint
+        shell: bash
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+        run: |
+          set +e
+          python scripts/validate_api_football_only.py --round 2 > round_2_validation.log
+          status=$?
+          set -e
+          mkdir -p reports/claude_reviews
+          {
+            echo "# API-Football Only Round 2 Review Packet"
+            echo
+            echo "## Scope"
+            echo "- Validate WorldCup match id to API-Football fixture id mapping."
+            echo "- Validate Germany vs Paraguay fixture id 1565176 returns odds."
+            echo
+            echo "## Validation Log"
+            echo '```json'
+            cat round_2_validation.log
+            echo '```'
+          } > reports/claude_reviews/round_2_review_packet.md
+          exit "$status"
+
+      - name: Claude review round 2
+        if: always()
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+        run: python scripts/github_claude_review.py --input-file reports/claude_reviews/round_2_review_packet.md --round 2
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-football-only-round-2
+          path: |
+            round_2_validation.log
+            reports/api_football_only/round_2.json
+            reports/claude_reviews/round_2_review_packet.md
+            reports/claude_reviews/round_2_claude_review.*
+
+  round-3-stability-gate:
+    name: Round 3 stability gate
+    runs-on: ubuntu-latest
+    needs: round-2-fixture-mapping-gate
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          if [[ -f requirements.txt ]]; then pip install -r requirements.txt; fi
+          python -m pip install anthropic python-dotenv
+
+      - name: Run stability and regression check
+        shell: bash
+        run: |
+          set +e
+          python scripts/validate_api_football_only.py --round 3 > round_3_validation.log
+          status=$?
+          set -e
+          mkdir -p reports/claude_reviews
+          {
+            echo "# API-Football Only Round 3 Review Packet"
+            echo
+            echo "## Scope"
+            echo "- Syntax, import-chain, and safe fallback regression check."
+            echo "- Confirm no UI crash from removed legacy function."
+            echo
+            echo "## Validation Log"
+            echo '```json'
+            cat round_3_validation.log
+            echo '```'
+          } > reports/claude_reviews/round_3_review_packet.md
+          exit "$status"
+
+      - name: Claude review round 3
+        if: always()
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+        run: python scripts/github_claude_review.py --input-file reports/claude_reviews/round_3_review_packet.md --round 3
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-football-only-round-3
+          path: |
+            round_3_validation.log
+            reports/api_football_only/round_3.json
+            reports/claude_reviews/round_3_review_packet.md
+            reports/claude_reviews/round_3_claude_review.*

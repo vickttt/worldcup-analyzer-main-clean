@@ -194,7 +194,7 @@ Generated before any Task 5 real API call.
 - API provider: API-Football only.
 - Key present: `{str(key_present).lower()}`; value redacted.
 - Key source: `{key_source}`.
-- The Odds API required: `false`.
+- External odds provider required: `false`.
 - Polymarket refresh: `not used`.
 - Real API call performed by this gate report: `false`.
 
@@ -210,7 +210,7 @@ Generated before any Task 5 real API call.
 - The request targets one explicit fixture ID.
 - The script has no loop and no retry path.
 - A runtime marker blocks a second accidental execution unless a future task explicitly overrides it.
-- The script does not call The Odds API, Polymarket, WorldCup2026 schedule APIs, or broad all-league/date endpoints.
+- The script does not call external odds providers, Polymarket, WorldCup2026 schedule APIs, or broad all-league/date endpoints.
 
 ## Files Written
 
@@ -253,7 +253,7 @@ def status_payload(
     warnings = [
         "This only reflects the last controlled API-Football refresh.",
         "API-Football key value is never displayed.",
-        "Odds API is disabled and not required for the current UI-CACHE-API phase.",
+        "External odds providers are disabled; API-Football is the active odds provider.",
         "Polymarket is not part of this refresh.",
         "No data/history or golden JSON files are written.",
     ]
@@ -331,7 +331,7 @@ def refresh_report(
 - API provider: API-Football only.
 - `API_FOOTBALL_KEY`: {'present' if key_present else 'missing'}, value redacted.
 - API key source: `{key_source}`.
-- `THE_ODDS_API_KEY`: not required.
+- External API-Football key: not required.
 - Endpoint/function called: `GET /fixtures` with `id={fixture_id}`.
 - API call count: `{api_call_count}`.
 - Refresh run exactly once: `{str(api_called and api_call_count == 1).lower()}`.
@@ -353,7 +353,7 @@ def refresh_report(
 - `data/history` unchanged by script design.
 - Golden JSON unchanged by script design.
 - Recommendation, ranking, portfolio, strategy, odds settlement, and backtest logic unchanged.
-- The Odds API was not called.
+- External odds providers were not called.
 - Polymarket was not called.
 - No API key value was printed or written.
 - One-time marker path: `.runtime/api_football_refresh/one_time_refresh_marker.json`.

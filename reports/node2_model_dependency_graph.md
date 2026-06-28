@@ -88,7 +88,7 @@ Hidden API coupling is medium:
 - portfolio scoring uses `distribution.game_behavior`, which depends on match context.
 - `compute_match_investment_score(...)` includes API quality and data timing concepts in its score components.
 
-The Odds API remains disabled for the current UI-CACHE-API phase, but model logic still consumes odds-like payloads and API-Football context if available.
+external providers remain disabled while API-Football remains active for the current UI-CACHE-API phase, but model logic still consumes odds-like payloads and API-Football context if available.
 
 ## Dependency On Cache Layer
 

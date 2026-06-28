@@ -11,7 +11,7 @@
   "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
-  "the_odds_api": {
+  "legacy_deprecated_odds": {
     "found": true,
     "home_win": 1.55,
     "draw": 3.8,
@@ -235,10 +235,10 @@
       "draw": 0.24909231593357536,
       "away_win": 0.14022974822927206
     },
-    "source": "The Odds API / Unibet",
+    "source": "API-Football / Unibet",
     "event_title": "Colombia vs DR Congo",
     "event_id": "68bfc965eb267508e04d8e8d75c1a0ae",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",
@@ -2544,10 +2544,10 @@
       "draw": 0.24909231593357536,
       "away_win": 0.14022974822927206
     },
-    "source": "The Odds API / Unibet",
+    "source": "API-Football / Unibet",
     "event_title": "Colombia vs DR Congo",
     "event_id": "68bfc965eb267508e04d8e8d75c1a0ae",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",

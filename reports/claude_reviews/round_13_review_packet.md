@@ -16,9 +16,9 @@ Claude should review only and must not write code. Please check secret safety, r
 # Product code impact
 
 - `app.py` was touched only inside the existing Data Freshness / Refresh Status panel support.
-- The panel shows API-Football key present/missing, controlled refresh readiness, Odds API disabled, and real API refresh performed = No.
+- The panel shows API-Football key present/missing, controlled refresh readiness, external providers disabled; API-Football active, and real API refresh performed = No.
 - API-Football key values are never displayed.
-- The Odds API is not required for the current phase.
+- API-Football is not required for the current phase.
 - Polymarket remains public-only and was not expanded.
 - WorldCup2026 schedule remains a public cache source.
 - No recommendation, ranking, portfolio, strategy, odds calculation, settlement, or backtest behavior was changed.
@@ -38,7 +38,7 @@ Planned and local validation for this packet:
 - `python3 scripts/write_refresh_status_dry_run.py` run twice: pass.
 - Repeated dry-run writes only ignored `.runtime/ui_refresh_status.json`: pass.
 - `API_FOOTBALL_KEY`: present in local config, value redacted.
-- `THE_ODDS_API_KEY`: not required for Task 4.
+- `API_FOOTBALL_KEY`: required for live API-Football odds refresh for Task 4.
 - Real API refresh: not performed.
 - `python3 -m py_compile app.py`: pass.
 - `python3 -m py_compile scripts/write_refresh_status_dry_run.py`: pass.
@@ -71,8 +71,8 @@ If Claude finds no material issue, Task 5 can be a controlled one-time API-Footb
 
 - Is the API-Football key value protected from printing and commits?
 - Does `.env` remain ignored?
-- Is the Odds API correctly disabled and not required for this phase?
-- Does missing `THE_ODDS_API_KEY` avoid blocking API-Football readiness?
+- Is external providers correctly disabled and API-Football active for this phase?
+- Does missing `API_FOOTBALL_KEY` avoid blocking API-Football readiness?
 - Does the UI avoid implying any real refresh occurred?
 - Does repeated dry-run execution avoid tracked-file churn?
 - Is this a good foundation for a later controlled one-time API-Football refresh?

@@ -38,7 +38,7 @@ def analyze_value(match, odds, polymarket):
     if not odds_probs or not polymarket_probs:
         return {
             "available": False,
-            "message": "Value Analysis requires both The Odds API and Polymarket probabilities.",
+            "message": "Value Analysis requires both API-Football and Polymarket probabilities.",
             "rows": [],
             "has_value": False,
         }
@@ -69,4 +69,3 @@ def analyze_value(match, odds, polymarket):
         "rows": rows,
         "has_value": has_value,
     }
-

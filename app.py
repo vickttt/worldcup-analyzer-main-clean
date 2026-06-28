@@ -55,7 +55,7 @@ from modules.schedule_client import (
     tournament_stats,
 )
 from modules.score_model import recommend_scores
-from modules.the_odds_client import fetch_odds
+from modules.odds_client import fetch_odds
 from modules.team_profile_client import fetch_team_profile
 from modules.user_odds import (
     build_recommendation_slots,
@@ -737,6 +737,28 @@ def selected_fixture_as_api_fixture(fixture):
     }
 
 
+def match_with_fixture_context(match, selected_fixture):
+    if not selected_fixture:
+        return match
+    enriched = dict(match)
+    fixture_source = selected_fixture.get("source")
+    fixture_id = selected_fixture.get("fixture_id")
+    enriched.update({
+        "schedule_fixture_id": fixture_id,
+        "schedule_source": fixture_source,
+        "fixture_source": fixture_source,
+        "fixture_home_team": selected_fixture.get("home_team") or {},
+        "fixture_away_team": selected_fixture.get("away_team") or {},
+        "fixture_kickoff_utc": selected_fixture.get("kickoff_utc"),
+        "fixture_league_name": selected_fixture.get("league_name"),
+        "fixture_round": selected_fixture.get("round"),
+    })
+    if fixture_source == "API-Football":
+        enriched["fixture_id"] = fixture_id
+        enriched["api_football_fixture_id"] = fixture_id
+    return enriched
+
+
 def same_fixture(left, right):
     if not left or not right:
         return False
@@ -810,7 +832,7 @@ def render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key
     correct_score = (api_football_data or {}).get("correct_score") or {}
     debug_rows = [
         {"项目": "Match", "状态": match.get("display_name"), "详情": f"{match.get('home_en')} vs {match.get('away_en')}"},
-        {"项目": "Odds Date Key", "状态": odds_date_key or "-", "详情": "The Odds API UTC比赛日"},
+        {"项目": "Odds Date Key", "状态": odds_date_key or "-", "详情": "API-Football UTC比赛日"},
         {"项目": "Fixture ID", "状态": fixture.get("id") or "-", "详情": fixture_result.get("message") or "-"},
         {
             "项目": "Home Team",
@@ -830,7 +852,7 @@ def render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key
         {
             "项目": "Over/Under",
             "状态": len(odds.get("over_under") or []),
-            "详情": "The Odds API totals rows",
+            "详情": "API-Football totals rows",
         },
         {
             "项目": "Asian Handicap",
@@ -4015,15 +4037,15 @@ def apply_api_football_readiness(refresh_status):
         warnings.append("API-Football key is present; value is not displayed.")
     else:
         warnings.append("API-Football controlled refresh is blocked because API_FOOTBALL_KEY is missing.")
-    warnings.append("Odds API is disabled and not required for the current UI-CACHE-API phase.")
+    warnings.append("External odds providers are disabled; API-Football is the active odds provider.")
     return {
         **refresh_status,
         "api_provider_policy": "api_football_only",
         "api_called": refresh_status.get("api_called", False),
         "real_api_refresh_performed": refresh_status.get("real_api_refresh_performed", False),
-        "odds_api_enabled": False,
-        "odds_api_required": False,
-        "odds_api_status": "disabled_not_used_current_phase",
+        "external_odds_provider_enabled": False,
+        "external_odds_provider_required": False,
+        "api_football_odds_status": "active_single_odds_provider",
         "polymarket_policy": "public_api_not_part_of_task_4",
         "worldcup2026_schedule_policy": "public_cache_source",
         **readiness,
@@ -4270,8 +4292,8 @@ def render_data_freshness_panel(freshness):
                 {"Item": "API-Football key source", "Value": refresh_status.get("api_football_key_source") or "unknown"},
                 {"Item": "API-Football controlled refresh", "Value": controlled_refresh_label},
                 {"Item": "Refresh gate status", "Value": refresh_gate_status},
-                {"Item": "Odds API", "Value": "disabled / not used in current phase"},
-                {"Item": "Odds API required", "Value": str(refresh_status.get("odds_api_required", False))},
+                {"Item": "API-Football odds provider", "Value": "active / single source"},
+                {"Item": "External odds provider required", "Value": str(refresh_status.get("external_odds_provider_required", False))},
                 {"Item": "Polymarket", "Value": refresh_status.get("polymarket_policy") or "public API / not part of Task 4"},
                 {"Item": "WorldCup2026 schedule", "Value": refresh_status.get("worldcup2026_schedule_policy") or "public cache source"},
                 {"Item": "Refresh data source", "Value": refresh_status.get("data_source") or "unknown"},
@@ -4668,7 +4690,7 @@ def portfolio_market_candidates(base_candidates, odds, api_football_data, match=
                 "name": f"{label} {line} 球",
                 "standard_odds": price,
                 "probability": 1 / price if price else None,
-                "source": "The Odds API 大小球完整盘口",
+                "source": "API-Football 大小球完整盘口",
             })
 
     correct_rows = ((api_football_data or {}).get("correct_score") or {}).get("rows") or []
@@ -5926,7 +5948,7 @@ def render_match_winner(match, odds, api_football_data):
     with st.container(border=True):
         st.markdown('<div class="section-title">胜平负赔率</div>', unsafe_allow_html=True)
         if not odds.get("found"):
-            st.info("未找到盘口数据：The Odds API 当前没有返回该比赛的胜平负市场。")
+            st.info(odds.get("message") or "No odds available for this match")
             return
         fixture = api_football_data.get("fixture") or {}
         home_name = team_cn(fixture.get("home_team", {}).get("name") or match["home_cn"])
@@ -5951,7 +5973,7 @@ def render_handicap(match, api_football_data):
         st.markdown('<div class="section-title">亚洲让球盘</div>', unsafe_allow_html=True)
         handicap = (api_football_data or {}).get("asian_handicap") or {}
         if not handicap.get("found"):
-            st.info(handicap.get("message", "未找到盘口数据：API-Football 当前没有返回该比赛的亚洲让球盘。"))
+            st.info(handicap.get("message") or "No odds available for this match")
             return
 
         rows = handicap.get("rows") or []
@@ -5990,7 +6012,7 @@ def render_totals(odds):
         st.markdown('<div class="section-title">大小球盘口</div>', unsafe_allow_html=True)
         markets = odds.get("over_under") or []
         if not markets:
-            st.info("未找到盘口数据：The Odds API 当前没有返回该比赛的大小球盘口。")
+            st.info(odds.get("message") or "No odds available for this match")
             return
 
         summary = identify_total_center(markets)
@@ -6067,7 +6089,7 @@ def render_value(value_analysis):
             st.info("🟢 暂无显著市场分歧")
         if main:
             col1, col2, col3 = st.columns(3)
-            col1.metric("Odds API", percent(main["odds_api"]))
+            col1.metric("API-Football", percent(main["odds_api"]))
             col2.metric("Polymarket", percent(main["polymarket"]))
             col3.metric("分歧幅度", percent(abs(main["difference"])))
 
@@ -6333,7 +6355,7 @@ def render_injuries_lineups(api_football_data):
 def render_technical_notes(odds, api_football_data):
     if st.checkbox("显示开发者信息", value=False, key="technical_notes_debug"):
         notes = [
-            "赔率来源：The Odds API",
+            "赔率来源：API-Football",
             "比赛、伤病、首发来源：API-Football",
             "预测市场来源：Polymarket",
         ]
@@ -6350,7 +6372,7 @@ def render_detail_data_source(odds=None, polymarket=None, fixture=None):
         st.markdown('<div class="section-title">数据来源</div>', unsafe_allow_html=True)
         cols = st.columns(4)
         cols[0].metric("赛程 / 比分", (fixture or {}).get("source", "API-Football / 缓存"))
-        cols[1].metric("赔率", (odds or {}).get("source", "The Odds API"))
+        cols[1].metric("赔率", (odds or {}).get("source", "API-Football"))
         cols[2].metric("预测市场", "Polymarket" if (polymarket or {}).get("found") else "暂无市场")
         cols[3].metric("缓存状态", "按模块缓存")
         st.caption("赛程优先级：WorldCup2026 API → ESPN → 项目缓存 → 本地备用数据。")
@@ -6709,7 +6731,7 @@ def render_market_center(fixtures):
     render_popular_matches(fixtures, "market_popular")
     with st.container(border=True):
         st.markdown("**市场数据缓存**")
-        st.write("The Odds API 赔率：24小时缓存")
+        st.write("API-Football 赔率：24小时缓存")
         st.write("Polymarket：5分钟缓存")
         st.write("赛程与球队资料：24小时缓存")
 
@@ -6754,7 +6776,7 @@ def render_cache_notes(schedule):
         col1, col2, col3, col4 = st.columns(4)
         col1.metric("赛程", "真实源优先", "24小时缓存")
         col2.metric("球队资料", "API缓存", "24小时")
-        col3.metric("赔率", "The Odds API", "24小时")
+        col3.metric("赔率", "API-Football", "24小时")
         col4.metric("Polymarket", "公开市场", "5分钟")
         st.caption(
             f"当前赛程来源：{schedule.get('source')} · 更新时间：{schedule.get('updated_at', '-')} · "
@@ -6807,6 +6829,7 @@ def render_analysis_page(match_text):
             with perf_timer("detail", "parse_and_fixture"):
                 match = parse_match(match_text)
                 selected_fixture = refresh_selected_fixture_if_needed(st.session_state.get("selected_fixture"))
+                market_match = match_with_fixture_context(match, selected_fixture)
                 if selected_fixture and is_finished(selected_fixture):
                     st.session_state.selected_fixture = selected_fixture
                     st.session_state.page = "post_match"
@@ -6819,9 +6842,9 @@ def render_analysis_page(match_text):
                     polymarket = db_polymarket(local_db)
                     odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
                 else:
-                    api_football_data = fetch_match_data(match, "page_market_data_v3")
+                    api_football_data = fetch_match_data(market_match, "page_market_data_v3")
                     odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
-                    odds = fetch_odds(match, odds_date_key, "odds_page_v4_24h_cache")
+                    odds = fetch_odds(market_match, odds_date_key, "odds_page_v4_24h_cache")
                     with perf_timer("detail", "fetch_polymarket"):
                         polymarket = fetch_polymarket(match)
             with perf_timer("detail", "base_models"):

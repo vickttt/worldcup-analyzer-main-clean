@@ -48,7 +48,7 @@
   - Market winner probability has Germany around 63.6%.
   - Polymarket also supports Germany around 64.5%.
   - Asian handicap main line is `Home -1.5`, aligned with Germany direction.
-  - Value rating is A, driven by handicap consistency, Asian handicap structure, correct score structure, and normal bookmaker margin.
+  - Value rating is A, driven by handicap consistency, Asian handicap structure, correct score structure, and normal market margin.
   - Correct score assets `2:0` and `3:1` both support Germany winning by 2.
 - Risk notes:
   - The highest single path in the distribution is Germany small win by 1, which loses `Germany -1.5`.

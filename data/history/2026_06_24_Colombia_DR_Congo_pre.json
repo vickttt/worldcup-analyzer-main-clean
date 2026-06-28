@@ -148,7 +148,7 @@
     }
   },
   "odds": {
-    "the_odds_api": {
+    "legacy_deprecated_odds": {
       "found": true,
       "home_win": 1.55,
       "draw": 3.8,
@@ -372,10 +372,10 @@
         "draw": 0.24909231593357536,
         "away_win": 0.14022974822927206
       },
-      "source": "The Odds API / Unibet",
+      "source": "API-Football / Unibet",
       "event_title": "Colombia vs DR Congo",
       "event_id": "68bfc965eb267508e04d8e8d75c1a0ae",
-      "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。",
+      "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。",
       "cache": {
         "source": "fresh api response",
         "sport_key": "soccer_fifa_world_cup",
@@ -43719,7 +43719,7 @@
       "name": "小于 2.5 球",
       "standard_odds": 1.698,
       "base_score": 50,
-      "source": "The Odds API 大小球均值"
+      "source": "API-Football 大小球均值"
     },
     {
       "slot": "大小球",
@@ -43728,7 +43728,7 @@
       "name": "大于 2.5 球",
       "standard_odds": 2.137,
       "base_score": 40,
-      "source": "The Odds API 大小球均值"
+      "source": "API-Football 大小球均值"
     },
     {
       "slot": "波胆1",
@@ -44227,7 +44227,7 @@
       "name": "小于 2.5 球",
       "standard_odds": 1.698,
       "base_score": 50,
-      "source": "The Odds API 大小球均值",
+      "source": "API-Football 大小球均值",
       "actual_odds": null,
       "effective_odds": 1.698,
       "edge": null,
@@ -44256,7 +44256,7 @@
       "name": "大于 2.5 球",
       "standard_odds": 2.137,
       "base_score": 40,
-      "source": "The Odds API 大小球均值",
+      "source": "API-Football 大小球均值",
       "actual_odds": null,
       "effective_odds": 2.137,
       "edge": null,

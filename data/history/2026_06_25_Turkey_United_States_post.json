@@ -1,0 +1,516 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "post_match_snapshot",
+  "created_at": "2026-06-29T02:41:29.875585+08:00",
+  "match": {
+    "home": "Turkey",
+    "away": "United States",
+    "display": "土耳其 vs 美国"
+  },
+  "fixture": {
+    "fixture_id": "58",
+    "home_team": {
+      "id": "16",
+      "name": "Turkey",
+      "logo": "https://flagcdn.com/w80/tr.png"
+    },
+    "away_team": {
+      "id": "13",
+      "name": "United States",
+      "logo": "https://flagcdn.com/w80/us.png"
+    },
+    "kickoff_utc": "06/25/2026 19:00",
+    "kickoff_display": "06/25/2026 19:00",
+    "league_name": "World Cup 2026",
+    "round": "group",
+    "group": "D",
+    "venue_name": "Los Angeles Stadium",
+    "venue_city": "Los Angeles (Inglewood), United States",
+    "status": "FT",
+    "status_text": "已结束",
+    "score": {
+      "home": 3,
+      "away": 2
+    },
+    "market_heat": null,
+    "post_match": {
+      "stats": {},
+      "goals": [
+        {
+          "球队": "Turkey",
+          "球员": "Arda Güler 10'"
+        },
+        {
+          "球队": "Turkey",
+          "球员": "Baris Alpr Ailmaz 31'"
+        },
+        {
+          "球队": "Turkey",
+          "球员": "Kan Aihan 90+8'"
+        },
+        {
+          "球队": "United States",
+          "球员": "Auston Trusty 3'"
+        },
+        {
+          "球队": "United States",
+          "球员": "Sebastian Berhalter 49'"
+        }
+      ],
+      "cards": [],
+      "prematch_review": "待复盘",
+      "odds_review": "赛后赔率复盘待补充。"
+    },
+    "source": "WorldCup2026 API"
+  },
+  "model_versions": {
+    "model_version": "v1.61",
+    "probability_engine_version": "score_distribution_v1",
+    "optimizer_version": "portfolio_optimizer_v1",
+    "asset_framework_version": "multi_role_asset_framework_v1",
+    "audit_version": "prediction_audit_v1"
+  },
+  "final_score": "3:2",
+  "final_result": {
+    "home": 3,
+    "away": 2
+  },
+  "pre_match_snapshot": "data/history/2026_06_25_Turkey_United_States_pre.json",
+  "probability_distribution": {
+    "available": true,
+    "favorite": "美国",
+    "underdog": "土耳其",
+    "rows": [
+      {
+        "label": "美国小胜（1球）",
+        "probability": 0.2570199203187251,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。",
+        "behavior_shift": 0.0
+      },
+      {
+        "label": "平局区间",
+        "probability": 0.23904382470119523,
+        "meaning": "比赛进入低分差或胶着路径。",
+        "behavior_shift": 0.0
+      },
+      {
+        "label": "美国赢2球",
+        "probability": 0.20806374501992034,
+        "meaning": "盘口边界路径，决定让球盘输赢。",
+        "behavior_shift": 0.0
+      },
+      {
+        "label": "土耳其不败",
+        "probability": 0.14900398406374504,
+        "meaning": "爆冷或热门方向失效路径。",
+        "behavior_shift": 0.0
+      },
+      {
+        "label": "美国赢3球以上",
+        "probability": 0.14686852589641433,
+        "meaning": "强队大胜路径，过去版本容易低估。",
+        "behavior_shift": 0.0
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "美国 -1.5",
+      "lose_paths": [
+        "美国只赢1球",
+        "平局",
+        "土耳其胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "美国小胜（1球）",
+    "boundary_path": "美国赢2球",
+    "extreme_path": "美国赢3球以上",
+    "game_behavior": {
+      "team_pressure_score": {
+        "0": "already eliminated / no motivation",
+        "1": "already qualified (rotation risk)",
+        "2": "draw acceptable",
+        "3": "must avoid loss",
+        "4": "must win",
+        "5": "must win big / depends on others"
+      },
+      "input": {
+        "team_a_pressure": 3,
+        "team_b_pressure": 3,
+        "group_stage": false,
+        "qualified_already": false,
+        "elimination_risk": false,
+        "goal_difference_pressure": 0.0,
+        "team_a_pressure_reason": "No standings context; neutral pressure.",
+        "team_b_pressure_reason": "No standings context; neutral pressure.",
+        "standings_source": null
+      },
+      "team_a_pressure_label": "must avoid loss",
+      "team_b_pressure_label": "must avoid loss",
+      "expected_game_tempo": "balanced",
+      "expected_goal_distribution_shift": "neutral",
+      "expected_upset_probability_change": 0.0,
+      "expected_handicap_movement_bias": "no strong pressure adjustment",
+      "adjustments": {
+        "small_win_shift": 0.0,
+        "two_goal_shift": 0.0,
+        "big_win_shift": 0.0,
+        "draw_shift": 0.0,
+        "underdog_shift": 0.0
+      },
+      "notes": [
+        "Team A pressure 3: must avoid loss",
+        "No standings context; neutral pressure.",
+        "Team B pressure 3: must avoid loss",
+        "No standings context; neutral pressure.",
+        "Tempo: balanced",
+        "Handicap bias: no strong pressure adjustment"
+      ]
+    },
+    "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。"
+  },
+  "strategies": [],
+  "strategy_settlement": [
+    {
+      "组合": "我的组合",
+      "来源": "My Portfolio",
+      "投入": "1400元",
+      "盈亏": "+0元",
+      "ROI": "0.0%",
+      "_profit": 0,
+      "_detail": [
+        {
+          "投注": "美国",
+          "资产角色": "保险资产 / 方向资产",
+          "金额": "1200元",
+          "赔率": "-",
+          "结果": "未找到赔率",
+          "盈亏": "+0元",
+          "_roles": [
+            {
+              "role": "Insurance Asset",
+              "role_cn": "保险资产",
+              "weight": 0.55,
+              "reason": "覆盖多个胜利比分路径，降低波胆组合失配风险。"
+            },
+            {
+              "role": "Directional Asset",
+              "role_cn": "方向资产",
+              "weight": 0.45,
+              "reason": "直接表达比赛主方向。"
+            }
+          ],
+          "_profit": 0,
+          "_amount": 1200
+        },
+        {
+          "投注": "1:2",
+          "资产角色": "方向资产 / 收益资产",
+          "金额": "200元",
+          "赔率": "-",
+          "结果": "未找到赔率",
+          "盈亏": "+0元",
+          "_roles": [
+            {
+              "role": "Directional Asset",
+              "role_cn": "方向资产",
+              "weight": 0.5,
+              "reason": "主路径波胆，直接表达比赛主逻辑。"
+            },
+            {
+              "role": "Return Asset",
+              "role_cn": "收益资产",
+              "weight": 0.5,
+              "reason": "赔率较高，用于放大主路径利润。"
+            }
+          ],
+          "_profit": 0,
+          "_amount": 200
+        }
+      ]
+    }
+  ],
+  "my_portfolio": {
+    "raw_text": "独赢，美国，1200；\n1:2，200",
+    "items": [
+      {
+        "type": "winner",
+        "selection": "美国",
+        "name": "美国",
+        "handicap_line": {},
+        "handicap_side": null,
+        "amount": 1200,
+        "odds": null,
+        "standard_odds": null,
+        "effective_odds": null,
+        "matched": false,
+        "match_error": "未找到对应独赢赔率。",
+        "raw_input": "独赢，美国，1200；"
+      },
+      {
+        "type": "correct_score",
+        "selection": "1:2",
+        "name": "1:2",
+        "handicap_line": {},
+        "handicap_side": null,
+        "amount": 200,
+        "odds": null,
+        "standard_odds": null,
+        "effective_odds": null,
+        "matched": false,
+        "match_error": "未找到对应波胆赔率。",
+        "raw_input": "1:2，200"
+      }
+    ]
+  },
+  "role_contribution_by_portfolio": {
+    "我的组合": [
+      {
+        "资产角色": "保险资产",
+        "代表投注": "美国",
+        "投入": "660元",
+        "盈亏": "+0元",
+        "ROI": "0.0%",
+        "结算项": 1,
+        "解释": "降低偏离路径亏损。"
+      },
+      {
+        "资产角色": "方向资产",
+        "代表投注": "美国、1:2",
+        "投入": "640元",
+        "盈亏": "+0元",
+        "ROI": "0.0%",
+        "结算项": 2,
+        "解释": "方向判断未兑现。"
+      },
+      {
+        "资产角色": "收益资产",
+        "代表投注": "1:2",
+        "投入": "100元",
+        "盈亏": "+0元",
+        "ROI": "0.0%",
+        "结算项": 1,
+        "解释": "高波动资产未命中。"
+      }
+    ]
+  },
+  "model_error": "最终比分 3:2 属于「弱势方爆冷路径」。模型候选主路径为 0:1, 1:2, 2:3，总进球误差约 4 球。",
+  "prediction_audit": {},
+  "prediction_audit_by_portfolio": {
+    "我的组合": {
+      "strategy": "我的组合",
+      "final_score": "3:2",
+      "profit": 0,
+      "roi": 0.0,
+      "hit_count": 0,
+      "total_count": 2,
+      "failure_reasons": [
+        "方向判断错误",
+        "精确比分路径偏离，实际比分 3:2"
+      ],
+      "rows": [
+        {
+          "赛前推荐": "美国",
+          "推荐原因": "覆盖率最高，用于承接主方向判断。",
+          "赛前风险": "保险资产：覆盖多个胜利比分路径，降低波胆组合失配风险。；方向资产：直接表达比赛主方向。",
+          "赛前主要路径": "美国",
+          "赛后真实结果": "3:2",
+          "是否命中": "未命中",
+          "失败原因": "方向判断错误"
+        },
+        {
+          "赛前推荐": "1:2",
+          "推荐原因": "用于覆盖最可能比分路径。",
+          "赛前风险": "方向资产：主路径波胆，直接表达比赛主逻辑。；收益资产：赔率较高，用于放大主路径利润。",
+          "赛前主要路径": "热门方胜1球主路径",
+          "赛后真实结果": "3:2",
+          "是否命中": "未命中",
+          "失败原因": "精确比分路径偏离，实际比分 3:2"
+        }
+      ]
+    }
+  },
+  "recommendation_audit": [
+    {
+      "排名": 1,
+      "组合名称": "我的组合",
+      "组合风格": "用户组合",
+      "具体投注": "美国 1200元；1:2 200元",
+      "总投入": "1400元",
+      "最终比分": "3:2",
+      "实际盈亏": "+0元",
+      "ROI": "0.0%",
+      "命中情况": "0赢 / 0走 / 2项",
+      "失败原因": "无",
+      "资产角色表现": "保险资产 +0 / 方向资产 +0 / 收益资产 +0"
+    }
+  ],
+  "portfolio_audit_details": {
+    "我的组合": {
+      "settlement": {
+        "组合": "我的组合",
+        "来源": "My Portfolio",
+        "投入": "1400元",
+        "盈亏": "+0元",
+        "ROI": "0.0%"
+      },
+      "items": [
+        {
+          "投注": "美国",
+          "资产角色": "保险资产 / 方向资产",
+          "金额": "1200元",
+          "盈亏": "+0元",
+          "ROI": "0.0%",
+          "作用": "降低偏离路径亏损。",
+          "结果": "未找到赔率"
+        },
+        {
+          "投注": "1:2",
+          "资产角色": "方向资产 / 收益资产",
+          "金额": "200元",
+          "盈亏": "+0元",
+          "ROI": "0.0%",
+          "作用": "方向判断未兑现。",
+          "结果": "未找到赔率"
+        }
+      ],
+      "prediction_audit": [
+        {
+          "赛前推荐": "美国",
+          "推荐原因": "覆盖率最高，用于承接主方向判断。",
+          "赛前风险": "保险资产：覆盖多个胜利比分路径，降低波胆组合失配风险。；方向资产：直接表达比赛主方向。",
+          "赛前主要路径": "美国",
+          "赛后真实结果": "3:2",
+          "是否命中": "未命中",
+          "失败原因": "方向判断错误"
+        },
+        {
+          "赛前推荐": "1:2",
+          "推荐原因": "用于覆盖最可能比分路径。",
+          "赛前风险": "方向资产：主路径波胆，直接表达比赛主逻辑。；收益资产：赔率较高，用于放大主路径利润。",
+          "赛前主要路径": "热门方胜1球主路径",
+          "赛后真实结果": "3:2",
+          "是否命中": "未命中",
+          "失败原因": "精确比分路径偏离，实际比分 3:2"
+        }
+      ],
+      "model_error": "最终比分 3:2 属于「弱势方爆冷路径」。模型候选主路径为 0:1, 1:2, 2:3，总进球误差约 4 球。"
+    }
+  },
+  "best_strategy": {
+    "组合": "我的组合",
+    "来源": "My Portfolio",
+    "投入": "1400元",
+    "盈亏": "+0元",
+    "ROI": "0.0%",
+    "_profit": 0,
+    "_detail": [
+      {
+        "投注": "美国",
+        "资产角色": "保险资产 / 方向资产",
+        "金额": "1200元",
+        "赔率": "-",
+        "结果": "未找到赔率",
+        "盈亏": "+0元",
+        "_roles": [
+          {
+            "role": "Insurance Asset",
+            "role_cn": "保险资产",
+            "weight": 0.55,
+            "reason": "覆盖多个胜利比分路径，降低波胆组合失配风险。"
+          },
+          {
+            "role": "Directional Asset",
+            "role_cn": "方向资产",
+            "weight": 0.45,
+            "reason": "直接表达比赛主方向。"
+          }
+        ],
+        "_profit": 0,
+        "_amount": 1200
+      },
+      {
+        "投注": "1:2",
+        "资产角色": "方向资产 / 收益资产",
+        "金额": "200元",
+        "赔率": "-",
+        "结果": "未找到赔率",
+        "盈亏": "+0元",
+        "_roles": [
+          {
+            "role": "Directional Asset",
+            "role_cn": "方向资产",
+            "weight": 0.5,
+            "reason": "主路径波胆，直接表达比赛主逻辑。"
+          },
+          {
+            "role": "Return Asset",
+            "role_cn": "收益资产",
+            "weight": 0.5,
+            "reason": "赔率较高，用于放大主路径利润。"
+          }
+        ],
+        "_profit": 0,
+        "_amount": 200
+      }
+    ]
+  },
+  "worst_strategy": {
+    "组合": "我的组合",
+    "来源": "My Portfolio",
+    "投入": "1400元",
+    "盈亏": "+0元",
+    "ROI": "0.0%",
+    "_profit": 0,
+    "_detail": [
+      {
+        "投注": "美国",
+        "资产角色": "保险资产 / 方向资产",
+        "金额": "1200元",
+        "赔率": "-",
+        "结果": "未找到赔率",
+        "盈亏": "+0元",
+        "_roles": [
+          {
+            "role": "Insurance Asset",
+            "role_cn": "保险资产",
+            "weight": 0.55,
+            "reason": "覆盖多个胜利比分路径，降低波胆组合失配风险。"
+          },
+          {
+            "role": "Directional Asset",
+            "role_cn": "方向资产",
+            "weight": 0.45,
+            "reason": "直接表达比赛主方向。"
+          }
+        ],
+        "_profit": 0,
+        "_amount": 1200
+      },
+      {
+        "投注": "1:2",
+        "资产角色": "方向资产 / 收益资产",
+        "金额": "200元",
+        "赔率": "-",
+        "结果": "未找到赔率",
+        "盈亏": "+0元",
+        "_roles": [
+          {
+            "role": "Directional Asset",
+            "role_cn": "方向资产",
+            "weight": 0.5,
+            "reason": "主路径波胆，直接表达比赛主逻辑。"
+          },
+          {
+            "role": "Return Asset",
+            "role_cn": "收益资产",
+            "weight": 0.5,
+            "reason": "赔率较高，用于放大主路径利润。"
+          }
+        ],
+        "_profit": 0,
+        "_amount": 200
+      }
+    ]
+  },
+  "updated_at": "2026-06-29T02:43:12.183263+08:00"
+}

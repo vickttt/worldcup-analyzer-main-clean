@@ -1,0 +1,8 @@
+{
+  "project_root_mode": "auto",
+  "default_port": 8501,
+  "allowed_ports": [8501],
+  "api_base_url": "https://worldcup26.ir/get/",
+  "launcher_mode": "single_entry",
+  "streamlit_entry": "app.py"
+}

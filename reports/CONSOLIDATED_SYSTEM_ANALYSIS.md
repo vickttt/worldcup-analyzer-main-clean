@@ -77,7 +77,7 @@ The schedule page is comparatively bounded. The detail page is the main load and
 Important UI/API/cache boundaries:
 
 - API-Football is the only keyed provider in the current phase.
-- The Odds API is disabled for current UI-CACHE-API work.
+- API-Football is disabled for current UI-CACHE-API work.
 - Polymarket is public-only.
 - WorldCup2026 schedule API is public and separate from keyed API-Football refresh.
 - Streamlit refresh status display reads `.runtime/ui_refresh_status.json` first, then `reports/samples/ui_refresh_status.sample.json`.

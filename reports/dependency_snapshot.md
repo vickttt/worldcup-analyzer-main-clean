@@ -27,7 +27,7 @@ This is a lightweight static import snapshot. It is intended for module planning
 - `modules.score_model`
 - `modules.shadow_metadata`
 - `modules.team_profile_client`
-- `modules.the_odds_client`
+- `removed legacy odds client`
 - `modules.user_odds`
 - `modules.value_model`
 - `modules.weather_client`
@@ -47,13 +47,13 @@ This is a lightweight static import snapshot. It is intended for module planning
 - `modules.result_distribution` -> `modules.game_behavior_engine`, `modules.pregame_content`
 - `modules.team_profile_client` -> `modules.cache_config`, `modules.odds_client`, `modules.pregame_content`
 - `modules.team_resolver` -> `modules.cache_config`
-- `modules.the_odds_client` -> `modules.cache_config`, `modules.team_resolver`
+- `removed legacy odds client` -> `modules.cache_config`, `modules.team_resolver`
 - `modules.user_odds` -> `modules.market_utils`, `modules.portfolio_engine`, `modules.pregame_content`, `modules.team_resolver`
 - `modules.worldcup_db` -> `modules.schedule_client`
 
 ### scripts
 
-- Data scripts import `modules.match_parser`, `modules.odds_client`, `modules.schedule_client`, `modules.team_resolver`, `modules.the_odds_client`, `modules.user_odds`, `modules.weather_client`, and `modules.worldcup_db`.
+- Data scripts import `modules.match_parser`, `modules.odds_client`, `modules.schedule_client`, `modules.team_resolver`, `removed legacy odds client`, `modules.user_odds`, `modules.weather_client`, and `modules.worldcup_db`.
 - Backtest and validation scripts import `modules.portfolio_engine`, `modules.result_distribution`, `modules.shadow_metadata`, and settlement helpers from validation scripts.
 - Report validation imports `modules.betting_opinion`, `modules.market_utils`, `modules.report_generator`, `modules.value_model`, and `modules.worldcup_db`.
 
@@ -104,7 +104,7 @@ The following non-UI modules import Streamlit directly today:
 - `modules.schedule_client.py`
 - `modules.team_profile_client.py`
 - `modules.team_resolver.py`
-- `modules.the_odds_client.py`
+- `removed legacy odds client.py`
 - `modules.weather_client.py`
 
 These imports are mostly cache-related. Later modularization should separate data client logic from UI/cache adapters.

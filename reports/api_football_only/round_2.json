@@ -1,0 +1,26 @@
+{
+  "round": "2",
+  "status": "PASS",
+  "legacy_findings": [],
+  "compiled": [],
+  "mapping_validation": {
+    "worldcup_match_id": 74,
+    "resolved_fixture_id": 1565176,
+    "expected_fixture_id": 1565176,
+    "endpoint": "/odds",
+    "bet_id": 4,
+    "response_count": 1,
+    "odds_provider": "API-Football",
+    "mapper_stats": {
+      "hits": 0,
+      "misses": 1,
+      "api_calls": 1,
+      "head_to_head_calls": 1,
+      "fixtures_search_calls": 0,
+      "cache_size": 1,
+      "hit_rate": 0.0
+    },
+    "passed": true
+  },
+  "import_validation": null
+}

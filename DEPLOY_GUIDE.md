@@ -121,7 +121,7 @@ app.py
 
 ```toml
 API_FOOTBALL_KEY = "你的 API-Football Key"
-THE_ODDS_API_KEY = "你的 The Odds API Key"
+API_FOOTBALL_KEY = "你的 API-Football Key"
 ```
 
 不要把真实 Key 写进 GitHub。
@@ -161,7 +161,7 @@ Argentina vs Algeria
 
 ```toml
 API_FOOTBALL_KEY = "..."
-THE_ODDS_API_KEY = "..."
+API_FOOTBALL_KEY = "..."
 ```
 
 ### 部署失败，提示安装依赖失败
@@ -178,8 +178,8 @@ requests>=2.32.0,<3
 
 可能原因：
 
-- The Odds API Key 未配置
-- The Odds API 免费额度用完
+- API-Football Key 未配置
+- API-Football 免费额度用完
 - 当前比赛没有对应市场
 
 ### API-Football 免费版提示额度或 season 权限

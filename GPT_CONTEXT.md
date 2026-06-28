@@ -37,7 +37,7 @@ Modified Files:
 - modules/result_distribution.py
 - modules/schedule_client.py
 - modules/team_resolver.py
-- modules/the_odds_client.py
+- removed legacy odds client
 - modules/user_odds.py
 - modules/weather_client.py
 - modules/worldcup_db.py
@@ -249,7 +249,7 @@ Running: http://localhost:8502
 5. Qualification Pressure Engine uses manual third-round seed data and still needs live standings automation.
 6. Pre-match decision cockpit needs validation against finished matches and saved snapshots.
 7. Score probability distribution still needs calibration against real match results.
-8. Correct score marginal EV depends on bookmaker implied probability and may need de-vig adjustment.
+8. Correct score marginal EV depends on market implied probability and may need de-vig adjustment.
 9. Coverage Engine still needs stronger joint calibration from handicap/totals/correct-score odds.
 10. Qualification pressure now uses API-Football standings when available, but live coverage still needs match-day validation.
 11. Directional Odds Value noise filtering is improved but remains heuristic without liquidity and price-stability inputs.
@@ -270,7 +270,7 @@ Running: http://localhost:8502
 - Turkey +0.5 is treated as coverage / insurance, not as the main market direction.
 - Handicap center detection filters outlier API-Football rows and prefers shallow favorite-market centers.
 - Total center detection identifies ranges such as 2.5-2.75 instead of mechanically outputting Lean Over 2.5.
-- Value Analysis is scoped to Winner Market Value when comparing The Odds API with Polymarket.
+- Value Analysis is scoped to Winner Market Value when comparing API-Football with Polymarket.
 - Report Data Quality Notes now flag missing lineups, Polymarket winner-only scope, handicap outliers, and pre-lineup injury ambiguity.
 - Betting Opinion v2 is now global across match reports, not only Turkey vs USA.
 - Match Direction, Handicap Market Direction, Coverage Candidate, Goals View, and Match Investment View are separated globally.

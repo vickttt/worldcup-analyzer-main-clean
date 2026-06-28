@@ -11,7 +11,7 @@
   "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
-  "the_odds_api": {
+  "legacy_deprecated_odds": {
     "found": true,
     "home_win": 2.37,
     "draw": 3.1,
@@ -253,10 +253,10 @@
       "draw": 0.30793763288447906,
       "away_win": 0.2892747460429955
     },
-    "source": "The Odds API / SportsBet",
+    "source": "API-Football / SportsBet",
     "event_title": "Switzerland vs Canada",
     "event_id": "c9ef5822ee64fd5275f7c73251bb56c7",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",
@@ -2703,10 +2703,10 @@
       "draw": 0.30793763288447906,
       "away_win": 0.2892747460429955
     },
-    "source": "The Odds API / SportsBet",
+    "source": "API-Football / SportsBet",
     "event_title": "Switzerland vs Canada",
     "event_id": "c9ef5822ee64fd5275f7c73251bb56c7",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",

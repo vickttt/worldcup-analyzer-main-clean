@@ -8,7 +8,7 @@ Generated before any Task 5 real API call.
 - API provider: API-Football only.
 - Key present: `true`; value redacted.
 - Key source: `dotenv`.
-- The Odds API required: `false`.
+- External odds provider required: `false`.
 - Polymarket refresh: `not used`.
 - Real API call performed by this gate report: `false`.
 
@@ -24,7 +24,7 @@ Generated before any Task 5 real API call.
 - The request targets one explicit fixture ID.
 - The script has no loop and no retry path.
 - A runtime marker blocks a second accidental execution unless a future task explicitly overrides it.
-- The script does not call The Odds API, Polymarket, WorldCup2026 schedule APIs, or broad all-league/date endpoints.
+- The script does not call API-Football, Polymarket, WorldCup2026 schedule APIs, or broad all-league/date endpoints.
 
 ## Files Written
 

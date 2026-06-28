@@ -15,7 +15,7 @@ Scope: read-only cache behavior and optimization opportunity map.
 | Standings | `st.cache_data` plus file cache | schedule TTL |
 | Team ID resolver | `st.cache_data` plus `team_id_cache.json` | 30 days |
 | Team profile | `st.cache_data` | 7 days |
-| The Odds API | `st.cache_data` plus daily file cache | 24h |
+| API-Football | `st.cache_data` plus daily file cache | 24h |
 | Polymarket | client-level cache path, public market source | 30 minutes by config |
 | User odds / portfolio | JSON under `data/history` | user-generated persistence |
 

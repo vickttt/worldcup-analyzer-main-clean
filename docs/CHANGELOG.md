@@ -87,13 +87,13 @@
 - Wrote API-Football refresh payload and one-time execution marker only under ignored `.runtime/`.
 - Updated `.runtime/ui_refresh_status.json` with real refresh status, call count, endpoint, timestamps, and files written.
 - Updated the Data Freshness / Refresh Status panel so it can display real one-time refresh metadata without adding refresh buttons or auto-refresh.
-- Confirmed no Odds API, no Polymarket refresh, no `data/history`, no golden JSON, and no recommendation/ranking/portfolio/strategy/odds/backtest logic changes for the one-time refresh task.
+- Confirmed no API-Football, no Polymarket refresh, no `data/history`, no golden JSON, and no recommendation/ranking/portfolio/strategy/odds/backtest logic changes for the one-time refresh task.
 - Ran one GitHub Actions Claude review round for the controlled one-time API-Football refresh and recorded the PASS result.
 - Added an API-Football-only refresh readiness gate for the UI-CACHE-API phase.
 - Added safe redacted `API_FOOTBALL_KEY` presence detection from process environment, Streamlit secrets, or repo `.env`.
-- Marked The Odds API as disabled and not required for current refresh readiness.
+- Marked API-Football as disabled and not required for current refresh readiness.
 - Updated the dry-run runtime refresh status with API-Football policy, key readiness, refresh gate status, and no-real-refresh fields.
-- Updated the Data Freshness / Refresh Status panel to show API-Football key present/missing, controlled-refresh readiness, Odds API disabled, and real API refresh performed = No.
+- Updated the Data Freshness / Refresh Status panel to show API-Football key present/missing, controlled-refresh readiness, external providers disabled; API-Football active, and real API refresh performed = No.
 - No real API refresh was performed, and no secret values were printed or committed.
 - No recommendation, ranking, portfolio, strategy, odds calculation/settlement, data, golden JSON, or backtest logic was changed for the API-Football readiness gate.
 - Ran one GitHub Actions Claude review round for the API-Football refresh readiness gate and recorded the PASS result.

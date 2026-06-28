@@ -1,0 +1,27 @@
+{
+  "round": "3",
+  "status": "PASS",
+  "legacy_findings": [],
+  "compiled": [
+    "app.py",
+    "modules/fixture_id_mapper.py",
+    "modules/odds_client.py",
+    "modules/team_resolver.py",
+    "modules/team_profile_client.py",
+    "modules/rating_model.py",
+    "modules/value_model.py",
+    "modules/worldcup_db.py",
+    "modules/user_odds.py",
+    "modules/report_generator.py",
+    "scripts/refresh_today_odds.py",
+    "scripts/refresh_match_prematch_snapshot.py",
+    "scripts/build_worldcup_data_center.py"
+  ],
+  "mapping_validation": null,
+  "import_validation": {
+    "app_compile": "ok",
+    "team_profile_unresolved_status": "unresolved",
+    "team_profile_unresolved_message": "Team profile temporarily unavailable",
+    "passed": true
+  }
+}

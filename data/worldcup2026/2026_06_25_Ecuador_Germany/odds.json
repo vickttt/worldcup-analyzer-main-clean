@@ -11,7 +11,7 @@
   "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
-  "the_odds_api": {
+  "legacy_deprecated_odds": {
     "found": true,
     "home_win": 4.2,
     "draw": 4.5,
@@ -120,10 +120,10 @@
       "draw": 0.20475319926873858,
       "away_win": 0.5758683729433273
     },
-    "source": "The Odds API / Winamax (FR)",
+    "source": "API-Football / Winamax (FR)",
     "event_title": "Ecuador vs Germany",
     "event_id": "0ec28b84ec399bd4dffbe8d1bc72b3c4",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-25）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-25）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",
@@ -1138,10 +1138,10 @@
       "draw": 0.20475319926873858,
       "away_win": 0.5758683729433273
     },
-    "source": "The Odds API / Winamax (FR)",
+    "source": "API-Football / Winamax (FR)",
     "event_title": "Ecuador vs Germany",
     "event_id": "0ec28b84ec399bd4dffbe8d1bc72b3c4",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-25）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-25）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",

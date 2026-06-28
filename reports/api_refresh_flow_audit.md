@@ -7,7 +7,7 @@ Scope: read-only audit of API-Football and refresh-status flow.
 ## API Provider Boundaries
 
 - Current keyed provider: API-Football only.
-- The Odds API is disabled for the current UI-CACHE-API phase.
+- External odds providers are disabled; API-Football is active for odds.
 - Polymarket is public-only and not part of controlled API refresh work.
 - WorldCup2026 schedule API is public and separate from keyed API-Football refresh.
 

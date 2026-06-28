@@ -348,7 +348,7 @@ def format_value_analysis_lines(value_analysis):
     if not value_analysis or not value_analysis.get("available"):
         message = (value_analysis or {}).get(
             "message",
-            "胜平负市场价值需要同时具备 The Odds API 与 Polymarket 概率。",
+            "胜平负市场价值需要同时具备 API-Football 与 Polymarket 概率。",
         )
         return lines + [f"- 状态：{message}"]
 
@@ -362,7 +362,7 @@ def format_value_analysis_lines(value_analysis):
     if main:
         lines.extend([
             "",
-            f"Odds API：{percent(main['odds_api'])}",
+            f"API-Football：{percent(main['odds_api'])}",
             "",
             f"Polymarket：{percent(main['polymarket'])}",
             "",
@@ -470,7 +470,7 @@ def format_over_under_lines(odds):
     lines = ["## 大小球 / Over/Under", ""]
     markets = odds.get("over_under") if odds else None
     if not markets:
-        return lines + ["The Odds API 未返回该盘口。"]
+        return lines + ["API-Football 未返回该盘口。"]
 
     center = identify_total_center(markets)
     if center.get("available"):

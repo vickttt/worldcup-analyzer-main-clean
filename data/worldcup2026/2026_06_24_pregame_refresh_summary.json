@@ -8,7 +8,7 @@
       "api_football_fixture_id": 1489408,
       "odds_found": true,
       "effective_odds_found": true,
-      "effective_odds_source": "The Odds API / SportsBet",
+      "effective_odds_source": "API-Football / SportsBet",
       "effective_totals_rows": 26,
       "api_asian_rows": 180,
       "api_correct_rows": 586,
@@ -18,13 +18,13 @@
       "data_completeness": 67,
       "fetch_rows": [
         {
-          "source": "The Odds API / SportsBet",
+          "source": "API-Football / SportsBet",
           "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
           "dataset": "Winner Odds / Totals",
           "success": true,
           "records": 26,
           "empty": false,
-          "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。"
+          "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。"
         },
         {
           "source": "API-Football",
@@ -89,7 +89,7 @@
       "api_football_fixture_id": 1539009,
       "odds_found": true,
       "effective_odds_found": true,
-      "effective_odds_source": "The Odds API / SportsBet",
+      "effective_odds_source": "API-Football / SportsBet",
       "effective_totals_rows": 25,
       "api_asian_rows": 206,
       "api_correct_rows": 490,
@@ -99,13 +99,13 @@
       "data_completeness": 67,
       "fetch_rows": [
         {
-          "source": "The Odds API / SportsBet",
+          "source": "API-Football / SportsBet",
           "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
           "dataset": "Winner Odds / Totals",
           "success": true,
           "records": 25,
           "empty": false,
-          "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。"
+          "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。"
         },
         {
           "source": "API-Football",
@@ -170,7 +170,7 @@
       "api_football_fixture_id": 1489405,
       "odds_found": true,
       "effective_odds_found": true,
-      "effective_odds_source": "The Odds API / SportsBet",
+      "effective_odds_source": "API-Football / SportsBet",
       "effective_totals_rows": 25,
       "api_asian_rows": 204,
       "api_correct_rows": 602,
@@ -180,13 +180,13 @@
       "data_completeness": 67,
       "fetch_rows": [
         {
-          "source": "The Odds API / SportsBet",
+          "source": "API-Football / SportsBet",
           "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
           "dataset": "Winner Odds / Totals",
           "success": true,
           "records": 25,
           "empty": false,
-          "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。"
+          "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。"
         },
         {
           "source": "API-Football",
@@ -251,7 +251,7 @@
       "api_football_fixture_id": 1489406,
       "odds_found": true,
       "effective_odds_found": true,
-      "effective_odds_source": "The Odds API / Unibet",
+      "effective_odds_source": "API-Football / Unibet",
       "effective_totals_rows": 26,
       "api_asian_rows": 199,
       "api_correct_rows": 587,
@@ -261,13 +261,13 @@
       "data_completeness": 67,
       "fetch_rows": [
         {
-          "source": "The Odds API / Unibet",
+          "source": "API-Football / Unibet",
           "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
           "dataset": "Winner Odds / Totals",
           "success": true,
           "records": 26,
           "empty": false,
-          "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-24）。"
+          "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-24）。"
         },
         {
           "source": "API-Football",

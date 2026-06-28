@@ -11,7 +11,7 @@
   "schedule_source": "WorldCup2026 API",
   "schedule_cache_status": "实时数据",
   "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
-  "the_odds_api": {
+  "legacy_deprecated_odds": {
     "found": true,
     "home_win": 1.49,
     "draw": 4.5,
@@ -253,10 +253,10 @@
       "draw": 0.20963770664790712,
       "away_win": 0.15722827998593034
     },
-    "source": "The Odds API / Unibet",
+    "source": "API-Football / Unibet",
     "event_title": "Germany vs Ivory Coast",
     "event_id": "f1ab0f69832972a329243522ceaa7804",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-20）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-20）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",
@@ -2653,10 +2653,10 @@
       "draw": 0.20963770664790712,
       "away_win": 0.15722827998593034
     },
-    "source": "The Odds API / Unibet",
+    "source": "API-Football / Unibet",
     "event_title": "Germany vs Ivory Coast",
     "event_id": "f1ab0f69832972a329243522ceaa7804",
-    "message": "已强制刷新 The Odds API 胜平负、让球、大小球（UTC日期 2026-06-20）。",
+    "message": "已强制刷新 API-Football 胜平负、让球、大小球（UTC日期 2026-06-20）。",
     "cache": {
       "source": "fresh api response",
       "sport_key": "soccer_fifa_world_cup",

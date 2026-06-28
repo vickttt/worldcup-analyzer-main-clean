@@ -131,7 +131,7 @@
       "name": "小于 2.5 球",
       "standard_odds": 2.0933333333333333,
       "base_score": 40,
-      "source": "The Odds API 大小球均值"
+      "source": "API-Football 大小球均值"
     },
     {
       "slot": "大小球",
@@ -140,7 +140,7 @@
       "name": "大于 2.5 球",
       "standard_odds": 1.7366666666666666,
       "base_score": 50,
-      "source": "The Odds API 大小球均值"
+      "source": "API-Football 大小球均值"
     },
     {
       "slot": "波胆1",
@@ -639,7 +639,7 @@
       "name": "大于 2.5 球",
       "standard_odds": 1.7366666666666666,
       "base_score": 50,
-      "source": "The Odds API 大小球均值",
+      "source": "API-Football 大小球均值",
       "actual_odds": null,
       "effective_odds": 1.7366666666666666,
       "edge": null,
@@ -668,7 +668,7 @@
       "name": "小于 2.5 球",
       "standard_odds": 2.0933333333333333,
       "base_score": 40,
-      "source": "The Odds API 大小球均值",
+      "source": "API-Football 大小球均值",
       "actual_odds": null,
       "effective_odds": 2.0933333333333333,
       "edge": null,

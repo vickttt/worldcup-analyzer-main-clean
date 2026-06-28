@@ -22,9 +22,10 @@ from scripts.refresh_match_prematch_snapshot import (
     build_portfolios,
     fetch_api_football_fixture,
     fetch_api_football_odds,
-    fetch_the_odds_force,
+    fetch_api_football_winner_totals,
     fixture_summary_from_api,
     force_fetch_schedule,
+    match_with_fixture_context,
     standing_for_fixture,
 )
 
@@ -121,8 +122,8 @@ def fetch_log_dir():
 def fetch_status_rows(match, fixture_id, odds, effective_odds, api_markets, fixture_assets):
     return [
         {
-            "source": effective_odds.get("source") or "The Odds API",
-            "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
+            "source": effective_odds.get("source") or "API-Football",
+            "endpoint": f"/odds?fixture={fixture_id}",
             "dataset": "Winner Odds / Totals",
             "success": bool(effective_odds.get("found")),
             "records": len(effective_odds.get("over_under") or []),
@@ -227,10 +228,11 @@ def build_match_database(entry):
     print(f"\n=== {entry['source_id']} {match['home_en']} vs {match['away_en']} ===")
 
     schedule, schedule_fixture = force_fetch_schedule(match)
-    odds = fetch_the_odds_force(match, entry["date"])
+    market_match = match_with_fixture_context(match, schedule_fixture)
+    odds = fetch_api_football_winner_totals(market_match, entry["date"])
 
     try:
-        home_team, away_team, api_fixture_raw, api_fixture_message = fetch_api_football_fixture(match, entry.get("date"))
+        home_team, away_team, api_fixture_raw, api_fixture_message = fetch_api_football_fixture(market_match, entry.get("date"))
     except Exception as error:
         home_team, away_team, api_fixture_raw, api_fixture_message = None, None, None, str(error)
 
@@ -302,7 +304,7 @@ def build_match_database(entry):
     })
     write_json(base / "odds.json", {
         **meta,
-        "the_odds_api": odds,
+        "api_football_winner_totals": odds,
         "effective_winner_totals": effective_odds,
         "api_football": api_markets,
     })
@@ -341,7 +343,7 @@ def build_match_database(entry):
 
     print(f"Directory: {base}")
     print(f"Schedule fixture: {(schedule_fixture or {}).get('fixture_id')} / API-Football fixture: {fixture_id}")
-    print(f"The Odds API: found={odds.get('found')} spreads={len(odds.get('asian_handicap') or [])} totals={len(odds.get('over_under') or [])}")
+    print(f"API-Football Winner/Totals: found={odds.get('found')} spreads={len(odds.get('asian_handicap') or [])} totals={len(odds.get('over_under') or [])}")
     print(f"Effective Winner/Totals: found={effective_odds.get('found')} source={effective_odds.get('source')} totals={len(effective_odds.get('over_under') or [])}")
     print(f"API-Football Asian: {api_markets['asian_handicap'].get('found')} rows={len(api_markets['asian_handicap'].get('rows') or [])}")
     print(f"API-Football Correct: {api_markets['correct_score'].get('found')} rows={len(api_markets['correct_score'].get('rows') or [])}")

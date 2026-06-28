@@ -110,7 +110,7 @@ league_id = 1
 league_name = World Cup
 season = 2026
 update = 2026-06-20T00:07:25+00:00
-bookmakers = 14
+api_football_providers = 14
 ```
 
 This sample update is before kickoff, so it can be treated as a candidate true pre-match odds snapshot.

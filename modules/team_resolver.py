@@ -103,13 +103,23 @@ def load_api_key():
         for key in ["API_FOOTBALL_KEY", "api_football_key"]:
             if secrets.get(key):
                 return str(secrets[key]).strip()
+
+    dotenv_path = Path(__file__).resolve().parents[1] / ".env"
+    if dotenv_path.exists():
+        for line in dotenv_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#") or "=" not in stripped:
+                continue
+            key, value = stripped.split("=", 1)
+            if key.strip() == "API_FOOTBALL_KEY" and value.strip().strip("\"'"):
+                return value.strip().strip("\"'")
     return None
 
 
 def request_teams(query):
     api_key = load_api_key()
     if not api_key:
-        raise RuntimeError("缺少 API-Football Key。请在 .streamlit/secrets.toml 中保存 API_FOOTBALL_KEY。")
+        raise RuntimeError("缺少 API-Football Key。请在环境变量、.streamlit/secrets.toml 或 .env 中保存 API_FOOTBALL_KEY。")
 
     response = requests.get(
         f"{API_FOOTBALL_BASE}/teams",

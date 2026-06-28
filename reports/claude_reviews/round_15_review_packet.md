@@ -36,7 +36,7 @@ Claude should review only and must not write code. This is a docs/protocol task 
 - `AGENTS.md` now defines project identity, branch rules, forbidden paths, risk gates, Codex-Claude review loop, autonomous progression rule, stop conditions, validation checklist, API/secret policy, UI-CACHE-API route, and checkpoint summary format.
 - `docs/CODEX_CLAUDE_LOOP.md` defines Codex, Claude, and ChatGPT/Jin roles; review round rules; max 3 Claude rounds; PASS early-stop; material finding handling; packet budget guard; artifact handling; and when Claude is not required.
 - `docs/UI_CACHE_API_PROTOCOL.md` defines the current UI-CACHE-API phase route, completed tasks, forbidden areas, API-Football-only policy, runtime/cache file policy, `.runtime/` behavior, sample JSON behavior, and local Streamlit 8501 testing protocol.
-- `docs/API_REFRESH_SAFETY.md` defines no-secret-printing rules, ignored secret files, API-Football-only policy, Odds API disabled policy, no repeated refresh loops, one-time bounded refresh gate, runtime status path, tracked sample path, no `data/history` mutation, no golden JSON mutation, API call logging, and failure-safe behavior.
+- `docs/API_REFRESH_SAFETY.md` defines no-secret-printing rules, ignored secret files, API-Football-only policy, external providers disabled; API-Football active policy, no repeated refresh loops, one-time bounded refresh gate, runtime status path, tracked sample path, no `data/history` mutation, no golden JSON mutation, API call logging, and failure-safe behavior.
 
 # Task 5 context included
 
