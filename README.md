@@ -129,3 +129,5 @@ API_FOOTBALL_KEY = "你的 API-Football Key"
 - 部分球队资料来自静态资料库，用于页面兜底。
 - 预测首发为市场预测首发，不是官方首发。
 - 本项目只做赛前分析辅助，不构成投资建议。
+
+<!-- loop-test-run: GitHub Actions + Claude gate smoke test -->
