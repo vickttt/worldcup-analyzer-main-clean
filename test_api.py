@@ -5,8 +5,8 @@ from modules.odds_client import (
     fetch_lineups_for_fixture,
     load_api_key,
     request_json,
-    search_team,
 )
+from modules.team_resolver import resolve_team
 
 
 HOME_TEAM = "Argentina"
@@ -64,14 +64,14 @@ def main():
 
     argentina = None
     try:
-        argentina = search_team(HOME_TEAM)
+        argentina = resolve_team(HOME_TEAM)
         section("1. 查询 Argentina", bool(argentina), argentina)
     except Exception as error:
         section("1. 查询 Argentina", False, note=str(error))
 
     algeria = None
     try:
-        algeria = search_team(AWAY_TEAM)
+        algeria = resolve_team(AWAY_TEAM)
         section("2. 查询 Algeria", bool(algeria), algeria)
     except Exception as error:
         section("2. 查询 Algeria", False, note=str(error))
@@ -151,4 +151,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
