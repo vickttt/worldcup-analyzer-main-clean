@@ -180,14 +180,25 @@ jobs:
           set -euo pipefail
           review="reports/claude_reviews/round_3_claude_review.md"
           test -s "$review"
-          if grep -Eiq '(^|[^A-Z])(FAIL|BLOCKED)([^A-Z]|$)' "$review"; then
-            cat "$review"
-            exit 1
-          fi
-          if ! grep -Eiq '(^|[^A-Z])PASS(_WITH_NOTES)?([^A-Z]|$)' "$review"; then
-            cat "$review"
-            exit 1
-          fi
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          text = Path("reports/claude_reviews/round_3_claude_review.md").read_text(encoding="utf-8")
+          match = re.search(
+              r"(?ims)^##\s*1\.\s*Verdict\s*$\s*^(PASS_WITH_NOTES|PASS|FAIL|BLOCKED)\b",
+              text,
+          )
+          if not match:
+              print(text)
+              raise SystemExit("Claude verdict missing or malformed")
+          verdict = match.group(1).upper()
+          print(f"claude_verdict={verdict}")
+          if verdict not in {"PASS", "PASS_WITH_NOTES"}:
+              print(text)
+              sys.exit(1)
+          PY
 
       - name: Upload Claude artifacts
         uses: actions/upload-artifact@v4
