@@ -1,4 +1,3 @@
-import requests
 import streamlit as st
 
 from modules.cache_config import TEAM_PROFILE_TTL
@@ -23,7 +22,7 @@ def fetch_team_profile(team_name):
 
     try:
         api_team = search_team(team_name)
-    except (requests.RequestException, RuntimeError) as error:
+    except RuntimeError as error:
         api_error = str(error)
 
     profile = {
@@ -47,4 +46,3 @@ def fetch_team_profile(team_name):
         "api_error": api_error,
     }
     return profile
-

@@ -815,7 +815,7 @@ def portfolio_risk_gate(portfolio, score_grid=None, match_context=None):
     passed = risk_level in {"LOW", "MEDIUM"} and not any("only" in blocker for blocker in blockers)
     if strictness > 1.2 and risk_level == "MEDIUM" and adjacent_failed_prob >= 0.45:
         passed = False
-        blockers.append("qualification pressure makes adjacent-path failure unacceptable")
+        blockers.append("knockout scenario risk makes adjacent-path failure unacceptable")
         risk_level = "HIGH"
 
     failed_paths = [
@@ -900,7 +900,7 @@ def rank1_eligibility_check(portfolio, match=None, distribution=None):
     if not exposure.get("passed"):
         blockers.append(exposure.get("warning") or "correct-score exposure failed")
     if pressure_fit.get("label") == "Low":
-        blockers.append("qualification pressure fit is LOW")
+        blockers.append("knockout scenario fit is LOW")
     coverage = (portfolio or {}).get("coverage_metrics") or {}
     if coverage:
         if coverage.get("main_coverage", 0) <= 0 and coverage.get("adjacent_coverage", 0) <= 0:
@@ -1023,7 +1023,7 @@ def strategy_pressure_fit(items, match, distribution):
     behavior = (distribution or {}).get("game_behavior") or {}
     adjustments = behavior.get("behavior_adjustments") or {}
     if not adjustments:
-        return {"score": 70, "label": "Medium", "reason": "暂无明确出线压力，按中性处理。", "matched": [], "missing": []}
+        return {"score": 70, "label": "Medium", "reason": "暂无明确淘汰赛节奏信号，按中性处理。", "matched": [], "missing": []}
 
     score = 70
     matched = []
@@ -1041,7 +1041,7 @@ def strategy_pressure_fit(items, match, distribution):
     if adjustments.get("deep_handicap_risk_delta", 0) >= 1:
         if has_deep:
             score -= 18
-            missing.append("出线压力提示深盘风险，但组合仍含深盘。")
+            missing.append("淘汰赛节奏信号提示深盘风险，但组合仍含深盘。")
         if has_shallow or has_narrow_score:
             score += 12
             matched.append("组合使用浅盘/窄比分响应深盘风险。")
@@ -1086,7 +1086,7 @@ def strategy_pressure_fit(items, match, distribution):
     return {
         "score": score,
         "label": label,
-        "reason": "；".join(matched[:2] or missing[:2] or ["组合与当前出线压力大致匹配。"]),
+        "reason": "；".join(matched[:2] or missing[:2] or ["组合与当前淘汰赛剧本大致匹配。"]),
         "matched": matched,
         "missing": missing,
         "match_pressure_type": behavior.get("match_pressure_type"),
@@ -1331,7 +1331,7 @@ def compute_portfolio_score(strategy, match, distribution):
             f"主剧本覆盖 {coverage.get('main_coverage', 0) * 100:.0f}%，邻近剧本覆盖 {coverage.get('adjacent_coverage', 0) * 100:.0f}%。",
             f"一球偏差风险 {coverage.get('one_goal_deviation_risk', 0) * 100:.0f}%，归零风险 {coverage.get('zero_risk', 0) * 100:.0f}%。",
             f"主方向赔率价值 {directional.get('weighted_edge', 0) * 100:+.1f}%。",
-            f"出线压力适配：{pressure_fit.get('label')}，{pressure_fit.get('reason')}",
+            f"淘汰赛剧本适配：{pressure_fit.get('label')}，{pressure_fit.get('reason')}",
         ],
     }
 
@@ -1422,67 +1422,53 @@ def generate_portfolio_templates_by_pressure(market_context, match, distribution
     if pressure_type == "qualified_favorite_vs_must_win_underdog":
         add(
             "pressure_qualified_favorite",
-            "Pressure Template: Shallow Favorite + Underdog Tail",
+            "Knockout Template: Shallow Favorite + Underdog Tail",
             winners + (shallow or handicaps)[:1] + (underdog_goal[:2] or narrow[:2] or adjacent[:2]),
             "qualified favorite: lower handicap depth and add underdog-goal/small-win coverage",
         )
     elif pressure_type == "both_draw_acceptable":
         add(
             "pressure_draw_acceptable",
-            "Pressure Template: Draw/Under/Narrow",
+            "Knockout Template: Draw/Under/Narrow",
             (under or totals)[:1] + (narrow[:3] or adjacent[:2]),
             "both draw acceptable: lift draw/under/narrow-score coverage",
         )
     elif pressure_type == "direct_second_place_battle":
         add(
             "pressure_second_place",
-            "Pressure Template: Narrow + Late Volatility",
+            "Knockout Template: Narrow + Late Volatility",
             (under or totals)[:1] + (narrow[:2] or adjacent[:2]) + underdog_goal[:1],
             "direct second-place battle: avoid one-sided blowout and cover narrow paths",
         )
     elif pressure_type == "must_win_vs_must_win":
         add(
             "pressure_both_must_win",
-            "Pressure Template: Both-Teams-Need-Goal",
+            "Knockout Template: Both-Teams-Need-Goal",
             (over or totals)[:1] + (underdog_goal[:2] or adjacent[:2]) + narrow[:2],
             "must-win vs must-win: raise late volatility and scoring-tail coverage",
         )
     elif pressure_type == "favorite_must_win":
         add(
             "pressure_favorite_must_win",
-            "Pressure Template: Favorite Direction + Goal Tail",
+            "Knockout Template: Favorite Direction + Goal Tail",
             winners + (shallow or handicaps)[:1] + (underdog_goal[:2] or adjacent[:2]),
             "favorite must win: keep direction but avoid clean-sheet-only exposure",
         )
     elif pressure_type == "qualified_vs_qualified":
         add(
             "pressure_qualified_both",
-            "Pressure Template: Conservative Qualified Teams",
+            "Knockout Template: Conservative Control",
             (under or totals)[:1] + (narrow[:3] or adjacent[:2]),
             "qualified vs qualified: avoid aggressive deep handicap and big over",
         )
     if not templates and pressure_type != "neutral_group_context":
         add(
             "pressure_generic",
-            "Pressure Template: Qualification-Aware Balanced",
+            "Knockout Template: Balanced",
             winners + (shallow or handicaps)[:1] + (narrow[:2] or adjacent[:2]),
             f"{pressure_type}: balanced pressure-aware template",
         )
     return templates
-
-
-def _polymarket_quality(polymarket):
-    if not polymarket:
-        return 0, "Polymarket 未提供数据。"
-    if not polymarket.get("found"):
-        return 20, polymarket.get("message") or "Polymarket 未找到对应市场。"
-    keys = ["home_win", "draw", "away_win"]
-    complete = [key for key in keys if polymarket.get(key) is not None]
-    if len(complete) == 3:
-        return 100, "Polymarket 主胜/平/客胜价格完整。"
-    if complete:
-        return 55, "Polymarket 只返回部分价格，数据质量降权。"
-    return 35, "Polymarket 找到事件但缺少完整主胜/平/客胜价格，数据质量降权。"
 
 
 def _api_quality(odds=None, api_football_data=None):
@@ -1515,19 +1501,17 @@ def _user_odds_quality(strategy):
 
 def _data_quality_score(strategy, context=None):
     context = context or {}
-    poly_score, poly_note = _polymarket_quality(context.get("polymarket"))
     api_score, api_note = _api_quality(context.get("odds"), context.get("api_football_data"))
     user_score, user_note = _user_odds_quality(strategy)
     timing_note = "数据时点未提供，按中性处理。"
     timing_score = 70
-    score = clamp(poly_score * 0.25 + api_score * 0.35 + user_score * 0.30 + timing_score * 0.10)
+    score = clamp(api_score * 0.55 + user_score * 0.35 + timing_score * 0.10)
     return {
         "score": score,
-        "polymarket_score": poly_score,
         "api_score": api_score,
         "user_odds_score": user_score,
         "timing_score": timing_score,
-        "note": " ".join([poly_note, api_note, user_note, timing_note]),
+        "note": " ".join([api_note, user_note, timing_note]),
     }
 
 
@@ -1577,15 +1561,12 @@ def compute_match_investment_score(strategies, match=None, distribution=None, co
         rating = "不建议下注"
     main_reason = f"主方向清晰度 {market_clarity}，覆盖质量 {coverage_quality}。"
     key_risk = "一球偏差可能造成组合回撤。" if coverage.get("one_goal_deviation_risk", 0) >= 0.30 else "主要风险在赔率波动和临场信息。"
-    if behavior.get("match_pressure_type"):
-        key_risk += f" 出线压力类型：{behavior.get('match_pressure_type')}。"
-    qualification_source = behavior.get("qualification_source") or "not provided"
     return {
         "score": score,
         "rating": rating,
         "main_reason": main_reason,
         "key_risk": key_risk,
-        "data_quality_note": data_quality_info["note"] + f" Qualification context: {qualification_source}.",
+        "data_quality_note": data_quality_info["note"],
         "components": {
             "Market Clarity": market_clarity,
             "Scenario Clarity": scenario_clarity,

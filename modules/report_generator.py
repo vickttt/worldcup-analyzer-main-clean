@@ -346,10 +346,7 @@ def format_value_analysis_lines(value_analysis):
     lines = ["## 价值分析", "", "### 胜平负市场价值", ""]
 
     if not value_analysis or not value_analysis.get("available"):
-        message = (value_analysis or {}).get(
-            "message",
-            "胜平负市场价值需要同时具备 The Odds API 与 Polymarket 概率。",
-        )
+        message = "API-Football 单一来源模式下不启用二级市场价差比较。"
         return lines + [f"- 状态：{message}"]
 
     rows = value_analysis.get("rows", [])
@@ -362,9 +359,9 @@ def format_value_analysis_lines(value_analysis):
     if main:
         lines.extend([
             "",
-            f"Odds API：{percent(main['odds_api'])}",
+            f"API-Football：{percent(main['odds_api'])}",
             "",
-            f"Polymarket：{percent(main['polymarket'])}",
+            f"二级市场：{percent(main['polymarket'])}",
             "",
             f"差异：{percent(abs(main['difference']))}",
         ])
@@ -470,7 +467,7 @@ def format_over_under_lines(odds):
     lines = ["## 大小球 / Over/Under", ""]
     markets = odds.get("over_under") if odds else None
     if not markets:
-        return lines + ["The Odds API 未返回该盘口。"]
+        return lines + ["API-Football 未返回该盘口。"]
 
     center = identify_total_center(markets)
     if center.get("available"):
@@ -630,7 +627,7 @@ def _portfolio_pass_reasons(portfolio_summary):
         reasons.append(risk_gate.get("reason") or "风险门槛通过")
     pressure_fit = portfolio_summary.get("pressure_fit") or {}
     if pressure_fit.get("label") in {"High", "Medium"}:
-        reasons.append(f"出线压力匹配度 {pressure_fit.get('label')}")
+        reasons.append(f"淘汰赛剧本匹配度 {pressure_fit.get('label')}")
     return reasons or ["组合可作为当前报告的第一推荐候选。"]
 
 
@@ -660,7 +657,7 @@ def format_portfolio_eligibility_lines(portfolio_summary=None, match=None):
         f"- 风险门槛结果：{_risk_gate_result(risk_gate, eligibility)}",
         f"- 风险等级：{risk_gate.get('risk_level') or '-'}",
         f"- 第一推荐资格：{'YES' if eligible else 'NO'}",
-        f"- 出线压力匹配度：{pressure_fit.get('label', '-')}",
+        f"- 淘汰赛剧本匹配度：{pressure_fit.get('label', '-')}",
     ]
     if items:
         lines.extend(["", "核心投注："])
@@ -736,27 +733,6 @@ def format_recent_form_lines(api_football_data):
     return lines if has_team else []
 
 
-def format_polymarket_lines(match, polymarket):
-    lines = ["## Polymarket 市场", ""]
-    if not polymarket.get("found", True):
-        return lines + [
-            f"数据来源：{polymarket.get('source', '-')}",
-            f"状态：{polymarket.get('message', '-')}",
-        ]
-
-    return lines + [
-        f"{team_cn(match['home_cn'])}: {percent(polymarket.get('home_win', 0))}",
-        "",
-        f"平局：{percent(polymarket.get('draw', 0))}",
-        "",
-        f"{team_cn(match['away_cn'])}: {percent(polymarket.get('away_win', 0))}",
-        "",
-        f"成交量：{money(polymarket.get('volume'))}",
-        "",
-        f"流动性：{money(polymarket.get('liquidity'))}",
-    ]
-
-
 def build_report(
     match,
     odds,
@@ -791,8 +767,6 @@ def build_report(
         *format_over_under_lines(odds),
         "",
         *format_correct_score_lines(api_football_data),
-        "",
-        *format_polymarket_lines(match, polymarket),
         "",
         *format_value_analysis_lines(value_analysis),
         "",

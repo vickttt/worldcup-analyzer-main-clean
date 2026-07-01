@@ -5,7 +5,6 @@ from itertools import combinations
 import json
 import os
 import re
-import tomllib
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -16,8 +15,9 @@ from modules.match_parser import parse_match
 from modules.market_utils import asian_handicap_summary, correct_score_summary, totals_summary, identify_handicap_center, identify_total_center
 from modules.betting_opinion import build_betting_opinion
 from modules.decision_engine import build_decision_engine, traffic_light
-from modules.mock_data import get_mock_news_and_injuries
 from modules.odds_client import fetch_match_data
+from modules.market_data import build_market_data
+from modules.polymarket_client import fetch_polymarket
 from modules.pregame_content import (
     BANNER_IMAGE_URL,
     TEAM_CN,
@@ -31,7 +31,6 @@ from modules.pregame_content import (
     static_recent_form_for,
     team_cn,
 )
-from modules.polymarket_client import fetch_polymarket
 from modules.probability_model import combine_probabilities
 from modules.rating_model import rate_opportunity
 from modules.report_generator import build_report, save_report
@@ -40,9 +39,7 @@ from modules.result_distribution import (
     build_extreme_scenarios,
     build_result_distribution,
 )
-from modules.game_behavior_engine import build_match_context
 from modules.schedule_client import (
-    default_standings,
     available_match_dates,
     default_date_key,
     fetch_world_cup_schedule,
@@ -55,7 +52,6 @@ from modules.schedule_client import (
     tournament_stats,
 )
 from modules.score_model import recommend_scores
-from modules.the_odds_client import fetch_odds
 from modules.team_profile_client import fetch_team_profile
 from modules.user_odds import (
     build_recommendation_slots,
@@ -86,13 +82,6 @@ from modules.portfolio_engine import (
     settle_asian_handicap,
 )
 from modules.shadow_metadata import attach_shadow_metadata
-from modules.worldcup_db import (
-    db_api_football_data,
-    db_odds,
-    db_polymarket,
-    load_match_database,
-    match_dir as db_match_dir,
-)
 from modules.odds.core import (
     actual_odds_completeness,
     actual_odds_completeness_for_match,
@@ -565,28 +554,6 @@ def card_css():
             color: white;
             border-color: #1d4ed8;
         }
-        .standings-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 6px;
-            font-size: 0.9rem;
-        }
-        .standings-table th {
-            color: #64748b;
-            font-size: 0.78rem;
-            text-align: left;
-            padding: 7px 8px;
-        }
-        .standings-table td {
-            background: #f8fafc;
-            padding: 8px;
-            border-top: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .standings-table tr.qualify-1 td {background:#dcfce7;}
-        .standings-table tr.qualify-2 td {background:#ecfdf5;}
-        .standings-table td:first-child {border-left:1px solid #e2e8f0;border-radius:8px 0 0 8px;}
-        .standings-table td:last-child {border-right:1px solid #e2e8f0;border-radius:0 8px 8px 0;}
         div[role="radiogroup"] {
             overflow-x: auto;
             flex-wrap: nowrap !important;
@@ -718,11 +685,14 @@ def team_badge_html(team):
 def selected_fixture_as_api_fixture(fixture):
     if not fixture:
         return None
+    fixture_id = fixture.get("fixture_id")
     return {
+        "id": fixture_id,
         "home_team": fixture.get("home_team") or {},
         "away_team": fixture.get("away_team") or {},
         "raw": {
             "fixture": {
+                "id": fixture_id,
                 "date": fixture.get("kickoff_utc"),
                 "venue": {
                     "name": fixture.get("venue_name"),
@@ -742,17 +712,7 @@ def same_fixture(left, right):
         return False
     left_id = left.get("fixture_id")
     right_id = right.get("fixture_id")
-    if left_id and right_id and str(left_id) == str(right_id):
-        return True
-    left_home = team_cn((left.get("home_team") or {}).get("name") or "")
-    left_away = team_cn((left.get("away_team") or {}).get("name") or "")
-    right_home = team_cn((right.get("home_team") or {}).get("name") or "")
-    right_away = team_cn((right.get("away_team") or {}).get("name") or "")
-    left_time = fixture_local_datetime(left)
-    right_time = fixture_local_datetime(right)
-    same_teams = left_home == right_home and left_away == right_away
-    same_day = bool(left_time and right_time and left_time.date() == right_time.date())
-    return same_teams and same_day
+    return bool(left_id and right_id and str(left_id) == str(right_id))
 
 
 def fixture_needs_status_refresh(fixture):
@@ -775,6 +735,69 @@ def refresh_selected_fixture_if_needed(fixture):
             st.session_state.selected_fixture = candidate
             return candidate
     return fixture
+
+
+def remember_valid_fixture(fixture, reason=""):
+    if not fixture or not fixture.get("fixture_id"):
+        return fixture
+    st.session_state.selected_fixture = fixture
+    st.session_state.last_valid_fixture = fixture
+    st.session_state.last_valid_fixture_id = fixture.get("fixture_id")
+    if reason:
+        print("[Fixture Guard]", reason, f"stored_fixture_id={fixture.get('fixture_id')}")
+    return fixture
+
+
+def normalized_match_text(value):
+    return " ".join(str(value or "").lower().replace("&", " and ").replace(".", " ").split())
+
+
+def fixture_matches_text(fixture, match_text):
+    wanted = normalized_match_text(match_text)
+    if not fixture or not wanted:
+        return False
+    candidate = normalized_match_text(schedule_match_text(fixture))
+    return candidate == wanted
+
+
+def fixture_by_id_or_match(fixtures, fixture_id=None, match_text=None):
+    wanted_id = normalized_fixture_id(fixture_id)
+    for fixture in fixtures or []:
+        if wanted_id and normalized_fixture_id(fixture.get("fixture_id")) == wanted_id:
+            return fixture
+    for fixture in fixtures or []:
+        if fixture_matches_text(fixture, match_text):
+            return fixture
+    return None
+
+
+def resolve_fixture_fallback(match_text=None, selected_fixture=None):
+    candidates = []
+    if st.session_state.get("selected_fixture"):
+        candidates.append(("session_selected_fixture", st.session_state.selected_fixture))
+    if selected_fixture:
+        candidates.append(("passed_selected_fixture", selected_fixture))
+
+    for label, fixture in candidates:
+        if fixture and fixture.get("fixture_id"):
+            return remember_valid_fixture(fixture, f"fallback:{label}")
+
+    schedule = fetch_world_cup_schedule(force_refresh=False)
+    fixtures = schedule.get("fixtures") or []
+    active_match_text = match_text or st.session_state.get("selected_match_text")
+    resolved = fixture_by_id_or_match(fixtures, match_text=active_match_text)
+    if resolved:
+        return remember_valid_fixture(resolved, "fallback:schedule")
+
+    last_valid = st.session_state.get("last_valid_fixture")
+    if last_valid and last_valid.get("fixture_id"):
+        return remember_valid_fixture(last_valid, "fallback:last_valid_fixture")
+
+    resolved = fixture_by_id_or_match(fixtures, fixture_id=st.session_state.get("last_valid_fixture_id"))
+    if resolved:
+        return remember_valid_fixture(resolved, "fallback:last_valid_fixture_id")
+
+    return None
 
 
 def odds_date_key_from_fixture(selected_fixture, api_football_data):
@@ -801,7 +824,43 @@ def odds_date_key_from_fixture(selected_fixture, api_football_data):
     return None
 
 
-def render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key):
+def normalized_fixture_id(value):
+    if value in (None, ""):
+        return None
+    return str(value)
+
+
+def log_fixture_route(stage, ui_fixture_id, request_fixture_id):
+    print(
+        "[Fixture Guard]",
+        stage,
+        f"UI_fixture_id={ui_fixture_id or '-'}",
+        f"request_fixture_id={request_fixture_id or '-'}",
+    )
+
+
+def enforce_ui_fixture_for_market_request(stage, selected_fixture, request_fixture_id=None):
+    ui_fixture = resolve_fixture_fallback(st.session_state.get("selected_match_text"), selected_fixture)
+    ui_fixture_id = normalized_fixture_id((ui_fixture or {}).get("fixture_id"))
+    candidate_request_id = normalized_fixture_id(
+        request_fixture_id if request_fixture_id is not None else (selected_fixture or {}).get("fixture_id")
+    )
+    log_fixture_route(stage, ui_fixture_id, candidate_request_id)
+
+    if not ui_fixture_id:
+        st.warning("暂时无法恢复当前比赛 fixture_id，请从赛程页重新选择比赛。")
+        return None
+
+    if candidate_request_id and candidate_request_id != ui_fixture_id:
+        log_fixture_route(f"{stage}:mismatch_reset", ui_fixture_id, candidate_request_id)
+        st.warning("检测到 fixture_id 短暂不一致，已自动恢复为当前界面比赛。")
+        st.session_state.selected_fixture = ui_fixture
+        return ui_fixture
+
+    return ui_fixture
+
+
+def render_debug_panel(match, odds, api_football_data, odds_date_key):
     fixture_result = (api_football_data or {}).get("fixture_result") or {}
     fixture = (api_football_data or {}).get("fixture") or {}
     home_team = fixture_result.get("home_team") or fixture.get("home_team") or {}
@@ -810,7 +869,7 @@ def render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key
     correct_score = (api_football_data or {}).get("correct_score") or {}
     debug_rows = [
         {"项目": "Match", "状态": match.get("display_name"), "详情": f"{match.get('home_en')} vs {match.get('away_en')}"},
-        {"项目": "Odds Date Key", "状态": odds_date_key or "-", "详情": "The Odds API UTC比赛日"},
+        {"项目": "Odds Date Key", "状态": odds_date_key or "-", "详情": "API-Football UTC比赛日"},
         {"项目": "Fixture ID", "状态": fixture.get("id") or "-", "详情": fixture_result.get("message") or "-"},
         {
             "项目": "Home Team",
@@ -830,7 +889,7 @@ def render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key
         {
             "项目": "Over/Under",
             "状态": len(odds.get("over_under") or []),
-            "详情": "The Odds API totals rows",
+            "详情": "API-Football totals rows",
         },
         {
             "项目": "Asian Handicap",
@@ -841,11 +900,6 @@ def render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key
             "项目": "Correct Score",
             "状态": len(correct_score.get("rows") or []),
             "详情": f"{correct_score.get('source')} / {correct_score.get('message')} / cache={correct_score.get('cache')}",
-        },
-        {
-            "项目": "Polymarket",
-            "状态": "found" if polymarket.get("found") else "missing",
-            "详情": polymarket.get("event_title") or polymarket.get("message"),
         },
     ]
     debug_rows = [
@@ -866,7 +920,7 @@ def safe_render_market_section(label, renderer, *args, **kwargs):
         return {"模块": label, "状态": "Failed", "错误": str(error)}
 
 
-def render_market_debug_summary(odds, api_football_data, polymarket, section_results):
+def render_market_debug_summary(odds, api_football_data, section_results):
     handicap = (api_football_data or {}).get("asian_handicap") or {}
     correct_score = (api_football_data or {}).get("correct_score") or {}
     debug_rows = [
@@ -894,11 +948,6 @@ def render_market_debug_summary(odds, api_football_data, polymarket, section_res
             "项目": "Correct Score",
             "状态": "Success" if correct_score.get("found") else "Missing",
             "详情": f"{len(correct_score.get('rows') or [])} rows",
-        },
-        {
-            "项目": "Polymarket",
-            "状态": "Success" if (polymarket or {}).get("found") else "Missing",
-            "详情": (polymarket or {}).get("event_title") or (polymarket or {}).get("message") or "-",
         },
     ]
     debug_rows.extend(
@@ -1012,6 +1061,15 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
             st.markdown("**数据质量提示**")
             for note in notes[:5]:
                 st.caption(f"- {note}")
+
+
+def neutral_news_context():
+    return {
+        "home": [],
+        "away": [],
+        "risk_flags": [],
+        "news_score_adjustment": 0,
+    }
 
 
 def render_score_card(title, score, status, reason=None):
@@ -3784,9 +3842,6 @@ def current_actual_odds(match):
 
 HISTORY_DIR = Path("data/history")
 MY_PORTFOLIO_DIR = HISTORY_DIR / "my_portfolios"
-UI_REFRESH_STATUS_RUNTIME_PATH = Path(".runtime/ui_refresh_status.json")
-UI_REFRESH_STATUS_SAMPLE_PATH = Path("reports/samples/ui_refresh_status.sample.json")
-API_FOOTBALL_KEY_NAME = "API_FOOTBALL_KEY"
 
 
 def history_slug(match, selected_fixture=None):
@@ -3797,22 +3852,6 @@ def history_slug(match, selected_fixture=None):
             date_key = local_time.strftime("%Y-%m-%d")
     raw = f"{date_key or 'match'}_{match['home_cn']}_{match['away_cn']}"
     return re.sub(r"[^A-Za-z0-9\u4e00-\u9fff]+", "_", raw).strip("_") or "match"
-
-
-def snapshot_path(match, selected_fixture=None):
-    return pre_match_snapshot_path(match, selected_fixture)
-
-
-def legacy_snapshot_path(match, selected_fixture=None):
-    return HISTORY_DIR / f"{history_slug(match, selected_fixture)}.json"
-
-
-def pre_match_snapshot_path(match, selected_fixture=None):
-    return HISTORY_DIR / f"{history_slug(match, selected_fixture)}_pre.json"
-
-
-def post_match_snapshot_path(match, selected_fixture=None):
-    return HISTORY_DIR / f"{history_slug(match, selected_fixture)}_post.json"
 
 
 def my_portfolio_path(match, selected_fixture=None):
@@ -3831,458 +3870,6 @@ def json_safe(value):
     if isinstance(value, datetime):
         return value.isoformat()
     return value
-
-
-def save_match_snapshot(match, selected_fixture, payload):
-    HISTORY_DIR.mkdir(parents=True, exist_ok=True)
-    path = pre_match_snapshot_path(match, selected_fixture)
-    if path.exists():
-        return path, False
-    data = {
-        "schema_version": 2,
-        "snapshot_type": "pre_match_snapshot",
-        "created_at": datetime.now().astimezone().isoformat(),
-        "match": {
-            "home": match["home_cn"],
-            "away": match["away_cn"],
-            "display": f"{team_cn(match['home_cn'])} vs {team_cn(match['away_cn'])}",
-        },
-        "fixture": json_safe(selected_fixture),
-        **json_safe(payload),
-    }
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-    return path, True
-
-
-def save_post_match_snapshot(match, selected_fixture, payload):
-    HISTORY_DIR.mkdir(parents=True, exist_ok=True)
-    path = post_match_snapshot_path(match, selected_fixture)
-    if path.exists():
-        try:
-            existing = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            existing = {}
-        changed = False
-        refreshable_keys = {
-            "strategy_settlement",
-            "role_contribution",
-            "role_contribution_by_portfolio",
-            "model_error",
-            "prediction_audit",
-            "prediction_audit_by_portfolio",
-            "recommendation_audit",
-            "portfolio_audit_details",
-            "best_strategy",
-            "worst_strategy",
-            "my_portfolio",
-        }
-        for key, value in json_safe(payload).items():
-            if key not in existing or key in refreshable_keys:
-                existing[key] = value
-                changed = True
-        if changed:
-            existing["updated_at"] = datetime.now().astimezone().isoformat()
-            path.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
-        return path, False
-    data = {
-        "schema_version": 2,
-        "snapshot_type": "post_match_snapshot",
-        "created_at": datetime.now().astimezone().isoformat(),
-        "match": {
-            "home": match["home_cn"],
-            "away": match["away_cn"],
-            "display": f"{team_cn(match['home_cn'])} vs {team_cn(match['away_cn'])}",
-        },
-        "fixture": json_safe(selected_fixture),
-        **json_safe(payload),
-    }
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-    return path, True
-
-
-def load_match_snapshot(match, selected_fixture=None):
-    for path in (
-        pre_match_snapshot_path(match, selected_fixture),
-        legacy_snapshot_path(match, selected_fixture),
-    ):
-        if not path.exists():
-            continue
-        try:
-            return json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            continue
-    return None
-
-
-def load_post_match_snapshot(match, selected_fixture=None):
-    path = post_match_snapshot_path(match, selected_fixture)
-    if not path.exists():
-        return None
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return None
-
-
-def repo_relative_path(path):
-    if not path:
-        return "-"
-    try:
-        return Path(path).resolve().relative_to(Path.cwd().resolve()).as_posix()
-    except (OSError, ValueError):
-        return str(path)
-
-
-def local_file_modified_time(path):
-    if not path:
-        return None
-    try:
-        return datetime.fromtimestamp(Path(path).stat().st_mtime).astimezone()
-    except OSError:
-        return None
-
-
-def key_value_present(value):
-    return bool(str(value or "").strip())
-
-
-def dotenv_key_present(key_name, path=Path(".env")):
-    if not path.exists():
-        return False
-    try:
-        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError:
-        return False
-    for line in lines:
-        stripped = line.strip()
-        if not stripped or stripped.startswith("#") or "=" not in stripped:
-            continue
-        name, value = stripped.split("=", 1)
-        name = name.strip().removeprefix("export ").strip()
-        if name != key_name:
-            continue
-        return key_value_present(value.strip().strip("\"'"))
-    return False
-
-
-def streamlit_secret_key_present(key_name):
-    secrets_path = Path(".streamlit/secrets.toml")
-    if not secrets_path.exists():
-        return False
-    try:
-        with secrets_path.open("rb") as file:
-            secrets = tomllib.load(file)
-    except (OSError, tomllib.TOMLDecodeError):
-        return False
-    return key_value_present(secrets.get(key_name) or secrets.get(key_name.lower()))
-
-
-def api_football_key_readiness():
-    if key_value_present(os.getenv(API_FOOTBALL_KEY_NAME)):
-        source = "process_env"
-        present = True
-    elif streamlit_secret_key_present(API_FOOTBALL_KEY_NAME):
-        source = "streamlit_secrets"
-        present = True
-    elif dotenv_key_present(API_FOOTBALL_KEY_NAME):
-        source = "dotenv"
-        present = True
-    else:
-        source = "missing"
-        present = False
-    return {
-        "api_football_key_present": present,
-        "api_football_key_status": "present" if present else "missing",
-        "api_football_key_source": source,
-        "refresh_gate_status": (
-            "ready_for_controlled_api_football_refresh"
-            if present
-            else "blocked_missing_api_football_key"
-        ),
-    }
-
-
-def apply_api_football_readiness(refresh_status):
-    readiness = api_football_key_readiness()
-    existing_gate_status = refresh_status.get("refresh_gate_status")
-    if existing_gate_status in {
-        "completed_controlled_api_football_refresh",
-        "failed_controlled_api_football_refresh",
-    }:
-        readiness["refresh_gate_status"] = existing_gate_status
-    warnings = list(refresh_status.get("warnings") or [])
-    if readiness["api_football_key_present"]:
-        warnings.append("API-Football key is present; value is not displayed.")
-    else:
-        warnings.append("API-Football controlled refresh is blocked because API_FOOTBALL_KEY is missing.")
-    warnings.append("Odds API is disabled and not required for the current UI-CACHE-API phase.")
-    return {
-        **refresh_status,
-        "api_provider_policy": "api_football_only",
-        "api_called": refresh_status.get("api_called", False),
-        "real_api_refresh_performed": refresh_status.get("real_api_refresh_performed", False),
-        "odds_api_enabled": False,
-        "odds_api_required": False,
-        "odds_api_status": "disabled_not_used_current_phase",
-        "polymarket_policy": "public_api_not_part_of_task_4",
-        "worldcup2026_schedule_policy": "public_cache_source",
-        **readiness,
-        "warnings": warnings,
-    }
-
-
-def refresh_status_fallback(path=UI_REFRESH_STATUS_RUNTIME_PATH):
-    status_path = Path(path)
-    return apply_api_football_readiness({
-        "report_found": False,
-        "is_sample": False,
-        "status_file_path": repo_relative_path(status_path),
-        "mode": "unknown",
-        "api_called": None,
-        "generated_at": "-",
-        "data_source": "unknown",
-        "status": "unknown",
-        "warnings": ["Refresh status unknown — no local refresh status report found."],
-    })
-
-
-def load_refresh_status_file(path, *, is_sample=False):
-    status_path = Path(path)
-    fallback = refresh_status_fallback(status_path)
-    report_found = status_path.exists() and not is_sample
-    fallback = {
-        **fallback,
-        "report_found": report_found,
-        "is_sample": is_sample,
-        "status_file_path": repo_relative_path(status_path),
-    }
-    if not status_path.exists():
-        return fallback
-    try:
-        data = json.loads(status_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {
-            **fallback,
-            "status": "warning",
-            "warnings": ["Refresh status file exists but could not be read as valid JSON."],
-        }
-    if not isinstance(data, dict):
-        return {
-            **fallback,
-            "status": "warning",
-            "warnings": ["Refresh status file exists but does not contain a JSON object."],
-        }
-    warnings = data.get("warnings")
-    if not isinstance(warnings, list):
-        warnings = []
-    if is_sample:
-        warnings = [
-            "Sample refresh status only — no runtime refresh status report is available.",
-            "Run the dry-run status writer to generate a local runtime status check.",
-        ]
-    return apply_api_football_readiness({
-        **data,
-        "report_found": report_found,
-        "is_sample": is_sample,
-        "status_file_path": repo_relative_path(status_path),
-        "mode": "sample" if is_sample else data.get("mode") or "unknown",
-        "api_called": None if is_sample else data.get("api_called"),
-        "generated_at": "-" if is_sample else data.get("generated_at") or "-",
-        "data_source": "sample" if is_sample else data.get("data_source") or "unknown",
-        "status": "unknown" if is_sample else data.get("status") or "unknown",
-        "warnings": warnings,
-    })
-
-
-def load_refresh_status_report():
-    runtime_report = load_refresh_status_file(UI_REFRESH_STATUS_RUNTIME_PATH)
-    if runtime_report.get("report_found"):
-        return runtime_report
-    if UI_REFRESH_STATUS_SAMPLE_PATH.exists():
-        return load_refresh_status_file(UI_REFRESH_STATUS_SAMPLE_PATH, is_sample=True)
-    return runtime_report
-
-
-def source_type_from_context(selected_fixture=None, source_path=None, reliable_source=False):
-    if selected_fixture and is_live(selected_fixture):
-        return "live"
-    if selected_fixture and is_finished(selected_fixture):
-        return "post-match"
-    if source_path:
-        name = Path(source_path).name
-        if name.endswith("_post.json") or name == "post_match.json":
-            return "post-match"
-        if name.endswith("_pre.json") or name in {"fixture.json", "odds.json", "lineups.json", "injuries.json", "team_stats.json"}:
-            return "pre-match" if reliable_source else "unknown"
-    return "unknown"
-
-
-def freshness_window_for_source(source_type):
-    return {
-        "live": timedelta(hours=2),
-        "pre-match": timedelta(hours=24),
-        "post-match": timedelta(days=7),
-        "static": timedelta(days=30),
-    }.get(source_type)
-
-
-def build_data_freshness_context(match, selected_fixture=None, local_db=None, snapshot_file=None):
-    source_path = None
-    reliable_source = False
-    refresh_mode = "unknown"
-
-    base_dir = (local_db or {}).get("base_dir")
-    if base_dir:
-        candidate_paths = [
-            Path(base_dir) / name
-            for name in ["fixture.json", "odds.json", "lineups.json", "injuries.json", "team_stats.json"]
-        ]
-        existing_paths = [path for path in candidate_paths if path.exists()]
-        if existing_paths:
-            source_path = max(existing_paths, key=lambda path: path.stat().st_mtime)
-            reliable_source = True
-            refresh_mode = "local snapshot"
-
-    if source_path is None and snapshot_file:
-        snapshot_candidate = Path(snapshot_file)
-        if snapshot_candidate.exists():
-            source_path = snapshot_candidate
-            refresh_mode = "manual refresh available"
-
-    modified_at = local_file_modified_time(source_path)
-    source_type = source_type_from_context(selected_fixture, source_path, reliable_source)
-    expected_window = freshness_window_for_source(source_type)
-    status = "Unknown"
-    warning = "Freshness unknown — source timestamp unavailable."
-    if modified_at and reliable_source and expected_window:
-        age = datetime.now().astimezone() - modified_at
-        if age <= expected_window:
-            status = "Fresh"
-            warning = ""
-        else:
-            status = "Possibly stale"
-            warning = "Local source metadata is older than the expected freshness window."
-    elif modified_at and not reliable_source:
-        warning = "Freshness unknown — the local snapshot time does not prove source-market freshness."
-
-    return {
-        "source_path": repo_relative_path(source_path),
-        "modified_at": modified_at.isoformat(timespec="seconds") if modified_at else "-",
-        "source_type": source_type,
-        "status": status,
-        "refresh_mode": refresh_mode,
-        "warning": warning,
-        "expected_window": str(expected_window) if expected_window else "-",
-        "reliable_source": reliable_source,
-        "refresh_status": load_refresh_status_report(),
-    }
-
-
-def render_data_freshness_panel(freshness):
-    freshness = freshness or {
-        "source_path": "-",
-        "modified_at": "-",
-        "source_type": "unknown",
-        "status": "Unknown",
-        "refresh_mode": "unknown",
-        "warning": "Freshness unknown — source timestamp unavailable.",
-        "expected_window": "-",
-        "refresh_status": load_refresh_status_report(),
-    }
-    status = freshness.get("status") or "Unknown"
-    source_type = freshness.get("source_type") or "unknown"
-    modified_at = freshness.get("modified_at") or "-"
-    warning = freshness.get("warning") or ""
-    refresh_status = freshness.get("refresh_status") or load_refresh_status_report()
-    refresh_warnings = refresh_status.get("warnings") or []
-    api_called = refresh_status.get("api_called")
-    api_called_label = "No" if api_called is False else ("Yes" if api_called is True else "Unknown")
-    real_refresh = refresh_status.get("real_api_refresh_performed")
-    real_refresh_label = "No" if real_refresh is False else ("Yes" if real_refresh is True else "Unknown")
-    api_football_key_label = "present" if refresh_status.get("api_football_key_present") else "missing"
-    refresh_gate_status = refresh_status.get("refresh_gate_status") or "unknown"
-    controlled_refresh_label = (
-        "ready"
-        if refresh_gate_status == "ready_for_controlled_api_football_refresh"
-        else "completed"
-        if refresh_gate_status == "completed_controlled_api_football_refresh"
-        else "failed"
-        if refresh_gate_status == "failed_controlled_api_football_refresh"
-        else "blocked"
-        if refresh_gate_status == "blocked_missing_api_football_key"
-        else "unknown"
-    )
-    refresh_mode = refresh_status.get("mode") or "unknown"
-    refresh_generated_at = refresh_status.get("generated_at") or "-"
-    api_call_count = refresh_status.get("api_call_count")
-    last_api_refresh_at = refresh_status.get("last_api_refresh_at") or refresh_status.get("refresh_finished_at") or "-"
-    files_written = refresh_status.get("files_written") or []
-    files_written_label = "; ".join(map(str, files_written)) if files_written else "-"
-    refresh_status_line = (
-        f"Refresh mode: {refresh_mode} · API called: {api_called_label} · "
-        f"API-Football key: {api_football_key_label} · "
-        f"controlled refresh: {controlled_refresh_label} · last check: {refresh_generated_at}"
-    )
-
-    with st.container(border=True):
-        st.markdown("**Data Freshness / Refresh Status**")
-        summary = f"Data freshness: {status} · source type: {source_type} · modified: {modified_at}"
-        if status == "Fresh":
-            st.info(summary)
-        else:
-            st.warning(summary)
-        if warning:
-            st.caption(warning)
-        st.caption(refresh_status_line)
-        for refresh_warning in refresh_warnings[:3]:
-            st.caption(str(refresh_warning))
-        if real_refresh is True:
-            st.caption(
-                "This only reflects the last controlled API-Football refresh. "
-                "Check latest market/API data before acting on recommendations."
-            )
-        else:
-            st.caption(
-                "Freshness is based on local snapshot metadata only. "
-                "This panel did not perform an external API refresh. "
-                "Check latest market/API data before acting on recommendations."
-            )
-        with st.expander("Show refresh/freshness details", expanded=False):
-            detail_rows = [
-                {"Item": "Last loaded local data file", "Value": freshness.get("source_path") or "-"},
-                {"Item": "Local file modified time", "Value": modified_at},
-                {"Item": "Data source type", "Value": source_type},
-                {"Item": "Freshness label", "Value": status},
-                {"Item": "Current refresh mode", "Value": freshness.get("refresh_mode") or "unknown"},
-                {"Item": "Expected freshness window", "Value": freshness.get("expected_window") or "-"},
-                {"Item": "Verification warning", "Value": warning or "None"},
-                {"Item": "Refresh status file", "Value": refresh_status.get("status_file_path") or "-"},
-                {"Item": "Refresh status generated at", "Value": refresh_generated_at},
-                {"Item": "Refresh mode", "Value": refresh_mode},
-                {"Item": "API called", "Value": api_called_label},
-                {"Item": "API call count", "Value": str(api_call_count) if api_call_count is not None else "-"},
-                {"Item": "Last API refresh time", "Value": last_api_refresh_at},
-                {"Item": "Real API refresh performed", "Value": real_refresh_label},
-                {"Item": "API provider policy", "Value": refresh_status.get("api_provider_policy") or "unknown"},
-                {"Item": "API provider", "Value": refresh_status.get("api_provider") or "unknown"},
-                {"Item": "API endpoint", "Value": refresh_status.get("api_endpoint") or "-"},
-                {"Item": "API-Football key", "Value": api_football_key_label},
-                {"Item": "API-Football key source", "Value": refresh_status.get("api_football_key_source") or "unknown"},
-                {"Item": "API-Football controlled refresh", "Value": controlled_refresh_label},
-                {"Item": "Refresh gate status", "Value": refresh_gate_status},
-                {"Item": "Odds API", "Value": "disabled / not used in current phase"},
-                {"Item": "Odds API required", "Value": str(refresh_status.get("odds_api_required", False))},
-                {"Item": "Polymarket", "Value": refresh_status.get("polymarket_policy") or "public API / not part of Task 4"},
-                {"Item": "WorldCup2026 schedule", "Value": refresh_status.get("worldcup2026_schedule_policy") or "public cache source"},
-                {"Item": "Refresh data source", "Value": refresh_status.get("data_source") or "unknown"},
-                {"Item": "Refresh status", "Value": refresh_status.get("status") or "unknown"},
-                {"Item": "Refresh availability", "Value": refresh_status.get("refresh_available") or "unknown"},
-                {"Item": "Refresh files written", "Value": files_written_label},
-                {"Item": "API quota protected", "Value": str(refresh_status.get("api_quota_protected", "unknown"))},
-                {"Item": "Manual refresh needed", "Value": str(refresh_status.get("manual_refresh_needed", "unknown"))},
-                {"Item": "Refresh warnings", "Value": "; ".join(map(str, refresh_warnings)) or "None"},
-            ]
-            st.dataframe(pd.DataFrame(detail_rows), use_container_width=True, hide_index=True)
 
 
 def my_portfolio_example():
@@ -4668,7 +4255,7 @@ def portfolio_market_candidates(base_candidates, odds, api_football_data, match=
                 "name": f"{label} {line} 球",
                 "standard_odds": price,
                 "probability": 1 / price if price else None,
-                "source": "The Odds API 大小球完整盘口",
+                "source": "API-Football 大小球完整盘口",
             })
 
     correct_rows = ((api_football_data or {}).get("correct_score") or {}).get("rows") or []
@@ -5018,7 +4605,7 @@ def portfolio_ranking_rows(strategies, baseline=None):
             "ROI": percent(metrics.get("expected_yield", strategy.get("expected_yield", 0))),
             "最大亏损": f"-{int(metrics.get('max_loss', strategy.get('max_loss', 0)))}元",
             "剧本一致性": components.get("Scenario Consistency", round(strategy.get("consistency_score", 0) * 100)),
-            "出线压力匹配度": pressure_fit.get("label", "-"),
+            "淘汰赛剧本匹配度": pressure_fit.get("label", "-"),
             "覆盖评分": components.get("Coverage Quality", coverage.get("coverage_score", "-")),
             "覆盖效率": components.get("Coverage Efficiency", (strategy.get("coverage_efficiency") or {}).get("score", "-")),
             "归零风险": percent(coverage.get("zero_risk", 0)),
@@ -5292,13 +4879,13 @@ def render_portfolio_detail_expanders(strategies, match, distribution):
             pressure_fit = strategy.get("pressure_fit") or {}
             if pressure_fit:
                 st.caption(
-                    f"- 出线压力匹配度：{pressure_fit.get('label', '-')} "
+                    f"- 淘汰赛剧本匹配度：{pressure_fit.get('label', '-')} "
                     f"({pressure_fit.get('score', '-')}/100)。{pressure_fit.get('reason', '-')}"
                 )
-                st.caption(f"- 出线压力模板：{strategy.get('pressure_template', '标准模板')}")
+                st.caption(f"- 淘汰赛剧本模板：{strategy.get('pressure_template', '标准模板')}")
                 missing = pressure_fit.get("missing") or []
                 if missing:
-                    st.caption("- 出线压力未覆盖风险：" + "；".join(missing[:2]))
+                    st.caption("- 淘汰赛剧本未覆盖风险：" + "；".join(missing[:2]))
             risk_gate = strategy.get("risk_gate") or {}
             if risk_gate:
                 st.caption(
@@ -5467,10 +5054,24 @@ def render_advanced_research(strategies, combo, initial_combo, match, distributi
             render_rating_breakdown(decision)
 
 
-def path_layer_summary(match, odds, api_football_data):
-    handicap = identify_handicap_center(((api_football_data or {}).get("asian_handicap") or {}).get("rows") or [], odds=odds, match=match)
-    totals = identify_total_center((odds or {}).get("over_under") or [])
-    correct = correct_score_summary(((api_football_data or {}).get("correct_score") or {}).get("rows") or [], limit=5)
+def odds_from_market_data(market_data):
+    api_odds = (market_data or {}).get("api_football_odds") or {}
+    one_x_two = dict(api_odds.get("one_x_two") or {})
+    one_x_two["over_under"] = ((api_odds.get("over_under") or {}).get("rows") or [])
+    one_x_two["over_under_line"] = (api_odds.get("over_under") or {}).get("line")
+    return one_x_two
+
+
+def api_markets_from_market_data(market_data):
+    return (market_data or {}).get("api_football_odds") or {}
+
+
+def path_layer_summary(match, market_data):
+    api_markets = api_markets_from_market_data(market_data)
+    odds = odds_from_market_data(market_data)
+    handicap = identify_handicap_center(((api_markets.get("asian_handicap") or {}).get("rows") or []), odds=odds, match=match)
+    totals = identify_total_center(((api_markets.get("over_under") or {}).get("rows") or []))
+    correct = correct_score_summary(((api_markets.get("correct_score") or {}).get("rows") or []), limit=5)
 
     direction_path = handicap.get("center_label") or "暂无亚洲盘主线"
     if handicap.get("available"):
@@ -5497,8 +5098,8 @@ def path_layer_summary(match, odds, api_football_data):
     }
 
 
-def render_path_layers(match, odds, api_football_data):
-    summary = path_layer_summary(match, odds, api_football_data)
+def render_path_layers(match, market_data):
+    summary = path_layer_summary(match, market_data)
     st.markdown("**主路径结构**")
     cols = st.columns(4)
     cols[0].metric("主方向", summary["direction_path"])
@@ -5508,8 +5109,8 @@ def render_path_layers(match, odds, api_football_data):
     st.caption(summary["handicap_reason"])
 
 
-def render_market_consensus_panel(match, odds, api_football_data):
-    summary = path_layer_summary(match, odds, api_football_data)
+def render_market_consensus_panel(match, market_data):
+    summary = path_layer_summary(match, market_data)
     with st.container(border=True):
         st.markdown("**Market Consensus**")
         cols = st.columns(3)
@@ -5532,61 +5133,7 @@ def render_core_risk_summary(match, decision, distribution):
             st.caption(exposure.get("meaning"))
 
 
-def pressure_type_cn(value):
-    labels = {
-        "qualified_favorite_vs_must_win_underdog": "已出线强队 vs 必须抢分方",
-        "both_draw_acceptable": "双方平局可接受",
-        "direct_second_place_battle": "直接出线/第二名争夺",
-        "must_win_vs_must_win": "双方必须赢",
-        "qualified_vs_qualified": "双方基本已出线",
-        "favorite_must_win": "强队必须赢",
-        "dead_rubber_or_low_motivation": "低战意 / 无明显动力",
-        "neutral_group_context": "中性小组赛形势",
-    }
-    return labels.get(value, value or "-")
-
-
-def pressure_score_text(context):
-    if not context:
-        return "-"
-    team = team_cn(context.get("team") or "")
-    score = context.get("pressure_score", "-")
-    note = context.get("qualification_note") or context.get("pressure_label") or ""
-    return f"{team} {score} - {note}"
-
-
-def render_qualification_behavior(distribution):
-    behavior = (distribution or {}).get("game_behavior") or {}
-    if not behavior:
-        return
-    adjustments = behavior.get("behavior_adjustments") or {}
-    home_context = behavior.get("home_context") or {}
-    away_context = behavior.get("away_context") or {}
-    shifts = adjustments.get("recommended_coverage_shift") or []
-    with st.container(border=True):
-        st.markdown("**Qualification & Game Behavior**")
-        cols = st.columns(4)
-        cols[0].metric("主队压力", f"{behavior.get('home_pressure_score', '-')}/5")
-        cols[1].metric("客队压力", f"{behavior.get('away_pressure_score', '-')}/5")
-        cols[2].metric("比赛类型", pressure_type_cn(behavior.get("match_pressure_type")))
-        cols[3].metric("比赛节奏", behavior.get("expected_game_tempo", "-"))
-        st.caption("主队：" + pressure_score_text(home_context))
-        st.caption("客队：" + pressure_score_text(away_context))
-        st.caption("盘口含义：" + str(behavior.get("expected_handicap_movement_bias") or "-"))
-        if shifts:
-            st.caption("覆盖调整：" + "；".join(shifts[:5]))
-        compact = {
-            "深盘风险": adjustments.get("deep_handicap_risk_delta", 0),
-            "强队小胜": adjustments.get("favorite_small_win_weight_delta", 0),
-            "弱队进球": adjustments.get("underdog_goal_weight_delta", 0),
-            "平局": adjustments.get("draw_weight_delta", 0),
-            "小球": adjustments.get("under_weight_delta", 0),
-            "后段波动": adjustments.get("late_goal_volatility_delta", 0),
-        }
-        st.caption("行为因子：" + " · ".join(f"{key} {value:+}" for key, value in compact.items()))
-
-
-def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, freshness_context=None):
+def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None):
     combo = recommendation_combo(match, odds, api_football_data, distribution, actual_odds)
     my_portfolio_candidates = portfolio_market_candidates(combo, odds, api_football_data, match, distribution)
     if my_portfolio and my_portfolio.get("raw_text"):
@@ -5599,9 +5146,7 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
     strategies = strategy_comparison(match, distribution, initial_combo_with_amounts, total_stake)
     with st.container(border=True):
         st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
-        render_qualification_behavior(distribution)
         render_betting_opinion(betting_opinion, odds, polymarket, match)
-        render_data_freshness_panel(freshness_context)
         render_portfolio_ranking(
             strategies,
             match,
@@ -5752,49 +5297,7 @@ def render_recent_form(api_football_data):
                     st.info("近期战绩样本不足")
 
 
-def worldcup_data_match_dir(match, selected_fixture=None):
-    return db_match_dir(match, selected_fixture)
-
-
-def render_data_completeness(db):
-    completeness = (db or {}).get("completeness") or {}
-    if not completeness:
-        return
-    with st.container(border=True):
-        st.markdown("**Data Completeness**")
-        st.metric("完整度", f"{completeness.get('score', 0)}%")
-        rows = [
-            {"数据项": row["item"], "状态": "√" if row["ok"] else "×"}
-            for row in completeness.get("checks", [])
-        ]
-        if rows:
-            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
-
-
-def standings_row_for_team(team_name, selected_fixture=None):
-    try:
-        schedule = fetch_world_cup_schedule(force_refresh=False)
-    except Exception:
-        return None
-    group = (selected_fixture or {}).get("group") or (selected_fixture or {}).get("round") or ""
-    standings = schedule.get("standings") or {}
-    candidate_groups = []
-    if group:
-        candidate_groups = [
-            rows for name, rows in standings.items()
-            if str(group).lower() in str(name).lower() or str(name).lower() in str(group).lower()
-        ]
-    if not candidate_groups:
-        candidate_groups = list(standings.values())
-    wanted = str(team_name or "").lower()
-    for rows in candidate_groups:
-        for row in rows:
-            if str(row.get("team") or "").lower() == wanted:
-                return row
-    return None
-
-
-def team_profile_metrics(profile, standing):
+def team_profile_metrics(profile):
     items = [
         ("FIFA排名", profile.get("fifa_rank")),
         ("ELO评分", profile.get("elo")),
@@ -5804,12 +5307,6 @@ def team_profile_metrics(profile, standing):
         ("世界杯最佳", profile.get("best_world_cup")),
         ("参赛次数", profile.get("world_cup_appearances")),
     ]
-    if standing:
-        items.extend([
-            ("当前积分", standing.get("points")),
-            ("净胜球", standing.get("gd")),
-            ("胜平负", f"{standing.get('wins', 0)}胜 {standing.get('draws', 0)}平 {standing.get('losses', 0)}负"),
-        ])
     return [{"项目": label, "数据": str(value)} for label, value in items if value not in {None, "", "待接入"}]
 
 
@@ -5868,7 +5365,6 @@ def render_team_intelligence(match, selected_fixture, api_football_data):
     for col, team in zip(cols, teams):
         team_name = team.get("name") or "-"
         profile = fetch_team_profile(team_name)
-        standing = standings_row_for_team(team_name, selected_fixture)
         with col:
             with st.container(border=True):
                 team_visual({"name": team_name, "logo": profile.get("logo") or team.get("logo")}, size=64)
@@ -5916,21 +5412,21 @@ def render_team_intelligence(match, selected_fixture, api_football_data):
                         f"进球/失球 {summary['last5']['gf']}/{summary['last5']['ga']}"
                     )
 
-                profile_rows = team_profile_metrics(profile, standing)
+                profile_rows = team_profile_metrics(profile)
                 if profile_rows:
                     st.markdown("**球队资料**")
                     st.dataframe(pd.DataFrame(profile_rows), use_container_width=True, hide_index=True)
 
 
-def render_match_winner(match, odds, api_football_data):
+def render_match_winner(match, market_data):
     with st.container(border=True):
         st.markdown('<div class="section-title">胜平负赔率</div>', unsafe_allow_html=True)
+        odds = odds_from_market_data(market_data)
         if not odds.get("found"):
-            st.info("未找到盘口数据：The Odds API 当前没有返回该比赛的胜平负市场。")
+            st.info("未找到盘口数据：API-Football 当前没有返回该比赛的胜平负市场。")
             return
-        fixture = api_football_data.get("fixture") or {}
-        home_name = team_cn(fixture.get("home_team", {}).get("name") or match["home_cn"])
-        away_name = team_cn(fixture.get("away_team", {}).get("name") or match["away_cn"])
+        home_name = team_cn(match["home_cn"])
+        away_name = team_cn(match["away_cn"])
         implied = odds.get("implied_probabilities") or {}
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -5946,10 +5442,10 @@ def render_match_winner(match, odds, api_football_data):
         st.info(f"市场当前认为最可能结果是：{favorite_label}，概率约 {percent(favorite_prob)}。")
 
 
-def render_handicap(match, api_football_data):
+def render_handicap(match, market_data):
     with st.container(border=True):
         st.markdown('<div class="section-title">亚洲让球盘</div>', unsafe_allow_html=True)
-        handicap = (api_football_data or {}).get("asian_handicap") or {}
+        handicap = (api_markets_from_market_data(market_data).get("asian_handicap") or {})
         if not handicap.get("found"):
             st.info(handicap.get("message", "未找到盘口数据：API-Football 当前没有返回该比赛的亚洲让球盘。"))
             return
@@ -5985,12 +5481,13 @@ def render_handicap(match, api_football_data):
             st.dataframe(pd.DataFrame(all_rows), use_container_width=True, hide_index=True)
 
 
-def render_totals(odds):
+def render_totals(market_data):
     with st.container(border=True):
         st.markdown('<div class="section-title">大小球盘口</div>', unsafe_allow_html=True)
-        markets = odds.get("over_under") or []
+        totals_data = api_markets_from_market_data(market_data).get("over_under") or {}
+        markets = totals_data.get("rows") or []
         if not markets:
-            st.info("未找到盘口数据：The Odds API 当前没有返回该比赛的大小球盘口。")
+            st.info(totals_data.get("message") or "未找到盘口数据：API-Football 当前没有返回该比赛的大小球盘口。")
             return
 
         summary = identify_total_center(markets)
@@ -6006,6 +5503,7 @@ def render_totals(odds):
         col2.metric("市场均值", f"{avg_over:.2f} / {avg_under:.2f}")
         col3.metric("大球最佳赔率", fmt(best_over))
         col4.metric("小球最佳赔率", fmt(best_under))
+        st.caption(f"数据来源：{totals_data.get('source') or 'API-Football / Goals Over/Under'}")
         st.caption("主要公司：" + (", ".join(bookmakers[:3]) if bookmakers else "-"))
         st.info(summary.get("market_bias", "大小球盘口中心暂不明确。"))
         st.caption(summary.get("recommended_interpretation", ""))
@@ -6014,8 +5512,8 @@ def render_totals(odds):
             st.dataframe(markets, use_container_width=True, hide_index=True)
 
 
-def render_correct_score_market(api_football_data):
-    correct_score = (api_football_data or {}).get("correct_score") or {}
+def render_correct_score_market(market_data):
+    correct_score = (api_markets_from_market_data(market_data).get("correct_score") or {})
     with st.container(border=True):
         st.markdown('<div class="section-title">真实波胆盘口</div>', unsafe_allow_html=True)
         if not correct_score.get("found"):
@@ -6067,54 +5565,40 @@ def render_value(value_analysis):
             st.info("🟢 暂无显著市场分歧")
         if main:
             col1, col2, col3 = st.columns(3)
-            col1.metric("Odds API", percent(main["odds_api"]))
-            col2.metric("Polymarket", percent(main["polymarket"]))
+            col1.metric("API-Football", percent(main["odds_api"]))
+            col2.metric("二级市场", percent(main["polymarket"]))
             col3.metric("分歧幅度", percent(abs(main["difference"])))
 
 
-def render_polymarket(match, api_football_data, polymarket):
+def render_polymarket_comparison(market_data):
+    reference = (market_data or {}).get("polymarket_reference") or {}
+    metrics = (market_data or {}).get("comparison_metrics") or {}
     with st.container(border=True):
-        st.markdown('<div class="section-title">Polymarket 预测市场</div>', unsafe_allow_html=True)
-        if not polymarket.get("found"):
-            st.info(polymarket.get("message", "Polymarket 暂未返回对应市场"))
+        st.markdown('<div class="section-title">Polymarket 概率对比</div>', unsafe_allow_html=True)
+        if not reference.get("found"):
+            st.info(reference.get("message") or "未找到对应 Polymarket 活跃市场。")
+            st.caption("Polymarket 仅作为情绪/概率参考，不替代 API-Football 赔率。")
             return
-        fixture = api_football_data.get("fixture") or {}
-        home_name = team_cn(fixture.get("home_team", {}).get("name") or match["home_cn"])
-        away_name = team_cn(fixture.get("away_team", {}).get("name") or match["away_cn"])
-        col1, col2, col3, col4, col5 = st.columns(5)
-        col1.metric(home_name, percent(polymarket.get("home_win", 0)))
-        col2.metric("平局", percent(polymarket.get("draw", 0)))
-        col3.metric(away_name, percent(polymarket.get("away_win", 0)))
-        col4.metric("成交量", money(polymarket.get("volume")))
-        col5.metric("流动性", money(polymarket.get("liquidity")))
-        if polymarket.get("event_url"):
-            st.link_button("打开 Polymarket 市场", polymarket["event_url"])
 
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("主胜参考概率", percent(reference.get("win_probability_home") or 0))
+        col2.metric("平局参考概率", percent(reference.get("win_probability_draw") or 0))
+        col3.metric("客胜参考概率", percent(reference.get("win_probability_away") or 0))
+        col4.metric("市场一致度", f"{metrics.get('market_agreement_score', '-')}/100")
 
-def render_market_consistency(match, odds, polymarket):
-    with st.container(border=True):
-        st.markdown('<div class="section-title">市场一致性分析</div>', unsafe_allow_html=True)
-        odds_probs = odds.get("implied_probabilities") if odds.get("found") else None
-        if not odds_probs or not polymarket.get("found"):
-            st.info("传统赔率市场与 Polymarket 暂缺少可直接比较的数据。")
-            return
-        labels = [
-            (team_cn(match["home_cn"]), odds_probs.get("home_win", 0), polymarket.get("home_win", 0)),
-            ("平局", odds_probs.get("draw", 0), polymarket.get("draw", 0)),
-            (team_cn(match["away_cn"]), odds_probs.get("away_win", 0), polymarket.get("away_win", 0)),
-        ]
-        largest = max(labels, key=lambda item: abs(item[2] - item[1]))
-        gap = abs(largest[2] - largest[1])
-        if gap >= 0.05:
-            st.warning(f"赔率市场与 Polymarket 在 {largest[0]} 方向存在明显分歧，差异约 {percent(gap)}。")
-        else:
-            st.success("赔率市场与 Polymarket 观点整体一致，暂未发现明显市场错价。")
-        for label, odds_value, poly_value in labels:
-            st.write(f"**{label}**")
-            cols = st.columns(3)
-            cols[0].metric("赔率市场", percent(odds_value))
-            cols[1].metric("Polymarket", percent(poly_value))
-            cols[2].metric("差异", percent(poly_value - odds_value))
+        rows = []
+        for row in metrics.get("rows") or []:
+            rows.append({
+                "方向": row.get("label"),
+                "API-Football": percent(row.get("api_football_probability") or 0),
+                "Polymarket": percent(row.get("polymarket_probability") or 0),
+                "偏差": percent(row.get("deviation") or 0),
+            })
+        if rows:
+            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        if reference.get("event_title"):
+            st.caption(f"事件：{reference.get('event_title')}")
+        st.caption("Polymarket 是只读对比层；推荐、赔率和盘口结构仍以 API-Football 为主。")
 
 
 def render_predicted_lineup_for_team(team_name):
@@ -6165,11 +5649,9 @@ def render_risk_analysis(match, decision, distribution, odds, polymarket, api_fo
         with risk_cols[3]:
             missing = []
             if not odds.get("found"):
-                missing.append("赔率")
-            if not polymarket.get("found"):
-                missing.append("Polymarket")
+                missing.append("API-Football赔率")
             if not api_football_data.get("fixture"):
-                missing.append("比赛信息")
+                missing.append("API-Football比赛信息")
             quality = "高" if not missing else "中" if len(missing) == 1 else "低"
             st.metric("数据质量", quality)
             st.caption("缺失：" + "、".join(missing) if missing else "核心市场数据完整。")
@@ -6187,15 +5669,6 @@ def render_risk_analysis(match, decision, distribution, odds, polymarket, api_fo
 def render_post_match_analysis_tab(match, selected_fixture, distribution, strategies=None, my_portfolio=None):
     with st.container(border=True):
         st.markdown('<div class="section-title">Post Match Analysis</div>', unsafe_allow_html=True)
-        snapshot = load_match_snapshot(match, selected_fixture)
-        post_snapshot = load_post_match_snapshot(match, selected_fixture)
-        if snapshot:
-            st.caption(f"Match Snapshot：已保存 · {format_cache_time(snapshot.get('created_at'))}")
-        else:
-            st.caption("Match Snapshot：尚未保存。打开赛前分析页后会自动保存一次。")
-        if post_snapshot:
-            st.caption(f"Post Match Snapshot：已保存 · {format_cache_time(post_snapshot.get('created_at'))}")
-
         if not selected_fixture or not is_finished(selected_fixture):
             st.info("比赛尚未结束。赛后总结将在最终比分返回后自动核算。")
             return
@@ -6208,19 +5681,17 @@ def render_post_match_analysis_tab(match, selected_fixture, distribution, strate
         score_cols = st.columns(4)
         score_cols[0].metric("最终比分", final_score)
         score_cols[1].metric("模型误差", "已计算")
-        score_cols[2].metric("快照状态", "已保存" if snapshot else "缺失")
+        score_cols[2].metric("数据来源", "API-Football")
         score_cols[3].metric("用户组合", "已保存" if (my_portfolio or {}).get("items") else "未录入")
 
-        if not strategies and snapshot:
-            strategies = (snapshot.get("strategy_snapshot") or {}).get("strategies") or []
         if not my_portfolio:
             my_portfolio = load_my_portfolio(match, selected_fixture) or {}
 
-        my_portfolio = render_my_portfolio_settlement(match, selected_fixture, snapshot or {}, distribution, final_score) or my_portfolio
+        my_portfolio = render_my_portfolio_settlement(match, selected_fixture, {}, distribution, final_score) or my_portfolio
 
         results = settle_strategies(match, distribution, strategies or [], my_portfolio or {}, final_score)
         if not results:
-            st.info("缺少赛前策略快照或用户实际组合，暂无法生成 Recommendation Audit。")
+            st.info("缺少当前会话策略或用户实际组合，暂无法生成 Recommendation Audit。")
             return
 
         model_error = model_error_summary(match, distribution, final_score)
@@ -6252,7 +5723,6 @@ def render_post_match_analysis_tab(match, selected_fixture, distribution, strate
                 "home": parse_score(final_score)[0] if parse_score(final_score) else None,
                 "away": parse_score(final_score)[1] if parse_score(final_score) else None,
             },
-            "pre_match_snapshot": str(pre_match_snapshot_path(match, selected_fixture)),
             "probability_distribution": distribution,
             "strategies": strategies or [],
             "strategy_settlement": results,
@@ -6274,13 +5744,8 @@ def render_post_match_analysis_tab(match, selected_fixture, distribution, strate
             "best_strategy": results[0],
             "worst_strategy": results[-1],
         }
-        post_file, post_created = save_post_match_snapshot(match, selected_fixture, post_payload)
         update_style_performance_database(match, selected_fixture, strategies or [], results)
         update_portfolio_performance_database(match, selected_fixture, results)
-        st.caption(
-            f"Post Match Snapshot：{'已创建' if post_created else '已存在'} · "
-            f"{post_file}"
-        )
 
         if recommendation_audit_rows:
             st.markdown("**组合排行榜**")
@@ -6333,9 +5798,8 @@ def render_injuries_lineups(api_football_data):
 def render_technical_notes(odds, api_football_data):
     if st.checkbox("显示开发者信息", value=False, key="technical_notes_debug"):
         notes = [
-            "赔率来源：The Odds API",
-            "比赛、伤病、首发来源：API-Football",
-            "预测市场来源：Polymarket",
+            "赛程、比赛、赔率、伤病、首发来源：API-Football",
+            "旧版外部数据源未参与当前页面数据流。",
         ]
         if not odds.get("found"):
             notes.append(f"赔率状态：{odds.get('message')}")
@@ -6345,15 +5809,14 @@ def render_technical_notes(odds, api_football_data):
             st.caption(note)
 
 
-def render_detail_data_source(odds=None, polymarket=None, fixture=None):
+def render_detail_data_source(odds=None, fixture=None):
     with st.container(border=True):
         st.markdown('<div class="section-title">数据来源</div>', unsafe_allow_html=True)
-        cols = st.columns(4)
-        cols[0].metric("赛程 / 比分", (fixture or {}).get("source", "API-Football / 缓存"))
-        cols[1].metric("赔率", (odds or {}).get("source", "The Odds API"))
-        cols[2].metric("预测市场", "Polymarket" if (polymarket or {}).get("found") else "暂无市场")
-        cols[3].metric("缓存状态", "按模块缓存")
-        st.caption("赛程优先级：WorldCup2026 API → ESPN → 项目缓存 → 本地备用数据。")
+        cols = st.columns(3)
+        cols[0].metric("赛程 / 比分", (fixture or {}).get("source", "API-Football"))
+        cols[1].metric("赔率", (odds or {}).get("source", "API-Football"))
+        cols[2].metric("比赛 ID", str((fixture or {}).get("fixture_id") or "-"))
+        st.caption("当前数据流只启用 API-Football；旧赛程源、二级市场源和本地历史库不作为页面数据源。")
 
 
 def schedule_match_text(fixture):
@@ -6366,8 +5829,6 @@ def fixture_time_text(fixture, compact=False):
     kickoff = fixture_local_datetime(fixture)
     if not kickoff:
         return "时间待定"
-    if fixture.get("source") == "WorldCup2026 API":
-        return kickoff.strftime("%m-%d %H:%M") + " 当地时间"
     return kickoff.strftime("%m-%d %H:%M CST" if compact else "%Y-%m-%d %H:%M CST")
 
 
@@ -6432,7 +5893,7 @@ def fixture_score_text(fixture):
 
 
 def open_fixture(fixture):
-    st.session_state.selected_fixture = fixture
+    remember_valid_fixture(fixture, "open_fixture")
     st.session_state.selected_match_text = schedule_match_text(fixture)
     st.session_state.page = "post_match" if is_finished(fixture) else "analysis"
     st.rerun()
@@ -6625,66 +6086,6 @@ def render_full_schedule(fixtures):
         render_schedule_section(date_fixtures, "当日暂无比赛。", f"date_{date_key}")
 
 
-def render_standings(schedule):
-    st.markdown('<div class="section-title">世界杯积分榜</div>', unsafe_allow_html=True)
-    st.caption(f"数据来源：{schedule.get('source')} · 更新时间：{schedule.get('updated_at', '-')}")
-    standings = schedule.get("standings") or default_standings()
-    for group_name, rows in standings.items():
-        st.markdown(f"**{group_name}**")
-        sorted_rows = sorted(
-            rows,
-            key=lambda row: (
-                -int(row.get("points", 0)),
-                -int(row.get("gd", 0)),
-                -int(row.get("gf", row.get("goals_for", 0) or 0)),
-            ),
-        )
-        table_rows = []
-        for index, row in enumerate(sorted_rows, start=1):
-            goals_for = row.get("gf", row.get("goals_for", 0))
-            goals_against = row.get("ga", row.get("goals_against", 0))
-            table_rows.append({
-                "排名": index,
-                "球队": team_cn(row.get("team")),
-                "场次": row.get("played", 0),
-                "胜": row.get("wins", 0),
-                "平": row.get("draws", 0),
-                "负": row.get("losses", 0),
-                "进球": goals_for,
-                "失球": goals_against,
-                "净胜球": row.get("gd", 0),
-                "积分": row.get("points", 0),
-            })
-        if not table_rows:
-            st.info("积分榜暂未更新。")
-            continue
-
-        dataframe = pd.DataFrame(table_rows)
-
-        def style_standings(dataframe):
-            styles = pd.DataFrame("", index=dataframe.index, columns=dataframe.columns)
-            styles[["场次"]] = "background-color: #f8fafc;"
-            styles[["胜", "平", "负"]] = "background-color: #eef6ff;"
-            styles[["进球", "失球", "净胜球"]] = "background-color: #fff7ed;"
-            styles[["积分"]] = "background-color: #dbeafe; color: #1e3a8a; font-weight: 900;"
-            for row_index, row in dataframe.iterrows():
-                if row["排名"] == 1:
-                    styles.loc[row_index, :] = "background-color: #dcfce7; color: #14532d; font-weight: 700;"
-                    styles.loc[row_index, "积分"] = "background-color: #bbf7d0; color: #14532d; font-weight: 950;"
-                elif row["排名"] == 2:
-                    styles.loc[row_index, :] = "background-color: #ecfdf5; color: #166534;"
-                    styles.loc[row_index, "积分"] = "background-color: #d1fae5; color: #166534; font-weight: 900;"
-            return styles
-
-        st.dataframe(
-            dataframe.style.apply(style_standings, axis=None),
-            use_container_width=True,
-            hide_index=True,
-            height=min(210, 42 + 36 * len(dataframe)),
-        )
-        st.caption("列分组：场次｜胜平负｜进球/失球/净胜球｜积分。积分列使用浅色强调，前两名用绿色标识。")
-
-
 def render_teams(fixtures):
     st.markdown('<div class="section-title">球队</div>', unsafe_allow_html=True)
     teams = {}
@@ -6705,13 +6106,12 @@ def render_teams(fixtures):
 
 def render_market_center(fixtures):
     st.markdown('<div class="section-title">市场分析</div>', unsafe_allow_html=True)
-    st.write("这里聚合未来重点比赛的赛前市场分析入口。不会新增预测模型，也不会新增付费数据源。")
+    st.write("这里聚合未来重点比赛的 API-Football 赛前市场分析入口。")
     render_popular_matches(fixtures, "market_popular")
     with st.container(border=True):
         st.markdown("**市场数据缓存**")
-        st.write("The Odds API 赔率：24小时缓存")
-        st.write("Polymarket：5分钟缓存")
-        st.write("赛程与球队资料：24小时缓存")
+        st.write("API-Football 赛程、赔率与球队资料：会话缓存")
+        st.write("旧版外部数据源：未启用")
 
 
 def render_finished_matches(fixtures, schedule):
@@ -6748,24 +6148,9 @@ def render_tournament_stats_center(fixtures, schedule):
     col4.metric("最大比分", stats["biggest_score"])
 
 
-def render_cache_notes(schedule):
-    with st.container(border=True):
-        st.markdown('<div class="section-title">缓存与数据策略</div>', unsafe_allow_html=True)
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("赛程", "真实源优先", "24小时缓存")
-        col2.metric("球队资料", "API缓存", "24小时")
-        col3.metric("赔率", "The Odds API", "24小时")
-        col4.metric("Polymarket", "公开市场", "5分钟")
-        st.caption(
-            f"当前赛程来源：{schedule.get('source')} · 更新时间：{schedule.get('updated_at', '-')} · "
-            f"缓存状态：{schedule.get('cache_status', '-')} · 首页赛程 API 调用：{schedule.get('api_calls', 0)}"
-        )
-        st.caption(schedule.get("message", "世界杯赛程已加载。"))
-
-
 def render_schedule_page():
     with perf_timer("home", "total"):
-        if st.button("刷新赛程状态", type="secondary"):
+        if st.button("重新加载赛程", type="secondary"):
             fetch_world_cup_schedule.clear()
             st.session_state.force_schedule_refresh = True
             st.rerun()
@@ -6779,20 +6164,15 @@ def render_schedule_page():
         with perf_timer("home", "search"):
             render_search(fixtures)
         st.caption(
-            f"赛程数据来源：{schedule.get('source')} · 更新时间：{schedule.get('updated_at', '-')} · "
-            f"缓存状态：{schedule.get('cache_status', '-')}"
+            f"赛程数据来源：{schedule.get('source')} · 更新时间：{schedule.get('updated_at', '-')}"
         )
         with perf_timer("home", "date_nav"):
             render_date_nav(fixtures)
-        with perf_timer("home", "standings"):
-            render_standings(schedule)
         with perf_timer("home", "tournament_stats"):
             render_tournament_stats_center(fixtures, schedule)
         if st.checkbox("显示全部世界杯赛程", value=False, key="full_schedule_toggle"):
             with perf_timer("home", "full_schedule"):
                 render_full_schedule(fixtures)
-        with perf_timer("home", "cache_notes"):
-            render_cache_notes(schedule)
 
 
 def render_analysis_page(match_text):
@@ -6811,32 +6191,44 @@ def render_analysis_page(match_text):
                     st.session_state.selected_fixture = selected_fixture
                     st.session_state.page = "post_match"
                     st.rerun()
-            with perf_timer("detail", "load_worldcup_database"):
-                local_db = load_match_database(match, selected_fixture, full=False)
-                if local_db:
-                    api_football_data = db_api_football_data(local_db)
-                    odds = db_odds(local_db)
-                    polymarket = db_polymarket(local_db)
-                    odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
-                else:
-                    api_football_data = fetch_match_data(match, "page_market_data_v3")
-                    odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
-                    odds = fetch_odds(match, odds_date_key, "odds_page_v4_24h_cache")
-                    with perf_timer("detail", "fetch_polymarket"):
-                        polymarket = fetch_polymarket(match)
+                selected_fixture = enforce_ui_fixture_for_market_request("before_api_football_odds", selected_fixture)
+                if not selected_fixture:
+                    return
+            with perf_timer("detail", "load_api_football_data"):
+                api_football_data = fetch_match_data(match, "api_football_ssot_v1", selected_fixture)
+                request_fixture_id = ((api_football_data or {}).get("fixture") or {}).get("id")
+                selected_fixture = enforce_ui_fixture_for_market_request(
+                    "after_api_football_odds",
+                    selected_fixture,
+                    request_fixture_id,
+                )
+                if not selected_fixture:
+                    return
+                if normalized_fixture_id(request_fixture_id) != normalized_fixture_id(selected_fixture.get("fixture_id")):
+                    api_football_data = fetch_match_data(match, "api_football_ssot_v1", selected_fixture)
+                odds_date_key = odds_date_key_from_fixture(selected_fixture, api_football_data)
+                odds = (api_football_data or {}).get("odds") or {}
+            with perf_timer("detail", "load_polymarket_reference"):
+                selected_fixture = enforce_ui_fixture_for_market_request("before_polymarket", selected_fixture)
+                if not selected_fixture:
+                    return
+                polymarket = fetch_polymarket(match, selected_fixture)
+                selected_fixture = enforce_ui_fixture_for_market_request("before_market_data", selected_fixture)
+                if not selected_fixture:
+                    return
+                market_data = build_market_data(odds, api_football_data, polymarket)
             with perf_timer("detail", "base_models"):
-                news = get_mock_news_and_injuries(match)
+                news = neutral_news_context()
                 probabilities = combine_probabilities(odds, polymarket, news, config)
                 scores = recommend_scores(match, probabilities, odds)
                 rating = rate_opportunity(probabilities, polymarket, news, odds)
                 value_analysis = analyze_value(match, odds, polymarket)
                 betting_opinion = build_betting_opinion(match, odds, polymarket, value_analysis, api_football_data)
             with perf_timer("detail", "result_distribution"):
-                match_context = build_match_context(api_football_data, match=match)
-                result_distribution = build_result_distribution(match, odds, polymarket, match_context)
+                result_distribution = build_result_distribution(match, odds, polymarket)
                 betting_opinion["result_distribution"] = result_distribution
             with perf_timer("detail", "render_match_overview"):
-                render_match_overview(match, api_football_data, selected_fixture, allow_live_weather=not bool(local_db))
+                render_match_overview(match, api_football_data, selected_fixture, allow_live_weather=True)
             actual_odds = current_actual_odds(match)
             with perf_timer("detail", "decision_engine"):
                 decision = build_decision_engine(
@@ -6872,40 +6264,6 @@ def render_analysis_page(match_text):
                     actual_odds,
                 )
                 report_path = save_report(report, match, config["report"]["output_dir"])
-        snapshot_payload = {
-            "model_versions": MODEL_VERSION_TRACKING,
-            "match_info": {
-                "odds_date_key": odds_date_key,
-                "report_path": str(report_path),
-            },
-            "odds": odds,
-            "api_football_data": api_football_data,
-            "polymarket": polymarket,
-            "actual_odds": actual_odds,
-            "my_portfolio": my_portfolio,
-            "recommendation_combo": snapshot_combo,
-            "strategy_snapshot": {
-                "strategies": snapshot_strategies,
-                "strategy_table": strategy_table_rows(snapshot_strategies, match, result_distribution),
-                "insurance_cost": insurance_cost_rows(snapshot_strategies, match, result_distribution),
-                "correlation_matrix": correlation_matrix_rows(snapshot_combo),
-                "kelly": kelly_reference_rows(snapshot_strategies[0]) if snapshot_strategies else [],
-                "return_matrix": (snapshot_strategies[0].get("score_rows") if snapshot_strategies else []),
-                "role_constraints": (top_strategy.get("role_constraint") or {}).get("rows", []),
-                "portfolio_style": top_strategy.get("portfolio_style", {}),
-            },
-            "decision": decision,
-            "probability_distribution": result_distribution,
-            "value_analysis": value_analysis,
-            "betting_opinion": betting_opinion,
-        }
-        with perf_timer("detail", "save_match_snapshot"):
-            snapshot_file, snapshot_created = save_match_snapshot(match, selected_fixture, snapshot_payload)
-        freshness_context = build_data_freshness_context(match, selected_fixture, local_db, snapshot_file)
-        snapshot_status = (
-            f"Match Snapshot：{'已创建' if snapshot_created else '已存在'} · "
-            f"{snapshot_file}"
-        )
 
         core_tab, team_tab, market_tab, post_tab, source_tab = st.tabs([
             "核心决策",
@@ -6928,7 +6286,6 @@ def render_analysis_page(match_text):
                     selected_fixture,
                     my_portfolio,
                     polymarket,
-                    freshness_context,
                 )
 
         with team_tab:
@@ -6937,17 +6294,15 @@ def render_analysis_page(match_text):
 
         with market_tab:
             with perf_timer("detail", "tab_market"):
-                render_market_consensus_panel(match, odds, api_football_data)
+                render_market_consensus_panel(match, market_data)
                 market_results = [
-                    safe_render_market_section("胜平负赔率", render_match_winner, match, odds, api_football_data),
-                    safe_render_market_section("亚洲让球盘", render_handicap, match, api_football_data),
-                    safe_render_market_section("大小球盘口", render_totals, odds),
-                    safe_render_market_section("真实波胆盘口", render_correct_score_market, api_football_data),
-                    safe_render_market_section("Polymarket", render_polymarket, match, api_football_data, polymarket),
-                    safe_render_market_section("市场价值分析", render_value, value_analysis),
-                    safe_render_market_section("市场一致性分析", render_market_consistency, match, odds, polymarket),
+                    safe_render_market_section("胜平负赔率", render_match_winner, match, market_data),
+                    safe_render_market_section("大小球盘口", render_totals, market_data),
+                    safe_render_market_section("亚洲让球盘", render_handicap, match, market_data),
+                    safe_render_market_section("真实波胆盘口", render_correct_score_market, market_data),
+                    safe_render_market_section("Polymarket概率对比", render_polymarket_comparison, market_data),
                 ]
-                render_market_debug_summary(odds, api_football_data, polymarket, market_results)
+                render_market_debug_summary(odds, api_football_data, market_results)
 
         with post_tab:
             with perf_timer("detail", "tab_post_match"):
@@ -6955,10 +6310,8 @@ def render_analysis_page(match_text):
 
         with source_tab:
             with perf_timer("detail", "tab_source"):
-                st.caption(snapshot_status)
-                render_data_completeness(local_db)
-                render_debug_panel(match, odds, api_football_data, polymarket, odds_date_key)
-                render_detail_data_source(odds, polymarket, selected_fixture)
+                render_debug_panel(match, odds, api_football_data, odds_date_key)
+                render_detail_data_source(odds, selected_fixture)
                 render_technical_notes(odds, api_football_data)
                 render_advanced_research(snapshot_strategies, snapshot_combo, snapshot_combo, match, result_distribution, decision)
 
@@ -7004,10 +6357,9 @@ def render_post_match_page(fixture):
 
     try:
         match = parse_match(schedule_match_text(fixture))
-        snapshot = load_match_snapshot(match, fixture) or {}
-        distribution = snapshot.get("probability_distribution") or {"rows": []}
-        strategies = (snapshot.get("strategy_snapshot") or {}).get("strategies") or []
-        my_portfolio = load_my_portfolio(match, fixture) or snapshot.get("my_portfolio") or {}
+        distribution = {"rows": []}
+        strategies = []
+        my_portfolio = load_my_portfolio(match, fixture) or {}
         render_post_match_analysis_tab(match, fixture, distribution, strategies, my_portfolio)
     except Exception as error:
         st.warning(f"赛后策略核算暂不可用：{error}")
@@ -7024,7 +6376,7 @@ config = load_config()
 st.set_page_config(page_title=config["app"]["title"], layout="wide")
 card_css()
 st.title("世界杯赛前分析平台")
-st.caption("用赔率、预测市场和规则引擎识别市场可能错在哪里。")
+st.caption("用 API-Football 赛程、赔率和规则引擎识别淘汰赛机会与风险。")
 
 if "page" not in st.session_state:
     st.session_state.page = "schedule"

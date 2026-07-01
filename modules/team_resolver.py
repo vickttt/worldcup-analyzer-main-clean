@@ -1,18 +1,15 @@
 import json
-import os
-import tomllib
 import unicodedata
 from datetime import datetime, timedelta
 from pathlib import Path
 
-import requests
 import streamlit as st
 import yaml
 
+from modules.api_client import request_json
 from modules.cache_config import TEAM_ID_CACHE_TTL
 
 
-API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
 TEAM_VARIANT_TOKENS = (" w", " u17", " u18", " u19", " u20", " u21", " u22", " u23")
 
 
@@ -91,40 +88,8 @@ def alias_candidates(team_name):
     return deduped
 
 
-def load_api_key():
-    env_key = os.getenv("API_FOOTBALL_KEY")
-    if env_key:
-        return env_key.strip()
-
-    secrets_path = Path(__file__).resolve().parents[1] / ".streamlit" / "secrets.toml"
-    if secrets_path.exists():
-        with secrets_path.open("rb") as file:
-            secrets = tomllib.load(file)
-        for key in ["API_FOOTBALL_KEY", "api_football_key"]:
-            if secrets.get(key):
-                return str(secrets[key]).strip()
-    return None
-
-
 def request_teams(query):
-    api_key = load_api_key()
-    if not api_key:
-        raise RuntimeError("缺少 API-Football Key。请在 .streamlit/secrets.toml 中保存 API_FOOTBALL_KEY。")
-
-    response = requests.get(
-        f"{API_FOOTBALL_BASE}/teams",
-        params={"search": query},
-        timeout=6,
-        headers={"x-apisports-key": api_key, "Accept": "application/json"},
-    )
-    response.raise_for_status()
-    data = response.json()
-    errors = data.get("errors")
-    if isinstance(errors, dict) and errors:
-        raise RuntimeError("; ".join(str(value) for value in errors.values()))
-    if isinstance(errors, list) and errors:
-        raise RuntimeError("; ".join(str(value) for value in errors))
-    return data.get("response", [])
+    return request_json("/teams", {"search": query})
 
 
 def is_unwanted_team_variant(team_name, target_name):
@@ -258,7 +223,7 @@ def resolve_team(team_name):
         attempted.append(candidate)
         try:
             teams = request_teams(candidate)
-        except (RuntimeError, requests.RequestException):
+        except RuntimeError:
             continue
         team = select_team_from_response(candidate, teams)
         if team:

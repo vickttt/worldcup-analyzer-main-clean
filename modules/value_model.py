@@ -20,53 +20,22 @@ def odds_probabilities(odds):
 
 
 def polymarket_probabilities(polymarket):
-    if not polymarket.get("found"):
-        return None
-    if not all(polymarket.get(key) is not None for key in ["home_win", "draw", "away_win"]):
-        return None
-    return normalize({
-        "home_win": polymarket["home_win"],
-        "draw": polymarket["draw"],
-        "away_win": polymarket["away_win"],
-    })
+    return None
 
 
 def analyze_value(match, odds, polymarket):
     odds_probs = odds_probabilities(odds)
-    polymarket_probs = polymarket_probabilities(polymarket)
-
-    if not odds_probs or not polymarket_probs:
+    if not odds_probs:
         return {
             "available": False,
-            "message": "Value Analysis requires both The Odds API and Polymarket probabilities.",
+            "message": "API-Football odds are unavailable.",
             "rows": [],
             "has_value": False,
         }
 
-    labels = {
-        "home_win": match["home_cn"],
-        "draw": "Draw",
-        "away_win": match["away_cn"],
-    }
-    rows = []
-    has_value = False
-
-    for key in ["home_win", "draw", "away_win"]:
-        difference = polymarket_probs[key] - odds_probs[key]
-        if abs(difference) >= 0.05:
-            has_value = True
-        rows.append({
-            "label": labels[key],
-            "odds_api": odds_probs[key],
-            "polymarket": polymarket_probs[key],
-            "difference": difference,
-            "is_value": abs(difference) >= 0.05,
-        })
-
     return {
-        "available": True,
-        "message": "Potential Value Opportunity" if has_value else "No major value gap detected",
-        "rows": rows,
-        "has_value": has_value,
+        "available": False,
+        "message": "API-Football single-source mode does not run secondary market value comparison.",
+        "rows": [],
+        "has_value": False,
     }
-

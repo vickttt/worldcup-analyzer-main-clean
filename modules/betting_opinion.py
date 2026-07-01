@@ -110,7 +110,7 @@ def handicap_market_view(api_football_data, odds, match):
     favorite_team = team_cn(match.get("home_cn") if center.get("center_side") == "home" else match.get("away_cn"))
     coverage = center.get("coverage_label") or "No coverage candidate"
     reason = (
-        "胜平负市场、Polymarket 和浅盘结构均显示，"
+        "API-Football 胜平负市场与浅盘结构显示，"
         f"{favorite_team} 仍是实力优势方。"
     )
     if center.get("outlier_count"):
@@ -177,7 +177,7 @@ def totals_market_view(odds):
         "goals_view": f"总进球盘口中心：{center.get('center_label')}",
         "total_center": center.get("center_label"),
         "market_bias": _translate_total_text(center.get("market_bias")),
-        "game_behavior_note": "如果出线形势提示轮换或控节奏风险，应降低激进大球信心。",
+        "game_behavior_note": "如果淘汰赛临场信息提示轮换或控节奏风险，应降低激进大球信心。",
         "recommended_interpretation": "存在大球尾部，但进球数观点应以盘口中心为准，不能机械追大 2.5。",
         "center": center,
     }
@@ -202,12 +202,7 @@ def winner_reason(winner, polymarket, match):
     if not winner:
         return "胜平负市场数据不足，暂不形成明确主方向。"
 
-    polymarket_winner = favored_by_polymarket(polymarket, match)
-    if polymarket_winner == winner:
-        return f"胜平负市场和 Polymarket 均倾向 {winner}。"
-    if polymarket_winner:
-        return f"胜平负赔率倾向 {winner}，但 Polymarket 观点不完全一致。"
-    return f"胜平负市场倾向 {winner}。"
+    return f"API-Football 胜平负市场倾向 {winner}。"
 
 
 def handicap_reason(handicap, match):
@@ -233,8 +228,6 @@ def totals_reason(goals):
 def risk_level(odds, polymarket, value_analysis):
     missing_markets = 0
     if not odds.get("found"):
-        missing_markets += 1
-    if not polymarket.get("found"):
         missing_markets += 1
     if not odds.get("asian_handicap"):
         missing_markets += 1
@@ -266,9 +259,6 @@ def split_confidence(odds, polymarket, handicap_view, totals_view, api_football_
         top = max(home, away, draw)
         second = sorted([home, away, draw], reverse=True)[1]
         market_direction = int(max(50, min(82, 58 + (top - second) * 100)))
-    if polymarket.get("found"):
-        market_direction = min(85, market_direction + 5)
-
     notes = []
     betting_confidence = market_direction - 10
     lineups = (api_football_data or {}).get("lineups") or []
@@ -278,11 +268,6 @@ def split_confidence(odds, polymarket, handicap_view, totals_view, api_football_
     if handicap_view.get("center", {}).get("outlier_count"):
         betting_confidence -= 5
         notes.append("API 亚洲盘存在可能异常盘口；最终下注排序应优先参考用户真实赔率。")
-    if polymarket.get("found"):
-        notes.append("Polymarket 对比仅支持胜平负市场；亚洲盘、大小球和波胆需要单独验证。")
-    else:
-        betting_confidence -= 5
-        notes.append("Polymarket 胜平负市场缺失。")
     if totals_view.get("total_center") in (None, "-", "No totals center"):
         betting_confidence -= 3
         notes.append("大小球盘口中心不可用。")
@@ -340,7 +325,7 @@ def build_betting_opinion(match, odds, polymarket, value_analysis, api_football_
         "coverage_candidate": handicap_view.get("coverage_candidate"),
         "coverage_reason": (
             f"{handicap_view.get('coverage_candidate')} 不是主方向投注，而是防守型覆盖资产，"
-            "用于防范平局、低节奏、热门方轮换或出线压力导致的不积极推进风险。"
+            "用于防范平局、低节奏、热门方轮换或淘汰赛节奏变化导致的不积极推进风险。"
             if handicap_view.get("coverage_candidate") not in (None, "No coverage candidate")
             else "未识别到覆盖候选。"
         ),

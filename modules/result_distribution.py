@@ -1,4 +1,3 @@
-from modules.game_behavior_engine import apply_behavior_to_distribution, game_behavior_engine
 from modules.pregame_content import team_cn
 
 
@@ -22,34 +21,13 @@ def odds_probs(odds):
 
 
 def poly_probs(polymarket):
-    if not polymarket.get("found"):
-        return None
-    raw = {
-        "home_win": polymarket.get("home_win"),
-        "draw": polymarket.get("draw"),
-        "away_win": polymarket.get("away_win"),
-    }
-    if any(value is None for value in raw.values()):
-        return None
-    total = sum(raw.values())
-    if total <= 0:
-        return None
-    return {key: value / total for key, value in raw.items()}
+    return None
 
 
 def blended_probabilities(odds, polymarket):
     odds_data = odds_probs(odds)
     poly_data = poly_probs(polymarket)
-    if odds_data and poly_data:
-        return {
-            key: odds_data[key] * 0.6 + poly_data[key] * 0.4
-            for key in ["home_win", "draw", "away_win"]
-        }
-    return odds_data or poly_data or {
-        "home_win": 0.45,
-        "draw": 0.27,
-        "away_win": 0.28,
-    }
+    return odds_data
 
 
 def consensus_line(markets):
@@ -91,6 +69,14 @@ def handicap_signal(odds):
 
 def build_result_distribution(match, odds, polymarket, match_context=None):
     probs = blended_probabilities(odds, polymarket)
+    if not probs:
+        return {
+            "available": False,
+            "source": "api_football",
+            "main_path": "暂无 API-Football 胜平负概率",
+            "rows": [],
+            "overround": odds.get("bookmaker_margin") if odds else None,
+        }
     home_prob = probs["home_win"]
     draw_prob = probs["draw"]
     away_prob = probs["away_win"]
@@ -154,8 +140,6 @@ def build_result_distribution(match, odds, polymarket, match_context=None):
         },
     ]
     rows = normalize(rows)
-    game_behavior = game_behavior_engine(match_context)
-    rows = apply_behavior_to_distribution(rows, game_behavior)
     rows.sort(key=lambda row: row["probability"], reverse=True)
     main_path = rows[0]["label"]
     boundary_path = f"{favorite}赢2球"
@@ -170,8 +154,7 @@ def build_result_distribution(match, odds, polymarket, match_context=None):
         "main_path": main_path,
         "boundary_path": boundary_path,
         "extreme_path": extreme_path,
-        "game_behavior": game_behavior,
-        "explanation": "基于胜平负概率、亚洲让球盘、大小球盘口、真实波胆盘口与 Polymarket 概率的路径分布。",
+        "explanation": "基于 API-Football 胜平负概率、亚洲让球盘、大小球盘口与真实波胆盘口的路径分布。",
     }
 
 
