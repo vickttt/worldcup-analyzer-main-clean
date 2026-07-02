@@ -1,6 +1,14 @@
 import re
 from copy import deepcopy
 
+from modules.probability_base import (
+    entropy as tpb_entropy,
+    investment_score_from_tpb,
+    odds_data_quality,
+    stake_from_investment_score,
+    true_probability_base,
+)
+
 
 def clamp(value, low=0, high=100):
     try:
@@ -742,143 +750,37 @@ def _risk_gate_strictness(distribution):
 
 
 def portfolio_risk_gate(portfolio, score_grid=None, match_context=None):
-    """Hard zero-risk gate used before selecting the Rank #1 recommendation."""
+    """TPB + volatility risk summary.
+
+    The old zero-risk gate used coverage path failures. In the probability-first
+    architecture this is diagnostic only and must not block by coverage paths.
+    """
     items = (portfolio or {}).get("items") if isinstance(portfolio, dict) else portfolio
     items = [item for item in (items or []) if item.get("type") != "empty"]
-    rows = score_grid or ((portfolio or {}).get("score_rows") if isinstance(portfolio, dict) else []) or []
-    match = (match_context or {}).get("match") or {}
     distribution = (match_context or {}).get("distribution") or match_context or {}
-    strictness = _risk_gate_strictness(distribution)
-    relevant = [
-        row for row in rows
-        if (row.get("scenario_type") or scenario_category(_scenario_score_text(row), match, distribution)) in {"main", "adjacent", "tail"}
-    ]
-    if not relevant:
-        return {
-            "passed": True,
-            "reason": "No scenario grid available; risk gate treated as neutral.",
-            "failed_paths": [],
-            "risk_level": "LOW",
-        }
-
-    total_prob = sum(_scenario_probability(row) for row in relevant) or 1
-    failed = [row for row in relevant if _scenario_profit(row) <= 0]
-    failed_prob = sum(_scenario_probability(row) for row in failed) / total_prob
-    adjacent = [
-        row for row in relevant
-        if (row.get("scenario_type") or scenario_category(_scenario_score_text(row), match, distribution)) == "adjacent"
-    ]
-    adjacent_total = sum(_scenario_probability(row) for row in adjacent) or 0
-    adjacent_failed_prob = (
-        sum(_scenario_probability(row) for row in adjacent if _scenario_profit(row) <= 0) / adjacent_total
-        if adjacent_total
-        else 0
-    )
-    main = [
-        row for row in relevant
-        if (row.get("scenario_type") or scenario_category(_scenario_score_text(row), match, distribution)) == "main"
-    ]
-    main_total = sum(_scenario_probability(row) for row in main) or 0
-    main_positive = (
-        sum(_scenario_probability(row) for row in main if _scenario_profit(row) > 0) / main_total
-        if main_total
-        else 1
-    )
-    score_items = [item for item in items if item.get("type") == "correct_score"]
-    core_items = [item for item in items if item.get("type") in {"winner", "handicap", "total"}]
-    score_stake = sum(float(item.get("amount") or 0) for item in score_items)
     total_stake = sum(float(item.get("amount") or 0) for item in items) or 1
-    profitable_paths = [row for row in relevant if _scenario_profit(row) > 0]
-    only_narrow_scores_profit = bool(score_items) and not core_items and len(profitable_paths) <= max(2, len(score_items))
-
-    blockers = []
-    if failed_prob >= 0.42 / strictness:
-        blockers.append(f"reasonable scenario loss probability {failed_prob * 100:.0f}%")
-    if adjacent_failed_prob >= 0.70 / strictness:
-        blockers.append(f"adjacent path failure {adjacent_failed_prob * 100:.0f}%")
-    if main_positive < 0.50:
-        blockers.append(f"main path positive coverage only {main_positive * 100:.0f}%")
-    if score_stake / total_stake > 0.45 and failed_prob >= 0.25:
-        blockers.append("correct-score exposure creates narrow-path dependency")
-    if only_narrow_scores_profit:
-        blockers.append("portfolio profits only in narrow exact-score paths")
-
-    if failed_prob >= 0.60 or adjacent_failed_prob >= 0.85 or only_narrow_scores_profit:
-        risk_level = "CRITICAL"
-    elif failed_prob >= 0.38 or adjacent_failed_prob >= 0.65 or blockers:
+    volatility = float((portfolio or {}).get("volatility") or 0)
+    volatility_ratio = volatility / total_stake if total_stake else 0
+    tpb = (match_context or {}).get("tpb") or distribution.get("tpb") or {}
+    if tpb:
+        tpb_entropy_risk = tpb_entropy(tpb) or 0
+    else:
+        tpb_entropy_risk = 1
+    risk_score = clamp(tpb_entropy_risk * 65 + min(1, volatility_ratio) * 35)
+    if risk_score >= 75:
         risk_level = "HIGH"
-    elif failed_prob >= 0.22:
+    elif risk_score >= 45:
         risk_level = "MEDIUM"
     else:
         risk_level = "LOW"
-
-    passed = risk_level in {"LOW", "MEDIUM"} and not any("only" in blocker for blocker in blockers)
-    if strictness > 1.2 and risk_level == "MEDIUM" and adjacent_failed_prob >= 0.45:
-        passed = False
-        blockers.append("knockout scenario risk makes adjacent-path failure unacceptable")
-        risk_level = "HIGH"
-
-    failed_paths = [
-        _scenario_score_text(row)
-        for row in sorted(failed, key=lambda item: _scenario_probability(item), reverse=True)
-    ][:6]
     return {
-        "passed": passed,
-        "reason": "Passed zero-risk gate." if passed else "High EV but failed risk gate: " + "; ".join(blockers[:3]),
-        "failed_paths": failed_paths,
+        "passed": True,
+        "reason": f"TPB风险 {risk_score} / 100；由 TPB 熵值和组合波动率派生，仅诊断、不阻断。",
+        "failed_paths": [],
         "risk_level": risk_level,
-        "failed_probability": failed_prob,
-        "adjacent_failed_probability": adjacent_failed_prob,
-        "main_positive_coverage": main_positive,
-    }
-
-
-def correct_score_exposure_control(portfolio, style=None):
-    items = (portfolio or {}).get("items") if isinstance(portfolio, dict) else portfolio
-    items = [item for item in (items or []) if item.get("type") != "empty"]
-    total_stake = sum(float(item.get("amount") or 0) for item in items) or 0
-    score_items = [item for item in items if item.get("type") == "correct_score"]
-    score_stake = sum(float(item.get("amount") or 0) for item in score_items)
-    stake_share = score_stake / total_stake if total_stake else 0
-    style_text = str(style or (portfolio or {}).get("name") or (portfolio or {}).get("portfolio_style_label") or "")
-    limit = 0.30
-    if "Aggressive" in style_text or "激进" in style_text:
-        limit = 0.40
-    if "Conservative" in style_text or "保守" in style_text:
-        limit = 0.20
-
-    scores = [normalize_score(item.get("selection") or item.get("name")) for item in score_items]
-    parsed = [_score_goals(score) for score in scores]
-    parsed = [goals for goals in parsed if goals]
-    clean_sheet = [goals for goals in parsed if min(goals) == 0]
-    high_margin = [goals for goals in parsed if abs(goals[0] - goals[1]) >= 3]
-    balanced = [goals for goals in parsed if min(goals) > 0 or abs(goals[0] - goals[1]) <= 1]
-    if score_items and len(clean_sheet) >= max(2, len(score_items) - 1):
-        cluster = "clean_sheet_cluster"
-    elif score_items and len(high_margin) >= max(2, len(score_items) - 1):
-        cluster = "high_margin_cluster"
-    elif score_items:
-        cluster = "balanced_cluster" if balanced else "mixed_cluster"
-    else:
-        cluster = "none"
-
-    core_items = [item for item in items if item.get("type") in {"winner", "handicap", "total"}]
-    dependent = bool(score_items) and (stake_share > limit or not core_items)
-    warnings = []
-    if stake_share > limit:
-        warnings.append(f"correct score stake share {stake_share * 100:.0f}% exceeds {limit * 100:.0f}% limit")
-    if dependent:
-        warnings.append("correct_score_dependent")
-    if cluster in {"clean_sheet_cluster", "high_margin_cluster"} and len(score_items) >= 2:
-        warnings.append("clean_sheet_score_cluster_risk" if cluster == "clean_sheet_cluster" else "high_margin_cluster_risk")
-    return {
-        "count": len(score_items),
-        "stake_share": stake_share,
-        "limit": limit,
-        "passed": not warnings,
-        "dependent": dependent,
-        "cluster_type": cluster,
-        "warning": "; ".join(warnings) if warnings else "Correct score exposure controlled.",
+        "risk_score": risk_score,
+        "tpb_entropy": tpb_entropy_risk,
+        "volatility_ratio": volatility_ratio,
     }
 
 
@@ -888,31 +790,12 @@ def rank1_eligibility_check(portfolio, match=None, distribution=None):
         (portfolio or {}).get("score_rows") or [],
         {"match": match or {}, "distribution": distribution or {}},
     )
-    exposure = (portfolio or {}).get("correct_score_exposure") or correct_score_exposure_control(portfolio)
-    pressure_fit = (portfolio or {}).get("pressure_fit") or strategy_pressure_fit(
-        (portfolio or {}).get("items") or [],
-        match or {},
-        distribution or {},
-    )
-    blockers = []
-    if not risk_gate.get("passed"):
-        blockers.append(risk_gate.get("reason") or "failed zero-risk gate")
-    if not exposure.get("passed"):
-        blockers.append(exposure.get("warning") or "correct-score exposure failed")
-    if pressure_fit.get("label") == "Low":
-        blockers.append("knockout scenario fit is LOW")
-    coverage = (portfolio or {}).get("coverage_metrics") or {}
-    if coverage:
-        if coverage.get("main_coverage", 0) <= 0 and coverage.get("adjacent_coverage", 0) <= 0:
-            blockers.append("does not cover main or adjacent path")
-    directional = (portfolio or {}).get("directional_odds_value") or {}
-    if directional.get("score", 50) < 25 and exposure.get("dependent"):
-        blockers.append("odds value is mainly narrow exact-score noise")
     return {
-        "rank1_eligible": not blockers,
-        "eligible": not blockers,
-        "rank1_blockers": blockers,
-        "summary": "Eligible for Rank #1." if not blockers else "Not Rank #1 eligible: " + "; ".join(blockers[:3]),
+        "rank1_eligible": True,
+        "eligible": True,
+        "rank1_blockers": [],
+        "summary": "TPB 风险仅作诊断展示；不阻断排序、仓位或推荐。",
+        "risk_diagnostic": risk_gate,
     }
 
 
@@ -1252,7 +1135,7 @@ def compute_coverage_efficiency(items, metrics, expected_yield=0):
             "notes": [
                 f"EV变化 {ev_delta:+.1f}，ROI变化 {roi_delta * 100:+.1f}%。",
                 f"主剧本覆盖 {main_gain * 100:+.1f}%，邻近覆盖 {adjacent_gain * 100:+.1f}%，尾部覆盖 {tail_gain * 100:+.1f}%。",
-                f"归零风险变化 {(new_stats['zero_risk'] - base_stats['zero_risk']) * 100:+.1f}%，一球偏差风险下降 {one_goal_reduction * 100:.1f}%。",
+                f"边际风险变化 {(new_stats['zero_risk'] - base_stats['zero_risk']) * 100:+.1f}%，一球偏差风险下降 {one_goal_reduction * 100:.1f}%。",
             ],
         }
 
@@ -1329,7 +1212,7 @@ def compute_portfolio_score(strategy, match, distribution):
         },
         "why": [
             f"主剧本覆盖 {coverage.get('main_coverage', 0) * 100:.0f}%，邻近剧本覆盖 {coverage.get('adjacent_coverage', 0) * 100:.0f}%。",
-            f"一球偏差风险 {coverage.get('one_goal_deviation_risk', 0) * 100:.0f}%，归零风险 {coverage.get('zero_risk', 0) * 100:.0f}%。",
+            f"一球偏差风险 {coverage.get('one_goal_deviation_risk', 0) * 100:.0f}%，边际风险 {coverage.get('zero_risk', 0) * 100:.0f}%。",
             f"主方向赔率价值 {directional.get('weighted_edge', 0) * 100:+.1f}%。",
             f"淘汰赛剧本适配：{pressure_fit.get('label')}，{pressure_fit.get('reason')}",
         ],
@@ -1343,14 +1226,14 @@ def portfolio_style_name(strategy, metrics=None):
     has_total = any(item.get("type") == "total" for item in items)
     zero_risk = ((metrics or {}).get("coverage") or {}).get("zero_risk", 0)
     if zero_risk < 0.25 and has_handicap:
-        return "Conservative"
+        return "保守型"
     if correct_count >= 3 and has_handicap:
-        return "Main Scenario"
+        return "主策略"
     if has_total and correct_count >= 2:
-        return "Aggressive"
+        return "激进型"
     if correct_count and not has_handicap:
-        return "Tail Hedge"
-    return "Main Scenario"
+        return "尾部对冲"
+    return "主策略"
 
 
 def generate_style_portfolios(combo, match, distribution):
@@ -1372,10 +1255,10 @@ def generate_style_portfolios(combo, match, distribution):
         if scenario_category(item.get("selection"), match, distribution) in {"main", "adjacent"}
     ][:4] or scores[:2]
     portfolios = [
-        {"code": "style_conservative", "name": "Conservative Portfolio", "items": dedupe_bets(winners + handicaps + adjacent_scores[:2])},
-        {"code": "style_main", "name": "Main Scenario Portfolio", "items": dedupe_bets(winners + handicaps + totals + adjacent_scores[:4])},
-        {"code": "style_aggressive", "name": "Aggressive Portfolio", "items": dedupe_bets((deep_handicaps or handicaps)[:1] + totals + scores[:4])},
-        {"code": "style_tail", "name": "Tail Hedge Portfolio", "items": dedupe_bets(winners + scores[:4])},
+        {"code": "style_conservative", "name": "保守组合", "items": dedupe_bets(winners + handicaps + adjacent_scores[:2])},
+        {"code": "style_main", "name": "主策略组合", "items": dedupe_bets(winners + handicaps + totals + adjacent_scores[:4])},
+        {"code": "style_aggressive", "name": "激进组合", "items": dedupe_bets((deep_handicaps or handicaps)[:1] + totals + scores[:4])},
+        {"code": "style_tail", "name": "尾部对冲组合", "items": dedupe_bets(winners + scores[:4])},
     ]
     portfolios.extend(generate_portfolio_templates_by_pressure({
         "winners": winners,
@@ -1472,19 +1355,8 @@ def generate_portfolio_templates_by_pressure(market_context, match, distribution
 
 
 def _api_quality(odds=None, api_football_data=None):
-    checks = []
-    odds = odds or {}
-    api_football_data = api_football_data or {}
-    checks.append(("胜平负", bool(odds.get("home_win") and odds.get("draw") and odds.get("away_win"))))
-    checks.append(("大小球", bool(odds.get("over_under"))))
-    checks.append(("亚洲盘", bool(((api_football_data.get("asian_handicap") or {}).get("rows")))))
-    checks.append(("波胆", bool(((api_football_data.get("correct_score") or {}).get("rows")))))
-    passed = [label for label, ok in checks if ok]
-    missing = [label for label, ok in checks if not ok]
-    score = round(len(passed) / len(checks) * 100) if checks else 0
-    if missing:
-        return score, f"API赔率缺少：{'、'.join(missing)}。"
-    return score, "API赔率完整：胜平负、大小球、亚洲盘、波胆均可用。"
+    quality = odds_data_quality(odds, api_football_data)
+    return quality["score"], quality["note"]
 
 
 def _user_odds_quality(strategy):
@@ -1502,55 +1374,27 @@ def _user_odds_quality(strategy):
 def _data_quality_score(strategy, context=None):
     context = context or {}
     api_score, api_note = _api_quality(context.get("odds"), context.get("api_football_data"))
-    user_score, user_note = _user_odds_quality(strategy)
-    timing_note = "数据时点未提供，按中性处理。"
-    timing_score = 70
-    score = clamp(api_score * 0.55 + user_score * 0.35 + timing_score * 0.10)
     return {
-        "score": score,
+        "score": api_score,
         "api_score": api_score,
-        "user_odds_score": user_score,
-        "timing_score": timing_score,
-        "note": " ".join([api_note, user_note, timing_note]),
+        "user_odds_score": None,
+        "timing_score": None,
+        "note": api_note,
     }
 
 
 def compute_match_investment_score(strategies, match=None, distribution=None, context=None):
-    if not strategies:
-        return {
-            "score": 0,
-            "rating": "不建议下注",
-            "main_reason": "没有足够真实盘口形成组合。",
-            "key_risk": "数据不足。",
-            "data_quality_note": "没有组合，无法评估数据质量。",
-            "components": {},
-        }
-    best = strategies[0]
-    components = best.get("portfolio_score_components") or best.get("score_components") or {}
-    coverage = best.get("coverage_metrics") or {}
-    scenario_clarity = components.get("Scenario Consistency", 55)
-    direction_alignment = best.get("direction_alignment")
-    if direction_alignment is None:
-        direction_alignment = scenario_clarity / 100
-    market_clarity = clamp(direction_alignment * 100)
-    directional_value = components.get("Directional Odds Value", 45)
-    coverage_quality = components.get("Coverage Quality", coverage.get("coverage_score", 50))
-    behavior = ((distribution or {}).get("game_behavior") or {})
-    behavior_adjustments = behavior.get("behavior_adjustments") or {}
-    pressure_risk_penalty = max(0, behavior_adjustments.get("deep_handicap_risk_delta", 0)) * 5
-    pressure_risk_penalty += max(0, behavior_adjustments.get("chaos_risk_delta", 0)) * 4
-    pressure_risk_penalty += max(0, behavior_adjustments.get("late_goal_volatility_delta", 0)) * 3
-    external_risk = clamp(100 - coverage.get("one_goal_deviation_risk", 0.35) * 100 - pressure_risk_penalty)
-    data_quality_info = _data_quality_score(best, context)
-    data_quality = data_quality_info["score"]
-    score = clamp(
-        market_clarity * 0.20
-        + scenario_clarity * 0.25
-        + directional_value * 0.20
-        + coverage_quality * 0.20
-        + external_risk * 0.10
-        + data_quality * 0.05
-    )
+    context = context or {}
+    odds = context.get("odds") or {}
+    api_football_data = context.get("api_football_data") or {}
+    tpb = true_probability_base(odds)
+    data_quality_info = _data_quality_score((strategies or [{}])[0] if strategies else {}, context)
+    score = investment_score_from_tpb(tpb)
+    probabilities = tpb.get("probabilities") or {}
+    ordered = sorted(probabilities.values(), reverse=True) if probabilities else [0, 0]
+    favorite_edge = (ordered[0] - ordered[1]) * 100 if len(ordered) >= 2 else 0
+    confidence = score
+    dispersion_score = clamp(100 - (tpb.get("market_dispersion") or 0) * 100)
     if score >= 80:
         rating = "值得重点研究"
     elif score >= 65:
@@ -1559,28 +1403,67 @@ def compute_match_investment_score(strategies, match=None, distribution=None, co
         rating = "谨慎观察"
     else:
         rating = "不建议下注"
-    main_reason = f"主方向清晰度 {market_clarity}，覆盖质量 {coverage_quality}。"
-    key_risk = "一球偏差可能造成组合回撤。" if coverage.get("one_goal_deviation_risk", 0) >= 0.30 else "主要风险在赔率波动和临场信息。"
+    main_reason = f"TPB 投资分 {score}，最高方向差值 {favorite_edge:.1f}。"
+    key_risk = "主要风险来自 TPB 熵值偏高或博彩公司概率分歧。" if score < 65 else "主要风险在临场赔率变化。"
     return {
         "score": score,
         "rating": rating,
         "main_reason": main_reason,
         "key_risk": key_risk,
         "data_quality_note": data_quality_info["note"],
+        "true_probability_base": tpb,
         "components": {
-            "Market Clarity": market_clarity,
-            "Scenario Clarity": scenario_clarity,
-            "Directional Odds Value": directional_value,
-            "Coverage Quality": coverage_quality,
-            "External Risk": external_risk,
-            "Data Quality / Timing": data_quality,
+            "TPB信心": confidence,
+            "热门差值": round(favorite_edge),
+            "平局概率": round((probabilities.get("draw", 0) if probabilities else 0) * 100),
+            "冷门概率": round(min(
+                probabilities.get("home_win", 0),
+                probabilities.get("away_win", 0),
+            ) * 100) if probabilities else 0,
+            "博彩公司一致性": dispersion_score,
         },
         "weights": {
-            "Market Clarity": "20%",
-            "Scenario Clarity": "25%",
-            "Directional Odds Value": "20%",
-            "Coverage Quality": "20%",
-            "External Risk": "10%",
-            "Data Quality / Timing": "5%",
+            "TPB信心": "55%",
+            "热门差值": "35%",
+            "平局概率": "5%",
+            "冷门概率": "5%",
+            "博彩公司一致性": "扣分项",
         },
+    }
+
+
+def build_core_decision_layers(strategies, match=None, distribution=None, context=None):
+    investment = compute_match_investment_score(strategies, match or {}, distribution or {}, context or {})
+    tpb = investment.get("true_probability_base") or {}
+    score_layer = {
+        "tpb": tpb,
+        "betting_confidence": investment.get("components", {}).get("TPB信心", 0),
+        "investment_score": investment.get("score", 0),
+        "data_quality_note": investment.get("data_quality_note", "-"),
+    }
+    stake = stake_from_investment_score(score_layer["investment_score"])
+    risk_decision = (
+        "可下注"
+        if stake.get("amount", 0) >= 500
+        else "观察"
+        if stake.get("amount", 0) > 0
+        else "不下注"
+    )
+    execution_layer = {
+        "stake": stake,
+        "recommended_bet_size": stake.get("amount", 0),
+        "risk_decision": risk_decision,
+        "investment_rating": investment.get("rating", "不建议下注"),
+    }
+    explanation_layer = {
+        "main_reason": investment.get("main_reason", "-"),
+        "risk_explanation": investment.get("key_risk", "-"),
+        "coverage_explanation": "覆盖资产用于防守平局、冷门或热门方未打穿；不参与 TPB 投资分重复计分。",
+        "components": investment.get("components") or {},
+        "weights": investment.get("weights") or {},
+    }
+    return {
+        "score_layer": score_layer,
+        "execution_layer": execution_layer,
+        "explanation_layer": explanation_layer,
     }

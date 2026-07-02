@@ -1,3 +1,6 @@
+from modules.probability_base import true_probability_base
+
+
 def normalize(values):
     total = sum(values.values())
     if total <= 0:
@@ -6,17 +9,7 @@ def normalize(values):
 
 
 def odds_probabilities(odds):
-    if not odds.get("found"):
-        return None
-    if odds.get("implied_probabilities"):
-        return odds["implied_probabilities"]
-    if all(odds.get(key) for key in ["home_win", "draw", "away_win"]):
-        return normalize({
-            "home_win": 1 / odds["home_win"],
-            "draw": 1 / odds["draw"],
-            "away_win": 1 / odds["away_win"],
-        })
-    return None
+    return true_probability_base(odds).get("probabilities")
 
 
 def polymarket_probabilities(polymarket):

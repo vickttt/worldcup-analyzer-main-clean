@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 
 from modules.market_utils import identify_handicap_center, identify_total_center, parse_handicap_value, safe_float
 from modules.pregame_content import static_recent_form_for, team_cn
+from modules.probability_base import true_probability_base
 
 
 def percent(value):
@@ -263,20 +264,17 @@ def format_match_winner_lines(odds):
             f"- 状态：{odds.get('message')}",
         ]
 
-    implied = odds.get("implied_probabilities") or {}
-    raw = odds.get("raw_probabilities") or {}
+    tpb = true_probability_base(odds)
+    implied = tpb.get("probabilities") or {}
     return [
         "## 胜平负 / Match Winner",
         "",
         f"- 主胜：{format_value(odds['home_win'])}",
         f"- 平局：{format_value(odds['draw'])}",
         f"- 客胜：{format_value(odds['away_win'])}",
-        f"- 主胜去水前概率：{percent(raw.get('home_win', 0))}",
-        f"- 平局去水前概率：{percent(raw.get('draw', 0))}",
-        f"- 客胜去水前概率：{percent(raw.get('away_win', 0))}",
-        f"- 主胜隐含概率：{percent(implied.get('home_win', 0))}",
-        f"- 平局隐含概率：{percent(implied.get('draw', 0))}",
-        f"- 客胜隐含概率：{percent(implied.get('away_win', 0))}",
+        f"- 主胜 TPB 概率：{percent(implied.get('home_win', 0))}",
+        f"- 平局 TPB 概率：{percent(implied.get('draw', 0))}",
+        f"- 客胜 TPB 概率：{percent(implied.get('away_win', 0))}",
     ]
 
 
@@ -566,9 +564,9 @@ def format_betting_opinion_lines(betting_opinion):
         "",
         "### 比赛投资价值",
         "",
-        f"市场方向置信度：{opinion.get('market_direction_confidence', opinion.get('confidence', 50))} / 100",
+        f"市场方向：{opinion.get('market_direction_label', '-')}",
         "",
-        f"投注信心：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100",
+        f"TPB 熵信心：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100",
         "",
         f"数据质量：{quality_cn(opinion.get('data_quality'))}",
     ]
@@ -579,7 +577,7 @@ def format_data_quality_lines(betting_opinion, api_football_data=None, match=Non
     notes = list((betting_opinion or {}).get("data_quality_notes") or [])
     user_odds_items = (actual_odds or {}).get("items") or []
     if user_odds_items:
-        notes.append(f"用户真实赔率已参与最终组合排序；当前载入 {len(user_odds_items)} 条。若与市场赔率不一致，组合排序优先使用用户真实赔率。")
+        notes.append(f"用户真实赔率已记录 {len(user_odds_items)} 条；当前仅用于展示与人工复核，不参与 TPB 决策、排序或仓位。")
     else:
         notes.append("用户真实赔率未输入；当前组合按市场标准赔率评估，赔率价值和投注信心需要降低解释强度。")
     if not ((api_football_data or {}).get("lineups")) and "Official lineups not released." not in notes:

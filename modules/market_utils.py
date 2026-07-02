@@ -2,6 +2,7 @@ import re
 from collections import Counter, defaultdict
 
 from modules.pregame_content import team_cn
+from modules.probability_base import true_probability_base
 
 
 def safe_float(value):
@@ -72,13 +73,31 @@ def _parsed_handicap_rows(rows):
 def identify_handicap_center(handicap_rows, user_odds=None, odds=None, match=None):
     """Identify the market handicap center without treating coverage as direction."""
     parsed_rows = _parsed_handicap_rows(handicap_rows)
+    tpb = true_probability_base(odds)
+    probabilities = tpb.get("probabilities") or {}
+    draw_probability = probabilities.get("draw", 0)
     if not parsed_rows:
+        coverage_needed = bool(probabilities) and draw_probability >= 0.22
         return {
             "available": False,
             "center_label": "No handicap center",
             "direction_label": "No view",
-            "coverage_label": "No coverage candidate",
+            "coverage_label": "平局对冲" if coverage_needed else "No coverage candidate",
             "outlier_count": 0,
+            "coverage_basis": {
+                "draw_probability": draw_probability,
+                "upset_probability": 0,
+                "favorite_gap": 0,
+                "coverage_needed": coverage_needed,
+                "source": "TPB draw/upset thresholds",
+            },
+            "coverage_trace": {
+                "raw_rows": len(handicap_rows or []),
+                "parsed_rows": 0,
+                "filtered_rows": 0,
+                "secondary_handicap_rows": 0,
+                "fallback_used": "draw_based_hedge" if coverage_needed else "no_parsed_rows",
+            },
             "warning": "No Asian handicap rows were available.",
         }
 
@@ -147,19 +166,66 @@ def identify_handicap_center(handicap_rows, user_odds=None, odds=None, match=Non
         line_text = f"{_team_label(match, center_side)} {_fmt_line(center_line)}"
 
     coverage_side = "away" if center_side == "home" else "home"
-    coverage_rows = [
+    upset_probability = (
+        probabilities.get("away_win", 0)
+        if coverage_side == "away"
+        else probabilities.get("home_win", 0)
+    )
+    favorite_gap = 0
+    if probabilities:
+        ordered_probabilities = sorted(probabilities.values(), reverse=True)
+        favorite_gap = ordered_probabilities[0] - ordered_probabilities[1]
+    coverage_needed = bool(probabilities) and (
+        draw_probability >= 0.22
+        or upset_probability >= 0.18
+        or favorite_gap >= 0.25
+    )
+    secondary_handicap_rows = [
         row for row in center_rows
         if row["side"] == coverage_side and row["line"] >= 0 and row["abs_line"] <= 0.75
     ]
-    if coverage_rows:
-        coverage_line = sorted(
-            {row["line"] for row in coverage_rows},
-            key=lambda value: (abs(abs(value) - 0.5), -value),
-        )[0]
-        coverage_label = f"{_team_label(match, coverage_side)} {_fmt_line(coverage_line)}"
+    relaxed_secondary_handicap_rows = [
+        row for row in center_rows
+        if row["side"] == coverage_side and row["abs_line"] <= 1.5
+    ]
+    if coverage_needed and draw_probability >= 0.22:
+        coverage_line = None
+        coverage_label = "平局对冲"
+        fallback_used = "draw_based_hedge"
+    elif coverage_needed and upset_probability >= 0.18:
+        coverage_line = None
+        coverage_label = f"{_team_label(match, coverage_side)}不败对冲"
+        fallback_used = "upset_probability_hedge"
+    elif coverage_needed:
+        coverage_line = None
+        coverage_label = f"{_team_label(match, coverage_side)}受让保护"
+        fallback_used = "favorite_gap_hedge"
     else:
         coverage_line = None
         coverage_label = "No coverage candidate"
+        fallback_used = "none"
+
+    secondary_handicap_label = None
+    if secondary_handicap_rows:
+        coverage_line = sorted(
+            {row["line"] for row in secondary_handicap_rows},
+            key=lambda value: (abs(abs(value) - 0.5), -value),
+        )[0]
+        secondary_handicap_label = f"{_team_label(match, coverage_side)} {_fmt_line(coverage_line)}"
+    elif relaxed_secondary_handicap_rows:
+        coverage_line = sorted(
+            {row["line"] for row in relaxed_secondary_handicap_rows},
+            key=lambda value: (value < 0, abs(abs(value) - 0.5), abs(value)),
+        )[0]
+        secondary_handicap_label = f"{_team_label(match, coverage_side)} {_fmt_line(coverage_line)}"
+    coverage_trace = {
+        "raw_rows": len(handicap_rows or []),
+        "parsed_rows": len(parsed_rows),
+        "filtered_rows": len(center_rows),
+        "secondary_handicap_rows": len(secondary_handicap_rows),
+        "relaxed_secondary_handicap_rows": len(relaxed_secondary_handicap_rows),
+        "fallback_used": fallback_used,
+    }
 
     avg_odds = mean([row["odd"] for row in best_rows])
     warning = ""
@@ -179,6 +245,15 @@ def identify_handicap_center(handicap_rows, user_odds=None, odds=None, match=Non
         "coverage_side": coverage_side,
         "coverage_line": coverage_line,
         "coverage_label": coverage_label,
+        "secondary_handicap_label": secondary_handicap_label,
+        "coverage_basis": {
+            "draw_probability": draw_probability,
+            "upset_probability": upset_probability,
+            "favorite_gap": favorite_gap,
+            "coverage_needed": coverage_needed,
+            "source": "TPB draw/upset thresholds",
+        },
+        "coverage_trace": coverage_trace,
         "avg_odds": avg_odds,
         "best_odds": max([row["odd"] for row in best_rows], default=None),
         "bookmakers": sorted({row.get("bookmaker") for row in best_rows if row.get("bookmaker")}),

@@ -239,7 +239,9 @@ def market_value_factor(candidate):
 
 def build_market_candidates(match, odds, api_football_data):
     candidates = []
-    implied = odds.get("implied_probabilities") or {}
+    from modules.probability_base import true_probability_base
+
+    implied = (true_probability_base(odds).get("probabilities") or {})
     if odds.get("found") and implied:
         options = [
             ("home_win", match["home_cn"], odds.get("home_win"), implied.get("home_win", 0)),

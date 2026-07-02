@@ -1,24 +1,8 @@
+from modules.probability_base import true_probability_base
+
+
 def api_probabilities(odds):
-    odds = odds or {}
-    probabilities = odds.get("implied_probabilities")
-    if probabilities:
-        return {
-            "home_win": probabilities.get("home_win"),
-            "draw": probabilities.get("draw"),
-            "away_win": probabilities.get("away_win"),
-        }
-    required = [odds.get("home_win"), odds.get("draw"), odds.get("away_win")]
-    if any(value in (None, 0) for value in required):
-        return None
-    raw = {
-        "home_win": 1 / odds["home_win"],
-        "draw": 1 / odds["draw"],
-        "away_win": 1 / odds["away_win"],
-    }
-    total = sum(raw.values())
-    if total <= 0:
-        return None
-    return {key: value / total for key, value in raw.items()}
+    return (true_probability_base(odds).get("probabilities") or None)
 
 
 def polymarket_probabilities(polymarket):
@@ -66,6 +50,7 @@ def build_market_data(odds, api_football_data, polymarket):
     api_football_data = api_football_data or {}
     polymarket = polymarket or {}
     api_probs = api_probabilities(odds)
+    tpb = true_probability_base(odds)
     poly_probs = polymarket_probabilities(polymarket)
     rows = comparison_rows(api_probs, poly_probs)
     average_deviation = (
@@ -87,7 +72,8 @@ def build_market_data(odds, api_football_data, polymarket):
                 "home_win": odds.get("home_win"),
                 "draw": odds.get("draw"),
                 "away_win": odds.get("away_win"),
-                "implied_probabilities": api_probs,
+                "tpb_probabilities": api_probs,
+                "true_probability_base": tpb,
                 "source": odds.get("source"),
             },
             "asian_handicap": (api_football_data.get("asian_handicap") or {}),

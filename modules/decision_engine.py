@@ -6,6 +6,13 @@ from modules.market_utils import (
     totals_summary,
 )
 from modules.user_odds import actual_odds_summary, build_recommendation_slots
+from modules.probability_base import (
+    betting_confidence_from_tpb,
+    investment_score_from_tpb,
+    market_direction_from_tpb,
+    stake_from_investment_score,
+    true_probability_base,
+)
 
 
 POPULAR_TEAMS = {
@@ -62,19 +69,7 @@ def display_team(value):
 
 
 def odds_probabilities(odds):
-    if not odds.get("found"):
-        return None
-    if odds.get("implied_probabilities"):
-        return odds["implied_probabilities"]
-    if all(odds.get(key) for key in ["home_win", "draw", "away_win"]):
-        raw = {
-            "home_win": 1 / odds["home_win"],
-            "draw": 1 / odds["draw"],
-            "away_win": 1 / odds["away_win"],
-        }
-        total = sum(raw.values())
-        return {key: value / total for key, value in raw.items()}
-    return None
+    return true_probability_base(odds).get("probabilities")
 
 
 def polymarket_probabilities(polymarket):
@@ -638,16 +633,17 @@ def odds_value_analysis(match, odds, polymarket, api_football_data=None, actual_
     }
 
 def market_value_component(match, odds, polymarket):
-    value = odds_value_analysis(match, odds, polymarket)
+    tpb = true_probability_base(odds)
+    score = investment_score_from_tpb(tpb)
     points = next(
-        (item["points"] for item in value.get("components", []) if item["name"] == "单一来源状态"),
-        0,
+        (item["points"] for item in direction_confidence(match, odds, polymarket, {}).get("components", []) if item["name"] == "TPB概率基础"),
+        score,
     )
     return {
-        "name": "赔率价值",
+        "name": "TPB投资分",
         "points": points,
-        "max_points": 40,
-        "reason": value["reason"],
+        "max_points": 100,
+        "reason": f"投资分 {score} / 100，只由 TPB 和博彩公司离散度派生。",
     }
 
 
@@ -768,13 +764,9 @@ def risk_adjustment_component(odds, upset):
 
 
 def build_value_rating_breakdown(match, odds, polymarket, upset):
-    components = [
-        market_value_component(match, odds, polymarket),
-        market_disagreement_component(match, odds, polymarket),
-        market_consistency_component(match, odds),
-        risk_adjustment_component(odds, upset),
-    ]
-    total = clamp(sum(item["points"] for item in components), 0, 100)
+    tpb = true_probability_base(odds)
+    total = investment_score_from_tpb(tpb)
+    components = [market_value_component(match, odds, polymarket)]
     rating = value_rating(total)
     return total, rating, components
 
@@ -792,61 +784,46 @@ def winner_strength_points(probability):
 
 
 def direction_confidence(match, odds, polymarket, api_football_data):
-    odds_probs = odds_probabilities(odds)
+    tpb = true_probability_base(odds)
+    odds_probs = tpb.get("probabilities")
     if not odds_probs:
         return {
             "score": 0,
             "level": "观望",
             "components": [],
-            "reason": "缺少胜平负赔率，无法形成方向把握。",
+            "investment_score": 0,
+            "market_direction": "No API-Football 1X2 probability",
+            "true_probability_base": tpb,
+            "reason": "缺少 API-Football 1X2 赔率，无法形成 TPB。",
         }
 
     favorite = max(odds_probs, key=odds_probs.get)
     favorite_label = display_team(label_for_key(match, favorite))
     favorite_probability = odds_probs[favorite]
-    components = []
-
-    winner_points = round(winner_strength_points(favorite_probability) / 32 * 30)
-    components.append({
-        "name": "胜平负方向",
-        "points": winner_points,
-        "max_points": 30,
-        "reason": f"{favorite_label}市场概率 {favorite_probability * 100:.1f}%。",
+    score = betting_confidence_from_tpb(tpb)
+    investment_score = investment_score_from_tpb(tpb)
+    market_direction = market_direction_from_tpb(tpb, {
+        "home_win": f"{favorite_label}占优",
+        "draw": "平衡 / 平局权重高",
+        "away_win": f"{favorite_label}占优",
     })
-
-    handicap_summary = api_handicap_summary(api_football_data)
-    handicap_points, handicap_reason = handicap_direction_points(favorite, handicap_summary, 30)
-    components.append({
-        "name": "亚洲让球盘",
-        "points": handicap_points,
-        "max_points": 30,
-        "reason": handicap_reason,
-    })
-
-    totals_points, totals_reason = totals_structure_points(odds, 8)
-    components.append({
-        "name": "大小球",
-        "points": totals_points,
-        "max_points": 8,
-        "reason": totals_reason,
-    })
-
-    correct_points, correct_reason = correct_score_points(match, favorite, api_football_data, 22)
-    components.append({
-        "name": "波胆结构",
-        "points": correct_points,
-        "max_points": 22,
-        "reason": correct_reason,
-    })
-
-    components.append({
-        "name": "API-Football 数据完整度",
-        "points": 10,
-        "max_points": 10,
-        "reason": "方向把握仅使用 API-Football 胜平负、亚洲盘、大小球与波胆数据。",
-    })
-
-    score = clamp(sum(item["points"] for item in components))
+    components = [
+        {
+            "name": "TPB概率基础",
+            "points": score,
+            "max_points": 100,
+            "reason": (
+                f"{favorite_label} TPB {favorite_probability * 100:.1f}%，"
+                "信心由 TPB 熵值唯一派生。"
+            ),
+        },
+        {
+            "name": "博彩公司离散度",
+            "points": clamp(100 - (tpb.get("market_dispersion") or 0) * 100),
+            "max_points": 100,
+            "reason": f"博彩公司概率离散度 {((tpb.get('market_dispersion') or 0) * 100):.1f}%。",
+        },
+    ]
     if score >= 90:
         level = "非常有把握"
     elif score >= 80:
@@ -857,32 +834,29 @@ def direction_confidence(match, odds, polymarket, api_football_data):
         level = "谨慎参与"
     else:
         level = "观望"
-    handicap_phrase = handicap_reason.replace("。", "")
-    correct_phrase = correct_reason.replace("。", "")
-    summary = f"市场普遍认为{favorite_label}占优，{handicap_phrase}，{correct_phrase}，因此方向把握{level}。"
+    summary = f"TPB 显示 {favorite_label} 为最高概率方向，投注信心由熵值派生为{level}。"
     return {
         "score": score,
         "level": level,
         "components": components,
+        "investment_score": investment_score,
+        "market_direction": market_direction,
+        "true_probability_base": tpb,
         "summary": summary,
-        "reason": f"{favorite_label}方向把握由 API-Football 胜平负、亚洲盘、大小球和真实波胆共同决定。",
+        "reason": "方向把握只由 API-Football 1X2 TPB 决定；盘口与波胆不再参与方向评分。",
     }
 
 
 def participation_advice(direction, odds_value, upset):
-    score = direction["score"]
-    value_rating_text = odds_value["rating"]
-    risk_score = upset["score"]
+    score = direction.get("investment_score", direction.get("score", 0))
 
-    if score >= 90 and value_rating_text in {"A", "B", "C", "D"} and risk_score < 65:
+    if score >= 90:
         advice = "强烈参与"
-    elif score >= 80 and risk_score < 70:
+    elif score >= 80:
         advice = "建议参与"
-    elif score >= 70:
+    elif score >= 60:
         advice = "小仓参与"
-    elif score >= 60 and value_rating_text in {"A", "B"}:
-        advice = "小仓参与"
-    elif score >= 55:
+    elif score >= 50:
         advice = "仅观察"
     else:
         advice = "放弃"
@@ -890,66 +864,28 @@ def participation_advice(direction, odds_value, upset):
     return {
         "advice": advice,
         "reason": (
-            f"方向把握 {score} / 100，赔率价值 {value_rating_text}，"
-            f"爆冷指数 {risk_score} / 100。"
+            f"参与建议只由 TPB 投资分 {score} / 100 派生。"
         ),
     }
 
 
 def recommended_stake(direction, odds_value, participation):
-    score = direction["score"]
-    if score >= 90:
-        base = 1500
-    elif score >= 80:
-        base = 1200
-    elif score >= 70:
-        base = 900
-    elif score >= 60:
-        base = 500
-    else:
-        base = 200 if participation["advice"] == "仅观察" else 0
-
-    adjustment = {
-        "A": 300,
-        "B": 200,
-        "C": 0,
-        "D": -100,
-    }.get(odds_value["rating"], 0)
-
-    if participation["advice"] in {"仅观察", "放弃"}:
-        base = min(base, 300)
-
-    final = clamp(round((base + adjustment) / 100) * 100, 100, 2000)
+    score = direction.get("investment_score", direction.get("score", 0))
+    stake = stake_from_investment_score(score)
     return {
-        "amount": final,
-        "base": base,
-        "adjustment": adjustment,
-        "reason": (
-            f"方向把握 {score} 分，对应基础仓位 {base}；"
-            f"赔率价值 {odds_value['rating']}，调整 {adjustment:+d}。"
-        ),
+        **stake,
+        "base": stake["amount"],
+        "adjustment": 0,
     }
 
 
 def final_recommendation(match, betting_opinion, contrarian, upset):
-    handicap = (betting_opinion or {}).get("asian_handicap", "No view").replace("Lean ", "")
-    if handicap != "No view" and (contrarian["score"] >= 55 or upset["score"] >= 55):
-        return {
-            "bet": handicap,
-            "reason": [
-                f"市场共识明显支持{display_team(match['home_cn'])}",
-                "逆向分数处于偏高区间",
-                "爆冷指数高于基准水平",
-                "让球盘相比独赢具备更好的风险收益比",
-            ],
-        }
-
     winner = (betting_opinion or {}).get("match_winner", "No view").replace("Lean ", "")
     return {
         "bet": winner if winner != "No view" else "观察为主",
         "reason": [
-            "暂未发现强逆向让球机会",
-            "当前仅将市场方向作为参考",
+            "最终推荐跟随 TPB 最高概率方向",
+            "让球、逆向与爆冷指标不再改写主推荐",
         ],
     }
 
@@ -965,15 +901,29 @@ def stake_suggestion(final_score):
 
 
 def build_decision_engine(match, odds, polymarket, api_football_data, betting_opinion, actual_odds=None, distribution=None):
-    disagreement = market_disagreement(match, odds, polymarket)
-    contrarian = contrarian_score(match, odds, polymarket)
-    upset = upset_index(match, odds, polymarket, api_football_data)
-    recent_form = recent_form_score(api_football_data)
-    injury_impact = injury_impact_score(api_football_data)
-    elo = placeholder_score("ELO评分")
-    team_value = placeholder_score("球队身价")
     direction = direction_confidence(match, odds, polymarket, api_football_data)
-    odds_value = odds_value_analysis(match, odds, polymarket, api_football_data, actual_odds, distribution)
+    investment_score = direction.get("investment_score", 0)
+    odds_value = {
+        "score": investment_score,
+        "rating": "A" if investment_score >= 80 else "B" if investment_score >= 65 else "C" if investment_score >= 50 else "D",
+        "components": direction.get("components", []),
+        "reason": "赔率价值已并入 TPB 投资分，不再单独重复计分。",
+    }
+    disabled_score = {
+        "score": 0,
+        "level": "已停用",
+        "meaning": "已停用",
+        "direction": "-",
+        "difference": 0,
+        "reason": "Probability-first 架构下该旧评分不再参与决策。",
+    }
+    disagreement = dict(disabled_score)
+    contrarian = dict(disabled_score)
+    upset = dict(disabled_score)
+    recent_form = dict(disabled_score)
+    injury_impact = dict(disabled_score)
+    elo = dict(disabled_score)
+    team_value = dict(disabled_score)
     participation = participation_advice(direction, odds_value, upset)
     stake = recommended_stake(direction, odds_value, participation)
 
@@ -995,11 +945,15 @@ def build_decision_engine(match, odds, polymarket, api_football_data, betting_op
         "value_rating_breakdown": odds_value.get("components", []),
         "value_rating_meaning": rating_meaning(odds_value["rating"], odds_value["score"]),
         "final_recommendation": final_recommendation(match, betting_opinion, contrarian, upset),
-        "stake_suggestion": stake_suggestion(direction["score"]),
+        "stake_suggestion": {
+            "Conservative": stake["amount"],
+            "Standard": stake["amount"],
+            "Aggressive": stake["amount"],
+        },
         "weights": {
-            "方向把握": "API-Football 胜平负30 + 亚洲让球30 + 大小球8 + 波胆22 + 数据完整度10",
-            "赔率价值": "输入实际赔率后：实际赔率优势45 + 推荐覆盖20 + 盘口结构15 + 庄家利润率10；未输入时使用 API-Football 市场标准盘口评估。",
-            "参与建议": "方向把握 + 赔率价值 + 风险暴露",
-            "推荐仓位": "方向把握为主，赔率价值微调",
+            "TPB": "API-Football 胜平负博彩公司共识概率",
+            "投注信心": "仅由 TPB 熵值派生",
+            "投资分": "TPB 集中度、热门差值、平局/冷门概率和博彩公司离散度",
+            "推荐仓位": "仅由投资分档位确定",
         },
     }

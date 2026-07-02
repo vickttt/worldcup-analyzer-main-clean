@@ -13,7 +13,6 @@ from modules.portfolio_engine import (
     compute_portfolio_marginal_utility,
     compute_portfolio_pnl_by_score,
     compute_portfolio_score,
-    correct_score_exposure_control,
     dedupe_bets,
     dedupe_portfolios,
     generate_style_portfolios,
@@ -370,10 +369,10 @@ def test_match_investment_score_data_quality():
     print("\nMatch Investment Score")
     print("Complete:", complete)
     print("Incomplete:", incomplete)
-    assert complete["components"]["External Risk"] <= 100
-    assert complete["weights"]["External Risk"] == "10%"
-    assert complete["weights"]["Data Quality / Timing"] == "5%"
-    assert incomplete["components"]["Data Quality / Timing"] < complete["components"]["Data Quality / Timing"]
+    assert complete["components"]["TPB信心"] <= 100
+    assert complete["weights"]["TPB信心"] == "55%"
+    assert "Data Quality / Timing" not in complete["components"]
+    assert incomplete["score"] == complete["score"]
 
 
 def _row_probability(distribution, keyword):
@@ -386,7 +385,9 @@ def _row_probability(distribution, keyword):
 def test_game_behavior_engine_pressure_adjustments():
     odds = {
         "found": True,
-        "implied_probabilities": {"home_win": 0.70, "draw": 0.18, "away_win": 0.12},
+        "home_win": 1.43,
+        "draw": 5.56,
+        "away_win": 8.33,
         "asian_handicap": [{"line": -1.5}],
         "over_under": [{"line": 2.5, "over_odds": 1.95, "under_odds": 1.95}],
     }
@@ -429,7 +430,9 @@ def test_qualification_seed_germany_ecuador():
     assert behavior["behavior_adjustments"]["favorite_small_win_weight_delta"] == 2
     odds = {
         "found": True,
-        "implied_probabilities": {"home_win": 0.18, "draw": 0.18, "away_win": 0.64},
+        "home_win": 5.56,
+        "draw": 5.56,
+        "away_win": 1.56,
         "asian_handicap": [{"line": 1.5}],
         "over_under": [{"line": 2.5, "over_odds": 1.95, "under_odds": 1.95}],
     }
@@ -465,7 +468,9 @@ def test_qualification_seed_switzerland_canada_draw_under():
     assert behavior["behavior_adjustments"]["under_weight_delta"] == 2
     odds = {
         "found": True,
-        "implied_probabilities": {"home_win": 0.36, "draw": 0.32, "away_win": 0.32},
+        "home_win": 2.78,
+        "draw": 3.13,
+        "away_win": 3.13,
         "asian_handicap": [{"line": -0.25}],
         "over_under": [{"line": 2.5, "over_odds": 2.05, "under_odds": 1.82}],
     }
@@ -497,7 +502,9 @@ def test_qualification_seed_morocco_haiti_keeps_main_direction():
     context = build_match_context({}, match=match)
     odds = {
         "found": True,
-        "implied_probabilities": {"home_win": 0.78, "draw": 0.14, "away_win": 0.08},
+        "home_win": 1.28,
+        "draw": 7.14,
+        "away_win": 12.5,
         "asian_handicap": [{"line": -2.0}],
         "over_under": [{"line": 3.0, "over_odds": 1.96, "under_odds": 1.90}],
     }
@@ -591,7 +598,7 @@ def test_match_context_eliminated_from_standings():
     assert context["elimination_risk"]
 
 
-def test_zero_risk_gate_blocks_fragile_deep_handicap():
+def test_tpb_risk_gate_is_diagnostic_not_path_blocking():
     context = _spain_context()
     items = [
         {"type": "handicap", "selection": "Home -2.5", "standard_odds": 2.0, "odds": 2.0, "amount": 800},
@@ -606,12 +613,13 @@ def test_zero_risk_gate_blocks_fragile_deep_handicap():
         {"score": "2:1", "scenario_type": "tail", "scenario_weight": 0.17, "profit": -1000},
     ]
     gate = portfolio_risk_gate({"items": items}, score_rows, context)
-    assert not gate["passed"]
-    assert gate["risk_level"] in {"HIGH", "CRITICAL"}
-    assert "2:0" in gate["failed_paths"]
+    assert gate["passed"]
+    assert gate["failed_paths"] == []
+    assert "TPB" in gate["reason"]
+    assert "coverage" not in gate
 
 
-def test_correct_score_exposure_control_and_rank1_eligibility():
+def test_rank1_eligibility_uses_tpb_risk_not_exact_score_exposure():
     context = _spain_context()
     items = [
         {"type": "correct_score", "selection": "3:0", "standard_odds": 6.0, "odds": 6.0, "amount": 400},
@@ -626,12 +634,10 @@ def test_correct_score_exposure_control_and_rank1_eligibility():
     ]
     strategy = {"items": items, "score_rows": score_rows, "score": 90}
     strategy["risk_gate"] = portfolio_risk_gate(strategy, score_rows, context)
-    strategy["correct_score_exposure"] = correct_score_exposure_control(strategy)
     strategy["pressure_fit"] = strategy_pressure_fit(items, context["match"], context["distribution"])
     eligibility = rank1_eligibility_check(strategy, context["match"], context["distribution"])
-    assert not strategy["correct_score_exposure"]["passed"]
-    assert strategy["correct_score_exposure"]["stake_share"] > 0.30
-    assert not eligibility["rank1_eligible"]
+    assert eligibility["rank1_eligible"]
+    assert "覆盖路径" in eligibility["summary"]
 
 
 def test_pressure_templates_change_candidate_generation():
@@ -734,8 +740,8 @@ if __name__ == "__main__":
     test_qualification_seed_japan_sweden_and_england_panama()
     test_match_context_from_api_football_standings()
     test_match_context_eliminated_from_standings()
-    test_zero_risk_gate_blocks_fragile_deep_handicap()
-    test_correct_score_exposure_control_and_rank1_eligibility()
+    test_tpb_risk_gate_is_diagnostic_not_path_blocking()
+    test_rank1_eligibility_uses_tpb_risk_not_exact_score_exposure()
     test_pressure_templates_change_candidate_generation()
     test_portfolio_marginal_utility_recommends_safer_replacement()
     test_market_center_identification_separates_direction_and_coverage()

@@ -1,4 +1,5 @@
 from modules.pregame_content import team_cn
+from modules.probability_base import true_probability_base
 
 
 def clamp(value, low=0.03, high=0.75):
@@ -15,9 +16,7 @@ def normalize(rows):
 
 
 def odds_probs(odds):
-    if not odds.get("found"):
-        return None
-    return odds.get("implied_probabilities")
+    return true_probability_base(odds).get("probabilities")
 
 
 def poly_probs(polymarket):
@@ -149,12 +148,13 @@ def build_result_distribution(match, odds, polymarket, match_context=None):
         "available": True,
         "favorite": favorite,
         "underdog": underdog,
+        "tpb": probs,
         "rows": rows,
         "risk_exposure": build_risk_exposure(favorite, underdog),
         "main_path": main_path,
         "boundary_path": boundary_path,
         "extreme_path": extreme_path,
-        "explanation": "基于 API-Football 胜平负概率、亚洲让球盘、大小球盘口与真实波胆盘口的路径分布。",
+        "explanation": "基于 API-Football TPB 概率生成的路径分布；盘口只用于展示，不参与 TPB 基准。",
     }
 
 

@@ -4,6 +4,13 @@ from modules.market_utils import (
     identify_total_center,
 )
 from modules.pregame_content import team_cn
+from modules.probability_base import (
+    betting_confidence_breakdown,
+    betting_confidence_from_tpb,
+    market_direction_from_tpb,
+    odds_data_quality,
+    true_probability_base,
+)
 
 
 def format_line(team, line):
@@ -40,20 +47,18 @@ def consensus_market(markets, line_key="line"):
 
 
 def strongest_match_winner(odds, match):
-    if not odds.get("found"):
+    tpb = true_probability_base(odds)
+    probabilities = tpb.get("probabilities")
+    if not probabilities:
         return None
 
-    prices = {
-        team_cn(match["home_cn"]): odds.get("home_win"),
-        "平局": odds.get("draw"),
-        team_cn(match["away_cn"]): odds.get("away_win"),
+    labels = {
+        "home_win": team_cn(match["home_cn"]),
+        "draw": "平局",
+        "away_win": team_cn(match["away_cn"]),
     }
-    prices = {key: value for key, value in prices.items() if value}
-    if not prices:
-        return None
-
-    # Lower decimal odds imply higher market confidence.
-    return min(prices, key=prices.get)
+    winner = max(probabilities, key=probabilities.get)
+    return labels.get(winner, "平局")
 
 
 def value_direction(value_analysis):
@@ -250,43 +255,18 @@ def confidence_score(risk):
 
 
 def split_confidence(odds, polymarket, handicap_view, totals_view, api_football_data=None):
-    market_direction = 50
-    if odds.get("found"):
-        implied = odds.get("implied_probabilities") or {}
-        home = implied.get("home_win", 0)
-        away = implied.get("away_win", 0)
-        draw = implied.get("draw", 0)
-        top = max(home, away, draw)
-        second = sorted([home, away, draw], reverse=True)[1]
-        market_direction = int(max(50, min(82, 58 + (top - second) * 100)))
-    notes = []
-    betting_confidence = market_direction - 10
-    lineups = (api_football_data or {}).get("lineups") or []
-    if not lineups:
-        betting_confidence -= 5
-        notes.append("官方首发尚未公布。")
-    if handicap_view.get("center", {}).get("outlier_count"):
-        betting_confidence -= 5
-        notes.append("API 亚洲盘存在可能异常盘口；最终下注排序应优先参考用户真实赔率。")
-    if totals_view.get("total_center") in (None, "-", "No totals center"):
-        betting_confidence -= 3
-        notes.append("大小球盘口中心不可用。")
-    injuries = (api_football_data or {}).get("injuries")
-    if not injuries and not lineups:
-        notes.append("暂无公开伤病信息不等于确认全员可用，需等待首发。")
-
-    betting_confidence = int(max(35, min(75, betting_confidence)))
-    data_quality = "High"
-    if len(notes) >= 3:
-        data_quality = "Medium"
-    if not odds.get("found") or not handicap_view.get("center", {}).get("available"):
-        data_quality = "Medium"
+    tpb = true_probability_base(odds)
+    betting_confidence = betting_confidence_from_tpb(tpb)
+    data_quality_info = odds_data_quality(odds, api_football_data)
+    notes = [data_quality_info["note"]]
 
     return {
-        "market_direction_confidence": market_direction,
         "betting_confidence": betting_confidence,
-        "data_quality": data_quality,
+        "data_quality": data_quality_info["label"],
         "data_quality_notes": notes,
+        "true_probability_base": tpb,
+        "market_direction_label": market_direction_from_tpb(tpb),
+        "betting_confidence_breakdown": betting_confidence_breakdown(tpb),
     }
 
 
@@ -336,8 +316,7 @@ def build_betting_opinion(match, odds, polymarket, value_analysis, api_football_
         "goals_game_behavior_note": goals_view.get("game_behavior_note"),
         "goals_recommended_interpretation": goals_view.get("recommended_interpretation"),
         "risk_level": risk,
-        "confidence": confidence.get("market_direction_confidence", confidence_score(risk)),
-        "market_direction_confidence": confidence.get("market_direction_confidence"),
+        "confidence": confidence.get("betting_confidence", confidence_score(risk)),
         "betting_confidence": confidence.get("betting_confidence"),
         "data_quality": confidence.get("data_quality"),
         "data_quality_notes": confidence.get("data_quality_notes", []),

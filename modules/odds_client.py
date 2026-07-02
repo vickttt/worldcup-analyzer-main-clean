@@ -6,6 +6,7 @@ from pathlib import Path
 import streamlit as st
 
 from modules.api_client import request_json
+from modules.probability_base import consensus_probabilities
 from modules.cache_config import (
     API_FOOTBALL_MARKET_DATA_TTL,
     CORRECT_SCORE_DATA_TTL,
@@ -40,30 +41,10 @@ def empty_result(reason, fixture=None, degraded=False, status=None, error=None):
         "over_under_bookmakers": [],
         "over_under_source": "API-Football / Goals Over/Under",
         "over_under_message": reason,
-        "raw_probabilities": None,
-        "implied_probabilities": None,
         "source": "API-Football 免费版",
         "event_title": fixture.get("name") if fixture else None,
         "event_id": fixture.get("id") if fixture else None,
         "message": reason,
-    }
-
-
-def implied_probabilities(home_win, draw, away_win):
-    raw = {
-        "home_win": 1 / home_win,
-        "draw": 1 / draw,
-        "away_win": 1 / away_win,
-    }
-    total = sum(raw.values())
-    return {key: value / total for key, value in raw.items()}
-
-
-def raw_probabilities(home_win, draw, away_win):
-    return {
-        "home_win": 1 / home_win,
-        "draw": 1 / draw,
-        "away_win": 1 / away_win,
     }
 
 
@@ -330,7 +311,8 @@ def parse_odd(value):
     return number if number > 1 else None
 
 
-def extract_match_winner_odds(odds_response):
+def extract_match_winner_rows(odds_response):
+    rows = []
     for item in odds_response:
         for bookmaker in item.get("bookmakers", []):
             for bet in bookmaker.get("bets", []):
@@ -349,12 +331,20 @@ def extract_match_winner_odds(odds_response):
                 draw = values.get("draw")
                 away = values.get("away")
                 if home and draw and away:
-                    return {
+                    rows.append({
                         "home_win": home,
                         "draw": draw,
                         "away_win": away,
                         "bookmaker": bookmaker.get("name"),
-                    }
+                    })
+
+    return rows
+
+
+def extract_match_winner_odds(odds_response):
+    rows = extract_match_winner_rows(odds_response)
+    if rows:
+        return rows[0]
 
     return None
 
@@ -424,7 +414,8 @@ def fetch_odds_for_fixture(fixture):
     except RuntimeError as error:
         return empty_result(f"API temporarily unavailable：{error}", fixture, degraded=True)
 
-    prices = extract_match_winner_odds(odds_response)
+    winner_rows = extract_match_winner_rows(odds_response)
+    prices = winner_rows[0] if winner_rows else None
     if not prices:
         return empty_result("找到了比赛，但没有返回完整的主胜/平局/客胜赔率。", fixture)
     totals, totals_bookmakers = extract_over_under_odds(odds_response)
@@ -442,12 +433,8 @@ def fetch_odds_for_fixture(fixture):
         "over_under": totals,
         "over_under_bookmakers": totals_bookmakers,
         "over_under_source": f"API-Football / Goals Over/Under ({totals_source})",
-        "raw_probabilities": raw_probabilities(
-            prices["home_win"], prices["draw"], prices["away_win"]
-        ),
-        "implied_probabilities": implied_probabilities(
-            prices["home_win"], prices["draw"], prices["away_win"]
-        ),
+        "true_probability_base": consensus_probabilities(winner_rows),
+        "match_winner_rows": winner_rows,
         "source": f"API-Football 免费版 / {prices.get('bookmaker') or 'Bookmaker'}",
         "event_title": fixture["name"],
         "event_id": fixture["id"],

@@ -67,10 +67,9 @@ from modules.weather_client import weather_for_fixture
 from modules.perf_logger import perf_timer, read_recent_events
 from modules.portfolio_engine import (
     build_bet_id,
+    build_core_decision_layers,
     compute_portfolio_marginal_utility,
-    compute_match_investment_score,
     compute_portfolio_score,
-    correct_score_exposure_control,
     dedupe_bets as engine_dedupe_bets,
     dedupe_portfolios as engine_dedupe_portfolios,
     generate_style_portfolios,
@@ -81,7 +80,6 @@ from modules.portfolio_engine import (
     rank1_eligibility_check,
     settle_asian_handicap,
 )
-from modules.shadow_metadata import attach_shadow_metadata
 from modules.odds.core import (
     actual_odds_completeness,
     actual_odds_completeness_for_match,
@@ -98,12 +96,9 @@ from modules.odds.core import (
 from modules.strategy.core import (
     clamp,
     confidence_reason,
-    hybrid_v2_status_label,
     item_path_consistency,
     market_disagreement_reason,
-    match_betting_score,
     rank_key_with_eligibility,
-    recommended_stake_mvp,
     round_to_hundred,
     shadow_verdict_label,
     strategy_path_consistency,
@@ -114,7 +109,7 @@ from modules.strategy.core import (
 MODEL_VERSION_TRACKING = {
     "model_version": "v1.61",
     "probability_engine_version": "score_distribution_v1",
-    "optimizer_version": "portfolio_optimizer_v1",
+    "optimizer_version": "tpb_only_no_optimizer",
     "asset_framework_version": "multi_role_asset_framework_v1",
     "audit_version": "prediction_audit_v1",
 }
@@ -1041,13 +1036,30 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
             soft_card("覆盖 / 保险候选", bet_cn(opinion.get("coverage_candidate", "暂无候选")))
         with col3:
             soft_card("投注信心", f"{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100", f"数据质量：{data_quality_label}")
+        tpb = opinion.get("true_probability_base") or {}
+        tpb_probs = tpb.get("probabilities") or {}
+        if tpb_probs:
+            st.caption(
+                "TPB："
+                f"主胜 {percent(tpb_probs.get('home_win', 0))} · "
+                f"平局 {percent(tpb_probs.get('draw', 0))} · "
+                f"客胜 {percent(tpb_probs.get('away_win', 0))}"
+            )
+        confidence_breakdown = opinion.get("betting_confidence_breakdown") or {}
+        if confidence_breakdown:
+            entropy_value = confidence_breakdown.get("entropy")
+            entropy_text = "-" if entropy_value is None else f"{entropy_value:.3f}"
+            st.caption(
+                f"信心公式：{confidence_breakdown.get('formula', '-')}；"
+                f"TPB 熵值 {entropy_text}；隐藏扣分：无。"
+            )
 
         blocks = [
             ("比赛主方向", opinion.get("match_winner_reason", "-")),
             ("让球盘口方向", f"{bet_cn(opinion.get('handicap_market_direction') or opinion.get('asian_handicap', '暂无观点'))}。{opinion.get('asian_handicap_reason', '')}"),
             ("覆盖 / 保险候选", f"{bet_cn(opinion.get('coverage_candidate', '暂无候选'))}。{opinion.get('coverage_reason', '')}"),
             ("进球数观点", f"总进球盘口中心：{opinion.get('total_center', '-')}。{opinion.get('goals_market_bias', '')}"),
-            ("比赛投资价值", f"市场方向置信度 {opinion.get('market_direction_confidence', '-')} / 100；投注信心 {opinion.get('betting_confidence', '-')} / 100。"),
+            ("比赛投资价值", f"TPB 熵信心 {opinion.get('betting_confidence', '-')} / 100；市场方向：{opinion.get('market_direction_label', '-')}。"),
         ]
         for title, text in blocks:
             st.markdown(
@@ -1201,6 +1213,32 @@ def recommendation_combo(match, odds, api_football_data=None, distribution=None,
 def recommended_total_stake(decision):
     stake = decision.get("recommended_stake") or {}
     return stake.get("amount", 0), stake.get("reason", "推荐仓位暂不可用。")
+
+
+def tpb_report_strategy(decision):
+    stake = decision.get("recommended_stake") or {}
+    score = decision.get("value_rating_score") or decision.get("final_confidence_score") or 0
+    return {
+        "code": "tpb_decision",
+        "name": "TPB 单一决策",
+        "rank_name": "TPB 单一决策",
+        "score": score,
+        "portfolio_score": score,
+        "portfolio_style_label": "TPB确定性",
+        "items": [],
+        "risk_gate": {
+            "passed": True,
+            "risk_level": "诊断",
+            "reason": "风险不阻断 TPB 决策；推荐金额只由投资分决定。",
+        },
+        "rank1_eligibility": {
+            "rank1_eligible": True,
+            "eligible": True,
+            "rank1_blockers": [],
+            "summary": "TPB 决策无 legacy gate 阻断。",
+        },
+        "recommended_stake": stake,
+    }
 
 
 def stake_amounts(combo, decision):
@@ -2190,64 +2228,7 @@ def portfolio_stability_score(volatility, max_loss, total_stake, concentration, 
 
 
 def evaluate_allocation(vector, assets, return_matrix, total_stake, match, distribution, risk_lambda):
-    amounts = [unit * 100 for unit in vector]
-    active = [{**asset, "amount": amount, "share": amount / total_stake if total_stake else 0} for asset, amount in zip(assets, amounts) if amount > 0]
-    if not active:
-        return None
-
-    profits = []
-    expected_profit = 0
-    hit_probability = 0
-    for row in return_matrix:
-        profit = 0
-        for index, amount in enumerate(amounts):
-            profit += amount * row.get(f"asset_{index}", 0)
-        probability = row["probability"]
-        profits.append((profit, probability))
-        expected_profit += probability * profit
-        if profit > 0:
-            hit_probability += probability
-
-    variance = sum(probability * ((profit - expected_profit) ** 2) for profit, probability in profits)
-    volatility = variance ** 0.5
-    max_profit = max((profit for profit, _ in profits), default=0)
-    min_profit = min((profit for profit, _ in profits), default=0)
-    max_loss = abs(min(0, min_profit))
-    correlation = weighted_combo_correlation(active)
-    strategic_value = strategy_strategic_value(active, match, distribution)
-    consistency_score = strategy_path_consistency(active)
-    sharpe_ratio = expected_profit / volatility if volatility else 0
-    stability = portfolio_stability_score(volatility, max_loss, total_stake, correlation, profits)
-    risk = volatility + max_loss * 0.35 + correlation * total_stake * 0.20
-    risk_reward = max_profit / max_loss if max_loss else max_profit / total_stake if total_stake else 0
-    score, _ = strategy_score(
-        expected_profit / total_stake if total_stake else 0,
-        hit_probability,
-        risk_reward,
-        max_loss,
-        total_stake,
-        correlation,
-        strategy_direction_alignment(active, match, distribution),
-        strategic_value,
-        consistency_score,
-        sharpe_ratio,
-        stability,
-    )
-    utility = score * 10 + expected_profit * 0.04 - risk_lambda * risk * 0.04 + role_balance_adjustment(active, match, distribution)
-    return {
-        "items": active,
-        "utility": utility,
-        "expected_profit": expected_profit,
-        "expected_yield": expected_profit / total_stake if total_stake else 0,
-        "hit_rate": hit_probability,
-        "max_profit": max_profit,
-        "max_loss": max_loss,
-        "volatility": volatility,
-        "correlation": correlation,
-        "strategic_value": strategic_value,
-        "sharpe_ratio": sharpe_ratio,
-        "stability_score": stability,
-    }
+    return None
 
 
 def optimize_betting_portfolio(match, distribution, combo, total_stake, risk_profile="standard"):
@@ -3120,142 +3101,24 @@ def portfolio_constraint_variants(items):
 
 
 def evaluate_strategy(strategy, match, distribution, total_stake):
-    items = strategy["items"] if strategy.get("fixed_amounts") else allocate_strategy_items(strategy["items"], total_stake)
-    scores = score_candidates(match, distribution, items)
-    probabilities = scenario_probability_map(match, distribution, items, scores)
-    score_rows = []
-    total_probability = 0
-    hit_probability = 0
-    weighted_profit = 0
-    profits = []
-    for score in scores:
-        row = score_profit_row(match, distribution, items, score)
-        probability = probabilities.get(score, 0)
-        profit = row["_total"]
-        ev_contribution = probability * profit
-        row["_probability"] = probability
-        row["比分概率"] = percent(probability)
-        row["概率×收益"] = f"{percent(probability)} × {row['组合收益']}"
-        row["EV贡献"] = f"{ev_contribution:+.0f}"
-        row["_ev_contribution"] = ev_contribution
-        total_probability += probability
-        if profit > 0:
-            hit_probability += probability
-        weighted_profit += ev_contribution
-        profits.append((profit, probability))
-        score_rows.append(row)
-
-    if total_probability:
-        hit_rate = hit_probability / total_probability
-        expected_profit = weighted_profit / total_probability
-    else:
-        hit_rate = 0
-        expected_profit = sum(item.get("amount", 0) * (item.get("actual_ev") or 0) for item in items)
-
-    max_profit = max((profit for profit, _ in profits), default=0)
-    min_profit = min((profit for profit, _ in profits), default=-total_stake)
-    max_loss = abs(min(0, min_profit))
-    variance = 0
-    if total_probability:
-        variance = sum(probability * ((profit - expected_profit) ** 2) for profit, probability in profits) / total_probability
-    volatility = variance ** 0.5
-    sharpe_ratio = expected_profit / volatility if volatility else 0
-    risk_reward = max_profit / max_loss if max_loss else max_profit / total_stake if total_stake else 0
-    coverage = sum(item.get("coverage_rate") or 0 for item in items) / len(items) if items else 0
-    concentration = weighted_combo_correlation(items)
-    direction_alignment = strategy_direction_alignment(items, match, distribution)
-    strategic_value = strategy_strategic_value(items, match, distribution)
-    consistency_score = strategy_path_consistency(items)
-    ev_yield = expected_profit / total_stake if total_stake else 0
-    capital_efficiency = expected_profit / total_stake if total_stake else 0
-    stability_score = portfolio_stability_score(volatility, max_loss, total_stake, concentration, profits)
-    score, score_components = strategy_score(
-        ev_yield,
-        hit_rate,
-        risk_reward,
-        max_loss,
-        total_stake,
-        concentration,
-        direction_alignment,
-        strategic_value,
-        consistency_score,
-        sharpe_ratio,
-        stability_score,
-    )
-    style = portfolio_style(items, match, distribution, {"concentration": concentration, "volatility": volatility})
-
-    result = {
+    items = strategy.get("items") or []
+    return {
         "code": strategy["code"],
         "name": strategy["name"],
         "items": items,
-        "hit_rate": hit_rate,
-        "expected_profit": expected_profit,
-        "expected_yield": ev_yield,
-        "capital_efficiency": capital_efficiency,
-        "max_profit": max_profit,
-        "max_loss": max_loss,
-        "volatility": volatility,
-        "sharpe_ratio": sharpe_ratio,
-        "risk_reward": risk_reward,
-        "coverage": min(1, coverage),
-        "concentration": concentration,
-        "direction_alignment": direction_alignment,
-        "strategic_value": strategic_value,
-        "consistency_score": consistency_score,
-        "role_constraint": {
-            "adjustment": role_balance_adjustment(items, match, distribution),
-            "rows": role_constraint_rows(items, match, distribution),
+        "score": 0,
+        "score_components": {"状态": "legacy evaluate_strategy 已停用；TPB 决策链不使用组合评分。"},
+        "score_rows": [],
+        "rank1_eligibility": {
+            "rank1_eligible": True,
+            "summary": "legacy strategy evaluation disabled",
         },
-        "portfolio_style": style,
-        "stability_score": stability_score,
-        "score": score,
-        "score_components": score_components,
-        "score_rows": score_rows,
     }
-    portfolio_metrics = compute_portfolio_score(result, match, distribution)
-    result["items"] = portfolio_metrics.get("items", items)
-    result["score"] = portfolio_metrics["score"]
-    result["portfolio_score_components"] = portfolio_metrics["score_components"]
-    result["coverage_metrics"] = portfolio_metrics["coverage"]
-    result["coverage_efficiency"] = portfolio_metrics["coverage_efficiency"]
-    result["directional_odds_value"] = portfolio_metrics["directional_odds_value"]
-    result["pressure_fit"] = portfolio_metrics.get("pressure_fit")
-    result["portfolio_why"] = portfolio_metrics["why"]
-    result["portfolio_style_label"] = portfolio_style_name(result, portfolio_metrics)
-    result["risk_gate"] = portfolio_risk_gate(result, score_rows, {"match": match, "distribution": distribution})
-    result["correct_score_exposure"] = correct_score_exposure_control(result, result.get("portfolio_style_label") or strategy.get("name"))
-    result["rank1_eligibility"] = rank1_eligibility_check(result, match, distribution)
-    result["pressure_template"] = strategy.get("pressure_template") or "standard template"
-    result["marginal_utility"] = compute_portfolio_marginal_utility(
-        result,
-        portfolio_constraint_variants(result["items"]),
-        [
-            {
-                "score": row.get("比分"),
-                "scenario_type": row.get("路径类型") or row.get("scenario_type"),
-                "scenario_weight": row.get("_probability"),
-            }
-            for row in score_rows
-        ],
-    )[:5]
-    return result
 
 
 
 def strategy_comparison(match, distribution, combo, total_stake):
-    strategies = build_strategy_library(combo, match, distribution)
-    evaluated = [evaluate_strategy(strategy, match, distribution, total_stake) for strategy in strategies]
-    optimized = build_auto_optimized_strategy(combo, match, distribution, total_stake)
-    if optimized:
-        evaluated.append(optimized)
-    evaluated = engine_dedupe_portfolios(evaluated)
-    ranked = sorted(evaluated, key=rank_key_with_eligibility, reverse=True)
-    if ranked and not (ranked[0].get("rank1_eligibility") or {}).get("rank1_eligible"):
-        ranked[0]["rank1_warning"] = "No portfolio passed zero-risk gate; this match may be unsuitable."
-    for index, strategy in enumerate(ranked):
-        strategy["original_name"] = strategy["name"]
-        strategy["rank_name"] = "推荐组合" if index == 0 else f"第{index + 1}组合"
-    return ranked
+    return []
 
 
 def efficient_frontier_rows(strategies):
@@ -3275,7 +3138,7 @@ def efficient_frontier_rows(strategies):
             "组合": strategy.get("rank_name", strategy["name"]),
             "EV": f"{strategy['expected_profit']:+.0f}",
             "风险": f"{strategy.get('volatility', 0):.0f}",
-            "最大亏损": f"-{strategy.get('max_loss', 0):.0f}",
+            "最大亏损": max_loss_state(strategy.get("max_loss")),
             "Sharpe": f"{strategy.get('sharpe_ratio', 0):.2f}",
             "说明": "风险更低" if zone == "低风险" else ("收益弹性更高" if zone == "高收益高风险" else "收益和风险较均衡"),
         })
@@ -3297,7 +3160,7 @@ def strategy_table_rows(strategies, match=None, distribution=None):
             "预期收益率": f"{strategy['expected_yield'] * 100:+.1f}%",
             "资金效率": f"{strategy['capital_efficiency'] * 100:+.1f}%",
             "最大盈利": f"{strategy['max_profit']:+.0f}",
-            "最大亏损": f"-{strategy['max_loss']:.0f}",
+            "最大亏损": max_loss_state(strategy.get("max_loss")),
             "盈亏波动": f"{strategy['volatility']:.0f}",
             "Sharpe": f"{strategy.get('sharpe_ratio', 0):.2f}",
             "稳定性": f"{strategy.get('stability_score', 0)} / 100",
@@ -3322,7 +3185,7 @@ def prematch_strategy_ranking_rows(strategies):
             "ROI预测": f"{strategy['expected_yield'] * 100:+.1f}%",
             "命中率": percent(strategy["hit_rate"]),
             "最大盈利": f"{strategy['max_profit']:+.0f}",
-            "最大亏损": f"-{strategy['max_loss']:.0f}",
+            "最大亏损": max_loss_state(strategy.get("max_loss")),
             "Sharpe": f"{strategy.get('sharpe_ratio', 0):.2f}",
             "稳定性": f"{strategy.get('stability_score', 0)} / 100",
             "保险成本": insurance_cost_summary(strategy, strategies),
@@ -3437,7 +3300,7 @@ def strategy_direct_comparison_rows(strategies):
             "预期收益率": f"{current['expected_yield'] * 100:+.1f}%",
             "资金效率": f"{current['capital_efficiency'] * 100:+.1f}%",
             "最大盈利": f"{current['max_profit']:+.0f}",
-            "最大亏损": f"-{current['max_loss']:.0f}",
+            "最大亏损": max_loss_state(current.get("max_loss")),
             "覆盖率": percent(current["coverage"]),
             "战略价值": percent(current["strategic_value"]),
             "综合评分": current["score"],
@@ -3451,7 +3314,7 @@ def strategy_direct_comparison_rows(strategies):
             "预期收益率": f"{best['expected_yield'] * 100:+.1f}%",
             "资金效率": f"{best['capital_efficiency'] * 100:+.1f}%",
             "最大盈利": f"{best['max_profit']:+.0f}",
-            "最大亏损": f"-{best['max_loss']:.0f}",
+            "最大亏损": max_loss_state(best.get("max_loss")),
             "覆盖率": percent(best["coverage"]),
             "战略价值": percent(best["strategic_value"]),
             "综合评分": best["score"],
@@ -3480,7 +3343,7 @@ def insurance_cost_rows(strategies, match=None, distribution=None):
             "EV": f"{protected['expected_profit']:+.0f}",
             "预期收益率": f"{protected['expected_yield'] * 100:+.1f}%",
             "命中率": percent(protected["hit_rate"]),
-            "最大亏损": f"-{protected['max_loss']:.0f}",
+            "最大亏损": max_loss_state(protected.get("max_loss")),
             "保险效率": "-",
             "说明": "独赢、让球、大小球用于覆盖非精确比分路径。",
         },
@@ -3490,7 +3353,7 @@ def insurance_cost_rows(strategies, match=None, distribution=None):
             "EV": f"{pure['expected_profit']:+.0f}",
             "预期收益率": f"{pure['expected_yield'] * 100:+.1f}%",
             "命中率": percent(pure["hit_rate"]),
-            "最大亏损": f"-{pure['max_loss']:.0f}",
+            "最大亏损": max_loss_state(pure.get("max_loss")),
             "保险效率": "-",
             "说明": "更依赖精确比分，收益弹性高但路径覆盖窄。",
         },
@@ -3749,6 +3612,19 @@ def normalize_portfolio_name(name, index=None, source=None):
     if source == "My Portfolio" or str(name or "").strip() in {"用户实际组合", "我的组合", "User Portfolio"}:
         return "我的组合"
     text = str(name or "").strip()
+    translations = {
+        "Conservative Portfolio": "保守组合",
+        "Main Scenario Portfolio": "主策略组合",
+        "Aggressive Portfolio": "激进组合",
+        "Tail Hedge Portfolio": "尾部对冲组合",
+        "Main Scenario": "主策略",
+        "Conservative": "保守型",
+        "Aggressive": "激进型",
+        "Balanced": "均衡型",
+        "Risk": "风险",
+    }
+    if text in translations:
+        return translations[text]
     if text in {"推荐组合（当前最优）", "首选组合", "当前推荐组合"}:
         return "推荐组合"
     if text.startswith("备选组合"):
@@ -3769,6 +3645,23 @@ def normalize_portfolio_name(name, index=None, source=None):
     if index is not None:
         return f"第{index + 1}组合"
     return text or "-"
+
+
+def ranking_label_cn(value):
+    translations = {
+        "High": "高",
+        "Medium": "中",
+        "Low": "低",
+        "Balanced": "均衡",
+        "Aggressive": "激进",
+        "Conservative": "保守",
+        "Main Scenario": "主策略",
+        "Tail Hedge": "尾部对冲",
+        "Risk": "风险",
+        "Knockout Template: Balanced": "淘汰赛均衡模板",
+        "Knockout Template: Conservative Control": "淘汰赛保守控制模板",
+    }
+    return translations.get(str(value), value)
 
 
 def render_actual_odds_input(match):
@@ -4583,150 +4476,83 @@ def portfolio_ranking_rows(strategies, baseline=None):
     rows = []
     for index, strategy in enumerate(strategies or [], start=1):
         metrics = strategy.get("metrics") or {}
-        coverage = strategy.get("coverage_metrics") or {}
         components = strategy.get("portfolio_score_components") or strategy.get("score_components") or {}
         pressure_fit = strategy.get("pressure_fit") or {}
         risk_gate = strategy.get("risk_gate") or {}
-        exposure = strategy.get("correct_score_exposure") or {}
         eligibility = strategy.get("rank1_eligibility") or {}
         rows.append({
             "排名": index,
             "组合名称": normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name"), index - 1),
-            "风格": strategy.get("portfolio_style_label") or (strategy.get("portfolio_style") or {}).get("style_cn", "-"),
-            "第一推荐资格": "YES" if eligibility.get("rank1_eligible") else "NO",
-            "风险门槛": risk_gate.get("risk_level", "-"),
+            "风格": ranking_label_cn(strategy.get("portfolio_style_label") or (strategy.get("portfolio_style") or {}).get("style_cn", "-")),
+            "第一推荐资格": "是" if eligibility.get("rank1_eligible") else "否",
+            "风险门槛": ranking_label_cn(risk_gate.get("risk_level", "-")),
             "主剧本": strategy_main_script(strategy),
             "让球资产": strategy_asset_names(strategy, "handicap"),
             "大小球资产": strategy_asset_names(strategy, "total"),
             "波胆资产": strategy_asset_names(strategy, "correct_score"),
-            "波胆占比": percent(exposure.get("stake_share", 0)),
-            "覆盖摘要": coverage.get("summary", "-"),
-            "EV": f"{int(metrics.get('expected_profit', strategy.get('expected_profit', 0))):+d}元",
-            "ROI": percent(metrics.get("expected_yield", strategy.get("expected_yield", 0))),
-            "最大亏损": f"-{int(metrics.get('max_loss', strategy.get('max_loss', 0)))}元",
+            "预期收益": f"{int(metrics.get('expected_profit', strategy.get('expected_profit', 0))):+d}元",
+            "收益率": percent(metrics.get("expected_yield", strategy.get("expected_yield", 0))),
             "剧本一致性": components.get("Scenario Consistency", round(strategy.get("consistency_score", 0) * 100)),
-            "淘汰赛剧本匹配度": pressure_fit.get("label", "-"),
-            "覆盖评分": components.get("Coverage Quality", coverage.get("coverage_score", "-")),
-            "覆盖效率": components.get("Coverage Efficiency", (strategy.get("coverage_efficiency") or {}).get("score", "-")),
-            "归零风险": percent(coverage.get("zero_risk", 0)),
+            "淘汰赛剧本匹配度": ranking_label_cn(pressure_fit.get("label", "-")),
             "综合评分": strategy.get("score", "-"),
         })
     return rows
 
 
-
-def hybrid_v2_sleeve_share_label(value):
+def max_loss_state(value):
     if value is None:
-        return "-"
+        return "未计算"
     try:
-        return f"{float(value) * 100:.0f}%"
+        number = float(value)
     except (TypeError, ValueError):
-        return "-"
+        return "未计算"
+    if number == 0:
+        return "无仓位 / 无敞口"
+    return f"-{int(number)}元"
 
+
+def render_ranking_score_notes(decision_layers):
+    score_layer = (decision_layers or {}).get("score_layer") or {}
+    execution_layer = (decision_layers or {}).get("execution_layer") or {}
+    explanation_layer = (decision_layers or {}).get("explanation_layer") or {}
+    stake = execution_layer.get("stake") or {}
+    with st.expander("评分说明", expanded=False):
+        rows = [
+            {"项目": "TPB", "说明": "API-Football 胜平负赔率归一化后的唯一概率基础。"},
+            {"项目": "投资分", "说明": f"{score_layer.get('investment_score', 0)} / 100；由 TPB 集中度、热门差值和平/冷概率派生。"},
+            {"项目": "投注信心", "说明": f"{score_layer.get('betting_confidence', 0)} / 100；由 TPB 熵值派生，无首发/伤病扣分。"},
+            {"项目": "推荐金额", "说明": f"{stake.get('amount', 0)} 元；只由投资分档位决定。"},
+            {"项目": "覆盖定义", "说明": explanation_layer.get("coverage_explanation", "-")},
+            {"项目": "风险解释", "说明": explanation_layer.get("risk_explanation", "-")},
+            {"项目": "最大亏损", "说明": "主表不展示；诊断中 null=未计算，0=无仓位，正数=真实敞口。"},
+        ]
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
 
 def portfolio_display_name(strategy):
-    return strategy.get("rank_name") or strategy.get("name") or "-"
-
-
-def hybrid_v2_sleeve_share(match, distribution):
-    sample_type = str((match or {}).get("sample_type") or "")
-    main_path = str((distribution or {}).get("main_path") or "")
-    if "低比分" in sample_type or "平局" in main_path:
-        return 0.05
-    if "冷门风险" in sample_type or "不败" in main_path:
-        return 0.10
-    if "强队深盘" in sample_type and "高比分" in sample_type:
-        return 0.20
-    if "高比分" in sample_type or "3球以上" in main_path:
-        return 0.20
-    if "强队深盘" in sample_type:
-        return 0.15
-    return 0.15
-
-
-def hybrid_v2_sleeve_status(match, distribution, sleeve_share):
-    sample_type = str((match or {}).get("sample_type") or "")
-    main_path = str((distribution or {}).get("main_path") or "")
-    if sleeve_share <= 0:
-        return "No Sleeve"
-    if "低比分" in sample_type or "平局" in main_path:
-        return "Watch: Small Upside Sleeve"
-    if "冷门风险" in sample_type or "不败" in main_path:
-        return "Watch: Small Upside Sleeve"
-    if "高比分" in sample_type or "强队深盘" in sample_type or "3球以上" in main_path:
-        return "Scenario-Supported Aggressive Upside"
-    return "Watch: Small Upside Sleeve"
-
-
-def hybrid_v2_sleeve_reason(match, distribution, sleeve_share):
-    sample_type = str((match or {}).get("sample_type") or "")
-    main_path = str((distribution or {}).get("main_path") or "")
-    if "低比分" in sample_type or "平局" in main_path:
-        return "低比分或胶着路径，只保留小仓观察，不影响正式推荐。"
-    if "冷门风险" in sample_type or "不败" in main_path:
-        return "存在冷门/不败路径，上行袖仓仅作为小仓观察。"
-    if "高比分" in sample_type and "强队深盘" in sample_type:
-        return "强队深盘且存在高比分路径，允许受限进攻上行观察。"
-    if "高比分" in sample_type or "3球以上" in main_path:
-        return "高比分路径下观察受限上行袖仓，用于避免完全错过进攻收益。"
-    if "强队深盘" in sample_type:
-        return "强队深盘路径下观察打穿盘口的受限上行暴露。"
-    return "Hybrid v0.2 观察用袖仓，不影响正式排序或推荐。"
-
-
-def attach_hybrid_v2_visible_metadata(strategies, match, distribution):
-    if not strategies:
-        return strategies
-    core = min(strategies, key=lambda item: (item.get("shadow") or {}).get("scenario_rank", 999))
-    sleeve = next((item for item in strategies if "Tail Upside" in str(portfolio_display_name(item))), None)
-    legacy_tail = next((item for item in strategies if "Legacy Value" in str(portfolio_display_name(item))), None)
-    sleeve_share = hybrid_v2_sleeve_share(match, distribution)
-    sleeve_status = hybrid_v2_sleeve_status(match, distribution, sleeve_share)
-    sleeve_reason = hybrid_v2_sleeve_reason(match, distribution, sleeve_share)
-    core_name = portfolio_display_name(core)
-    sleeve_name = portfolio_display_name(sleeve) if sleeve else "-"
-    legacy_tail_name = portfolio_display_name(legacy_tail) if legacy_tail else "-"
-
-    for strategy in strategies:
-        name = portfolio_display_name(strategy)
-        is_legacy_tail = legacy_tail is not None and strategy is legacy_tail
-        strategy["hybrid_v2"] = {
-            "core_portfolio": core_name,
-            "upside_sleeve": sleeve_name,
-            "legacy_tail_heavy_portfolio": legacy_tail_name,
-            "sleeve_share": 1.0 if is_legacy_tail else sleeve_share,
-            "sleeve_status": "Blocked Tail" if is_legacy_tail else sleeve_status,
-            "sleeve_reason": (
-                "Legacy Tail-Heavy 可能捕捉更高收益，但回撤显著更大；本阶段仅观察。"
-                if is_legacy_tail
-                else sleeve_reason
-            ),
-        }
-    return strategies
+    return normalize_portfolio_name(strategy.get("rank_name") or strategy.get("name") or "-")
 
 
 
 
-def render_match_decision_cards(strategies, match=None, distribution=None, data_context=None):
-    investment = compute_match_investment_score(strategies, match or {}, distribution or {}, data_context or {})
-    score = match_betting_score(strategies)
-    stake = recommended_stake_mvp(score)
+def render_match_decision_cards(decision_layers):
+    score_layer = (decision_layers or {}).get("score_layer") or {}
+    execution_layer = (decision_layers or {}).get("execution_layer") or {}
+    explanation_layer = (decision_layers or {}).get("explanation_layer") or {}
+    stake = execution_layer.get("stake") or {"amount": 0, "risk_mode": "-", "amount_rule": "-", "reason": "-"}
     cols = st.columns(2)
     with cols[0]:
         with st.container(border=True):
-            st.markdown("**Match Investment Score**")
-            st.metric("比赛投资分", f"{investment['score']} / 100", investment["rating"])
-            st.caption("Main Reason：" + investment.get("main_reason", "-"))
-            st.caption("Key Risk：" + investment.get("key_risk", "-"))
-            st.caption("数据质量说明：" + investment.get("data_quality_note", "-"))
-            components = investment.get("components") or {}
+            st.markdown("**比赛投资分**")
+            st.metric("比赛投资分", f"{score_layer.get('investment_score', 0)} / 100", execution_layer.get("risk_decision", "-"))
+            st.caption("数据质量说明：" + score_layer.get("data_quality_note", "-"))
+            components = explanation_layer.get("components") or {}
             if components:
                 component_text = " · ".join(f"{key}: {value}" for key, value in components.items())
                 st.caption(component_text)
     with cols[1]:
         with st.container(border=True):
-            st.markdown("**Recommended Stake**")
+            st.markdown("**推荐金额**")
             st.metric("推荐金额", f"{stake['amount']} 元", stake["risk_mode"])
             st.caption("金额规则：" + stake.get("amount_rule", "-"))
             st.caption("推荐原因：" + stake["reason"])
@@ -4808,7 +4634,6 @@ def portfolio_goal_text(strategy):
 
 def portfolio_downgrade_reason(strategy):
     shadow = strategy.get("shadow") or {}
-    hybrid_v2 = strategy.get("hybrid_v2") or {}
     reasons = []
     legacy_rank = shadow.get("legacy_rank")
     scenario_rank = shadow.get("scenario_rank")
@@ -4836,9 +4661,6 @@ def portfolio_downgrade_reason(strategy):
         reasons.append("加分来源：主剧本收益覆盖更清晰。")
     elif scenario_reason:
         reasons.append(scenario_reason)
-    sleeve_reason = hybrid_v2.get("sleeve_reason")
-    if sleeve_reason:
-        reasons.append(str(sleeve_reason))
     if verdict == "Disagreement":
         reasons.append("结论：存在明显剧本分歧，需要降级观察。")
     elif verdict == "Watch":
@@ -4889,17 +4711,8 @@ def render_portfolio_detail_expanders(strategies, match, distribution):
             risk_gate = strategy.get("risk_gate") or {}
             if risk_gate:
                 st.caption(
-                    f"- 归零风险门槛：{risk_gate.get('risk_level', '-')}，"
+                    f"- TPB 风险诊断：{risk_gate.get('risk_level', '-')}，"
                     f"{risk_gate.get('reason', '-')}"
-                )
-                failed_paths = risk_gate.get("failed_paths") or []
-                if failed_paths:
-                    st.caption("- Gate 失败路径：" + "、".join(failed_paths[:6]))
-            exposure = strategy.get("correct_score_exposure") or {}
-            if exposure:
-                st.caption(
-                    f"- 波胆暴露：{exposure.get('stake_share', 0) * 100:.0f}% "
-                    f"/ 上限 {exposure.get('limit', 0) * 100:.0f}%。{exposure.get('warning', '-')}"
                 )
             eligibility = strategy.get("rank1_eligibility") or {}
             if eligibility:
@@ -4912,7 +4725,7 @@ def render_portfolio_detail_expanders(strategies, match, distribution):
 
             marginal_rows = strategy.get("marginal_utility") or []
             if marginal_rows:
-                st.markdown("**覆盖效率 / 边际效用**")
+                st.markdown("**边际效用诊断**")
                 st.dataframe(
                     pd.DataFrame([
                         {
@@ -4920,8 +4733,8 @@ def render_portfolio_detail_expanders(strategies, match, distribution):
                             "建议": row.get("recommendation"),
                             "EV变化": f"{row.get('ev_delta', 0):+.0f}",
                             "ROI变化": percent(row.get("ev_roi_delta", 0)),
-                            "归零风险改善": percent(row.get("coverage_gain", 0)),
-                            "最大亏损": f"{row.get('base_max_loss', 0):.0f} -> {row.get('new_max_loss', 0):.0f}",
+                            "风险改善": percent(row.get("coverage_gain", 0)),
+                            "最大亏损": f"{max_loss_state(row.get('base_max_loss'))} -> {max_loss_state(row.get('new_max_loss'))}",
                             "复杂度": row.get("complexity_delta"),
                         }
                         for row in marginal_rows
@@ -4929,19 +4742,6 @@ def render_portfolio_detail_expanders(strategies, match, distribution):
                     use_container_width=True,
                     hide_index=True,
                 )
-
-            st.markdown("**Hybrid v0.2 Diagnostic**")
-            st.caption("Hybrid v0.2 仅为观察，不影响正式排序、默认推荐或评分。")
-            hybrid_v2 = strategy.get("hybrid_v2") or {}
-            diagnostic_rows = [
-                {"项目": "Core Portfolio", "内容": hybrid_v2.get("core_portfolio", "-")},
-                {"项目": "Upside Sleeve", "内容": hybrid_v2.get("upside_sleeve", "-")},
-                {"项目": "Sleeve %", "内容": hybrid_v2_sleeve_share_label(hybrid_v2.get("sleeve_share"))},
-                {"项目": "Sleeve Status", "内容": hybrid_v2_status_label(hybrid_v2.get("sleeve_status"))},
-                {"项目": "Sleeve Reason", "内容": hybrid_v2.get("sleeve_reason", "-")},
-            ]
-            st.dataframe(pd.DataFrame(diagnostic_rows), use_container_width=True, hide_index=True)
-
             st.markdown("**风险提示**")
             risk_rows = risk_path_rows(strategy)
             if risk_rows:
@@ -4951,39 +4751,28 @@ def render_portfolio_detail_expanders(strategies, match, distribution):
 
 
 def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None, data_context=None):
-    if not strategies:
-        st.info("当前没有足够真实盘口生成组合排行榜。")
-        return
-
-    with perf_timer("detail", "render_portfolio_ranking", {"shown": min(6, len(strategies)), "total": len(strategies)}):
-        st.markdown("**组合排行**")
-        st.caption("Legacy 排名仍为正式排序；Scenario Rank 仅供观察，不影响推荐。")
-        st.caption("Hybrid v0.2 仅为观察，不影响正式排序、默认推荐或评分。")
-        my_strategy = evaluated_my_portfolio_strategy(my_portfolio, match, distribution)
-        comparison = list(strategies)
-        if my_strategy:
-            comparison.append(my_strategy)
-        comparison = sorted(comparison, key=rank_key_with_eligibility, reverse=True)
-        comparison = attach_shadow_metadata(comparison, match, distribution)
-        comparison = attach_hybrid_v2_visible_metadata(comparison, match, distribution)
-        display_comparison, duplicate_groups = dedupe_portfolios_for_display(comparison, match, distribution)
-        render_match_decision_cards(display_comparison, match, distribution, data_context)
-        shown = display_comparison[:6]
-        if my_strategy and all(item.get("code") != "my_portfolio" for item in shown):
-            shadowed_my_strategy = next(
-                (item for item in display_comparison if item.get("code") == "my_portfolio"),
-                None,
-            )
-            if shadowed_my_strategy:
-                shown = shown[:5] + [shadowed_my_strategy]
-        baseline = strategies[0] if strategies else None
-        if duplicate_groups:
-            st.caption("已合并重复组合：" + "；".join(duplicate_groups))
-        st.dataframe(pd.DataFrame(portfolio_ranking_rows(shown, baseline)), use_container_width=True, hide_index=True)
-        if my_strategy:
-            my_rank = next((idx for idx, item in enumerate(comparison, start=1) if item.get("code") == "my_portfolio"), None)
-            st.caption(f"我的组合当前排名：第 {my_rank} / {len(comparison)}。")
-        render_portfolio_detail_expanders(shown, match, distribution)
+    with perf_timer("detail", "render_tpb_decision", {"mode": "tpb_only"}):
+        st.markdown("**TPB 决策输出**")
+        st.caption("旧组合排序、收益排序与剧本排序已退出决策链；本区只展示 TPB 模型层返回值。")
+        decision_layers = build_core_decision_layers([], match, distribution, data_context)
+        render_match_decision_cards(decision_layers)
+        score_layer = decision_layers.get("score_layer") or {}
+        execution_layer = decision_layers.get("execution_layer") or {}
+        stake = execution_layer.get("stake") or {}
+        tpb = score_layer.get("tpb") or {}
+        probs = tpb.get("probabilities") or {}
+        rows = [{
+            "决策层": "TPB 单一决策",
+            "主胜": percent(probs.get("home_win", 0)) if probs else "-",
+            "平局": percent(probs.get("draw", 0)) if probs else "-",
+            "客胜": percent(probs.get("away_win", 0)) if probs else "-",
+            "投注信心": f"{score_layer.get('betting_confidence', 0)} / 100",
+            "投资分": f"{score_layer.get('investment_score', 0)} / 100",
+            "推荐金额": f"{stake.get('amount', 0)} 元",
+            "执行判断": execution_layer.get("risk_decision", "-"),
+        }]
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        render_ranking_score_notes(decision_layers)
 
 
 def render_actual_market_odds_summary(initial_combo):
@@ -5134,46 +4923,32 @@ def render_core_risk_summary(match, decision, distribution):
 
 
 def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None):
-    combo = recommendation_combo(match, odds, api_football_data, distribution, actual_odds)
-    my_portfolio_candidates = portfolio_market_candidates(combo, odds, api_football_data, match, distribution)
-    if my_portfolio and my_portfolio.get("raw_text"):
-        my_portfolio = {
-            **my_portfolio,
-            "items": parse_my_portfolio(my_portfolio.get("raw_text", ""), my_portfolio_candidates, match),
-        }
-    initial_combo_with_amounts = stake_amounts(combo, decision)
-    total_stake, total_reason = recommended_total_stake(decision)
-    strategies = strategy_comparison(match, distribution, initial_combo_with_amounts, total_stake)
     with st.container(border=True):
         st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
         render_betting_opinion(betting_opinion, odds, polymarket, match)
         render_portfolio_ranking(
-            strategies,
+            [],
             match,
             distribution,
-            my_portfolio,
+            None,
             {
                 "odds": odds,
                 "api_football_data": api_football_data,
-                "actual_odds": actual_odds,
                 "polymarket": polymarket,
             },
         )
         render_core_risk_summary(match, decision, distribution)
+        st.caption("结果分布为观察层，不参与 TPB 投资分、推荐金额或排序。")
+        render_result_distribution(distribution)
 
-        current_combo_with_actual = stake_amounts(recommendation_combo(match, odds, api_football_data, distribution, actual_odds), decision)
         st.markdown("**辅助功能**")
-        with st.expander(actual_odds_expander_title(match, current_combo_with_actual), expanded=False):
+        with st.expander("我的实际赔率（仅记录，不参与 TPB 决策）", expanded=False):
             actual_odds = render_actual_odds_input(match)
-        with st.expander(my_portfolio_expander_title(match, selected_fixture, my_portfolio), expanded=False):
-            my_portfolio = render_my_portfolio_input(match, selected_fixture, my_portfolio_candidates)
-        with st.expander(actual_value_expander_title(current_combo_with_actual), expanded=False):
-            render_actual_market_odds_summary(current_combo_with_actual)
+        st.caption("用户赔率、我的组合、收益对比和剧本组合排行不再参与决策输出。")
 
     return {
-        "strategies": strategies,
-        "snapshot_combo": initial_combo_with_amounts,
-        "top_strategy": (strategies[0] if strategies else {}),
+        "strategies": [],
+        "top_strategy": {},
         "my_portfolio": my_portfolio or {},
         "actual_odds": actual_odds or {},
     }
@@ -5427,7 +5202,8 @@ def render_match_winner(match, market_data):
             return
         home_name = team_cn(match["home_cn"])
         away_name = team_cn(match["away_cn"])
-        implied = odds.get("implied_probabilities") or {}
+        tpb = odds.get("true_probability_base") or {}
+        implied = tpb.get("probabilities") or {}
         col1, col2, col3 = st.columns(3)
         with col1:
             probability_bar(home_name, implied.get("home_win", 0), fmt(odds.get("home_win")))
@@ -5452,7 +5228,7 @@ def render_handicap(match, market_data):
 
         rows = handicap.get("rows") or []
         bookmakers = handicap.get("bookmakers") or []
-        summary = identify_handicap_center(rows, odds={}, match=match)
+        summary = identify_handicap_center(rows, odds=odds_from_market_data(market_data), match=match)
         st.success(handicap.get("message", "已获取真实亚洲让球盘。"))
         st.caption(
             f"数据来源：{handicap.get('source')} · "
@@ -5466,6 +5242,19 @@ def render_handicap(match, market_data):
             st.caption("盘口中心公司：" + (", ".join(summary.get("bookmakers", [])[:6]) or "-"))
             if summary.get("coverage_label") not in (None, "No coverage candidate"):
                 st.info(f"覆盖/保险候选：{summary.get('coverage_label')}。这不是主方向，只用于防守平局、低节奏或热门方不打穿。")
+            if summary.get("secondary_handicap_label"):
+                st.caption(f"盘口参考：{summary.get('secondary_handicap_label')}（仅展示，不参与 TPB 决策）。")
+            trace = summary.get("coverage_trace") or {}
+            if trace:
+                st.caption(
+                    "覆盖 trace："
+                    f"raw {trace.get('raw_rows', 0)} → "
+                    f"parsed {trace.get('parsed_rows', 0)} → "
+                    f"filtered {trace.get('filtered_rows', 0)} → "
+                    f"secondary_handicap {trace.get('secondary_handicap_rows', 0)} → "
+                    f"relaxed_secondary {trace.get('relaxed_secondary_handicap_rows', 0)}；"
+                    f"fallback：{trace.get('fallback_used', '-')}"
+                )
             if summary.get("warning"):
                 st.warning(summary.get("warning"))
         if st.checkbox("展开全部盘口", value=False, key="market_all_handicap"):
@@ -6240,14 +6029,9 @@ def render_analysis_page(match_text):
                     actual_odds,
                     result_distribution,
                 )
-            with perf_timer("detail", "portfolio_candidates"):
-                portfolio_candidates = recommendation_combo(match, odds, api_football_data, result_distribution, actual_odds)
             my_portfolio = load_my_portfolio(match, selected_fixture) or {}
-            with perf_timer("detail", "portfolio_optimizer"):
-                total_stake, _ = recommended_total_stake(decision)
-                snapshot_combo = stake_amounts(portfolio_candidates, decision)
-                snapshot_strategies = strategy_comparison(match, result_distribution, snapshot_combo, total_stake)
-                top_strategy = snapshot_strategies[0] if snapshot_strategies else {}
+            with perf_timer("detail", "tpb_report_strategy"):
+                top_strategy = tpb_report_strategy(decision)
             with perf_timer("detail", "report_generation"):
                 report = build_report(
                     match,
@@ -6306,14 +6090,14 @@ def render_analysis_page(match_text):
 
         with post_tab:
             with perf_timer("detail", "tab_post_match"):
-                render_post_match_analysis_tab(match, selected_fixture, result_distribution, snapshot_strategies, my_portfolio)
+                render_post_match_analysis_tab(match, selected_fixture, result_distribution, [], my_portfolio)
 
         with source_tab:
             with perf_timer("detail", "tab_source"):
                 render_debug_panel(match, odds, api_football_data, odds_date_key)
                 render_detail_data_source(odds, selected_fixture)
                 render_technical_notes(odds, api_football_data)
-                render_advanced_research(snapshot_strategies, snapshot_combo, snapshot_combo, match, result_distribution, decision)
+                st.caption("高级收益 / 组合研究已退出 TPB 决策链；剧本系统仅作为观察层保留。")
 
         st.download_button(
             "下载 Markdown 报告",
