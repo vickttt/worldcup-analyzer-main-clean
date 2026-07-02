@@ -328,60 +328,6 @@ def format_lineups_lines(api_football_data):
     return lines
 
 
-def format_opportunity_lines(rating):
-    return [
-        "## 机会评级",
-        "",
-        f"- 评级：{rating.get('grade', '放弃')}",
-        f"- 推荐方向：{rating.get('recommendation', 'No bet')}",
-        f"- 风险等级：{rating.get('risk_level', '高')}",
-        f"- 价值信号：{rating.get('value_signal', 'No')}",
-        f"- 推荐理由：{rating.get('reason') or rating.get('summary')}",
-    ]
-
-
-def format_value_analysis_lines(value_analysis):
-    lines = ["## 价值分析", "", "### 胜平负市场价值", ""]
-
-    if not value_analysis or not value_analysis.get("available"):
-        message = "API-Football 单一来源模式下不启用二级市场价差比较。"
-        return lines + [f"- 状态：{message}"]
-
-    rows = value_analysis.get("rows", [])
-    main = max(rows, key=lambda row: abs(row.get("difference", 0))) if rows else None
-    if value_analysis.get("has_value"):
-        lines.append("发现潜在胜平负市场价值机会。")
-    else:
-        lines.append("胜平负市场暂无显著分歧。")
-
-    if main:
-        lines.extend([
-            "",
-            f"API-Football：{percent(main['odds_api'])}",
-            "",
-            f"二级市场：{percent(main['polymarket'])}",
-            "",
-            f"差异：{percent(abs(main['difference']))}",
-        ])
-
-    lines.extend([
-        "",
-        "### 让球价值",
-        "",
-        "需要结合用户真实赔率和过滤异常后的盘口中心判断。",
-        "",
-        "### 大小球价值",
-        "",
-        "需要结合总进球盘口中心判断。",
-        "",
-        "### 波胆价值",
-        "",
-        "仅在用户输入真实赔率且与合理剧本一致时评估。",
-    ])
-
-    return lines
-
-
 def format_asian_handicap_lines(api_football_data, odds=None, match=None):
     lines = ["## 亚洲让球 / Asian Handicap", ""]
     handicap = (api_football_data or {}).get("asian_handicap") or {}
@@ -575,11 +521,6 @@ def format_betting_opinion_lines(betting_opinion):
 
 def format_data_quality_lines(betting_opinion, api_football_data=None, match=None, actual_odds=None):
     notes = list((betting_opinion or {}).get("data_quality_notes") or [])
-    user_odds_items = (actual_odds or {}).get("items") or []
-    if user_odds_items:
-        notes.append(f"用户真实赔率已记录 {len(user_odds_items)} 条；当前仅用于展示与人工复核，不参与 TPB 决策、排序或仓位。")
-    else:
-        notes.append("用户真实赔率未输入；当前组合按市场标准赔率评估，赔率价值和投注信心需要降低解释强度。")
     if not ((api_football_data or {}).get("lineups")) and "Official lineups not released." not in notes:
         if "官方首发尚未公布。" not in notes:
             notes.append("官方首发尚未公布。")
@@ -594,68 +535,42 @@ def format_data_quality_lines(betting_opinion, api_football_data=None, match=Non
     return lines
 
 
-def _risk_gate_result(risk_gate, eligibility):
-    if not risk_gate:
-        return "无法获取"
-    if "status" in risk_gate:
-        return risk_gate.get("status") or "无法获取"
-    if not risk_gate.get("passed"):
-        return "FAIL"
-    blockers = (eligibility or {}).get("blockers") or (eligibility or {}).get("rank1_blockers") or []
-    if blockers:
-        return "WARNING"
-    risk_level = risk_gate.get("risk_level")
-    if risk_level in {"HIGH", "CRITICAL"}:
-        return "WARNING"
-    return "PASS"
-
-
 def _portfolio_blockers(eligibility):
     return (eligibility or {}).get("blockers") or (eligibility or {}).get("rank1_blockers") or []
 
 
 def _portfolio_pass_reasons(portfolio_summary):
     reasons = []
-    if (portfolio_summary.get("coverage_metrics") or {}).get("main_coverage", 0) > 0:
-        reasons.append("覆盖主剧本")
-    if (portfolio_summary.get("coverage_metrics") or {}).get("adjacent_coverage", 0) > 0:
-        reasons.append("覆盖邻近剧本")
-    risk_gate = portfolio_summary.get("risk_gate") or {}
-    if risk_gate.get("passed"):
-        reasons.append(risk_gate.get("reason") or "风险门槛通过")
-    pressure_fit = portfolio_summary.get("pressure_fit") or {}
-    if pressure_fit.get("label") in {"High", "Medium"}:
-        reasons.append(f"淘汰赛剧本匹配度 {pressure_fit.get('label')}")
-    return reasons or ["组合可作为当前报告的第一推荐候选。"]
+    risk_diagnostic = portfolio_summary.get("risk_diagnostic") or {}
+    if risk_diagnostic:
+        reasons.append(risk_diagnostic.get("reason") or "TPB 风险诊断不阻断推荐")
+    return reasons or ["TPB 决策输出可作为当前报告的唯一推荐来源。"]
 
 
 def format_portfolio_eligibility_lines(portfolio_summary=None, match=None):
     if not portfolio_summary:
         return [
-            "## 组合推荐资格",
+            "## TPB 推荐资格",
             "",
-            "- 推荐组合：未生成",
-            "- 风险门槛：无法获取，报告生成时未收到组合排名结果。",
+            "- TPB 推荐：未生成",
+            "- TPB 风险诊断：无法获取，报告生成时未收到 TPB 输出。",
             "- 第一推荐资格：无法获取",
-        ]
+    ]
     eligibility = portfolio_summary.get("rank1_eligibility") or {}
-    risk_gate = portfolio_summary.get("risk_gate") or {}
-    pressure_fit = portfolio_summary.get("pressure_fit") or {}
+    risk_diagnostic = portfolio_summary.get("risk_diagnostic") or {}
     blockers = _portfolio_blockers(eligibility)
     eligible = eligibility.get("rank1_eligible")
     if eligible is None:
         eligible = eligibility.get("eligible")
     items = portfolio_summary.get("items") or []
     lines = [
-        "## 组合推荐资格",
+        "## TPB 推荐资格",
         "",
-        f"- 推荐组合名称：{_portfolio_display_name(portfolio_summary, match)}",
-        f"- 综合评分：{format_value(portfolio_summary.get('portfolio_score') or portfolio_summary.get('score'))}",
+        f"- TPB 推荐名称：{_portfolio_display_name(portfolio_summary, match)}",
+        f"- TPB 决策分：{format_value(portfolio_summary.get('decision_score') or portfolio_summary.get('score'))}",
         f"- 组合风格：{portfolio_summary.get('portfolio_style_label') or (portfolio_summary.get('portfolio_style') or {}).get('style_cn') or '-'}",
-        f"- 风险门槛结果：{_risk_gate_result(risk_gate, eligibility)}",
-        f"- 风险等级：{risk_gate.get('risk_level') or '-'}",
+        f"- TPB 风险诊断：{risk_diagnostic.get('risk_level') or '-'}",
         f"- 第一推荐资格：{'YES' if eligible else 'NO'}",
-        f"- 淘汰赛剧本匹配度：{pressure_fit.get('label', '-')}",
     ]
     if items:
         lines.extend(["", "核心投注："])
@@ -765,8 +680,6 @@ def build_report(
         *format_over_under_lines(odds),
         "",
         *format_correct_score_lines(api_football_data),
-        "",
-        *format_value_analysis_lines(value_analysis),
         "",
         *format_injuries_lines(api_football_data),
         "",
