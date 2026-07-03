@@ -11,6 +11,50 @@ The production decision system is fixed as Multi-Layer Betting Intelligence
 System v1. It must not degrade into TPB-only, multi-model voting, EV trading, or
 optimizer-based systems.
 
+System Definition (IMPORTANT):
+
+- The system does not predict match results.
+- The system does not search for optimal odds.
+- The system does not maximize profit or act as a yield optimizer.
+- The system builds a probability market structure explanation system.
+- The system builds scenario coverage space.
+- The system outputs risk-coverage balance portfolios.
+- Final positioning: Market Structure + Scenario Coverage + Probability Anchor
+  System.
+
+Philosophy:
+
+- No prediction dominance.
+- No EV/ROI dominance.
+- No optimizer dominance.
+- No hidden scoring authority.
+- TPB = anchor only.
+- Scenario = decomposition only.
+- Market = signal only.
+
+Odds philosophy:
+
+- odds are not true probability.
+- odds are market pricing with bookmaker bias.
+- odds are noisy market signals.
+- The system does not assume an external "true probability" exists. It infers
+  market structure from quoted prices and bookmaker consensus.
+
+EV / ROI boundary:
+
+- EV and ROI are excluded because they depend on an assumed true probability.
+- This system does not claim to know a true probability independent of market
+  pricing.
+- The system performs market structure inference, not value-betting
+  optimization.
+
+Optimizer boundary:
+
+- Allowed: coverage optimization as explanation, scenario balancing, and risk
+  exposure smoothing.
+- Forbidden: EV optimizer, ROI optimizer, profit maximization engine, and
+  black-box scoring system.
+
 Layer model:
 
 1. Layer 0: Market Data Layer
@@ -23,6 +67,8 @@ Layer model:
 2. Layer 1: TPB Baseline Layer
    - TPB is the baseline probability anchor derived from API-Football 1X2 odds
      and normalized bookmaker consensus.
+   - TPB is a probability normalization anchor and coordinate system.
+   - TPB is not a predictive model and not a decision engine.
    - TPB is the only probability baseline anchor. It may not be replaced,
      overridden, or downgraded into an ordinary helper variable.
    - TPB anchors probability interpretation, confidence, investment score, and

@@ -5,6 +5,52 @@ def build_model_methodology():
             "Model Methodology Transparency Layer 只解释计算方法，不参与 TPB、Market Structure、"
             "Scenario、Portfolio、Ranking、Stake 或 Execution 的任何计算。"
         ),
+        "system_definition": {
+            "identity": "Market Structure + Scenario Coverage + Probability Anchor System",
+            "not": [
+                "prediction model",
+                "optimal odds finder",
+                "profit maximization engine",
+                "EV/ROI optimizer",
+            ],
+            "does": [
+                "market structure inference",
+                "scenario coverage space construction",
+                "risk-coverage balance explanation",
+            ],
+        },
+        "tpb_definition": {
+            "role": "probability normalization anchor and coordinate system",
+            "not": [
+                "predictive model",
+                "decision engine",
+                "true probability claim",
+            ],
+        },
+        "odds_definition": {
+            "odds_are": "market pricing with bookmaker bias and noisy signal",
+            "odds_are_not": "true probability",
+        },
+        "ev_roi_boundary": {
+            "excluded_reason": (
+                "EV/ROI depend on an assumed true probability. This system does not assume "
+                "true probability exists outside quoted market structure."
+            ),
+            "system_method": "market structure inference, not value-betting optimization",
+        },
+        "optimizer_boundary": {
+            "allowed": [
+                "coverage optimization as explanation",
+                "scenario balancing",
+                "risk exposure smoothing",
+            ],
+            "forbidden": [
+                "EV optimizer",
+                "ROI optimizer",
+                "profit maximization engine",
+                "black-box scoring system",
+            ],
+        },
         "market_structure_methods": {
             "directional_strength": {
                 "name": "Directional Strength",

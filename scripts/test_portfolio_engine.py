@@ -205,6 +205,14 @@ def test_scenario_engine_contract():
     assert 0 <= scenario["coverage_efficiency_score"] <= 100
     methodology = scenario["methodology"]
     assert methodology["version"] == "model_methodology_transparency_v1"
+    assert methodology["system_definition"]["identity"] == "Market Structure + Scenario Coverage + Probability Anchor System"
+    assert "prediction model" in methodology["system_definition"]["not"]
+    assert "EV/ROI optimizer" in methodology["system_definition"]["not"]
+    assert methodology["tpb_definition"]["role"] == "probability normalization anchor and coordinate system"
+    assert "decision engine" in methodology["tpb_definition"]["not"]
+    assert methodology["odds_definition"]["odds_are_not"] == "true probability"
+    assert "true probability" in methodology["ev_roi_boundary"]["excluded_reason"]
+    assert "profit maximization engine" in methodology["optimizer_boundary"]["forbidden"]
     methods = methodology["market_structure_methods"]
     assert set(methods) == {
         "directional_strength",
@@ -269,6 +277,11 @@ def test_architecture_guardrails():
     repo_root = Path(__file__).resolve().parents[1]
     agents_text = (repo_root / "AGENTS.md").read_text(encoding="utf-8")
     assert "Decision Authority Hierarchy" in agents_text
+    assert "System Definition (IMPORTANT)" in agents_text
+    assert "The system does not predict match results." in agents_text
+    assert "odds are not true probability" in agents_text
+    assert "EV and ROI are excluded because they depend on an assumed true probability." in agents_text
+    assert "Allowed: coverage optimization as explanation" in agents_text
     assert "TPB Baseline Probability (anchor)" in agents_text
     assert "Market Structure Intelligence (signal layer)" in agents_text
     assert "Scenario Engine Layer (probability space decomposition and portfolio" in agents_text
@@ -278,6 +291,9 @@ def test_architecture_guardrails():
 
     rubric_text = (repo_root / "reports" / "claude_reviews" / "CLAUDE_REVIEW_RUBRIC.md").read_text(encoding="utf-8")
     assert "TPB is not the sole system anymore" in rubric_text
+    assert "not a prediction model, optimal-odds finder, or profit" in rubric_text
+    assert "odds are treated as biased and noisy market pricing" in rubric_text
+    assert "EV/ROI reasoning is not used as an explanation shortcut" in rubric_text
     assert "System Portfolio is synthesis-based" in rubric_text
     assert "Execution Layer does not affect any upstream layer" in rubric_text
     assert "Scenario Engine is integrated into the System Portfolio explanation flow" in rubric_text

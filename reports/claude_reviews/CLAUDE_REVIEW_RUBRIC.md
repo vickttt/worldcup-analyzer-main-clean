@@ -26,8 +26,14 @@ API-Football market data -> TPB baseline anchor -> market structure signal layer
 
 Claude must verify:
 
+- The system is framed as Market Structure + Scenario Coverage + Probability
+  Anchor System, not a prediction model, optimal-odds finder, or profit
+  maximization engine.
 - TPB is not the sole system anymore, but it is still the single probability
   baseline anchor.
+- TPB is a probability normalization anchor / coordinate system, not a
+  predictive model or decision engine.
+- odds are treated as biased and noisy market pricing, not true probability.
 - TPB is not overridden, replaced, downgraded, or mutated by market structure,
   scenario thinking, user input, or secondary models.
 - Market Structure Intelligence exists as a signal layer that explains market
@@ -79,6 +85,9 @@ Claude must validate:
 - No hidden scoring weights exist.
 - No EV-like transformation is hidden in Scenario Engine.
 - No optimizer logic is embedded in Coverage Engine.
+- EV/ROI reasoning is not used as an explanation shortcut.
+- Coverage optimization, scenario balancing, and risk exposure smoothing are
+  explanation-only and do not become profit optimization.
 - No legacy ranking system returns.
 - No risk-gate blocking system is reinstated.
 
