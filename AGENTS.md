@@ -83,6 +83,15 @@ Layer model:
    - User input must never influence TPB, investment score, stake, coverage,
      system ranking, raw odds, API data, or system recommendation.
 
+7. Model Methodology Transparency Layer
+   - This layer explains calculation methods only. It never computes or mutates
+     TPB, Market Structure, Scenario, Portfolio, Ranking, Stake, or Execution.
+   - It must document Directional Strength, Market Conflict Index, Efficiency
+     Score, Volatility Index, Scenario Probability Derivation, Scenario Mapping,
+     Coverage Mapping, and Coverage Efficiency.
+   - It must prevent black-box scoring, hidden ranking weights, implicit EV
+     logic, and optimizer-style reasoning.
+
 Scenario Thinking and Scenario Engine:
 
 - Scenario Thinking is implemented through Scenario Engine v1 and is allowed
@@ -129,6 +138,7 @@ Decision Authority Hierarchy:
    explanation backbone only).
 4. System Portfolio Layer (synthesis + ranking).
 5. Execution Layer (display/evaluation only).
+6. Method Layer (calculation transparency only).
 
 Authority rules:
 
@@ -149,6 +159,8 @@ Allowed report structure:
 4. System Portfolio Layer: main, defensive, and tail positions.
 5. System Ranking: system-only ranking.
 6. Execution Layer: user portfolio, odds comparison, and evaluation only.
+7. Model Explanation Layer: calculation methods, thresholds, scenario
+   derivation, coverage logic, and audit guards.
 
 System chain:
 
@@ -158,6 +170,7 @@ API-Football market data
   -> market structure signal layer
   -> scenario coverage and risk decomposition
   -> system-only recommendation synthesis
+  -> methodology transparency
   -> deterministic stake display + UI/report display
 ```
 
@@ -175,6 +188,8 @@ System invariants:
 - Execution Layer cannot become ranking input.
 - Scenario Thinking cannot become a decision engine.
 - No layer may become an EV/ROI system.
+- No hidden scoring weights, black-box transformations, or optimizer-style
+  reasoning are allowed.
 
 ## 2. Execution Layer: Git, UI, API
 

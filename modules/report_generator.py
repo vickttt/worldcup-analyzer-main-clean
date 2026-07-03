@@ -821,6 +821,57 @@ def format_scenario_engine_lines(scenario_engine):
     return lines
 
 
+def format_model_explanation_lines(scenario_engine):
+    methodology = (scenario_engine or {}).get("methodology") or {}
+    lines = [
+        "## Model Explanation Layer（模型方法透明层）",
+        "",
+        methodology.get("disclaimer") or "模型方法透明层只展示计算说明，不参与任何模型计算。",
+        "",
+        "### Market Structure Calculation Methods",
+        "",
+    ]
+    methods = methodology.get("market_structure_methods") or {}
+    for key in ["directional_strength", "market_conflict_index", "efficiency_score", "volatility_index"]:
+        item = methods.get(key) or {}
+        lines.append(f"- {item.get('name', key)}")
+        lines.append(f"  - Inputs：{', '.join(item.get('inputs') or ['-'])}")
+        lines.append(f"  - Logic：{item.get('logic', '-')}")
+        thresholds = item.get("thresholds") or {}
+        if thresholds:
+            lines.append("  - Thresholds：" + "；".join(f"{label}={value}" for label, value in thresholds.items()))
+
+    scenario_method = methodology.get("scenario_probability_derivation") or {}
+    mapping_method = methodology.get("scenario_mapping_method") or {}
+    coverage_method = methodology.get("coverage_mapping_logic") or {}
+    lines.extend([
+        "",
+        "### Scenario Probability Derivation Method",
+        "",
+        f"- Principle：{scenario_method.get('principle', '-')}",
+        f"- Inputs：{', '.join(scenario_method.get('inputs') or ['-'])}",
+        f"- Logic：{scenario_method.get('logic', '-')}",
+        f"- Forbidden：{', '.join(scenario_method.get('forbidden') or ['-'])}",
+        "",
+        "### Scenario Mapping Method",
+        "",
+        mapping_method.get("logic", "-"),
+        "",
+        "### Coverage Mapping Logic",
+        "",
+        f"- Main coverage：{coverage_method.get('primary_coverage', '-')}",
+        f"- Defensive coverage：{coverage_method.get('defensive_coverage', '-')}",
+        f"- Tail coverage：{coverage_method.get('tail_coverage', '-')}",
+        f"- Coverage efficiency：{coverage_method.get('coverage_efficiency_score', '-')}",
+        "",
+        "### Audit Guards",
+        "",
+    ])
+    for guard in methodology.get("audit_guards") or []:
+        lines.append(f"- {guard}")
+    return lines
+
+
 def format_system_portfolio_lines(market_intelligence, scenario_engine=None):
     portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
     scenario_mapping = (scenario_engine or {}).get("portfolio_mapping_explanation") or {}
@@ -1012,6 +1063,8 @@ def build_report(
         *format_market_intelligence_lines(market_intelligence),
         "",
         *format_scenario_engine_lines(scenario_engine),
+        "",
+        *format_model_explanation_lines(scenario_engine),
         "",
         *format_system_portfolio_lines(market_intelligence, scenario_engine),
         "",

@@ -203,6 +203,21 @@ def test_scenario_engine_contract():
     assert "scenario-driven recommendation" in scenario["portfolio_mapping_explanation"]["main_position_coverage"]["explanation"]
     assert set(scenario["scenario_market_mapping"]) == {"S1", "S2", "S3", "S4", "S5", "S6"}
     assert 0 <= scenario["coverage_efficiency_score"] <= 100
+    methodology = scenario["methodology"]
+    assert methodology["version"] == "model_methodology_transparency_v1"
+    methods = methodology["market_structure_methods"]
+    assert set(methods) == {
+        "directional_strength",
+        "market_conflict_index",
+        "efficiency_score",
+        "volatility_index",
+    }
+    assert "TPB probability concentration" in methods["directional_strength"]["inputs"]
+    assert "0-30" in methods["market_conflict_index"]["thresholds"]["Low conflict"]
+    assert "structural projection" in methodology["scenario_probability_derivation"]["principle"]
+    assert "No EV / ROI transformation" in methodology["scenario_probability_derivation"]["forbidden"]
+    assert "Coverage Efficiency Score combines" in methodology["coverage_mapping_logic"]["coverage_efficiency_score"]
+    assert "No black-box scoring" in methodology["audit_guards"]
     assert "不影响 TPB" in scenario["disclaimer"]
 
 
@@ -259,6 +274,7 @@ def test_architecture_guardrails():
     assert "Scenario Engine Layer (probability space decomposition and portfolio" in agents_text
     assert "System Portfolio Layer (synthesis + ranking)" in agents_text
     assert "Execution Layer (display/evaluation only)" in agents_text
+    assert "Method Layer (calculation transparency only)" in agents_text
 
     rubric_text = (repo_root / "reports" / "claude_reviews" / "CLAUDE_REVIEW_RUBRIC.md").read_text(encoding="utf-8")
     assert "TPB is not the sole system anymore" in rubric_text
@@ -266,6 +282,8 @@ def test_architecture_guardrails():
     assert "Execution Layer does not affect any upstream layer" in rubric_text
     assert "Scenario Engine is integrated into the System Portfolio explanation flow" in rubric_text
     assert "Scenario Engine is not an isolated UI module" in rubric_text
+    assert "Scenario Engine calculation transparency exists" in rubric_text
+    assert "No hidden scoring weights exist" in rubric_text
 
     report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
     for heading in [
@@ -277,6 +295,10 @@ def test_architecture_guardrails():
         "## 6. Execution Layer",
     ]:
         assert heading in report_text
+    assert "## Model Explanation Layer" in report_text
+    assert "Market Structure Calculation Methods" in report_text
+    assert "Scenario Probability Derivation Method" in report_text
+    assert "Coverage Mapping Logic" in report_text
     assert "Scenario → Portfolio Mapping Explanation" in report_text
     assert "System Portfolio = TPB baseline + Market Structure + Scenario Engine explanation synthesis" in report_text
     assert "Ranking incorporates scenario coverage signals as explanation only" in report_text

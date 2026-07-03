@@ -1268,6 +1268,32 @@ def render_scenario_coverage_analysis(scenario_engine):
         st.dataframe(pd.DataFrame(mapping_rows), use_container_width=True, hide_index=True)
 
 
+def render_model_explanation_layer(scenario_engine):
+    methodology = (scenario_engine or {}).get("methodology") or {}
+    with st.container(border=True):
+        st.markdown("**Model Explanation Layer**")
+        st.caption(methodology.get("disclaimer", "模型方法透明层只展示计算说明，不参与任何模型计算。"))
+        methods = methodology.get("market_structure_methods") or {}
+        rows = []
+        for key in ["directional_strength", "market_conflict_index", "efficiency_score", "volatility_index"]:
+            item = methods.get(key) or {}
+            rows.append({
+                "Method": item.get("name", key),
+                "Inputs": " / ".join(item.get("inputs") or []),
+                "Logic": item.get("logic", "-"),
+            })
+        st.markdown("**Market Structure Calculation Methods**")
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+        scenario_method = methodology.get("scenario_probability_derivation") or {}
+        coverage_method = methodology.get("coverage_mapping_logic") or {}
+        st.markdown("**Scenario Probability Derivation Method**")
+        st.caption(scenario_method.get("principle", "-"))
+        st.write(scenario_method.get("logic", "-"))
+        st.markdown("**Coverage Mapping Logic**")
+        st.write(coverage_method.get("coverage_efficiency_score", "-"))
+
+
 def render_user_portfolio_comparison(input_key, comparison):
     input_key = input_key or "user_portfolio_input"
     with st.container(border=True):
@@ -1428,6 +1454,7 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
         )
         render_market_intelligence_layer(market_intelligence)
         render_scenario_coverage_analysis(scenario_engine)
+        render_model_explanation_layer(scenario_engine)
         render_system_portfolio_layer(market_intelligence, scenario_engine)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)

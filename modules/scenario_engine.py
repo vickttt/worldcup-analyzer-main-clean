@@ -1,4 +1,5 @@
 from modules.probability_base import true_probability_base
+from modules.model_methodology import build_model_methodology
 
 
 SCENARIO_TAXONOMY = [
@@ -217,6 +218,7 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
         "portfolio_mapping_explanation": _portfolio_mapping_explanation(coverage_map),
         "scenario_market_mapping": _scenario_market_mapping(),
         "coverage_efficiency_score": _coverage_efficiency_score(distribution, risk_surface),
+        "methodology": build_model_methodology(),
         "disclaimer": (
             "Scenario Engine v1 只做概率空间、风险覆盖和情景结构分析；"
             "不预测比分，不计算 EV/ROI，不影响 TPB、investment_score、stake、system ranking 或 recommendation。"

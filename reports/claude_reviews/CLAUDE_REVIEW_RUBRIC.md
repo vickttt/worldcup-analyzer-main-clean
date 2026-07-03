@@ -48,6 +48,8 @@ Claude must verify:
   signals plus Scenario Engine coverage narrative.
 - System Portfolio is synthesis-based and owns final system recommendation and
   system-only ranking.
+- Model Methodology Transparency Layer exists and explains Market Structure,
+  Scenario, Coverage, and Ranking basis without computing model outputs.
 - Customer Execution Layer is display-only/evaluation-only and isolated.
 - Stake remains deterministic from the current investment-score mapping unless a
   future task explicitly scopes stake-model migration.
@@ -72,6 +74,11 @@ Claude must validate:
 - Scenario-to-Portfolio Mapping Explanation is present and explains Main,
   Defensive, and Tail coverage without driving ranking.
 - System Portfolio explicitly references scenario coverage.
+- Market Structure metrics are explainable.
+- Scenario Engine calculation transparency exists.
+- No hidden scoring weights exist.
+- No EV-like transformation is hidden in Scenario Engine.
+- No optimizer logic is embedded in Coverage Engine.
 - No legacy ranking system returns.
 - No risk-gate blocking system is reinstated.
 
@@ -108,6 +115,7 @@ Claude must check whether user-facing labels clearly distinguish:
 - scenario probability distribution, risk surface, coverage map, and coverage
   efficiency as analysis-only
 - scenario-to-portfolio mapping as portfolio explanation narrative
+- model methodology transparency as explanation-only
 - Polymarket read-only comparison
 - risk and max_loss diagnostic-only information
 
