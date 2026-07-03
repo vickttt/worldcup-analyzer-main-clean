@@ -282,6 +282,9 @@ def test_architecture_guardrails():
     assert "odds are not true probability" in agents_text
     assert "EV and ROI are excluded because they depend on an assumed true probability." in agents_text
     assert "Allowed: coverage optimization as explanation" in agents_text
+    assert "Decision Flow Lock Rule" in agents_text
+    assert "The final decision block is the only decision-entry view" in agents_text
+    assert "Execution remains a separate layer" in agents_text
     assert "TPB Baseline Probability (anchor)" in agents_text
     assert "Market Structure Intelligence (signal layer)" in agents_text
     assert "Scenario Engine Layer (probability space decomposition and portfolio" in agents_text
@@ -294,6 +297,8 @@ def test_architecture_guardrails():
     assert "not a prediction model, optimal-odds finder, or profit" in rubric_text
     assert "odds are treated as biased and noisy market pricing" in rubric_text
     assert "EV/ROI reasoning is not used as an explanation shortcut" in rubric_text
+    assert "unified FINAL DECISION SUMMARY / FINAL DECISION BLOCK exists" in rubric_text
+    assert "Execution Layer is separate from the final decision block" in rubric_text
     assert "System Portfolio is synthesis-based" in rubric_text
     assert "Execution Layer does not affect any upstream layer" in rubric_text
     assert "Scenario Engine is integrated into the System Portfolio explanation flow" in rubric_text
@@ -312,12 +317,19 @@ def test_architecture_guardrails():
     ]:
         assert heading in report_text
     assert "## Model Explanation Layer" in report_text
+    assert "## FINAL DECISION BLOCK" in report_text
+    assert "Execution Layer 不进入本区" in report_text
     assert "Market Structure Calculation Methods" in report_text
     assert "Scenario Probability Derivation Method" in report_text
     assert "Coverage Mapping Logic" in report_text
     assert "Scenario → Portfolio Mapping Explanation" in report_text
     assert "System Portfolio = TPB baseline + Market Structure + Scenario Engine explanation synthesis" in report_text
     assert "Ranking incorporates scenario coverage signals as explanation only" in report_text
+
+    app_text = (repo_root / "app.py").read_text(encoding="utf-8")
+    assert "FINAL DECISION SUMMARY" in app_text
+    assert "Execution Layer 不进入本区" in app_text
+    assert "render_final_decision_summary" in app_text
 
     core_files = [
         repo_root / "modules" / "probability_base.py",

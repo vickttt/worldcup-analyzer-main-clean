@@ -56,6 +56,8 @@ Claude must verify:
   system-only ranking.
 - Model Methodology Transparency Layer exists and explains Market Structure,
   Scenario, Coverage, and Ranking basis without computing model outputs.
+- A unified FINAL DECISION SUMMARY / FINAL DECISION BLOCK exists as the single
+  decision-entry view for TPB, Market, Scenario, Portfolio, and Ranking.
 - Customer Execution Layer is display-only/evaluation-only and isolated.
 - Stake remains deterministic from the current investment-score mapping unless a
   future task explicitly scopes stake-model migration.
@@ -88,6 +90,11 @@ Claude must validate:
 - EV/ROI reasoning is not used as an explanation shortcut.
 - Coverage optimization, scenario balancing, and risk exposure smoothing are
   explanation-only and do not become profit optimization.
+- UI/report output does not remain fragmented in a way that creates competing
+  decision-entry views.
+- Execution Layer is separate from the final decision block.
+- No hidden ranking contamination exists from user input or execution-layer
+  fields.
 - No legacy ranking system returns.
 - No risk-gate blocking system is reinstated.
 
@@ -125,6 +132,7 @@ Claude must check whether user-facing labels clearly distinguish:
   efficiency as analysis-only
 - scenario-to-portfolio mapping as portfolio explanation narrative
 - model methodology transparency as explanation-only
+- unified final decision summary as the only decision-entry view
 - Polymarket read-only comparison
 - risk and max_loss diagnostic-only information
 

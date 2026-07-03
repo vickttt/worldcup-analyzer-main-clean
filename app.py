@@ -967,7 +967,7 @@ def render_match_overview(match, api_football_data, selected_fixture=None, allow
 
 def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
     data_quality_label = {"High": "高", "Medium": "中等", "Low": "低"}.get(str(opinion.get("data_quality", "")), opinion.get("data_quality", "-"))
-    with st.container(border=True):
+    with st.container():
         st.markdown('<div class="section-title">🎯 投注观点</div>', unsafe_allow_html=True)
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -1151,6 +1151,85 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None,
         }]
         st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
         render_ranking_score_notes(decision_layers)
+
+
+def render_final_decision_summary(match, distribution, data_context, market_intelligence=None, scenario_engine=None):
+    decision_layers = build_core_decision_layers([], match, distribution, data_context)
+    score_layer = decision_layers.get("score_layer") or {}
+    execution_layer = decision_layers.get("execution_layer") or {}
+    stake = execution_layer.get("stake") or {}
+    tpb = score_layer.get("tpb") or {}
+    probabilities = tpb.get("probabilities") or {}
+    metrics = (market_intelligence or {}).get("metrics") or {}
+    scenario = scenario_engine or {}
+    portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
+    coverage = scenario.get("coverage_map") or {}
+
+    with st.container(border=True):
+        st.markdown("**FINAL DECISION SUMMARY**")
+        st.caption(
+            "唯一决策入口视图：TPB + Market + Scenario + Portfolio + Ranking 汇总展示。"
+            "用户 Execution Layer 不进入本区。"
+        )
+
+        tpb_cols = st.columns(5)
+        tpb_cols[0].metric("主方向", metrics.get("favorite_label") or "-")
+        tpb_cols[1].metric("主方向概率", f"{metrics.get('favorite_probability', 0)}%")
+        tpb_cols[2].metric("投注信心", f"{score_layer.get('betting_confidence', 0)} / 100")
+        tpb_cols[3].metric("比赛投资分", f"{score_layer.get('investment_score', 0)} / 100")
+        tpb_cols[4].metric("推荐金额", f"{stake.get('amount', 0)} 元")
+        if probabilities:
+            st.caption(
+                "TPB Anchor: "
+                f"主胜 {percent(probabilities.get('home_win', 0))} / "
+                f"平局 {percent(probabilities.get('draw', 0))} / "
+                f"客胜 {percent(probabilities.get('away_win', 0))}"
+            )
+
+        market_cols = st.columns(5)
+        market_cols[0].metric("Directional Strength", metrics.get("directional_strength", "-"))
+        market_cols[1].metric("Conflict Index", f"{metrics.get('market_conflict_index', 0)} / 100")
+        market_cols[2].metric("Efficiency Score", f"{metrics.get('market_efficiency_score', 0)} / 100")
+        market_cols[3].metric("Volatility", metrics.get("volatility_index", "-"))
+        market_cols[4].metric("Upset Probability", metrics.get("upset_probability", "-"))
+
+        scenario_rows = [
+            {
+                "Scenario": f"{item.get('code')}: {item.get('name')}",
+                "Probability": percent(item.get("probability", 0)),
+            }
+            for item in (scenario.get("probability_distribution") or [])
+        ]
+        if scenario_rows:
+            st.markdown("**Scenario Summary**")
+            st.dataframe(pd.DataFrame(scenario_rows), use_container_width=True, hide_index=True)
+        risk = scenario.get("risk_surface") or {}
+        st.caption(
+            "Risk Surface: "
+            f"Tail {risk.get('tail_risk_concentration', '-')} / "
+            f"Fragility {risk.get('market_fragility', '-')} / "
+            f"Upset {risk.get('upset_exposure', '-')} / "
+            f"Draw {risk.get('draw_dependency', '-')}"
+        )
+        st.caption(
+            "Coverage Summary: "
+            f"Primary {(coverage.get('primary_coverage') or {}).get('scenario', '-')} / "
+            f"Defensive {(coverage.get('defensive_coverage') or {}).get('scenario', '-')} / "
+            f"Tail {(coverage.get('tail_optionality') or {}).get('scenario', '-')}"
+        )
+
+        portfolio_rows = []
+        for key in ["main_position", "defensive_position", "tail_risk_position"]:
+            item = portfolio.get(key) or {}
+            portfolio_rows.append({
+                "System Portfolio": item.get("name", "-"),
+                "Position": item.get("label", "-"),
+                "Explanation": item.get("rationale", "-"),
+            })
+        st.markdown("**System Portfolio Recommendation**")
+        st.dataframe(pd.DataFrame(portfolio_rows), use_container_width=True, hide_index=True)
+        st.markdown("**System Ranking（仅系统）**")
+        st.dataframe(pd.DataFrame(portfolio.get("ranking") or []), use_container_width=True, hide_index=True)
 
 
 def render_market_intelligence_layer(market_intelligence):
@@ -1440,6 +1519,17 @@ def render_core_risk_summary(match, decision, distribution):
 def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, user_portfolio_key=None, market_intelligence=None, scenario_engine=None):
     with st.container(border=True):
         st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
+        render_final_decision_summary(
+            match,
+            distribution,
+            {
+                "odds": odds,
+                "api_football_data": api_football_data,
+                "polymarket": polymarket,
+            },
+            market_intelligence,
+            scenario_engine,
+        )
         render_betting_opinion(betting_opinion, odds, polymarket, match)
         render_portfolio_ranking(
             [],

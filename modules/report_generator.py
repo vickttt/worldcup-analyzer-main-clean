@@ -613,6 +613,77 @@ def format_core_conclusion_lines(
     return lines
 
 
+def format_final_decision_block_lines(
+    betting_opinion,
+    portfolio_summary=None,
+    odds=None,
+    match=None,
+    market_intelligence=None,
+    scenario_engine=None,
+):
+    opinion = betting_opinion or {}
+    portfolio_summary = portfolio_summary or {}
+    tpb = true_probability_base(odds or {})
+    probabilities = tpb.get("probabilities") or {}
+    metrics = (market_intelligence or {}).get("metrics") or {}
+    scenario = scenario_engine or {}
+    portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
+    risk = scenario.get("risk_surface") or {}
+    coverage = scenario.get("coverage_map") or {}
+    score = portfolio_summary.get("decision_score")
+    if score is None:
+        score = portfolio_summary.get("score")
+
+    lines = [
+        "## FINAL DECISION BLOCK",
+        "",
+        "唯一决策入口视图：TPB + Market + Scenario + Portfolio + Ranking 汇总展示。Execution Layer 不进入本区。",
+        "",
+        "### TPB Anchor Summary",
+        "",
+        f"- 主方向：{metrics.get('favorite_label') or opinion.get('match_direction') or opinion.get('match_winner', '-')}",
+        f"- 主方向概率：{format_value(metrics.get('favorite_probability'))}%",
+        f"- TPB 概率：主胜 {percent(probabilities.get('home_win', 0)) if probabilities else '-'} / 平局 {percent(probabilities.get('draw', 0)) if probabilities else '-'} / 客胜 {percent(probabilities.get('away_win', 0)) if probabilities else '-'}",
+        f"- 投注信心：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100",
+        f"- 比赛投资分：{format_value(score)}",
+        f"- 推荐金额：{_recommended_stake_text(portfolio_summary)}",
+        "",
+        "### Market Structure Summary",
+        "",
+        f"- Directional Strength：{metrics.get('directional_strength', '-')}",
+        f"- Conflict Index：{format_value(metrics.get('market_conflict_index'))} / 100",
+        f"- Efficiency Score：{format_value(metrics.get('market_efficiency_score'))} / 100",
+        f"- Volatility Index：{metrics.get('volatility_index', '-')}",
+        f"- Upset Probability：{metrics.get('upset_probability', '-')}",
+        "",
+        "### Scenario Summary",
+        "",
+    ]
+    for item in scenario.get("probability_distribution") or []:
+        lines.append(f"- {item.get('code', '-')}: {item.get('name', '-')}：{percent(item.get('probability', 0))}")
+    lines.extend([
+        f"- Risk Surface：Tail {risk.get('tail_risk_concentration', '-')} / Fragility {risk.get('market_fragility', '-')} / Upset {risk.get('upset_exposure', '-')} / Draw {risk.get('draw_dependency', '-')}",
+        f"- Coverage Summary：Primary {(coverage.get('primary_coverage') or {}).get('scenario', '-')} / Defensive {(coverage.get('defensive_coverage') or {}).get('scenario', '-')} / Tail {(coverage.get('tail_optionality') or {}).get('scenario', '-')}",
+        "",
+        "### System Portfolio Recommendation",
+        "",
+    ])
+    for key in ["main_position", "defensive_position", "tail_risk_position"]:
+        item = portfolio.get(key) or {}
+        lines.append(f"- {item.get('name', '-')}：{item.get('label', '-')}；{item.get('rationale', '-')}")
+    lines.extend([
+        "",
+        "### System Ranking（仅系统）",
+        "",
+    ])
+    ranking = portfolio.get("ranking") or []
+    if not ranking:
+        lines.append("- 暂无系统排序。")
+    for item in ranking:
+        lines.append(f"- Rank {item.get('rank', '-')}: {item.get('position', '-')}（依据：{item.get('basis', '-')}）")
+    return lines
+
+
 def format_tpb_coverage_lines(betting_opinion):
     opinion = betting_opinion or {}
     lines = [
@@ -1050,6 +1121,15 @@ def build_report(
         f"生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
         "",
         *format_fixture_lines(api_football_data, match),
+        "",
+        *format_final_decision_block_lines(
+            betting_opinion,
+            portfolio_summary,
+            odds,
+            match,
+            market_intelligence,
+            scenario_engine,
+        ),
         "",
         *format_core_conclusion_lines(
             betting_opinion,

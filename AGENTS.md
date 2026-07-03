@@ -21,6 +21,7 @@ System Definition (IMPORTANT):
 - The system outputs risk-coverage balance portfolios.
 - Final positioning: Market Structure + Scenario Coverage + Probability Anchor
   System.
+- Final UI positioning: One Decision View System.
 
 Philosophy:
 
@@ -194,8 +195,21 @@ Authority rules:
 - System Portfolio must be synthesis-based.
 - Execution Layer cannot affect any upstream layer.
 
+Decision Flow Lock Rule:
+
+- The system must follow this interpretation order:
+  TPB -> Market -> Scenario -> Portfolio -> Ranking -> Execution.
+- UI/report output must converge TPB, Market, Scenario, Portfolio, and Ranking
+  into one unified decision block.
+- Execution remains a separate layer and must not appear inside the final
+  decision block.
+- The final decision block is the only decision-entry view. It is a summary of
+  existing model outputs, not a new model and not a new calculation layer.
+
 Allowed report structure:
 
+0. FINAL DECISION BLOCK: TPB Summary, Market Structure Summary, Scenario
+   Summary, Portfolio Recommendation, and System Ranking.
 1. Core Decision Layer: TPB, betting confidence, investment score, and stake.
 2. Market Structure Layer: Directional Strength, Conflict Index, Efficiency
    Score, Volatility Index, and Upset Probability.
@@ -236,6 +250,8 @@ System invariants:
 - No layer may become an EV/ROI system.
 - No hidden scoring weights, black-box transformations, or optimizer-style
   reasoning are allowed.
+- Not multiple systems: one unified decision flow, one interpretation layer, and
+  one separate execution layer.
 
 ## 2. Execution Layer: Git, UI, API
 
