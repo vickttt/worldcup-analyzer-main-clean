@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Run GitHub-mediated Claude review on a sanitized review packet."""
+"""Manual, read-only GitHub/Claude review runner for one sanitized packet.
+
+This tool must be manually triggered or explicitly authorized. It must not
+modify code, create branches, open pull requests, commit, push, merge, or act
+as an entrypoint for the old Issue -> Branch -> PR workflow. Use it only as a
+single-round review tool in the lightweight Codex-Claude loop.
+"""
 
 from __future__ import annotations
 
@@ -182,14 +188,14 @@ def network_unstable_review(error: BaseException, attempts: int, timeout_seconds
         "## 8. Long-Term Goal Alignment\n\n"
         "GitHub workflow reliability remains the relevant goal.\n\n"
         "## 9. Codex Capability Recommendation\n\n"
-        "Retry the Claude review later or use another approved review path.\n\n"
+        "Retry the Claude review later only after explicit user approval.\n\n"
         "## 10. Gate Status\n\n"
         "PORTFOLIO_EXTRACTION: BLOCKED\n\n"
         "BACKTEST_READY: NO\n\n"
         "## 11. Codex Reply Quality Check\n\n"
         "Codex must report the network failure explicitly.\n\n"
         "## 12. Next Codex Task\n\n"
-        "NEXT_NODE: retry Claude review after network stabilization\n\n"
+        "NEXT_ACTION: manual single-round Claude review retry after user approval\n\n"
         "SYSTEM_HEALTH: BLOCKED\n\n"
         "## 13. Stop Conditions\n\n"
         f"Claude API network call failed after {attempts} attempt(s) with timeout {timeout_seconds:g}s. "

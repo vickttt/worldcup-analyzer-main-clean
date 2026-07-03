@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Generate a read-only Claude review for a controlled diff or report."""
+"""Manual, read-only, single-round Claude review for a controlled input.
+
+This tool must not be used as the default execution path. It must not create
+branches, pull requests, commits, pushes, merges, or multi-round automation.
+Use it only when the user explicitly requests Claude review. Codex remains the
+only execution engine; Claude only provides review.
+"""
 
 from __future__ import annotations
 
