@@ -150,26 +150,41 @@ Claude must check:
 - Codex did not treat CI as a substitute for Claude Review
 - Codex did not mark a committed task complete before Claude returned a verdict
 - no merge, production-ready declaration, or next-task continuation occurs while
-  the mandatory Claude Review gate is pending
+  review state is PENDING_REVIEW, IN_REVIEW, or NEEDS_CHANGES
 
-## 8. Mandatory Review Gate
+## 8. Decoupled Review Request System
 
-Claude Review is a required architecture validation gate after every Codex
-commit.
+Claude Review is a required architecture validation state after every Codex
+commit, but it is not assumed to run automatically.
 
 Claude must validate:
 
-- Claude Review was triggered after the relevant commit.
+- Codex marked committed work as `REVIEW REQUIRED` / `PENDING_REVIEW`.
+- The review request was explicitly triggered or explicitly reported as pending.
+- Review was not assumed automatically from commit creation, CI success, or push
+  completion.
 - Claude Review remains read-only.
 - The review uses an approved path: commit_range, packet_path, or manual
   workflow_dispatch.
+- The review is tied to a concrete commit_range or sanitized packet.
+- No old multi-round auto-loop is assumed in the system design.
 - CI is present only as syntax, import, unit-test, smoke-test, or command
   validation.
 - CI is not used as a replacement for architecture review.
 - Low-risk, governance-only, or documentation-only commits are not exempt from
   Claude Review.
-- If Claude Review cannot run or cannot return a verdict, the task remains
-  incomplete.
+- Commit does not equal completed task.
+- Only APPROVED review state means the committed task is complete.
+- If Claude Review cannot run or cannot return a verdict, review state remains
+  PENDING_REVIEW or NEEDS_CHANGES.
+
+Review State Machine:
+
+- PENDING_REVIEW: review requested but not started.
+- IN_REVIEW: review running or waiting for verdict.
+- APPROVED: Claude returned PASS or PASS_WITH_POLISH without a blocking fix.
+- NEEDS_CHANGES: Claude returned NEEDS_CHANGES/BLOCKED, failed, or identified a
+  required fix.
 
 CI vs Claude Review boundary:
 
@@ -178,7 +193,8 @@ CI vs Claude Review boundary:
   structure boundaries, Scenario Engine isolation, EV/ROI violations, ranking
   contamination, execution-layer isolation, API/data safety, and governance
   compliance.
-- Both are mandatory after a commit. Neither replaces the other.
+- Both are mandatory after a commit. Neither replaces the other. Review remains
+  an independent request state, not an automatic commit hook.
 
 ## 9. API / Secret / Data Safety
 
@@ -202,7 +218,7 @@ VERDICT: PASS / PASS_WITH_POLISH / NEEDS_CHANGES / BLOCKED
 
 ACTIVE_DECISION_PATH_RISK: YES / NO
 
-MANDATORY_REVIEW_GATE: SATISFIED / PENDING / BLOCKED
+REVIEW_STATE: PENDING_REVIEW / IN_REVIEW / APPROVED / NEEDS_CHANGES
 
 MUST_FIX:
 

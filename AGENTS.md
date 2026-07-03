@@ -317,33 +317,50 @@ Codex-Claude loop:
 3. Codex runs required local validation.
 4. Codex commits changes when the task requires or authorizes a commit.
 5. Codex pushes only when explicitly allowed by the user.
-6. Codex must trigger Claude Review after every commit.
-7. Claude performs read-only review and returns a verdict.
-8. Codex applies approved review fixes if needed on `dev-clean`, validates, and
+6. Codex marks `REVIEW REQUIRED` after every commit.
+7. Claude Review is requested and triggered as an independent step.
+8. Claude performs read-only review and returns a verdict.
+9. Codex applies approved review fixes if needed on `dev-clean`, validates, and
    commits the fix.
-9. Every fix commit repeats the mandatory Claude Review gate.
-10. Codex reports changes, Claude findings, fixes, and final status to the user
-    only after the Claude Review gate is satisfied or explicitly pending.
+10. Every fix commit returns to `REVIEW REQUIRED`.
+11. Codex reports changes, Claude findings, fixes, and final status to the user
+    only after the review state is APPROVED. Pending review may only be reported
+    as an incomplete review state.
 
-Codex-Claude Mandatory Review Gate:
+Decoupled Review Request System:
 
-- Claude Review is required after every Codex commit.
-- Claude Review is a mandatory validation layer, not optional feedback.
-- No committed task is considered complete without Claude Review.
+- Claude Review is required after every Codex commit, but review is not an
+  automatic side effect of commit creation.
+- Codex must request Claude Review after every commit.
+- Codex must mark committed work as `REVIEW REQUIRED` / `PENDING_REVIEW` until
+  a review is independently triggered and completed.
+- Commit does not equal completed task.
 - CI does not replace Claude Review.
-- Claude Review is read-only but required.
+- Review is not assumed to have run.
+- Claude Review is read-only but required as a separate architecture validation
+  state.
 - Codex must not skip review for governance-only, documentation-only, or
   "low-risk" commits.
 - Codex must not proceed to the next task, merge, or report production-ready
-  status while the Claude Review gate is pending.
-- If Claude Review cannot be triggered because push, workflow, Claude, or token
-  authorization is missing, Codex must report:
-  `INCOMPLETE: Claude Review pending`.
+  status while review is pending.
+- If review cannot be requested or triggered because push, workflow, Claude, or
+  token authorization is missing, Codex must report:
+  `REVIEW REQUIRED: PENDING_REVIEW`.
 - If Claude Review fails, returns NEEDS_CHANGES/BLOCKED, or cannot produce a
   verdict, Codex must report the task as incomplete until the user authorizes a
   scoped fix or explicitly stops the task.
 
-Supported Claude Review trigger methods:
+Review State Machine:
+
+- `PENDING_REVIEW`: Codex has committed changes and requested review, but
+  Claude Review has not started.
+- `IN_REVIEW`: Claude Review is actively running or waiting for a verdict.
+- `APPROVED`: Claude Review returned PASS or PASS_WITH_POLISH with no required
+  blocking fix. Only APPROVED means the committed task is complete.
+- `NEEDS_CHANGES`: Claude Review returned NEEDS_CHANGES/BLOCKED, failed to
+  produce a verdict, or identified a required fix.
+
+Review request methods:
 
 - `commit_range` review for committed repository changes.
 - `packet_path` / packet-based review for sanitized review packets.
@@ -357,7 +374,8 @@ CI vs Claude Review:
   structure boundaries, Scenario Engine isolation, EV/ROI violation detection,
   ranking contamination, execution-layer isolation, and governance compliance.
 - CI and Claude Review are both mandatory after a commit. Neither replaces the
-  other.
+  other, but Claude Review remains a decoupled request state rather than an
+  automatic commit hook.
 
 Role boundaries:
 
@@ -395,11 +413,11 @@ Stop conditions:
 - A new branch is created.
 - Claude attempts to modify code or perform Git/execution actions.
 - Codex bypasses a required Claude review step.
-- A commit has been created but Claude Review has not been triggered, completed,
-  or explicitly reported as pending.
+- A commit has been created but Codex has not marked `REVIEW REQUIRED` /
+  `PENDING_REVIEW`.
 - Codex attempts to mark a committed task complete using CI only.
 - Codex attempts to start the next task, merge, or declare production readiness
-  while the Claude Review gate is pending.
+  while review state is PENDING_REVIEW, IN_REVIEW, or NEEDS_CHANGES.
 - Multiple workflows or parallel agent paths are introduced.
 - Task would reintroduce EV, ROI, hybrid, legacy optimizer, scenario shadow,
   user-odds decision influence, or risk-gate blocking.
@@ -420,9 +438,9 @@ Validation defaults:
   `git diff --check`, and confirm `git status`.
 - UI changes: compile validation plus browser verification only when requested
   or required by the task.
-- After any commit, trigger the mandatory Claude Review gate using an authorized
-  supported review method. If authorization is missing, report
-  `INCOMPLETE: Claude Review pending`.
+- After any commit, mark `REVIEW REQUIRED` and request Claude Review using an
+  authorized review method. If review cannot be triggered yet, report
+  `REVIEW REQUIRED: PENDING_REVIEW`.
 
 ## Codex Execution Loop
 
@@ -432,10 +450,11 @@ Validation defaults:
 4. Execute only allowed operations on `dev-clean`.
 5. Run local validation.
 6. Commit when the task requires or authorizes a commit.
-7. Trigger mandatory Claude Review after every commit.
-8. Apply scoped fixes if needed, then repeat validation, commit, and Claude
-   Review for the fix.
-9. Report files changed, validations, Claude findings, fixes, protected-path
+7. Mark `REVIEW REQUIRED` / `PENDING_REVIEW` after every commit.
+8. Request Claude Review as an independent step.
+9. Apply scoped fixes if needed, then repeat validation, commit, and review
+   request for the fix.
+10. Report files changed, validations, Claude findings, fixes, protected-path
    status, TPB baseline integrity, market-structure integrity, customer
-   execution isolation, UI status, Git state, Claude Review gate status, and
+   execution isolation, UI status, Git state, review state, and
    unresolved risks.
