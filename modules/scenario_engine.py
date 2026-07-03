@@ -180,6 +180,309 @@ def _coverage_efficiency_score(distribution, risk_surface):
     return round(_clamp(score, 0, 100))
 
 
+def _scenario_weights_v2(distribution, metrics):
+    base = {item["code"]: item["probability"] for item in distribution}
+    direction = _clamp(metrics.get("direction_score"), 0, 100) / 100
+    conflict = _clamp(metrics.get("market_conflict_index"), 0, 100) / 100
+    efficiency = _clamp(metrics.get("market_efficiency_score"), 0, 100) / 100
+    upset = _clamp(metrics.get("upset_score"), 0, 100) / 100
+    volatility = _clamp(metrics.get("volatility_score"), 0, 100) / 100
+    tail_density = _clamp(metrics.get("tail_density"), 0, 1)
+
+    weighted = {
+        "S1": base.get("S1", 0) * (1 + direction * 0.28 + efficiency * 0.18),
+        "S2": base.get("S2", 0) * (1 + direction * 0.12 + conflict * 0.16),
+        "S3": base.get("S3", 0) * (1 + conflict * 0.22 + volatility * 0.12),
+        "S4": base.get("S4", 0) * (1 + upset * 0.30 + conflict * 0.14),
+        "S5": base.get("S5", 0) * (1 + (1 - volatility) * 0.18 + conflict * 0.10),
+        "S6": base.get("S6", 0) * (1 + volatility * 0.30 + tail_density * 0.20),
+    }
+    normalized = _normalize_weights(weighted)
+    return [
+        {
+            "code": code,
+            "name": _scenario_label(code),
+            "weight": normalized.get(code, 0),
+            "base_probability": base.get(code, 0),
+            "rationale": (
+                "Bounded heuristic weight from TPB baseline, Market Structure, "
+                "Volatility, Upset Probability, and tail density; no EV/ROI or ML."
+            ),
+        }
+        for code, _label in SCENARIO_TAXONOMY
+    ]
+
+
+def _weight_map(scenario_weights):
+    return {item["code"]: item["weight"] for item in scenario_weights or []}
+
+
+def _portfolio_leg_templates(metrics):
+    favorite = metrics.get("favorite_label") or "TPB 主方向"
+    return [
+        {
+            "id": "primary_1x2",
+            "name": f"主覆盖：{favorite} 独赢方向",
+            "market": "胜平负",
+            "selection": favorite,
+            "set": "primary",
+            "scenario_dependencies": ["S1", "S2"],
+            "risk_exposure": 0.25,
+            "redundancy": 0.16,
+        },
+        {
+            "id": "primary_handicap",
+            "name": f"主覆盖：{favorite} 轻让球方向",
+            "market": "亚洲让球",
+            "selection": favorite,
+            "set": "primary",
+            "scenario_dependencies": ["S1", "S2"],
+            "risk_exposure": 0.34,
+            "redundancy": 0.22,
+        },
+        {
+            "id": "defensive_draw",
+            "name": "防守覆盖：平局路径",
+            "market": "胜平负",
+            "selection": "平局",
+            "set": "defensive",
+            "scenario_dependencies": ["S3"],
+            "risk_exposure": 0.38,
+            "redundancy": 0.08,
+        },
+        {
+            "id": "defensive_handicap",
+            "name": "防守覆盖：受让/对冲方向",
+            "market": "亚洲让球",
+            "selection": "受让方向",
+            "set": "defensive",
+            "scenario_dependencies": ["S3", "S4"],
+            "risk_exposure": 0.36,
+            "redundancy": 0.18,
+        },
+        {
+            "id": "defensive_under",
+            "name": "防守覆盖：低比分/小球路径",
+            "market": "大小球",
+            "selection": "Under",
+            "set": "defensive",
+            "scenario_dependencies": ["S2", "S5"],
+            "risk_exposure": 0.31,
+            "redundancy": 0.14,
+        },
+        {
+            "id": "tail_upset",
+            "name": "尾部覆盖：冷门方向",
+            "market": "胜平负/受让",
+            "selection": "冷门路径",
+            "set": "tail",
+            "scenario_dependencies": ["S4"],
+            "risk_exposure": 0.74,
+            "redundancy": 0.04,
+        },
+        {
+            "id": "tail_variance",
+            "name": "尾部覆盖：高方差进球路径",
+            "market": "大小球/波胆",
+            "selection": "高方差路径",
+            "set": "tail",
+            "scenario_dependencies": ["S6"],
+            "risk_exposure": 0.78,
+            "redundancy": 0.05,
+        },
+    ]
+
+
+def _score_leg(leg, weights):
+    coverage = sum(weights.get(code, 0) for code in leg["scenario_dependencies"])
+    risk_penalty = leg["risk_exposure"] * 0.22
+    redundancy_penalty = leg["redundancy"] * 0.18
+    contribution = max(0, coverage * (1 - risk_penalty - redundancy_penalty))
+    enriched = dict(leg)
+    enriched["coverage_contribution"] = round(contribution, 4)
+    enriched["scenario_dependency"] = [
+        {
+            "code": code,
+            "name": _scenario_label(code),
+            "weight": weights.get(code, 0),
+        }
+        for code in leg["scenario_dependencies"]
+    ]
+    enriched["explanation"] = (
+        "Coverage contribution is a bounded heuristic from scenario weight, "
+        "risk exposure, and redundancy. It is not EV, ROI, or profit optimization."
+    )
+    return enriched
+
+
+def _select_set(scored_legs, set_name, limit=2):
+    rows = [leg for leg in scored_legs if leg.get("set") == set_name]
+    return sorted(rows, key=lambda item: item.get("coverage_contribution", 0), reverse=True)[:limit]
+
+
+def _scenario_coverage_map_v2(scored_legs, weights):
+    rows = []
+    for code, name in SCENARIO_TAXONOMY:
+        covering = [
+            leg
+            for leg in scored_legs
+            if code in (leg.get("scenario_dependencies") or [])
+        ]
+        coverage_score = min(1, sum(1 - leg.get("risk_exposure", 0) for leg in covering) / 2)
+        rows.append({
+            "code": code,
+            "name": name,
+            "weight": weights.get(code, 0),
+            "covered_by": [leg.get("name") for leg in covering],
+            "coverage_score": round(coverage_score, 4),
+        })
+    return rows
+
+
+def _risk_distribution_surface(scored_legs, weights):
+    rows = []
+    for code, name in SCENARIO_TAXONOMY:
+        covering = [
+            leg
+            for leg in scored_legs
+            if code in (leg.get("scenario_dependencies") or [])
+        ]
+        if covering:
+            exposure = sum(leg.get("risk_exposure", 0) for leg in covering) / len(covering)
+            redundancy = sum(leg.get("redundancy", 0) for leg in covering)
+        else:
+            exposure = 1
+            redundancy = 0
+        rows.append({
+            "code": code,
+            "name": name,
+            "weight": weights.get(code, 0),
+            "risk_exposure": round(exposure, 4),
+            "redundancy": round(redundancy, 4),
+        })
+    return rows
+
+
+def _coverage_efficiency_v2(scenario_coverage_map, risk_surface_rows):
+    weighted_coverage = sum(
+        row.get("weight", 0) * row.get("coverage_score", 0)
+        for row in scenario_coverage_map
+    )
+    weighted_risk = sum(
+        row.get("weight", 0) * row.get("risk_exposure", 0)
+        for row in risk_surface_rows
+    )
+    weighted_redundancy = sum(
+        row.get("weight", 0) * row.get("redundancy", 0)
+        for row in risk_surface_rows
+    )
+    denominator = max(0.1, weighted_risk + weighted_redundancy)
+    score = (weighted_coverage / denominator) * 55
+    return round(_clamp(score, 0, 100))
+
+
+def _scenario_weighted_ranking_v2(primary_set, defensive_set, tail_set, weights, metrics):
+    direction_bonus = _clamp(metrics.get("direction_score"), 0, 100) / 100
+    conflict = _clamp(metrics.get("market_conflict_index"), 0, 100) / 100
+    volatility = _clamp(metrics.get("volatility_score"), 0, 100) / 100
+
+    candidates = [
+        {
+            "position": "Primary Coverage Set",
+            "legs": primary_set,
+            "score": sum(leg.get("coverage_contribution", 0) for leg in primary_set) * (1 + direction_bonus * 0.15),
+            "basis": "TPB anchor + Directional Strength + S1/S2 scenario weights",
+        },
+        {
+            "position": "Defensive Coverage Set",
+            "legs": defensive_set,
+            "score": sum(leg.get("coverage_contribution", 0) for leg in defensive_set) * (1 + conflict * 0.18),
+            "basis": "Conflict Index + Volatility + S3/S4/S5 scenario weights",
+        },
+        {
+            "position": "Tail Coverage Set",
+            "legs": tail_set,
+            "score": sum(leg.get("coverage_contribution", 0) for leg in tail_set) * (1 + volatility * 0.12),
+            "basis": "S4/S6 scenario weights + tail exposure constraint",
+        },
+    ]
+    ranked = sorted(candidates, key=lambda item: item["score"], reverse=True)
+    return [
+        {
+            "rank": index,
+            "position": item["position"],
+            "score": round(item["score"] * 100, 1),
+            "basis": item["basis"],
+            "legs": [leg.get("name") for leg in item["legs"]],
+        }
+        for index, item in enumerate(ranked, start=1)
+    ]
+
+
+def _coverage_optimization_v2(scenario_weights, metrics):
+    weights = _weight_map(scenario_weights)
+    leg_templates = _portfolio_leg_templates(metrics)
+    scored_legs = [_score_leg(leg, weights) for leg in leg_templates]
+    primary_set = _select_set(scored_legs, "primary")
+    defensive_set = _select_set(scored_legs, "defensive", limit=3)
+    tail_set = _select_set(scored_legs, "tail")
+    scenario_coverage_map = _scenario_coverage_map_v2(scored_legs, weights)
+    risk_surface = _risk_distribution_surface(scored_legs, weights)
+    efficiency = _coverage_efficiency_v2(scenario_coverage_map, risk_surface)
+    ranking = _scenario_weighted_ranking_v2(primary_set, defensive_set, tail_set, weights, metrics)
+    return {
+        "version": "coverage_optimization_v2",
+        "objective": {
+            "maximize": ["scenario coverage", "probability alignment", "risk balance"],
+            "minimize": ["tail exposure", "conflict exposure", "redundancy"],
+            "type": "bounded deterministic heuristic",
+        },
+        "constraints": [
+            "TPB remains anchor and cannot be overridden",
+            "No EV / ROI / profit maximization",
+            "No ML training or black-box optimizer",
+            "No user input influence",
+        ],
+        "primary_coverage_set": primary_set,
+        "defensive_coverage_set": defensive_set,
+        "tail_coverage_set": tail_set,
+        "scenario_coverage_map_v2": scenario_coverage_map,
+        "risk_distribution_surface": risk_surface,
+        "coverage_efficiency_score_v2": efficiency,
+        "scenario_weighted_ranking_v2": ranking,
+        "explanation": (
+            "Coverage Optimization Engine v2 is a bounded heuristic coverage layer. "
+            "It optimizes scenario coverage, not expected profit."
+        ),
+    }
+
+
+def _system_optimized_portfolio_v2(optimization):
+    primary = optimization.get("primary_coverage_set") or []
+    defensive = optimization.get("defensive_coverage_set") or []
+    tail = optimization.get("tail_coverage_set") or []
+    return {
+        "version": "system_optimized_portfolio_v2",
+        "main_position": {
+            "name": "Primary Coverage Set",
+            "label": " / ".join(leg.get("name") for leg in primary) or "-",
+            "rationale": "Scenario-weighted primary coverage anchored to TPB and constrained by Market Structure.",
+        },
+        "defensive_position": {
+            "name": "Defensive Coverage Set",
+            "label": " / ".join(leg.get("name") for leg in defensive) or "-",
+            "rationale": "Defensive coverage balances conflict, draw, upset, and low-scoring scenario weights.",
+        },
+        "tail_risk_position": {
+            "name": "Tail Coverage Set",
+            "label": " / ".join(leg.get("name") for leg in tail) or "-",
+            "rationale": "Tail coverage is bounded optionality only; it does not amplify stake or profit targets.",
+        },
+        "ranking": optimization.get("scenario_weighted_ranking_v2") or [],
+        "coverage_efficiency_score_v2": optimization.get("coverage_efficiency_score_v2"),
+    }
+
+
 def _portfolio_mapping_explanation(coverage_map):
     primary = coverage_map.get("primary_coverage") or {}
     defensive = coverage_map.get("defensive_coverage") or {}
@@ -187,15 +490,15 @@ def _portfolio_mapping_explanation(coverage_map):
     return {
         "main_position_coverage": {
             "scenario": primary.get("scenario", "-"),
-            "explanation": "Main Position 主要解释概率空间中的主覆盖路径；它不是 scenario-driven recommendation。",
+            "explanation": "Main Position 使用 bounded scenario weights 解释主覆盖路径；不是 EV/ROI 或盈利优化。",
         },
         "defensive_position_coverage": {
             "scenario": defensive.get("scenario", "-"),
-            "explanation": "Defensive Position 解释平局、冷门或低比分防守路径；它不改变 stake 或 ranking。",
+            "explanation": "Defensive Position 解释平局、冷门或低比分防守路径；不改变 TPB、stake 或用户执行层。",
         },
         "tail_exposure": {
             "scenario": tail.get("scenario", "-"),
-            "explanation": "Tail Optionality 标记未充分覆盖的尾部暴露；仅用于风险说明，不放大推荐。",
+            "explanation": "Tail Optionality 标记尾部暴露；只用于 bounded coverage，不做利润最大化。",
         },
     }
 
@@ -204,23 +507,28 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
     tpb = (market_intelligence or {}).get("tpb_baseline") or true_probability_base(odds or {})
     metrics = (market_intelligence or {}).get("metrics") or {}
     distribution = _scenario_distribution(tpb, metrics)
+    scenario_weights = _scenario_weights_v2(distribution, metrics)
     risk_surface = _risk_surface(distribution, metrics)
     coverage_map = _coverage_map(distribution)
+    optimization_v2 = _coverage_optimization_v2(scenario_weights, metrics)
     return {
-        "version": "scenario_engine_v1",
+        "version": "scenario_engine_v2",
         "taxonomy": [
             {"code": code, "name": name}
             for code, name in SCENARIO_TAXONOMY
         ],
         "probability_distribution": distribution,
+        "scenario_weights": scenario_weights,
         "risk_surface": risk_surface,
         "coverage_map": coverage_map,
         "portfolio_mapping_explanation": _portfolio_mapping_explanation(coverage_map),
         "scenario_market_mapping": _scenario_market_mapping(),
         "coverage_efficiency_score": _coverage_efficiency_score(distribution, risk_surface),
+        "scenario_optimization_v2": optimization_v2,
+        "system_optimized_portfolio_v2": _system_optimized_portfolio_v2(optimization_v2),
         "methodology": build_model_methodology(),
         "disclaimer": (
-            "Scenario Engine v1 只做概率空间、风险覆盖和情景结构分析；"
-            "不预测比分，不计算 EV/ROI，不影响 TPB、investment_score、stake、system ranking 或 recommendation。"
+            "Scenario Engine v2 使用 bounded heuristic scenario weights 做覆盖优化；"
+            "不预测比分，不计算 EV/ROI，不做盈利最大化，不覆盖 TPB，不改变 stake，也不使用用户输入。"
         ),
     }

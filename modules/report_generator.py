@@ -627,7 +627,11 @@ def format_final_decision_block_lines(
     probabilities = tpb.get("probabilities") or {}
     metrics = (market_intelligence or {}).get("metrics") or {}
     scenario = scenario_engine or {}
-    portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
+    portfolio = (
+        scenario.get("system_optimized_portfolio_v2")
+        or ((market_intelligence or {}).get("system_portfolio") or {})
+    )
+    optimization = scenario.get("scenario_optimization_v2") or {}
     risk = scenario.get("risk_surface") or {}
     coverage = scenario.get("coverage_map") or {}
     score = portfolio_summary.get("decision_score")
@@ -637,7 +641,7 @@ def format_final_decision_block_lines(
     lines = [
         "## FINAL DECISION BLOCK",
         "",
-        "唯一决策入口视图：TPB + Market + Scenario + Portfolio + Ranking 汇总展示。Execution Layer 不进入本区。",
+        "唯一决策入口视图：TPB + Market + Scenario Weights + Portfolio + Ranking 汇总展示。Execution Layer 不进入本区。",
         "",
         "### TPB Anchor Summary",
         "",
@@ -661,9 +665,14 @@ def format_final_decision_block_lines(
     ]
     for item in scenario.get("probability_distribution") or []:
         lines.append(f"- {item.get('code', '-')}: {item.get('name', '-')}：{percent(item.get('probability', 0))}")
+    if scenario.get("scenario_weights"):
+        lines.extend(["", "Scenario Weights v2："])
+        for item in scenario.get("scenario_weights") or []:
+            lines.append(f"- {item.get('code', '-')}: {item.get('name', '-')}：{percent(item.get('weight', 0))}")
     lines.extend([
         f"- Risk Surface：Tail {risk.get('tail_risk_concentration', '-')} / Fragility {risk.get('market_fragility', '-')} / Upset {risk.get('upset_exposure', '-')} / Draw {risk.get('draw_dependency', '-')}",
         f"- Coverage Summary：Primary {(coverage.get('primary_coverage') or {}).get('scenario', '-')} / Defensive {(coverage.get('defensive_coverage') or {}).get('scenario', '-')} / Tail {(coverage.get('tail_optionality') or {}).get('scenario', '-')}",
+        f"- Coverage Efficiency v2：{format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
         "",
         "### System Portfolio Recommendation",
         "",
@@ -817,7 +826,7 @@ def format_scenario_engine_lines(scenario_engine):
         "## 3. Scenario Engine Layer（情景覆盖分析层）",
         "",
         scenario.get("disclaimer")
-        or "Scenario Engine v1 只做概率空间、风险覆盖和情景结构分析，不参与 TPB、stake、system ranking 或 recommendation。",
+        or "Scenario Engine v2 使用 bounded heuristic scenario weights 做覆盖优化；不覆盖 TPB，不计算 EV/ROI，不改变 stake，不使用用户输入。",
         "",
         "### Scenario Probability Distribution",
     ]
@@ -892,6 +901,95 @@ def format_scenario_engine_lines(scenario_engine):
     return lines
 
 
+def format_scenario_optimization_v2_lines(scenario_engine):
+    scenario = scenario_engine or {}
+    optimization = scenario.get("scenario_optimization_v2") or {}
+    if not optimization:
+        return [
+            "## Scenario Optimization Layer v2",
+            "",
+            "暂无 Scenario Optimization Layer v2 输出。",
+        ]
+
+    lines = [
+        "## Scenario Optimization Layer v2（受约束情景覆盖优化层）",
+        "",
+        "该层只做 bounded heuristic coverage optimization：不计算 EV/ROI，不做盈利最大化，不使用用户输入，不覆盖 TPB，不改变 stake。",
+        "",
+        "### Scenario Weights",
+        "",
+    ]
+    for item in scenario.get("scenario_weights") or []:
+        lines.append(
+            f"- {item.get('code', '-')}: {item.get('name', '-')}："
+            f"{percent(item.get('weight', 0))}（base {percent(item.get('base_probability', 0))}）"
+        )
+
+    objective = optimization.get("objective") or {}
+    lines.extend([
+        "",
+        "### Coverage Optimization Objective",
+        "",
+        f"- Type：{objective.get('type', 'bounded deterministic heuristic')}",
+        f"- Maximize：{', '.join(objective.get('maximize') or ['-'])}",
+        f"- Minimize：{', '.join(objective.get('minimize') or ['-'])}",
+        "",
+        "### System Optimized Portfolio v2",
+        "",
+    ])
+    for title, key in [
+        ("Primary Coverage Set", "primary_coverage_set"),
+        ("Defensive Coverage Set", "defensive_coverage_set"),
+        ("Tail Coverage Set", "tail_coverage_set"),
+    ]:
+        lines.append(f"#### {title}")
+        rows = optimization.get(key) or []
+        if not rows:
+            lines.append("- 暂无。")
+        for leg in rows:
+            dependencies = ", ".join(
+                f"{item.get('code')} {percent(item.get('weight', 0))}"
+                for item in (leg.get("scenario_dependency") or [])
+            )
+            lines.append(
+                f"- {leg.get('name', '-')}：coverage {format_value(leg.get('coverage_contribution'))}；"
+                f"risk {format_value(leg.get('risk_exposure'))}；dependency {dependencies or '-'}"
+            )
+
+    lines.extend([
+        "",
+        "### Scenario Coverage Map v2",
+        "",
+    ])
+    for item in optimization.get("scenario_coverage_map_v2") or []:
+        lines.append(
+            f"- {item.get('code', '-')}: {item.get('name', '-')}："
+            f"weight {percent(item.get('weight', 0))}；coverage {percent(item.get('coverage_score', 0))}；"
+            f"covered by {', '.join(item.get('covered_by') or ['-'])}"
+        )
+
+    lines.extend([
+        "",
+        "### Risk Distribution Surface",
+        "",
+    ])
+    for item in optimization.get("risk_distribution_surface") or []:
+        lines.append(
+            f"- {item.get('code', '-')}: {item.get('name', '-')}："
+            f"risk {format_value(item.get('risk_exposure'))}；redundancy {format_value(item.get('redundancy'))}"
+        )
+
+    lines.extend([
+        "",
+        "### Coverage Efficiency Score v2",
+        "",
+        f"- {format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
+        "",
+        "说明：Coverage Efficiency v2 = scenario coverage / (risk exposure + redundancy)，是可解释的受约束覆盖评分，不是 EV/ROI 或收益优化。",
+    ])
+    return lines
+
+
 def format_model_explanation_lines(scenario_engine):
     methodology = (scenario_engine or {}).get("methodology") or {}
     lines = [
@@ -913,8 +1011,10 @@ def format_model_explanation_lines(scenario_engine):
             lines.append("  - Thresholds：" + "；".join(f"{label}={value}" for label, value in thresholds.items()))
 
     scenario_method = methodology.get("scenario_probability_derivation") or {}
+    weighting_method = methodology.get("scenario_weighting_method_v2") or {}
     mapping_method = methodology.get("scenario_mapping_method") or {}
     coverage_method = methodology.get("coverage_mapping_logic") or {}
+    optimization_method = methodology.get("coverage_optimization_v2") or {}
     lines.extend([
         "",
         "### Scenario Probability Derivation Method",
@@ -923,6 +1023,13 @@ def format_model_explanation_lines(scenario_engine):
         f"- Inputs：{', '.join(scenario_method.get('inputs') or ['-'])}",
         f"- Logic：{scenario_method.get('logic', '-')}",
         f"- Forbidden：{', '.join(scenario_method.get('forbidden') or ['-'])}",
+        "",
+        "### Scenario Weighting Function v2",
+        "",
+        f"- Principle：{weighting_method.get('principle', '-')}",
+        f"- Formula：{weighting_method.get('formula', '-')}",
+        f"- Constraints：{', '.join(weighting_method.get('constraints') or ['-'])}",
+        f"- Forbidden：{', '.join(weighting_method.get('forbidden') or ['-'])}",
         "",
         "### Scenario Mapping Method",
         "",
@@ -934,6 +1041,12 @@ def format_model_explanation_lines(scenario_engine):
         f"- Defensive coverage：{coverage_method.get('defensive_coverage', '-')}",
         f"- Tail coverage：{coverage_method.get('tail_coverage', '-')}",
         f"- Coverage efficiency：{coverage_method.get('coverage_efficiency_score', '-')}",
+        f"- Coverage efficiency v2：{coverage_method.get('coverage_efficiency_score_v2', '-')}",
+        "",
+        "### Coverage Optimization Engine v2",
+        "",
+        f"- Type：{optimization_method.get('type', '-')}",
+        f"- Forbidden：{', '.join(optimization_method.get('forbidden') or ['-'])}",
         "",
         "### Audit Guards",
         "",
@@ -944,12 +1057,16 @@ def format_model_explanation_lines(scenario_engine):
 
 
 def format_system_portfolio_lines(market_intelligence, scenario_engine=None):
-    portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
+    scenario = scenario_engine or {}
+    portfolio = (
+        scenario.get("system_optimized_portfolio_v2")
+        or ((market_intelligence or {}).get("system_portfolio") or {})
+    )
     scenario_mapping = (scenario_engine or {}).get("portfolio_mapping_explanation") or {}
     lines = [
         "## 4. System Portfolio Layer（系统推荐组合）",
         "",
-        "System Portfolio = TPB baseline + Market Structure + Scenario Engine explanation synthesis。用户实盘输入不参与系统组合、推荐或排序。",
+        "System Portfolio = TPB baseline + Market Structure + bounded Scenario Weights synthesis。用户实盘输入不参与系统组合、推荐或排序。",
         "",
     ]
     mapping_keys = {
@@ -968,7 +1085,7 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None):
         "",
         "## 5. System Ranking（系统级排序）",
         "",
-        "Ranking incorporates scenario coverage signals as explanation only；排序仍保持 system-only，不使用用户输入、EV/ROI 或 legacy optimizer。",
+        "Scenario-weighted Ranking v2 保持 system-only：anchored to TPB，constrained by Market Structure，influenced by bounded Scenario Weights；不使用用户输入、EV/ROI 或 profit optimizer。",
     ])
     ranking = portfolio.get("ranking") or []
     if not ranking:
@@ -1143,6 +1260,8 @@ def build_report(
         *format_market_intelligence_lines(market_intelligence),
         "",
         *format_scenario_engine_lines(scenario_engine),
+        "",
+        *format_scenario_optimization_v2_lines(scenario_engine),
         "",
         *format_model_explanation_lines(scenario_engine),
         "",

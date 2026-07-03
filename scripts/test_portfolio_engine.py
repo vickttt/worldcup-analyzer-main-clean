@@ -175,11 +175,14 @@ def test_scenario_engine_contract():
         odds=fixture["context"]["odds"],
         market_intelligence=intelligence,
     )
-    assert scenario["version"] == "scenario_engine_v1"
+    assert scenario["version"] == "scenario_engine_v2"
     assert [item["code"] for item in scenario["taxonomy"]] == [code for code, _name in SCENARIO_TAXONOMY]
     distribution = scenario["probability_distribution"]
     assert [item["code"] for item in distribution] == ["S1", "S2", "S3", "S4", "S5", "S6"]
     assert abs(sum(item["probability"] for item in distribution) - 1.0) < 0.0001
+    scenario_weights = scenario["scenario_weights"]
+    assert [item["code"] for item in scenario_weights] == ["S1", "S2", "S3", "S4", "S5", "S6"]
+    assert abs(sum(item["weight"] for item in scenario_weights) - 1.0) < 0.0001
     assert set(scenario["risk_surface"]) == {
         "tail_risk_concentration",
         "tail_risk_value",
@@ -200,12 +203,28 @@ def test_scenario_engine_contract():
         "defensive_position_coverage",
         "tail_exposure",
     }
-    assert "scenario-driven recommendation" in scenario["portfolio_mapping_explanation"]["main_position_coverage"]["explanation"]
+    assert "bounded scenario weights" in scenario["portfolio_mapping_explanation"]["main_position_coverage"]["explanation"]
     assert set(scenario["scenario_market_mapping"]) == {"S1", "S2", "S3", "S4", "S5", "S6"}
     assert 0 <= scenario["coverage_efficiency_score"] <= 100
+    optimization = scenario["scenario_optimization_v2"]
+    assert optimization["version"] == "coverage_optimization_v2"
+    assert set(optimization) >= {
+        "primary_coverage_set",
+        "defensive_coverage_set",
+        "tail_coverage_set",
+        "scenario_coverage_map_v2",
+        "risk_distribution_surface",
+        "coverage_efficiency_score_v2",
+        "scenario_weighted_ranking_v2",
+    }
+    assert 0 <= optimization["coverage_efficiency_score_v2"] <= 100
+    assert [item["rank"] for item in optimization["scenario_weighted_ranking_v2"]] == [1, 2, 3]
+    optimized_portfolio = scenario["system_optimized_portfolio_v2"]
+    assert optimized_portfolio["version"] == "system_optimized_portfolio_v2"
+    assert [item["rank"] for item in optimized_portfolio["ranking"]] == [1, 2, 3]
     methodology = scenario["methodology"]
-    assert methodology["version"] == "model_methodology_transparency_v1"
-    assert methodology["system_definition"]["identity"] == "Market Structure + Scenario Coverage + Probability Anchor System"
+    assert methodology["version"] == "model_methodology_transparency_v2"
+    assert methodology["system_definition"]["identity"] == "Market Structure + Scenario-Weighted Bounded Optimization + Probability Anchor System"
     assert "prediction model" in methodology["system_definition"]["not"]
     assert "EV/ROI optimizer" in methodology["system_definition"]["not"]
     assert methodology["tpb_definition"]["role"] == "probability normalization anchor and coordinate system"
@@ -224,9 +243,12 @@ def test_scenario_engine_contract():
     assert "0-30" in methods["market_conflict_index"]["thresholds"]["Low conflict"]
     assert "structural projection" in methodology["scenario_probability_derivation"]["principle"]
     assert "No EV / ROI transformation" in methodology["scenario_probability_derivation"]["forbidden"]
+    assert methodology["scenario_weighting_method_v2"]["formula"] == "w(Si) = f(TPB baseline, Market Structure, Volatility, Upset Probability)"
+    assert "bounded deterministic heuristic" in methodology["coverage_optimization_v2"]["type"]
     assert "Coverage Efficiency Score combines" in methodology["coverage_mapping_logic"]["coverage_efficiency_score"]
+    assert "Coverage Efficiency v2" in methodology["coverage_mapping_logic"]["coverage_efficiency_score_v2"]
     assert "No black-box scoring" in methodology["audit_guards"]
-    assert "不影响 TPB" in scenario["disclaimer"]
+    assert "不覆盖 TPB" in scenario["disclaimer"]
 
 
 def test_user_portfolio_comparison_is_display_only():
@@ -281,27 +303,32 @@ def test_architecture_guardrails():
     assert "The system does not predict match results." in agents_text
     assert "odds are not true probability" in agents_text
     assert "EV and ROI are excluded because they depend on an assumed true probability." in agents_text
-    assert "Allowed: coverage optimization as explanation" in agents_text
+    assert "bounded scenario-weighted optimization system" in agents_text
+    assert "Bounded Influence Rule" in agents_text
+    assert "Scenario Weighting Permission" in agents_text
     assert "Decision Flow Lock Rule" in agents_text
     assert "The final decision block is the only decision-entry view" in agents_text
     assert "Execution remains a separate layer" in agents_text
     assert "TPB Baseline Probability (anchor)" in agents_text
     assert "Market Structure Intelligence (signal layer)" in agents_text
-    assert "Scenario Engine Layer (probability space decomposition and portfolio" in agents_text
+    assert "Scenario Engine Layer (probability space decomposition and bounded scenario" in agents_text
     assert "System Portfolio Layer (synthesis + ranking)" in agents_text
     assert "Execution Layer (display/evaluation only)" in agents_text
     assert "Method Layer (calculation transparency only)" in agents_text
 
     rubric_text = (repo_root / "reports" / "claude_reviews" / "CLAUDE_REVIEW_RUBRIC.md").read_text(encoding="utf-8")
     assert "TPB is not the sole system anymore" in rubric_text
-    assert "not a prediction model, optimal-odds finder, or profit" in rubric_text
+    assert "optimal-odds finder" in rubric_text
+    assert "EV/ROI system" in rubric_text
     assert "odds are treated as biased and noisy market pricing" in rubric_text
     assert "EV/ROI reasoning is not used as an explanation shortcut" in rubric_text
     assert "unified FINAL DECISION SUMMARY / FINAL DECISION BLOCK exists" in rubric_text
     assert "Execution Layer is separate from the final decision block" in rubric_text
     assert "System Portfolio is synthesis-based" in rubric_text
+    assert "Scenario weights are normalized, explainable, deterministic, and bounded" in rubric_text
     assert "Execution Layer does not affect any upstream layer" in rubric_text
-    assert "Scenario Engine is integrated into the System Portfolio explanation flow" in rubric_text
+    assert "Scenario Engine is integrated into the System Portfolio flow" in rubric_text
+    assert "scenario-weighted coverage backbone" in rubric_text
     assert "Scenario Engine is not an isolated UI module" in rubric_text
     assert "Scenario Engine calculation transparency exists" in rubric_text
     assert "No hidden scoring weights exist" in rubric_text
@@ -311,6 +338,7 @@ def test_architecture_guardrails():
         "## 1. Core Decision Layer",
         "## 2. Market Structure Layer",
         "## 3. Scenario Engine Layer",
+        "## Scenario Optimization Layer v2",
         "## 4. System Portfolio Layer",
         "## 5. System Ranking",
         "## 6. Execution Layer",
@@ -323,13 +351,14 @@ def test_architecture_guardrails():
     assert "Scenario Probability Derivation Method" in report_text
     assert "Coverage Mapping Logic" in report_text
     assert "Scenario → Portfolio Mapping Explanation" in report_text
-    assert "System Portfolio = TPB baseline + Market Structure + Scenario Engine explanation synthesis" in report_text
-    assert "Ranking incorporates scenario coverage signals as explanation only" in report_text
+    assert "System Portfolio = TPB baseline + Market Structure + bounded Scenario Weights synthesis" in report_text
+    assert "Scenario-weighted Ranking v2 保持 system-only" in report_text
 
     app_text = (repo_root / "app.py").read_text(encoding="utf-8")
     assert "FINAL DECISION SUMMARY" in app_text
     assert "Execution Layer 不进入本区" in app_text
     assert "render_final_decision_summary" in app_text
+    assert "Scenario Optimization View v2" in app_text
 
     core_files = [
         repo_root / "modules" / "probability_base.py",
@@ -352,11 +381,13 @@ def test_architecture_guardrails():
     assert "stake_from_investment_score" not in intelligence_text
     assert "recommended_stake" not in intelligence_text
     assert "user_portfolio" not in intelligence_text
-    assert "System 层才综合 TPB baseline 与结构信号" in intelligence_text
+    assert "bounded Scenario Weights" in intelligence_text
 
     scenario_text = (repo_root / "modules" / "scenario_engine.py").read_text(encoding="utf-8")
     assert "SCENARIO_TAXONOMY" in scenario_text
     assert "portfolio_mapping_explanation" in scenario_text
+    assert "scenario_weights" in scenario_text
+    assert "coverage_optimization_v2" in scenario_text
     assert "stake_from_investment_score" not in scenario_text
     assert "build_user_portfolio_comparison" not in scenario_text
     assert "expected_value" not in scenario_text.lower()

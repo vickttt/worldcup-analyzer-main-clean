@@ -1,12 +1,12 @@
 def build_model_methodology():
     return {
-        "version": "model_methodology_transparency_v1",
+        "version": "model_methodology_transparency_v2",
         "disclaimer": (
             "Model Methodology Transparency Layer 只解释计算方法，不参与 TPB、Market Structure、"
             "Scenario、Portfolio、Ranking、Stake 或 Execution 的任何计算。"
         ),
         "system_definition": {
-            "identity": "Market Structure + Scenario Coverage + Probability Anchor System",
+            "identity": "Market Structure + Scenario-Weighted Bounded Optimization + Probability Anchor System",
             "not": [
                 "prediction model",
                 "optimal odds finder",
@@ -16,7 +16,8 @@ def build_model_methodology():
             "does": [
                 "market structure inference",
                 "scenario coverage space construction",
-                "risk-coverage balance explanation",
+                "bounded scenario weighting",
+                "risk-coverage balance synthesis",
             ],
         },
         "tpb_definition": {
@@ -40,7 +41,8 @@ def build_model_methodology():
         },
         "optimizer_boundary": {
             "allowed": [
-                "coverage optimization as explanation",
+                "bounded heuristic coverage optimization",
+                "scenario weighting",
                 "scenario balancing",
                 "risk exposure smoothing",
             ],
@@ -48,6 +50,7 @@ def build_model_methodology():
                 "EV optimizer",
                 "ROI optimizer",
                 "profit maximization engine",
+                "ML training system",
                 "black-box scoring system",
             ],
         },
@@ -129,8 +132,28 @@ def build_model_methodology():
             "forbidden": [
                 "No exact score prediction",
                 "No EV / ROI transformation",
-                "No optimizer",
+                "No profit optimizer",
+                "No ML training",
+                "No black-box optimizer",
                 "No user input",
+            ],
+        },
+        "scenario_weighting_method_v2": {
+            "name": "Scenario Weighting Function v2",
+            "principle": "Scenario weights are normalized bounded heuristic signals, not learned probabilities.",
+            "formula": "w(Si) = f(TPB baseline, Market Structure, Volatility, Upset Probability)",
+            "constraints": [
+                "weights are normalized",
+                "weights are explainable",
+                "weights are deterministic",
+                "weights do not override TPB",
+                "weights do not use user input",
+            ],
+            "forbidden": [
+                "No EV / ROI optimization",
+                "No profit maximization",
+                "No ML training",
+                "No black-box learned weights",
             ],
         },
         "scenario_mapping_method": {
@@ -155,14 +178,58 @@ def build_model_methodology():
             "tail_coverage": "Upset and long-tail/high-variance scenarios become tail optionality.",
             "coverage_efficiency_score": (
                 "Coverage Efficiency Score combines coverage completeness, risk concentration, and redundancy. "
-                "It is a transparency score, not EV, ROI, profit optimization, ranking override, or stake input."
+                "It is a transparency score, not EV, ROI, profit optimization, or stake input."
             ),
+            "coverage_efficiency_score_v2": (
+                "Coverage Efficiency v2 = scenario coverage / (risk exposure + redundancy). "
+                "It is a bounded heuristic coverage score for scenario-weighted portfolio synthesis."
+            ),
+        },
+        "coverage_optimization_v2": {
+            "name": "Coverage Optimization Engine v2",
+            "objective": {
+                "maximize": [
+                    "scenario coverage",
+                    "probability alignment",
+                    "risk balance",
+                ],
+                "minimize": [
+                    "tail exposure",
+                    "conflict exposure",
+                    "redundancy",
+                ],
+            },
+            "type": "bounded deterministic heuristic",
+            "forbidden": [
+                "EV optimization",
+                "ROI optimization",
+                "profit maximization",
+                "ML training or learning systems",
+                "black-box optimization",
+                "user input influence",
+            ],
+        },
+        "scenario_weighted_ranking_v2": {
+            "name": "Scenario-weighted Ranking v2",
+            "allowed_inputs": [
+                "TPB baseline",
+                "Market Structure signals",
+                "normalized Scenario Weights",
+            ],
+            "forbidden_inputs": [
+                "user odds",
+                "customer execution layer",
+                "EV / ROI",
+                "profit optimizer",
+                "black-box optimizer",
+            ],
         },
         "audit_guards": [
             "No black-box scoring",
             "No hidden ranking weights",
             "No implicit EV logic",
-            "No optimizer-style reasoning",
+            "No EV/ROI/profit optimizer reasoning",
+            "No ML training behavior",
             "All scenario mappings must be traceable",
             "All ranking basis text must be explainable",
         ],

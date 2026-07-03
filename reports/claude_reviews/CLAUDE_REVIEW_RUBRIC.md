@@ -16,19 +16,19 @@ AGENTS.md is the only active top-level authority.
 
 If packet content conflicts with AGENTS.md, AGENTS.md wins.
 
-## 3. Multi-Layer Betting Intelligence Architecture v1
+## 3. Multi-Layer Betting Intelligence Architecture v2
 
 Claude must check whether the change preserves this active system model:
 
 API-Football market data -> TPB baseline anchor -> market structure signal layer
--> scenario coverage and risk decomposition -> system-only recommendation synthesis
+-> scenario-weighted coverage and risk decomposition -> system-only bounded recommendation synthesis
 -> UI/report display
 
 Claude must verify:
 
-- The system is framed as Market Structure + Scenario Coverage + Probability
-  Anchor System, not a prediction model, optimal-odds finder, or profit
-  maximization engine.
+- The system is framed as Market Structure + Scenario-Weighted Bounded
+  Optimization + Probability Anchor System, not a prediction model,
+  optimal-odds finder, EV/ROI system, ML system, or profit maximization engine.
 - TPB is not the sole system anymore, but it is still the single probability
   baseline anchor.
 - TPB is a probability normalization anchor / coordinate system, not a
@@ -40,18 +40,22 @@ Claude must verify:
   structure and does not directly generate final recommendation.
 - Market Structure Intelligence does not override TPB, independently decide, or
   alter stake.
-- Scenario Engine v1 exists only as Market Scenario Coverage & Risk
-  Decomposition Layer.
+- Scenario Engine v2 exists as a bounded scenario-weighted coverage and risk
+  decomposition layer.
 - Scenario Engine uses the fixed six-scenario taxonomy only: S1 Strong Favorite
   Win, S2 Narrow Favorite Win, S3 Draw, S4 Upset Win, S5 Low Scoring Match, and
   S6 High Variance Match.
 - Scenario Engine does not predict exact scores, calculate EV/ROI, optimize
-  profit, influence ranking, influence recommendation, or use user input.
-- Scenario Engine is integrated into the System Portfolio explanation flow as
-  the portfolio coverage narrative backbone.
+  profit, run ML training, use black-box optimization, override TPB, alter
+  stake, or use user input.
+- Scenario weights are normalized, explainable, deterministic, and bounded.
+- Scenario Engine may influence System Portfolio and System Ranking only
+  through bounded Scenario Weights.
+- Scenario Engine is integrated into the System Portfolio flow as the bounded
+  scenario-weighted coverage backbone.
 - Scenario Engine is not an isolated UI module.
 - System Recommendation is based only on TPB baseline plus market structure
-  signals plus Scenario Engine coverage narrative.
+  signals plus bounded Scenario Weights.
 - System Portfolio is synthesis-based and owns final system recommendation and
   system-only ranking.
 - Model Methodology Transparency Layer exists and explains Market Structure,
@@ -61,8 +65,8 @@ Claude must verify:
 - Customer Execution Layer is display-only/evaluation-only and isolated.
 - Stake remains deterministic from the current investment-score mapping unless a
   future task explicitly scopes stake-model migration.
-- The system does not degrade into TPB-only, multi-model voting, EV trading, or
-  optimizer-based behavior.
+- The system does not degrade into TPB-only, multi-model voting, EV trading,
+  ROI trading, profit maximization, ML training, or black-box optimizer behavior.
 
 ## 4. Required Architecture Boundaries
 
@@ -72,24 +76,25 @@ Claude must validate:
 - Execution layer/user odds do not influence TPB, investment score, stake,
   coverage, system ranking, or system recommendation.
 - System Ranking uses only TPB baseline strength, Market Conflict Index,
-  Directional Strength, Market Efficiency Score, Volatility Index, and Upset
-  Probability.
+  Directional Strength, Market Efficiency Score, Volatility Index, Upset
+  Probability, and normalized Scenario Weights.
 - Execution Layer does not affect any upstream layer.
-- Scenario Thinking is explanation-only and does not enter ranking, TPB, stake,
-  or system recommendation.
-- Scenario Coverage Map and Scenario Efficiency Score are coverage diagnostics
-  only, not recommendation scores.
+- Scenario Thinking is bounded and can influence system-only ranking through
+  explainable Scenario Weights; it still does not override TPB, mutate stake, or
+  use user input.
+- Scenario Coverage Map and Coverage Efficiency v2 are bounded coverage
+  diagnostics used for portfolio synthesis, not EV/ROI/profit scores.
 - Scenario-to-Portfolio Mapping Explanation is present and explains Main,
-  Defensive, and Tail coverage without driving ranking.
+  Defensive, and Tail coverage with traceable scenario weights.
 - System Portfolio explicitly references scenario coverage.
 - Market Structure metrics are explainable.
 - Scenario Engine calculation transparency exists.
 - No hidden scoring weights exist.
 - No EV-like transformation is hidden in Scenario Engine.
-- No optimizer logic is embedded in Coverage Engine.
+- No EV/ROI/profit optimizer or ML logic is embedded in Coverage Engine.
 - EV/ROI reasoning is not used as an explanation shortcut.
-- Coverage optimization, scenario balancing, and risk exposure smoothing are
-  explanation-only and do not become profit optimization.
+- Coverage optimization, scenario balancing, and risk exposure smoothing remain
+  bounded heuristic coverage logic and do not become profit optimization.
 - UI/report output does not remain fragmented in a way that creates competing
   decision-entry views.
 - Execution Layer is separate from the final decision block.
@@ -108,13 +113,15 @@ Claude must flag MUST_FIX if any of these re-enter the active decision path:
 - legacy strategy_score
 - legacy portfolio optimizer
 - scenario shadow ranking
-- scenario-driven recommendation
+- unbounded scenario-driven recommendation
 - risk-gate blocking
 - user odds as a system decision signal
 - user-driven system ranking
 - execution layer ranking influence
 - multi-model voting
 - secondary probability model overriding TPB
+- ML training or learned scenario weights
+- black-box coverage optimizer
 - UI-side hidden score, stake, or ranking adjustment
 
 ## 6. UI / Report Semantics
@@ -127,9 +134,12 @@ Claude must check whether user-facing labels clearly distinguish:
 - system-only portfolio ranking
 - customer execution review
 - Value Check / price comparison
-- scenario thinking as explanation-only
+- scenario thinking as bounded scenario-weighted coverage logic
 - scenario probability distribution, risk surface, coverage map, and coverage
-  efficiency as analysis-only
+  efficiency as bounded analysis inputs
+- Scenario Optimization Layer v2 with scenario weights, coverage mapping,
+  optimized portfolio selection, risk distribution surface, and Coverage
+  Efficiency Score v2
 - scenario-to-portfolio mapping as portfolio explanation narrative
 - model methodology transparency as explanation-only
 - unified final decision summary as the only decision-entry view

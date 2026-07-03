@@ -141,7 +141,7 @@ def _system_positions(favorite, metrics):
     tail = {
         "name": "Tail Risk Position",
         "label": "尾部组合：小额波胆/极端路径观察",
-        "rationale": "低概率高赔率路径仅作为 scenario thinking 展示，不进入 ranking override 或 stake。",
+        "rationale": "低概率高赔率路径仅作为受约束尾部覆盖参考，不进入 EV/ROI 或 stake。",
     }
     ranking_basis = (
         f"TPB baseline {metrics.get('favorite_probability', 0)}%; "
@@ -213,7 +213,7 @@ def build_market_intelligence(match=None, odds=None, api_football_data=None, bet
         "favorite_label": favorite.get("label"),
         "favorite_probability": _percent(favorite.get("probability")),
         "tail_density": round(tail_density, 3),
-        "explanation": "Market Structure 只解释盘口结构；System 层才综合 TPB baseline 与结构信号，不使用用户输入，不计算 EV/ROI。",
+        "explanation": "Market Structure 只解释盘口结构；System 层综合 TPB baseline、结构信号与 bounded Scenario Weights，不使用用户输入，不计算 EV/ROI。",
     }
     return {
         "available": tpb.get("available", False),
