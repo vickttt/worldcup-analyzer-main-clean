@@ -161,4 +161,4 @@ def apply_path_consistency(candidates, *args, **kwargs):
 
 
 def recommendation_reason(candidate):
-    return "实际赔率推荐已停用；TPB 是唯一决策来源。"
+    return "实际赔率推荐已停用；用户赔率仅用于执行复盘，不进入系统推荐。"

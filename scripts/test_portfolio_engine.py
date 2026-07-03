@@ -12,6 +12,7 @@ from modules.portfolio_engine import (
     portfolio_style_name,
     rank1_eligibility_check,
 )
+from modules.market_intelligence import build_market_intelligence
 from modules.probability_base import stake_from_investment_score
 from modules.user_portfolio_compare import build_user_portfolio_comparison, parse_user_portfolio_text
 
@@ -119,7 +120,7 @@ def test_legacy_portfolio_helpers_are_disabled_stubs():
     assert "旧组合评分已停用" in " ".join(disabled_score["why"])
 
     assert generate_style_portfolios({}, fixture["match"], fixture["distribution"]) == []
-    assert portfolio_style_name({}) == "TPB 单一决策"
+    assert portfolio_style_name({}) == "Multi-layer baseline"
 
     gate = portfolio_risk_gate(legacy_strategy)
     assert gate["passed"] is True
@@ -129,6 +130,36 @@ def test_legacy_portfolio_helpers_are_disabled_stubs():
     eligibility = rank1_eligibility_check(legacy_strategy)
     assert eligibility["eligible"] is True
     assert eligibility["rank1_blockers"] == []
+
+
+def test_market_intelligence_contract():
+    fixture = sample_fixture()
+    intelligence = build_market_intelligence(
+        match=fixture["match"],
+        odds=fixture["context"]["odds"],
+        api_football_data=fixture["context"]["api_football_data"],
+    )
+    assert intelligence["available"] is True
+    metrics = intelligence["metrics"]
+    assert metrics["directional_strength"] in {
+        "Strong Direction",
+        "Medium Direction",
+        "Weak Direction",
+    }
+    assert 0 <= metrics["market_conflict_index"] <= 100
+    assert metrics["market_conflict_label"] in {"低冲突", "中冲突", "高不确定性市场"}
+    assert 0 <= metrics["market_efficiency_score"] <= 100
+    assert metrics["volatility_index"] in {"Low", "Medium", "High"}
+    assert metrics["upset_probability"] in {"Low", "Medium", "High"}
+
+    portfolio = intelligence["system_portfolio"]
+    assert set(portfolio) == {
+        "main_position",
+        "defensive_position",
+        "tail_risk_position",
+        "ranking",
+    }
+    assert [item["rank"] for item in portfolio["ranking"]] == [1, 2, 3]
 
 
 def test_user_portfolio_comparison_is_display_only():
@@ -179,8 +210,9 @@ def run():
     test_core_decision_layers_contract()
     test_match_investment_score_contract()
     test_legacy_portfolio_helpers_are_disabled_stubs()
+    test_market_intelligence_contract()
     test_user_portfolio_comparison_is_display_only()
-    print("TPB-only portfolio engine smoke tests passed.")
+    print("Multi-layer betting intelligence smoke tests passed.")
 
 
 if __name__ == "__main__":

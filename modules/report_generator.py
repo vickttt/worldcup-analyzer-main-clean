@@ -719,10 +719,64 @@ def format_polymarket_observation_lines(polymarket):
     return lines
 
 
+def format_market_intelligence_lines(market_intelligence):
+    intelligence = market_intelligence or {}
+    metrics = intelligence.get("metrics") or {}
+    lines = [
+        "## Market Structure Intelligence（市场结构分析）",
+        "",
+        "该层使用 API-Football 盘口结构和 TPB baseline 做结构分析；不使用用户输入，不计算 EV/ROI。",
+        "",
+        f"- Directional Strength：{metrics.get('directional_strength', '-')}",
+        f"- Market Conflict Index：{format_value(metrics.get('market_conflict_index'))} / 100（{metrics.get('market_conflict_label', '-')}）",
+        f"- Efficiency Score：{format_value(metrics.get('market_efficiency_score'))} / 100",
+        f"- Volatility Index：{metrics.get('volatility_index', '-')}",
+        f"- Upset Probability：{metrics.get('upset_probability', '-')}",
+    ]
+    if metrics.get("favorite_label"):
+        lines.append(f"- TPB baseline 主方向：{metrics.get('favorite_label')}（{format_value(metrics.get('favorite_probability'))}%）")
+    if metrics.get("explanation"):
+        lines.extend(["", f"说明：{metrics.get('explanation')}"])
+    return lines
+
+
+def format_system_portfolio_lines(market_intelligence):
+    portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
+    lines = [
+        "## System Portfolio Recommendation（系统推荐组合）",
+        "",
+        "系统组合仅使用 TPB baseline 与 Market Structure signals；用户实盘输入不参与系统组合或排序。",
+        "",
+    ]
+    for key in ["main_position", "defensive_position", "tail_risk_position"]:
+        item = portfolio.get(key) or {}
+        lines.append(f"- {item.get('name', '-')}：{item.get('label', '-')}")
+        lines.append(f"  - 说明：{item.get('rationale', '-')}")
+    lines.extend([
+        "",
+        "## System Portfolio Ranking（系统级排序）",
+        "",
+        "仅系统组合参与排序；不使用用户赔率、用户金额、EV/ROI 或 legacy portfolio optimizer。",
+    ])
+    ranking = portfolio.get("ranking") or []
+    if not ranking:
+        return lines + ["", "暂无系统组合排序。"]
+    for item in ranking:
+        lines.append(
+            f"- Rank {item.get('rank', '-')}: {item.get('position', '-')} "
+            f"（依据：{item.get('basis', '-')}）"
+        )
+    return lines
+
+
 def format_user_portfolio_lines(user_portfolio):
     comparison = user_portfolio or {}
     lines = [
-        "## 我的实盘组合",
+        "## Customer Execution Layer（客户执行层）",
+        "",
+        "客户执行层仅用于记录实盘输入、执行价格对比和人工复盘；不参与系统推荐。",
+        "",
+        "### 我的实盘组合",
         "",
         comparison.get("disclaimer")
         or "我的执行价格分析仅用于复盘和价格偏差提醒，不参与 TPB、比赛投资分或推荐金额。",
@@ -759,7 +813,7 @@ def format_user_portfolio_lines(user_portfolio):
 
     lines.extend([
         "",
-        "## 我的执行价格分析（Value Check）",
+        "### 我的执行价格分析（Value Check）",
         "",
         "仅用于复盘，不影响 TPB 决策；价格差异不参与比赛投资分、推荐金额或系统主结论。",
         "",
@@ -846,6 +900,7 @@ def build_report(
     portfolio_summary=None,
     actual_odds=None,
     user_portfolio=None,
+    market_intelligence=None,
 ):
     lines = [
         f"# {match['display_name']} 分析报告",
@@ -862,6 +917,10 @@ def build_report(
             api_football_data,
             actual_odds,
         ),
+        "",
+        *format_market_intelligence_lines(market_intelligence),
+        "",
+        *format_system_portfolio_lines(market_intelligence),
         "",
         *format_user_portfolio_lines(user_portfolio),
         "",

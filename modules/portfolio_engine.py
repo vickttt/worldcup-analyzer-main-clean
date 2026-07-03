@@ -1,9 +1,12 @@
-"""TPB-only execution layer.
+"""Multi-layer baseline execution helpers.
 
-Legacy portfolio optimization and coverage-path blocking have been removed
-from the active decision path. The active chain is:
+Legacy portfolio optimization and coverage-path blocking remain disabled.
+This module owns the TPB baseline score and deterministic stake mapping:
 
 API-Football odds -> TPB -> confidence -> investment_score -> stake.
+
+Market Structure Intelligence is built separately and may synthesize system
+portfolio displays, but user input and EV/ROI never enter this baseline chain.
 """
 
 import re
@@ -318,12 +321,12 @@ def rank1_eligibility_check(portfolio, match=None, distribution=None):
         "rank1_eligible": True,
         "eligible": True,
         "rank1_blockers": [],
-        "summary": "旧 Rank #1 gate 已停用；TPB 投资分是唯一排序来源。",
+        "summary": "旧 Rank #1 gate 已停用；系统排序由 multi-layer 系统层展示，stake 仍由投资分映射。",
     }
 
 
 def portfolio_style_name(strategy, metrics=None):
-    return "TPB 单一决策"
+    return "Multi-layer baseline"
 
 
 def generate_style_portfolios(combo, match, distribution):

@@ -13,6 +13,7 @@ from modules.betting_opinion import build_betting_opinion
 from modules.decision_engine import build_decision_engine
 from modules.odds_client import fetch_match_data
 from modules.market_data import build_market_data
+from modules.market_intelligence import build_market_intelligence
 from modules.polymarket_client import fetch_polymarket
 from modules.pregame_content import (
     BANNER_IMAGE_URL,
@@ -45,9 +46,9 @@ from modules.user_portfolio_compare import build_user_portfolio_comparison
 
 
 MODEL_VERSION_TRACKING = {
-    "model_version": "v1.61",
+    "model_version": "multi_layer_v1",
     "probability_engine_version": "score_distribution_v1",
-    "optimizer_version": "tpb_only_no_optimizer",
+    "optimizer_version": "multi_layer_no_ev_roi_optimizer",
     "asset_framework_version": "multi_role_asset_framework_v1",
     "audit_version": "prediction_audit_v1",
 }
@@ -1052,12 +1053,12 @@ def tpb_report_strategy(decision):
     stake = decision.get("recommended_stake") or {}
     score = decision.get("value_rating_score") or decision.get("final_confidence_score") or 0
     return {
-        "code": "tpb_decision",
-        "name": "TPB 单一决策",
-        "rank_name": "TPB 单一决策",
+        "code": "multi_layer_baseline",
+        "name": "Multi-layer 系统基准",
+        "rank_name": "Multi-layer 系统基准",
         "score": score,
         "decision_score": score,
-        "portfolio_style_label": "TPB 确定性",
+        "portfolio_style_label": "Multi-layer synthesis",
         "items": [],
         "risk_diagnostic": {
             "risk_level": "诊断",
@@ -1067,7 +1068,7 @@ def tpb_report_strategy(decision):
             "rank1_eligible": True,
             "eligible": True,
             "rank1_blockers": [],
-            "summary": "TPB 决策无 legacy gate 阻断。",
+            "summary": "Multi-layer 系统无 legacy gate 阻断。",
         },
         "recommended_stake": stake,
     }
@@ -1127,9 +1128,9 @@ def render_match_decision_cards(decision_layers):
 
 
 def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None, data_context=None):
-    with perf_timer("detail", "render_tpb_decision", {"mode": "tpb_only"}):
-        st.markdown("**TPB 决策输出**")
-        st.caption("旧组合排序、收益排序与剧本排序已退出决策链；本区只展示 TPB 模型层返回值。")
+    with perf_timer("detail", "render_tpb_decision", {"mode": "multi_layer_baseline"}):
+        st.markdown("**TPB Baseline Layer**")
+        st.caption("本区展示 TPB baseline、投资分和推荐金额；Market Intelligence 在下方作为系统结构层展示。")
         decision_layers = build_core_decision_layers([], match, distribution, data_context)
         render_match_decision_cards(decision_layers)
         score_layer = decision_layers.get("score_layer") or {}
@@ -1138,7 +1139,7 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None,
         tpb = score_layer.get("tpb") or {}
         probs = tpb.get("probabilities") or {}
         rows = [{
-            "决策层": "TPB 单一决策",
+            "决策层": "TPB Baseline",
             "主胜": percent(probs.get("home_win", 0)) if probs else "-",
             "平局": percent(probs.get("draw", 0)) if probs else "-",
             "客胜": percent(probs.get("away_win", 0)) if probs else "-",
@@ -1149,6 +1150,38 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None,
         }]
         st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
         render_ranking_score_notes(decision_layers)
+
+
+def render_market_intelligence_layer(market_intelligence):
+    intelligence = market_intelligence or {}
+    metrics = intelligence.get("metrics") or {}
+    with st.container(border=True):
+        st.markdown("**市场结构分析（Market Intelligence Layer）**")
+        st.caption("使用 API-Football 盘口结构和 TPB baseline；不使用用户输入，不计算 EV/ROI。")
+        cols = st.columns(5)
+        cols[0].metric("Directional Strength", metrics.get("directional_strength", "-"))
+        cols[1].metric("Conflict Index", f"{metrics.get('market_conflict_index', 0)} / 100", metrics.get("market_conflict_label", "-"))
+        cols[2].metric("Efficiency Score", f"{metrics.get('market_efficiency_score', 0)} / 100")
+        cols[3].metric("Volatility", metrics.get("volatility_index", "-"))
+        cols[4].metric("Upset Probability", metrics.get("upset_probability", "-"))
+
+
+def render_system_portfolio_layer(market_intelligence):
+    portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
+    with st.container(border=True):
+        st.markdown("**系统推荐组合（System Portfolio Layer）**")
+        st.caption("仅系统信号参与：TPB baseline + Market Structure。用户实盘输入不参与系统组合或排序。")
+        rows = []
+        for key in ["main_position", "defensive_position", "tail_risk_position"]:
+            item = portfolio.get(key) or {}
+            rows.append({
+                "类型": item.get("name", "-"),
+                "组合": item.get("label", "-"),
+                "说明": item.get("rationale", "-"),
+            })
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        st.markdown("**System Portfolio Ranking（系统级）**")
+        st.dataframe(pd.DataFrame(portfolio.get("ranking") or []), use_container_width=True, hide_index=True)
 
 
 def render_user_portfolio_comparison(input_key, comparison):
@@ -1294,7 +1327,7 @@ def render_core_risk_summary(match, decision, distribution):
             st.caption(exposure.get("meaning"))
 
 
-def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, user_portfolio_key=None):
+def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, user_portfolio_key=None, market_intelligence=None):
     with st.container(border=True):
         st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
         render_betting_opinion(betting_opinion, odds, polymarket, match)
@@ -1309,6 +1342,8 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
                 "polymarket": polymarket,
             },
         )
+        render_market_intelligence_layer(market_intelligence)
+        render_system_portfolio_layer(market_intelligence)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)
         st.caption("结果分布为观察层，不参与 TPB 投资分、推荐金额或排序。")
@@ -1786,7 +1821,7 @@ def render_post_match_analysis_tab(match, selected_fixture, distribution, strate
         score_cols = st.columns(3)
         score_cols[0].metric("最终比分", final_score)
         score_cols[1].metric("数据来源", "API-Football")
-        score_cols[2].metric("决策模型", "TPB-only")
+        score_cols[2].metric("决策模型", "Multi-layer v1")
         st.caption("赛后页仅展示比赛结果与观察层分布；旧组合结算、收益率审计和历史绩效写入已退出运行路径。")
         render_result_distribution(distribution)
 
@@ -2252,6 +2287,13 @@ def render_analysis_page(match_text):
             with perf_timer("detail", "result_distribution"):
                 result_distribution = build_result_distribution(match, odds, polymarket)
                 betting_opinion["result_distribution"] = result_distribution
+            with perf_timer("detail", "market_intelligence"):
+                market_intelligence = build_market_intelligence(
+                    match=match,
+                    odds=odds,
+                    api_football_data=api_football_data,
+                    betting_opinion=betting_opinion,
+                )
             with perf_timer("detail", "render_match_overview"):
                 render_match_overview(match, api_football_data, selected_fixture, allow_live_weather=True)
             with perf_timer("detail", "decision_engine"):
@@ -2291,6 +2333,7 @@ def render_analysis_page(match_text):
                     top_strategy,
                     None,
                     my_portfolio,
+                    market_intelligence,
                 )
                 report_path = save_report(report, match, config["report"]["output_dir"])
 
@@ -2316,6 +2359,7 @@ def render_analysis_page(match_text):
                     my_portfolio,
                     polymarket,
                     user_portfolio_key,
+                    market_intelligence,
                 )
 
         with team_tab:

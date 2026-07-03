@@ -4,9 +4,11 @@
 
 Claude is a read-only reviewer.
 
-Claude must not suggest direct execution, branch creation, commits, pushes, pull requests, merges, rebases, or multi-round automation.
+Claude must not suggest direct execution, branch creation, commits, pushes,
+pull requests, merges, rebases, or multi-round automation.
 
-Claude reviews only the submitted packet and must not treat missing context as permission to infer or execute changes.
+Claude reviews only the submitted packet and must not treat missing context as
+permission to infer or execute changes.
 
 ## 2. Highest System Rule
 
@@ -14,13 +16,34 @@ AGENTS.md is the only active top-level authority.
 
 If packet content conflicts with AGENTS.md, AGENTS.md wins.
 
-## 3. TPB-Only Decision Architecture
+## 3. Multi-Layer Betting Intelligence Architecture
 
-Claude must check whether the change preserves this active decision chain:
+Claude must check whether the change preserves this active system model:
 
-API-Football 1X2 odds -> TPB -> betting_confidence -> investment_score -> stake -> UI/report display
+API-Football market data -> TPB baseline -> market structure intelligence ->
+system portfolio synthesis -> UI/report display
 
-## 4. Forbidden Active Decision Signals
+Claude must verify:
+
+- TPB is a baseline probability anchor, not the sole decision engine.
+- Market Structure Intelligence exists as an analytical layer.
+- System Portfolio Recommendation uses system-only signals, not user input.
+- Customer Execution Layer is display-only and isolated.
+- Stake remains deterministic from the current investment-score mapping unless a
+  future task explicitly scopes stake-model migration.
+
+## 4. Required Architecture Boundaries
+
+Claude must validate:
+
+- Market structure signals do not mutate TPB or raw API odds.
+- Execution layer/user odds do not influence TPB, investment score, stake,
+  coverage, system ranking, or system recommendation.
+- No single-model dominance is reintroduced.
+- No legacy ranking system returns.
+- No risk-gate blocking system is reinstated.
+
+## 5. Forbidden Active Decision Signals
 
 Claude must flag MUST_FIX if any of these re-enter the active decision path:
 
@@ -28,24 +51,27 @@ Claude must flag MUST_FIX if any of these re-enter the active decision path:
 - ROI
 - hybrid
 - legacy strategy_score
-- scenario decision influence
-- portfolio optimizer
+- legacy portfolio optimizer
+- scenario shadow ranking
 - risk-gate blocking
-- user odds as decision signal
-- secondary probability model
+- user odds as a system decision signal
+- user-driven system ranking
 - UI-side hidden score, stake, or ranking adjustment
 
-## 5. UI / Report Semantics
+## 6. UI / Report Semantics
 
 Claude must check whether user-facing labels clearly distinguish:
 
-- TPB decision output
-- observation-only data
-- coverage explanation
+- TPB baseline output
+- market structure intelligence
+- system portfolio recommendation
+- system-only portfolio ranking
+- customer execution review
+- Value Check / price comparison
 - Polymarket read-only comparison
 - risk and max_loss diagnostic-only information
 
-## 6. Git / Workflow Safety
+## 7. Git / Workflow Safety
 
 Claude must check:
 
@@ -56,7 +82,7 @@ Claude must check:
 - manual workflow_dispatch only
 - no second review round unless the user explicitly approves
 
-## 7. API / Secret / Data Safety
+## 8. API / Secret / Data Safety
 
 Claude must flag:
 
@@ -68,7 +94,7 @@ Claude must flag:
 - real API calls introduced into tests
 - pytest collecting manual API diagnostics
 
-## 8. Output Format
+## 9. Output Format
 
 Claude must output:
 
