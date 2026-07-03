@@ -1093,7 +1093,7 @@ def render_ranking_score_notes(decision_layers):
     stake = execution_layer.get("stake") or {}
     with st.expander("评分说明", expanded=False):
         rows = [
-            {"项目": "TPB", "说明": "API-Football 胜平负赔率归一化后的唯一概率基础。"},
+            {"项目": "TPB", "说明": "API-Football 胜平负赔率归一化后的唯一概率 baseline anchor。"},
             {"项目": "投资分", "说明": f"{score_layer.get('investment_score', 0)} / 100；由 TPB 集中度、热门差值和平/冷概率派生。"},
             {"项目": "投注信心", "说明": f"{score_layer.get('betting_confidence', 0)} / 100；由 TPB 熵值派生，无首发/伤病扣分。"},
             {"项目": "推荐金额", "说明": f"{stake.get('amount', 0)} 元；只由投资分档位决定。"},
@@ -1157,7 +1157,7 @@ def render_market_intelligence_layer(market_intelligence):
     metrics = intelligence.get("metrics") or {}
     with st.container(border=True):
         st.markdown("**市场结构分析（Market Intelligence Layer）**")
-        st.caption("使用 API-Football 盘口结构和 TPB baseline；不使用用户输入，不计算 EV/ROI。")
+        st.caption("只解释 API-Football 市场结构；不覆盖 TPB，不影响 stake，不使用用户输入，不计算 EV/ROI。")
         cols = st.columns(5)
         cols[0].metric("Directional Strength", metrics.get("directional_strength", "-"))
         cols[1].metric("Conflict Index", f"{metrics.get('market_conflict_index', 0)} / 100", metrics.get("market_conflict_label", "-"))
@@ -1170,7 +1170,7 @@ def render_system_portfolio_layer(market_intelligence):
     portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
     with st.container(border=True):
         st.markdown("**系统推荐组合（System Portfolio Layer）**")
-        st.caption("仅系统信号参与：TPB baseline + Market Structure。用户实盘输入不参与系统组合或排序。")
+        st.caption("仅系统信号参与：TPB baseline + Market Structure。用户实盘输入不参与系统组合、推荐或排序。")
         rows = []
         for key in ["main_position", "defensive_position", "tail_risk_position"]:
             item = portfolio.get(key) or {}

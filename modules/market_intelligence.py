@@ -131,33 +131,41 @@ def _system_positions(favorite, metrics):
     main = {
         "name": "Main Position",
         "label": f"主方向：{favorite.get('label')}",
-        "rationale": "结合 TPB baseline 与市场结构方向强度，作为系统主推荐观察。",
+        "rationale": "System 层综合 TPB baseline strength 与 Directional Strength；Market Structure 本身不覆盖 TPB。",
     }
     defensive = {
         "name": "Defensive Position",
         "label": "防守组合：平局/受让覆盖",
-        "rationale": "用于覆盖冲突指数、波动指数或平局风险偏高的结构。",
+        "rationale": "用于解释 Conflict、Volatility 或平局风险偏高的防守结构，不改变 stake。",
     }
     tail = {
         "name": "Tail Risk Position",
         "label": "尾部组合：小额波胆/极端路径观察",
-        "rationale": "低概率高赔率路径仅展示，不放大，不影响 stake。",
+        "rationale": "低概率高赔率路径仅作为 scenario thinking 展示，不进入 ranking override 或 stake。",
     }
+    ranking_basis = (
+        f"TPB baseline {metrics.get('favorite_probability', 0)}%; "
+        f"Directional {metrics.get('directional_strength')}; "
+        f"Conflict {metrics.get('market_conflict_index')}; "
+        f"Efficiency {metrics.get('market_efficiency_score')}; "
+        f"Volatility {metrics.get('volatility_index')}; "
+        f"Upset {metrics.get('upset_probability')}"
+    )
     ranking = [
         {
             "rank": 1,
             "position": main["label"],
-            "basis": metrics.get("directional_strength"),
+            "basis": ranking_basis,
         },
         {
             "rank": 2,
             "position": defensive["label"],
-            "basis": metrics.get("market_conflict_label"),
+            "basis": f"Conflict {metrics.get('market_conflict_label')} / Volatility {metrics.get('volatility_index')}",
         },
         {
             "rank": 3,
             "position": tail["label"],
-            "basis": metrics.get("upset_probability"),
+            "basis": f"Upset {metrics.get('upset_probability')} / tail density {metrics.get('tail_density')}",
         },
     ]
     return {
@@ -205,7 +213,7 @@ def build_market_intelligence(match=None, odds=None, api_football_data=None, bet
         "favorite_label": favorite.get("label"),
         "favorite_probability": _percent(favorite.get("probability")),
         "tail_density": round(tail_density, 3),
-        "explanation": "Market Intelligence 使用 API-Football 市场结构和 TPB baseline；不使用用户输入，不计算 EV/ROI。",
+        "explanation": "Market Structure 只解释盘口结构；System 层才综合 TPB baseline 与结构信号，不使用用户输入，不计算 EV/ROI。",
     }
     return {
         "available": tpb.get("available", False),

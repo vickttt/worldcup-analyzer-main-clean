@@ -206,12 +206,41 @@ def test_user_portfolio_comparison_is_display_only():
     assert set(layers) == {"score_layer", "execution_layer", "explanation_layer"}
 
 
+def test_architecture_guardrails():
+    repo_root = Path(__file__).resolve().parents[1]
+    core_files = [
+        repo_root / "modules" / "probability_base.py",
+        repo_root / "modules" / "portfolio_engine.py",
+        repo_root / "modules" / "market_intelligence.py",
+    ]
+    for file_path in core_files:
+        text = file_path.read_text(encoding="utf-8")
+        assert "from modules.user_portfolio_compare" not in text
+        assert "build_user_portfolio_comparison" not in text
+        assert "expected_value" not in text.lower()
+        assert "roi_" not in text.lower()
+        assert "portfolio_optimizer" not in text.lower()
+        assert "scenario_engine" not in text
+
+    intelligence_text = (repo_root / "modules" / "market_intelligence.py").read_text(encoding="utf-8")
+    assert "true_probability_base" in intelligence_text
+    assert "stake_from_investment_score" not in intelligence_text
+    assert "recommended_stake" not in intelligence_text
+    assert "user_portfolio" not in intelligence_text
+
+    user_layer_text = (repo_root / "modules" / "user_portfolio_compare.py").read_text(encoding="utf-8")
+    assert "true_probability_base" not in user_layer_text
+    assert "investment_score" not in user_layer_text
+    assert "stake_from_investment_score" not in user_layer_text
+
+
 def run():
     test_core_decision_layers_contract()
     test_match_investment_score_contract()
     test_legacy_portfolio_helpers_are_disabled_stubs()
     test_market_intelligence_contract()
     test_user_portfolio_comparison_is_display_only()
+    test_architecture_guardrails()
     print("Multi-layer betting intelligence smoke tests passed.")
 
 

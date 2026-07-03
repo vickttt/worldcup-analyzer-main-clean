@@ -37,14 +37,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile \
-            app.py \
-            modules/portfolio_engine.py \
-            modules/game_behavior_engine.py \
-            modules/user_odds.py \
-            modules/market_utils.py \
-            modules/betting_opinion.py \
-            modules/report_generator.py
+          python -m py_compile app.py modules/*.py scripts/*.py
 
       - name: Portfolio engine smoke test
         run: python scripts/test_portfolio_engine.py

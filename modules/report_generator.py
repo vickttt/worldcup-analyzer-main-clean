@@ -589,7 +589,7 @@ def format_core_conclusion_lines(
         score = portfolio_summary.get("score")
     notes = _data_quality_notes(opinion, api_football_data, match, actual_odds)
     lines = [
-        "## 核心结论",
+        "## 1. Core Decision Layer（核心决策层）",
         "",
         f"- 比赛主方向：{opinion.get('match_direction') or opinion.get('match_winner', '暂无观点')}",
         f"- TPB 概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}",
@@ -723,9 +723,9 @@ def format_market_intelligence_lines(market_intelligence):
     intelligence = market_intelligence or {}
     metrics = intelligence.get("metrics") or {}
     lines = [
-        "## Market Structure Intelligence（市场结构分析）",
+        "## 2. Market Structure Layer（市场结构层）",
         "",
-        "该层使用 API-Football 盘口结构和 TPB baseline 做结构分析；不使用用户输入，不计算 EV/ROI。",
+        "该层只解释市场结构，不独立决策，不覆盖 TPB，不影响 stake，不使用用户输入，不计算 EV/ROI。",
         "",
         f"- Directional Strength：{metrics.get('directional_strength', '-')}",
         f"- Market Conflict Index：{format_value(metrics.get('market_conflict_index'))} / 100（{metrics.get('market_conflict_label', '-')}）",
@@ -743,9 +743,9 @@ def format_market_intelligence_lines(market_intelligence):
 def format_system_portfolio_lines(market_intelligence):
     portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
     lines = [
-        "## System Portfolio Recommendation（系统推荐组合）",
+        "## 3. System Portfolio Recommendation（系统推荐组合）",
         "",
-        "系统组合仅使用 TPB baseline 与 Market Structure signals；用户实盘输入不参与系统组合或排序。",
+        "系统组合仅使用 TPB baseline 与 Market Structure signals；用户实盘输入不参与系统组合、推荐或排序。",
         "",
     ]
     for key in ["main_position", "defensive_position", "tail_risk_position"]:
@@ -754,9 +754,9 @@ def format_system_portfolio_lines(market_intelligence):
         lines.append(f"  - 说明：{item.get('rationale', '-')}")
     lines.extend([
         "",
-        "## System Portfolio Ranking（系统级排序）",
+        "### System Ranking（系统级排序）",
         "",
-        "仅系统组合参与排序；不使用用户赔率、用户金额、EV/ROI 或 legacy portfolio optimizer。",
+        "仅系统组合参与排序；依据 TPB baseline strength、Directional Strength、Conflict、Efficiency、Volatility 与 Upset signals；不使用用户输入、EV/ROI 或 legacy optimizer。",
     ])
     ranking = portfolio.get("ranking") or []
     if not ranking:
@@ -772,9 +772,9 @@ def format_system_portfolio_lines(market_intelligence):
 def format_user_portfolio_lines(user_portfolio):
     comparison = user_portfolio or {}
     lines = [
-        "## Customer Execution Layer（客户执行层）",
+        "## 4. Execution Layer（用户执行层）",
         "",
-        "客户执行层仅用于记录实盘输入、执行价格对比和人工复盘；不参与系统推荐。",
+        "客户执行层仅用于记录实盘输入、执行价格对比和人工复盘；不参与 TPB、系统推荐、系统排序或 stake。",
         "",
         "### 我的实盘组合",
         "",

@@ -16,21 +16,27 @@ AGENTS.md is the only active top-level authority.
 
 If packet content conflicts with AGENTS.md, AGENTS.md wins.
 
-## 3. Multi-Layer Betting Intelligence Architecture
+## 3. Multi-Layer Betting Intelligence Architecture v1
 
 Claude must check whether the change preserves this active system model:
 
-API-Football market data -> TPB baseline -> market structure intelligence ->
-system portfolio synthesis -> UI/report display
+API-Football market data -> TPB baseline anchor -> market structure explanation
+-> system-only recommendation synthesis -> UI/report display
 
 Claude must verify:
 
-- TPB is a baseline probability anchor, not the sole decision engine.
-- Market Structure Intelligence exists as an analytical layer.
-- System Portfolio Recommendation uses system-only signals, not user input.
-- Customer Execution Layer is display-only and isolated.
+- TPB is still the single baseline probability anchor.
+- TPB is not overridden, replaced, downgraded, or mutated by market structure,
+  scenario thinking, user input, or secondary models.
+- Market Structure Intelligence exists as an analytical explanation layer.
+- Market Structure Intelligence does not independently decide or alter stake.
+- System Recommendation is based only on TPB baseline plus market structure
+  signals.
+- Customer Execution Layer is display-only/evaluation-only and isolated.
 - Stake remains deterministic from the current investment-score mapping unless a
   future task explicitly scopes stake-model migration.
+- The system does not degrade into TPB-only, multi-model voting, EV trading, or
+  optimizer-based behavior.
 
 ## 4. Required Architecture Boundaries
 
@@ -39,7 +45,11 @@ Claude must validate:
 - Market structure signals do not mutate TPB or raw API odds.
 - Execution layer/user odds do not influence TPB, investment score, stake,
   coverage, system ranking, or system recommendation.
-- No single-model dominance is reintroduced.
+- System Ranking uses only TPB baseline strength, Market Conflict Index,
+  Directional Strength, Market Efficiency Score, Volatility Index, and Upset
+  Probability.
+- Scenario Thinking is explanation-only and does not enter ranking, TPB, stake,
+  or system recommendation.
 - No legacy ranking system returns.
 - No risk-gate blocking system is reinstated.
 
@@ -56,6 +66,9 @@ Claude must flag MUST_FIX if any of these re-enter the active decision path:
 - risk-gate blocking
 - user odds as a system decision signal
 - user-driven system ranking
+- execution layer ranking influence
+- multi-model voting
+- secondary probability model overriding TPB
 - UI-side hidden score, stake, or ranking adjustment
 
 ## 6. UI / Report Semantics
@@ -68,6 +81,7 @@ Claude must check whether user-facing labels clearly distinguish:
 - system-only portfolio ranking
 - customer execution review
 - Value Check / price comparison
+- scenario thinking as explanation-only
 - Polymarket read-only comparison
 - risk and max_loss diagnostic-only information
 
@@ -93,6 +107,8 @@ Claude must flag:
 - data/performance_logs
 - real API calls introduced into tests
 - pytest collecting manual API diagnostics
+- CI or smoke tests depending on TPB-only assumptions
+- legacy ranking imports or optimizer imports in active core paths
 
 ## 9. Output Format
 

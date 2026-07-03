@@ -5,52 +5,81 @@ docs, reports, workflows, and agent notes are subordinate to this file.
 
 Codex must read this file before every task.
 
-## 1. Decision Core: Multi-Layer Betting Intelligence System
+## 1. Decision Core: Multi-Layer Betting Intelligence System v1
 
-The production decision system is a multi-layer betting intelligence system.
+The production decision system is fixed as Multi-Layer Betting Intelligence
+System v1. It must not degrade into TPB-only, multi-model voting, EV trading, or
+optimizer-based systems.
 
 Layer model:
 
-1. API Market Data Layer
+1. Layer 0: Market Data Layer
    - Source: API-Football only unless explicitly scoped.
    - Inputs: 1X2 odds, Asian Handicap, Over/Under, Correct Score, and bookmaker
      market data.
    - Output: raw market data, implied probabilities, and bookmaker consensus.
+   - This layer provides data only and never makes decisions.
 
-2. TPB Baseline Layer
+2. Layer 1: TPB Baseline Layer
    - TPB is the baseline probability anchor derived from API-Football 1X2 odds
      and normalized bookmaker consensus.
-   - TPB remains the anchor for probability interpretation, confidence,
-     investment score, and deterministic stake mapping.
-   - TPB is no longer the only analytical input for system-level market
-     intelligence.
+   - TPB is the only probability baseline anchor. It may not be replaced,
+     overridden, or downgraded into an ordinary helper variable.
+   - TPB anchors probability interpretation, confidence, investment score, and
+     deterministic stake mapping.
+   - TPB cannot be overridden by market structure, scenario thinking, user
+     input, or any secondary model.
+   - TPB does not participate in a ranking override; it supplies baseline
+     strength to the system recommendation layer.
 
-3. Market Structure Intelligence Layer
+3. Layer 2: Market Structure Intelligence Layer
    - Uses API-Football market structure to produce analytical signals:
      Directional Strength, Market Conflict Index, Market Efficiency Score,
      Volatility Index, and Upset Probability.
-   - These signals may inform system portfolio recommendation and system-only
-     portfolio ordering.
-   - Market structure must not mutate TPB, raw odds, API transport, or user
-     execution data.
+   - This layer explains the market. It does not independently decide,
+     override TPB, alter stake, mutate raw odds, or write user execution data.
+   - These signals may be consumed by the System Portfolio Layer as explanatory
+     system inputs.
 
-4. System Portfolio Layer
-   - System recommendation is a synthesis of TPB baseline and market structure
-     signals.
+4. Layer 3: System Portfolio Layer
+   - The only legal system recommendation chain is:
+     TPB baseline + Market Structure -> System Recommendation.
+   - System recommendation is a synthesis of TPB baseline strength and market
+     structure signals.
    - Allowed system outputs: Main Position, Defensive Position, Tail Risk
-     Position, and System Portfolio Ranking.
-   - System Portfolio Ranking may use Directional Strength, Market Conflict
-     Index, Market Efficiency Score, Upset Probability, Volatility Index, and
-     TPB baseline consistency.
+     Position, and System Ranking.
+   - System Ranking may use TPB baseline strength, Market Conflict Index,
+     Directional Strength, Market Efficiency Score, Volatility Index, and Upset
+     Probability.
+   - System Ranking must not use user input, execution layer signals, EV, ROI,
+     or legacy optimizer logic.
    - Stake remains deterministic from the existing investment score unless the
      user explicitly scopes a future stake-model migration.
 
-5. Customer Execution Layer
+5. Layer 4: Customer Execution Layer
    - User input is execution behavior only.
-   - User odds and positions may be used for Value Check, execution review, and
-     user-vs-system display comparison.
+   - User odds and positions may be used for execution evaluation, Value Check,
+     risk review, and user-vs-system display comparison.
+   - Allowed execution classifications include Aligned, Partially Aligned,
+     Hedged, Contrarian, and High Risk Exposure.
    - User input must never influence TPB, investment score, stake, coverage,
      system ranking, raw odds, API data, or system recommendation.
+
+Scenario Thinking:
+
+- Scenario Thinking is allowed only as an explanation layer. Examples include
+  strong favorite win, narrow win, draw-heavy market, upset scenario, and
+  high-variance match.
+- Scenario Thinking must not enter ranking, override TPB, mutate market
+  structure metrics, alter stake, or change system recommendation.
+
+System positioning:
+
+- This is not a pure prediction system and not an EV trading system.
+- It is a Market Structure + Probability Anchor + Scenario Explanation System.
+- One-line lock:
+  TPB defines probability baseline; Market defines structure; Execution defines
+  user behavior; System defines recommendation.
 
 Forbidden in the active decision path:
 
@@ -60,23 +89,50 @@ Forbidden in the active decision path:
 - legacy portfolio optimizer.
 - risk-gate blocking.
 - user-entered odds as a system decision signal.
+- user-driven ranking.
 - scenario shadow or scenario-driven ranking.
+- multi-model voting.
+- secondary probability model overriding TPB.
+
+Forbidden ranking paths:
+
+- user input ranking.
+- execution layer ranking influence.
+- EV ranking.
+- ROI ranking.
+- portfolio optimizer ranking.
+
+Allowed report structure:
+
+1. Core Decision Layer: TPB, betting confidence, investment score, and stake.
+2. Market Structure Layer: Directional Strength, Conflict Index, Efficiency
+   Score, Volatility Index, and Upset Probability.
+3. System Portfolio Recommendation: main, defensive, and tail positions.
+4. Execution Layer: user portfolio, odds comparison, and evaluation only.
 
 System chain:
 
 ```text
 API-Football market data
-  -> TPB baseline
-  -> market structure intelligence
-  -> system portfolio synthesis
+  -> TPB baseline anchor
+  -> market structure explanation
+  -> system-only recommendation synthesis
   -> deterministic stake display + UI/report display
 ```
 
 Customer execution chain:
 
 ```text
-user execution input -> Value Check / execution review -> UI/report display only
+user execution input -> Value Check / execution evaluation -> UI/report display only
 ```
+
+System invariants:
+
+- TPB cannot be overridden.
+- Market Structure cannot become an optimizer.
+- Execution Layer cannot become ranking input.
+- Scenario Thinking cannot become a decision engine.
+- No layer may become an EV/ROI system.
 
 ## 2. Execution Layer: Git, UI, API
 
