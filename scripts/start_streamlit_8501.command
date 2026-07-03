@@ -1,7 +1,8 @@
 #!/bin/zsh
 
-PROJECT_DIR="/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer"
-PORT="8502"
+SCRIPT_DIR="${0:A:h}"
+PROJECT_DIR="${SCRIPT_DIR:h}"
+PORT="8501"
 URL="http://localhost:${PORT}/"
 LOG_DIR="${PROJECT_DIR}/logs"
 LOG_FILE="${LOG_DIR}/streamlit_${PORT}.log"
@@ -30,16 +31,21 @@ if [ ! -f "app.py" ]; then
   exit 1
 fi
 
-if [ ! -x ".venv/bin/python" ]; then
-  echo "启动失败：虚拟环境 .venv 不存在或损坏。"
-  echo "请先恢复项目虚拟环境。"
+if [ -x ".venv/bin/python" ]; then
+  PYTHON_BIN="$PROJECT_DIR/.venv/bin/python"
+else
+  PYTHON_BIN="$(command -v python3)"
+fi
+
+if [ -z "$PYTHON_BIN" ]; then
+  echo "启动失败：找不到可用 Python。"
   read "?按回车关闭窗口。"
   exit 1
 fi
 
-if [ ! -x ".venv/bin/streamlit" ]; then
-  echo "启动失败：虚拟环境里没有 Streamlit。"
-  echo "可执行：.venv/bin/python -m pip install -r requirements.txt"
+if ! "$PYTHON_BIN" -m streamlit --version >/dev/null 2>&1; then
+  echo "启动失败：当前 Python 环境没有 Streamlit。"
+  echo "可执行：$PYTHON_BIN -m pip install -r requirements.txt"
   read "?按回车关闭窗口。"
   exit 1
 fi
@@ -52,7 +58,7 @@ fi
 
 PORT_PIDS=$(lsof -ti tcp:${PORT} 2>/dev/null)
 if [ -n "$PORT_PIDS" ]; then
-  echo "发现 8502 端口有旧进程但网页不可访问，正在清理。"
+  echo "发现 ${PORT} 端口有旧进程但网页不可访问，正在清理。"
   for pid in ${(f)PORT_PIDS}; do
     kill "$pid" 2>/dev/null
   done
@@ -65,7 +71,7 @@ echo ""
 
 (
   cd "$PROJECT_DIR" || exit 1
-  exec "$PROJECT_DIR/.venv/bin/python" -m streamlit run app.py \
+  exec "$PYTHON_BIN" -m streamlit run app.py \
     --server.port "$PORT" \
     --server.headless true \
     --browser.gatherUsageStats false

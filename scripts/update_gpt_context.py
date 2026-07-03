@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTEXT_FILE = ROOT / "GPT_CONTEXT.md"
 LATEST_FILE = ROOT / "LATEST.md"
 VERSION = "v1.81-dev"
-URL = "http://localhost:8502"
+URL = "http://localhost:8501"
 CURRENT_BEST_PORTFOLIO = "推荐组合（当前最优）"
 CURRENT_UTILITY = "Calculated per selected match"
 TOP_ISSUE = "Report readability layer is fixed; next focus is live Streamlit export spot-checks after user odds are entered."
@@ -38,7 +38,7 @@ def modified_files():
 
 
 def running_status():
-    output = run(["lsof", "-i", ":8502"])
+    output = run(["lsof", "-i", ":8501"])
     if "LISTEN" in output:
         return f"Running: {URL}"
     return "Not confirmed"
@@ -223,7 +223,7 @@ Enabled:
     "API-Football standings are cached for 24 hours by league and season.",
     "Local app startup is protected by START_APP.command with port checks, stale-process cleanup, health check, browser open, PID file, and log output.",
     "Do not use LaunchAgent for this project while it remains inside Documents because macOS blocks background access to the virtualenv.",
-    "When localhost is down, Codex should open START_APP.command first, then verify lsof -i :8502 and curl -I http://localhost:8502/.",
+    "When localhost is down, Codex should open START_APP.command first, then verify lsof -i :8501 and curl -I http://localhost:8501/.",
     "Detail page now uses indexed lightweight database loading instead of eager full JSON loading.",
     "Polymarket uses file cache and a 4-second page timeout to avoid blocking the decision page.",
     "Page-triggered network requests have shorter timeouts; full API refresh should still be done through terminal refresh scripts.",

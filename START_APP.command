@@ -1,4 +1,4 @@
 #!/bin/zsh
 
-SCRIPT_DIR="/Users/zijianchen/Documents/Codex/2026-06-14/1-vs-2-polymarket-3-4/worldcup-analyzer"
-exec "$SCRIPT_DIR/scripts/start_streamlit_8502.command"
+SCRIPT_DIR="${0:A:h}"
+exec "$SCRIPT_DIR/scripts/start_streamlit_8501.command"

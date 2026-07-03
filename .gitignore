@@ -9,6 +9,7 @@ __pycache__/
 *.env
 logs/
 data/cache/
+data/performance_logs/
 outputs/reports/
 .streamlit/secrets.toml
 .streamlit/secrets.toml.*
