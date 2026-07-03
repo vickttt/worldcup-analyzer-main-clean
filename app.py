@@ -1156,8 +1156,8 @@ def render_user_portfolio_comparison(input_key, comparison):
     with st.container(border=True):
         st.markdown("**我的实盘组合（可选）**")
         st.caption(
-            "如果不输入，系统照常运行。若输入，仅用于和 TPB 系统输出做 display-only 对比，"
-            "不影响 TPB、比赛投资分或推荐金额。"
+            "如果不输入，系统照常运行。若输入，仅用于执行价格复盘和 API 赔率对比，"
+            "不影响 TPB、比赛投资分、推荐金额或系统主结论。"
         )
         st.text_area(
             "每行一笔：市场,选择,盘口(可选),赔率",
@@ -1182,10 +1182,7 @@ def render_user_portfolio_comparison(input_key, comparison):
             st.info("暂未解析到有效实盘组合。")
             return
 
-        cols = st.columns(3)
-        cols[0].metric("总笔数", comparison.get("total_count", 0))
-        cols[1].metric("组合类型", comparison.get("portfolio_type", "-"))
-        cols[2].metric("与 TPB 主方向关系", comparison.get("relation", "-"))
+        st.metric("总笔数", comparison.get("total_count", 0))
 
         st.markdown("**我的组合明细**")
         detail_rows = [
@@ -1195,14 +1192,13 @@ def render_user_portfolio_comparison(input_key, comparison):
                 "盘口": item.get("handicap_display") or "-",
                 "盘口结构": "分段盘口" if item.get("is_split_line") else "单一盘口",
                 "实际赔率": item.get("user_odds"),
-                "路径判断": item.get("classification"),
             }
             for item in positions
         ]
         st.dataframe(pd.DataFrame(detail_rows), use_container_width=True, hide_index=True)
 
-        st.markdown("**我的实际赔率 vs API 赔率**")
-        st.caption("价格差异只用于用户复盘，不参与 TPB、比赛投资分、推荐金额或系统主结论。")
+        st.markdown("**我的执行价格分析（Value Check）**")
+        st.caption("仅用于复盘，不影响 TPB 决策；价格差异不参与比赛投资分、推荐金额或系统主结论。")
         price_rows = [
             {
                 "市场": item.get("market"),
@@ -1211,22 +1207,12 @@ def render_user_portfolio_comparison(input_key, comparison):
                 "盘口结构": "分段盘口" if item.get("is_split_line") else "单一盘口",
                 "用户实际赔率": item.get("user_odds"),
                 "API参考赔率": item.get("api_reference_odds") if item.get("api_reference_odds") is not None else "-",
-                "差异": item.get("price_difference_text"),
+                "赔率差值": item.get("price_difference_pct_text"),
                 "判断": item.get("price_judgment"),
             }
             for item in positions
         ]
         st.dataframe(pd.DataFrame(price_rows), use_container_width=True, hide_index=True)
-
-        st.markdown("**我的组合对比观察**")
-        st.caption("我的组合对比观察仅用于用户复盘和人工判断，不参与 TPB、比赛投资分或推荐金额。")
-        st.dataframe(pd.DataFrame(comparison.get("observation_rows") or []), use_container_width=True, hide_index=True)
-
-        warnings = comparison.get("risk_warnings") or []
-        if warnings:
-            st.markdown("**风险提示**")
-            for warning in warnings:
-                st.caption(f"- {warning}")
 
 
 def odds_from_market_data(market_data):

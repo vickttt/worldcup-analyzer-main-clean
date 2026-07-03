@@ -725,7 +725,7 @@ def format_user_portfolio_lines(user_portfolio):
         "## 我的实盘组合",
         "",
         comparison.get("disclaimer")
-        or "我的实盘组合仅用于人工复盘和 display-only 对比，不参与 TPB、比赛投资分或推荐金额。",
+        or "我的执行价格分析仅用于复盘和价格偏差提醒，不参与 TPB、比赛投资分或推荐金额。",
         "",
     ]
     if not comparison.get("has_input"):
@@ -744,8 +744,6 @@ def format_user_portfolio_lines(user_portfolio):
 
     lines.extend([
         f"- 总笔数：{comparison.get('total_count', 0)}",
-        f"- 组合类型判断：{comparison.get('portfolio_type', '-')}",
-        f"- 与 TPB 主方向关系：{comparison.get('relation', '-')}",
         "",
         "明细：",
     ])
@@ -756,15 +754,14 @@ def format_user_portfolio_lines(user_portfolio):
             f"{format_value(item.get('selection'))} / "
             f"盘口 {format_value(item.get('handicap_display') or '-')} / "
             f"{'系统识别为分段盘口 / ' if item.get('is_split_line') else ''}"
-            f"实际赔率 {format_value(item.get('user_odds'))} / "
-            f"{item.get('classification', '-')}"
+            f"实际赔率 {format_value(item.get('user_odds'))}"
         )
 
     lines.extend([
         "",
-        "## 我的实际赔率 vs API 赔率",
+        "## 我的执行价格分析（Value Check）",
         "",
-        "价格差异只用于用户复盘，不参与 TPB、比赛投资分、推荐金额或系统主结论。",
+        "仅用于复盘，不影响 TPB 决策；价格差异不参与比赛投资分、推荐金额或系统主结论。",
         "",
     ])
     for item in positions:
@@ -776,31 +773,9 @@ def format_user_portfolio_lines(user_portfolio):
             f"盘口 {format_value(item.get('handicap_display') or '-')}："
             f"用户实际赔率 {format_value(item.get('user_odds'))}；"
             f"API参考赔率 {format_value(api_odds) if api_odds is not None else '暂无可比 API 赔率'}；"
-            f"差异 {item.get('price_difference_text', '-')}；"
+            f"赔率差值 {item.get('price_difference_pct_text', '-')}；"
             f"判断：{item.get('price_judgment', '-')}"
         )
-
-    lines.extend([
-        "",
-        "## 我的组合对比观察",
-        "",
-        "我的组合对比观察仅用于用户复盘和人工判断，不参与 TPB、比赛投资分或推荐金额。",
-        "",
-    ])
-    for row in comparison.get("observation_rows") or []:
-        lines.append(
-            "- "
-            f"{row.get('对象', '-')}："
-            f"{row.get('关系', '-')} / "
-            f"{row.get('TPB一致性', '-')}。"
-            f"{row.get('说明', '')}"
-        )
-
-    warnings = comparison.get("risk_warnings") or []
-    if warnings:
-        lines.extend(["", "风险提示："])
-        for warning in warnings:
-            lines.append(f"- {warning}")
     return lines
 
 

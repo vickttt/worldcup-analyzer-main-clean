@@ -1,6 +1,5 @@
 from modules.market_utils import parse_handicap_value, safe_float
 from modules.pregame_content import team_cn
-from modules.probability_base import true_probability_base
 
 
 ALLOWED_MARKETS = {"独赢", "胜平负", "让球", "大小球", "波胆", "其他"}
@@ -38,26 +37,6 @@ def _team_label(match, side):
     fallback = "home_en" if side == "home" else "away_en"
     return team_cn(match.get(key) or match.get(fallback) or side)
 
-
-def _tpb_direction(odds, match):
-    probabilities = (true_probability_base(odds or {}).get("probabilities") or {})
-    if not probabilities:
-        return {
-            "outcome": None,
-            "label": "无法判断",
-            "probability": None,
-        }
-    outcome = max(probabilities, key=lambda key: probabilities.get(key, 0))
-    labels = {
-        "home_win": _team_label(match, "home"),
-        "draw": "平局",
-        "away_win": _team_label(match, "away"),
-    }
-    return {
-        "outcome": outcome,
-        "label": labels.get(outcome, outcome),
-        "probability": probabilities.get(outcome),
-    }
 
 
 def _parse_number(value, field_name, line_number):
@@ -199,17 +178,6 @@ def parse_user_portfolio_text(raw_text):
     return positions, warnings
 
 
-def _selection_matches_tpb(selection, direction, match):
-    selected = _normalized(selection)
-    if not selected or not direction.get("outcome"):
-        return False
-    candidates = {
-        "home_win": {_normalized(_team_label(match, "home")), "主胜", "home", "homewin"},
-        "draw": {"平局", "draw", "x"},
-        "away_win": {_normalized(_team_label(match, "away")), "客胜", "away", "awaywin"},
-    }
-    return selected in candidates.get(direction.get("outcome"), set())
-
 
 def _selection_matches_side(selection, side, match):
     selected = _normalized(selection)
@@ -231,37 +199,26 @@ def _selection_outcome(selection, match):
     return None
 
 
-def _selection_is_opposite(selection, direction, match):
-    selected = _normalized(selection)
-    if not selected or direction.get("outcome") not in {"home_win", "away_win"}:
-        return False
-    opposite = "away_win" if direction["outcome"] == "home_win" else "home_win"
-    candidates = {
-        "home_win": {_normalized(_team_label(match, "home")), "主胜", "home", "homewin"},
-        "away_win": {_normalized(_team_label(match, "away")), "客胜", "away", "awaywin"},
-    }
-    return selected in candidates.get(opposite, set())
-
 
 def _price_judgment(user_odds, api_odds):
     if api_odds is None:
         return {
             "api_odds": None,
-            "difference": None,
-            "difference_text": "-",
-            "judgment": "暂无可比 API 赔率",
+            "difference_pct": None,
+            "difference_pct_text": "-",
+            "judgment": "无API可比（unknown）",
         }
-    difference = round(float(user_odds) - float(api_odds), 3)
-    if difference > 0.03:
-        judgment = "用户赔率更好"
-    elif difference < -0.03:
-        judgment = "用户赔率更差"
+    difference_pct = round((float(user_odds) - float(api_odds)) / float(api_odds) * 100, 2)
+    if difference_pct > 2:
+        judgment = "用户赔率更优（value +）"
+    elif difference_pct < -2:
+        judgment = "用户赔率更差（overpay）"
     else:
-        judgment = "接近"
+        judgment = "用户赔率接近（neutral）"
     return {
         "api_odds": float(api_odds),
-        "difference": difference,
-        "difference_text": f"{difference:+.2f}",
+        "difference_pct": difference_pct,
+        "difference_pct_text": f"{difference_pct:+.2f}%",
         "judgment": judgment,
     }
 
@@ -338,97 +295,6 @@ def _api_reference_for_position(position, match, odds, api_football_data):
     return _price_judgment(position.get("odds"), api_odds)
 
 
-def _classify_position(position, direction, match):
-    market = position.get("market")
-    selection = position.get("selection")
-    odds = position.get("odds") or 0
-    handicap = _clean_text(position.get("handicap"))
-
-    if market == "波胆":
-        return "尾部", "波胆属于精确比分路径，作为尾部风险观察。"
-    if market == "大小球":
-        if _normalized(selection).startswith("under"):
-            return "防守", "小球倾向通常更偏防守路径。"
-        if _normalized(selection).startswith("over"):
-            return "激进", "大球倾向通常更偏进攻或尾部路径。"
-        return "混合", "大小球不直接对应 TPB 主方向。"
-    if market in {"独赢", "胜平负"}:
-        if _selection_matches_tpb(selection, direction, match):
-            return "主方向", "选择与 TPB 主方向一致。"
-        if _normalized(selection) in {"平局", "draw", "x"}:
-            return "覆盖", "平局选择更接近覆盖/防守路径。"
-        if _selection_is_opposite(selection, direction, match):
-            return "冲突", "选择与 TPB 主方向相反。"
-        return "混合", "无法直接映射到 TPB 主方向。"
-    if market == "让球":
-        if _selection_matches_tpb(selection, direction, match):
-            if handicap.startswith("+"):
-                return "覆盖", "主方向受让更接近防守参考。"
-            return "主方向", "让球选择与 TPB 主方向一致。"
-        if _selection_is_opposite(selection, direction, match) or handicap.startswith("+"):
-            return "防守", "让球选择更偏覆盖或对冲路径。"
-        return "混合", "让球选择与 TPB 主方向关系不明确。"
-    if odds >= 8:
-        return "尾部", "高赔率选择更偏尾部风险路径。"
-    return "混合", "其他市场仅用于人工复盘。"
-
-
-def _portfolio_type(classifications):
-    if not classifications:
-        return "未输入"
-    counts = {label: classifications.count(label) for label in set(classifications)}
-    if counts.get("冲突"):
-        return "混合 / 含冲突"
-    for label in ["主方向", "覆盖", "防守", "激进", "尾部"]:
-        if counts.get(label) == len(classifications):
-            return label
-    if counts.get("主方向") and (counts.get("覆盖") or counts.get("防守")):
-        return "主方向 + 防守"
-    return "混合"
-
-
-def _relation(classifications):
-    if not classifications:
-        return "未输入"
-    if "冲突" in classifications:
-        return "冲突"
-    if all(item == "主方向" for item in classifications):
-        return "一致"
-    if "主方向" in classifications:
-        return "部分一致"
-    if any(item in {"覆盖", "防守"} for item in classifications):
-        return "对冲"
-    return "无法判断"
-
-
-def _compatibility_score(positions, classifications):
-    if not positions:
-        return None
-    score = 50
-    for classification in classifications:
-        if classification == "主方向":
-            score += 15
-        elif classification in {"覆盖", "防守"}:
-            score += 6
-        elif classification == "冲突":
-            score -= 20
-        elif classification == "尾部":
-            score -= 12
-        elif classification == "激进":
-            score -= 6
-    return max(0, min(100, round(score)))
-
-
-def _risk_warnings(positions, classifications):
-    warnings = []
-    if "冲突" in classifications:
-        warnings.append("存在与 TPB 主方向冲突的选择。")
-    if "尾部" in classifications:
-        warnings.append("包含波胆或高赔率尾部路径，波动较大。")
-    if not warnings:
-        warnings.append("未发现明显组合冲突；仍仅供人工复盘。")
-    return warnings
-
 
 def build_user_portfolio_comparison(
     raw_text,
@@ -439,57 +305,25 @@ def build_user_portfolio_comparison(
     api_football_data=None,
 ):
     positions, errors = parse_user_portfolio_text(raw_text)
-    direction = _tpb_direction(odds, match)
     enriched = []
-    classifications = []
     for position in positions:
-        classification, note = _classify_position(position, direction, match)
         price_reference = _api_reference_for_position(position, match, odds, api_football_data)
-        classifications.append(classification)
         enriched.append({
             **position,
             "handicap_display": _line_display(position.get("handicap"), position.get("split_handicap")),
-            "classification": classification,
-            "note": note,
             "user_odds": position.get("odds"),
             "api_reference_odds": price_reference.get("api_odds"),
-            "price_difference": price_reference.get("difference"),
-            "price_difference_text": price_reference.get("difference_text"),
+            "price_difference_pct": price_reference.get("difference_pct"),
+            "price_difference_pct_text": price_reference.get("difference_pct_text"),
             "price_judgment": price_reference.get("judgment"),
         })
 
-    compatibility_score = _compatibility_score(positions, classifications)
     has_input = bool(str(raw_text or "").strip())
-    relation = _relation(classifications)
-    portfolio_type = _portfolio_type(classifications)
-
-    observation_rows = [{
-        "对象": "系统 TPB 输出",
-        "类型": "baseline",
-        "关系": "系统主链",
-        "TPB一致性": "基准",
-        "说明": "TPB 输出仍是唯一系统决策，不受用户组合影响。",
-    }]
-    if positions:
-        observation_rows.append({
-            "对象": "我的实盘组合",
-            "类型": portfolio_type,
-            "关系": relation,
-            "TPB一致性": f"{compatibility_score} / 100",
-            "说明": "仅用于人工复盘，不参与 TPB、比赛投资分或推荐金额。",
-        })
-
     return {
         "has_input": has_input,
         "positions": enriched,
         "errors": errors,
         "warnings": errors,
         "total_count": len(enriched),
-        "tpb_direction": direction,
-        "portfolio_type": portfolio_type,
-        "relation": relation,
-        "compatibility_score": compatibility_score,
-        "risk_warnings": _risk_warnings(enriched, classifications) if enriched else [],
-        "observation_rows": observation_rows,
-        "disclaimer": "我的实盘组合仅用于人工复盘和 display-only 对比，不参与 TPB、比赛投资分、推荐金额、coverage 或系统主方向。",
+        "disclaimer": "我的执行价格分析仅用于复盘和价格偏差提醒，不参与 TPB、比赛投资分、推荐金额、coverage 或系统主结论。",
     }

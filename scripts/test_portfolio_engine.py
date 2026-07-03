@@ -158,12 +158,12 @@ def test_user_portfolio_comparison_is_display_only():
     )
     assert comparison["has_input"] is True
     assert comparison["total_count"] == 4
-    assert comparison["observation_rows"][0]["对象"] == "系统 TPB 输出"
     assert comparison["positions"][0]["api_reference_odds"] == 1.8
-    assert comparison["positions"][0]["price_judgment"] == "接近"
+    assert comparison["positions"][0]["price_difference_pct_text"] == "+0.00%"
+    assert comparison["positions"][0]["price_judgment"] == "用户赔率接近（neutral）"
     assert comparison["positions"][1]["handicap_display"] == "-0.5 / -1"
     assert comparison["positions"][2]["handicap_display"] == "2.5 / 3"
-    assert comparison["positions"][2]["price_judgment"] == "暂无可比 API 赔率"
+    assert comparison["positions"][2]["price_judgment"] == "无API可比（unknown）"
     assert "不参与 TPB" in comparison["disclaimer"]
 
     layers = build_core_decision_layers(
