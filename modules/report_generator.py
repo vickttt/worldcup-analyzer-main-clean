@@ -800,6 +800,20 @@ def format_scenario_engine_lines(scenario_engine):
 
     lines.extend([
         "",
+        "### Scenario → Portfolio Mapping Explanation",
+        "",
+    ])
+    portfolio_mapping = scenario.get("portfolio_mapping_explanation") or {}
+    for label, key in [
+        ("Main Position", "main_position_coverage"),
+        ("Defensive Position", "defensive_position_coverage"),
+        ("Tail Exposure", "tail_exposure"),
+    ]:
+        item = portfolio_mapping.get(key) or {}
+        lines.append(f"- {label}：{item.get('scenario', '-')}；{item.get('explanation', '-')}")
+
+    lines.extend([
+        "",
         "### Scenario Efficiency Score",
         "",
         f"- Coverage Efficiency Score：{format_value(scenario.get('coverage_efficiency_score'))} / 100",
@@ -807,23 +821,32 @@ def format_scenario_engine_lines(scenario_engine):
     return lines
 
 
-def format_system_portfolio_lines(market_intelligence):
+def format_system_portfolio_lines(market_intelligence, scenario_engine=None):
     portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
+    scenario_mapping = (scenario_engine or {}).get("portfolio_mapping_explanation") or {}
     lines = [
         "## 4. System Portfolio Layer（系统推荐组合）",
         "",
-        "系统组合仅使用 TPB baseline 与 Market Structure signals；用户实盘输入不参与系统组合、推荐或排序。",
+        "System Portfolio = TPB baseline + Market Structure + Scenario Engine explanation synthesis。用户实盘输入不参与系统组合、推荐或排序。",
         "",
     ]
+    mapping_keys = {
+        "main_position": "main_position_coverage",
+        "defensive_position": "defensive_position_coverage",
+        "tail_risk_position": "tail_exposure",
+    }
     for key in ["main_position", "defensive_position", "tail_risk_position"]:
         item = portfolio.get(key) or {}
+        mapping = scenario_mapping.get(mapping_keys[key]) or {}
         lines.append(f"- {item.get('name', '-')}：{item.get('label', '-')}")
         lines.append(f"  - 说明：{item.get('rationale', '-')}")
+        lines.append(f"  - Scenario coverage：{mapping.get('scenario', '-')}")
+        lines.append(f"  - Scenario 解释：{mapping.get('explanation', '-')}")
     lines.extend([
         "",
         "## 5. System Ranking（系统级排序）",
         "",
-        "仅系统组合参与排序；依据 TPB baseline strength、Directional Strength、Conflict、Efficiency、Volatility 与 Upset signals；不使用用户输入、EV/ROI 或 legacy optimizer。",
+        "Ranking incorporates scenario coverage signals as explanation only；排序仍保持 system-only，不使用用户输入、EV/ROI 或 legacy optimizer。",
     ])
     ranking = portfolio.get("ranking") or []
     if not ranking:
@@ -990,7 +1013,7 @@ def build_report(
         "",
         *format_scenario_engine_lines(scenario_engine),
         "",
-        *format_system_portfolio_lines(market_intelligence),
+        *format_system_portfolio_lines(market_intelligence, scenario_engine),
         "",
         *format_user_portfolio_lines(user_portfolio),
         "",

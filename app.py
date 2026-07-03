@@ -1167,30 +1167,40 @@ def render_market_intelligence_layer(market_intelligence):
         cols[4].metric("Upset Probability", metrics.get("upset_probability", "-"))
 
 
-def render_system_portfolio_layer(market_intelligence):
+def render_system_portfolio_layer(market_intelligence, scenario_engine=None):
     portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
+    scenario_mapping = (scenario_engine or {}).get("portfolio_mapping_explanation") or {}
     with st.container(border=True):
         st.markdown("**系统推荐组合（System Portfolio Layer）**")
-        st.caption("仅系统信号参与：TPB baseline + Market Structure。用户实盘输入不参与系统组合、推荐或排序。")
+        st.caption("系统组合由 TPB baseline + Market Structure 综合生成；Scenario Engine 提供 portfolio coverage narrative，不驱动 ranking。")
         rows = []
+        mapping_keys = {
+            "main_position": "main_position_coverage",
+            "defensive_position": "defensive_position_coverage",
+            "tail_risk_position": "tail_exposure",
+        }
         for key in ["main_position", "defensive_position", "tail_risk_position"]:
             item = portfolio.get(key) or {}
+            mapping = scenario_mapping.get(mapping_keys[key]) or {}
             rows.append({
                 "类型": item.get("name", "-"),
                 "组合": item.get("label", "-"),
                 "说明": item.get("rationale", "-"),
+                "Scenario Coverage": mapping.get("scenario", "-"),
+                "Scenario 解释": mapping.get("explanation", "-"),
             })
         st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
         st.markdown("**System Portfolio Ranking（系统级）**")
+        st.caption("Ranking 保持 system-only；scenario coverage 仅作为解释，不作为 scenario-driven ranking。")
         st.dataframe(pd.DataFrame(portfolio.get("ranking") or []), use_container_width=True, hide_index=True)
 
 
 def render_scenario_coverage_analysis(scenario_engine):
     scenario = scenario_engine or {}
     with st.container(border=True):
-        st.markdown("**Scenario Coverage Analysis**")
+        st.markdown("**Scenario Coverage Analysis（System Portfolio Explanation Sub-layer）**")
         st.caption(
-            "Scenario Engine v1 是概率空间覆盖与风险拆解分析层；不影响 TPB、investment_score、stake、system ranking 或 recommendation。"
+            "Scenario Engine v1 是 System Portfolio 的解释骨架：只做概率空间覆盖与风险拆解，不影响 TPB、investment_score、stake、system ranking 或 recommendation。"
         )
         st.metric("Coverage Efficiency Score", f"{scenario.get('coverage_efficiency_score', 0)} / 100")
 
@@ -1235,6 +1245,27 @@ def render_scenario_coverage_analysis(scenario_engine):
         ]
         st.markdown("**Scenario Risk Surface**")
         st.dataframe(pd.DataFrame(risk_rows), use_container_width=True, hide_index=True)
+
+        mapping = scenario.get("portfolio_mapping_explanation") or {}
+        mapping_rows = [
+            {
+                "Portfolio": "Main Position",
+                "Scenario Coverage": (mapping.get("main_position_coverage") or {}).get("scenario", "-"),
+                "解释": (mapping.get("main_position_coverage") or {}).get("explanation", "-"),
+            },
+            {
+                "Portfolio": "Defensive Position",
+                "Scenario Coverage": (mapping.get("defensive_position_coverage") or {}).get("scenario", "-"),
+                "解释": (mapping.get("defensive_position_coverage") or {}).get("explanation", "-"),
+            },
+            {
+                "Portfolio": "Tail Exposure",
+                "Scenario Coverage": (mapping.get("tail_exposure") or {}).get("scenario", "-"),
+                "解释": (mapping.get("tail_exposure") or {}).get("explanation", "-"),
+            },
+        ]
+        st.markdown("**Scenario → Portfolio Mapping Explanation**")
+        st.dataframe(pd.DataFrame(mapping_rows), use_container_width=True, hide_index=True)
 
 
 def render_user_portfolio_comparison(input_key, comparison):
@@ -1397,7 +1428,7 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
         )
         render_market_intelligence_layer(market_intelligence)
         render_scenario_coverage_analysis(scenario_engine)
-        render_system_portfolio_layer(market_intelligence)
+        render_system_portfolio_layer(market_intelligence, scenario_engine)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)
         st.caption("结果分布为观察层，不参与 TPB 投资分、推荐金额或排序。")

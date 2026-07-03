@@ -52,8 +52,9 @@ Layer model:
      S1 Strong Favorite Win, S2 Narrow Favorite Win, S3 Draw, S4 Upset Win,
      S5 Low Scoring Match, and S6 High Variance Match.
    - It may output Scenario Probability Distribution, Scenario Risk Surface,
-     Scenario Coverage Map, Scenario Efficiency Score, and Scenario-to-Market
-     Mapping.
+     Scenario Coverage Map, Scenario Efficiency Score, Scenario-to-Market
+     Mapping, and Scenario-to-Portfolio Mapping Explanation.
+   - It is the explanatory backbone for System Portfolio coverage narrative.
    - Scenario Engine must not predict exact scores, calculate EV/ROI, optimize
      profit, override TPB, alter stake, influence system ranking, influence
      system recommendation, or use user input.
@@ -61,8 +62,8 @@ Layer model:
 5. Layer 4: System Portfolio & Ranking Layer
    - The only legal system recommendation chain is:
      TPB baseline + Market Structure -> System Recommendation.
-   - System recommendation is a synthesis of TPB baseline strength and market
-     structure signals.
+   - System recommendation is a synthesis of TPB baseline strength, market
+     structure signals, and Scenario Engine coverage narrative.
    - Allowed system outputs: Main Position, Defensive Position, Tail Risk
      Position, and System Ranking.
    - System Ranking may use TPB baseline strength, Market Conflict Index,
@@ -124,7 +125,8 @@ Decision Authority Hierarchy:
 
 1. TPB Baseline Probability (anchor).
 2. Market Structure Intelligence (signal layer).
-3. Scenario Engine Layer (probability space decomposition only).
+3. Scenario Engine Layer (probability space decomposition and portfolio
+   explanation backbone only).
 4. System Portfolio Layer (synthesis + ranking).
 5. Execution Layer (display/evaluation only).
 
@@ -142,7 +144,8 @@ Allowed report structure:
 2. Market Structure Layer: Directional Strength, Conflict Index, Efficiency
    Score, Volatility Index, and Upset Probability.
 3. Scenario Engine Layer: scenario probability distribution, risk surface,
-   coverage map, scenario-market mapping, and coverage efficiency.
+   coverage map, scenario-market mapping, scenario-portfolio mapping, and
+   coverage efficiency.
 4. System Portfolio Layer: main, defensive, and tail positions.
 5. System Ranking: system-only ranking.
 6. Execution Layer: user portfolio, odds comparison, and evaluation only.

@@ -179,6 +179,26 @@ def _coverage_efficiency_score(distribution, risk_surface):
     return round(_clamp(score, 0, 100))
 
 
+def _portfolio_mapping_explanation(coverage_map):
+    primary = coverage_map.get("primary_coverage") or {}
+    defensive = coverage_map.get("defensive_coverage") or {}
+    tail = coverage_map.get("tail_optionality") or {}
+    return {
+        "main_position_coverage": {
+            "scenario": primary.get("scenario", "-"),
+            "explanation": "Main Position 主要解释概率空间中的主覆盖路径；它不是 scenario-driven recommendation。",
+        },
+        "defensive_position_coverage": {
+            "scenario": defensive.get("scenario", "-"),
+            "explanation": "Defensive Position 解释平局、冷门或低比分防守路径；它不改变 stake 或 ranking。",
+        },
+        "tail_exposure": {
+            "scenario": tail.get("scenario", "-"),
+            "explanation": "Tail Optionality 标记未充分覆盖的尾部暴露；仅用于风险说明，不放大推荐。",
+        },
+    }
+
+
 def build_scenario_engine(match=None, odds=None, market_intelligence=None):
     tpb = (market_intelligence or {}).get("tpb_baseline") or true_probability_base(odds or {})
     metrics = (market_intelligence or {}).get("metrics") or {}
@@ -194,6 +214,7 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
         "probability_distribution": distribution,
         "risk_surface": risk_surface,
         "coverage_map": coverage_map,
+        "portfolio_mapping_explanation": _portfolio_mapping_explanation(coverage_map),
         "scenario_market_mapping": _scenario_market_mapping(),
         "coverage_efficiency_score": _coverage_efficiency_score(distribution, risk_surface),
         "disclaimer": (

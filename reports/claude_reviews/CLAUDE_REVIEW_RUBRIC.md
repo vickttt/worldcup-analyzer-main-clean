@@ -41,8 +41,11 @@ Claude must verify:
   S6 High Variance Match.
 - Scenario Engine does not predict exact scores, calculate EV/ROI, optimize
   profit, influence ranking, influence recommendation, or use user input.
+- Scenario Engine is integrated into the System Portfolio explanation flow as
+  the portfolio coverage narrative backbone.
+- Scenario Engine is not an isolated UI module.
 - System Recommendation is based only on TPB baseline plus market structure
-  signals.
+  signals plus Scenario Engine coverage narrative.
 - System Portfolio is synthesis-based and owns final system recommendation and
   system-only ranking.
 - Customer Execution Layer is display-only/evaluation-only and isolated.
@@ -66,6 +69,9 @@ Claude must validate:
   or system recommendation.
 - Scenario Coverage Map and Scenario Efficiency Score are coverage diagnostics
   only, not recommendation scores.
+- Scenario-to-Portfolio Mapping Explanation is present and explains Main,
+  Defensive, and Tail coverage without driving ranking.
+- System Portfolio explicitly references scenario coverage.
 - No legacy ranking system returns.
 - No risk-gate blocking system is reinstated.
 
@@ -101,6 +107,7 @@ Claude must check whether user-facing labels clearly distinguish:
 - scenario thinking as explanation-only
 - scenario probability distribution, risk surface, coverage map, and coverage
   efficiency as analysis-only
+- scenario-to-portfolio mapping as portfolio explanation narrative
 - Polymarket read-only comparison
 - risk and max_loss diagnostic-only information
 

@@ -195,6 +195,12 @@ def test_scenario_engine_contract():
         "defensive_coverage",
         "tail_optionality",
     }
+    assert set(scenario["portfolio_mapping_explanation"]) == {
+        "main_position_coverage",
+        "defensive_position_coverage",
+        "tail_exposure",
+    }
+    assert "scenario-driven recommendation" in scenario["portfolio_mapping_explanation"]["main_position_coverage"]["explanation"]
     assert set(scenario["scenario_market_mapping"]) == {"S1", "S2", "S3", "S4", "S5", "S6"}
     assert 0 <= scenario["coverage_efficiency_score"] <= 100
     assert "不影响 TPB" in scenario["disclaimer"]
@@ -250,6 +256,7 @@ def test_architecture_guardrails():
     assert "Decision Authority Hierarchy" in agents_text
     assert "TPB Baseline Probability (anchor)" in agents_text
     assert "Market Structure Intelligence (signal layer)" in agents_text
+    assert "Scenario Engine Layer (probability space decomposition and portfolio" in agents_text
     assert "System Portfolio Layer (synthesis + ranking)" in agents_text
     assert "Execution Layer (display/evaluation only)" in agents_text
 
@@ -257,6 +264,8 @@ def test_architecture_guardrails():
     assert "TPB is not the sole system anymore" in rubric_text
     assert "System Portfolio is synthesis-based" in rubric_text
     assert "Execution Layer does not affect any upstream layer" in rubric_text
+    assert "Scenario Engine is integrated into the System Portfolio explanation flow" in rubric_text
+    assert "Scenario Engine is not an isolated UI module" in rubric_text
 
     report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
     for heading in [
@@ -268,6 +277,9 @@ def test_architecture_guardrails():
         "## 6. Execution Layer",
     ]:
         assert heading in report_text
+    assert "Scenario → Portfolio Mapping Explanation" in report_text
+    assert "System Portfolio = TPB baseline + Market Structure + Scenario Engine explanation synthesis" in report_text
+    assert "Ranking incorporates scenario coverage signals as explanation only" in report_text
 
     core_files = [
         repo_root / "modules" / "probability_base.py",
@@ -294,6 +306,7 @@ def test_architecture_guardrails():
 
     scenario_text = (repo_root / "modules" / "scenario_engine.py").read_text(encoding="utf-8")
     assert "SCENARIO_TAXONOMY" in scenario_text
+    assert "portfolio_mapping_explanation" in scenario_text
     assert "stake_from_investment_score" not in scenario_text
     assert "build_user_portfolio_comparison" not in scenario_text
     assert "expected_value" not in scenario_text.lower()
