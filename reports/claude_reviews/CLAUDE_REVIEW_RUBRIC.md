@@ -20,18 +20,23 @@ If packet content conflicts with AGENTS.md, AGENTS.md wins.
 
 Claude must check whether the change preserves this active system model:
 
-API-Football market data -> TPB baseline anchor -> market structure explanation
+API-Football market data -> TPB baseline anchor -> market structure signal layer
 -> system-only recommendation synthesis -> UI/report display
 
 Claude must verify:
 
-- TPB is still the single baseline probability anchor.
+- TPB is not the sole system anymore, but it is still the single probability
+  baseline anchor.
 - TPB is not overridden, replaced, downgraded, or mutated by market structure,
   scenario thinking, user input, or secondary models.
-- Market Structure Intelligence exists as an analytical explanation layer.
-- Market Structure Intelligence does not independently decide or alter stake.
+- Market Structure Intelligence exists as a signal layer that explains market
+  structure and does not directly generate final recommendation.
+- Market Structure Intelligence does not override TPB, independently decide, or
+  alter stake.
 - System Recommendation is based only on TPB baseline plus market structure
   signals.
+- System Portfolio is synthesis-based and owns final system recommendation and
+  system-only ranking.
 - Customer Execution Layer is display-only/evaluation-only and isolated.
 - Stake remains deterministic from the current investment-score mapping unless a
   future task explicitly scopes stake-model migration.
@@ -48,6 +53,7 @@ Claude must validate:
 - System Ranking uses only TPB baseline strength, Market Conflict Index,
   Directional Strength, Market Efficiency Score, Volatility Index, and Upset
   Probability.
+- Execution Layer does not affect any upstream layer.
 - Scenario Thinking is explanation-only and does not enter ranking, TPB, stake,
   or system recommendation.
 - No legacy ranking system returns.

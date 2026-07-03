@@ -208,6 +208,28 @@ def test_user_portfolio_comparison_is_display_only():
 
 def test_architecture_guardrails():
     repo_root = Path(__file__).resolve().parents[1]
+    agents_text = (repo_root / "AGENTS.md").read_text(encoding="utf-8")
+    assert "Decision Authority Hierarchy" in agents_text
+    assert "TPB Baseline Probability (anchor)" in agents_text
+    assert "Market Structure Intelligence (signal layer)" in agents_text
+    assert "System Portfolio Layer (synthesis + ranking)" in agents_text
+    assert "Execution Layer (display/evaluation only)" in agents_text
+
+    rubric_text = (repo_root / "reports" / "claude_reviews" / "CLAUDE_REVIEW_RUBRIC.md").read_text(encoding="utf-8")
+    assert "TPB is not the sole system anymore" in rubric_text
+    assert "System Portfolio is synthesis-based" in rubric_text
+    assert "Execution Layer does not affect any upstream layer" in rubric_text
+
+    report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
+    for heading in [
+        "## 1. Core Decision Layer",
+        "## 2. Market Structure Layer",
+        "## 3. System Portfolio Layer",
+        "## 4. System Ranking",
+        "## 5. Execution Layer",
+    ]:
+        assert heading in report_text
+
     core_files = [
         repo_root / "modules" / "probability_base.py",
         repo_root / "modules" / "portfolio_engine.py",
@@ -221,12 +243,15 @@ def test_architecture_guardrails():
         assert "roi_" not in text.lower()
         assert "portfolio_optimizer" not in text.lower()
         assert "scenario_engine" not in text
+        assert "override_tpb" not in text.lower()
+        assert "tpb_override" not in text.lower()
 
     intelligence_text = (repo_root / "modules" / "market_intelligence.py").read_text(encoding="utf-8")
     assert "true_probability_base" in intelligence_text
     assert "stake_from_investment_score" not in intelligence_text
     assert "recommended_stake" not in intelligence_text
     assert "user_portfolio" not in intelligence_text
+    assert "System 层才综合 TPB baseline 与结构信号" in intelligence_text
 
     user_layer_text = (repo_root / "modules" / "user_portfolio_compare.py").read_text(encoding="utf-8")
     assert "true_probability_base" not in user_layer_text

@@ -743,7 +743,7 @@ def format_market_intelligence_lines(market_intelligence):
 def format_system_portfolio_lines(market_intelligence):
     portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
     lines = [
-        "## 3. System Portfolio Recommendation（系统推荐组合）",
+        "## 3. System Portfolio Layer（系统推荐组合）",
         "",
         "系统组合仅使用 TPB baseline 与 Market Structure signals；用户实盘输入不参与系统组合、推荐或排序。",
         "",
@@ -754,7 +754,7 @@ def format_system_portfolio_lines(market_intelligence):
         lines.append(f"  - 说明：{item.get('rationale', '-')}")
     lines.extend([
         "",
-        "### System Ranking（系统级排序）",
+        "## 4. System Ranking（系统级排序）",
         "",
         "仅系统组合参与排序；依据 TPB baseline strength、Directional Strength、Conflict、Efficiency、Volatility 与 Upset signals；不使用用户输入、EV/ROI 或 legacy optimizer。",
     ])
@@ -772,7 +772,7 @@ def format_system_portfolio_lines(market_intelligence):
 def format_user_portfolio_lines(user_portfolio):
     comparison = user_portfolio or {}
     lines = [
-        "## 4. Execution Layer（用户执行层）",
+        "## 5. Execution Layer（用户执行层）",
         "",
         "客户执行层仅用于记录实盘输入、执行价格对比和人工复盘；不参与 TPB、系统推荐、系统排序或 stake。",
         "",

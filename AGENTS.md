@@ -40,8 +40,10 @@ Layer model:
      override TPB, alter stake, mutate raw odds, or write user execution data.
    - These signals may be consumed by the System Portfolio Layer as explanatory
      system inputs.
+   - Market Structure cannot directly generate final recommendation. It can
+     influence System Ranking only through the synthesis layer.
 
-4. Layer 3: System Portfolio Layer
+4. Layer 3: System Portfolio & Ranking Layer
    - The only legal system recommendation chain is:
      TPB baseline + Market Structure -> System Recommendation.
    - System recommendation is a synthesis of TPB baseline strength and market
@@ -102,20 +104,35 @@ Forbidden ranking paths:
 - ROI ranking.
 - portfolio optimizer ranking.
 
+Decision Authority Hierarchy:
+
+1. TPB Baseline Probability (anchor).
+2. Market Structure Intelligence (signal layer).
+3. System Portfolio Layer (synthesis + ranking).
+4. Execution Layer (display/evaluation only).
+
+Authority rules:
+
+- TPB cannot be overridden.
+- Market Structure cannot override TPB.
+- System Portfolio must be synthesis-based.
+- Execution Layer cannot affect any upstream layer.
+
 Allowed report structure:
 
 1. Core Decision Layer: TPB, betting confidence, investment score, and stake.
 2. Market Structure Layer: Directional Strength, Conflict Index, Efficiency
    Score, Volatility Index, and Upset Probability.
-3. System Portfolio Recommendation: main, defensive, and tail positions.
-4. Execution Layer: user portfolio, odds comparison, and evaluation only.
+3. System Portfolio Layer: main, defensive, and tail positions.
+4. System Ranking: system-only ranking.
+5. Execution Layer: user portfolio, odds comparison, and evaluation only.
 
 System chain:
 
 ```text
 API-Football market data
   -> TPB baseline anchor
-  -> market structure explanation
+  -> market structure signal layer
   -> system-only recommendation synthesis
   -> deterministic stake display + UI/report display
 ```
