@@ -13,6 +13,7 @@ from modules.portfolio_engine import (
     rank1_eligibility_check,
 )
 from modules.probability_base import stake_from_investment_score
+from modules.user_portfolio_compare import build_user_portfolio_comparison, parse_user_portfolio_text
 
 
 def sample_fixture():
@@ -130,10 +131,40 @@ def test_legacy_portfolio_helpers_are_disabled_stubs():
     assert eligibility["rank1_blockers"] == []
 
 
+def test_user_portfolio_comparison_is_display_only():
+    fixture = sample_fixture()
+    raw_text = "胜平负,主队,,1.80,200\n波胆,1:1,,6.00,50"
+    positions, errors = parse_user_portfolio_text(raw_text)
+    assert not errors
+    assert len(positions) == 2
+
+    comparison = build_user_portfolio_comparison(
+        raw_text,
+        match=fixture["match"],
+        odds=fixture["context"]["odds"],
+        betting_opinion={},
+        distribution=fixture["distribution"],
+    )
+    assert comparison["has_input"] is True
+    assert comparison["total_count"] == 2
+    assert comparison["total_amount"] == 250
+    assert comparison["ranking_rows"][0]["对象"] == "系统 TPB 输出"
+    assert "不参与 TPB" in comparison["disclaimer"]
+
+    layers = build_core_decision_layers(
+        fixture["strategies"],
+        fixture["match"],
+        fixture["distribution"],
+        fixture["context"],
+    )
+    assert set(layers) == {"score_layer", "execution_layer", "explanation_layer"}
+
+
 def run():
     test_core_decision_layers_contract()
     test_match_investment_score_contract()
     test_legacy_portfolio_helpers_are_disabled_stubs()
+    test_user_portfolio_comparison_is_display_only()
     print("TPB-only portfolio engine smoke tests passed.")
 
 

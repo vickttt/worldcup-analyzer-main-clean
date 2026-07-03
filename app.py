@@ -41,6 +41,7 @@ from modules.team_profile_client import fetch_team_profile
 from modules.weather_client import weather_for_fixture
 from modules.perf_logger import perf_timer
 from modules.portfolio_engine import build_core_decision_layers
+from modules.user_portfolio_compare import build_user_portfolio_comparison
 
 
 MODEL_VERSION_TRACKING = {
@@ -1150,6 +1151,67 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None,
         render_ranking_score_notes(decision_layers)
 
 
+def render_user_portfolio_comparison(input_key, comparison):
+    input_key = input_key or "user_portfolio_input"
+    with st.container(border=True):
+        st.markdown("**我的实盘组合（可选）**")
+        st.caption(
+            "如果不输入，系统照常运行。若输入，仅用于和 TPB 系统输出做 display-only 对比，"
+            "不影响 TPB、比赛投资分或推荐金额。"
+        )
+        st.text_area(
+            "每行一笔：市场,选择,盘口,赔率,金额",
+            key=input_key,
+            placeholder="胜平负,埃及,,2.32,200\n让球,埃及,-0.25,1.42,300\n大小球,Under,2,1.89,200\n波胆,1:1,,6.00,50",
+            height=130,
+        )
+
+        if not comparison.get("has_input"):
+            st.info("未输入我的实盘组合。系统输出不受用户组合影响。")
+            return
+
+        errors = comparison.get("errors") or []
+        if errors:
+            st.warning("部分输入未被解析：")
+            for error in errors:
+                st.caption(f"- {error}")
+
+        positions = comparison.get("positions") or []
+        if not positions:
+            st.info("暂未解析到有效实盘组合。")
+            return
+
+        cols = st.columns(4)
+        cols[0].metric("总笔数", comparison.get("total_count", 0))
+        cols[1].metric("总投入", comparison.get("total_amount_text", "0元"))
+        cols[2].metric("组合类型", comparison.get("portfolio_type", "-"))
+        cols[3].metric("与 TPB 主方向关系", comparison.get("relation", "-"))
+
+        st.markdown("**我的组合明细**")
+        detail_rows = [
+            {
+                "市场": item.get("market"),
+                "选择": item.get("selection"),
+                "盘口": item.get("line") or "-",
+                "赔率": item.get("odds"),
+                "金额": item.get("amount_text"),
+                "路径判断": item.get("classification"),
+            }
+            for item in positions
+        ]
+        st.dataframe(pd.DataFrame(detail_rows), use_container_width=True, hide_index=True)
+
+        st.markdown("**组合对比排名**")
+        st.caption("组合对比排名仅用于用户复盘和人工判断，不参与 TPB、比赛投资分或推荐金额。")
+        st.dataframe(pd.DataFrame(comparison.get("ranking_rows") or []), use_container_width=True, hide_index=True)
+
+        warnings = comparison.get("risk_warnings") or []
+        if warnings:
+            st.markdown("**风险提示**")
+            for warning in warnings:
+                st.caption(f"- {warning}")
+
+
 def odds_from_market_data(market_data):
     api_odds = (market_data or {}).get("api_football_odds") or {}
     one_x_two = dict(api_odds.get("one_x_two") or {})
@@ -1229,7 +1291,7 @@ def render_core_risk_summary(match, decision, distribution):
             st.caption(exposure.get("meaning"))
 
 
-def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None):
+def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, user_portfolio_key=None):
     with st.container(border=True):
         st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
         render_betting_opinion(betting_opinion, odds, polymarket, match)
@@ -1244,11 +1306,12 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
                 "polymarket": polymarket,
             },
         )
+        render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)
         st.caption("结果分布为观察层，不参与 TPB 投资分、推荐金额或排序。")
         render_result_distribution(distribution)
 
-        st.caption("用户赔率、我的组合、收益对比和剧本组合排行不再参与决策输出。")
+        st.caption("我的实盘组合仅作为 display-only 对比层，不参与 TPB、比赛投资分、推荐金额或系统主方向。")
 
     return {
         "strategies": [],
@@ -2198,7 +2261,15 @@ def render_analysis_page(match_text):
                     None,
                     result_distribution,
                 )
-            my_portfolio = {}
+            user_portfolio_key = f"user_portfolio_input_{selected_fixture.get('fixture_id') or match_text}"
+            user_portfolio_raw = st.session_state.get(user_portfolio_key, "")
+            my_portfolio = build_user_portfolio_comparison(
+                user_portfolio_raw,
+                match=match,
+                odds=odds,
+                betting_opinion=betting_opinion,
+                distribution=result_distribution,
+            )
             with perf_timer("detail", "tpb_report_strategy"):
                 top_strategy = tpb_report_strategy(decision)
             with perf_timer("detail", "report_generation"):
@@ -2215,6 +2286,7 @@ def render_analysis_page(match_text):
                     betting_opinion,
                     top_strategy,
                     None,
+                    my_portfolio,
                 )
                 report_path = save_report(report, match, config["report"]["output_dir"])
 
@@ -2239,6 +2311,7 @@ def render_analysis_page(match_text):
                     selected_fixture,
                     my_portfolio,
                     polymarket,
+                    user_portfolio_key,
                 )
 
         with team_tab:

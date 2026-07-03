@@ -719,6 +719,66 @@ def format_polymarket_observation_lines(polymarket):
     return lines
 
 
+def format_user_portfolio_lines(user_portfolio):
+    comparison = user_portfolio or {}
+    lines = [
+        "## 我的实盘组合",
+        "",
+        comparison.get("disclaimer")
+        or "我的实盘组合仅用于人工复盘和 display-only 对比，不参与 TPB、比赛投资分或推荐金额。",
+        "",
+    ]
+    if not comparison.get("has_input"):
+        return lines + ["我的实盘组合：未输入。系统输出不受用户组合影响。"]
+
+    errors = comparison.get("errors") or []
+    if errors:
+        lines.append("输入提示：")
+        for error in errors:
+            lines.append(f"- {error}")
+        lines.append("")
+
+    positions = comparison.get("positions") or []
+    if not positions:
+        return lines + ["暂未解析到有效实盘组合。"]
+
+    lines.extend([
+        f"- 总笔数：{comparison.get('total_count', 0)}",
+        f"- 总投入：{comparison.get('total_amount_text', '0元')}",
+        f"- 组合类型判断：{comparison.get('portfolio_type', '-')}",
+        f"- 与 TPB 主方向关系：{comparison.get('relation', '-')}",
+        "",
+        "明细：",
+    ])
+    for item in positions:
+        lines.append(
+            "- "
+            f"{format_value(item.get('market'))} / "
+            f"{format_value(item.get('selection'))} / "
+            f"盘口 {format_value(item.get('line') or '-')} / "
+            f"赔率 {format_value(item.get('odds'))} / "
+            f"金额 {item.get('amount_text', '未填金额')} / "
+            f"{item.get('classification', '-')}"
+        )
+
+    lines.extend(["", "组合对比排名："])
+    for row in comparison.get("ranking_rows") or []:
+        lines.append(
+            "- "
+            f"{row.get('对象', '-')}："
+            f"{row.get('关系', '-')} / "
+            f"{row.get('对比分', '-')}。"
+            f"{row.get('说明', '')}"
+        )
+
+    warnings = comparison.get("risk_warnings") or []
+    if warnings:
+        lines.extend(["", "风险提示："])
+        for warning in warnings:
+            lines.append(f"- {warning}")
+    return lines
+
+
 def format_recent_form_lines(api_football_data):
     data = api_football_data or {}
     fixture_result = data.get("fixture_result") or {}
@@ -785,6 +845,7 @@ def build_report(
     betting_opinion=None,
     portfolio_summary=None,
     actual_odds=None,
+    user_portfolio=None,
 ):
     lines = [
         f"# {match['display_name']} 分析报告",
@@ -801,6 +862,8 @@ def build_report(
             api_football_data,
             actual_odds,
         ),
+        "",
+        *format_user_portfolio_lines(user_portfolio),
         "",
         *format_tpb_coverage_lines(betting_opinion),
         "",
