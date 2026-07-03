@@ -146,8 +146,41 @@ Claude must check:
 - no push or pull_request Claude trigger
 - manual workflow_dispatch only
 - no second review round unless the user explicitly approves
+- the review is tied to a specific commit range or sanitized packet
+- Codex did not treat CI as a substitute for Claude Review
+- Codex did not mark a committed task complete before Claude returned a verdict
+- no merge, production-ready declaration, or next-task continuation occurs while
+  the mandatory Claude Review gate is pending
 
-## 8. API / Secret / Data Safety
+## 8. Mandatory Review Gate
+
+Claude Review is a required architecture validation gate after every Codex
+commit.
+
+Claude must validate:
+
+- Claude Review was triggered after the relevant commit.
+- Claude Review remains read-only.
+- The review uses an approved path: commit_range, packet_path, or manual
+  workflow_dispatch.
+- CI is present only as syntax, import, unit-test, smoke-test, or command
+  validation.
+- CI is not used as a replacement for architecture review.
+- Low-risk, governance-only, or documentation-only commits are not exempt from
+  Claude Review.
+- If Claude Review cannot run or cannot return a verdict, the task remains
+  incomplete.
+
+CI vs Claude Review boundary:
+
+- CI checks syntax, imports, tests, and basic execution correctness.
+- Claude checks architecture integrity, TPB baseline boundaries, market
+  structure boundaries, Scenario Engine isolation, EV/ROI violations, ranking
+  contamination, execution-layer isolation, API/data safety, and governance
+  compliance.
+- Both are mandatory after a commit. Neither replaces the other.
+
+## 9. API / Secret / Data Safety
 
 Claude must flag:
 
@@ -161,13 +194,15 @@ Claude must flag:
 - CI or smoke tests depending on TPB-only assumptions
 - legacy ranking imports or optimizer imports in active core paths
 
-## 9. Output Format
+## 10. Output Format
 
 Claude must output:
 
 VERDICT: PASS / PASS_WITH_POLISH / NEEDS_CHANGES / BLOCKED
 
 ACTIVE_DECISION_PATH_RISK: YES / NO
+
+MANDATORY_REVIEW_GATE: SATISFIED / PENDING / BLOCKED
 
 MUST_FIX:
 
