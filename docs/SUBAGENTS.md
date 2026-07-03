@@ -1,3 +1,19 @@
+# DEPRECATED — HISTORICAL REFERENCE ONLY
+
+This document is no longer an active workflow authority.
+The current active repository rules are defined only in AGENTS.md.
+
+Current active workflow:
+- dev-clean is the only development branch
+- no automatic branch creation or branch switching
+- Codex is the only execution engine
+- Claude is read-only review only
+- the user is the final decision authority
+- no parallel agent workflows are allowed
+- old Issue -> Branch -> PR, Supervisor-driven branch workflows, and multi-agent automation loops must not be followed unless explicitly re-approved by the user
+
+Do not use this document as execution guidance unless AGENTS.md is explicitly updated to restore it.
+
 # Subagents
 
 Date: 2026-06-22
@@ -273,4 +289,3 @@ This file defines specialized agent roles for WorldCup Analyzer.
 - API access required
 - protected data write required
 - odds timestamp is not true pre-match
-
