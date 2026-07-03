@@ -62,29 +62,51 @@ def _dedupe_markets(rows, key_fn, limit):
     return selected
 
 
-def _portfolio_item_name(item, match=None):
-    name = item.get("name") or item.get("selection") or "-"
-    if item.get("type") == "handicap":
-        return format_handicap_label(item.get("selection") or name, match)
-    if item.get("type") == "winner":
-        selection = item.get("selection") or str(name).replace("独赢", "").strip()
-        return f"{team_cn(selection)}独赢"
-    return str(name).replace("Home ", f"{_match_team_label(match, 'home')} ").replace(
-        "Away ", f"{_match_team_label(match, 'away')} "
-    )
+def tpb_probability_label(odds=None, match=None, fallback=None):
+    fallback_text = str(fallback or "").strip()
+    if fallback_text and fallback_text not in {"-", "暂无标签，详见胜平负 TPB 概率"}:
+        return fallback_text
+
+    probabilities = (true_probability_base(odds or {}).get("probabilities") or {})
+    if not probabilities:
+        return "暂无标签，详见胜平负 TPB 概率"
+
+    outcome_labels = {
+        "home_win": _match_team_label(match, "home"),
+        "draw": "平局",
+        "away_win": _match_team_label(match, "away"),
+    }
+    ordered = sorted(probabilities, key=lambda key: probabilities.get(key, 0), reverse=True)
+    top = ordered[0]
+    top_probability = probabilities.get(top, 0)
+    second_probability = probabilities.get(ordered[1], 0) if len(ordered) > 1 else 0
+    draw_probability = probabilities.get("draw", 0)
+
+    if top == "draw" or draw_probability >= 0.30 or top_probability - second_probability < 0.08:
+        return "均衡/平局风险较高"
+    if top_probability >= 0.75:
+        return f"强热门方向：{outcome_labels.get(top, top)}"
+    if top_probability >= 0.60:
+        return f"优势方向：{outcome_labels.get(top, top)}"
+    if top_probability >= 0.45:
+        return f"轻微优势方向：{outcome_labels.get(top, top)}"
+    return "均衡/平局风险较高"
 
 
-def _portfolio_display_name(portfolio_summary, match=None):
-    items = (portfolio_summary or {}).get("items") or []
-    base = (
-        portfolio_summary.get("rank_name")
-        or portfolio_summary.get("portfolio_style_label")
-        or portfolio_summary.get("name")
-        or "-"
-    )
-    if items and (str(base).strip() == "推荐组合" or "Home " in str(base) or "Away " in str(base)):
-        return " + ".join(_portfolio_item_name(item, match) for item in items[:4])
-    return str(base)
+def _coverage_display_text(value):
+    text = str(value or "").strip()
+    if not text:
+        return text
+    replacements = {
+        "防守型覆盖资产": "防守参考",
+        "保险 / 覆盖资产": "覆盖说明 / 防守参考",
+        "保险/覆盖资产": "覆盖说明 / 防守参考",
+        "保险资产": "防守参考",
+        "覆盖资产": "覆盖说明",
+    }
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+    return text
 
 
 def quality_cn(value):
@@ -469,46 +491,103 @@ def format_over_under_lines(odds):
     return lines
 
 
-def format_betting_opinion_lines(betting_opinion):
+def _data_quality_notes(betting_opinion, api_football_data=None, match=None, actual_odds=None):
+    opinion = betting_opinion or {}
+    notes = list(opinion.get("data_quality_notes") or [])
+    if not ((api_football_data or {}).get("lineups")) and "Official lineups not released." not in notes:
+        if "官方首发尚未公布。" not in notes:
+            notes.append("官方首发尚未公布。")
+    missing = fixture_metadata(api_football_data, match).get("missing") if (api_football_data or match) else []
+    if missing:
+        notes.append("缺少 fixture metadata：" + "、".join(missing) + "。")
+    return notes
+
+
+def _portfolio_eligible(portfolio_summary):
+    eligibility = (portfolio_summary or {}).get("rank1_eligibility") or {}
+    eligible = eligibility.get("rank1_eligible")
+    if eligible is None:
+        eligible = eligibility.get("eligible")
+    return eligible
+
+
+def format_core_conclusion_lines(
+    betting_opinion,
+    portfolio_summary=None,
+    odds=None,
+    match=None,
+    api_football_data=None,
+    actual_odds=None,
+):
+    opinion = betting_opinion or {}
+    portfolio_summary = portfolio_summary or {}
+    risk_diagnostic = portfolio_summary.get("risk_diagnostic") or {}
+    eligible = _portfolio_eligible(portfolio_summary)
+    execution_judgment = "无法获取" if eligible is None else "可执行" if eligible else "暂不执行"
+    score = portfolio_summary.get("decision_score")
+    if score is None:
+        score = portfolio_summary.get("score")
+    notes = _data_quality_notes(opinion, api_football_data, match, actual_odds)
+    lines = [
+        "## 核心结论",
+        "",
+        f"- 比赛主方向：{opinion.get('match_direction') or opinion.get('match_winner', '暂无观点')}",
+        f"- TPB 概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}",
+        f"- 比赛投资分：{format_value(score)}",
+        f"- 投注信心：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100",
+        f"- 推荐金额：{_recommended_stake_text(portfolio_summary)}",
+        f"- 执行判断：{execution_judgment}",
+        f"- 数据质量：{quality_cn(opinion.get('data_quality'))}",
+        f"- 执行模式：{portfolio_summary.get('portfolio_style_label') or (portfolio_summary.get('portfolio_style') or {}).get('style_cn') or '-'}",
+        "",
+        "主依据：",
+        f"- {opinion.get('match_winner_reason', '-')}",
+        f"- {risk_diagnostic.get('reason') or 'TPB 风险诊断不阻断推荐；推荐金额只由比赛投资分决定。'}",
+    ]
+    if notes:
+        lines.extend(["", "数据质量提示："])
+        for note in notes[:5]:
+            lines.append(f"- {note}")
+    return lines
+
+
+def format_tpb_coverage_lines(betting_opinion):
     opinion = betting_opinion or {}
     lines = [
-        "## 投注观点",
-        "",
-        "### 比赛主方向",
-        "",
-        opinion.get("match_direction") or opinion.get("match_winner", "暂无观点"),
-        "",
-        "理由：",
-        opinion.get("match_winner_reason", "-"),
-        "",
-        "### TPB 概率标签",
-        "",
-        opinion.get("market_direction_label") or "暂无标签，详见胜平负 TPB 概率",
-        "",
-        "### 比赛投资价值",
-        "",
-        f"投注信心：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100",
-        "",
-        f"数据质量：{quality_cn(opinion.get('data_quality'))}",
-        "",
-        "### TPB 覆盖说明",
+        "## TPB 覆盖说明",
         "",
         opinion.get("coverage_candidate") or "暂无 TPB 覆盖说明",
         "",
-        "理由：",
-        opinion.get("coverage_reason", "-"),
+        "说明：",
+        _coverage_display_text(opinion.get("coverage_reason")) or "-",
         "",
-        "建议用途：",
-        opinion.get("recommended_use", "-"),
+        "用途：",
+        _coverage_display_text(opinion.get("recommended_use")) or "-",
         "",
-        "### 盘口观察",
+        "TPB 覆盖说明仅作为防守参考，不是主方向投注，不参与 TPB、比赛投资分或推荐金额。",
+    ]
+    return lines
+
+
+def format_handicap_observation_lines(betting_opinion):
+    opinion = betting_opinion or {}
+    lines = [
+        "## 盘口观察",
         "",
         opinion.get("handicap_market_direction") or opinion.get("asian_handicap", "暂无观点"),
         "",
         "理由：",
         opinion.get("asian_handicap_reason", "-"),
         "",
-        "### 进球数观点",
+        "盘口观察是市场结构观察，不是 TPB 主决策来源，不参与比赛投资分或推荐金额。",
+    ]
+    return lines
+
+
+def format_goals_view_lines(betting_opinion):
+    opinion = betting_opinion or {}
+    return [
+        "## 进球数观点",
         "",
         f"总进球盘口中心：{opinion.get('total_center', '-')}",
         "",
@@ -518,17 +597,10 @@ def format_betting_opinion_lines(betting_opinion):
         "",
         f"解释：{opinion.get('goals_recommended_interpretation', '-')}",
     ]
-    return lines
 
 
 def format_data_quality_lines(betting_opinion, api_football_data=None, match=None, actual_odds=None):
-    notes = list((betting_opinion or {}).get("data_quality_notes") or [])
-    if not ((api_football_data or {}).get("lineups")) and "Official lineups not released." not in notes:
-        if "官方首发尚未公布。" not in notes:
-            notes.append("官方首发尚未公布。")
-    missing = fixture_metadata(api_football_data, match).get("missing") if (api_football_data or match) else []
-    if missing:
-        notes.append("缺少 fixture metadata：" + "、".join(missing) + "。")
+    notes = _data_quality_notes(betting_opinion, api_football_data, match, actual_odds)
     if not notes:
         return []
     lines = ["## 数据质量提示", ""]
@@ -537,72 +609,12 @@ def format_data_quality_lines(betting_opinion, api_football_data=None, match=Non
     return lines
 
 
-def _portfolio_blockers(eligibility):
-    return (eligibility or {}).get("blockers") or (eligibility or {}).get("rank1_blockers") or []
-
-
-def _portfolio_pass_reasons(portfolio_summary):
-    reasons = []
-    risk_diagnostic = portfolio_summary.get("risk_diagnostic") or {}
-    if risk_diagnostic:
-        reasons.append(risk_diagnostic.get("reason") or "TPB 风险诊断不阻断推荐")
-    return reasons or ["TPB 决策输出可作为当前报告的唯一推荐来源。"]
-
-
 def _recommended_stake_text(portfolio_summary):
     stake = (portfolio_summary or {}).get("recommended_stake") or {}
     amount = stake.get("amount")
     if amount is None:
         return "未计算（推荐金额由比赛投资分映射得出）"
     return f"{format_value(amount)}元"
-
-
-def format_portfolio_eligibility_lines(portfolio_summary=None, match=None):
-    if not portfolio_summary:
-        return [
-            "## TPB 决策输出",
-            "",
-            "- TPB 推荐：未生成",
-            "- 推荐金额：未计算（推荐金额由比赛投资分映射得出）",
-            "- TPB 风险诊断：无法获取，报告生成时未收到 TPB 输出。",
-            "- 执行判断：无法获取",
-    ]
-    eligibility = portfolio_summary.get("rank1_eligibility") or {}
-    risk_diagnostic = portfolio_summary.get("risk_diagnostic") or {}
-    blockers = _portfolio_blockers(eligibility)
-    eligible = eligibility.get("rank1_eligible")
-    if eligible is None:
-        eligible = eligibility.get("eligible")
-    items = portfolio_summary.get("items") or []
-    lines = [
-        "## TPB 决策输出",
-        "",
-        f"- TPB 推荐名称：{_portfolio_display_name(portfolio_summary, match)}",
-        f"- 比赛投资分：{format_value(portfolio_summary.get('decision_score') or portfolio_summary.get('score'))}",
-        f"- 推荐金额：{_recommended_stake_text(portfolio_summary)}",
-        f"- 执行模式：{portfolio_summary.get('portfolio_style_label') or (portfolio_summary.get('portfolio_style') or {}).get('style_cn') or '-'}",
-        f"- TPB 风险诊断：{risk_diagnostic.get('risk_level') or '-'}",
-        f"- 执行判断：{'可执行' if eligible else '暂不执行'}",
-    ]
-    if items:
-        lines.extend(["", "核心投注："])
-        for item in items[:6]:
-            amount = item.get("amount")
-            odds = item.get("actual_odds") or item.get("effective_odds") or item.get("standard_odds")
-            suffix = []
-            if amount is not None:
-                suffix.append(f"{format_value(amount)}元")
-            if odds is not None:
-                suffix.append(f"赔率 {format_value(odds)}")
-            lines.append(f"- {_portfolio_item_name(item, match)}" + (f"（{'，'.join(suffix)}）" if suffix else ""))
-    lines.extend(["", "通过原因：" if eligible else "阻碍因素："])
-    if blockers:
-        for blocker in blockers:
-            lines.append(f"- {blocker}")
-    else:
-        for reason in _portfolio_pass_reasons(portfolio_summary):
-            lines.append(f"- {reason}")
-    return lines
 
 
 def format_result_distribution_observation_lines(betting_opinion):
@@ -719,11 +731,20 @@ def build_report(
         "",
         *format_fixture_lines(api_football_data, match),
         "",
-        *format_betting_opinion_lines(betting_opinion),
+        *format_core_conclusion_lines(
+            betting_opinion,
+            portfolio_summary,
+            odds,
+            match,
+            api_football_data,
+            actual_odds,
+        ),
         "",
-        *format_data_quality_lines(betting_opinion, api_football_data, match, actual_odds),
+        *format_tpb_coverage_lines(betting_opinion),
         "",
-        *format_portfolio_eligibility_lines(portfolio_summary, match),
+        *format_handicap_observation_lines(betting_opinion),
+        "",
+        *format_goals_view_lines(betting_opinion),
         "",
         *format_result_distribution_observation_lines(betting_opinion),
         "",

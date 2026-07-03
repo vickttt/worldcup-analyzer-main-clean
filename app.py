@@ -24,7 +24,7 @@ from modules.pregame_content import (
     static_recent_form_for,
     team_cn,
 )
-from modules.report_generator import build_report, save_report
+from modules.report_generator import build_report, save_report, tpb_probability_label
 from modules.result_distribution import build_result_distribution
 from modules.schedule_client import (
     available_match_dates,
@@ -996,7 +996,7 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
             ("盘口观察", f"{bet_cn(opinion.get('handicap_market_direction') or opinion.get('asian_handicap', '暂无观点'))}。{opinion.get('asian_handicap_reason', '')}"),
             ("TPB 覆盖说明", f"{bet_cn(opinion.get('coverage_candidate', '暂无候选'))}。{opinion.get('coverage_reason', '')}"),
             ("进球数观点", f"总进球盘口中心：{opinion.get('total_center', '-')}。{opinion.get('goals_market_bias', '')}"),
-            ("比赛投资价值", f"TPB 熵信心 {opinion.get('betting_confidence', '-')} / 100；TPB 概率标签：{opinion.get('market_direction_label') or '暂无标签，详见胜平负 TPB 概率'}。"),
+            ("比赛投资价值", f"TPB 熵信心 {opinion.get('betting_confidence', '-')} / 100；TPB 概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}。"),
         ]
         for title, text in blocks:
             st.markdown(
