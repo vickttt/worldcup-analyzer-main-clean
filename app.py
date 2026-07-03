@@ -970,7 +970,7 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
         with col1:
             soft_card("比赛主方向", bet_cn(opinion.get("match_direction") or opinion.get("match_winner", "暂无观点")))
         with col2:
-            soft_card("覆盖 / 保险候选", bet_cn(opinion.get("coverage_candidate", "暂无候选")))
+            soft_card("TPB 覆盖说明", bet_cn(opinion.get("coverage_candidate", "暂无候选")))
         with col3:
             soft_card("投注信心", f"{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100", f"数据质量：{data_quality_label}")
         tpb = opinion.get("true_probability_base") or {}
@@ -993,10 +993,10 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
 
         blocks = [
             ("比赛主方向", opinion.get("match_winner_reason", "-")),
-            ("让球盘口方向", f"{bet_cn(opinion.get('handicap_market_direction') or opinion.get('asian_handicap', '暂无观点'))}。{opinion.get('asian_handicap_reason', '')}"),
-            ("覆盖 / 保险候选", f"{bet_cn(opinion.get('coverage_candidate', '暂无候选'))}。{opinion.get('coverage_reason', '')}"),
+            ("盘口观察", f"{bet_cn(opinion.get('handicap_market_direction') or opinion.get('asian_handicap', '暂无观点'))}。{opinion.get('asian_handicap_reason', '')}"),
+            ("TPB 覆盖说明", f"{bet_cn(opinion.get('coverage_candidate', '暂无候选'))}。{opinion.get('coverage_reason', '')}"),
             ("进球数观点", f"总进球盘口中心：{opinion.get('total_center', '-')}。{opinion.get('goals_market_bias', '')}"),
-            ("比赛投资价值", f"TPB 熵信心 {opinion.get('betting_confidence', '-')} / 100；市场方向：{opinion.get('market_direction_label', '-')}。"),
+            ("比赛投资价值", f"TPB 熵信心 {opinion.get('betting_confidence', '-')} / 100；TPB 概率标签：{opinion.get('market_direction_label', '-')}。"),
         ]
         for title, text in blocks:
             st.markdown(
