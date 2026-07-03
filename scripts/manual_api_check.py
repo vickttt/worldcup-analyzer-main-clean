@@ -1,9 +1,17 @@
+"""
+Manual API-Football diagnostic script.
+
+This file is intentionally not named test_*.py so pytest does not collect it.
+Run it only when the user explicitly authorizes a real API-Football diagnostic.
+It may perform keyed API calls and must not be part of normal CI validation.
+"""
+
 import json
 
+from modules.api_client import load_api_key
 from modules.odds_client import (
     fetch_injuries_for_fixture,
     fetch_lineups_for_fixture,
-    load_api_key,
     request_json,
     search_team,
 )
@@ -151,4 +159,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
