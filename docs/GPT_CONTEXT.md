@@ -1,5 +1,18 @@
 # GPT Context
 
+## Governance Notice
+
+This file is contextual history only. `AGENTS.md` is the only active system
+authority for repository execution rules.
+
+Current active workflow:
+
+- `dev-clean` is the only development branch.
+- No automatic branch creation or branch switching.
+- Codex is the only execution engine.
+- Claude is read-only review only.
+- The user is the final decision authority.
+
 ## Project
 
 WorldCup Analyzer is a football betting and portfolio analysis project. The project currently needs stronger governance before additional feature work continues.
@@ -21,12 +34,9 @@ Before starting any development work, read:
 
 ## Current Git Baseline
 
-- Current branch: `main`
-- Tracking: `main...origin/main`
-- Working tree before governance setup: clean
-- Recent baseline commit: `1dbb5fa` 简洁但功能不全版本
+- Current active branch model: `dev-clean` only.
+- Historical baseline notes below this file must not override `AGENTS.md`.
 
 ## Development Rule
 
-Do not continue large product or algorithm work directly on `main`. Use a backup branch and feature branches before changing business logic.
-
+Follow `AGENTS.md`: all work happens on `dev-clean`; do not create backup or feature branches unless the user explicitly approves that branch operation.

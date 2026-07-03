@@ -81,6 +81,21 @@ Modified Files:
 Status:
 {status}
 
+## Governance Kernel
+
+Active Rule Source:
+- AGENTS.md only
+
+Active Workflow:
+- dev-clean only
+- no automatic branch creation
+- no automatic branch switching
+- Codex executes
+- Claude is read-only review only
+- user is the final decision authority
+- no old Issue -> Branch -> PR default workflow
+- no old multi-round automatic Claude loop
+
 ## Current Recommendation
 
 Current Best Portfolio:

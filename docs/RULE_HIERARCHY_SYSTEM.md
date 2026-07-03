@@ -1,5 +1,12 @@
 # Rule Hierarchy System
 
+## Historical Governance Notice
+
+This file is a historical classification map only. It is not an active rule
+source. `AGENTS.md` is the only active top-level authority for this repository.
+All classifications below are subordinate historical context unless `AGENTS.md`
+explicitly restores them.
+
 Date: 2026-07-01
 
 Purpose: consolidate discovered governance, loop, execution, and observation rules into one authority hierarchy without deleting or rewriting historical files.
@@ -25,7 +32,7 @@ All other governance files must be interpreted as subordinate to `AGENTS.md`. If
 
 No parallel top-level authority is allowed.
 
-Reports, audit logs, Claude artifacts, workflow outputs, and historical branch documents are evidence. They do not override `AGENTS.md`, `docs/TASK_GRAPH.md`, or active execution gates unless an active governance file explicitly promotes them.
+Reports, audit logs, Claude artifacts, workflow outputs, and historical branch documents are evidence. They do not override `AGENTS.md`.
 
 ## Rule Hierarchy Tree
 
@@ -35,17 +42,17 @@ Reports, audit logs, Claude artifacts, workflow outputs, and historical branch d
 | --- | --- | --- |
 | `AGENTS.md` | ACTIVE | Single source of truth for agent behavior, branch rules, forbidden paths, risk gates, Claude review boundaries, API safety, and stop conditions. |
 
-### LEVEL 1 - EXECUTION CONTROL
+### LEVEL 1 - HISTORICAL EXECUTION CONTROL
 
-These files control whether work may proceed, which node is current, and which gates are locked.
+These files formerly described execution control. They are historical or subordinate only and do not override `AGENTS.md`.
 
 | File | Classification | Authority |
 | --- | --- | --- |
-| `docs/TASK_GRAPH.md` | ACTIVE | Current node, next node, graph dependency, graph drift detection. |
-| `docs/EXECUTION_GATE_SYSTEM.md` | ACTIVE | Execution readiness gates and phase locks. |
-| `docs/DECISION_LAYER_CONTROL_SYSTEM.md` | ACTIVE | Analysis, consolidation, execution-ready, and execution-locked modes. |
+| `docs/TASK_GRAPH.md` | DEPRECATED | Historical graph dependency and drift notes only. |
+| `docs/EXECUTION_GATE_SYSTEM.md` | DEPRECATED | Historical branch-consolidation gate design only. |
+| `docs/DECISION_LAYER_CONTROL_SYSTEM.md` | DEPRECATED | Historical decision-layer design only. |
 
-Level 1 files must not contradict `AGENTS.md`. If `TASK_GRAPH` and gate documents disagree, execution is blocked until the mismatch is resolved.
+These files must not be used as active execution rules unless `AGENTS.md` is explicitly updated to restore them.
 
 ### LEVEL 2 - DOMAIN RULES
 
@@ -53,23 +60,23 @@ These files constrain domain-specific work. They are active only within their do
 
 | File or Rule Family | Classification | Authority |
 | --- | --- | --- |
-| `docs/UI_CACHE_API_PROTOCOL.md` | ACTIVE | UI-CACHE-API phase rules, UI refresh behavior, cache/API boundaries. |
-| `docs/API_REFRESH_SAFETY.md` | ACTIVE | API-Football refresh safety, key handling, one-time bounded refresh rules. |
-| `docs/PRODUCT_PRINCIPLES.md` | ACTIVE | Product-level intent and non-runtime decision principles. |
-| `docs/TASK_QUEUE.md` | ACTIVE | Queued work inventory, subordinate to `TASK_GRAPH`. |
-| `docs/KNOWN_BUGS.md` | ACTIVE | Known issue inventory, not an execution permit by itself. |
-| Model-design rules in `AGENTS.md` and model-design governance docs | ACTIVE | Model contract and intelligence-loop constraints, only when the current task is explicitly model-design scoped. |
-| OPS and branch governance docs | ACTIVE | Branch lifecycle, worktree hygiene, GitHub workflow discipline, subordinate to `AGENTS.md`. |
+| `docs/UI_CACHE_API_PROTOCOL.md` | SUBORDINATE REFERENCE | Historical UI-CACHE-API phase rules; does not override `AGENTS.md`. |
+| `docs/API_REFRESH_SAFETY.md` | SUBORDINATE REFERENCE | API-Football refresh safety reference; does not override `AGENTS.md`. |
+| `docs/PRODUCT_PRINCIPLES.md` | SUBORDINATE REFERENCE | Product-level intent and non-runtime decision principles. |
+| `docs/TASK_QUEUE.md` | SUBORDINATE REFERENCE | Queued work inventory; not an execution permit by itself. |
+| `docs/KNOWN_BUGS.md` | SUBORDINATE REFERENCE | Known issue inventory; not an execution permit by itself. |
+| Model-design rules in `AGENTS.md` and model-design governance docs | SUBORDINATE REFERENCE | Model contract context only when explicitly scoped by `AGENTS.md` and the user task. |
+| OPS and branch governance docs | SUBORDINATE REFERENCE | Historical GitHub workflow discipline; does not override `AGENTS.md`. |
 
-### LEVEL 3 - LOOP SYSTEMS
+### LEVEL 3 - HISTORICAL LOOP SYSTEMS
 
 These files define review and agent-loop behavior.
 
 | File | Classification | Authority |
 | --- | --- | --- |
-| `docs/CODEX_CLAUDE_LOOP.md` | ACTIVE | Primary Codex-Claude loop protocol. |
-| `docs/CLAUDE_REVIEW_PROMPT_TEMPLATE.md` | ACTIVE | Prompt contract for review-only Claude output. |
-| `.github/workflows/claude-review.yml` | ACTIVE | GitHub-mediated Claude review implementation, not policy authority. |
+| `docs/CODEX_CLAUDE_LOOP.md` | DEPRECATED | Historical loop protocol; superseded by `AGENTS.md`. |
+| `docs/CLAUDE_REVIEW_PROMPT_TEMPLATE.md` | DEPRECATED | Historical prompt contract; superseded by `AGENTS.md`. |
+| `.github/workflows/claude-review.yml` | MANUAL TOOL | Manual review implementation only, not policy authority. |
 | `docs/CODEX_CLAUDE_REVIEW_LOOP.md` | DEPRECATED | Older review-loop lineage. Retained for history only. |
 | Numbered workflow or loop copies such as `claude-review 2.yml` | DEPRECATED | Historical duplicates unless explicitly re-promoted. |
 
@@ -87,16 +94,14 @@ These files record findings, validation results, and historical evidence.
 
 ## Active / Deprecated / Observation Classification
 
-### ACTIVE
+### CURRENT ACTIVE AUTHORITY
 
 - `AGENTS.md`
-- `docs/TASK_GRAPH.md`
-- `docs/EXECUTION_GATE_SYSTEM.md`
-- `docs/DECISION_LAYER_CONTROL_SYSTEM.md`
+
+### SUBORDINATE / HISTORICAL REFERENCES
+
 - `docs/UI_CACHE_API_PROTOCOL.md`
 - `docs/API_REFRESH_SAFETY.md`
-- `docs/CODEX_CLAUDE_LOOP.md`
-- `docs/CLAUDE_REVIEW_PROMPT_TEMPLATE.md`
 - `docs/PRODUCT_PRINCIPLES.md`
 - `docs/GPT_CONTEXT.md`
 - `docs/TASK_QUEUE.md`
@@ -106,6 +111,11 @@ These files record findings, validation results, and historical evidence.
 ### DEPRECATED
 
 - `docs/CODEX_CLAUDE_REVIEW_LOOP.md`
+- `docs/TASK_GRAPH.md`
+- `docs/EXECUTION_GATE_SYSTEM.md`
+- `docs/DECISION_LAYER_CONTROL_SYSTEM.md`
+- `docs/CODEX_CLAUDE_LOOP.md`
+- `docs/CLAUDE_REVIEW_PROMPT_TEMPLATE.md`
 - Numbered duplicate governance, workflow, issue-template, PR-template, and hook-plan files.
 - Historical workflow variants that are not referenced by `AGENTS.md` or current GitHub Actions usage.
 - Branch-specific copies superseded by the current active files.
