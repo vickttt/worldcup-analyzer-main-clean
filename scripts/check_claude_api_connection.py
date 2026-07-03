@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Smoke test for Claude API connectivity.
+"""Manual smoke test for Claude API connectivity.
 
 This script never stores or prints API keys. It reads credentials only from
-local environment sources.
+local environment sources. It makes a real Claude API call and must only be run
+when the user explicitly asks to diagnose Claude API connectivity. It is not a
+default validation step and must not be run automatically during normal Codex
+tasks. It does not create branches, open pull requests, commit, push, or merge.
 """
 
 from __future__ import annotations

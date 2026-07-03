@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Prepare a sanitized Claude review packet for GitHub-mediated review."""
+"""Prepare a sanitized packet for a manual, read-only Claude review.
+
+This tool is manually triggered or explicitly authorized only. It does not call
+Claude APIs, create branches, open pull requests, commit, push, merge, or act as
+an entrypoint for the old automatic review loop. Generated packets may only
+support a lightweight, single-round, read-only Claude review under AGENTS.md.
+"""
 
 from __future__ import annotations
 

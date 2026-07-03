@@ -1,5 +1,8 @@
 name: Agent QA
 
+# Manual safety/QA check only. This workflow is not workflow authority and does
+# not require feature branches, pull requests, or multi-agent execution. The
+# active repository rules remain defined only in AGENTS.md.
 on:
   workflow_dispatch:
 

@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Fetch a GitHub Actions Claude review artifact for a round."""
+"""Manually fetch an explicitly authorized Claude review artifact/result.
+
+This tool must not trigger GitHub Actions or Claude review. It must not create
+branches, open pull requests, commit, push, merge, or act as an entrypoint for
+the old GitHub-mediated review loop. Use it only to retrieve an existing result
+after the user explicitly authorizes that review path.
+"""
 
 from __future__ import annotations
 

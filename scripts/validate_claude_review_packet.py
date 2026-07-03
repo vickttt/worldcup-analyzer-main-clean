@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Validate a sanitized Claude review packet before GitHub-mediated review."""
+"""Validate a sanitized Claude review packet with static local checks only.
+
+This tool does not call Claude APIs, create branches, open pull requests,
+commit, push, merge, or define workflow authority. It only checks whether a
+packet is suitable for a lightweight, single-round, read-only Claude review
+under AGENTS.md.
+"""
 
 from __future__ import annotations
 
