@@ -144,11 +144,15 @@ def test_user_portfolio_comparison_is_display_only():
         odds=fixture["context"]["odds"],
         betting_opinion={},
         distribution=fixture["distribution"],
+        api_football_data=fixture["context"]["api_football_data"],
     )
     assert comparison["has_input"] is True
     assert comparison["total_count"] == 2
     assert comparison["total_amount"] == 250
-    assert comparison["ranking_rows"][0]["对象"] == "系统 TPB 输出"
+    assert comparison["observation_rows"][0]["对象"] == "系统 TPB 输出"
+    assert comparison["positions"][0]["api_reference_odds"] == 1.8
+    assert comparison["positions"][0]["price_judgment"] == "接近"
+    assert comparison["positions"][1]["price_judgment"] == "暂无可比 API 赔率"
     assert "不参与 TPB" in comparison["disclaimer"]
 
     layers = build_core_decision_layers(

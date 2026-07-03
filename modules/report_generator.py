@@ -756,18 +756,44 @@ def format_user_portfolio_lines(user_portfolio):
             f"{format_value(item.get('market'))} / "
             f"{format_value(item.get('selection'))} / "
             f"盘口 {format_value(item.get('line') or '-')} / "
-            f"赔率 {format_value(item.get('odds'))} / "
+            f"实际赔率 {format_value(item.get('user_odds'))} / "
             f"金额 {item.get('amount_text', '未填金额')} / "
             f"{item.get('classification', '-')}"
         )
 
-    lines.extend(["", "组合对比排名："])
-    for row in comparison.get("ranking_rows") or []:
+    lines.extend([
+        "",
+        "## 我的实际赔率 vs API 赔率",
+        "",
+        "价格差异只用于用户复盘，不参与 TPB、比赛投资分、推荐金额或系统主结论。",
+        "",
+    ])
+    for item in positions:
+        api_odds = item.get("api_reference_odds")
+        lines.append(
+            "- "
+            f"{format_value(item.get('market'))} / "
+            f"{format_value(item.get('selection'))} / "
+            f"盘口 {format_value(item.get('line') or '-')}："
+            f"用户实际赔率 {format_value(item.get('user_odds'))}；"
+            f"API参考赔率 {format_value(api_odds) if api_odds is not None else '暂无可比 API 赔率'}；"
+            f"差异 {item.get('price_difference_text', '-')}；"
+            f"判断：{item.get('price_judgment', '-')}"
+        )
+
+    lines.extend([
+        "",
+        "## 我的组合对比观察",
+        "",
+        "我的组合对比观察仅用于用户复盘和人工判断，不参与 TPB、比赛投资分或推荐金额。",
+        "",
+    ])
+    for row in comparison.get("observation_rows") or []:
         lines.append(
             "- "
             f"{row.get('对象', '-')}："
             f"{row.get('关系', '-')} / "
-            f"{row.get('对比分', '-')}。"
+            f"{row.get('TPB一致性', '-')}。"
             f"{row.get('说明', '')}"
         )
 

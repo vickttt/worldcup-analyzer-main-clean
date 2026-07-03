@@ -1,3 +1,4 @@
+from modules.market_utils import parse_handicap_value, safe_float
 from modules.pregame_content import team_cn
 from modules.probability_base import true_probability_base
 
@@ -115,6 +116,26 @@ def _selection_matches_tpb(selection, direction, match):
     return selected in candidates.get(direction.get("outcome"), set())
 
 
+def _selection_matches_side(selection, side, match):
+    selected = _normalized(selection)
+    candidates = {
+        "home": {_normalized(_team_label(match, "home")), "主胜", "home", "homewin"},
+        "away": {_normalized(_team_label(match, "away")), "客胜", "away", "awaywin"},
+    }
+    return selected in candidates.get(side, set())
+
+
+def _selection_outcome(selection, match):
+    selected = _normalized(selection)
+    if selected in {_normalized(_team_label(match, "home")), "主胜", "home", "homewin"}:
+        return "home_win"
+    if selected in {"平局", "draw", "x"}:
+        return "draw"
+    if selected in {_normalized(_team_label(match, "away")), "客胜", "away", "awaywin"}:
+        return "away_win"
+    return None
+
+
 def _selection_is_opposite(selection, direction, match):
     selected = _normalized(selection)
     if not selected or direction.get("outcome") not in {"home_win", "away_win"}:
@@ -125,6 +146,97 @@ def _selection_is_opposite(selection, direction, match):
         "away_win": {_normalized(_team_label(match, "away")), "客胜", "away", "awaywin"},
     }
     return selected in candidates.get(opposite, set())
+
+
+def _price_judgment(user_odds, api_odds):
+    if api_odds is None:
+        return {
+            "api_odds": None,
+            "difference": None,
+            "difference_text": "-",
+            "judgment": "暂无可比 API 赔率",
+        }
+    difference = round(float(user_odds) - float(api_odds), 3)
+    if difference > 0.03:
+        judgment = "用户赔率更好"
+    elif difference < -0.03:
+        judgment = "用户赔率更差"
+    else:
+        judgment = "接近"
+    return {
+        "api_odds": float(api_odds),
+        "difference": difference,
+        "difference_text": f"{difference:+.2f}",
+        "judgment": judgment,
+    }
+
+
+def _match_winner_api_odds(position, match, odds):
+    outcome = _selection_outcome(position.get("selection"), match)
+    if not outcome:
+        return None
+    return safe_float((odds or {}).get(outcome))
+
+
+def _handicap_api_odds(position, match, api_football_data):
+    target_line = safe_float(position.get("line"))
+    if target_line is None:
+        return None
+    rows = (((api_football_data or {}).get("asian_handicap") or {}).get("rows") or [])
+    for row in rows:
+        parsed = parse_handicap_value(row.get("value"))
+        if not parsed:
+            continue
+        if not _selection_matches_side(position.get("selection"), parsed.get("side"), match):
+            continue
+        if safe_float(parsed.get("line")) is None:
+            continue
+        if abs(float(parsed["line"]) - target_line) <= 0.001:
+            return safe_float(row.get("odd"))
+    return None
+
+
+def _total_api_odds(position, odds):
+    target_line = safe_float(position.get("line"))
+    if target_line is None:
+        return None
+    selection = _normalized(position.get("selection"))
+    rows = (odds or {}).get("over_under") or []
+    for row in rows:
+        row_line = safe_float(row.get("line"))
+        if row_line is None or abs(row_line - target_line) > 0.001:
+            continue
+        if selection in {"under", "小", "小球", "under球"}:
+            return safe_float(row.get("under_odds"))
+        if selection in {"over", "大", "大球", "over球"}:
+            return safe_float(row.get("over_odds"))
+    return None
+
+
+def _correct_score_api_odds(position, api_football_data):
+    target_score = _clean_text(position.get("selection")).replace("-", ":").replace("–", ":")
+    if not target_score:
+        return None
+    rows = (((api_football_data or {}).get("correct_score") or {}).get("rows") or [])
+    for row in rows:
+        row_score = _clean_text(row.get("score")).replace("-", ":").replace("–", ":")
+        if row_score == target_score:
+            return safe_float(row.get("odd"))
+    return None
+
+
+def _api_reference_for_position(position, match, odds, api_football_data):
+    market = position.get("market")
+    api_odds = None
+    if market == "胜平负":
+        api_odds = _match_winner_api_odds(position, match, odds)
+    elif market == "让球":
+        api_odds = _handicap_api_odds(position, match, api_football_data)
+    elif market == "大小球":
+        api_odds = _total_api_odds(position, odds)
+    elif market == "波胆":
+        api_odds = _correct_score_api_odds(position, api_football_data)
+    return _price_judgment(position.get("odds"), api_odds)
 
 
 def _classify_position(position, direction, match):
@@ -229,19 +341,32 @@ def _risk_warnings(positions, classifications):
     return warnings
 
 
-def build_user_portfolio_comparison(raw_text, match=None, odds=None, betting_opinion=None, distribution=None):
+def build_user_portfolio_comparison(
+    raw_text,
+    match=None,
+    odds=None,
+    betting_opinion=None,
+    distribution=None,
+    api_football_data=None,
+):
     positions, errors = parse_user_portfolio_text(raw_text)
     direction = _tpb_direction(odds, match)
     enriched = []
     classifications = []
     for position in positions:
         classification, note = _classify_position(position, direction, match)
+        price_reference = _api_reference_for_position(position, match, odds, api_football_data)
         classifications.append(classification)
         enriched.append({
             **position,
             "amount_text": "未填金额" if position.get("amount") is None else f"{position.get('amount'):g}元",
             "classification": classification,
             "note": note,
+            "user_odds": position.get("odds"),
+            "api_reference_odds": price_reference.get("api_odds"),
+            "price_difference": price_reference.get("difference"),
+            "price_difference_text": price_reference.get("difference_text"),
+            "price_judgment": price_reference.get("judgment"),
         })
 
     total_amount = sum(position.get("amount") or 0 for position in positions)
@@ -250,19 +375,19 @@ def build_user_portfolio_comparison(raw_text, match=None, odds=None, betting_opi
     relation = _relation(classifications)
     portfolio_type = _portfolio_type(classifications)
 
-    ranking_rows = [{
+    observation_rows = [{
         "对象": "系统 TPB 输出",
         "类型": "baseline",
         "关系": "系统主链",
-        "对比分": "基准",
+        "TPB一致性": "基准",
         "说明": "TPB 输出仍是唯一系统决策，不受用户组合影响。",
     }]
     if positions:
-        ranking_rows.append({
+        observation_rows.append({
             "对象": "我的实盘组合",
             "类型": portfolio_type,
             "关系": relation,
-            "对比分": f"{compatibility_score} / 100",
+            "TPB一致性": f"{compatibility_score} / 100",
             "说明": "仅用于人工复盘，不参与 TPB、比赛投资分或推荐金额。",
         })
 
@@ -278,6 +403,7 @@ def build_user_portfolio_comparison(raw_text, match=None, odds=None, betting_opi
         "relation": relation,
         "compatibility_score": compatibility_score,
         "risk_warnings": _risk_warnings(enriched, classifications) if enriched else [],
-        "ranking_rows": ranking_rows,
+        "observation_rows": observation_rows,
+        "ranking_rows": observation_rows,
         "disclaimer": "我的实盘组合仅用于人工复盘和 display-only 对比，不参与 TPB、比赛投资分、推荐金额、coverage 或系统主方向。",
     }

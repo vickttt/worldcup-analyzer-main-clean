@@ -1193,7 +1193,7 @@ def render_user_portfolio_comparison(input_key, comparison):
                 "市场": item.get("market"),
                 "选择": item.get("selection"),
                 "盘口": item.get("line") or "-",
-                "赔率": item.get("odds"),
+                "实际赔率": item.get("user_odds"),
                 "金额": item.get("amount_text"),
                 "路径判断": item.get("classification"),
             }
@@ -1201,9 +1201,25 @@ def render_user_portfolio_comparison(input_key, comparison):
         ]
         st.dataframe(pd.DataFrame(detail_rows), use_container_width=True, hide_index=True)
 
-        st.markdown("**组合对比排名**")
-        st.caption("组合对比排名仅用于用户复盘和人工判断，不参与 TPB、比赛投资分或推荐金额。")
-        st.dataframe(pd.DataFrame(comparison.get("ranking_rows") or []), use_container_width=True, hide_index=True)
+        st.markdown("**我的实际赔率 vs API 赔率**")
+        st.caption("价格差异只用于用户复盘，不参与 TPB、比赛投资分、推荐金额或系统主结论。")
+        price_rows = [
+            {
+                "市场": item.get("market"),
+                "选择": item.get("selection"),
+                "盘口": item.get("line") or "-",
+                "用户实际赔率": item.get("user_odds"),
+                "API参考赔率": item.get("api_reference_odds") if item.get("api_reference_odds") is not None else "-",
+                "差异": item.get("price_difference_text"),
+                "判断": item.get("price_judgment"),
+            }
+            for item in positions
+        ]
+        st.dataframe(pd.DataFrame(price_rows), use_container_width=True, hide_index=True)
+
+        st.markdown("**我的组合对比观察**")
+        st.caption("我的组合对比观察仅用于用户复盘和人工判断，不参与 TPB、比赛投资分或推荐金额。")
+        st.dataframe(pd.DataFrame(comparison.get("observation_rows") or []), use_container_width=True, hide_index=True)
 
         warnings = comparison.get("risk_warnings") or []
         if warnings:
@@ -2269,6 +2285,7 @@ def render_analysis_page(match_text):
                 odds=odds,
                 betting_opinion=betting_opinion,
                 distribution=result_distribution,
+                api_football_data=api_football_data,
             )
             with perf_timer("detail", "tpb_report_strategy"):
                 top_strategy = tpb_report_strategy(decision)
