@@ -5,32 +5,33 @@ docs, reports, workflows, and agent notes are subordinate to this file.
 
 Codex must read this file before every task.
 
-## 1. Decision Core: Multi-Layer Betting Intelligence System v1
+## 1. Decision Core: Multi-Layer Betting Intelligence System v2
 
 The production decision system is fixed as Multi-Layer Betting Intelligence
-System v1. It must not degrade into TPB-only, multi-model voting, EV trading, or
-optimizer-based systems.
+System v2. It is a bounded scenario-weighted optimization system. It must not
+degrade into TPB-only, multi-model voting, EV trading, ROI trading, profit
+maximization, ML training, or black-box optimizer systems.
 
 System Definition (IMPORTANT):
 
 - The system does not predict match results.
 - The system does not search for optimal odds.
 - The system does not maximize profit or act as a yield optimizer.
-- The system builds a probability market structure explanation system.
-- The system builds scenario coverage space.
-- The system outputs risk-coverage balance portfolios.
-- Final positioning: Market Structure + Scenario Coverage + Probability Anchor
-  System.
+- The system builds a probability market structure inference system.
+- The system builds scenario coverage and scenario-weighted synthesis space.
+- The system outputs bounded risk-coverage balance portfolios.
+- Final positioning: Market Structure + Scenario-Weighted Bounded Optimization
+  + Probability Anchor System.
 - Final UI positioning: One Decision View System.
 
 Philosophy:
 
 - No prediction dominance.
 - No EV/ROI dominance.
-- No optimizer dominance.
+- No profit optimizer dominance.
 - No hidden scoring authority.
 - TPB = anchor only.
-- Scenario = decomposition only.
+- Scenario = bounded weighted signal only.
 - Market = signal only.
 
 Odds philosophy:
@@ -51,10 +52,13 @@ EV / ROI boundary:
 
 Optimizer boundary:
 
-- Allowed: coverage optimization as explanation, scenario balancing, and risk
-  exposure smoothing.
-- Forbidden: EV optimizer, ROI optimizer, profit maximization engine, and
-  black-box scoring system.
+- Allowed: bounded heuristic coverage optimization, scenario weighting,
+  scenario balancing, and risk exposure smoothing.
+- Allowed optimization must maximize scenario coverage, probability alignment,
+  and risk balance while minimizing tail exposure, conflict exposure, and
+  redundancy.
+- Forbidden: EV optimizer, ROI optimizer, profit maximization engine, ML
+  training system, and black-box scoring system.
 
 Layer model:
 
@@ -91,7 +95,7 @@ Layer model:
      influence System Ranking only through the synthesis layer.
 
 4. Layer 3: Scenario Engine Layer
-   - Scenario Engine v1 is the Market Scenario Coverage & Risk Decomposition
+   - Scenario Engine v2 is the Scenario-Weighted Coverage & Risk Decomposition
      Layer.
    - It uses only API-Football market data, TPB baseline, and Market Structure
      signals.
@@ -100,24 +104,31 @@ Layer model:
      S5 Low Scoring Match, and S6 High Variance Match.
    - It may output Scenario Probability Distribution, Scenario Risk Surface,
      Scenario Coverage Map, Scenario Efficiency Score, Scenario-to-Market
-     Mapping, and Scenario-to-Portfolio Mapping Explanation.
-   - It is the explanatory backbone for System Portfolio coverage narrative.
+     Mapping, Scenario-to-Portfolio Mapping Explanation, and normalized
+     Scenario Weights.
+   - It is the bounded weighted signal backbone for System Portfolio coverage
+     narrative and ranking synthesis.
+   - Scenario Engine may influence System Portfolio Layer and System Ranking
+     only through explainable, deterministic, bounded heuristic scenario
+     weights.
    - Scenario Engine must not predict exact scores, calculate EV/ROI, optimize
-     profit, override TPB, alter stake, influence system ranking, influence
-     system recommendation, or use user input.
+     profit, perform ML training, use black-box optimization, override TPB,
+     alter stake, mutate raw odds, or use user input.
 
 5. Layer 4: System Portfolio & Ranking Layer
    - The only legal system recommendation chain is:
-     TPB baseline + Market Structure -> System Recommendation.
+     TPB baseline + Market Structure + bounded Scenario Weights -> System
+     Recommendation.
    - System recommendation is a synthesis of TPB baseline strength, market
-     structure signals, and Scenario Engine coverage narrative.
+     structure signals, and bounded Scenario Engine coverage weights.
    - Allowed system outputs: Main Position, Defensive Position, Tail Risk
      Position, and System Ranking.
    - System Ranking may use TPB baseline strength, Market Conflict Index,
      Directional Strength, Market Efficiency Score, Volatility Index, and Upset
-     Probability.
+     Probability, plus normalized Scenario Weights.
    - System Ranking must not use user input, execution layer signals, EV, ROI,
-     or legacy optimizer logic.
+     profit optimization, ML training, black-box optimization, or legacy
+     optimizer logic.
    - Stake remains deterministic from the existing investment score unless the
      user explicitly scopes a future stake-model migration.
 
@@ -137,23 +148,53 @@ Layer model:
      Score, Volatility Index, Scenario Probability Derivation, Scenario Mapping,
      Coverage Mapping, and Coverage Efficiency.
    - It must prevent black-box scoring, hidden ranking weights, implicit EV
-     logic, and optimizer-style reasoning.
+     logic, and EV/ROI/profit optimizer reasoning.
 
 Scenario Thinking and Scenario Engine:
 
-- Scenario Thinking is implemented through Scenario Engine v1 and is allowed
-  only as probability-space decomposition, risk coverage, and explanation.
+- Scenario Thinking is implemented through Scenario Engine v2 and is allowed as
+  probability-space decomposition, bounded scenario weighting, risk coverage,
+  and coverage optimization.
 - Scenario taxonomy is fixed. Do not dynamically add scenario types.
-- Scenario Engine must not enter ranking, override TPB, mutate market structure
-  metrics, alter stake, or change system recommendation.
+- Scenario Engine may influence System Ranking and System Portfolio only through
+  bounded, deterministic, explainable Scenario Weights.
+- Scenario Engine must not override TPB, mutate market structure metrics, alter
+  stake, use user input, calculate EV/ROI, maximize profit, or become a
+  black-box optimizer.
+
+Bounded Influence Rule:
+
+- Scenario Engine cannot override TPB.
+- Scenario Engine cannot act as an EV/ROI/profit optimizer.
+- Scenario Engine can only provide weighted scenario signals to the System
+  Portfolio Layer.
+- Scenario influence must be explainable, deterministic, bounded, and
+  heuristic.
+- Scenario influence must be traceable to TPB baseline, Market Structure
+  signals, Volatility Index, and Upset Probability.
+- Scenario influence must not depend on user input, user odds, historical
+  returns, profit targets, or black-box learned weights.
+
+Scenario Weighting Permission:
+
+- Normalized scenario weights may influence System Ranking under bounded
+  constraints.
+- Normalized scenario weights may influence System Portfolio construction under
+  bounded constraints.
+- Normalized scenario weights may influence coverage optimization under bounded
+  constraints.
+- Scenario weights must not create EV optimization, ROI optimization, profit
+  maximization, ML training behavior, or hidden scoring authority.
 
 System positioning:
 
 - This is not a pure prediction system and not an EV trading system.
-- It is a Market Structure + Probability Anchor + Scenario Explanation System.
+- It is a Market Structure + Probability Anchor + Scenario-Weighted Bounded
+  Optimization System.
 - One-line lock:
-  TPB defines probability baseline; Market defines structure; Execution defines
-  user behavior; System defines recommendation.
+  TPB defines probability baseline; Market defines structure; Scenario defines
+  bounded weights; Execution defines user behavior; System defines
+  recommendation.
 
 Forbidden in the active decision path:
 
@@ -164,8 +205,8 @@ Forbidden in the active decision path:
 - risk-gate blocking.
 - user-entered odds as a system decision signal.
 - user-driven ranking.
-- scenario shadow or scenario-driven ranking.
-- scenario-driven recommendation.
+- scenario shadow.
+- unbounded scenario-driven ranking or recommendation.
 - multi-model voting.
 - secondary probability model overriding TPB.
 
@@ -175,14 +216,16 @@ Forbidden ranking paths:
 - execution layer ranking influence.
 - EV ranking.
 - ROI ranking.
-- portfolio optimizer ranking.
+- profit optimizer ranking.
+- black-box optimizer ranking.
+- user-driven scenario ranking override.
 
 Decision Authority Hierarchy:
 
 1. TPB Baseline Probability (anchor).
 2. Market Structure Intelligence (signal layer).
-3. Scenario Engine Layer (probability space decomposition and portfolio
-   explanation backbone only).
+3. Scenario Engine Layer (probability space decomposition and bounded scenario
+   weighting).
 4. System Portfolio Layer (synthesis + ranking).
 5. Execution Layer (display/evaluation only).
 6. Method Layer (calculation transparency only).
@@ -191,7 +234,9 @@ Authority rules:
 
 - TPB cannot be overridden.
 - Market Structure cannot override TPB.
-- Scenario Engine cannot become a decision engine.
+- Scenario Engine cannot override TPB or become an EV/ROI/profit optimizer.
+- Scenario Engine may influence System Portfolio and Ranking only through
+  bounded, deterministic, explainable Scenario Weights.
 - System Portfolio must be synthesis-based.
 - Execution Layer cannot affect any upstream layer.
 
@@ -216,8 +261,11 @@ Allowed report structure:
 3. Scenario Engine Layer: scenario probability distribution, risk surface,
    coverage map, scenario-market mapping, scenario-portfolio mapping, and
    coverage efficiency.
+3a. Scenario Optimization Layer v2: normalized scenario weights, bounded
+   coverage optimization objective, scenario-to-leg coverage contribution,
+   scenario dependency, risk exposure, redundancy, and Coverage Efficiency v2.
 4. System Portfolio Layer: main, defensive, and tail positions.
-5. System Ranking: system-only ranking.
+5. System Ranking: scenario-weighted system-only ranking.
 6. Execution Layer: user portfolio, odds comparison, and evaluation only.
 7. Model Explanation Layer: calculation methods, thresholds, scenario
    derivation, coverage logic, and audit guards.
@@ -228,8 +276,8 @@ System chain:
 API-Football market data
   -> TPB baseline anchor
   -> market structure signal layer
-  -> scenario coverage and risk decomposition
-  -> system-only recommendation synthesis
+  -> scenario-weighted coverage and risk decomposition
+  -> system-only bounded recommendation synthesis
   -> methodology transparency
   -> deterministic stake display + UI/report display
 ```
@@ -243,13 +291,16 @@ user execution input -> Value Check / execution evaluation -> UI/report display 
 System invariants:
 
 - TPB cannot be overridden.
-- Market Structure cannot become an optimizer.
-- Scenario Engine cannot become an optimizer, EV model, or ranking engine.
+- Market Structure cannot become an EV/ROI/profit optimizer.
+- Scenario Engine cannot become an EV model, ROI model, profit optimizer, ML
+  training system, or black-box optimizer.
+- Scenario Engine can influence System Ranking only through bounded,
+  deterministic, explainable Scenario Weights.
 - Execution Layer cannot become ranking input.
-- Scenario Thinking cannot become a decision engine.
+- Scenario Thinking cannot become an unbounded decision engine.
 - No layer may become an EV/ROI system.
-- No hidden scoring weights, black-box transformations, or optimizer-style
-  reasoning are allowed.
+- No hidden scoring weights, black-box transformations, EV/ROI/profit optimizer
+  reasoning, or ML training behavior are allowed.
 - Not multiple systems: one unified decision flow, one interpretation layer, and
   one separate execution layer.
 
