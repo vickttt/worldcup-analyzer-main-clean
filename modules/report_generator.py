@@ -339,7 +339,7 @@ def format_asian_handicap_lines(api_football_data, odds=None, match=None):
     if center.get("available"):
         lines.extend([
             f"让球盘口中心：{center.get('center_label')}",
-            f"覆盖 / 保险候选：{center.get('coverage_label')}",
+            f"TPB 覆盖说明：{center.get('coverage_label')}",
         ])
         if center.get("warning"):
             lines.append(f"数据提示：已过滤 {center.get('outlier_count')} 条可能异常盘口。")
@@ -481,14 +481,17 @@ def format_betting_opinion_lines(betting_opinion):
         "理由：",
         opinion.get("match_winner_reason", "-"),
         "",
-        "### 让球盘口方向",
+        "### TPB 概率标签",
         "",
-        opinion.get("handicap_market_direction") or opinion.get("asian_handicap", "No view"),
+        opinion.get("market_direction_label", "-"),
         "",
-        "理由：",
-        opinion.get("asian_handicap_reason", "-"),
+        "### 比赛投资价值",
         "",
-        "### 覆盖 / 保险候选",
+        f"投注信心：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100",
+        "",
+        f"数据质量：{quality_cn(opinion.get('data_quality'))}",
+        "",
+        "### TPB 覆盖说明",
         "",
         opinion.get("coverage_candidate", "No coverage candidate"),
         "",
@@ -497,6 +500,13 @@ def format_betting_opinion_lines(betting_opinion):
         "",
         "建议用途：",
         opinion.get("recommended_use", "-"),
+        "",
+        "### 盘口观察",
+        "",
+        opinion.get("handicap_market_direction") or opinion.get("asian_handicap", "No view"),
+        "",
+        "理由：",
+        opinion.get("asian_handicap_reason", "-"),
         "",
         "### 进球数观点",
         "",
@@ -507,14 +517,6 @@ def format_betting_opinion_lines(betting_opinion):
         f"比赛行为提示：{opinion.get('goals_game_behavior_note', '-')}",
         "",
         f"解释：{opinion.get('goals_recommended_interpretation', '-')}",
-        "",
-        "### 比赛投资价值",
-        "",
-        f"市场方向：{opinion.get('market_direction_label', '-')}",
-        "",
-        f"TPB 熵信心：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100",
-        "",
-        f"数据质量：{quality_cn(opinion.get('data_quality'))}",
     ]
     return lines
 
@@ -547,14 +549,23 @@ def _portfolio_pass_reasons(portfolio_summary):
     return reasons or ["TPB 决策输出可作为当前报告的唯一推荐来源。"]
 
 
+def _recommended_stake_text(portfolio_summary):
+    stake = (portfolio_summary or {}).get("recommended_stake") or {}
+    amount = stake.get("amount")
+    if amount is None:
+        return "未计算（推荐金额由比赛投资分映射得出）"
+    return f"{format_value(amount)}元"
+
+
 def format_portfolio_eligibility_lines(portfolio_summary=None, match=None):
     if not portfolio_summary:
         return [
-            "## TPB 推荐资格",
+            "## TPB 决策输出",
             "",
             "- TPB 推荐：未生成",
+            "- 推荐金额：未计算（推荐金额由比赛投资分映射得出）",
             "- TPB 风险诊断：无法获取，报告生成时未收到 TPB 输出。",
-            "- 第一推荐资格：无法获取",
+            "- 执行判断：无法获取",
     ]
     eligibility = portfolio_summary.get("rank1_eligibility") or {}
     risk_diagnostic = portfolio_summary.get("risk_diagnostic") or {}
@@ -564,13 +575,14 @@ def format_portfolio_eligibility_lines(portfolio_summary=None, match=None):
         eligible = eligibility.get("eligible")
     items = portfolio_summary.get("items") or []
     lines = [
-        "## TPB 推荐资格",
+        "## TPB 决策输出",
         "",
         f"- TPB 推荐名称：{_portfolio_display_name(portfolio_summary, match)}",
-        f"- TPB 决策分：{format_value(portfolio_summary.get('decision_score') or portfolio_summary.get('score'))}",
-        f"- 组合风格：{portfolio_summary.get('portfolio_style_label') or (portfolio_summary.get('portfolio_style') or {}).get('style_cn') or '-'}",
+        f"- 比赛投资分：{format_value(portfolio_summary.get('decision_score') or portfolio_summary.get('score'))}",
+        f"- 推荐金额：{_recommended_stake_text(portfolio_summary)}",
+        f"- 执行模式：{portfolio_summary.get('portfolio_style_label') or (portfolio_summary.get('portfolio_style') or {}).get('style_cn') or '-'}",
         f"- TPB 风险诊断：{risk_diagnostic.get('risk_level') or '-'}",
-        f"- 第一推荐资格：{'YES' if eligible else 'NO'}",
+        f"- 执行判断：{'可执行' if eligible else '暂不执行'}",
     ]
     if items:
         lines.extend(["", "核心投注："])
@@ -590,6 +602,46 @@ def format_portfolio_eligibility_lines(portfolio_summary=None, match=None):
     else:
         for reason in _portfolio_pass_reasons(portfolio_summary):
             lines.append(f"- {reason}")
+    return lines
+
+
+def format_result_distribution_observation_lines(betting_opinion):
+    distribution = (betting_opinion or {}).get("result_distribution") or {}
+    rows = distribution.get("rows") or []
+    lines = [
+        "## 结果分布观察",
+        "",
+        "结果分布仅作为观察层展示，不参与 TPB、比赛投资分或推荐金额。",
+    ]
+    if not rows:
+        return lines + ["", "结果分布观察：暂无可用观察数据。"]
+    lines.append("")
+    for row in rows[:6]:
+        probability = row.get("probability")
+        probability_text = percent(probability) if probability is not None else "-"
+        lines.append(f"- {row.get('label', '-')}：{probability_text} · {row.get('meaning', '-')}")
+    return lines
+
+
+def format_polymarket_observation_lines(polymarket):
+    reference = polymarket or {}
+    lines = [
+        "## Polymarket 只读对比层",
+        "",
+        "Polymarket 仅作为市场情绪观察，不替代 API-Football 赔率，也不参与 TPB、比赛投资分或推荐金额。",
+    ]
+    if not reference.get("found"):
+        return lines + ["", f"Polymarket 只读对比层：{reference.get('message') or '暂无可用市场对比数据。'}"]
+    rows = [
+        ("主胜参考概率", reference.get("home_win")),
+        ("平局参考概率", reference.get("draw")),
+        ("客胜参考概率", reference.get("away_win")),
+    ]
+    lines.append("")
+    for label, value in rows:
+        lines.append(f"- {label}：{percent(value) if value is not None else '-'}")
+    if reference.get("event_title"):
+        lines.append(f"- 事件：{reference.get('event_title')}")
     return lines
 
 
@@ -672,6 +724,10 @@ def build_report(
         *format_data_quality_lines(betting_opinion, api_football_data, match, actual_odds),
         "",
         *format_portfolio_eligibility_lines(portfolio_summary, match),
+        "",
+        *format_result_distribution_observation_lines(betting_opinion),
+        "",
+        *format_polymarket_observation_lines(polymarket),
         "",
         *format_match_winner_lines(odds),
         "",
