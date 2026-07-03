@@ -129,8 +129,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: claude-review-round-${{ steps.packet.outputs.round }}
+          name: claude-review-round-${{ steps.review.outputs.round }}
           path: |
-            reports/claude_reviews/round_${{ steps.packet.outputs.round }}_claude_review.md
-            reports/claude_reviews/round_${{ steps.packet.outputs.round }}_claude_review.json
+            reports/claude_reviews/round_${{ steps.review.outputs.round }}_claude_review.md
+            reports/claude_reviews/round_${{ steps.review.outputs.round }}_claude_review.json
           if-no-files-found: error

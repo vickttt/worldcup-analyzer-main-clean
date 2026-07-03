@@ -25,11 +25,11 @@ MAX_SNIPPET_LINES_PER_FILE = 80
 CONTEXT_LINES = 4
 COMMIT_RANGE_RE = re.compile(r"^[A-Za-z0-9._/\-^~]+\.\.[A-Za-z0-9._/\-^~]+$")
 SECRET_PATTERNS = [
-    re.compile(r"sk-ant", re.IGNORECASE),
-    re.compile(r"ghp_", re.IGNORECASE),
-    re.compile(r"github_pat_", re.IGNORECASE),
-    re.compile(r"(?m)^[A-Z0-9_]*KEY\s*="),
-    re.compile(r"(?m)^[A-Z0-9_]*TOKEN\s*="),
+    re.compile(r"sk-ant-[A-Za-z0-9_-]{20,}", re.IGNORECASE),
+    re.compile(r"ghp_[A-Za-z0-9]{20,}", re.IGNORECASE),
+    re.compile(r"github_pat_[A-Za-z0-9_]{30,}", re.IGNORECASE),
+    re.compile(r"(?m)^\s*[A-Z0-9_]*KEY\s*=\s*['\"]?[A-Za-z0-9_./+=:-]{16,}['\"]?\s*$"),
+    re.compile(r"(?m)^\s*[A-Z0-9_]*TOKEN\s*=\s*['\"]?[A-Za-z0-9_./+=:-]{16,}['\"]?\s*$"),
 ]
 FORBIDDEN_PATH_PREFIXES = (
     ".env",
