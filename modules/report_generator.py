@@ -754,7 +754,8 @@ def format_user_portfolio_lines(user_portfolio):
             "- "
             f"{format_value(item.get('market'))} / "
             f"{format_value(item.get('selection'))} / "
-            f"盘口 {format_value(item.get('handicap') or '-')} / "
+            f"盘口 {format_value(item.get('handicap_display') or '-')} / "
+            f"{'系统识别为分段盘口 / ' if item.get('is_split_line') else ''}"
             f"实际赔率 {format_value(item.get('user_odds'))} / "
             f"{item.get('classification', '-')}"
         )
@@ -772,7 +773,7 @@ def format_user_portfolio_lines(user_portfolio):
             "- "
             f"{format_value(item.get('market'))} / "
             f"{format_value(item.get('selection'))} / "
-            f"盘口 {format_value(item.get('handicap') or '-')}："
+            f"盘口 {format_value(item.get('handicap_display') or '-')}："
             f"用户实际赔率 {format_value(item.get('user_odds'))}；"
             f"API参考赔率 {format_value(api_odds) if api_odds is not None else '暂无可比 API 赔率'}；"
             f"差异 {item.get('price_difference_text', '-')}；"

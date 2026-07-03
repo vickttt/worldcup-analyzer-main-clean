@@ -27,6 +27,10 @@ def _normalize_market(value):
     return text if text in ALLOWED_MARKETS else "其他"
 
 
+def _split_enabled_market(market):
+    return _normalize_market(market) in {"让球", "大小球"}
+
+
 def _team_label(match, side):
     if not match:
         return side
@@ -79,6 +83,8 @@ def _is_handicap_text(value, market=None):
     text = _clean_text(value)
     if not text:
         return False
+    if "/" in text and _split_enabled_market(market):
+        return bool(_parse_split_handicap(text))
     if _normalize_market(market) == "波胆" and _is_score_text(text):
         return True
     if text.startswith(("+", "-")) and safe_float(text) is not None:
@@ -86,6 +92,32 @@ def _is_handicap_text(value, market=None):
     if _normalize_market(market) == "大小球" and safe_float(text) is not None:
         return True
     return False
+
+
+def _parse_split_handicap(value):
+    text = _clean_text(value)
+    if "/" not in text:
+        return None
+    parts = [part.strip() for part in text.split("/") if part.strip()]
+    if len(parts) < 2:
+        return None
+    sign_multiplier = -1 if parts[0].startswith("-") else 1
+    parsed = []
+    for index, part in enumerate(parts):
+        token = part
+        if index > 0 and sign_multiplier < 0 and not part.startswith(("+", "-")):
+            token = f"-{part}"
+        number = safe_float(token)
+        if number is None:
+            return None
+        parsed.append(float(number))
+    return parsed
+
+
+def _line_display(handicap, split_handicap=None):
+    if split_handicap:
+        return " / ".join(f"{value:g}" for value in split_handicap)
+    return _clean_text(handicap)
 
 
 def _split_total_selection(selection):
@@ -117,16 +149,16 @@ def _parse_position_parts(parts, line_number):
     handicap = None
     if len(remaining) == 1:
         odds, odds_error = _parse_number(remaining[0], "赔率", line_number)
-        if odds_error or odds is None or odds <= 1:
+        if odds_error or odds is None or odds <= 0:
             return None, f"第 {line_number} 行缺少有效赔率，已跳过。"
     else:
         first, second = remaining
         first_number = safe_float(first)
         second_number = safe_float(second)
-        if second_number is not None and second_number > 1:
+        if second_number is not None and second_number > 0:
             odds = second_number
             handicap = first if _is_handicap_text(first, market) else None
-        elif first_number is not None and first_number > 1:
+        elif first_number is not None and first_number > 0:
             odds = first_number
             handicap = second if _is_handicap_text(second, market) else None
         else:
@@ -138,12 +170,15 @@ def _parse_position_parts(parts, line_number):
         handicap = parsed_line
     if market == "波胆":
         handicap = None
+    split_handicap = _parse_split_handicap(handicap) if _split_enabled_market(market) else None
 
     return {
         "line_number": line_number,
         "market": market,
         "selection": selection,
         "handicap": handicap,
+        "split_handicap": split_handicap,
+        "is_split_line": bool(split_handicap),
         "odds": float(odds),
     }, None
 
@@ -239,6 +274,8 @@ def _match_winner_api_odds(position, match, odds):
 
 
 def _handicap_api_odds(position, match, api_football_data):
+    if position.get("is_split_line"):
+        return None
     target_line = safe_float(position.get("handicap"))
     if target_line is None:
         return None
@@ -257,6 +294,8 @@ def _handicap_api_odds(position, match, api_football_data):
 
 
 def _total_api_odds(position, odds):
+    if position.get("is_split_line"):
+        return None
     target_line = safe_float(position.get("handicap"))
     if target_line is None:
         return None
@@ -409,6 +448,7 @@ def build_user_portfolio_comparison(
         classifications.append(classification)
         enriched.append({
             **position,
+            "handicap_display": _line_display(position.get("handicap"), position.get("split_handicap")),
             "classification": classification,
             "note": note,
             "user_odds": position.get("odds"),

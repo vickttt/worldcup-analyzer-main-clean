@@ -1192,7 +1192,8 @@ def render_user_portfolio_comparison(input_key, comparison):
             {
                 "市场": item.get("market"),
                 "选择": item.get("selection"),
-                "盘口": item.get("handicap") or "-",
+                "盘口": item.get("handicap_display") or "-",
+                "盘口结构": "分段盘口" if item.get("is_split_line") else "单一盘口",
                 "实际赔率": item.get("user_odds"),
                 "路径判断": item.get("classification"),
             }
@@ -1206,7 +1207,8 @@ def render_user_portfolio_comparison(input_key, comparison):
             {
                 "市场": item.get("market"),
                 "选择": item.get("selection"),
-                "盘口": item.get("handicap") or "-",
+                "盘口": item.get("handicap_display") or "-",
+                "盘口结构": "分段盘口" if item.get("is_split_line") else "单一盘口",
                 "用户实际赔率": item.get("user_odds"),
                 "API参考赔率": item.get("api_reference_odds") if item.get("api_reference_odds") is not None else "-",
                 "差异": item.get("price_difference_text"),
