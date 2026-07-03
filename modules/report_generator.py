@@ -109,6 +109,43 @@ def _coverage_display_text(value):
     return text
 
 
+def _localized_injury_text(value):
+    text = str(value or "").strip()
+    if not text:
+        return format_value(value)
+    translations = {
+        "Missing Fixture": "缺席本场",
+        "Hamstring Injury": "腘绳肌伤病",
+        "Ankle Problems": "脚踝问题",
+        "Yellow Card": "黄牌停赛/黄牌风险",
+        "Suspension Through Sports Court": "停赛",
+        "Muscle Bruise": "肌肉挫伤",
+    }
+    return translations.get(text, text)
+
+
+def _score_parts(score):
+    text = str(score or "").strip()
+    separators = (":", "-", "–")
+    for separator in separators:
+        if separator not in text:
+            continue
+        left, right = text.split(separator, 1)
+        try:
+            return int(left.strip()), int(right.strip())
+        except (TypeError, ValueError):
+            return None
+    return None
+
+
+def _displayable_correct_score(score):
+    parsed = _score_parts(score)
+    if not parsed:
+        return True
+    home_score, away_score = parsed
+    return home_score < 10 and away_score < 10
+
+
 def quality_cn(value):
     return {
         "High": "高",
@@ -318,7 +355,7 @@ def format_injuries_lines(api_football_data):
         injury_type = item.get("player", {}).get("type")
         lines.append(
             f"- {format_value(team)} / {format_value(player)} / "
-            f"{format_value(injury_type)} / {format_value(reason)}"
+            f"{_localized_injury_text(injury_type)} / {_localized_injury_text(reason)}"
         )
 
     return lines
@@ -420,7 +457,15 @@ def format_correct_score_lines(api_football_data):
 
     lines.append(f"数据来源：{correct_score.get('source', 'API-Football / Exact Score')}")
     lines.append("")
-    for market in markets[:40]:
+    display_markets = [
+        market for market in markets
+        if _displayable_correct_score(market.get("score"))
+    ]
+    hidden_count = len(markets) - len(display_markets)
+    if hidden_count:
+        lines.append(f"数据提示：已隐藏 {hidden_count} 条 10球级极端比分，仅保留常规波胆展示。")
+        lines.append("")
+    for market in display_markets[:40]:
         lines.extend([
             f"- 比分：{format_value(market.get('score'))}",
             f"  赔率：{format_value(market.get('odd'))}",
@@ -511,6 +556,17 @@ def _portfolio_eligible(portfolio_summary):
     return eligible
 
 
+def _recommended_stake_amount(portfolio_summary):
+    stake = (portfolio_summary or {}).get("recommended_stake") or {}
+    amount = stake.get("amount")
+    if amount is None:
+        return None
+    try:
+        return float(amount)
+    except (TypeError, ValueError):
+        return None
+
+
 def format_core_conclusion_lines(
     betting_opinion,
     portfolio_summary=None,
@@ -523,7 +579,11 @@ def format_core_conclusion_lines(
     portfolio_summary = portfolio_summary or {}
     risk_diagnostic = portfolio_summary.get("risk_diagnostic") or {}
     eligible = _portfolio_eligible(portfolio_summary)
-    execution_judgment = "无法获取" if eligible is None else "可执行" if eligible else "暂不执行"
+    stake_amount = _recommended_stake_amount(portfolio_summary)
+    if stake_amount == 0:
+        execution_judgment = "可观察，当前不建议投入"
+    else:
+        execution_judgment = "无法获取" if eligible is None else "可执行" if eligible else "暂不执行"
     score = portfolio_summary.get("decision_score")
     if score is None:
         score = portfolio_summary.get("score")
@@ -544,6 +604,8 @@ def format_core_conclusion_lines(
         f"- {opinion.get('match_winner_reason', '-')}",
         f"- {risk_diagnostic.get('reason') or 'TPB 风险诊断不阻断推荐；推荐金额只由比赛投资分决定。'}",
     ]
+    if stake_amount == 0:
+        lines.append("- 推荐金额为 0 元表示当前不建议下注；该金额仍由比赛投资分映射得出。")
     if notes:
         lines.extend(["", "数据质量提示："])
         for note in notes[:5]:
