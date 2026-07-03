@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# DEPRECATED — LEGACY MULTI-ROUND CLAUDE LOOP
+# Current active loop is defined in AGENTS.md.
+# This script must not be used as the default execution path.
+# Do not run it unless the user explicitly re-approves legacy multi-round automation.
+# For current workflow, Claude review must be read-only, manual or explicitly requested,
+# and Codex remains the only execution engine.
 """Run one safe round of the Codex-Claude review loop."""
 
 from __future__ import annotations
