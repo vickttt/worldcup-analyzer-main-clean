@@ -1,3 +1,18 @@
+# DEPRECATED — HISTORICAL REFERENCE ONLY
+
+This document is no longer an active workflow authority.
+The current active repository rules are defined only in AGENTS.md.
+
+Current active workflow:
+- dev-clean is the only development branch
+- no automatic branch creation or branch switching
+- Codex is the only execution engine
+- Claude is read-only review only
+- the user is the final decision authority
+- old Issue -> Branch -> PR or multi-branch agent workflows must not be followed unless explicitly re-approved by the user
+
+Do not use this document as execution guidance unless AGENTS.md is explicitly updated to restore it.
+
 # GitHub Agent Workflow v1
 
 Date: 2026-06-21
@@ -549,4 +564,3 @@ Codex should implement.
 Claude Code should optionally review.
 
 Jin should approve scope, merge, and any high-risk action.
-
