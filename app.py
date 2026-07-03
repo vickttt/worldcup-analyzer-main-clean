@@ -1160,11 +1160,12 @@ def render_user_portfolio_comparison(input_key, comparison):
             "不影响 TPB、比赛投资分或推荐金额。"
         )
         st.text_area(
-            "每行一笔：市场,选择,盘口,赔率,金额",
+            "每行一笔：市场,选择,盘口(可选),赔率",
             key=input_key,
-            placeholder="胜平负,埃及,,2.32,200\n让球,埃及,-0.25,1.42,300\n大小球,Under,2,1.89,200\n波胆,1:1,,6.00,50",
+            placeholder="独赢,埃及,2.32\n让球,埃及,-0.5,1.42\n大小球,Under 2.5,1.89\n波胆,2:0,19.5",
             height=130,
         )
+        st.caption("支持英文逗号或中文逗号；无需金额字段，系统会自动识别结构。")
 
         if not comparison.get("has_input"):
             st.info("未输入我的实盘组合。系统输出不受用户组合影响。")
@@ -1181,20 +1182,18 @@ def render_user_portfolio_comparison(input_key, comparison):
             st.info("暂未解析到有效实盘组合。")
             return
 
-        cols = st.columns(4)
+        cols = st.columns(3)
         cols[0].metric("总笔数", comparison.get("total_count", 0))
-        cols[1].metric("总投入", comparison.get("total_amount_text", "0元"))
-        cols[2].metric("组合类型", comparison.get("portfolio_type", "-"))
-        cols[3].metric("与 TPB 主方向关系", comparison.get("relation", "-"))
+        cols[1].metric("组合类型", comparison.get("portfolio_type", "-"))
+        cols[2].metric("与 TPB 主方向关系", comparison.get("relation", "-"))
 
         st.markdown("**我的组合明细**")
         detail_rows = [
             {
                 "市场": item.get("market"),
                 "选择": item.get("selection"),
-                "盘口": item.get("line") or "-",
+                "盘口": item.get("handicap") or "-",
                 "实际赔率": item.get("user_odds"),
-                "金额": item.get("amount_text"),
                 "路径判断": item.get("classification"),
             }
             for item in positions
@@ -1207,7 +1206,7 @@ def render_user_portfolio_comparison(input_key, comparison):
             {
                 "市场": item.get("market"),
                 "选择": item.get("selection"),
-                "盘口": item.get("line") or "-",
+                "盘口": item.get("handicap") or "-",
                 "用户实际赔率": item.get("user_odds"),
                 "API参考赔率": item.get("api_reference_odds") if item.get("api_reference_odds") is not None else "-",
                 "差异": item.get("price_difference_text"),

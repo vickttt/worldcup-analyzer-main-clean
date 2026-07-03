@@ -744,7 +744,6 @@ def format_user_portfolio_lines(user_portfolio):
 
     lines.extend([
         f"- 总笔数：{comparison.get('total_count', 0)}",
-        f"- 总投入：{comparison.get('total_amount_text', '0元')}",
         f"- 组合类型判断：{comparison.get('portfolio_type', '-')}",
         f"- 与 TPB 主方向关系：{comparison.get('relation', '-')}",
         "",
@@ -755,9 +754,8 @@ def format_user_portfolio_lines(user_portfolio):
             "- "
             f"{format_value(item.get('market'))} / "
             f"{format_value(item.get('selection'))} / "
-            f"盘口 {format_value(item.get('line') or '-')} / "
+            f"盘口 {format_value(item.get('handicap') or '-')} / "
             f"实际赔率 {format_value(item.get('user_odds'))} / "
-            f"金额 {item.get('amount_text', '未填金额')} / "
             f"{item.get('classification', '-')}"
         )
 
@@ -774,7 +772,7 @@ def format_user_portfolio_lines(user_portfolio):
             "- "
             f"{format_value(item.get('market'))} / "
             f"{format_value(item.get('selection'))} / "
-            f"盘口 {format_value(item.get('line') or '-')}："
+            f"盘口 {format_value(item.get('handicap') or '-')}："
             f"用户实际赔率 {format_value(item.get('user_odds'))}；"
             f"API参考赔率 {format_value(api_odds) if api_odds is not None else '暂无可比 API 赔率'}；"
             f"差异 {item.get('price_difference_text', '-')}；"

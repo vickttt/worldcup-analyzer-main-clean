@@ -133,10 +133,13 @@ def test_legacy_portfolio_helpers_are_disabled_stubs():
 
 def test_user_portfolio_comparison_is_display_only():
     fixture = sample_fixture()
-    raw_text = "胜平负,主队,,1.80,200\n波胆,1:1,,6.00,50"
+    raw_text = "独赢，主队，1.80\n大小球,Under 2.5,1.90\n波胆,1:1,6.00"
     positions, errors = parse_user_portfolio_text(raw_text)
     assert not errors
-    assert len(positions) == 2
+    assert len(positions) == 3
+    assert positions[0] == {"line_number": 1, "market": "独赢", "selection": "主队", "handicap": None, "odds": 1.8}
+    assert positions[1]["selection"] == "Under"
+    assert positions[1]["handicap"] == "2.5"
 
     comparison = build_user_portfolio_comparison(
         raw_text,
@@ -147,12 +150,12 @@ def test_user_portfolio_comparison_is_display_only():
         api_football_data=fixture["context"]["api_football_data"],
     )
     assert comparison["has_input"] is True
-    assert comparison["total_count"] == 2
-    assert comparison["total_amount"] == 250
+    assert comparison["total_count"] == 3
     assert comparison["observation_rows"][0]["对象"] == "系统 TPB 输出"
     assert comparison["positions"][0]["api_reference_odds"] == 1.8
     assert comparison["positions"][0]["price_judgment"] == "接近"
-    assert comparison["positions"][1]["price_judgment"] == "暂无可比 API 赔率"
+    assert comparison["positions"][1]["api_reference_odds"] == 1.9
+    assert comparison["positions"][2]["price_judgment"] == "暂无可比 API 赔率"
     assert "不参与 TPB" in comparison["disclaimer"]
 
     layers = build_core_decision_layers(
