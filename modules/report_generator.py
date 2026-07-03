@@ -740,10 +740,77 @@ def format_market_intelligence_lines(market_intelligence):
     return lines
 
 
+def format_scenario_engine_lines(scenario_engine):
+    scenario = scenario_engine or {}
+    lines = [
+        "## 3. Scenario Engine Layer（情景覆盖分析层）",
+        "",
+        scenario.get("disclaimer")
+        or "Scenario Engine v1 只做概率空间、风险覆盖和情景结构分析，不参与 TPB、stake、system ranking 或 recommendation。",
+        "",
+        "### Scenario Probability Distribution",
+    ]
+    distribution = scenario.get("probability_distribution") or []
+    if not distribution:
+        lines.append("暂无 scenario probability distribution。")
+    else:
+        for item in distribution:
+            lines.append(
+                f"- {item.get('code', '-')}: {item.get('name', '-')}："
+                f"{percent(item.get('probability', 0))}"
+            )
+
+    risk = scenario.get("risk_surface") or {}
+    lines.extend([
+        "",
+        "### Scenario Risk Surface",
+        "",
+        f"- Tail Risk Concentration：{risk.get('tail_risk_concentration', '-')}（{percent(risk.get('tail_risk_value', 0))}）",
+        f"- Market Fragility：{risk.get('market_fragility', '-')}（{percent(risk.get('market_fragility_value', 0))}）",
+        f"- Upset Exposure：{risk.get('upset_exposure', '-')}（{percent(risk.get('upset_exposure_value', 0))}）",
+        f"- Draw Dependency：{risk.get('draw_dependency', '-')}（{percent(risk.get('draw_dependency_value', 0))}）",
+        "",
+        "### Scenario Coverage Map",
+        "",
+    ])
+    coverage = scenario.get("coverage_map") or {}
+    for label, key in [
+        ("Primary Coverage", "primary_coverage"),
+        ("Defensive Coverage", "defensive_coverage"),
+        ("Tail Optionality", "tail_optionality"),
+    ]:
+        item = coverage.get(key) or {}
+        lines.append(f"- {label}：{item.get('scenario', '-')}；{item.get('description', '-')}")
+
+    mapping = scenario.get("scenario_market_mapping") or {}
+    lines.extend(["", "### Scenario ↔ Market Mapping", ""])
+    for code, name in [
+        ("S1", "Strong Favorite Win"),
+        ("S2", "Narrow Favorite Win"),
+        ("S3", "Draw"),
+        ("S4", "Upset Win"),
+        ("S5", "Low Scoring Match"),
+        ("S6", "High Variance Match"),
+    ]:
+        item = mapping.get(code) or {}
+        lines.append(
+            f"- {code}: {name}：受益盘口 {', '.join(item.get('benefits') or ['-'])}；"
+            f"失败盘口 {', '.join(item.get('fails') or ['-'])}；hedge：{item.get('hedge', '-')}"
+        )
+
+    lines.extend([
+        "",
+        "### Scenario Efficiency Score",
+        "",
+        f"- Coverage Efficiency Score：{format_value(scenario.get('coverage_efficiency_score'))} / 100",
+    ])
+    return lines
+
+
 def format_system_portfolio_lines(market_intelligence):
     portfolio = ((market_intelligence or {}).get("system_portfolio") or {})
     lines = [
-        "## 3. System Portfolio Layer（系统推荐组合）",
+        "## 4. System Portfolio Layer（系统推荐组合）",
         "",
         "系统组合仅使用 TPB baseline 与 Market Structure signals；用户实盘输入不参与系统组合、推荐或排序。",
         "",
@@ -754,7 +821,7 @@ def format_system_portfolio_lines(market_intelligence):
         lines.append(f"  - 说明：{item.get('rationale', '-')}")
     lines.extend([
         "",
-        "## 4. System Ranking（系统级排序）",
+        "## 5. System Ranking（系统级排序）",
         "",
         "仅系统组合参与排序；依据 TPB baseline strength、Directional Strength、Conflict、Efficiency、Volatility 与 Upset signals；不使用用户输入、EV/ROI 或 legacy optimizer。",
     ])
@@ -772,7 +839,7 @@ def format_system_portfolio_lines(market_intelligence):
 def format_user_portfolio_lines(user_portfolio):
     comparison = user_portfolio or {}
     lines = [
-        "## 5. Execution Layer（用户执行层）",
+        "## 6. Execution Layer（用户执行层）",
         "",
         "客户执行层仅用于记录实盘输入、执行价格对比和人工复盘；不参与 TPB、系统推荐、系统排序或 stake。",
         "",
@@ -901,6 +968,7 @@ def build_report(
     actual_odds=None,
     user_portfolio=None,
     market_intelligence=None,
+    scenario_engine=None,
 ):
     lines = [
         f"# {match['display_name']} 分析报告",
@@ -919,6 +987,8 @@ def build_report(
         ),
         "",
         *format_market_intelligence_lines(market_intelligence),
+        "",
+        *format_scenario_engine_lines(scenario_engine),
         "",
         *format_system_portfolio_lines(market_intelligence),
         "",

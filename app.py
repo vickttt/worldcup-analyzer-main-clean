@@ -14,6 +14,7 @@ from modules.decision_engine import build_decision_engine
 from modules.odds_client import fetch_match_data
 from modules.market_data import build_market_data
 from modules.market_intelligence import build_market_intelligence
+from modules.scenario_engine import build_scenario_engine
 from modules.polymarket_client import fetch_polymarket
 from modules.pregame_content import (
     BANNER_IMAGE_URL,
@@ -1184,6 +1185,58 @@ def render_system_portfolio_layer(market_intelligence):
         st.dataframe(pd.DataFrame(portfolio.get("ranking") or []), use_container_width=True, hide_index=True)
 
 
+def render_scenario_coverage_analysis(scenario_engine):
+    scenario = scenario_engine or {}
+    with st.container(border=True):
+        st.markdown("**Scenario Coverage Analysis**")
+        st.caption(
+            "Scenario Engine v1 是概率空间覆盖与风险拆解分析层；不影响 TPB、investment_score、stake、system ranking 或 recommendation。"
+        )
+        st.metric("Coverage Efficiency Score", f"{scenario.get('coverage_efficiency_score', 0)} / 100")
+
+        distribution_rows = [
+            {
+                "Scenario": f"{item.get('code')}: {item.get('name')}",
+                "Probability": percent(item.get("probability", 0)),
+            }
+            for item in (scenario.get("probability_distribution") or [])
+        ]
+        if distribution_rows:
+            st.markdown("**Scenario Probability Distribution**")
+            st.dataframe(pd.DataFrame(distribution_rows), use_container_width=True, hide_index=True)
+
+        coverage = scenario.get("coverage_map") or {}
+        coverage_rows = [
+            {
+                "Coverage": "Primary Coverage",
+                "Scenario": (coverage.get("primary_coverage") or {}).get("scenario", "-"),
+                "说明": (coverage.get("primary_coverage") or {}).get("description", "-"),
+            },
+            {
+                "Coverage": "Defensive Coverage",
+                "Scenario": (coverage.get("defensive_coverage") or {}).get("scenario", "-"),
+                "说明": (coverage.get("defensive_coverage") or {}).get("description", "-"),
+            },
+            {
+                "Coverage": "Tail Optionality",
+                "Scenario": (coverage.get("tail_optionality") or {}).get("scenario", "-"),
+                "说明": (coverage.get("tail_optionality") or {}).get("description", "-"),
+            },
+        ]
+        st.markdown("**Scenario Coverage Map**")
+        st.dataframe(pd.DataFrame(coverage_rows), use_container_width=True, hide_index=True)
+
+        risk = scenario.get("risk_surface") or {}
+        risk_rows = [
+            {"Risk": "Tail Risk Concentration", "Level": risk.get("tail_risk_concentration", "-"), "Value": percent(risk.get("tail_risk_value", 0))},
+            {"Risk": "Market Fragility", "Level": risk.get("market_fragility", "-"), "Value": percent(risk.get("market_fragility_value", 0))},
+            {"Risk": "Upset Exposure", "Level": risk.get("upset_exposure", "-"), "Value": percent(risk.get("upset_exposure_value", 0))},
+            {"Risk": "Draw Dependency", "Level": risk.get("draw_dependency", "-"), "Value": percent(risk.get("draw_dependency_value", 0))},
+        ]
+        st.markdown("**Scenario Risk Surface**")
+        st.dataframe(pd.DataFrame(risk_rows), use_container_width=True, hide_index=True)
+
+
 def render_user_portfolio_comparison(input_key, comparison):
     input_key = input_key or "user_portfolio_input"
     with st.container(border=True):
@@ -1327,7 +1380,7 @@ def render_core_risk_summary(match, decision, distribution):
             st.caption(exposure.get("meaning"))
 
 
-def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, user_portfolio_key=None, market_intelligence=None):
+def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, user_portfolio_key=None, market_intelligence=None, scenario_engine=None):
     with st.container(border=True):
         st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
         render_betting_opinion(betting_opinion, odds, polymarket, match)
@@ -1343,6 +1396,7 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
             },
         )
         render_market_intelligence_layer(market_intelligence)
+        render_scenario_coverage_analysis(scenario_engine)
         render_system_portfolio_layer(market_intelligence)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)
@@ -2294,6 +2348,12 @@ def render_analysis_page(match_text):
                     api_football_data=api_football_data,
                     betting_opinion=betting_opinion,
                 )
+            with perf_timer("detail", "scenario_engine"):
+                scenario_engine = build_scenario_engine(
+                    match=match,
+                    odds=odds,
+                    market_intelligence=market_intelligence,
+                )
             with perf_timer("detail", "render_match_overview"):
                 render_match_overview(match, api_football_data, selected_fixture, allow_live_weather=True)
             with perf_timer("detail", "decision_engine"):
@@ -2334,6 +2394,7 @@ def render_analysis_page(match_text):
                     None,
                     my_portfolio,
                     market_intelligence,
+                    scenario_engine,
                 )
                 report_path = save_report(report, match, config["report"]["output_dir"])
 
@@ -2360,6 +2421,7 @@ def render_analysis_page(match_text):
                     polymarket,
                     user_portfolio_key,
                     market_intelligence,
+                    scenario_engine,
                 )
 
         with team_tab:

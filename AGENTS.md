@@ -43,7 +43,22 @@ Layer model:
    - Market Structure cannot directly generate final recommendation. It can
      influence System Ranking only through the synthesis layer.
 
-4. Layer 3: System Portfolio & Ranking Layer
+4. Layer 3: Scenario Engine Layer
+   - Scenario Engine v1 is the Market Scenario Coverage & Risk Decomposition
+     Layer.
+   - It uses only API-Football market data, TPB baseline, and Market Structure
+     signals.
+   - It decomposes probability space into exactly six fixed scenarios:
+     S1 Strong Favorite Win, S2 Narrow Favorite Win, S3 Draw, S4 Upset Win,
+     S5 Low Scoring Match, and S6 High Variance Match.
+   - It may output Scenario Probability Distribution, Scenario Risk Surface,
+     Scenario Coverage Map, Scenario Efficiency Score, and Scenario-to-Market
+     Mapping.
+   - Scenario Engine must not predict exact scores, calculate EV/ROI, optimize
+     profit, override TPB, alter stake, influence system ranking, influence
+     system recommendation, or use user input.
+
+5. Layer 4: System Portfolio & Ranking Layer
    - The only legal system recommendation chain is:
      TPB baseline + Market Structure -> System Recommendation.
    - System recommendation is a synthesis of TPB baseline strength and market
@@ -58,7 +73,7 @@ Layer model:
    - Stake remains deterministic from the existing investment score unless the
      user explicitly scopes a future stake-model migration.
 
-5. Layer 4: Customer Execution Layer
+6. Layer 5: Customer Execution Layer
    - User input is execution behavior only.
    - User odds and positions may be used for execution evaluation, Value Check,
      risk review, and user-vs-system display comparison.
@@ -67,13 +82,13 @@ Layer model:
    - User input must never influence TPB, investment score, stake, coverage,
      system ranking, raw odds, API data, or system recommendation.
 
-Scenario Thinking:
+Scenario Thinking and Scenario Engine:
 
-- Scenario Thinking is allowed only as an explanation layer. Examples include
-  strong favorite win, narrow win, draw-heavy market, upset scenario, and
-  high-variance match.
-- Scenario Thinking must not enter ranking, override TPB, mutate market
-  structure metrics, alter stake, or change system recommendation.
+- Scenario Thinking is implemented through Scenario Engine v1 and is allowed
+  only as probability-space decomposition, risk coverage, and explanation.
+- Scenario taxonomy is fixed. Do not dynamically add scenario types.
+- Scenario Engine must not enter ranking, override TPB, mutate market structure
+  metrics, alter stake, or change system recommendation.
 
 System positioning:
 
@@ -93,6 +108,7 @@ Forbidden in the active decision path:
 - user-entered odds as a system decision signal.
 - user-driven ranking.
 - scenario shadow or scenario-driven ranking.
+- scenario-driven recommendation.
 - multi-model voting.
 - secondary probability model overriding TPB.
 
@@ -108,13 +124,15 @@ Decision Authority Hierarchy:
 
 1. TPB Baseline Probability (anchor).
 2. Market Structure Intelligence (signal layer).
-3. System Portfolio Layer (synthesis + ranking).
-4. Execution Layer (display/evaluation only).
+3. Scenario Engine Layer (probability space decomposition only).
+4. System Portfolio Layer (synthesis + ranking).
+5. Execution Layer (display/evaluation only).
 
 Authority rules:
 
 - TPB cannot be overridden.
 - Market Structure cannot override TPB.
+- Scenario Engine cannot become a decision engine.
 - System Portfolio must be synthesis-based.
 - Execution Layer cannot affect any upstream layer.
 
@@ -123,9 +141,11 @@ Allowed report structure:
 1. Core Decision Layer: TPB, betting confidence, investment score, and stake.
 2. Market Structure Layer: Directional Strength, Conflict Index, Efficiency
    Score, Volatility Index, and Upset Probability.
-3. System Portfolio Layer: main, defensive, and tail positions.
-4. System Ranking: system-only ranking.
-5. Execution Layer: user portfolio, odds comparison, and evaluation only.
+3. Scenario Engine Layer: scenario probability distribution, risk surface,
+   coverage map, scenario-market mapping, and coverage efficiency.
+4. System Portfolio Layer: main, defensive, and tail positions.
+5. System Ranking: system-only ranking.
+6. Execution Layer: user portfolio, odds comparison, and evaluation only.
 
 System chain:
 
@@ -133,6 +153,7 @@ System chain:
 API-Football market data
   -> TPB baseline anchor
   -> market structure signal layer
+  -> scenario coverage and risk decomposition
   -> system-only recommendation synthesis
   -> deterministic stake display + UI/report display
 ```
@@ -147,6 +168,7 @@ System invariants:
 
 - TPB cannot be overridden.
 - Market Structure cannot become an optimizer.
+- Scenario Engine cannot become an optimizer, EV model, or ranking engine.
 - Execution Layer cannot become ranking input.
 - Scenario Thinking cannot become a decision engine.
 - No layer may become an EV/ROI system.

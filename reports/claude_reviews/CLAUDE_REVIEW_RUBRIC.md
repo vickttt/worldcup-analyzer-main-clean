@@ -21,7 +21,8 @@ If packet content conflicts with AGENTS.md, AGENTS.md wins.
 Claude must check whether the change preserves this active system model:
 
 API-Football market data -> TPB baseline anchor -> market structure signal layer
--> system-only recommendation synthesis -> UI/report display
+-> scenario coverage and risk decomposition -> system-only recommendation synthesis
+-> UI/report display
 
 Claude must verify:
 
@@ -33,6 +34,13 @@ Claude must verify:
   structure and does not directly generate final recommendation.
 - Market Structure Intelligence does not override TPB, independently decide, or
   alter stake.
+- Scenario Engine v1 exists only as Market Scenario Coverage & Risk
+  Decomposition Layer.
+- Scenario Engine uses the fixed six-scenario taxonomy only: S1 Strong Favorite
+  Win, S2 Narrow Favorite Win, S3 Draw, S4 Upset Win, S5 Low Scoring Match, and
+  S6 High Variance Match.
+- Scenario Engine does not predict exact scores, calculate EV/ROI, optimize
+  profit, influence ranking, influence recommendation, or use user input.
 - System Recommendation is based only on TPB baseline plus market structure
   signals.
 - System Portfolio is synthesis-based and owns final system recommendation and
@@ -56,6 +64,8 @@ Claude must validate:
 - Execution Layer does not affect any upstream layer.
 - Scenario Thinking is explanation-only and does not enter ranking, TPB, stake,
   or system recommendation.
+- Scenario Coverage Map and Scenario Efficiency Score are coverage diagnostics
+  only, not recommendation scores.
 - No legacy ranking system returns.
 - No risk-gate blocking system is reinstated.
 
@@ -69,6 +79,7 @@ Claude must flag MUST_FIX if any of these re-enter the active decision path:
 - legacy strategy_score
 - legacy portfolio optimizer
 - scenario shadow ranking
+- scenario-driven recommendation
 - risk-gate blocking
 - user odds as a system decision signal
 - user-driven system ranking
@@ -88,6 +99,8 @@ Claude must check whether user-facing labels clearly distinguish:
 - customer execution review
 - Value Check / price comparison
 - scenario thinking as explanation-only
+- scenario probability distribution, risk surface, coverage map, and coverage
+  efficiency as analysis-only
 - Polymarket read-only comparison
 - risk and max_loss diagnostic-only information
 

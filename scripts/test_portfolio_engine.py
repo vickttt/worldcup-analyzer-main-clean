@@ -14,6 +14,7 @@ from modules.portfolio_engine import (
 )
 from modules.market_intelligence import build_market_intelligence
 from modules.probability_base import stake_from_investment_score
+from modules.scenario_engine import SCENARIO_TAXONOMY, build_scenario_engine
 from modules.user_portfolio_compare import build_user_portfolio_comparison, parse_user_portfolio_text
 
 
@@ -162,6 +163,43 @@ def test_market_intelligence_contract():
     assert [item["rank"] for item in portfolio["ranking"]] == [1, 2, 3]
 
 
+def test_scenario_engine_contract():
+    fixture = sample_fixture()
+    intelligence = build_market_intelligence(
+        match=fixture["match"],
+        odds=fixture["context"]["odds"],
+        api_football_data=fixture["context"]["api_football_data"],
+    )
+    scenario = build_scenario_engine(
+        match=fixture["match"],
+        odds=fixture["context"]["odds"],
+        market_intelligence=intelligence,
+    )
+    assert scenario["version"] == "scenario_engine_v1"
+    assert [item["code"] for item in scenario["taxonomy"]] == [code for code, _name in SCENARIO_TAXONOMY]
+    distribution = scenario["probability_distribution"]
+    assert [item["code"] for item in distribution] == ["S1", "S2", "S3", "S4", "S5", "S6"]
+    assert abs(sum(item["probability"] for item in distribution) - 1.0) < 0.0001
+    assert set(scenario["risk_surface"]) == {
+        "tail_risk_concentration",
+        "tail_risk_value",
+        "market_fragility",
+        "market_fragility_value",
+        "upset_exposure",
+        "upset_exposure_value",
+        "draw_dependency",
+        "draw_dependency_value",
+    }
+    assert set(scenario["coverage_map"]) == {
+        "primary_coverage",
+        "defensive_coverage",
+        "tail_optionality",
+    }
+    assert set(scenario["scenario_market_mapping"]) == {"S1", "S2", "S3", "S4", "S5", "S6"}
+    assert 0 <= scenario["coverage_efficiency_score"] <= 100
+    assert "不影响 TPB" in scenario["disclaimer"]
+
+
 def test_user_portfolio_comparison_is_display_only():
     fixture = sample_fixture()
     raw_text = "独赢，主队，1.80\n让球,主队,-0.5/1,0.91\n大小球,Under,2.5/3,0.92\n波胆,1:1,6.00"
@@ -224,9 +262,10 @@ def test_architecture_guardrails():
     for heading in [
         "## 1. Core Decision Layer",
         "## 2. Market Structure Layer",
-        "## 3. System Portfolio Layer",
-        "## 4. System Ranking",
-        "## 5. Execution Layer",
+        "## 3. Scenario Engine Layer",
+        "## 4. System Portfolio Layer",
+        "## 5. System Ranking",
+        "## 6. Execution Layer",
     ]:
         assert heading in report_text
 
@@ -253,6 +292,14 @@ def test_architecture_guardrails():
     assert "user_portfolio" not in intelligence_text
     assert "System 层才综合 TPB baseline 与结构信号" in intelligence_text
 
+    scenario_text = (repo_root / "modules" / "scenario_engine.py").read_text(encoding="utf-8")
+    assert "SCENARIO_TAXONOMY" in scenario_text
+    assert "stake_from_investment_score" not in scenario_text
+    assert "build_user_portfolio_comparison" not in scenario_text
+    assert "expected_value" not in scenario_text.lower()
+    assert "roi_" not in scenario_text.lower()
+    assert "portfolio_optimizer" not in scenario_text.lower()
+
     user_layer_text = (repo_root / "modules" / "user_portfolio_compare.py").read_text(encoding="utf-8")
     assert "true_probability_base" not in user_layer_text
     assert "investment_score" not in user_layer_text
@@ -264,6 +311,7 @@ def run():
     test_match_investment_score_contract()
     test_legacy_portfolio_helpers_are_disabled_stubs()
     test_market_intelligence_contract()
+    test_scenario_engine_contract()
     test_user_portfolio_comparison_is_display_only()
     test_architecture_guardrails()
     print("Multi-layer betting intelligence smoke tests passed.")
