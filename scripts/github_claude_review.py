@@ -38,6 +38,8 @@ except ImportError:  # pragma: no cover - dependency is installed with anthropic
 ROOT = Path(__file__).resolve().parents[1]
 PROMPT_TEMPLATE = ROOT / "docs" / "CLAUDE_REVIEW_PROMPT_TEMPLATE.md"
 OUTPUT_DIR = ROOT / "reports" / "claude_reviews"
+RUBRIC_PATH = OUTPUT_DIR / "CLAUDE_REVIEW_RUBRIC.md"
+RUBRIC_MARKER = "CLAUDE_REVIEW_RUBRIC"
 DEFAULT_MODEL = "claude-haiku-4-5-20251001"
 DEFAULT_TIMEOUT_SECONDS = 90.0
 DEFAULT_MAX_ATTEMPTS = 3
@@ -75,10 +77,25 @@ def read_text(path: Path) -> str:
     return (ROOT / path).read_text(encoding="utf-8")
 
 
-def build_prompt(packet_text: str, source: str) -> str:
+def read_rubric() -> str:
+    if not RUBRIC_PATH.is_file():
+        raise FileNotFoundError("missing reports/claude_reviews/CLAUDE_REVIEW_RUBRIC.md")
+    rubric_text = RUBRIC_PATH.read_text(encoding="utf-8").strip()
+    if RUBRIC_MARKER not in rubric_text:
+        raise ValueError("Claude review rubric is missing CLAUDE_REVIEW_RUBRIC marker")
+    return rubric_text
+
+
+def packet_has_embedded_rubric(packet_text: str) -> bool:
+    return RUBRIC_MARKER in packet_text
+
+
+def build_prompt(packet_text: str, source: str, rubric_text: str) -> str:
     template = PROMPT_TEMPLATE.read_text(encoding="utf-8")
     return (
         f"{template}\n\n"
+        "## Standard Claude Review Rubric\n\n"
+        f"{rubric_text}\n\n"
         "## Review Input Source\n\n"
         f"{source}\n\n"
         "## Current Sanitized Review Packet\n\n"
@@ -257,7 +274,15 @@ def main() -> int:
 
     input_path = relative_repo_path(args.input_file)
     packet_text = read_text(input_path)
-    prompt = build_prompt(packet_text, input_path.as_posix())
+    rubric_text = read_rubric()
+    rubric_embedded = packet_has_embedded_rubric(packet_text)
+    if not rubric_embedded:
+        print(
+            "WARNING: packet does not embed CLAUDE_REVIEW_RUBRIC; "
+            "standard rubric will still be included in the Claude prompt.",
+            flush=True,
+        )
+    prompt = build_prompt(packet_text, input_path.as_posix(), rubric_text)
     model = os.getenv("ANTHROPIC_MODEL") or DEFAULT_MODEL
     timeout_seconds = parse_positive_float_env("CLAUDE_REVIEW_TIMEOUT_SECONDS", DEFAULT_TIMEOUT_SECONDS)
     max_attempts = min(parse_positive_int_env("CLAUDE_REVIEW_MAX_ATTEMPTS", DEFAULT_MAX_ATTEMPTS), 3)
@@ -280,6 +305,8 @@ def main() -> int:
                 "attempts": attempts,
                 "network_error_type": type(network_error).__name__,
                 "review_status": "NETWORK_UNSTABLE",
+                "rubric_applied_in_prompt": True,
+                "rubric_embedded_in_packet": rubric_embedded,
                 "timeout_seconds": timeout_seconds,
             },
         )
@@ -297,6 +324,8 @@ def main() -> int:
         {
             "attempts": attempts,
             "review_status": "COMPLETED",
+            "rubric_applied_in_prompt": True,
+            "rubric_embedded_in_packet": rubric_embedded,
             "timeout_seconds": timeout_seconds,
         },
     )

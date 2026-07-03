@@ -19,6 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = ROOT / "reports" / "claude_reviews"
 OUTPUT_PATH = OUTPUT_DIR / "commit_range_review_packet.md"
+RUBRIC_PATH = OUTPUT_DIR / "CLAUDE_REVIEW_RUBRIC.md"
 MAX_PACKET_BYTES = 20 * 1024
 MAX_SNIPPET_LINES_PER_FILE = 80
 CONTEXT_LINES = 4
@@ -116,6 +117,16 @@ def validate_commit_range(commit_range: str) -> None:
     run_git(["rev-list", "--count", commit_range])
 
 
+def read_rubric() -> str:
+    if not RUBRIC_PATH.is_file():
+        raise FileNotFoundError("missing reports/claude_reviews/CLAUDE_REVIEW_RUBRIC.md")
+    rubric = sanitize_text(RUBRIC_PATH.read_text(encoding="utf-8"))
+    reject_secret_like_text("Claude review rubric", rubric)
+    if "CLAUDE_REVIEW_RUBRIC" not in rubric:
+        raise ValueError("rubric file must contain CLAUDE_REVIEW_RUBRIC marker")
+    return rubric.strip()
+
+
 def parse_changed_paths(name_status_text: str) -> list[str]:
     paths: list[str] = []
     for line in name_status_text.splitlines():
@@ -178,6 +189,7 @@ def selected_snippet(path: str) -> str:
 
 
 def build_packet(commit_range: str) -> str:
+    rubric = read_rubric()
     commit_log = sanitize_text(run_git(["log", "--oneline", commit_range]))
     name_status = sanitize_text(run_git(["diff", "--name-status", commit_range]))
     stat = sanitize_text(run_git(["diff", "--stat", commit_range]))
@@ -196,7 +208,23 @@ def build_packet(commit_range: str) -> str:
     skipped = "\n".join(f"- {path}" for path in skipped_paths) or "- none"
     snippets = "\n\n".join(snippet_sections) or "No text snippets selected."
 
-    packet = f"""# Task
+    packet = f"""# Embedded Claude Review Rubric
+
+{rubric}
+
+# Commit Range Rule
+
+Git range A..B excludes commit A and includes commits after A through B.
+
+To include commit A itself, use A^..B.
+
+If the user says "include commit A through B", Codex must convert the range to A^..B.
+
+If the user gives raw A..B, Codex must report that A itself is excluded.
+
+Current raw commit range: `{commit_range}`
+
+# Task
 
 Perform a single-round, read-only Claude Review for a git commit range generated inside the manual workflow_dispatch runner.
 

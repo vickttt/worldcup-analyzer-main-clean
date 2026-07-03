@@ -19,7 +19,7 @@ on:
         default: "reports/claude_reviews/github_action_test_packet.md"
         type: string
       commit_range:
-        description: "Git commit range for commit_range mode, for example 850c506..48dd13c"
+        description: "Git range for commit_range mode. A..B excludes A; use A^..B to include A."
         required: false
         default: ""
         type: string
