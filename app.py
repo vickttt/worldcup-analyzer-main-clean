@@ -996,7 +996,7 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
             ("盘口观察", f"{bet_cn(opinion.get('handicap_market_direction') or opinion.get('asian_handicap', '暂无观点'))}。{opinion.get('asian_handicap_reason', '')}"),
             ("TPB 覆盖说明", f"{bet_cn(opinion.get('coverage_candidate', '暂无候选'))}。{opinion.get('coverage_reason', '')}"),
             ("进球数观点", f"总进球盘口中心：{opinion.get('total_center', '-')}。{opinion.get('goals_market_bias', '')}"),
-            ("比赛投资价值", f"TPB 熵信心 {opinion.get('betting_confidence', '-')} / 100；TPB 概率标签：{opinion.get('market_direction_label', '-')}。"),
+            ("比赛投资价值", f"TPB 熵信心 {opinion.get('betting_confidence', '-')} / 100；TPB 概率标签：{opinion.get('market_direction_label') or '暂无标签，详见胜平负 TPB 概率'}。"),
         ]
         for title, text in blocks:
             st.markdown(
@@ -1023,7 +1023,7 @@ def neutral_news_context():
 
 def render_result_distribution(distribution):
     with st.container(border=True):
-        st.markdown('<div class="section-title">结果分布</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-title">结果分布观察</div>', unsafe_allow_html=True)
         st.caption(distribution.get("explanation", "规则分布，不是比分预测。"))
         rows = distribution.get("rows", [])
         favorite = distribution.get("favorite", "")
@@ -1056,7 +1056,7 @@ def tpb_report_strategy(decision):
         "rank_name": "TPB 单一决策",
         "score": score,
         "decision_score": score,
-        "portfolio_style_label": "TPB确定性",
+        "portfolio_style_label": "TPB 确定性",
         "items": [],
         "risk_diagnostic": {
             "risk_level": "诊断",
@@ -1545,7 +1545,7 @@ def render_handicap(match, market_data):
             c3.metric("最佳赔率", f"{summary.get('best_odds'):.2f}" if summary.get("best_odds") else "-")
             st.caption("盘口中心公司：" + (", ".join(summary.get("bookmakers", [])[:6]) or "-"))
             if summary.get("coverage_label") not in (None, "No coverage candidate"):
-                st.info(f"覆盖/保险候选：{summary.get('coverage_label')}。这不是主方向，只用于防守平局、低节奏或热门方不打穿。")
+                st.info(f"TPB 覆盖说明（盘口参考）：{summary.get('coverage_label')}。这不是主方向，只用于防守平局、低节奏或热门方不打穿。")
             if summary.get("secondary_handicap_label"):
                 st.caption(f"盘口参考：{summary.get('secondary_handicap_label')}（仅展示，不参与 TPB 决策）。")
             trace = summary.get("coverage_trace") or {}
@@ -1648,7 +1648,7 @@ def render_polymarket_comparison(market_data):
     reference = (market_data or {}).get("polymarket_reference") or {}
     metrics = (market_data or {}).get("comparison_metrics") or {}
     with st.container(border=True):
-        st.markdown('<div class="section-title">Polymarket 概率对比</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-title">Polymarket 只读对比层</div>', unsafe_allow_html=True)
         if not reference.get("found"):
             st.info(reference.get("message") or "未找到对应 Polymarket 活跃市场。")
             st.caption("Polymarket 仅作为情绪/概率参考，不替代 API-Football 赔率。")

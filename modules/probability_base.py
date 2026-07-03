@@ -141,7 +141,7 @@ def market_direction_from_tpb(tpb, labels=None):
         "away_win": "客队占优",
     }
     if not probabilities:
-        return "No API-Football 1X2 probability"
+        return "暂无 API-Football 胜平负 TPB 概率"
     ordered = sorted(OUTCOMES, key=lambda key: probabilities.get(key, 0), reverse=True)
     top = ordered[0]
     second = ordered[1]
@@ -191,7 +191,7 @@ def stake_from_investment_score(score):
         rule = "1500元：投资分90以上。"
     return {
         "amount": amount,
-        "risk_mode": "TPB确定性",
+        "risk_mode": "TPB 确定性",
         "amount_rule": rule,
         "reason": f"推荐金额只由投资分 {round(score)} / 100 决定。",
     }
