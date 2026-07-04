@@ -1,7 +1,8 @@
 name: Claude Review
 
-# Manual review only. The active repository workflow is defined in AGENTS.md:
-# dev-clean only, no branch creation, no automatic Claude review loop.
+# Artifact-only review preparation. The active repository workflow is defined
+# in AGENTS.md: dev-clean only, no branch creation, no automatic Claude review
+# loop, and no CI-hosted external AI calls.
 on:
   workflow_dispatch:
     inputs:
@@ -35,7 +36,7 @@ permissions:
 
 jobs:
   claude-review:
-    name: GitHub-mediated Claude review
+    name: Generate Claude review packet artifact
     runs-on: ubuntu-latest
 
     steps:
@@ -110,27 +111,18 @@ jobs:
           echo "input_file=${input_file}" >> "$GITHUB_OUTPUT"
           echo "round=${{ steps.review.outputs.round }}" >> "$GITHUB_OUTPUT"
 
-      - name: Install review dependencies
-        run: python -m pip install --upgrade anthropic python-dotenv
-
-      - name: Run Claude review from sanitized packet
-        timeout-minutes: 8
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
-          CLAUDE_REVIEW_TIMEOUT_SECONDS: "90"
-          CLAUDE_REVIEW_MAX_ATTEMPTS: "3"
+      - name: Confirm artifact-only review mode
+        shell: bash
         run: |
-          python scripts/github_claude_review.py \
-            --input-file "${{ steps.packet.outputs.input_file }}" \
-            --round "${{ steps.packet.outputs.round }}"
+          set -euo pipefail
+          echo "Claude Review workflow is artifact-only."
+          echo "No external AI API call is executed in GitHub Actions."
+          echo "Packet artifact: ${{ steps.packet.outputs.input_file }}"
 
-      - name: Upload Claude review artifact
+      - name: Upload Claude review packet artifact
         uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: claude-review-round-${{ steps.review.outputs.round }}
+          name: claude-review-packet-round-${{ steps.review.outputs.round }}
           path: |
-            reports/claude_reviews/round_${{ steps.review.outputs.round }}_claude_review.md
-            reports/claude_reviews/round_${{ steps.review.outputs.round }}_claude_review.json
+            ${{ steps.packet.outputs.input_file }}
           if-no-files-found: error
