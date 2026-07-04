@@ -410,7 +410,7 @@ Decoupled Review Request System:
   automatic side effect of commit creation.
 - Codex must request Claude Review after every commit.
 - Codex must mark committed work as `REVIEW REQUIRED` / `PENDING_REVIEW` until
-  a review is independently triggered and completed.
+  a manual/chat-based review is independently completed.
 - Commit plus local validation can be `LOCAL_COMPLETE`.
 - Commit does not equal `APPROVED` review.
 - CI does not replace Claude Review.
@@ -429,6 +429,13 @@ Decoupled Review Request System:
 - Remote `workflow_dispatch` is artifact-only. It may generate or collect a
   sanitized packet and upload it as a GitHub Actions artifact, but it must not
   call Claude, Anthropic, or any external AI API from CI.
+- AI review is external and manual only. CI is never allowed to execute AI
+  inference.
+- CI may build, test, generate sanitized review packets, and upload artifacts.
+  CI must not perform model-based review, automated AI evaluation, or external
+  LLM inference.
+- Claude Review is performed only by manual/chat-based analysis of the
+  downloaded artifact or copied packet content.
 - If review cannot be requested or triggered because workflow, Claude, token
   authorization, local dependency, or user approval is missing, Codex must
   report:
@@ -446,6 +453,16 @@ Review State Machine:
   blocking fix. Only APPROVED means the committed task is complete.
 - `NEEDS_CHANGES`: Claude Review returned NEEDS_CHANGES/BLOCKED, failed to
   produce a verdict, or identified a required fix.
+
+Review System Rule (locked artifact-only flow):
+
+- CI only generates artifacts.
+- CI does not execute AI review.
+- Claude Review is manual/chat-based only.
+- No workflow-based AI execution is allowed.
+- No external AI API calls are allowed from CI.
+- GitHub Actions may run tests, generate sanitized review packets, and upload
+  packet artifacts only.
 
 Review request methods:
 

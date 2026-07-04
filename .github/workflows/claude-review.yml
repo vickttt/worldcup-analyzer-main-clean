@@ -80,6 +80,13 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Run local validation before packet artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile app.py modules/*.py scripts/*.py
+          python scripts/test_portfolio_engine.py
+
       - name: Generate commit range review packet
         id: commit_range_packet
         if: steps.review.outputs.review_mode == 'commit_range'
