@@ -26,7 +26,17 @@ from modules.pregame_content import (
     static_recent_form_for,
     team_cn,
 )
-from modules.report_generator import build_report, save_report, tpb_probability_label
+from modules.report_generator import (
+    build_report,
+    portfolio_leg_display_rows,
+    save_report,
+    scenario_coverage_map_rows,
+    scenario_probability_weight_rows,
+    scenario_risk_surface_rows,
+    system_portfolio_display_rows,
+    system_ranking_display_rows,
+    tpb_probability_label,
+)
 from modules.result_distribution import build_result_distribution
 from modules.schedule_client import (
     available_match_dates,
@@ -1130,8 +1140,8 @@ def render_match_decision_cards(decision_layers):
 
 def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None, data_context=None):
     with perf_timer("detail", "render_tpb_decision", {"mode": "multi_layer_baseline"}):
-        st.markdown("**TPB Baseline Layer**")
-        st.caption("本区展示 TPB baseline、投资分和推荐金额；Market Intelligence 在下方作为系统结构层展示。")
+        st.markdown("**TPB 基准层**")
+        st.caption("本区展示 TPB 锚点、投资分和推荐金额；市场结构分析在下方作为系统结构层展示。")
         decision_layers = build_core_decision_layers([], match, distribution, data_context)
         render_match_decision_cards(decision_layers)
         score_layer = decision_layers.get("score_layer") or {}
@@ -1140,7 +1150,7 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None,
         tpb = score_layer.get("tpb") or {}
         probs = tpb.get("probabilities") or {}
         rows = [{
-            "决策层": "TPB Baseline",
+            "决策层": "TPB 基准",
             "主胜": percent(probs.get("home_win", 0)) if probs else "-",
             "平局": percent(probs.get("draw", 0)) if probs else "-",
             "客胜": percent(probs.get("away_win", 0)) if probs else "-",
@@ -1170,12 +1180,13 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
     coverage = scenario.get("coverage_map") or {}
 
     with st.container(border=True):
-        st.markdown("**FINAL DECISION SUMMARY**")
+        st.markdown("**最终决策区（FINAL DECISION BLOCK）**")
         st.caption(
-            "唯一决策入口视图：TPB + Market + Scenario Weights + Portfolio + Ranking 汇总展示。"
-            "用户 Execution Layer 不进入本区。"
+            "唯一决策入口视图：TPB 锚点 + 市场结构 + 情景权重 + 推荐组合 + 系统排名汇总展示。"
+            "用户执行层不进入本区。"
         )
 
+        st.markdown("**1. TPB 结论**")
         tpb_cols = st.columns(5)
         tpb_cols[0].metric("主方向", metrics.get("favorite_label") or "-")
         tpb_cols[1].metric("主方向概率", f"{metrics.get('favorite_probability', 0)}%")
@@ -1190,76 +1201,42 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
                 f"客胜 {percent(probabilities.get('away_win', 0))}"
             )
 
+        st.markdown("**2. 市场结构**")
         market_cols = st.columns(5)
-        market_cols[0].metric("Directional Strength", metrics.get("directional_strength", "-"))
-        market_cols[1].metric("Conflict Index", f"{metrics.get('market_conflict_index', 0)} / 100")
-        market_cols[2].metric("Efficiency Score", f"{metrics.get('market_efficiency_score', 0)} / 100")
-        market_cols[3].metric("Volatility", metrics.get("volatility_index", "-"))
-        market_cols[4].metric("Upset Probability", metrics.get("upset_probability", "-"))
+        market_cols[0].metric("方向强度", metrics.get("directional_strength", "-"))
+        market_cols[1].metric("冲突指数", f"{metrics.get('market_conflict_index', 0)} / 100")
+        market_cols[2].metric("效率分", f"{metrics.get('market_efficiency_score', 0)} / 100")
+        market_cols[3].metric("波动指数", metrics.get("volatility_index", "-"))
+        market_cols[4].metric("冷门概率", metrics.get("upset_probability", "-"))
 
-        scenario_rows = [
-            {
-                "Scenario": f"{item.get('code')}: {item.get('name')}",
-                "Probability": percent(item.get("probability", 0)),
-            }
-            for item in (scenario.get("probability_distribution") or [])
-        ]
-        if scenario_rows:
-            st.markdown("**Scenario Summary**")
-            st.dataframe(pd.DataFrame(scenario_rows), use_container_width=True, hide_index=True)
-        weight_rows = [
-            {
-                "Scenario": f"{item.get('code')}: {item.get('name')}",
-                "Weight": percent(item.get("weight", 0)),
-                "Base Probability": percent(item.get("base_probability", 0)),
-            }
-            for item in (scenario.get("scenario_weights") or [])
-        ]
-        if weight_rows:
-            st.markdown("**Scenario Weights v2**")
-            st.dataframe(pd.DataFrame(weight_rows), use_container_width=True, hide_index=True)
-        risk = scenario.get("risk_surface") or {}
-        st.caption(
-            "Risk Surface: "
-            f"Tail {risk.get('tail_risk_concentration', '-')} / "
-            f"Fragility {risk.get('market_fragility', '-')} / "
-            f"Upset {risk.get('upset_exposure', '-')} / "
-            f"Draw {risk.get('draw_dependency', '-')}"
-        )
-        st.caption(
-            "Coverage Summary: "
-            f"Primary {(coverage.get('primary_coverage') or {}).get('scenario', '-')} / "
-            f"Defensive {(coverage.get('defensive_coverage') or {}).get('scenario', '-')} / "
-            f"Tail {(coverage.get('tail_optionality') or {}).get('scenario', '-')}"
-        )
-        st.caption(f"Coverage Efficiency v2: {optimization.get('coverage_efficiency_score_v2', '-')} / 100")
+        probability_weight_rows = scenario_probability_weight_rows(scenario)
+        if probability_weight_rows:
+            st.markdown("**3. 情景概率与权重分析（Scenario Engine）**")
+            st.dataframe(pd.DataFrame(probability_weight_rows), use_container_width=True, hide_index=True)
+        st.markdown("**风险面**")
+        st.dataframe(pd.DataFrame(scenario_risk_surface_rows(scenario)), use_container_width=True, hide_index=True)
+        st.markdown("**覆盖图**")
+        st.dataframe(pd.DataFrame(scenario_coverage_map_rows(scenario)), use_container_width=True, hide_index=True)
+        st.caption(f"覆盖效率 v2：{optimization.get('coverage_efficiency_score_v2', '-')} / 100")
 
-        portfolio_rows = []
-        for key in ["main_position", "defensive_position", "tail_risk_position"]:
-            item = portfolio.get(key) or {}
-            portfolio_rows.append({
-                "System Portfolio": item.get("name", "-"),
-                "Position": item.get("label", "-"),
-                "Explanation": item.get("rationale", "-"),
-            })
-        st.markdown("**System Portfolio Recommendation**")
-        st.dataframe(pd.DataFrame(portfolio_rows), use_container_width=True, hide_index=True)
-        st.markdown("**System Ranking（仅系统）**")
-        st.dataframe(pd.DataFrame(portfolio.get("ranking") or []), use_container_width=True, hide_index=True)
+        st.markdown("**4. 系统推荐投注组合（System Portfolio）**")
+        st.dataframe(pd.DataFrame(system_portfolio_display_rows(scenario)), use_container_width=True, hide_index=True)
+        st.markdown("**5. 系统排名组合（System Ranking Bets，仅系统）**")
+        st.dataframe(pd.DataFrame(system_ranking_display_rows(portfolio, scenario)), use_container_width=True, hide_index=True)
 
 
 def render_market_intelligence_layer(market_intelligence):
     intelligence = market_intelligence or {}
     metrics = intelligence.get("metrics") or {}
     with st.container(border=True):
-        st.markdown("**市场结构分析（Market Intelligence Layer）**")
-        st.caption("只解释 API-Football 市场结构；不覆盖 TPB，不影响 stake，不使用用户输入，不计算 EV/ROI。")
+        st.markdown("**市场结构分析**")
+        st.caption("只解释 API-Football 市场结构；不覆盖 TPB，不影响推荐金额，不使用用户输入，不计算 EV/ROI。")
         cols = st.columns(5)
-        cols[0].metric("Directional Strength", metrics.get("directional_strength", "-"))
-        cols[1].metric("Conflict Index", f"{metrics.get('market_conflict_index', 0)} / 100", metrics.get("market_conflict_label", "-"))
-        cols[2].metric("Efficiency Score", f"{metrics.get('market_efficiency_score', 0)} / 100")
-        cols[3].metric("Volatility", metrics.get("volatility_index", "-"))
-        cols[4].metric("Upset Probability", metrics.get("upset_probability", "-"))
+        cols[0].metric("方向强度", metrics.get("directional_strength", "-"))
+        cols[1].metric("冲突指数", f"{metrics.get('market_conflict_index', 0)} / 100", metrics.get("market_conflict_label", "-"))
+        cols[2].metric("效率分", f"{metrics.get('market_efficiency_score', 0)} / 100")
+        cols[3].metric("波动指数", metrics.get("volatility_index", "-"))
+        cols[4].metric("冷门概率", metrics.get("upset_probability", "-"))
 
 
 def render_system_portfolio_layer(market_intelligence, scenario_engine=None):
@@ -1270,100 +1247,53 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None):
     )
     scenario_mapping = (scenario_engine or {}).get("portfolio_mapping_explanation") or {}
     with st.container(border=True):
-        st.markdown("**系统推荐组合（System Portfolio Layer）**")
-        st.caption("系统组合由 TPB baseline + Market Structure + bounded Scenario Weights 综合生成；不使用用户输入，不计算 EV/ROI，不做盈利优化。")
-        rows = []
-        mapping_keys = {
-            "main_position": "main_position_coverage",
-            "defensive_position": "defensive_position_coverage",
-            "tail_risk_position": "tail_exposure",
-        }
-        for key in ["main_position", "defensive_position", "tail_risk_position"]:
-            item = portfolio.get(key) or {}
-            mapping = scenario_mapping.get(mapping_keys[key]) or {}
-            rows.append({
-                "类型": item.get("name", "-"),
-                "组合": item.get("label", "-"),
-                "说明": item.get("rationale", "-"),
-                "Scenario Coverage": mapping.get("scenario", "-"),
-                "Scenario 解释": mapping.get("explanation", "-"),
-            })
-        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
-        st.markdown("**System Portfolio Ranking（系统级）**")
-        st.caption("Scenario-weighted Ranking v2 保持 system-only：anchored to TPB，constrained by Market Structure，influenced by bounded Scenario Weights；不使用用户输入。")
-        st.dataframe(pd.DataFrame(portfolio.get("ranking") or []), use_container_width=True, hide_index=True)
+        st.markdown("**系统推荐投注组合（System Portfolio）**")
+        st.caption("系统组合由 TPB 锚点 + 市场结构 + 受约束情景权重综合生成；不使用用户输入，不计算 EV/ROI，不做盈利优化。")
+        st.dataframe(pd.DataFrame(system_portfolio_display_rows(scenario)), use_container_width=True, hide_index=True)
+        st.markdown("**系统排名组合（System Ranking Bets，仅系统）**")
+        st.caption("系统排名只使用 TPB 锚点、市场结构和受约束情景权重；不使用用户输入。")
+        st.dataframe(pd.DataFrame(system_ranking_display_rows(portfolio, scenario)), use_container_width=True, hide_index=True)
 
 
 def render_scenario_coverage_analysis(scenario_engine):
     scenario = scenario_engine or {}
     with st.container(border=True):
-        st.markdown("**Scenario Coverage Analysis（System Portfolio Explanation Sub-layer）**")
+        st.markdown("**情景概率与权重分析（Scenario Engine）**")
         st.caption(
-            "Scenario Engine v2 是受约束情景权重层：不覆盖 TPB，不改变 investment_score 或 stake，不使用用户输入，不计算 EV/ROI。"
+            "Scenario Engine v2 是受约束情景权重层：不覆盖 TPB，不改变比赛投资分或推荐金额，不使用用户输入，不计算 EV/ROI。"
         )
-        st.metric("Coverage Efficiency Score", f"{scenario.get('coverage_efficiency_score', 0)} / 100")
+        st.metric("情景覆盖效率分", f"{scenario.get('coverage_efficiency_score', 0)} / 100")
 
-        distribution_rows = [
-            {
-                "Scenario": f"{item.get('code')}: {item.get('name')}",
-                "Probability": percent(item.get("probability", 0)),
-            }
-            for item in (scenario.get("probability_distribution") or [])
-        ]
-        if distribution_rows:
-            st.markdown("**Scenario Probability Distribution**")
-            st.dataframe(pd.DataFrame(distribution_rows), use_container_width=True, hide_index=True)
+        probability_weight_rows = scenario_probability_weight_rows(scenario)
+        if probability_weight_rows:
+            st.markdown("**S1-S6 原始概率与 v2 权重**")
+            st.dataframe(pd.DataFrame(probability_weight_rows), use_container_width=True, hide_index=True)
 
-        coverage = scenario.get("coverage_map") or {}
-        coverage_rows = [
-            {
-                "Coverage": "Primary Coverage",
-                "Scenario": (coverage.get("primary_coverage") or {}).get("scenario", "-"),
-                "说明": (coverage.get("primary_coverage") or {}).get("description", "-"),
-            },
-            {
-                "Coverage": "Defensive Coverage",
-                "Scenario": (coverage.get("defensive_coverage") or {}).get("scenario", "-"),
-                "说明": (coverage.get("defensive_coverage") or {}).get("description", "-"),
-            },
-            {
-                "Coverage": "Tail Optionality",
-                "Scenario": (coverage.get("tail_optionality") or {}).get("scenario", "-"),
-                "说明": (coverage.get("tail_optionality") or {}).get("description", "-"),
-            },
-        ]
-        st.markdown("**Scenario Coverage Map**")
-        st.dataframe(pd.DataFrame(coverage_rows), use_container_width=True, hide_index=True)
+        st.markdown("**覆盖图**")
+        st.dataframe(pd.DataFrame(scenario_coverage_map_rows(scenario)), use_container_width=True, hide_index=True)
 
-        risk = scenario.get("risk_surface") or {}
-        risk_rows = [
-            {"Risk": "Tail Risk Concentration", "Level": risk.get("tail_risk_concentration", "-"), "Value": percent(risk.get("tail_risk_value", 0))},
-            {"Risk": "Market Fragility", "Level": risk.get("market_fragility", "-"), "Value": percent(risk.get("market_fragility_value", 0))},
-            {"Risk": "Upset Exposure", "Level": risk.get("upset_exposure", "-"), "Value": percent(risk.get("upset_exposure_value", 0))},
-            {"Risk": "Draw Dependency", "Level": risk.get("draw_dependency", "-"), "Value": percent(risk.get("draw_dependency_value", 0))},
-        ]
-        st.markdown("**Scenario Risk Surface**")
-        st.dataframe(pd.DataFrame(risk_rows), use_container_width=True, hide_index=True)
+        st.markdown("**风险面**")
+        st.dataframe(pd.DataFrame(scenario_risk_surface_rows(scenario)), use_container_width=True, hide_index=True)
 
         mapping = scenario.get("portfolio_mapping_explanation") or {}
         mapping_rows = [
             {
-                "Portfolio": "Main Position",
-                "Scenario Coverage": (mapping.get("main_position_coverage") or {}).get("scenario", "-"),
+                "组合": "主推荐覆盖",
+                "情景覆盖": (mapping.get("main_position_coverage") or {}).get("scenario", "-"),
                 "解释": (mapping.get("main_position_coverage") or {}).get("explanation", "-"),
             },
             {
-                "Portfolio": "Defensive Position",
-                "Scenario Coverage": (mapping.get("defensive_position_coverage") or {}).get("scenario", "-"),
+                "组合": "防守覆盖",
+                "情景覆盖": (mapping.get("defensive_position_coverage") or {}).get("scenario", "-"),
                 "解释": (mapping.get("defensive_position_coverage") or {}).get("explanation", "-"),
             },
             {
-                "Portfolio": "Tail Exposure",
-                "Scenario Coverage": (mapping.get("tail_exposure") or {}).get("scenario", "-"),
+                "组合": "尾部风险",
+                "情景覆盖": (mapping.get("tail_exposure") or {}).get("scenario", "-"),
                 "解释": (mapping.get("tail_exposure") or {}).get("explanation", "-"),
             },
         ]
-        st.markdown("**Scenario → Portfolio Mapping Explanation**")
+        st.markdown("**情景到组合的解释映射**")
         st.dataframe(pd.DataFrame(mapping_rows), use_container_width=True, hide_index=True)
 
 
@@ -1373,94 +1303,78 @@ def render_scenario_optimization_view_v2(scenario_engine):
     if not optimization:
         return
     with st.container(border=True):
-        st.markdown("**Scenario Optimization View v2**")
+        st.markdown("**情景覆盖优化视图 v2**")
         st.caption(
-            "Bounded heuristic coverage optimization：展示 scenario weights、coverage mapping、risk surface 和 coverage efficiency；"
-            "不计算 EV/ROI，不做盈利最大化，不改变 TPB、investment_score、stake，不使用用户输入。"
+            "受约束情景覆盖优化：展示情景权重、投注组合覆盖、风险面和覆盖效率；"
+            "不计算 EV/ROI，不做盈利最大化，不改变 TPB、比赛投资分、推荐金额，不使用用户输入。"
         )
 
-        weight_rows = [
-            {
-                "Scenario": f"{item.get('code')}: {item.get('name')}",
-                "Weight": percent(item.get("weight", 0)),
-                "Base Probability": percent(item.get("base_probability", 0)),
-            }
-            for item in (scenario.get("scenario_weights") or [])
-        ]
-        if weight_rows:
-            st.markdown("**Scenario weights (S1-S6)**")
-            st.dataframe(pd.DataFrame(weight_rows), use_container_width=True, hide_index=True)
+        probability_weight_rows = scenario_probability_weight_rows(scenario)
+        if probability_weight_rows:
+            st.markdown("**S1-S6 原始概率与 v2 权重**")
+            st.dataframe(pd.DataFrame(probability_weight_rows), use_container_width=True, hide_index=True)
 
         for title, key in [
-            ("Primary Coverage Set", "primary_coverage_set"),
-            ("Defensive Coverage Set", "defensive_coverage_set"),
-            ("Tail Coverage Set", "tail_coverage_set"),
+            ("主覆盖组合", "primary_coverage_set"),
+            ("防守覆盖组合", "defensive_coverage_set"),
+            ("尾部风险组合", "tail_coverage_set"),
         ]:
-            rows = []
-            for leg in optimization.get(key) or []:
-                rows.append({
-                    "Leg": leg.get("name", "-"),
-                    "Market": leg.get("market", "-"),
-                    "Selection": leg.get("selection", "-"),
-                    "Coverage Contribution": leg.get("coverage_contribution", "-"),
-                    "Risk Exposure": leg.get("risk_exposure", "-"),
-                    "Scenario Dependency": " / ".join(
-                        f"{item.get('code')} {percent(item.get('weight', 0))}"
-                        for item in (leg.get("scenario_dependency") or [])
-                    ),
-                })
             st.markdown(f"**{title}**")
-            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+            st.dataframe(
+                pd.DataFrame(portfolio_leg_display_rows(optimization.get(key) or [])),
+                use_container_width=True,
+                hide_index=True,
+            )
 
         coverage_rows = [
             {
-                "Scenario": f"{item.get('code')}: {item.get('name')}",
-                "Weight": percent(item.get("weight", 0)),
-                "Coverage Score": percent(item.get("coverage_score", 0)),
-                "Covered By": " / ".join(item.get("covered_by") or []),
+                "情景": f"{item.get('code')}: {item.get('name')}",
+                "权重": percent(item.get("weight", 0)),
+                "覆盖分": percent(item.get("coverage_score", 0)),
+                "覆盖组合": " / ".join(item.get("covered_by") or []),
             }
             for item in optimization.get("scenario_coverage_map_v2") or []
         ]
-        st.markdown("**Coverage mapping (bet legs → scenarios)**")
+        st.markdown("**投注组合到情景的覆盖映射**")
         st.dataframe(pd.DataFrame(coverage_rows), use_container_width=True, hide_index=True)
 
         risk_rows = [
             {
-                "Scenario": f"{item.get('code')}: {item.get('name')}",
-                "Weight": percent(item.get("weight", 0)),
-                "Risk Exposure": item.get("risk_exposure", "-"),
-                "Redundancy": item.get("redundancy", "-"),
+                "情景": f"{item.get('code')}: {item.get('name')}",
+                "权重": percent(item.get("weight", 0)),
+                "风险暴露": item.get("risk_exposure", "-"),
+                "冗余": item.get("redundancy", "-"),
             }
             for item in optimization.get("risk_distribution_surface") or []
         ]
-        st.markdown("**Risk distribution surface**")
+        st.markdown("**风险分布面**")
         st.dataframe(pd.DataFrame(risk_rows), use_container_width=True, hide_index=True)
-        st.metric("Coverage Efficiency Score v2", f"{optimization.get('coverage_efficiency_score_v2', 0)} / 100")
+        st.metric("覆盖效率分 v2", f"{optimization.get('coverage_efficiency_score_v2', 0)} / 100")
 
 
 def render_model_explanation_layer(scenario_engine):
     methodology = (scenario_engine or {}).get("methodology") or {}
     with st.container(border=True):
-        st.markdown("**Model Explanation Layer**")
+        st.markdown("**模型方法透明层**")
         st.caption(methodology.get("disclaimer", "模型方法透明层只展示计算说明，不参与任何模型计算。"))
         methods = methodology.get("market_structure_methods") or {}
         rows = []
         for key in ["directional_strength", "market_conflict_index", "efficiency_score", "volatility_index"]:
             item = methods.get(key) or {}
             rows.append({
-                "Method": item.get("name", key),
-                "Inputs": " / ".join(item.get("inputs") or []),
-                "Logic": item.get("logic", "-"),
+                "方法": item.get("name", key),
+                "输入": " / ".join(item.get("inputs") or []),
+                "逻辑": item.get("logic", "-"),
             })
-        st.markdown("**Market Structure Calculation Methods**")
+        st.markdown("**市场结构计算方法**")
         st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
         scenario_method = methodology.get("scenario_probability_derivation") or {}
         coverage_method = methodology.get("coverage_mapping_logic") or {}
-        st.markdown("**Scenario Probability Derivation Method**")
+        st.markdown("**情景概率推导方法**")
         st.caption(scenario_method.get("principle", "-"))
         st.write(scenario_method.get("logic", "-"))
-        st.markdown("**Coverage Mapping Logic**")
+        st.markdown("**覆盖映射逻辑**")
         st.write(coverage_method.get("coverage_efficiency_score", "-"))
 
 
@@ -1586,7 +1500,7 @@ def render_path_layers(match, market_data):
 def render_market_consensus_panel(match, market_data):
     summary = path_layer_summary(match, market_data)
     with st.container(border=True):
-        st.markdown("**Market Consensus**")
+        st.markdown("**市场共识**")
         cols = st.columns(3)
         cols[0].metric("主亚洲盘", summary["direction_path"])
         cols[1].metric("主大小球", summary["tempo_path"])
@@ -2684,7 +2598,7 @@ def render_analysis_page(match_text):
                 render_debug_panel(match, odds, api_football_data, odds_date_key)
                 render_detail_data_source(odds, selected_fixture)
                 render_technical_notes(odds, api_football_data)
-                st.caption("高级收益 / 组合研究已退出 TPB 决策链；剧本系统仅作为观察层保留。")
+                st.caption("旧版收益研究与旧组合研究不进入当前决策链；当前系统以 TPB 锚点、市场结构和受约束情景权重为准。")
 
         st.download_button(
             "下载 Markdown 报告",

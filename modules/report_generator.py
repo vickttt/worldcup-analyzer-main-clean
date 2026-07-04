@@ -33,6 +33,212 @@ def format_value(value):
     return str(value)
 
 
+SCENARIO_NAME_CN = {
+    "S1": "强热门获胜",
+    "S2": "热门小胜",
+    "S3": "平局",
+    "S4": "冷门获胜",
+    "S5": "低比分比赛",
+    "S6": "高波动比赛",
+}
+
+LEVEL_CN = {
+    "Low": "低",
+    "Medium": "中",
+    "High": "高",
+}
+
+PORTFOLIO_SET_CN = {
+    "Primary Coverage Set": "主覆盖组合",
+    "Defensive Coverage Set": "防守覆盖组合",
+    "Tail Coverage Set": "尾部风险组合",
+}
+
+
+def _level_cn(value):
+    return LEVEL_CN.get(str(value), format_value(value))
+
+
+def _scenario_name_cn(code, name=None):
+    return f"{code} {SCENARIO_NAME_CN.get(code, name or '-')}"
+
+
+def _portfolio_position_cn(value):
+    return PORTFOLIO_SET_CN.get(str(value), format_value(value))
+
+
+def _basis_cn(value):
+    text = str(value or "").strip()
+    replacements = {
+        "TPB anchor": "TPB 锚点",
+        "Directional Strength": "方向强度",
+        "scenario weights": "情景权重",
+        "Conflict Index": "冲突指数",
+        "Volatility": "波动指数",
+        "tail exposure constraint": "尾部风险约束",
+        "S1/S2": "S1/S2",
+        "S3/S4/S5": "S3/S4/S5",
+        "S4/S6": "S4/S6",
+        "+": "+",
+    }
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+    return text or "-"
+
+
+def portfolio_leg_display(leg):
+    leg = leg or {}
+    leg_id = leg.get("id")
+    selection = leg.get("selection") or "-"
+    scenario_text = " / ".join(
+        f"{item.get('code')} {percent(item.get('weight', 0))}"
+        for item in (leg.get("scenario_dependency") or [])
+    )
+    templates = {
+        "primary_1x2": {
+            "bet": f"{selection} 独赢",
+            "market": "胜平负",
+            "reason": "覆盖 S1/S2 主方向情景，跟随 TPB 主方向。",
+        },
+        "primary_handicap": {
+            "bet": f"{selection} -0.5",
+            "market": "亚洲让球 -0.5",
+            "reason": "主方向轻让球覆盖，适合热门方向兑现但不做收益优化。",
+        },
+        "defensive_draw": {
+            "bet": "平局",
+            "market": "胜平负",
+            "reason": "覆盖 S3 平局风险，作为主方向的防守参考。",
+        },
+        "defensive_handicap": {
+            "bet": "受让方向 +1.0",
+            "market": "亚洲让球 +1.0",
+            "reason": "覆盖冷门或胶着路径，降低单边判断暴露。",
+        },
+        "defensive_under": {
+            "bet": "小球 Under 2.5",
+            "market": "大小球 2.5",
+            "reason": "覆盖 S5 低比分和热门小胜情景。",
+        },
+        "tail_upset": {
+            "bet": "冷门胜 / 受让方向",
+            "market": "胜平负 / 亚洲让球",
+            "reason": "仅覆盖 S4 冷门尾部风险，不放大推荐金额。",
+        },
+        "tail_variance": {
+            "bet": "大比分 Over 3.5",
+            "market": "大小球 3.5 / 波胆尾部",
+            "reason": "仅覆盖 S6 高波动尾部路径。",
+        },
+    }
+    template = templates.get(leg_id, {})
+    return {
+        "中文投注描述": template.get("bet") or leg.get("name") or "-",
+        "对应盘口": template.get("market") or leg.get("market") or "-",
+        "理由": template.get("reason") or leg.get("explanation") or "-",
+        "情景依赖": scenario_text or "-",
+        "覆盖贡献": format_value(leg.get("coverage_contribution")),
+        "风险暴露": format_value(leg.get("risk_exposure")),
+    }
+
+
+def portfolio_leg_display_rows(legs):
+    return [portfolio_leg_display(leg) for leg in (legs or [])]
+
+
+def scenario_probability_weight_rows(scenario_engine):
+    scenario = scenario_engine or {}
+    weights = {
+        item.get("code"): item
+        for item in (scenario.get("scenario_weights") or [])
+    }
+    rows = []
+    for item in scenario.get("probability_distribution") or []:
+        code = item.get("code", "-")
+        weight = weights.get(code) or {}
+        rows.append({
+            "情景": _scenario_name_cn(code, item.get("name")),
+            "原始概率": percent(item.get("probability", 0)),
+            "v2 权重": percent(weight.get("weight", 0)),
+        })
+    return rows
+
+
+def scenario_risk_surface_rows(scenario_engine):
+    risk = (scenario_engine or {}).get("risk_surface") or {}
+    return [
+        {"风险面": "尾部风险集中度", "等级": _level_cn(risk.get("tail_risk_concentration")), "数值": percent(risk.get("tail_risk_value", 0))},
+        {"风险面": "市场脆弱性", "等级": _level_cn(risk.get("market_fragility")), "数值": percent(risk.get("market_fragility_value", 0))},
+        {"风险面": "冷门暴露", "等级": _level_cn(risk.get("upset_exposure")), "数值": percent(risk.get("upset_exposure_value", 0))},
+        {"风险面": "平局依赖", "等级": _level_cn(risk.get("draw_dependency")), "数值": percent(risk.get("draw_dependency_value", 0))},
+    ]
+
+
+def scenario_coverage_map_rows(scenario_engine):
+    coverage = (scenario_engine or {}).get("coverage_map") or {}
+    return [
+        {
+            "覆盖类型": "主覆盖",
+            "情景": (coverage.get("primary_coverage") or {}).get("scenario", "-"),
+            "说明": (coverage.get("primary_coverage") or {}).get("description", "-"),
+        },
+        {
+            "覆盖类型": "防守覆盖",
+            "情景": (coverage.get("defensive_coverage") or {}).get("scenario", "-"),
+            "说明": (coverage.get("defensive_coverage") or {}).get("description", "-"),
+        },
+        {
+            "覆盖类型": "尾部覆盖",
+            "情景": (coverage.get("tail_optionality") or {}).get("scenario", "-"),
+            "说明": (coverage.get("tail_optionality") or {}).get("description", "-"),
+        },
+    ]
+
+
+def _optimization_sets(scenario_engine):
+    optimization = (scenario_engine or {}).get("scenario_optimization_v2") or {}
+    return {
+        "Primary Coverage Set": optimization.get("primary_coverage_set") or [],
+        "Defensive Coverage Set": optimization.get("defensive_coverage_set") or [],
+        "Tail Coverage Set": optimization.get("tail_coverage_set") or [],
+    }
+
+
+def system_portfolio_display_rows(scenario_engine):
+    rows = []
+    for title, legs in _optimization_sets(scenario_engine).items():
+        display_legs = portfolio_leg_display_rows(legs)
+        if not display_legs:
+            rows.append({
+                "组合类型": _portfolio_position_cn(title),
+                "中文投注描述": "暂无",
+                "对应盘口": "-",
+                "理由": "当前情景权重未生成该组合。",
+            })
+            continue
+        for leg in display_legs:
+            rows.append({"组合类型": _portfolio_position_cn(title), **leg})
+    return rows
+
+
+def system_ranking_display_rows(portfolio, scenario_engine=None):
+    rows = []
+    sets = _optimization_sets(scenario_engine)
+    for item in (portfolio or {}).get("ranking") or []:
+        position = item.get("position", "-")
+        legs = portfolio_leg_display_rows(sets.get(position) or [])
+        bet_text = "；".join(leg.get("中文投注描述", "-") for leg in legs) or "暂无"
+        market_text = "；".join(leg.get("对应盘口", "-") for leg in legs) or "-"
+        rows.append({
+            "排名": f"Rank {item.get('rank', '-')}",
+            "组合类型": _portfolio_position_cn(position),
+            "具体投注组合": bet_text,
+            "对应盘口": market_text,
+            "结构理由": _basis_cn(item.get("basis")),
+        })
+    return rows
+
+
 def _match_team_label(match, side):
     if not match:
         return side.title()
@@ -589,7 +795,7 @@ def format_core_conclusion_lines(
         score = portfolio_summary.get("score")
     notes = _data_quality_notes(opinion, api_football_data, match, actual_odds)
     lines = [
-        "## 1. Core Decision Layer（核心决策层）",
+        "## 1. 核心决策层",
         "",
         f"- 比赛主方向：{opinion.get('match_direction') or opinion.get('match_winner', '暂无观点')}",
         f"- TPB 概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}",
@@ -639,11 +845,11 @@ def format_final_decision_block_lines(
         score = portfolio_summary.get("score")
 
     lines = [
-        "## FINAL DECISION BLOCK",
+        "## 最终决策区（FINAL DECISION BLOCK）",
         "",
-        "唯一决策入口视图：TPB + Market + Scenario Weights + Portfolio + Ranking 汇总展示。Execution Layer 不进入本区。",
+        "唯一决策入口视图：TPB 锚点 + 市场结构 + 情景权重 + 推荐组合 + 系统排名汇总展示。用户执行层不进入本区。",
         "",
-        "### TPB Anchor Summary",
+        "### 1. TPB 结论",
         "",
         f"- 主方向：{metrics.get('favorite_label') or opinion.get('match_direction') or opinion.get('match_winner', '-')}",
         f"- 主方向概率：{format_value(metrics.get('favorite_probability'))}%",
@@ -652,44 +858,43 @@ def format_final_decision_block_lines(
         f"- 比赛投资分：{format_value(score)}",
         f"- 推荐金额：{_recommended_stake_text(portfolio_summary)}",
         "",
-        "### Market Structure Summary",
+        "### 2. 市场结构",
         "",
-        f"- Directional Strength：{metrics.get('directional_strength', '-')}",
-        f"- Conflict Index：{format_value(metrics.get('market_conflict_index'))} / 100",
-        f"- Efficiency Score：{format_value(metrics.get('market_efficiency_score'))} / 100",
-        f"- Volatility Index：{metrics.get('volatility_index', '-')}",
-        f"- Upset Probability：{metrics.get('upset_probability', '-')}",
+        f"- 方向强度：{metrics.get('directional_strength', '-')}",
+        f"- 市场冲突指数：{format_value(metrics.get('market_conflict_index'))} / 100",
+        f"- 市场效率分：{format_value(metrics.get('market_efficiency_score'))} / 100",
+        f"- 波动指数：{metrics.get('volatility_index', '-')}",
+        f"- 冷门概率：{metrics.get('upset_probability', '-')}",
         "",
-        "### Scenario Summary",
+        "### 3. 情景概率与权重分析（Scenario Engine）",
         "",
     ]
-    for item in scenario.get("probability_distribution") or []:
-        lines.append(f"- {item.get('code', '-')}: {item.get('name', '-')}：{percent(item.get('probability', 0))}")
-    if scenario.get("scenario_weights"):
-        lines.extend(["", "Scenario Weights v2："])
-        for item in scenario.get("scenario_weights") or []:
-            lines.append(f"- {item.get('code', '-')}: {item.get('name', '-')}：{percent(item.get('weight', 0))}")
+    for row in scenario_probability_weight_rows(scenario):
+        lines.append(f"- {row['情景']}：原始概率 {row['原始概率']}；v2 权重 {row['v2 权重']}")
     lines.extend([
-        f"- Risk Surface：Tail {risk.get('tail_risk_concentration', '-')} / Fragility {risk.get('market_fragility', '-')} / Upset {risk.get('upset_exposure', '-')} / Draw {risk.get('draw_dependency', '-')}",
-        f"- Coverage Summary：Primary {(coverage.get('primary_coverage') or {}).get('scenario', '-')} / Defensive {(coverage.get('defensive_coverage') or {}).get('scenario', '-')} / Tail {(coverage.get('tail_optionality') or {}).get('scenario', '-')}",
-        f"- Coverage Efficiency v2：{format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
+        f"- 风险面：尾部 {_level_cn(risk.get('tail_risk_concentration'))} / 脆弱性 {_level_cn(risk.get('market_fragility'))} / 冷门 {_level_cn(risk.get('upset_exposure'))} / 平局 {_level_cn(risk.get('draw_dependency'))}",
+        f"- 覆盖图：主覆盖 {(coverage.get('primary_coverage') or {}).get('scenario', '-')} / 防守覆盖 {(coverage.get('defensive_coverage') or {}).get('scenario', '-')} / 尾部覆盖 {(coverage.get('tail_optionality') or {}).get('scenario', '-')}",
+        f"- 覆盖效率 v2：{format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
         "",
-        "### System Portfolio Recommendation",
+        "### 4. 系统推荐投注组合（System Portfolio）",
         "",
     ])
-    for key in ["main_position", "defensive_position", "tail_risk_position"]:
-        item = portfolio.get(key) or {}
-        lines.append(f"- {item.get('name', '-')}：{item.get('label', '-')}；{item.get('rationale', '-')}")
+    for row in system_portfolio_display_rows(scenario):
+        lines.append(
+            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
+        )
     lines.extend([
         "",
-        "### System Ranking（仅系统）",
+        "### 5. 系统排名组合（System Ranking Bets，仅系统）",
         "",
     ])
-    ranking = portfolio.get("ranking") or []
-    if not ranking:
+    ranking_rows = system_ranking_display_rows(portfolio, scenario)
+    if not ranking_rows:
         lines.append("- 暂无系统排序。")
-    for item in ranking:
-        lines.append(f"- Rank {item.get('rank', '-')}: {item.get('position', '-')}（依据：{item.get('basis', '-')}）")
+    for row in ranking_rows:
+        lines.append(
+            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}"
+        )
     return lines
 
 
@@ -803,15 +1008,15 @@ def format_market_intelligence_lines(market_intelligence):
     intelligence = market_intelligence or {}
     metrics = intelligence.get("metrics") or {}
     lines = [
-        "## 2. Market Structure Layer（市场结构层）",
+        "## 2. 市场结构层",
         "",
-        "该层只解释市场结构，不独立决策，不覆盖 TPB，不影响 stake，不使用用户输入，不计算 EV/ROI。",
+        "该层只解释市场结构，不独立决策，不覆盖 TPB，不影响推荐金额，不使用用户输入，不计算 EV/ROI。",
         "",
-        f"- Directional Strength：{metrics.get('directional_strength', '-')}",
-        f"- Market Conflict Index：{format_value(metrics.get('market_conflict_index'))} / 100（{metrics.get('market_conflict_label', '-')}）",
-        f"- Efficiency Score：{format_value(metrics.get('market_efficiency_score'))} / 100",
-        f"- Volatility Index：{metrics.get('volatility_index', '-')}",
-        f"- Upset Probability：{metrics.get('upset_probability', '-')}",
+        f"- 方向强度：{metrics.get('directional_strength', '-')}",
+        f"- 市场冲突指数：{format_value(metrics.get('market_conflict_index'))} / 100（{metrics.get('market_conflict_label', '-')}）",
+        f"- 市场效率分：{format_value(metrics.get('market_efficiency_score'))} / 100",
+        f"- 波动指数：{metrics.get('volatility_index', '-')}",
+        f"- 冷门概率：{metrics.get('upset_probability', '-')}",
     ]
     if metrics.get("favorite_label"):
         lines.append(f"- TPB baseline 主方向：{metrics.get('favorite_label')}（{format_value(metrics.get('favorite_probability'))}%）")
@@ -823,47 +1028,37 @@ def format_market_intelligence_lines(market_intelligence):
 def format_scenario_engine_lines(scenario_engine):
     scenario = scenario_engine or {}
     lines = [
-        "## 3. Scenario Engine Layer（情景覆盖分析层）",
+        "## 3. 情景概率与权重分析（Scenario Engine）",
         "",
         scenario.get("disclaimer")
-        or "Scenario Engine v2 使用 bounded heuristic scenario weights 做覆盖优化；不覆盖 TPB，不计算 EV/ROI，不改变 stake，不使用用户输入。",
+        or "Scenario Engine v2 使用受约束启发式情景权重做覆盖优化；不覆盖 TPB，不计算 EV/ROI，不改变推荐金额，不使用用户输入。",
         "",
-        "### Scenario Probability Distribution",
+        "### S1-S6 原始概率与 v2 权重",
     ]
-    distribution = scenario.get("probability_distribution") or []
-    if not distribution:
-        lines.append("暂无 scenario probability distribution。")
+    probability_rows = scenario_probability_weight_rows(scenario)
+    if not probability_rows:
+        lines.append("暂无情景概率数据。")
     else:
-        for item in distribution:
-            lines.append(
-                f"- {item.get('code', '-')}: {item.get('name', '-')}："
-                f"{percent(item.get('probability', 0))}"
-            )
+        for row in probability_rows:
+            lines.append(f"- {row['情景']}：原始概率 {row['原始概率']}；v2 权重 {row['v2 权重']}")
 
-    risk = scenario.get("risk_surface") or {}
     lines.extend([
         "",
-        "### Scenario Risk Surface",
-        "",
-        f"- Tail Risk Concentration：{risk.get('tail_risk_concentration', '-')}（{percent(risk.get('tail_risk_value', 0))}）",
-        f"- Market Fragility：{risk.get('market_fragility', '-')}（{percent(risk.get('market_fragility_value', 0))}）",
-        f"- Upset Exposure：{risk.get('upset_exposure', '-')}（{percent(risk.get('upset_exposure_value', 0))}）",
-        f"- Draw Dependency：{risk.get('draw_dependency', '-')}（{percent(risk.get('draw_dependency_value', 0))}）",
-        "",
-        "### Scenario Coverage Map",
+        "### 风险面",
         "",
     ])
-    coverage = scenario.get("coverage_map") or {}
-    for label, key in [
-        ("Primary Coverage", "primary_coverage"),
-        ("Defensive Coverage", "defensive_coverage"),
-        ("Tail Optionality", "tail_optionality"),
-    ]:
-        item = coverage.get(key) or {}
-        lines.append(f"- {label}：{item.get('scenario', '-')}；{item.get('description', '-')}")
+    for row in scenario_risk_surface_rows(scenario):
+        lines.append(f"- {row['风险面']}：{row['等级']}（{row['数值']}）")
+    lines.extend([
+        "",
+        "### 覆盖图",
+        "",
+    ])
+    for row in scenario_coverage_map_rows(scenario):
+        lines.append(f"- {row['覆盖类型']}：{row['情景']}；{row['说明']}")
 
     mapping = scenario.get("scenario_market_mapping") or {}
-    lines.extend(["", "### Scenario ↔ Market Mapping", ""])
+    lines.extend(["", "### 情景与盘口映射", ""])
     for code, name in [
         ("S1", "Strong Favorite Win"),
         ("S2", "Narrow Favorite Win"),
@@ -874,29 +1069,29 @@ def format_scenario_engine_lines(scenario_engine):
     ]:
         item = mapping.get(code) or {}
         lines.append(
-            f"- {code}: {name}：受益盘口 {', '.join(item.get('benefits') or ['-'])}；"
-            f"失败盘口 {', '.join(item.get('fails') or ['-'])}；hedge：{item.get('hedge', '-')}"
+            f"- {_scenario_name_cn(code, name)}：受益盘口 {', '.join(item.get('benefits') or ['-'])}；"
+            f"失败盘口 {', '.join(item.get('fails') or ['-'])}；对冲关系：{item.get('hedge', '-')}"
         )
 
     lines.extend([
         "",
-        "### Scenario → Portfolio Mapping Explanation",
+        "### 情景到组合的解释映射",
         "",
     ])
     portfolio_mapping = scenario.get("portfolio_mapping_explanation") or {}
     for label, key in [
-        ("Main Position", "main_position_coverage"),
-        ("Defensive Position", "defensive_position_coverage"),
-        ("Tail Exposure", "tail_exposure"),
+        ("主推荐覆盖", "main_position_coverage"),
+        ("防守覆盖", "defensive_position_coverage"),
+        ("尾部风险", "tail_exposure"),
     ]:
         item = portfolio_mapping.get(key) or {}
         lines.append(f"- {label}：{item.get('scenario', '-')}；{item.get('explanation', '-')}")
 
     lines.extend([
         "",
-        "### Scenario Efficiency Score",
+        "### 情景覆盖效率分",
         "",
-        f"- Coverage Efficiency Score：{format_value(scenario.get('coverage_efficiency_score'))} / 100",
+        f"- 覆盖效率分：{format_value(scenario.get('coverage_efficiency_score'))} / 100",
     ])
     return lines
 
@@ -906,86 +1101,73 @@ def format_scenario_optimization_v2_lines(scenario_engine):
     optimization = scenario.get("scenario_optimization_v2") or {}
     if not optimization:
         return [
-            "## Scenario Optimization Layer v2",
+            "## 情景覆盖优化层 v2",
             "",
-            "暂无 Scenario Optimization Layer v2 输出。",
+            "暂无情景覆盖优化层 v2 输出。",
         ]
 
     lines = [
-        "## Scenario Optimization Layer v2（受约束情景覆盖优化层）",
+        "## 情景覆盖优化层 v2",
         "",
-        "该层只做 bounded heuristic coverage optimization：不计算 EV/ROI，不做盈利最大化，不使用用户输入，不覆盖 TPB，不改变 stake。",
+        "该层只做受约束启发式覆盖优化：不计算 EV/ROI，不做盈利最大化，不使用用户输入，不覆盖 TPB，不改变推荐金额。",
         "",
-        "### Scenario Weights",
+        "### 覆盖优化目标",
         "",
     ]
-    for item in scenario.get("scenario_weights") or []:
-        lines.append(
-            f"- {item.get('code', '-')}: {item.get('name', '-')}："
-            f"{percent(item.get('weight', 0))}（base {percent(item.get('base_probability', 0))}）"
-        )
-
     objective = optimization.get("objective") or {}
     lines.extend([
+        f"- 类型：{objective.get('type', 'bounded deterministic heuristic')}",
+        f"- 最大化：{', '.join(objective.get('maximize') or ['-'])}",
+        f"- 最小化：{', '.join(objective.get('minimize') or ['-'])}",
         "",
-        "### Coverage Optimization Objective",
-        "",
-        f"- Type：{objective.get('type', 'bounded deterministic heuristic')}",
-        f"- Maximize：{', '.join(objective.get('maximize') or ['-'])}",
-        f"- Minimize：{', '.join(objective.get('minimize') or ['-'])}",
-        "",
-        "### System Optimized Portfolio v2",
+        "### 系统推荐投注组合",
         "",
     ])
     for title, key in [
-        ("Primary Coverage Set", "primary_coverage_set"),
-        ("Defensive Coverage Set", "defensive_coverage_set"),
-        ("Tail Coverage Set", "tail_coverage_set"),
+        ("主覆盖组合", "primary_coverage_set"),
+        ("防守覆盖组合", "defensive_coverage_set"),
+        ("尾部风险组合", "tail_coverage_set"),
     ]:
         lines.append(f"#### {title}")
         rows = optimization.get(key) or []
         if not rows:
             lines.append("- 暂无。")
         for leg in rows:
-            dependencies = ", ".join(
-                f"{item.get('code')} {percent(item.get('weight', 0))}"
-                for item in (leg.get("scenario_dependency") or [])
-            )
+            display = portfolio_leg_display(leg)
             lines.append(
-                f"- {leg.get('name', '-')}：coverage {format_value(leg.get('coverage_contribution'))}；"
-                f"risk {format_value(leg.get('risk_exposure'))}；dependency {dependencies or '-'}"
+                f"- {display['中文投注描述']}｜盘口：{display['对应盘口']}｜理由：{display['理由']}｜情景依赖：{display['情景依赖']}"
             )
 
     lines.extend([
         "",
-        "### Scenario Coverage Map v2",
+        "### 情景覆盖图 v2",
         "",
     ])
     for item in optimization.get("scenario_coverage_map_v2") or []:
         lines.append(
-            f"- {item.get('code', '-')}: {item.get('name', '-')}："
-            f"weight {percent(item.get('weight', 0))}；coverage {percent(item.get('coverage_score', 0))}；"
-            f"covered by {', '.join(item.get('covered_by') or ['-'])}"
+            f"- {_scenario_name_cn(item.get('code', '-'), item.get('name'))}："
+            f"权重 {percent(item.get('weight', 0))}；覆盖 {percent(item.get('coverage_score', 0))}；"
+            f"覆盖组合 {', '.join(item.get('covered_by') or ['-'])}"
         )
 
     lines.extend([
         "",
-        "### Risk Distribution Surface",
+        "### 风险分布面",
         "",
     ])
     for item in optimization.get("risk_distribution_surface") or []:
         lines.append(
-            f"- {item.get('code', '-')}: {item.get('name', '-')}："
-            f"risk {format_value(item.get('risk_exposure'))}；redundancy {format_value(item.get('redundancy'))}"
+            f"- {_scenario_name_cn(item.get('code', '-'), item.get('name'))}："
+            f"风险暴露 {format_value(item.get('risk_exposure'))}；冗余 {format_value(item.get('redundancy'))}"
         )
 
     lines.extend([
         "",
-        "### Coverage Efficiency Score v2",
+        "### 覆盖效率分 v2",
         "",
         f"- {format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
         "",
-        "说明：Coverage Efficiency v2 = scenario coverage / (risk exposure + redundancy)，是可解释的受约束覆盖评分，不是 EV/ROI 或收益优化。",
+        "说明：覆盖效率 v2 = 情景覆盖 /（风险暴露 + 冗余），是可解释的受约束覆盖评分，不是 EV/ROI 或收益优化。",
     ])
     return lines
 
@@ -993,22 +1175,22 @@ def format_scenario_optimization_v2_lines(scenario_engine):
 def format_model_explanation_lines(scenario_engine):
     methodology = (scenario_engine or {}).get("methodology") or {}
     lines = [
-        "## Model Explanation Layer（模型方法透明层）",
+        "## 模型方法透明层",
         "",
         methodology.get("disclaimer") or "模型方法透明层只展示计算说明，不参与任何模型计算。",
         "",
-        "### Market Structure Calculation Methods",
+        "### 市场结构计算方法",
         "",
     ]
     methods = methodology.get("market_structure_methods") or {}
     for key in ["directional_strength", "market_conflict_index", "efficiency_score", "volatility_index"]:
         item = methods.get(key) or {}
         lines.append(f"- {item.get('name', key)}")
-        lines.append(f"  - Inputs：{', '.join(item.get('inputs') or ['-'])}")
-        lines.append(f"  - Logic：{item.get('logic', '-')}")
+        lines.append(f"  - 输入：{', '.join(item.get('inputs') or ['-'])}")
+        lines.append(f"  - 逻辑：{item.get('logic', '-')}")
         thresholds = item.get("thresholds") or {}
         if thresholds:
-            lines.append("  - Thresholds：" + "；".join(f"{label}={value}" for label, value in thresholds.items()))
+            lines.append("  - 阈值：" + "；".join(f"{label}={value}" for label, value in thresholds.items()))
 
     scenario_method = methodology.get("scenario_probability_derivation") or {}
     weighting_method = methodology.get("scenario_weighting_method_v2") or {}
@@ -1017,38 +1199,38 @@ def format_model_explanation_lines(scenario_engine):
     optimization_method = methodology.get("coverage_optimization_v2") or {}
     lines.extend([
         "",
-        "### Scenario Probability Derivation Method",
+        "### 情景概率推导方法",
         "",
-        f"- Principle：{scenario_method.get('principle', '-')}",
-        f"- Inputs：{', '.join(scenario_method.get('inputs') or ['-'])}",
-        f"- Logic：{scenario_method.get('logic', '-')}",
-        f"- Forbidden：{', '.join(scenario_method.get('forbidden') or ['-'])}",
+        f"- 原则：{scenario_method.get('principle', '-')}",
+        f"- 输入：{', '.join(scenario_method.get('inputs') or ['-'])}",
+        f"- 逻辑：{scenario_method.get('logic', '-')}",
+        f"- 禁止：{', '.join(scenario_method.get('forbidden') or ['-'])}",
         "",
-        "### Scenario Weighting Function v2",
+        "### 情景权重函数 v2",
         "",
-        f"- Principle：{weighting_method.get('principle', '-')}",
-        f"- Formula：{weighting_method.get('formula', '-')}",
-        f"- Constraints：{', '.join(weighting_method.get('constraints') or ['-'])}",
-        f"- Forbidden：{', '.join(weighting_method.get('forbidden') or ['-'])}",
+        f"- 原则：{weighting_method.get('principle', '-')}",
+        f"- 公式：{weighting_method.get('formula', '-')}",
+        f"- 约束：{', '.join(weighting_method.get('constraints') or ['-'])}",
+        f"- 禁止：{', '.join(weighting_method.get('forbidden') or ['-'])}",
         "",
-        "### Scenario Mapping Method",
+        "### 情景映射方法",
         "",
         mapping_method.get("logic", "-"),
         "",
-        "### Coverage Mapping Logic",
+        "### 覆盖映射逻辑",
         "",
-        f"- Main coverage：{coverage_method.get('primary_coverage', '-')}",
-        f"- Defensive coverage：{coverage_method.get('defensive_coverage', '-')}",
-        f"- Tail coverage：{coverage_method.get('tail_coverage', '-')}",
-        f"- Coverage efficiency：{coverage_method.get('coverage_efficiency_score', '-')}",
-        f"- Coverage efficiency v2：{coverage_method.get('coverage_efficiency_score_v2', '-')}",
+        f"- 主覆盖：{coverage_method.get('primary_coverage', '-')}",
+        f"- 防守覆盖：{coverage_method.get('defensive_coverage', '-')}",
+        f"- 尾部覆盖：{coverage_method.get('tail_coverage', '-')}",
+        f"- 覆盖效率：{coverage_method.get('coverage_efficiency_score', '-')}",
+        f"- 覆盖效率 v2：{coverage_method.get('coverage_efficiency_score_v2', '-')}",
         "",
-        "### Coverage Optimization Engine v2",
+        "### 覆盖优化引擎 v2",
         "",
-        f"- Type：{optimization_method.get('type', '-')}",
-        f"- Forbidden：{', '.join(optimization_method.get('forbidden') or ['-'])}",
+        f"- 类型：{optimization_method.get('type', '-')}",
+        f"- 禁止：{', '.join(optimization_method.get('forbidden') or ['-'])}",
         "",
-        "### Audit Guards",
+        "### 审计防线",
         "",
     ])
     for guard in methodology.get("audit_guards") or []:
@@ -1062,38 +1244,28 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None):
         scenario.get("system_optimized_portfolio_v2")
         or ((market_intelligence or {}).get("system_portfolio") or {})
     )
-    scenario_mapping = (scenario_engine or {}).get("portfolio_mapping_explanation") or {}
     lines = [
-        "## 4. System Portfolio Layer（系统推荐组合）",
+        "## 4. 系统推荐投注组合（System Portfolio）",
         "",
-        "System Portfolio = TPB baseline + Market Structure + bounded Scenario Weights synthesis。用户实盘输入不参与系统组合、推荐或排序。",
+        "系统推荐投注组合 = TPB 锚点 + 市场结构 + 受约束情景权重综合生成。用户实盘输入不参与系统组合、推荐或排序。",
         "",
     ]
-    mapping_keys = {
-        "main_position": "main_position_coverage",
-        "defensive_position": "defensive_position_coverage",
-        "tail_risk_position": "tail_exposure",
-    }
-    for key in ["main_position", "defensive_position", "tail_risk_position"]:
-        item = portfolio.get(key) or {}
-        mapping = scenario_mapping.get(mapping_keys[key]) or {}
-        lines.append(f"- {item.get('name', '-')}：{item.get('label', '-')}")
-        lines.append(f"  - 说明：{item.get('rationale', '-')}")
-        lines.append(f"  - Scenario coverage：{mapping.get('scenario', '-')}")
-        lines.append(f"  - Scenario 解释：{mapping.get('explanation', '-')}")
+    for row in system_portfolio_display_rows(scenario):
+        lines.append(
+            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
+        )
     lines.extend([
         "",
-        "## 5. System Ranking（系统级排序）",
+        "## 5. 系统排名组合（System Ranking Bets）",
         "",
-        "Scenario-weighted Ranking v2 保持 system-only：anchored to TPB，constrained by Market Structure，influenced by bounded Scenario Weights；不使用用户输入、EV/ROI 或 profit optimizer。",
+        "系统排名只使用 TPB 锚点、市场结构和受约束情景权重；不使用用户输入、EV/ROI 或盈利优化器。",
     ])
-    ranking = portfolio.get("ranking") or []
-    if not ranking:
+    ranking_rows = system_ranking_display_rows(portfolio, scenario)
+    if not ranking_rows:
         return lines + ["", "暂无系统组合排序。"]
-    for item in ranking:
+    for row in ranking_rows:
         lines.append(
-            f"- Rank {item.get('rank', '-')}: {item.get('position', '-')} "
-            f"（依据：{item.get('basis', '-')}）"
+            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}"
         )
     return lines
 
@@ -1103,7 +1275,7 @@ def format_user_portfolio_lines(user_portfolio):
     lines = [
         "## 6. Execution Layer（用户执行层）",
         "",
-        "客户执行层仅用于记录实盘输入、执行价格对比和人工复盘；不参与 TPB、系统推荐、系统排序或 stake。",
+        "客户执行层仅用于记录实盘输入、执行价格对比和人工复盘；不参与 TPB、系统推荐、系统排序或推荐金额。",
         "",
         "### 我的实盘组合",
         "",
