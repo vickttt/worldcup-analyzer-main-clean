@@ -156,9 +156,9 @@ def portfolio_leg_display(leg, match=None, market_intelligence=None, scenario_en
             "reason": "覆盖 S3 平局风险，作为主方向的防守参考。",
         },
         "defensive_handicap": {
-            "bet": f"{underdog} +1.0",
+            "bet": f"{favorite} +1.0",
             "market": "亚洲让球 +1.0",
-            "reason": "覆盖冷门或胶着路径，降低单边判断暴露。",
+            "reason": "平局和冷门保护，降低主方向单边暴露。",
         },
         "defensive_under": {
             "bet": "小球 Under 2.5",
@@ -362,6 +362,10 @@ def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, mar
             [leg.get("对应盘口", "-") for leg in legs]
             + [row.get("对应盘口", "-") for row in score_rows]
         ) or "-"
+        dependency_text = "；".join(
+            [leg.get("情景依赖", "-") for leg in legs if leg.get("情景依赖")]
+            + [row.get("情景依赖", "-") for row in score_rows if row.get("情景依赖")]
+        ) or "-"
         score_reason = "；".join(row.get("理由", "-") for row in score_rows)
         reason = _basis_cn(item.get("basis"))
         if score_reason:
@@ -372,6 +376,7 @@ def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, mar
             "具体投注组合": bet_text,
             "对应盘口": market_text,
             "结构理由": reason,
+            "情景依赖": dependency_text,
         })
     return rows
 
@@ -1003,7 +1008,7 @@ def format_final_decision_block_lines(
         f"- 波动指数：{metrics.get('volatility_index', '-')}",
         f"- 冷门概率：{metrics.get('upset_probability', '-')}",
         "",
-        "### 3. 情景概率与权重分析（Scenario Engine）",
+        "### 3. 情景概率与权重分析（Scenario Engine v2）",
         "",
     ]
     for row in scenario_probability_weight_rows(scenario):
@@ -1018,11 +1023,11 @@ def format_final_decision_block_lines(
     ])
     for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
         lines.append(
-            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
+            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
         )
     lines.extend([
         "",
-        "#### 波胆策略层（Correct Score Strategy Layer）",
+        "#### 波胆策略增强层（Correct Score Strategy v2.1）",
         "",
     ])
     for row in correct_score_strategy_rows(match, market_intelligence, scenario):
@@ -1044,7 +1049,7 @@ def format_final_decision_block_lines(
         lines.append("- 暂无系统排序。")
     for row in ranking_rows:
         lines.append(
-            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}"
+            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}｜情景依赖：{row['情景依赖']}"
         )
     return lines
 
@@ -1179,7 +1184,7 @@ def format_market_intelligence_lines(market_intelligence):
 def format_scenario_engine_lines(scenario_engine):
     scenario = scenario_engine or {}
     lines = [
-        "## 3. 情景概率与权重分析（Scenario Engine）",
+        "## 3. 情景概率与权重分析（Scenario Engine v2）",
         "",
         scenario.get("disclaimer")
         or "Scenario Engine v2 使用受约束启发式情景权重做覆盖优化；不覆盖 TPB，不计算 EV/ROI，不改变推荐金额，不使用用户输入。",
@@ -1403,11 +1408,11 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
     ]
     for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
         lines.append(
-            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
+            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
         )
     lines.extend([
         "",
-        "### 波胆策略层（Correct Score Strategy Layer）",
+        "### 波胆策略增强层（Correct Score Strategy v2.1）",
         "",
     ])
     for row in correct_score_strategy_rows(match, market_intelligence, scenario):
@@ -1430,7 +1435,7 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         return lines + ["", "暂无系统组合排序。"]
     for row in ranking_rows:
         lines.append(
-            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}"
+            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}｜情景依赖：{row['情景依赖']}"
         )
     return lines
 
@@ -1586,24 +1591,7 @@ def build_report(
             scenario_engine,
         ),
         "",
-        *format_core_conclusion_lines(
-            betting_opinion,
-            portfolio_summary,
-            odds,
-            match,
-            api_football_data,
-            actual_odds,
-        ),
-        "",
-        *format_market_intelligence_lines(market_intelligence),
-        "",
-        *format_scenario_engine_lines(scenario_engine),
-        "",
-        *format_scenario_optimization_v2_lines(scenario_engine),
-        "",
         *format_model_explanation_lines(scenario_engine),
-        "",
-        *format_system_portfolio_lines(market_intelligence, scenario_engine, match),
         "",
         *format_user_portfolio_lines(user_portfolio),
         "",

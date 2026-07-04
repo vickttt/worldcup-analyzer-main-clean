@@ -1212,7 +1212,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
-            st.markdown("**3. 情景概率与权重分析（Scenario Engine）**")
+            st.markdown("**3. 情景概率与权重分析（Scenario Engine v2）**")
             st.dataframe(pd.DataFrame(probability_weight_rows), use_container_width=True, hide_index=True)
         st.markdown("**风险面**")
         st.dataframe(pd.DataFrame(scenario_risk_surface_rows(scenario)), use_container_width=True, hide_index=True)
@@ -1226,7 +1226,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**波胆策略层（Correct Score Strategy Layer）**")
+        st.markdown("**波胆策略增强层（Correct Score Strategy v2.1）**")
         st.dataframe(
             pd.DataFrame(correct_score_strategy_rows(match, market_intelligence, scenario)),
             use_container_width=True,
@@ -1269,7 +1269,7 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**波胆策略层（Correct Score Strategy Layer）**")
+        st.markdown("**波胆策略增强层（Correct Score Strategy v2.1）**")
         st.dataframe(
             pd.DataFrame(correct_score_strategy_rows(match, market_intelligence, scenario)),
             use_container_width=True,
@@ -1287,7 +1287,7 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
 def render_scenario_coverage_analysis(scenario_engine):
     scenario = scenario_engine or {}
     with st.container(border=True):
-        st.markdown("**情景概率与权重分析（Scenario Engine）**")
+        st.markdown("**情景概率与权重分析（Scenario Engine v2）**")
         st.caption(
             "Scenario Engine v2 是受约束情景权重层：不覆盖 TPB，不改变比赛投资分或推荐金额，不使用用户输入，不计算 EV/ROI。"
         )
@@ -1571,23 +1571,7 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
             market_intelligence,
             scenario_engine,
         )
-        render_betting_opinion(betting_opinion, odds, polymarket, match)
-        render_portfolio_ranking(
-            [],
-            match,
-            distribution,
-            None,
-            {
-                "odds": odds,
-                "api_football_data": api_football_data,
-                "polymarket": polymarket,
-            },
-        )
-        render_market_intelligence_layer(market_intelligence)
-        render_scenario_coverage_analysis(scenario_engine)
-        render_scenario_optimization_view_v2(scenario_engine, match=match, market_intelligence=market_intelligence)
         render_model_explanation_layer(scenario_engine)
-        render_system_portfolio_layer(market_intelligence, scenario_engine, match=match)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)
         st.caption("结果分布为观察层，不参与 TPB 投资分、推荐金额或排序。")

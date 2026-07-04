@@ -334,36 +334,36 @@ def test_architecture_guardrails():
     assert "No hidden scoring weights exist" in rubric_text
 
     report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
-    for heading in [
-        "## 1. 核心决策层",
-        "## 2. 市场结构层",
-        "## 3. 情景概率与权重分析",
-        "## 情景覆盖优化层 v2",
-        "## 4. 系统推荐投注组合",
-        "## 5. 系统排名组合",
-        "## 6. Execution Layer",
-    ]:
-        assert heading in report_text
-    assert "## 模型方法透明层" in report_text
     assert "## 最终决策区（FINAL DECISION BLOCK）" in report_text
+    assert "### 3. 情景概率与权重分析（Scenario Engine v2）" in report_text
+    assert "### 4. 系统推荐投注组合（System Portfolio）" in report_text
+    assert "### 5. 系统排名组合（System Ranking Bets，仅系统）" in report_text
+    assert "## 6. Execution Layer" in report_text
+    assert "## 模型方法透明层" in report_text
     assert "用户执行层不进入本区" in report_text
     assert "### 市场结构计算方法" in report_text
     assert "### 情景概率推导方法" in report_text
     assert "### 覆盖映射逻辑" in report_text
     assert "### 情景到组合的解释映射" in report_text
-    assert "波胆策略层（Correct Score Strategy Layer）" in report_text
+    assert "波胆策略增强层（Correct Score Strategy v2.1）" in report_text
     assert "主波胆覆盖" in report_text
     assert "防守波胆" in report_text
     assert "高赔率尾部波胆" in report_text
-    assert "系统推荐投注组合 = TPB 锚点 + 市场结构 + 受约束情景权重综合生成" in report_text
-    assert "系统排名只使用 TPB 锚点、市场结构和受约束情景权重" in report_text
+    assert "｜情景依赖：" in report_text
+    assert "*format_market_intelligence_lines(market_intelligence)" not in report_text
+    assert "*format_scenario_engine_lines(scenario_engine)" not in report_text
+    assert "*format_scenario_optimization_v2_lines(scenario_engine)" not in report_text
+    assert "*format_system_portfolio_lines(market_intelligence, scenario_engine, match)" not in report_text
 
     app_text = (repo_root / "app.py").read_text(encoding="utf-8")
     assert "最终决策区（FINAL DECISION BLOCK）" in app_text
     assert "用户执行层不进入本区" in app_text
     assert "render_final_decision_summary" in app_text
-    assert "情景覆盖优化视图 v2" in app_text
-    assert "波胆策略层（Correct Score Strategy Layer）" in app_text
+    assert "波胆策略增强层（Correct Score Strategy v2.1）" in app_text
+    assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
+    assert "        render_scenario_coverage_analysis(scenario_engine)" not in app_text
+    assert "        render_scenario_optimization_view_v2(scenario_engine, match=match, market_intelligence=market_intelligence)" not in app_text
+    assert "        render_system_portfolio_layer(market_intelligence, scenario_engine, match=match)" not in app_text
 
     core_files = [
         repo_root / "modules" / "probability_base.py",
