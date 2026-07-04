@@ -280,318 +280,288 @@ API-Football market data
   -> system-only bounded recommendation synthesis
   -> methodology transparency
   -> deterministic stake display + UI/report display
-```
-
 Customer execution chain:
-
-```text
 user execution input -> Value Check / execution evaluation -> UI/report display only
-```
-
 System invariants:
-
-- TPB cannot be overridden.
-- Market Structure cannot become an EV/ROI/profit optimizer.
-- Scenario Engine cannot become an EV model, ROI model, profit optimizer, ML
-  training system, or black-box optimizer.
-- Scenario Engine can influence System Ranking only through bounded,
-  deterministic, explainable Scenario Weights.
-- Execution does not affect upstream layers.
-- Scenario Thinking cannot become an unbounded decision engine.
-- No layer may become an EV/ROI system.
-- No hidden scoring weights, black-box transformations, EV/ROI/profit optimizer
-  reasoning, or ML training behavior are allowed.
-- Not multiple systems: one unified decision flow, one interpretation layer, and
-  one separate execution layer.
-
-## 2. Execution Layer: Git, UI, API
-
+TPB cannot be overridden.
+Market Structure cannot become an EV/ROI/profit optimizer.
+Scenario Engine cannot become an EV model, ROI model, profit optimizer, ML
+training system, or black-box optimizer.
+Scenario Engine can influence System Ranking only through bounded,
+deterministic, explainable Scenario Weights.
+Execution does not affect upstream layers.
+Scenario Thinking cannot become an unbounded decision engine.
+No layer may become an EV/ROI system.
+No hidden scoring weights, black-box transformations, EV/ROI/profit optimizer
+reasoning, or ML training behavior are allowed.
+Not multiple systems: one unified decision flow, one interpretation layer, and
+one separate execution layer.
+2. Execution Layer: Git, UI, API
 Default execution state:
-
-- Branch: `dev-clean`.
-- Mode: multi-layer betting intelligence.
-- UI: displays model outputs and may render user execution review.
-- Scenario = bounded weighted signal layer.
-- Loop: Codex executes, Claude reviews read-only, user decides.
-- Git: no branch operation unless explicitly requested.
-
+Branch: dev-clean.
+Mode: multi-layer betting intelligence.
+UI: displays model outputs and may render user execution review.
+Scenario = bounded weighted signal layer.
+Loop: Codex executes, Claude reviews read-only, user decides.
+Git: no branch operation unless explicitly requested.
 Branch and Git rules:
-
-- Codex must stop if the current branch is not `dev-clean`.
-- All work happens directly on `dev-clean`.
-- No feature branches and no automatic branch creation or branch switching.
-- Branch creation, branch switching, merge, rebase, cherry-pick, push, force
-  push, tag creation, branch deletion, history rewrite, stash deletion, and
-  destructive cleanup require explicit user approval.
-- Commits may include only files scoped by the task.
-- Do not mix governance-only changes with product logic changes unless the task
-  explicitly scopes a governance migration.
-- Prefer fast-forward only when the user explicitly requests a production merge.
-
+Codex must stop if the current branch is not dev-clean.
+All work happens directly on dev-clean.
+No feature branches and no automatic branch creation or branch switching.
+Branch creation, branch switching, merge, rebase, cherry-pick, push, force
+push, tag creation, branch deletion, history rewrite, stash deletion, and
+destructive cleanup require explicit user approval.
+Commits may include only files scoped by the task.
+Do not mix governance-only changes with product logic changes unless the task
+explicitly scopes a governance migration.
+Prefer fast-forward only when the user explicitly requests a production merge.
 UI rules:
-
-- UI code may orchestrate loading, format values, translate labels, and display
-  model outputs.
-- UI code must not compute or mutate TPB, investment score, stake, raw odds,
-  API data, EV, ROI, or legacy strategy score.
-- UI code may display Market Structure Intelligence and Customer Execution
-  Layer outputs returned by model/helper modules.
-
+UI code may orchestrate loading, format values, translate labels, and display
+model outputs.
+UI code must not compute or mutate TPB, investment score, stake, raw odds,
+API data, EV, ROI, or legacy strategy score.
+UI code may display Market Structure Intelligence and Customer Execution
+Layer outputs returned by model/helper modules.
 API and secret rules:
-
-- Never print or commit API keys, tokens, `.env` values, or secrets.
-- API-Football is the only keyed API provider unless explicitly scoped.
-- Real API calls require explicit approval unless the task names the exact
-  bounded call.
-- No broad refresh loops, all-date pulls, all-league pulls, or repeated API
-  refresh loops.
-- Runtime outputs must stay ignored unless explicitly approved.
-
+Never print or commit API keys, tokens, .env values, or secrets.
+API-Football is the only keyed API provider unless explicitly scoped.
+Real API calls require explicit approval unless the task names the exact
+bounded call.
+No broad refresh loops, all-date pulls, all-league pulls, or repeated API
+refresh loops.
+Runtime outputs must stay ignored unless explicitly approved.
 Protected paths and areas:
-
-- `data/`
-- `data/history/`
-- `data/performance_logs/`
-- golden JSON fixtures
-- `.env`, `.env.*`, `*.env`
-- `.streamlit/secrets.toml`
-- generated runtime/cache/log artifacts
-- `main-clean`
-- branch history
-- TPB formulas, API transport, odds settlement, betting strategy, backtest
-  behavior, and ranking behavior unless explicitly scoped.
-
+data/
+data/history/
+data/performance_logs/
+golden JSON fixtures
+.env, .env.*, *.env
+.streamlit/secrets.toml
+generated runtime/cache/log artifacts
+main-clean
+branch history
+TPB formulas, API transport, odds settlement, betting strategy, backtest
+behavior, and ranking behavior unless explicitly scoped.
 Codex-Claude loop:
-
-1. User assigns task.
-2. Codex executes on `dev-clean` with scoped changes only.
-3. Codex runs required local validation.
-4. Codex commits changes when the task requires or authorizes a commit.
-5. Codex marks `REVIEW REQUIRED` after every commit.
-6. Codex may stop at Local Complete with Review Pending if the user has not
-   requested remote sync or review execution.
-7. Codex pushes only when explicitly allowed by the user.
-8. Claude Review may be requested as an independent step. GitHub Actions may
-   either produce sanitized packet artifacts or, with explicit user
-   authorization for that run, execute a read-only Claude API review from the
-   sanitized packet.
-9. Claude performs read-only review from copied packet content, a downloaded
-   artifact, or an explicitly authorized workflow_dispatch review run and
-   returns a verdict artifact or verdict text.
-10. Codex applies approved review fixes if needed on `dev-clean`, validates, and
+User assigns task.
+Codex executes on dev-clean with scoped changes only.
+Codex runs required local validation.
+Codex commits changes when the task requires or authorizes a commit.
+Codex marks REVIEW REQUIRED after every commit.
+Codex may stop at Local Complete with Review Pending if the user has not
+requested remote sync or review execution.
+Codex pushes only when explicitly allowed by the user.
+Claude Review may be requested as an independent step. GitHub Actions may
+produce sanitized packet artifacts, execute explicitly authorized manual
+workflow_dispatch Claude API review, or execute push-triggered Claude API
+review on dev-clean using sanitized commit-range packets.
+Claude performs read-only review from copied packet content, a downloaded
+artifact, an explicitly authorized workflow_dispatch review run, or a
+push-triggered dev-clean review run and returns a verdict artifact or
+verdict text.
+Codex applies approved review fixes if needed on dev-clean, validates, and
    commits the fix.
-11. Every fix commit returns to `REVIEW REQUIRED`.
-12. Codex reports local completion, review state, remote sync state, and any
-    unresolved risks. Production-ready status requires APPROVED review.
-
+Every fix commit returns to REVIEW REQUIRED.
+Codex reports local completion, review state, remote sync state, and any
+unresolved risks. Production-ready status requires APPROVED review.
 Git / Review State Machine:
-
-- `LOCAL_COMPLETE`: commit complete, required local validation complete, and
-  working tree clean. This is a valid stopping state for local development.
-- `PENDING_REVIEW`: commit complete and Claude Review not yet completed. This
-  state records architecture review debt; it does not require push and does not
-  block unrelated local development unless the user requests production-ready
-  status, merge, release, or review closure.
-- `REMOTE_SYNC`: commit has been pushed to `origin/dev-clean` for remote backup,
-  CI, or GitHub Actions review. Remote sync is optional and requires explicit
-  user approval.
-
+LOCAL_COMPLETE: commit complete, required local validation complete, and
+working tree clean. This is a valid stopping state for local development.
+PENDING_REVIEW: commit complete and Claude Review not yet completed. This
+state records architecture review debt; it does not require push and does not
+block unrelated local development unless the user requests production-ready
+status, merge, release, or review closure.
+REMOTE_SYNC: commit has been pushed to origin/dev-clean for remote backup,
+CI, or GitHub Actions review. Remote sync is optional and requires explicit
+user approval.
 State output standard:
-
-- `Local Complete`: `YES` when commit, local validation, and clean worktree are
-  confirmed.
-- `Review State`: `PENDING_REVIEW`, `IN_REVIEW`, `APPROVED`, or
-  `NEEDS_CHANGES`.
-- `Remote Sync`: `YES` only after push to `origin/dev-clean` succeeds.
-- `Push Required`: always `OPTIONAL`, never `REQUIRED`, unless a user explicitly
-  scopes a remote workflow that needs pushed commits.
-
+Local Complete: YES when commit, local validation, and clean worktree are
+confirmed.
+Review State: PENDING_REVIEW, IN_REVIEW, APPROVED, or
+NEEDS_CHANGES.
+Remote Sync: YES only after push to origin/dev-clean succeeds.
+Push Required: always OPTIONAL, never REQUIRED, unless a user explicitly
+scopes a remote workflow that needs pushed commits.
 Decoupled Review Request System:
+Claude Review is required after every Codex commit, but review is not an
+automatic side effect of commit creation.
+Codex must request Claude Review after every commit.
+Codex must mark committed work as REVIEW REQUIRED / PENDING_REVIEW until
+an approved manual/chat-based review, explicitly authorized workflow_dispatch
+Claude API review, or push-triggered dev-clean Claude API review is completed.
+Commit plus local validation can be LOCAL_COMPLETE.
+Commit does not equal APPROVED review.
+CI does not replace Claude Review.
+Review is not assumed to have run.
+Claude Review is read-only but required as a separate architecture validation
+state.
+Codex must not skip review for governance-only, documentation-only, or
+"low-risk" commits.
+Codex may continue local development while review is pending when the user
+assigns another local task, but must not report production-ready status, merge,
+release, or review closure while review is pending.
+Push is optional remote sync, but when a commit is pushed to dev-clean, the
+configured push-triggered Claude Review workflow may automatically run.
+Claude Review does not inherently depend on push. Local packet-based review
+can use copied packet content, while GitHub workflow review requires remote
+sync and the configured workflow.
+Remote workflow_dispatch has two allowed modes:Packet artifact mode: runs validation, generates a sanitized packet, and
+uploads it as a GitHub Actions artifact without AI inference.
+Authorized Claude API review mode: after explicit user authorization for
+that run, generates the same sanitized packet, sends only that packet to
+Anthropic Claude API, and uploads the read-only verdict artifact.
 
-- Claude Review is required after every Codex commit, but review is not an
-  automatic side effect of commit creation.
-- Codex must request Claude Review after every commit.
-- Codex must mark committed work as `REVIEW REQUIRED` / `PENDING_REVIEW` until
-  an approved manual/chat-based review or explicitly authorized
-  workflow_dispatch Claude API review is independently completed.
-- Commit plus local validation can be `LOCAL_COMPLETE`.
-- Commit does not equal `APPROVED` review.
-- CI does not replace Claude Review.
-- Review is not assumed to have run.
-- Claude Review is read-only but required as a separate architecture validation
-  state.
-- Codex must not skip review for governance-only, documentation-only, or
-  "low-risk" commits.
-- Codex may continue local development while review is pending when the user
-  assigns another local task, but must not report production-ready status, merge,
-  release, or review closure while review is pending.
-- Push is optional remote sync, not a required validation step.
-- Claude Review does not inherently depend on push. Local packet-based review
-  can use copied packet content, while GitHub workflow review requires explicit
-  user-approved remote sync and workflow_dispatch.
-- Remote `workflow_dispatch` has two allowed modes:
-  1. Packet artifact mode: runs validation, generates a sanitized packet, and
-     uploads it as a GitHub Actions artifact without AI inference.
-  2. Authorized Claude API review mode: after explicit user authorization for
-     that run, generates the same sanitized packet, sends only that packet to
-     Anthropic Claude API, and uploads the read-only verdict artifact.
-- CI workflow and Claude Review workflow responsibilities must remain distinct.
-  Ordinary CI must not perform model-based review, automated AI evaluation, or
-  external LLM inference.
-- Claude Review may be performed by manual/chat-based analysis of downloaded
-  packet content or by the explicitly authorized workflow_dispatch Claude API
-  review mode.
-- If review cannot be requested or triggered because workflow, Claude, token
-  authorization, local dependency, or user approval is missing, Codex must
-  report:
-  `REVIEW REQUIRED: PENDING_REVIEW`.
-- If Claude Review fails, returns NEEDS_CHANGES/BLOCKED, or cannot produce a
-  verdict, Codex must report the task as incomplete until the user authorizes a
-  scoped fix or explicitly stops the task.
-
+Push-triggered Claude API review is allowed only on dev-clean.
+Push-triggered Claude API review must use a sanitized HEAD^..HEAD
+commit-range packet.
+Push-triggered Claude API review must send only the sanitized packet and
+standard rubric/prompt to Anthropic Claude API.
+Push-triggered Claude API review must upload the Claude read-only verdict as
+an artifact.
+Pull request-triggered Claude API review remains disabled.
+CI workflow and Claude Review workflow responsibilities must remain distinct.
+Ordinary CI must not perform model-based review, automated AI evaluation, or
+external LLM inference.
+Claude Review may be performed by manual/chat-based analysis of downloaded
+packet content, by explicitly authorized workflow_dispatch Claude API review
+mode, or by push-triggered dev-clean Claude API review mode.
+If review cannot be requested or triggered because workflow, Claude, token
+authorization, local dependency, or user approval is missing, Codex must
+report:
+REVIEW REQUIRED: PENDING_REVIEW.
+If Claude Review fails, returns NEEDS_CHANGES/BLOCKED, or cannot produce a
+verdict, Codex must report the task as incomplete until the user authorizes a
+scoped fix or explicitly stops the task.
 Review State Machine:
+PENDING_REVIEW: Codex has committed changes and requested review, but
+Claude Review has not started.
+IN_REVIEW: manual/chat-based review is in progress, an explicitly
+authorized workflow_dispatch Claude API review is running, or a
+push-triggered dev-clean Claude API review is running or awaiting a verdict
+artifact.
+APPROVED: Claude Review returned PASS or PASS_WITH_POLISH with no required
+blocking fix. Only APPROVED means the committed task is complete.
+NEEDS_CHANGES: Claude Review returned NEEDS_CHANGES/BLOCKED, failed to
+produce a verdict, or identified a required fix.
+Review System Rule:
+Ordinary CI only performs validation and sanitized packet artifact generation
+with no AI inference.
+Claude API review is allowed through:manual workflow_dispatch with explicit user authorization for that run,
+or
+push to dev-clean using a sanitized HEAD^..HEAD commit-range packet.
 
-- `PENDING_REVIEW`: Codex has committed changes and requested review, but
-  Claude Review has not started.
-- `IN_REVIEW`: manual/chat-based review is in progress, or an explicitly
-  authorized workflow_dispatch Claude API review is running or awaiting a
-  verdict artifact.
-- `APPROVED`: Claude Review returned PASS or PASS_WITH_POLISH with no required
-  blocking fix. Only APPROVED means the committed task is complete.
-- `NEEDS_CHANGES`: Claude Review returned NEEDS_CHANGES/BLOCKED, failed to
-  produce a verdict, or identified a required fix.
-
-Review System Rule (explicit authorization flow):
-
-- Ordinary CI only performs validation and sanitized packet artifact generation
-  with no AI inference.
-- Claude API review is allowed only through manual `workflow_dispatch` with an
-  explicit user authorization for that run.
-- The workflow must generate a sanitized packet before any Claude API call.
-- The workflow may send only the sanitized packet and standard rubric/prompt to
-  Anthropic Claude API.
-- The workflow must upload the read-only Claude verdict as an artifact.
-- The workflow must not send secrets, `.env` content, runtime logs,
-  `data/performance_logs`, raw data caches, or unrelated repository content.
-- Claude Review remains read-only: it must not modify code, create branches,
-  commit, push, open pull requests, merge, rebase, or trigger follow-up
-  automation.
-- No push or pull_request auto-triggered Claude API review is allowed.
-- No automatic second review round is allowed unless the user explicitly
-  authorizes that separate run.
-
+The workflow must generate a sanitized packet before any Claude API call.
+The workflow may send only the sanitized packet and standard rubric/prompt to
+Anthropic Claude API.
+The workflow must upload the read-only Claude verdict as an artifact.
+The workflow must not send secrets, .env content, runtime logs,
+data/performance_logs, raw data caches, or unrelated repository content.
+Claude Review remains read-only: it must not modify code, create branches,
+commit, push, open pull requests, merge, rebase, or trigger follow-up
+automation.
+Pull request-triggered Claude API review is disabled.
+No automatic second review round is allowed unless the user explicitly
+authorizes that separate run.
 Review input methods:
-
-- Local `commit_range` packet generation for committed repository changes.
-- Local `packet_path` / packet-based packet preparation.
-- Remote `workflow_dispatch` for CI validation and packet artifact generation
-  when remote sync is explicitly authorized.
-- Remote `workflow_dispatch` for explicitly authorized Claude API review from
-  the sanitized packet when the user approves that run.
-- Manual/chat-based Claude Review from the downloaded artifact or copied packet
-  content remains allowed.
-
+Local commit_range packet generation for committed repository changes.
+Local packet_path / packet-based packet preparation.
+Remote workflow_dispatch for CI validation and packet artifact generation
+when remote sync is explicitly authorized.
+Remote workflow_dispatch for explicitly authorized Claude API review from
+the sanitized packet when the user approves that run.
+Push-triggered dev-clean Claude API review from the sanitized HEAD^..HEAD
+packet.
+Manual/chat-based Claude Review from the downloaded artifact or copied packet
+content remains allowed.
 CI vs Claude Review:
+CI checks syntax, imports, unit tests, smoke tests, and basic command
+correctness.
+GitHub Actions may generate sanitized review packets and upload artifacts for
+manual analysis.
+GitHub Actions may execute Claude API review only in:the dedicated workflow_dispatch review mode with explicit authorization, or
+the push-triggered dev-clean review mode using sanitized packets.
 
-- CI checks syntax, imports, unit tests, smoke tests, and basic command
-  correctness.
-- GitHub Actions may generate sanitized review packets and upload artifacts for
-  manual analysis.
-- GitHub Actions may execute Claude API review only in the dedicated
-  workflow_dispatch review mode and only with explicit user authorization.
-- Claude Review checks architecture validation, TPB baseline integrity, market
-  structure boundaries, Scenario Engine isolation, EV/ROI violation detection,
-  ranking contamination, execution-layer isolation, and governance compliance.
-- CI and Claude Review are both mandatory after a commit. Neither replaces the
-  other. Claude Review is either manual/chat-based or an explicitly authorized
-  workflow_dispatch review run; it is never an automatic push or pull_request
-  side effect.
-
+Claude Review checks architecture validation, TPB baseline integrity, market
+structure boundaries, Scenario Engine isolation, EV/ROI violation detection,
+ranking contamination, execution-layer isolation, and governance compliance.
+CI and Claude Review are both mandatory after a commit. Neither replaces the
+other. Claude Review is manual/chat-based, explicitly authorized
+workflow_dispatch review, or push-triggered dev-clean review; it is never a
+pull_request side effect.
 Role boundaries:
-
-- Codex is the only execution engine. It may edit files, run scripts, validate,
-  commit, and apply Claude feedback within task scope.
-- Claude is read-only. It may review code, logic, risks, and architecture. It
-  must not edit files, run commands, create branches, commit, push, merge, or
-  trigger automation.
-- The user is the final decision authority.
-- No additional agents, branches, or parallel workflows are allowed.
-
-## 3. Safety And Conflict Resolution
-
+Codex is the only execution engine. It may edit files, run scripts, validate,
+commit, and apply Claude feedback within task scope.
+Claude is read-only. It may review code, logic, risks, and architecture. It
+must not edit files, run commands, create branches, commit, push, merge, or
+trigger automation.
+The user is the final decision authority.
+No additional agents, branches, or parallel workflows are allowed.
+3. Safety And Conflict Resolution
 Rule priority, highest to lowest:
-
-1. Multi-layer system contract.
-2. Protected paths and secrets.
-3. Git workflow.
-4. UI display behavior.
-5. Scenario observation.
-
+Multi-layer system contract.
+Protected paths and secrets.
+Git workflow.
+UI display behavior.
+Scenario bounded weighted signal semantics.
 Conflict rules:
-
-- Higher-priority rules always win.
-- Never merge conflicting rules.
-- Never partially apply conflicting rules.
-- Never use heuristic or "best effort" interpretation.
-- Task context cannot bypass protected paths, secrets, Git rules, or the
-  customer-execution isolation rule.
-
+Higher-priority rules always win.
+Never merge conflicting rules.
+Never partially apply conflicting rules.
+Never use heuristic or "best effort" interpretation.
+Task context cannot bypass protected paths, secrets, Git rules, or the
+customer-execution isolation rule.
 Stop conditions:
-
-- Current branch is not `dev-clean`.
-- Task requires branch operation without explicit approval.
-- A new branch is created.
-- Claude attempts to modify code or perform Git/execution actions.
-- Codex bypasses a required Claude review step.
-- A commit has been created but Codex has not marked `REVIEW REQUIRED` /
-  `PENDING_REVIEW`.
-- Codex attempts to mark a committed task complete using CI only.
-- Codex attempts to merge, release, or declare production readiness while review
-  state is PENDING_REVIEW, IN_REVIEW, or NEEDS_CHANGES.
-- Codex reports push as required when the user has not explicitly requested
-  remote sync, CI, or GitHub Actions review.
-- Multiple workflows or parallel agent paths are introduced.
-- Task would reintroduce EV, ROI, hybrid, legacy optimizer, scenario shadow,
-  user-odds decision influence, or risk-gate blocking.
-- User execution input would influence TPB, investment score, stake, coverage,
-  system ranking, raw odds, API data, or system recommendation.
-- Protected paths or secrets would be touched without approval.
-- An unapproved real API call would be made.
-- Destructive Git operation is required.
-- Validation fails and the fix is outside scope.
-- Unrelated dirty files create commit risk.
-
+Current branch is not dev-clean.
+Task requires branch operation without explicit approval.
+A new branch is created.
+Claude attempts to modify code or perform Git/execution actions.
+Codex bypasses a required Claude review step.
+A commit has been created but Codex has not marked REVIEW REQUIRED /
+PENDING_REVIEW.
+Codex attempts to mark a committed task complete using CI only.
+Codex attempts to merge, release, or declare production readiness while review
+state is PENDING_REVIEW, IN_REVIEW, or NEEDS_CHANGES.
+Codex reports push as required when the user has not explicitly requested
+remote sync, CI, or GitHub Actions review.
+Multiple workflows or parallel agent paths are introduced.
+Task would reintroduce EV, ROI, hybrid, legacy optimizer, scenario shadow,
+user-odds decision influence, or risk-gate blocking.
+User execution input would influence TPB, investment score, stake, coverage,
+system ranking, raw odds, API data, or system recommendation.
+Protected paths or secrets would be touched without approval.
+An unapproved real API call would be made.
+Destructive Git operation is required.
+Validation fails and the fix is outside scope.
+Unrelated dirty files create commit risk.
 Validation defaults:
-
-- Code changes: `python3 -m py_compile app.py modules/*.py scripts/*.py`,
-  `python3 scripts/test_portfolio_engine.py`, `git diff --check`, and
-  `git status`.
-- Governance-only changes: confirm only governance files changed, run
-  `git diff --check`, and confirm `git status`.
-- UI changes: compile validation plus browser verification only when requested
-  or required by the task.
-- After any commit, mark `REVIEW REQUIRED` and report the current review state.
-  Request Claude Review using an authorized review method when scoped or
-  approved. If review cannot be triggered yet, report
-  `REVIEW REQUIRED: PENDING_REVIEW` and `Push Required: OPTIONAL`.
-
-## Codex Execution Loop
-
-1. Check branch is `dev-clean`.
-2. Read `AGENTS.md`.
-3. Validate task scope, allowed files, forbidden files, and approvals.
-4. Execute only allowed operations on `dev-clean`.
-5. Run local validation.
-6. Commit when the task requires or authorizes a commit.
-7. Mark `REVIEW REQUIRED` / `PENDING_REVIEW` after every commit.
-8. Report `LOCAL_COMPLETE` when commit, validation, and clean worktree are
-   confirmed.
-9. Request Claude Review as an independent step when scoped or approved.
-10. Push only when explicitly approved as optional remote sync.
-11. Apply scoped fixes if needed, then repeat validation, commit, and review
-   request for the fix.
-12. Report files changed, validations, Claude findings, fixes, protected-path
-   status, TPB baseline integrity, market-structure integrity, customer
-   execution isolation, UI status, Git state, review state, Remote Sync, Push
-   Required, and
-   unresolved risks.
+Code changes: python3 -m py_compile app.py modules/*.py scripts/*.py,
+python3 scripts/test_portfolio_engine.py, git diff --check, and
+git status.
+Governance-only changes: confirm only governance files changed, run
+git diff --check, and confirm git status.
+UI changes: compile validation plus browser verification only when requested
+or required by the task.
+After any commit, mark REVIEW REQUIRED and report the current review state.
+Request Claude Review using an authorized review method when scoped or
+approved. If review cannot be triggered yet, report
+REVIEW REQUIRED: PENDING_REVIEW and Push Required: OPTIONAL.
+Codex Execution Loop
+Check branch is dev-clean.
+Read AGENTS.md.
+Validate task scope, allowed files, forbidden files, and approvals.
+Execute only allowed operations on dev-clean.
+Run local validation.
+Commit when the task requires or authorizes a commit.
+Mark REVIEW REQUIRED / PENDING_REVIEW after every commit.
+Report LOCAL_COMPLETE when commit, validation, and clean worktree are
+confirmed.
+Request Claude Review as an independent step when scoped or approved.
+Push only when explicitly approved as optional remote sync.
+When a commit is pushed to dev-clean, the push-triggered Claude Review
+workflow may run automatically using a sanitized HEAD^..HEAD packet.
+Apply scoped fixes if needed, then repeat validation, commit, and review
+request for the fix.
+Report files changed, validations, Claude findings, fixes, protected-path
+status, TPB baseline integrity, market-structure integrity, customer
+execution isolation, UI status, Git state, review state, Remote Sync, Push
+Required, and unresolved risks.
