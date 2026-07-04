@@ -381,6 +381,51 @@ def risk_score_v3_summary(scenario_engine):
     }
 
 
+def system_semantic_alignment_rows():
+    return [
+        {
+            "层 / 指标": "TPB",
+            "统一语义": "probability anchor",
+            "真实作用": "提供主胜 / 平局 / 客胜三项概率坐标，不被其他层覆盖。",
+        },
+        {
+            "层 / 指标": "Scenario",
+            "统一语义": "bounded structural weighting layer",
+            "真实作用": "提供受约束情景权重，用于组合构建、排序调整和风险估计。",
+        },
+        {
+            "层 / 指标": "Portfolio",
+            "统一语义": "coverage layer",
+            "真实作用": "展示主覆盖、防守覆盖、高波动覆盖，不直接生成最终金额。",
+        },
+        {
+            "层 / 指标": "Ranking",
+            "统一语义": "ordering layer, not final execution instruction",
+            "真实作用": "对投注结构排序；最终是否执行仍取决于 stake decision layer。",
+        },
+        {
+            "层 / 指标": "RSI",
+            "统一语义": "risk adjustment factor",
+            "真实作用": "不直接输入 stake；通过 Risk Adjustment 改变 Investment Score，从而间接影响资金分配。",
+        },
+        {
+            "层 / 指标": "Stake",
+            "统一语义": "final execution mapping",
+            "真实作用": "只由 Investment Score 档位映射得出。",
+        },
+        {
+            "层 / 指标": "Market Conflict",
+            "统一语义": "inverse of market agreement score",
+            "真实作用": "当前 active model 使用 100 - market_agreement_score；legacy conflict function 已废弃且不使用。",
+        },
+        {
+            "层 / 指标": "Correct Score",
+            "统一语义": "high variance structural signal layer, not execution signal",
+            "真实作用": "作为高波动结构信号展示，不进入 Investment Score、Ranking Score 或 stake mapping。",
+        },
+    ]
+
+
 def scenario_coverage_map_rows(scenario_engine):
     coverage = (scenario_engine or {}).get("coverage_map") or {}
     return [
@@ -1137,7 +1182,6 @@ def format_final_decision_block_lines(
         for row in scenario_rows
     ) or "暂无情景概率与权重数据。"
     top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
-    observation_mode = _is_observation_mode(portfolio_summary)
     score = portfolio_summary.get("decision_score")
     if score is None:
         score = portfolio_summary.get("score")
@@ -1146,19 +1190,24 @@ def format_final_decision_block_lines(
     lines = [
         "## 最终决策区（FINAL DECISION BLOCK）",
         "",
-        "Lite v1：Ranking 是唯一决策排序入口；Portfolio 只保留 coverage structure；用户执行层不进入本区。",
+        "Lite v1：Ranking 是结构排序层，不是最终执行指令；Portfolio 只保留 coverage structure；用户执行层不进入本区。",
+        "最终执行取决于 stake decision layer：Stake 只由 Investment Score 档位映射得出。",
+        "",
+        "### System Semantic Alignment Layer",
+        "",
+    ]
+    for row in system_semantic_alignment_rows():
+        lines.append(
+            f"- {row['层 / 指标']}：{row['统一语义']}｜{row['真实作用']}"
+        )
+    lines.extend([
         "",
         "### 1. TPB Summary",
         "",
         f"- 主方向：{metrics.get('favorite_label') or opinion.get('match_direction') or opinion.get('match_winner', '-')}（{format_value(metrics.get('favorite_probability'))}%）｜TPB：主胜 {percent(probabilities.get('home_win', 0)) if probabilities else '-'} / 平局 {percent(probabilities.get('draw', 0)) if probabilities else '-'} / 客胜 {percent(probabilities.get('away_win', 0)) if probabilities else '-'}",
         f"- Signal Strength / 推荐金额：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100；{_recommended_stake_text(portfolio_summary)}",
         "",
-    ]
-    if observation_mode:
-        lines.extend([
-            "当前为观察模式，系统不提供执行型投注组合。",
-            "",
-        ])
+    ])
     lines.extend([
         "### 2. Market Structure（3指标）",
         "",
@@ -1168,7 +1217,7 @@ def format_final_decision_block_lines(
         "",
         "### 3. Scenario Projection（简化版）",
         "",
-        "- Scenario = TPB + Market signal projection；不做双重 normalization，不计算 EV/ROI。",
+        "- Scenario = 受约束结构权重层；用于 portfolio construction、ranking adjustment、risk estimation，不覆盖 TPB，不计算 EV/ROI。",
         f"- S1-S6：{scenario_summary}",
         "",
         "### 4. Investment Score（2因子）",
@@ -1176,35 +1225,31 @@ def format_final_decision_block_lines(
         f"- Signal：{format_value(investment_breakdown.get('signal'))} / 100；Risk Adjustment：{format_value(investment_breakdown.get('risk_adjustment'))}；RSI：{rss['RSI']}",
         f"- Investment Score：{format_value(score)} / 100",
         "- 公式：Investment Score = Signal × Risk Adjustment；Signal = TPB Edge + Scenario Alignment。",
+        "- 资金链：RSI 不直接输入 stake mapping；RSI 通过 Risk Adjustment 改变 Investment Score，从而间接影响推荐金额。",
         "",
-        "### 5. " + ("组合观察区（无执行信号）" if observation_mode else "Portfolio（coverage only）"),
+        "### 5. Portfolio（coverage only）",
         "",
         f"Portfolio 只保留 coverage structure，不参与 Ranking Score；CQS：{format_value(optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2')))} / 100。",
         "",
     ])
-    if observation_mode:
-        lines.append("- 观察模式：推荐金额为 0 元，当前不输出具体投注组合。")
-    else:
-        for row in system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence):
-            lines.append(
-                f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
-            )
+    for row in system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence):
+        lines.append(
+            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
+        )
     lines.extend([
         "",
-        "### 6. " + ("排序结构（仅结构分析）" if observation_mode else "Ranking Top 3（唯一决策排序入口）"),
+        "### 6. Ranking Top 3（结构排序，非执行指令）",
         "",
-        "Ranking Score = SS + Scenario Alignment - RSI；不复制 Portfolio，不使用用户输入。",
+        "Ranking Score = SS + Scenario Alignment - RSI；Ranking 只排序投注结构，不是最终下注指令；最终执行取决于 stake decision layer。",
         "",
     ])
-    ranking_rows = [] if observation_mode else system_ranking_display_rows(
-            portfolio,
-            scenario,
-            match=match,
-            market_intelligence=market_intelligence,
-        )
-    if observation_mode:
-        lines.append("- 无执行信号：当前为观察模式，Ranking 不输出具体投注组合。")
-    elif not ranking_rows:
+    ranking_rows = system_ranking_display_rows(
+        portfolio,
+        scenario,
+        match=match,
+        market_intelligence=market_intelligence,
+    )
+    if not ranking_rows:
         lines.append("- 暂无系统排序。")
     else:
         for row in ranking_rows:
@@ -1216,11 +1261,12 @@ def format_final_decision_block_lines(
         "### 7. RSI Risk",
         "",
         f"- RSI：{rss['RSI']}｜{rss['组件']}",
+        "- RSI 语义：risk adjustment factor；不直接输入 stake mapping，但会通过 Investment Score 间接影响资金分配。",
         "",
-        "### 8. Tail Signal（波胆）",
+        "### 8. High Variance Structural Signal（波胆）",
         "",
-        "- 波胆已降级为 Tail Signal Layer：不进入 Ranking Score，不影响 Investment Score，仅提示结构尾部。",
-        f"- {'高波动结构提示（仅分析）' if observation_mode else '高波动信号提示'}：{top_score['中文投注描述'] if not observation_mode else '观察模式，不输出波胆执行信号'}｜盘口：{top_score['对应盘口'] if not observation_mode else '-'}｜情景依赖：{top_score['情景依赖'] if not observation_mode else '-'}",
+        "- Correct Score = high variance structural signal layer, not execution signal；不进入 Investment Score、Ranking Score 或 stake mapping。",
+        f"- 高波动结构信号：{top_score['中文投注描述']}｜盘口：{top_score['对应盘口']}｜情景依赖：{top_score['情景依赖']}",
     ])
     return lines
 
@@ -1505,7 +1551,7 @@ def format_risk_surface_v3_lines(scenario_engine):
         "## RSI Risk（Lite v1）",
         "",
         risk_surface_v3.get("description")
-        or "Risk Surface v3 只刻画结构风险，不预测结果，不计算 EV/ROI，不做 optimizer，不改变 TPB、stake 或 ranking。",
+        or "Risk Surface v3 只刻画结构风险，不预测结果，不计算 EV/ROI，不做 optimizer；RSI 可通过 Investment Score 间接影响 stake，不直接输入 stake mapping。",
         "",
         "### RSI 结构风险",
         "",
@@ -1532,7 +1578,7 @@ def format_risk_surface_v3_lines(scenario_engine):
         )
     lines.extend([
         "",
-        "边界：RSI 是 Low / Medium / High qualitative risk index；不是 EV、ROI、profit maximization、ML training 或 black-box scoring。",
+        "边界：RSI 是 Low / Medium / High qualitative risk index；不是 EV、ROI、profit maximization、ML training 或 black-box scoring。RSI 不直接输入 stake mapping，但会通过 Investment Score 间接影响资金分配。",
     ])
     return lines
 
@@ -1544,11 +1590,20 @@ def format_model_explanation_lines(scenario_engine):
         "",
         methodology.get("disclaimer") or "模型方法透明层只展示计算说明，不参与任何模型计算。",
         "",
-        "### 市场结构计算方法",
+        "### System Semantic Alignment Layer",
         "",
     ]
+    for row in system_semantic_alignment_rows():
+        lines.append(
+            f"- {row['层 / 指标']}：{row['统一语义']}｜{row['真实作用']}"
+        )
+    lines.extend([
+        "",
+        "### 市场结构计算方法",
+        "",
+    ])
     methods = methodology.get("market_structure_methods") or {}
-    for key in ["directional_strength", "market_conflict_index", "efficiency_score", "volatility_index"]:
+    for key in ["directional_strength", "market_agreement", "market_conflict_index", "volatility_pressure"]:
         item = methods.get(key) or {}
         lines.append(f"- {item.get('name', key)}")
         lines.append(f"  - 输入：{', '.join(item.get('inputs') or ['-'])}")
@@ -1618,24 +1673,18 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         "## Portfolio Coverage（coverage only）",
         "",
         "本区只展示 coverage structure，不参与 Ranking Score；FINAL DECISION BLOCK 仍是压缩决策视图。",
-        "Lite v1：Portfolio 保留 Primary / Defensive / High Variance Coverage；Ranking 是唯一排序入口。",
+        "Lite v1：Portfolio 保留 Primary / Defensive / High Variance Coverage；Ranking 是结构排序层，不是最终执行指令。",
         "",
     ]
-    if _is_observation_mode(portfolio_summary):
-        lines.extend([
-            "观察模式：推荐金额为 0 元或当前不建议下注，本区不输出具体投注组合。",
-            "Ranking 仅代表结构排序语义，不代表最终下注建议。",
-        ])
-        return lines
     for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
         lines.append(
             f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
         )
     lines.extend([
         "",
-        "### Tail Signal（波胆）",
+        "### High Variance Structural Signal（波胆）",
         "",
-        "说明：波胆已降级为 Tail Signal Layer；不进入 Ranking Score，不影响 Investment Score。",
+        "说明：Correct Score = high variance structural signal layer, not execution signal；不进入 Investment Score、Ranking Score 或 stake mapping。",
         "",
     ])
     for row in correct_score_strategy_rows(match, market_intelligence, scenario):

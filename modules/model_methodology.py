@@ -40,6 +40,11 @@ def build_model_methodology():
                 "inputs": ["bookmaker dispersion", "available market depth"],
                 "logic": "Higher agreement means lower bookmaker dispersion and sufficient market depth.",
             },
+            "market_conflict_index": {
+                "name": "Market Conflict",
+                "inputs": ["Market Agreement Score"],
+                "logic": "Market Conflict = 100 - Market Agreement Score in the active Lite model. The legacy conflict function is deprecated and not used.",
+            },
             "volatility_pressure": {
                 "name": "Volatility Pressure",
                 "inputs": ["draw probability", "market disagreement", "correct-score tail density"],
@@ -53,11 +58,12 @@ def build_model_methodology():
         "investment_score": {
             "formula": "Investment Score = Signal × Risk Adjustment",
             "signal": "Signal = TPB Edge + Scenario Alignment",
-            "risk": "Risk Adjustment is derived from RSI Low / Medium / High.",
+            "risk": "Risk Adjustment is derived from RSI Low / Medium / High. RSI does not enter the stake mapping function directly; it indirectly influences stake through Investment Score.",
         },
         "scenario_projection": {
             "name": "Scenario Projection Layer",
-            "principle": "Scenario = TPB + Market signal projection.",
+            "principle": "Scenario = bounded structural weighting layer from TPB + Market signal projection.",
+            "role": "Scenario weights are used for portfolio construction, ranking adjustment, and risk estimation.",
             "constraints": [
                 "fixed S1-S6 taxonomy",
                 "one projection pass",
@@ -70,7 +76,8 @@ def build_model_methodology():
             "name": "Risk Surface Index (RSI)",
             "formula": "RSI = qualitative max(Market disagreement, Scenario dispersion, Tail density)",
             "outputs": ["Low", "Medium", "High"],
-            "not": ["100-point RSS", "EV input", "ROI input", "stake input"],
+            "role": "RSI is a risk adjustment factor. It affects Investment Score through Risk Adjustment and therefore can indirectly affect stake.",
+            "not": ["100-point RSS", "EV input", "ROI input", "direct stake mapping input"],
         },
         "coverage_quality_score": {
             "name": "Coverage Quality Score (CQS)",
@@ -80,7 +87,8 @@ def build_model_methodology():
         "ranking": {
             "name": "Ranking Score",
             "formula": "Ranking Score = SS + Scenario Alignment - RSI",
-            "outputs": "Top 3 only",
+            "outputs": "Top 3 ordered structure only",
+            "role": "Ranking orders betting structures; it is not a final execution instruction. Final execution still depends on the stake decision layer.",
             "forbidden_inputs": [
                 "Portfolio coverage score",
                 "Correct Score tail signal",
@@ -88,6 +96,25 @@ def build_model_methodology():
                 "execution layer",
                 "EV / ROI",
             ],
+        },
+        "correct_score": {
+            "name": "Correct Score",
+            "role": "high variance structural signal layer, not execution signal",
+            "boundaries": [
+                "does not enter Investment Score",
+                "does not enter Ranking Score",
+                "does not enter stake mapping",
+            ],
+        },
+        "semantic_alignment": {
+            "TPB": "probability anchor",
+            "Scenario": "bounded structural weighting layer",
+            "Portfolio": "coverage layer",
+            "Ranking": "ordering layer, not final execution instruction",
+            "RSI": "risk adjustment factor that indirectly influences stake through Investment Score",
+            "Stake": "final execution mapping from Investment Score only",
+            "Market Conflict": "inverse of Market Agreement Score in the active Lite model; legacy conflict function is deprecated and not used",
+            "Correct Score": "high variance structural signal layer, not execution signal",
         },
         "audit_guards": [
             "No hidden ranking weights",

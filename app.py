@@ -2,6 +2,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from html import escape
 from zoneinfo import ZoneInfo
+import importlib
 
 import pandas as pd
 import streamlit as st
@@ -10,7 +11,8 @@ import yaml
 from modules.match_parser import parse_match
 from modules.market_utils import correct_score_summary, identify_handicap_center, identify_total_center
 from modules.betting_opinion import build_betting_opinion
-from modules.decision_engine import build_decision_engine
+import modules.probability_base as probability_base_module
+import modules.decision_engine as decision_engine_module
 from modules.odds_client import fetch_match_data
 from modules.market_data import build_market_data
 from modules.market_intelligence import build_market_intelligence
@@ -38,6 +40,7 @@ from modules.report_generator import (
     correct_score_top_signal_row,
     scenario_probability_weight_rows,
     scenario_risk_surface_rows,
+    system_semantic_alignment_rows,
     system_portfolio_display_rows,
     system_portfolio_top_rows,
     system_ranking_display_rows,
@@ -60,6 +63,11 @@ from modules.weather_client import weather_for_fixture
 from modules.perf_logger import perf_timer
 from modules.portfolio_engine import build_core_decision_layers
 from modules.user_portfolio_compare import build_user_portfolio_comparison
+
+
+probability_base_module = importlib.reload(probability_base_module)
+decision_engine_module = importlib.reload(decision_engine_module)
+build_decision_engine = decision_engine_module.build_decision_engine
 
 
 MODEL_VERSION_TRACKING = {
@@ -1203,15 +1211,18 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
     optimization = scenario.get("scenario_optimization_v2") or {}
     top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
     rss = risk_score_v3_summary(scenario)
-    observation_mode = float(display_stake_amount or 0) <= 0
 
     with st.container(border=True):
         st.markdown("**最终决策区（FINAL DECISION BLOCK）**")
         st.caption(
-            "用户执行层不进入本区；Ranking 为结构排序，不代表最终下注建议。"
+            "用户执行层不进入本区；Ranking 是结构排序，不是最终执行指令；最终执行仍取决于 stake decision layer。"
         )
-        if observation_mode:
-            st.info("当前为观察模式，系统不提供执行型投注组合。")
+        st.markdown("**System Semantic Alignment Layer**")
+        st.dataframe(
+            pd.DataFrame(system_semantic_alignment_rows()),
+            use_container_width=True,
+            hide_index=True,
+        )
 
         st.markdown("**1. TPB Summary**")
         tpb_cols = st.columns(4)
@@ -1236,7 +1247,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
             st.markdown("**3. Scenario Projection（简化版）**")
-            st.caption("Scenario = TPB + Market signal projection；不做双重 normalization，不计算 EV/ROI。")
+            st.caption("Scenario = 受约束结构权重层；用于 portfolio construction、ranking adjustment、risk estimation，不覆盖 TPB，不计算 EV/ROI。")
             st.caption(
                 "S1-S6："
                 + "；".join(
@@ -1250,43 +1261,31 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         score_cols[1].metric("RSI", rss["RSI"])
         score_cols[2].metric("Risk Adjustment", fmt(investment_breakdown.get("risk_adjustment")))
         score_cols[3].metric("Investment Score", f"{score_layer.get('investment_score', 0)} / 100")
-        st.caption("Investment Score = Signal × Risk Adjustment；Signal = TPB Edge + Scenario Alignment。")
+        st.caption("Investment Score = Signal × Risk Adjustment；Signal = TPB Edge + Scenario Alignment。RSI 不直接输入 stake，但会通过 Investment Score 间接影响资金分配。")
 
-        portfolio_title = "5. 组合观察区（无执行信号）" if observation_mode else "5. Portfolio（coverage only）"
-        st.markdown(f"**{portfolio_title}**")
+        st.markdown("**5. Portfolio（coverage only）**")
         st.caption(f"Portfolio 只保留 coverage structure，不参与 Ranking Score；CQS：{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', '-'))} / 100。")
-        if observation_mode:
-            st.info("观察模式：推荐金额为 0 元，当前不输出具体投注组合。")
-            st.caption("高波动结构提示（仅分析）：观察模式，不输出波胆执行信号。")
-        else:
-            st.dataframe(
-                pd.DataFrame(system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence)),
-                use_container_width=True,
-                hide_index=True,
-            )
-        ranking_title = "6. 排序结构（仅结构分析）" if observation_mode else "6. Ranking Top 3（唯一决策排序入口）"
-        st.markdown(f"**{ranking_title}**")
-        st.caption("Ranking Score = SS + Scenario Alignment - RSI；不复制 Portfolio，不使用用户输入。")
-        if observation_mode:
-            st.info("无执行信号：当前为观察模式，Ranking 不输出具体投注组合。")
-        else:
-            st.dataframe(
-                pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
-                use_container_width=True,
-                hide_index=True,
-            )
+        st.dataframe(
+            pd.DataFrame(system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence)),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**6. Ranking Top 3（结构排序，非执行指令）**")
+        st.caption("Ranking Score = SS + Scenario Alignment - RSI；Ranking 只排序投注结构，不是最终下注指令；最终执行取决于 stake decision layer。")
+        st.dataframe(
+            pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
+            use_container_width=True,
+            hide_index=True,
+        )
         st.markdown("**7. RSI Risk**")
-        st.caption(f"RSI：{rss['RSI']}｜{rss['组件']}。RSI 只做 Low / Medium / High 风险层级。")
-        st.markdown("**8. Tail Signal（波胆）**")
-        st.caption("波胆已降级为 Tail Signal Layer：不进入 Ranking Score，不影响 Investment Score，仅提示结构尾部。")
-        if observation_mode:
-            st.caption("高波动结构提示（仅分析）：观察模式，不输出波胆执行信号。")
-        else:
-            st.caption(
-                "高波动信号提示："
-                f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
-                f"情景依赖：{top_score.get('情景依赖', '-')}"
-            )
+        st.caption(f"RSI：{rss['RSI']}｜{rss['组件']}。RSI 是风险调整因子：不直接输入 stake mapping，但通过 Investment Score 间接影响资金分配。")
+        st.markdown("**8. High Variance Structural Signal（波胆）**")
+        st.caption("Correct Score = high variance structural signal layer, not execution signal；不进入 Investment Score、Ranking Score 或 stake mapping。")
+        st.caption(
+            "高波动结构信号："
+            f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
+            f"情景依赖：{top_score.get('情景依赖', '-')}"
+        )
 
 
 def render_market_intelligence_layer(market_intelligence):
@@ -1316,15 +1315,15 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）**")
-        st.caption("波胆是高熵、高方差、高信息密度市场，用于表达情景波动结构，不作为 EV/ROI 或收益优化。")
+        st.markdown("**波胆高波动结构信号（Correct Score）**")
+        st.caption("Correct Score = high variance structural signal layer, not execution signal；用于表达情景波动结构，不进入 Investment Score、Ranking Score 或 stake mapping。")
         st.dataframe(
             pd.DataFrame(correct_score_strategy_rows(match, market_intelligence, scenario)),
             use_container_width=True,
             hide_index=True,
         )
         st.markdown("**系统排名组合（System Ranking Bets，仅系统）**")
-        st.caption("系统排名只使用 TPB 锚点、市场结构和受约束情景权重；不使用用户输入。")
+        st.caption("系统排名只使用 TPB 锚点、市场结构和受约束情景权重；它是结构排序，不是最终执行指令，最终执行仍取决于 stake decision layer。")
         st.dataframe(
             pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
             use_container_width=True,
@@ -2601,15 +2600,15 @@ def render_analysis_page(match_text):
                 render_match_overview(match, api_football_data, selected_fixture, allow_live_weather=True)
             with perf_timer("detail", "decision_engine"):
                 decision = build_decision_engine(
-                    match,
-                    odds,
-                    polymarket,
-                    api_football_data,
-                    betting_opinion,
-                    None,
-                    result_distribution,
-                    market_intelligence,
-                    scenario_engine,
+                    match=match,
+                    odds=odds,
+                    polymarket=polymarket,
+                    api_football_data=api_football_data,
+                    betting_opinion=betting_opinion,
+                    actual_odds=None,
+                    distribution=result_distribution,
+                    market_intelligence=market_intelligence,
+                    scenario_engine=scenario_engine,
                 )
             user_portfolio_key = f"user_portfolio_input_{selected_fixture.get('fixture_id') or match_text}"
             user_portfolio_raw = st.session_state.get(user_portfolio_key, "")

@@ -258,10 +258,16 @@ def test_scenario_engine_contract():
     assert methodology["system_definition"]["identity"] == "Lite Explainable Betting Decision System v1"
     assert methodology["signal_strength"]["formula"] == "SS = (max(TPB probabilities) - second max(TPB probabilities)) * 100"
     assert methodology["investment_score"]["formula"] == "Investment Score = Signal × Risk Adjustment"
-    assert methodology["scenario_projection"]["principle"] == "Scenario = TPB + Market signal projection."
+    assert methodology["scenario_projection"]["principle"] == "Scenario = bounded structural weighting layer from TPB + Market signal projection."
+    assert methodology["scenario_projection"]["role"] == "Scenario weights are used for portfolio construction, ranking adjustment, and risk estimation."
     assert methodology["risk_surface_index"]["outputs"] == ["Low", "Medium", "High"]
+    assert "indirectly affect stake" in methodology["risk_surface_index"]["role"]
+    assert methodology["market_structure_methods"]["market_conflict_index"]["logic"] == "Market Conflict = 100 - Market Agreement Score in the active Lite model. The legacy conflict function is deprecated and not used."
     assert methodology["coverage_quality_score"]["formula"] == "CQS = coverage completeness - redundancy"
     assert methodology["ranking"]["formula"] == "Ranking Score = SS + Scenario Alignment - RSI"
+    assert "not a final execution instruction" in methodology["ranking"]["role"]
+    assert methodology["correct_score"]["role"] == "high variance structural signal layer, not execution signal"
+    assert methodology["semantic_alignment"]["RSI"] == "risk adjustment factor that indirectly influences stake through Investment Score"
     assert "不覆盖 TPB" in scenario["disclaimer"]
 
 
@@ -353,16 +359,20 @@ def test_architecture_guardrails():
     assert "Investment Score = Signal × Risk Adjustment" in report_text
     assert "Ranking Score = SS + Scenario Alignment - RSI" in report_text
     assert "Portfolio 只保留 coverage structure" in report_text
-    assert "Tail Signal Layer" in report_text
-    assert "组合观察区（无执行信号）" in report_text
-    assert "排序结构（仅结构分析）" in report_text
+    assert "System Semantic Alignment Layer" in report_text
+    assert "High Variance Structural Signal" in report_text
+    assert "risk adjustment factor" in report_text
+    assert "legacy conflict function 已废弃且不使用" in report_text
+    assert "组合观察区（无执行信号）" not in report_text
+    assert "排序结构（仅结构分析）" not in report_text
+    assert "当前不输出具体投注组合" not in report_text
     assert "## 6. Execution Layer" in report_text
     assert "用户执行层不进入本区" in report_text
     assert "RSI：{rss['RSI']}" in report_text
-    assert "高波动结构提示（仅分析）" in report_text
+    assert "高波动结构信号" in report_text
     assert "Portfolio Coverage（coverage only）" in report_text
-    assert "Ranking 是唯一排序入口" in report_text
-    assert "Scenario = TPB + Market signal projection" in report_text
+    assert "Ranking 是结构排序层" in report_text
+    assert "Scenario = 受约束结构权重层" in report_text
     assert "主波胆" in report_text
     assert "结构波胆" in report_text
     assert "高波动波胆" in report_text
@@ -377,13 +387,15 @@ def test_architecture_guardrails():
     assert "render_final_decision_summary" in app_text
     assert "Portfolio（coverage only）" in app_text
     assert "Investment Score（2因子）" in app_text
-    assert "Ranking Top 3（唯一决策排序入口）" in app_text
-    assert "Tail Signal（波胆）" in app_text
-    assert "组合观察区（无执行信号）" in app_text
-    assert "高波动结构提示（仅分析）" in app_text
-    assert "排序结构（仅结构分析）" in app_text
+    assert "Ranking Top 3（结构排序，非执行指令）" in app_text
+    assert "High Variance Structural Signal（波胆）" in app_text
+    assert "System Semantic Alignment Layer" in app_text
+    assert "组合观察区（无执行信号）" not in app_text
+    assert "高波动结构提示（仅分析）" not in app_text
+    assert "排序结构（仅结构分析）" not in app_text
+    assert "当前不输出具体投注组合" not in app_text
     assert "Ranking Score = SS + Scenario Alignment - RSI" in app_text
-    assert "Scenario = TPB + Market signal projection" in app_text
+    assert "Scenario = 受约束结构权重层" in app_text
     assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
     assert "        render_risk_surface_quantification_v3(scenario_engine)" not in app_text
     assert "        render_model_explanation_layer(scenario_engine)" not in app_text

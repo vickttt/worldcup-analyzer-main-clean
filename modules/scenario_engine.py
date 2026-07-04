@@ -230,7 +230,7 @@ def _risk_score_v3(metrics, scenario_weights):
             "tail_density": round(tail_density, 1),
             "scenario_dispersion": dispersion,
         },
-        "disclaimer": "RSI 是 Low / Medium / High 结构风险索引，不是 100 分制 RSS、EV、ROI 或 stake 输入。",
+        "disclaimer": "RSI 是 Low / Medium / High 结构风险索引，不是 100 分制 RSS、EV 或 ROI。RSI 不直接输入 stake mapping，但会通过 Investment Score 间接影响资金分配。",
     }
 
 
@@ -598,7 +598,7 @@ def _portfolio_mapping_explanation(coverage_map):
         },
         "defensive_position_coverage": {
             "scenario": defensive.get("scenario", "-"),
-            "explanation": "Defensive Position 解释平局、冷门或低比分防守路径；不改变 TPB、stake 或用户执行层。",
+            "explanation": "Defensive Position 解释平局、冷门或低比分防守路径；不覆盖 TPB，不使用用户执行层，资金执行仍由 Investment Score -> stake mapping 决定。",
         },
         "tail_exposure": {
             "scenario": tail.get("scenario", "-"),
@@ -646,8 +646,8 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
             "risk_score_v3": risk_score_v3,
             "description": (
                 "Risk Surface Index Lite v1 reports Low / Medium / High structural risk. "
-                "It does not predict results, calculate EV/ROI, optimize profit, alter TPB, "
-                "or alter stake."
+                "It does not predict results, calculate EV/ROI, optimize profit, or alter TPB. "
+                "RSI can indirectly influence stake only through Investment Score."
             ),
         },
         "coverage_map": coverage_map,
@@ -660,6 +660,7 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
         "methodology": build_model_methodology(),
         "disclaimer": (
             "Scenario Projection Lite v1 使用 TPB + Market signal projection 生成 S1-S6；"
-            "不预测比分，不计算 EV/ROI，不做盈利最大化，不覆盖 TPB，不改变 stake，也不使用用户输入。"
+            "它是受约束结构权重层，用于 portfolio construction、ranking adjustment、risk estimation；"
+            "不预测比分，不计算 EV/ROI，不做盈利最大化，不覆盖 TPB，也不使用用户输入。"
         ),
     }
