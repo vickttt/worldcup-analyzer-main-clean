@@ -31,6 +31,7 @@ from modules.report_generator import (
     portfolio_leg_display_rows,
     save_report,
     scenario_coverage_map_rows,
+    correct_score_strategy_rows,
     scenario_probability_weight_rows,
     scenario_risk_surface_rows,
     system_portfolio_display_rows,
@@ -1220,9 +1221,23 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         st.caption(f"覆盖效率 v2：{optimization.get('coverage_efficiency_score_v2', '-')} / 100")
 
         st.markdown("**4. 系统推荐投注组合（System Portfolio）**")
-        st.dataframe(pd.DataFrame(system_portfolio_display_rows(scenario)), use_container_width=True, hide_index=True)
+        st.dataframe(
+            pd.DataFrame(system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence)),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**波胆策略层（Correct Score Strategy Layer）**")
+        st.dataframe(
+            pd.DataFrame(correct_score_strategy_rows(match, market_intelligence, scenario)),
+            use_container_width=True,
+            hide_index=True,
+        )
         st.markdown("**5. 系统排名组合（System Ranking Bets，仅系统）**")
-        st.dataframe(pd.DataFrame(system_ranking_display_rows(portfolio, scenario)), use_container_width=True, hide_index=True)
+        st.dataframe(
+            pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
+            use_container_width=True,
+            hide_index=True,
+        )
 
 
 def render_market_intelligence_layer(market_intelligence):
@@ -1239,7 +1254,7 @@ def render_market_intelligence_layer(market_intelligence):
         cols[4].metric("冷门概率", metrics.get("upset_probability", "-"))
 
 
-def render_system_portfolio_layer(market_intelligence, scenario_engine=None):
+def render_system_portfolio_layer(market_intelligence, scenario_engine=None, match=None):
     scenario = scenario_engine or {}
     portfolio = (
         scenario.get("system_optimized_portfolio_v2")
@@ -1249,10 +1264,24 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None):
     with st.container(border=True):
         st.markdown("**系统推荐投注组合（System Portfolio）**")
         st.caption("系统组合由 TPB 锚点 + 市场结构 + 受约束情景权重综合生成；不使用用户输入，不计算 EV/ROI，不做盈利优化。")
-        st.dataframe(pd.DataFrame(system_portfolio_display_rows(scenario)), use_container_width=True, hide_index=True)
+        st.dataframe(
+            pd.DataFrame(system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence)),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**波胆策略层（Correct Score Strategy Layer）**")
+        st.dataframe(
+            pd.DataFrame(correct_score_strategy_rows(match, market_intelligence, scenario)),
+            use_container_width=True,
+            hide_index=True,
+        )
         st.markdown("**系统排名组合（System Ranking Bets，仅系统）**")
         st.caption("系统排名只使用 TPB 锚点、市场结构和受约束情景权重；不使用用户输入。")
-        st.dataframe(pd.DataFrame(system_ranking_display_rows(portfolio, scenario)), use_container_width=True, hide_index=True)
+        st.dataframe(
+            pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
+            use_container_width=True,
+            hide_index=True,
+        )
 
 
 def render_scenario_coverage_analysis(scenario_engine):
@@ -1297,7 +1326,7 @@ def render_scenario_coverage_analysis(scenario_engine):
         st.dataframe(pd.DataFrame(mapping_rows), use_container_width=True, hide_index=True)
 
 
-def render_scenario_optimization_view_v2(scenario_engine):
+def render_scenario_optimization_view_v2(scenario_engine, match=None, market_intelligence=None):
     scenario = scenario_engine or {}
     optimization = scenario.get("scenario_optimization_v2") or {}
     if not optimization:
@@ -1321,7 +1350,14 @@ def render_scenario_optimization_view_v2(scenario_engine):
         ]:
             st.markdown(f"**{title}**")
             st.dataframe(
-                pd.DataFrame(portfolio_leg_display_rows(optimization.get(key) or [])),
+                pd.DataFrame(
+                    portfolio_leg_display_rows(
+                        optimization.get(key) or [],
+                        match=match,
+                        market_intelligence=market_intelligence,
+                        scenario_engine=scenario,
+                    )
+                ),
                 use_container_width=True,
                 hide_index=True,
             )
@@ -1549,9 +1585,9 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
         )
         render_market_intelligence_layer(market_intelligence)
         render_scenario_coverage_analysis(scenario_engine)
-        render_scenario_optimization_view_v2(scenario_engine)
+        render_scenario_optimization_view_v2(scenario_engine, match=match, market_intelligence=market_intelligence)
         render_model_explanation_layer(scenario_engine)
-        render_system_portfolio_layer(market_intelligence, scenario_engine)
+        render_system_portfolio_layer(market_intelligence, scenario_engine, match=match)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)
         st.caption("结果分布为观察层，不参与 TPB 投资分、推荐金额或排序。")

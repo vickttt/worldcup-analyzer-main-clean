@@ -67,6 +67,48 @@ def _portfolio_position_cn(value):
     return PORTFOLIO_SET_CN.get(str(value), format_value(value))
 
 
+def _team_labels_from_match(match):
+    if not match:
+        return "热门方向", "冷门方向"
+    home = _match_team_label(match, "home")
+    away = _match_team_label(match, "away")
+    return home, away
+
+
+def _favorite_and_underdog(match=None, market_intelligence=None, scenario_engine=None):
+    home, away = _team_labels_from_match(match)
+    metrics = (market_intelligence or {}).get("metrics") or {}
+    favorite = metrics.get("favorite_label")
+    if not favorite:
+        primary = ((scenario_engine or {}).get("scenario_optimization_v2") or {}).get("primary_coverage_set") or []
+        favorite = (primary[0] or {}).get("selection") if primary else None
+    favorite = favorite or home
+    favorite_text = str(favorite)
+    if favorite_text in {home, away}:
+        underdog = away if favorite_text == home else home
+    elif home in favorite_text:
+        favorite_text = home
+        underdog = away
+    elif away in favorite_text:
+        favorite_text = away
+        underdog = home
+    else:
+        underdog = "冷门方向"
+    return favorite_text, underdog
+
+
+def _score_for_side(match, side, home_goals, away_goals):
+    if not match:
+        return f"{home_goals}:{away_goals}"
+    home = _match_team_label(match, "home")
+    away = _match_team_label(match, "away")
+    if side == home:
+        return f"{home_goals}:{away_goals}"
+    if side == away:
+        return f"{away_goals}:{home_goals}"
+    return f"{home_goals}:{away_goals}"
+
+
 def _basis_cn(value):
     text = str(value or "").strip()
     replacements = {
@@ -86,10 +128,13 @@ def _basis_cn(value):
     return text or "-"
 
 
-def portfolio_leg_display(leg):
+def portfolio_leg_display(leg, match=None, market_intelligence=None, scenario_engine=None):
     leg = leg or {}
     leg_id = leg.get("id")
+    favorite, underdog = _favorite_and_underdog(match, market_intelligence, scenario_engine)
     selection = leg.get("selection") or "-"
+    if selection in {"TPB 主方向", "热门方向"} or leg_id in {"primary_1x2", "primary_handicap"}:
+        selection = favorite
     scenario_text = " / ".join(
         f"{item.get('code')} {percent(item.get('weight', 0))}"
         for item in (leg.get("scenario_dependency") or [])
@@ -111,7 +156,7 @@ def portfolio_leg_display(leg):
             "reason": "覆盖 S3 平局风险，作为主方向的防守参考。",
         },
         "defensive_handicap": {
-            "bet": "受让方向 +1.0",
+            "bet": f"{underdog} +1.0",
             "market": "亚洲让球 +1.0",
             "reason": "覆盖冷门或胶着路径，降低单边判断暴露。",
         },
@@ -121,12 +166,12 @@ def portfolio_leg_display(leg):
             "reason": "覆盖 S5 低比分和热门小胜情景。",
         },
         "tail_upset": {
-            "bet": "冷门胜 / 受让方向",
-            "market": "胜平负 / 亚洲让球",
+            "bet": f"{underdog} 冷门胜",
+            "market": "胜平负",
             "reason": "仅覆盖 S4 冷门尾部风险，不放大推荐金额。",
         },
         "tail_variance": {
-            "bet": "大比分 Over 3.5",
+            "bet": "大球 Over 3.5",
             "market": "大小球 3.5 / 波胆尾部",
             "reason": "仅覆盖 S6 高波动尾部路径。",
         },
@@ -142,8 +187,68 @@ def portfolio_leg_display(leg):
     }
 
 
-def portfolio_leg_display_rows(legs):
-    return [portfolio_leg_display(leg) for leg in (legs or [])]
+def portfolio_leg_display_rows(legs, match=None, market_intelligence=None, scenario_engine=None):
+    return [
+        portfolio_leg_display(
+            leg,
+            match=match,
+            market_intelligence=market_intelligence,
+            scenario_engine=scenario_engine,
+        )
+        for leg in (legs or [])
+    ]
+
+
+def correct_score_strategy_rows(match=None, market_intelligence=None, scenario_engine=None):
+    favorite, underdog = _favorite_and_underdog(match, market_intelligence, scenario_engine)
+    primary_10 = _score_for_side(match, favorite, 1, 0)
+    primary_20 = _score_for_side(match, favorite, 2, 0)
+    upset_01 = _score_for_side(match, underdog, 1, 0)
+    high_32 = _score_for_side(match, favorite, 3, 2)
+    return [
+        {
+            "波胆层级": "主波胆覆盖",
+            "中文投注描述": f"{primary_10} {favorite}胜",
+            "对应盘口": "波胆 / Correct Score",
+            "理由": "S1 小胜路径，补充主覆盖组合。",
+            "情景依赖": "S1",
+        },
+        {
+            "波胆层级": "主波胆覆盖",
+            "中文投注描述": f"{primary_20} {favorite}胜",
+            "对应盘口": "波胆 / Correct Score",
+            "理由": "S1 强覆盖路径，跟随 TPB 主方向。",
+            "情景依赖": "S1",
+        },
+        {
+            "波胆层级": "防守波胆",
+            "中文投注描述": "1:1 平局",
+            "对应盘口": "波胆 / Correct Score",
+            "理由": "S3 平局风险对冲。",
+            "情景依赖": "S3",
+        },
+        {
+            "波胆层级": "防守波胆",
+            "中文投注描述": f"{upset_01} {underdog}冷门",
+            "对应盘口": "波胆 / Correct Score",
+            "理由": "S4 冷门尾部路径保护。",
+            "情景依赖": "S4",
+        },
+        {
+            "波胆层级": "高赔率尾部波胆",
+            "中文投注描述": "2:2",
+            "对应盘口": "波胆 / Correct Score",
+            "理由": "S6 高波动路径。",
+            "情景依赖": "S6",
+        },
+        {
+            "波胆层级": "高赔率尾部波胆",
+            "中文投注描述": f"{high_32} 高进球尾部",
+            "对应盘口": "波胆 / Correct Score",
+            "理由": "S6 高进球尾部路径。",
+            "情景依赖": "S6",
+        },
+    ]
 
 
 def scenario_probability_weight_rows(scenario_engine):
@@ -204,10 +309,15 @@ def _optimization_sets(scenario_engine):
     }
 
 
-def system_portfolio_display_rows(scenario_engine):
+def system_portfolio_display_rows(scenario_engine, match=None, market_intelligence=None):
     rows = []
     for title, legs in _optimization_sets(scenario_engine).items():
-        display_legs = portfolio_leg_display_rows(legs)
+        display_legs = portfolio_leg_display_rows(
+            legs,
+            match=match,
+            market_intelligence=market_intelligence,
+            scenario_engine=scenario_engine,
+        )
         if not display_legs:
             rows.append({
                 "组合类型": _portfolio_position_cn(title),
@@ -221,20 +331,47 @@ def system_portfolio_display_rows(scenario_engine):
     return rows
 
 
-def system_ranking_display_rows(portfolio, scenario_engine=None):
+def _score_rows_for_ranking(position, match=None, market_intelligence=None, scenario_engine=None):
+    rows = correct_score_strategy_rows(match, market_intelligence, scenario_engine)
+    if position == "Primary Coverage Set":
+        return [row for row in rows if row["波胆层级"] == "主波胆覆盖"][:2]
+    if position == "Defensive Coverage Set":
+        return [row for row in rows if row["波胆层级"] == "防守波胆"][:2]
+    if position == "Tail Coverage Set":
+        return [row for row in rows if row["波胆层级"] == "高赔率尾部波胆"][:2]
+    return []
+
+
+def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, market_intelligence=None):
     rows = []
     sets = _optimization_sets(scenario_engine)
     for item in (portfolio or {}).get("ranking") or []:
         position = item.get("position", "-")
-        legs = portfolio_leg_display_rows(sets.get(position) or [])
-        bet_text = "；".join(leg.get("中文投注描述", "-") for leg in legs) or "暂无"
-        market_text = "；".join(leg.get("对应盘口", "-") for leg in legs) or "-"
+        legs = portfolio_leg_display_rows(
+            sets.get(position) or [],
+            match=match,
+            market_intelligence=market_intelligence,
+            scenario_engine=scenario_engine,
+        )
+        score_rows = _score_rows_for_ranking(position, match, market_intelligence, scenario_engine)
+        bet_text = "；".join(
+            [leg.get("中文投注描述", "-") for leg in legs]
+            + [row.get("中文投注描述", "-") for row in score_rows]
+        ) or "暂无"
+        market_text = "；".join(
+            [leg.get("对应盘口", "-") for leg in legs]
+            + [row.get("对应盘口", "-") for row in score_rows]
+        ) or "-"
+        score_reason = "；".join(row.get("理由", "-") for row in score_rows)
+        reason = _basis_cn(item.get("basis"))
+        if score_reason:
+            reason = f"{reason}；波胆：{score_reason}"
         rows.append({
             "排名": f"Rank {item.get('rank', '-')}",
             "组合类型": _portfolio_position_cn(position),
             "具体投注组合": bet_text,
             "对应盘口": market_text,
-            "结构理由": _basis_cn(item.get("basis")),
+            "结构理由": reason,
         })
     return rows
 
@@ -879,16 +1016,30 @@ def format_final_decision_block_lines(
         "### 4. 系统推荐投注组合（System Portfolio）",
         "",
     ])
-    for row in system_portfolio_display_rows(scenario):
+    for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
         lines.append(
             f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
+        )
+    lines.extend([
+        "",
+        "#### 波胆策略层（Correct Score Strategy Layer）",
+        "",
+    ])
+    for row in correct_score_strategy_rows(match, market_intelligence, scenario):
+        lines.append(
+            f"- {row['波胆层级']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
         )
     lines.extend([
         "",
         "### 5. 系统排名组合（System Ranking Bets，仅系统）",
         "",
     ])
-    ranking_rows = system_ranking_display_rows(portfolio, scenario)
+    ranking_rows = system_ranking_display_rows(
+        portfolio,
+        scenario,
+        match=match,
+        market_intelligence=market_intelligence,
+    )
     if not ranking_rows:
         lines.append("- 暂无系统排序。")
     for row in ranking_rows:
@@ -1238,7 +1389,7 @@ def format_model_explanation_lines(scenario_engine):
     return lines
 
 
-def format_system_portfolio_lines(market_intelligence, scenario_engine=None):
+def format_system_portfolio_lines(market_intelligence, scenario_engine=None, match=None):
     scenario = scenario_engine or {}
     portfolio = (
         scenario.get("system_optimized_portfolio_v2")
@@ -1250,9 +1401,18 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None):
         "系统推荐投注组合 = TPB 锚点 + 市场结构 + 受约束情景权重综合生成。用户实盘输入不参与系统组合、推荐或排序。",
         "",
     ]
-    for row in system_portfolio_display_rows(scenario):
+    for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
         lines.append(
             f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
+        )
+    lines.extend([
+        "",
+        "### 波胆策略层（Correct Score Strategy Layer）",
+        "",
+    ])
+    for row in correct_score_strategy_rows(match, market_intelligence, scenario):
+        lines.append(
+            f"- {row['波胆层级']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
         )
     lines.extend([
         "",
@@ -1260,7 +1420,12 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None):
         "",
         "系统排名只使用 TPB 锚点、市场结构和受约束情景权重；不使用用户输入、EV/ROI 或盈利优化器。",
     ])
-    ranking_rows = system_ranking_display_rows(portfolio, scenario)
+    ranking_rows = system_ranking_display_rows(
+        portfolio,
+        scenario,
+        match=match,
+        market_intelligence=market_intelligence,
+    )
     if not ranking_rows:
         return lines + ["", "暂无系统组合排序。"]
     for row in ranking_rows:
@@ -1438,7 +1603,7 @@ def build_report(
         "",
         *format_model_explanation_lines(scenario_engine),
         "",
-        *format_system_portfolio_lines(market_intelligence, scenario_engine),
+        *format_system_portfolio_lines(market_intelligence, scenario_engine, match),
         "",
         *format_user_portfolio_lines(user_portfolio),
         "",
