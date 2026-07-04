@@ -78,8 +78,8 @@ Layer model:
      overridden, or downgraded into an ordinary helper variable.
    - TPB anchors probability interpretation, confidence, investment score, and
      deterministic stake mapping.
-   - TPB cannot be overridden by market structure, scenario thinking, user
-     input, or any secondary model.
+   - Canonical invariant: TPB cannot be overridden. See System invariants for
+     the single non-override rule.
    - TPB does not participate in a ranking override; it supplies baseline
      strength to the system recommendation layer.
 
@@ -138,8 +138,8 @@ Layer model:
      risk review, and user-vs-system display comparison.
    - Allowed execution classifications include Aligned, Partially Aligned,
      Hedged, Contrarian, and High Risk Exposure.
-   - User input must never influence TPB, investment score, stake, coverage,
-     system ranking, raw odds, API data, or system recommendation.
+   - Canonical invariant: Execution does not affect upstream layers. See System
+     invariants for the single execution-isolation rule.
 
 7. Model Methodology Transparency Layer
    - This layer explains calculation methods only. It never computes or mutates
@@ -232,13 +232,13 @@ Decision Authority Hierarchy:
 
 Authority rules:
 
-- TPB cannot be overridden.
+- Canonical invariants define TPB non-override and Execution upstream
+  isolation.
 - Market Structure cannot override TPB.
 - Scenario Engine cannot override TPB or become an EV/ROI/profit optimizer.
 - Scenario Engine may influence System Portfolio and Ranking only through
   bounded, deterministic, explainable Scenario Weights.
 - System Portfolio must be synthesis-based.
-- Execution Layer cannot affect any upstream layer.
 
 Decision Flow Lock Rule:
 
@@ -296,7 +296,7 @@ System invariants:
   training system, or black-box optimizer.
 - Scenario Engine can influence System Ranking only through bounded,
   deterministic, explainable Scenario Weights.
-- Execution Layer cannot become ranking input.
+- Execution does not affect upstream layers.
 - Scenario Thinking cannot become an unbounded decision engine.
 - No layer may become an EV/ROI system.
 - No hidden scoring weights, black-box transformations, EV/ROI/profit optimizer
@@ -311,7 +311,7 @@ Default execution state:
 - Branch: `dev-clean`.
 - Mode: multi-layer betting intelligence.
 - UI: displays model outputs and may render user execution review.
-- Scenario: observation-only.
+- Scenario = bounded weighted signal layer.
 - Loop: Codex executes, Claude reviews read-only, user decides.
 - Git: no branch operation unless explicitly requested.
 
@@ -430,9 +430,9 @@ Decoupled Review Request System:
   artifact. It must not start, imply, or execute Claude Review.
 - AI review is external and manual only. CI is never allowed to execute AI
   inference.
-- CI may build, test, generate sanitized review packets, and upload artifacts.
-  CI must not perform model-based review, automated AI evaluation, or external
-  LLM inference.
+- CI only performs validation + sanitized packet artifact generation (no AI
+  inference). CI must not perform model-based review, automated AI evaluation,
+  or external LLM inference.
 - Claude Review is performed only by manual/chat-based analysis of the
   downloaded artifact or copied packet content. CI has zero awareness of
   Claude and no AI review lifecycle.
@@ -448,7 +448,7 @@ Review State Machine:
 
 - `PENDING_REVIEW`: Codex has committed changes and requested review, but
   Claude Review has not started.
-- `IN_REVIEW`: Claude Review is actively running or waiting for a verdict.
+- `IN_REVIEW`: manual/chat-based review is in progress or awaiting verdict.
 - `APPROVED`: Claude Review returned PASS or PASS_WITH_POLISH with no required
   blocking fix. Only APPROVED means the committed task is complete.
 - `NEEDS_CHANGES`: Claude Review returned NEEDS_CHANGES/BLOCKED, failed to
@@ -456,7 +456,8 @@ Review State Machine:
 
 Review System Rule (locked artifact-only flow):
 
-- CI only generates artifacts.
+- CI only performs validation + sanitized packet artifact generation (no AI
+  inference).
 - CI does not execute AI review.
 - Claude Review is manual/chat-based only.
 - No workflow-based AI execution is allowed.
