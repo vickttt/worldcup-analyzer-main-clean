@@ -129,7 +129,7 @@ jobs:
       - name: Upload sanitized packet artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sanitized-packet-round-${{ steps.packet_mode.outputs.artifact_round }}
+          name: claude-review-packet-round-${{ steps.packet_mode.outputs.artifact_round }}
           path: |
             ${{ steps.packet.outputs.input_file }}
           if-no-files-found: error

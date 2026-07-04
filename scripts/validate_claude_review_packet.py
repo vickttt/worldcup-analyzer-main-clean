@@ -20,7 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PACKET_DIR = ROOT / "reports" / "claude_reviews"
 REPORT_PATH = PACKET_DIR / "packet_validation_report.md"
-MAX_PACKET_BYTES = 20 * 1024
+MAX_PACKET_BYTES = 48 * 1024
 DEFAULT_MODEL_CLASS = "haiku"
 DEFAULT_EXPECTED_OUTPUT_TOKENS = 1200
 DEFAULT_MAX_ESTIMATED_COST_USD = 0.20
