@@ -80,6 +80,25 @@ def _metric_number_text(value):
     return f"{number:.0f} / 100"
 
 
+def _direction_strength_number(metrics):
+    value = (
+        metrics.get("directional_strength_score")
+        or metrics.get("direction_score")
+        or metrics.get("signal_strength")
+    )
+    number = _score_to_number(value)
+    if number is not None:
+        return number
+    return {
+        "Strong": 80,
+        "Medium": 50,
+        "Weak": 20,
+        "强": 80,
+        "中": 50,
+        "弱": 20,
+    }.get(str(metrics.get("directional_strength")), None)
+
+
 def _scenario_name_cn(code, name=None):
     return f"{code} {SCENARIO_NAME_CN.get(code, name or '-')}"
 
@@ -407,7 +426,7 @@ def market_structure_numeric_rows(market_intelligence):
     return [
         {
             "指标": "Direction Strength",
-            "数值": _metric_number_text(metrics.get("directional_strength_score") or metrics.get("direction_score")),
+            "数值": _metric_number_text(_direction_strength_number(metrics)),
             "说明": "TPB 集中度 + 盘口偏差",
         },
         {
