@@ -32,9 +32,11 @@ from modules.report_generator import (
     save_report,
     scenario_coverage_map_rows,
     correct_score_strategy_rows,
+    correct_score_strategy_summary_rows,
     scenario_probability_weight_rows,
     scenario_risk_surface_rows,
     system_portfolio_display_rows,
+    system_portfolio_summary_rows,
     system_ranking_display_rows,
     tpb_probability_label,
 )
@@ -1223,19 +1225,19 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         st.markdown("**4. 系统推荐投注组合（System Portfolio）**")
         st.caption("Portfolio Priority v2：主覆盖（TPB aligned） -> 波胆策略（Correct Score Layer） -> 防守覆盖 -> 高波动覆盖。")
         st.dataframe(
-            pd.DataFrame(system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence)),
+            pd.DataFrame(system_portfolio_summary_rows(scenario, match=match, market_intelligence=market_intelligence)),
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）**")
+        st.markdown("**波胆策略摘要（Correct Score Strategy v2.2 / High Variance Strategy Layer）**")
         st.caption("波胆是高熵、高方差、高信息密度市场，用于表达情景波动结构，不作为 EV/ROI 或收益优化。")
         st.dataframe(
-            pd.DataFrame(correct_score_strategy_rows(match, market_intelligence, scenario)),
+            pd.DataFrame(correct_score_strategy_summary_rows(match, market_intelligence, scenario)),
             use_container_width=True,
             hide_index=True,
         )
         st.markdown("**5. 系统排名组合（System Ranking Bets，仅系统）**")
-        st.caption("System Ranking Bets v2：每个 Rank 同时展示主覆盖、波胆结构和对应防守/高波动路径。")
+        st.caption("Ranking 是优先级排序结果，不是 Portfolio 明细复制；本区只保留 Top3 精简投注。")
         st.dataframe(
             pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
             use_container_width=True,
@@ -1321,7 +1323,7 @@ def render_scenario_coverage_analysis(scenario_engine):
                 "解释": (mapping.get("defensive_position_coverage") or {}).get("explanation", "-"),
             },
             {
-                "组合": "尾部风险",
+                "组合": "高波动覆盖",
                 "情景覆盖": (mapping.get("tail_exposure") or {}).get("scenario", "-"),
                 "解释": (mapping.get("tail_exposure") or {}).get("explanation", "-"),
             },
@@ -1350,7 +1352,7 @@ def render_scenario_optimization_view_v2(scenario_engine, match=None, market_int
         for title, key in [
             ("主覆盖组合", "primary_coverage_set"),
             ("防守覆盖组合", "defensive_coverage_set"),
-            ("尾部风险组合", "tail_coverage_set"),
+            ("高波动覆盖组合", "tail_coverage_set"),
         ]:
             st.markdown(f"**{title}**")
             st.dataframe(

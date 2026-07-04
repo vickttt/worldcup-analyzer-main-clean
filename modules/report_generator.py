@@ -274,6 +274,32 @@ def correct_score_strategy_rows(match=None, market_intelligence=None, scenario_e
     ]
 
 
+def correct_score_strategy_summary_rows(match=None, market_intelligence=None, scenario_engine=None):
+    rows = correct_score_strategy_rows(match, market_intelligence, scenario_engine)
+    grouped = {
+        "主波胆": [],
+        "结构波胆": [],
+        "高波动波胆": [],
+    }
+    for row in rows:
+        level = row.get("波胆层级")
+        if level in grouped:
+            grouped[level].append(row)
+    summaries = []
+    for level, items in grouped.items():
+        summaries.append({
+            "波胆层级": level,
+            "摘要": "；".join(item.get("中文投注描述", "-") for item in items[:3]) or "暂无",
+            "情景依赖": " / ".join(sorted({item.get("情景依赖", "-") for item in items if item.get("情景依赖")})) or "-",
+            "说明": {
+                "主波胆": "TPB + S1/S2 主路径。",
+                "结构波胆": "S3、市场冲突和平局密度结构。",
+                "高波动波胆": "S5/S6 高方差结构核心。",
+            }.get(level, "-"),
+        })
+    return summaries
+
+
 def scenario_probability_weight_rows(scenario_engine):
     scenario = scenario_engine or {}
     weights = {
@@ -316,7 +342,7 @@ def scenario_coverage_map_rows(scenario_engine):
             "说明": (coverage.get("defensive_coverage") or {}).get("description", "-"),
         },
         {
-            "覆盖类型": "尾部覆盖",
+            "覆盖类型": "高波动覆盖",
             "情景": (coverage.get("tail_optionality") or {}).get("scenario", "-"),
             "说明": (coverage.get("tail_optionality") or {}).get("description", "-"),
         },
@@ -360,6 +386,33 @@ def system_portfolio_display_rows(scenario_engine, match=None, market_intelligen
     return rows
 
 
+def system_portfolio_summary_rows(scenario_engine, match=None, market_intelligence=None):
+    sets = _optimization_sets(scenario_engine)
+    score_rows = correct_score_strategy_rows(match, market_intelligence, scenario_engine)
+    return [
+        {
+            "层级": "主覆盖",
+            "摘要": f"{len(sets.get('Primary Coverage Set') or [])} 个主覆盖投注",
+            "角色": "TPB aligned 主方向集合。",
+        },
+        {
+            "层级": "波胆策略",
+            "摘要": f"{len(score_rows)} 个波胆结构，分为主波胆 / 结构波胆 / 高波动波胆",
+            "角色": "高熵、高方差、高信息密度的情景波动层。",
+        },
+        {
+            "层级": "防守覆盖",
+            "摘要": f"{len(sets.get('Defensive Coverage Set') or [])} 个防守覆盖投注",
+            "角色": "Under / Draw / Handicap hedge 防守集合。",
+        },
+        {
+            "层级": "高波动覆盖",
+            "摘要": f"{len(sets.get('Tail Coverage Set') or [])} 个极端情景投注",
+            "角色": "S4/S6 高波动和冷门路径集合。",
+        },
+    ]
+
+
 def _score_rows_for_ranking(position, match=None, market_intelligence=None, scenario_engine=None):
     rows = correct_score_strategy_rows(match, market_intelligence, scenario_engine)
     if position == "Primary Coverage Set":
@@ -369,6 +422,16 @@ def _score_rows_for_ranking(position, match=None, market_intelligence=None, scen
     if position == "Tail Coverage Set":
         return [row for row in rows if row["波胆层级"] == "高波动波胆"][:2]
     return []
+
+
+def _compact_legs_for_ranking(position, legs):
+    if position == "Primary Coverage Set":
+        return legs[:1]
+    if position == "Defensive Coverage Set":
+        return legs[:1]
+    if position == "Tail Coverage Set":
+        return legs[:1]
+    return legs[:1]
 
 
 def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, market_intelligence=None):
@@ -382,7 +445,8 @@ def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, mar
             market_intelligence=market_intelligence,
             scenario_engine=scenario_engine,
         )
-        score_rows = _score_rows_for_ranking(position, match, market_intelligence, scenario_engine)
+        legs = _compact_legs_for_ranking(position, legs)
+        score_rows = _score_rows_for_ranking(position, match, market_intelligence, scenario_engine)[:1]
         bet_text = "；".join(
             [leg.get("中文投注描述", "-") for leg in legs]
             + [row.get("中文投注描述", "-") for row in score_rows]
@@ -1011,6 +1075,11 @@ def format_final_decision_block_lines(
     optimization = scenario.get("scenario_optimization_v2") or {}
     risk = scenario.get("risk_surface") or {}
     coverage = scenario.get("coverage_map") or {}
+    scenario_rows = scenario_probability_weight_rows(scenario)
+    scenario_summary = "；".join(
+        f"{row['情景']} {row['原始概率']} / 权重 {row['v2 权重']}"
+        for row in scenario_rows
+    ) or "暂无情景概率与权重数据。"
     score = portfolio_summary.get("decision_score")
     if score is None:
         score = portfolio_summary.get("score")
@@ -1039,39 +1108,37 @@ def format_final_decision_block_lines(
         "",
         "### 3. 情景概率与权重分析（Scenario Engine v2）",
         "",
-    ]
-    for row in scenario_probability_weight_rows(scenario):
-        lines.append(f"- {row['情景']}：原始概率 {row['原始概率']}；v2 权重 {row['v2 权重']}")
-    lines.extend([
+        f"- S1-S6：{scenario_summary}",
         f"- 风险面：尾部 {_level_cn(risk.get('tail_risk_concentration'))} / 脆弱性 {_level_cn(risk.get('market_fragility'))} / 冷门 {_level_cn(risk.get('upset_exposure'))} / 平局 {_level_cn(risk.get('draw_dependency'))}",
         f"- 覆盖图：主覆盖 {(coverage.get('primary_coverage') or {}).get('scenario', '-')} / 防守覆盖 {(coverage.get('defensive_coverage') or {}).get('scenario', '-')} / 高波动覆盖 {(coverage.get('tail_optionality') or {}).get('scenario', '-')}",
         f"- 覆盖效率 v2：{format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
         "",
         "### 4. 系统推荐投注组合（System Portfolio）",
         "",
+        "Portfolio 是投注组合集合；本区只显示压缩摘要，完整明细见下方系统组合明细。",
         "Portfolio Priority v2：主覆盖（TPB aligned） -> 波胆策略（Correct Score Layer） -> 防守覆盖 -> 高波动覆盖。",
         "",
-    ])
-    for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
+    ]
+    for row in system_portfolio_summary_rows(scenario, match=match, market_intelligence=market_intelligence):
         lines.append(
-            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
+            f"- {row['层级']}：{row['摘要']}｜角色：{row['角色']}"
         )
     lines.extend([
         "",
-        "#### 波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）",
+        "#### 波胆策略摘要（Correct Score Strategy v2.2 / High Variance Strategy Layer）",
         "",
         "说明：波胆是高熵、高方差、高信息密度市场，用于表达情景波动结构，不作为 EV/ROI 或收益优化。",
         "",
     ])
-    for row in correct_score_strategy_rows(match, market_intelligence, scenario):
+    for row in correct_score_strategy_summary_rows(match, market_intelligence, scenario):
         lines.append(
-            f"- {row['波胆层级']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
+            f"- {row['波胆层级']}：{row['摘要']}｜情景依赖：{row['情景依赖']}｜说明：{row['说明']}"
         )
     lines.extend([
         "",
         "### 5. 系统排名组合（System Ranking Bets，仅系统）",
         "",
-        "System Ranking Bets v2：每个 Rank 同时展示主覆盖、波胆结构和对应防守/高波动路径。",
+        "Ranking 是优先级排序结果，不是 Portfolio 明细复制；本区只保留 Top3 精简投注。",
         "",
     ])
     ranking_rows = system_ranking_display_rows(
@@ -1273,7 +1340,7 @@ def format_scenario_engine_lines(scenario_engine):
     for label, key in [
         ("主推荐覆盖", "main_position_coverage"),
         ("防守覆盖", "defensive_position_coverage"),
-        ("尾部风险", "tail_exposure"),
+        ("高波动覆盖", "tail_exposure"),
     ]:
         item = portfolio_mapping.get(key) or {}
         lines.append(f"- {label}：{item.get('scenario', '-')}；{item.get('explanation', '-')}")
@@ -1317,7 +1384,7 @@ def format_scenario_optimization_v2_lines(scenario_engine):
     for title, key in [
         ("主覆盖组合", "primary_coverage_set"),
         ("防守覆盖组合", "defensive_coverage_set"),
-        ("尾部风险组合", "tail_coverage_set"),
+        ("高波动覆盖组合", "tail_coverage_set"),
     ]:
         lines.append(f"#### {title}")
         rows = optimization.get(key) or []
@@ -1412,7 +1479,7 @@ def format_model_explanation_lines(scenario_engine):
         "",
         f"- 主覆盖：{coverage_method.get('primary_coverage', '-')}",
         f"- 防守覆盖：{coverage_method.get('defensive_coverage', '-')}",
-        f"- 尾部覆盖：{coverage_method.get('tail_coverage', '-')}",
+        f"- 高波动覆盖：{coverage_method.get('tail_coverage', '-')}",
         f"- 覆盖效率：{coverage_method.get('coverage_efficiency_score', '-')}",
         f"- 覆盖效率 v2：{coverage_method.get('coverage_efficiency_score_v2', '-')}",
         "",
@@ -1431,13 +1498,10 @@ def format_model_explanation_lines(scenario_engine):
 
 def format_system_portfolio_lines(market_intelligence, scenario_engine=None, match=None):
     scenario = scenario_engine or {}
-    portfolio = (
-        scenario.get("system_optimized_portfolio_v2")
-        or ((market_intelligence or {}).get("system_portfolio") or {})
-    )
     lines = [
-        "## 4. 系统推荐投注组合（System Portfolio）",
+        "## 系统推荐组合明细（非决策入口）",
         "",
+        "本区是 Portfolio 明细，不是新的决策入口；FINAL DECISION BLOCK 仍是唯一压缩决策视图。",
         "系统推荐投注组合 = TPB 锚点 + 市场结构 + 受约束情景权重综合生成。用户实盘输入不参与系统组合、推荐或排序。",
         "Portfolio Priority v2：主覆盖（TPB aligned） -> 波胆策略（Correct Score Layer） -> 防守覆盖 -> 高波动覆盖。",
         "",
@@ -1456,25 +1520,6 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
     for row in correct_score_strategy_rows(match, market_intelligence, scenario):
         lines.append(
             f"- {row['波胆层级']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
-        )
-    lines.extend([
-        "",
-        "## 5. 系统排名组合（System Ranking Bets）",
-        "",
-        "系统排名只使用 TPB 锚点、市场结构和受约束情景权重；不使用用户输入、EV/ROI 或盈利优化器。",
-        "System Ranking Bets v2：每个 Rank 同时展示主覆盖、波胆结构和对应防守/高波动路径。",
-    ])
-    ranking_rows = system_ranking_display_rows(
-        portfolio,
-        scenario,
-        match=match,
-        market_intelligence=market_intelligence,
-    )
-    if not ranking_rows:
-        return lines + ["", "暂无系统组合排序。"]
-    for row in ranking_rows:
-        lines.append(
-            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}｜情景依赖：{row['情景依赖']}"
         )
     return lines
 
@@ -1629,6 +1674,8 @@ def build_report(
             market_intelligence,
             scenario_engine,
         ),
+        "",
+        *format_system_portfolio_lines(market_intelligence, scenario_engine, match),
         "",
         *format_model_explanation_lines(scenario_engine),
         "",
