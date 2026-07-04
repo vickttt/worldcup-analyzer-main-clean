@@ -154,7 +154,7 @@ Claude must check:
 - no pull request default workflow
 - no automatic Claude loop
 - no push or pull_request Claude trigger
-- manual workflow_dispatch only
+- workflow_dispatch review only when explicitly authorized for that run
 - no second review round unless the user explicitly approves
 - the review is tied to a specific commit range or sanitized packet
 - Codex did not treat CI as a substitute for Claude Review
@@ -174,12 +174,15 @@ Claude must validate:
 - Review was not assumed automatically from commit creation, CI success, or push
   completion.
 - Claude Review remains read-only.
-- The review uses an approved path: commit_range, packet_path, or manual
-  workflow_dispatch.
+- The review uses an approved path: commit_range, packet_path, manual
+  workflow_dispatch, or explicitly authorized workflow_dispatch Claude API
+  review.
 - The review is tied to a concrete commit_range or sanitized packet.
 - No old multi-round auto-loop is assumed in the system design.
-- CI is present only as syntax, import, unit-test, smoke-test, or command
-  validation.
+- Ordinary CI is present only as syntax, import, unit-test, smoke-test, command
+  validation, or sanitized packet artifact generation.
+- Workflow-based Claude API review, if used, was explicitly authorized and used
+  only the sanitized packet as model input.
 - CI is not used as a replacement for architecture review.
 - Low-risk, governance-only, or documentation-only commits are not exempt from
   Claude Review.

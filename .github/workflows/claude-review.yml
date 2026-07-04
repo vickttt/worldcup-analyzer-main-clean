@@ -1,8 +1,8 @@
-name: Review Packet Artifact
+name: Claude Review / Packet Artifact
 
-# Pure artifact generation. The active repository workflow is defined in
-# AGENTS.md: dev-clean only, no branch creation, no CI-hosted AI semantics,
-# no external inference, and no workflow-based AI evaluation.
+# Default mode is pure packet artifact generation. Explicitly authorized
+# workflow_dispatch runs may set execute_claude_review=true to send only the
+# sanitized packet to Anthropic Claude API and upload a read-only verdict.
 on:
   workflow_dispatch:
     inputs:
@@ -23,6 +23,14 @@ on:
         required: true
         default: "1"
         type: string
+      execute_claude_review:
+        description: "Explicitly call Claude API with the sanitized packet"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
 
 permissions:
   contents: read
@@ -48,9 +56,14 @@ jobs:
           packet_mode="${{ inputs.packet_mode }}"
           commit_range="${{ inputs.commit_range }}"
           artifact_round="${{ inputs.artifact_round }}"
+          execute_claude_review="${{ inputs.execute_claude_review }}"
           case "${packet_mode}" in
             commit_range) ;;
             *) echo "Unsupported packet_mode: ${packet_mode}" >&2; exit 1 ;;
+          esac
+          case "${execute_claude_review}" in
+            true|false) ;;
+            *) echo "execute_claude_review must be true or false" >&2; exit 1 ;;
           esac
           if [[ "${packet_mode}" != "commit_range" ]]; then
             echo "packet_path mode is disabled for HEAD-bound packet artifacts" >&2
@@ -59,6 +72,7 @@ jobs:
           echo "commit_range=${commit_range}" >> "$GITHUB_OUTPUT"
           echo "packet_mode=${packet_mode}" >> "$GITHUB_OUTPUT"
           echo "artifact_round=${artifact_round}" >> "$GITHUB_OUTPUT"
+          echo "execute_claude_review=${execute_claude_review}" >> "$GITHUB_OUTPUT"
 
       - name: Resolve current HEAD binding
         id: head
@@ -121,12 +135,16 @@ jobs:
           echo "input_file=${input_file}" >> "$GITHUB_OUTPUT"
           echo "artifact_round=${{ steps.packet_mode.outputs.artifact_round }}" >> "$GITHUB_OUTPUT"
 
-      - name: Confirm artifact-only mode
+      - name: Confirm review mode
         shell: bash
         run: |
           set -euo pipefail
-          echo "This workflow only runs validation and uploads a sanitized packet artifact."
-          echo "No AI evaluation, external inference, or external AI API call is executed."
+          if [[ "${{ steps.packet_mode.outputs.execute_claude_review }}" == "true" ]]; then
+            echo "Authorized Claude API review mode is enabled for this workflow_dispatch run."
+            echo "Only the sanitized packet will be sent to Claude."
+          else
+            echo "Packet artifact mode only. No AI evaluation, external inference, or external AI API call is executed."
+          fi
           echo "Packet artifact: ${{ steps.packet.outputs.input_file }}"
 
       - name: Upload sanitized packet artifact
@@ -135,4 +153,44 @@ jobs:
           name: claude-review-packet-round-${{ steps.packet_mode.outputs.artifact_round }}-${{ steps.head.outputs.short_sha }}
           path: |
             ${{ steps.packet.outputs.input_file }}
+          if-no-files-found: error
+
+      - name: Install Claude review dependency
+        if: steps.packet_mode.outputs.execute_claude_review == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install anthropic
+
+      - name: Prepare sanitized packet for authorized Claude API review
+        id: claude_input
+        if: steps.packet_mode.outputs.execute_claude_review == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p reports/claude_reviews
+          review_input="reports/claude_reviews/$(basename "${{ steps.packet.outputs.input_file }}")"
+          cp "${{ steps.packet.outputs.input_file }}" "${review_input}"
+          echo "review_input=${review_input}" >> "$GITHUB_OUTPUT"
+
+      - name: Execute authorized read-only Claude review
+        if: steps.packet_mode.outputs.execute_claude_review == 'true'
+        shell: bash
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          set -euo pipefail
+          python scripts/github_claude_review.py \
+            --input-file "${{ steps.claude_input.outputs.review_input }}" \
+            --round "${{ steps.packet_mode.outputs.artifact_round }}"
+
+      - name: Upload Claude review verdict artifact
+        if: steps.packet_mode.outputs.execute_claude_review == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-review-result-round-${{ steps.packet_mode.outputs.artifact_round }}-${{ steps.head.outputs.short_sha }}
+          path: |
+            reports/claude_reviews/round_${{ steps.packet_mode.outputs.artifact_round }}_claude_review.md
+            reports/claude_reviews/round_${{ steps.packet_mode.outputs.artifact_round }}_claude_review.json
           if-no-files-found: error
