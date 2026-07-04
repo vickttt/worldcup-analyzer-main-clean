@@ -29,6 +29,9 @@ from modules.pregame_content import (
 from modules.report_generator import (
     build_report,
     portfolio_leg_display_rows,
+    risk_decomposition_v3_rows,
+    risk_score_v3_summary,
+    risk_surface_v3_map_rows,
     save_report,
     scenario_coverage_map_rows,
     correct_score_strategy_rows,
@@ -1181,6 +1184,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
     )
     optimization = scenario.get("scenario_optimization_v2") or {}
     top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
+    rss = risk_score_v3_summary(scenario)
 
     with st.container(border=True):
         st.markdown("**最终决策区（FINAL DECISION BLOCK）**")
@@ -1214,7 +1218,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
-            st.markdown("**3. 情景概率与权重分析（Scenario Engine v2）**")
+            st.markdown("**3. 情景概率与权重分析（Scenario Engine v3 Phase 1）**")
             st.caption(
                 "S1-S6："
                 + "；".join(
@@ -1227,6 +1231,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
             "风险面："
             + " / ".join(f"{row['风险面']} {row['等级']}" for row in risk_rows)
         )
+        st.caption(f"RSS v3：{rss['RSS']}（{rss['等级']}）｜{rss['组件']}")
         st.caption(f"覆盖效率 v2：{optimization.get('coverage_efficiency_score_v2', '-')} / 100")
 
         st.markdown("**4. Portfolio Top 3（系统投注组合）**")
@@ -1298,9 +1303,9 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
 def render_scenario_coverage_analysis(scenario_engine):
     scenario = scenario_engine or {}
     with st.container(border=True):
-        st.markdown("**情景概率与权重分析（Scenario Engine v2）**")
+        st.markdown("**情景概率与权重分析（Scenario Engine v3 Phase 1）**")
         st.caption(
-            "Scenario Engine v2 是受约束情景权重层：不覆盖 TPB，不改变比赛投资分或推荐金额，不使用用户输入，不计算 EV/ROI。"
+            "Scenario Engine v3 Phase 1 是受约束情景权重 + 结构风险量化层：不覆盖 TPB，不改变比赛投资分或推荐金额，不使用用户输入，不计算 EV/ROI。"
         )
         st.metric("情景覆盖效率分", f"{scenario.get('coverage_efficiency_score', 0)} / 100")
 
@@ -1397,6 +1402,28 @@ def render_scenario_optimization_view_v2(scenario_engine, match=None, market_int
         st.markdown("**风险分布面**")
         st.dataframe(pd.DataFrame(risk_rows), use_container_width=True, hide_index=True)
         st.metric("覆盖效率分 v2", f"{optimization.get('coverage_efficiency_score_v2', 0)} / 100")
+
+
+def render_risk_surface_quantification_v3(scenario_engine):
+    scenario = scenario_engine or {}
+    if not scenario.get("risk_score_v3"):
+        return
+    rss = risk_score_v3_summary(scenario)
+    with st.container(border=True):
+        st.markdown("**Risk Surface Quantification Layer v3**")
+        st.caption(
+            "结构风险量化层：刻画不确定性结构，不预测赛果，不计算 EV/ROI，不做 optimizer，"
+            "不改变 TPB、比赛投资分、推荐金额或 ranking 计算。"
+        )
+        cols = st.columns(2)
+        cols[0].metric("RSS 结构风险分", rss["RSS"], rss["等级"])
+        cols[1].caption(rss["组件"])
+
+        st.markdown("**Structural Risk Map**")
+        st.dataframe(pd.DataFrame(risk_surface_v3_map_rows(scenario)), use_container_width=True, hide_index=True)
+
+        st.markdown("**Risk Decomposition**")
+        st.dataframe(pd.DataFrame(risk_decomposition_v3_rows(scenario)), use_container_width=True, hide_index=True)
 
 
 def render_model_explanation_layer(scenario_engine):
@@ -1582,6 +1609,7 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
             market_intelligence,
             scenario_engine,
         )
+        render_risk_surface_quantification_v3(scenario_engine)
         render_model_explanation_layer(scenario_engine)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)

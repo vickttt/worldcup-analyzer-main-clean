@@ -1,3 +1,5 @@
+import math
+
 from modules.probability_base import true_probability_base
 from modules.model_methodology import build_model_methodology
 
@@ -106,6 +108,138 @@ def _risk_surface(distribution, metrics):
         "upset_exposure_value": round(upset_exposure, 4),
         "draw_dependency": _level(draw_dependency, low=0.20, high=0.30),
         "draw_dependency_value": round(draw_dependency, 4),
+    }
+
+
+def _risk_level_from_score(score):
+    if score >= 65:
+        return "High"
+    if score >= 35:
+        return "Medium"
+    return "Low"
+
+
+def _level_to_score(value, low=25, medium=55, high=80):
+    normalized = str(value or "").strip().lower()
+    if normalized == "high":
+        return high
+    if normalized == "medium":
+        return medium
+    if normalized == "low":
+        return low
+    return medium
+
+
+def _scenario_dispersion_score(scenario_weights):
+    weights = [max(0, item.get("weight", 0)) for item in (scenario_weights or [])]
+    total = sum(weights)
+    if total <= 0:
+        return 0
+    normalized = [value / total for value in weights if value > 0]
+    if len(normalized) <= 1:
+        return 0
+    entropy = -sum(value * math.log(value) for value in normalized)
+    max_entropy = math.log(len(SCENARIO_TAXONOMY))
+    return round(_clamp(entropy / max_entropy * 100, 0, 100), 1)
+
+
+def _structural_risk_map(tpb, metrics, scenario_weights):
+    probabilities = _probabilities_from_tpb(tpb)
+    weights = _weight_map(scenario_weights)
+    favorite_probability = max(probabilities.values()) if probabilities else 0
+    draw_pressure = max(probabilities.get("draw", 0), weights.get("S3", 0))
+    upset_pressure = max(weights.get("S4", 0), _clamp(metrics.get("upset_score"), 0, 100) / 100)
+    volatility_cluster = max(weights.get("S6", 0), _clamp(metrics.get("volatility_score"), 0, 100) / 100)
+    conflict = _clamp(metrics.get("market_conflict_index"), 0, 100)
+    uncertainty = max(0, 1 - favorite_probability) * 100
+
+    return {
+        "tpb_uncertainty_concentration": {
+            "score": round(_clamp(uncertainty, 0, 100), 1),
+            "level": _risk_level_from_score(uncertainty),
+            "explanation": "TPB 主方向越不集中，概率锚点周围的不确定性越高。",
+        },
+        "market_disagreement_zones": {
+            "score": round(conflict, 1),
+            "level": _risk_level_from_score(conflict),
+            "explanation": "来自胜平负、亚洲盘、大小球和波胆尾部之间的结构分歧。",
+        },
+        "scenario_volatility_clustering": {
+            "score": round(_clamp(volatility_cluster * 100, 0, 100), 1),
+            "level": _risk_level_from_score(volatility_cluster * 100),
+            "explanation": "S6 与市场波动信号共同形成的高方差情景聚集。",
+        },
+        "draw_pressure_zones": {
+            "score": round(_clamp(draw_pressure * 100, 0, 100), 1),
+            "level": _risk_level_from_score(draw_pressure * 100),
+            "explanation": "平局 TPB 概率与 S3 权重共同形成的平局压力区。",
+        },
+        "upset_pressure_zones": {
+            "score": round(_clamp(upset_pressure * 100, 0, 100), 1),
+            "level": _risk_level_from_score(upset_pressure * 100),
+            "explanation": "S4 权重与冷门结构信号共同形成的冷门压力区。",
+        },
+    }
+
+
+def _risk_decomposition(metrics, scenario_weights):
+    weights = _weight_map(scenario_weights)
+    direction_score = _clamp(metrics.get("direction_score"), 0, 100)
+    directional_risk = 100 - direction_score
+    volatility_risk = _level_to_score(metrics.get("volatility_index"))
+    conflict_risk = _clamp(metrics.get("market_conflict_index"), 0, 100)
+    tail_risk = _clamp((weights.get("S4", 0) + weights.get("S6", 0)) * 100, 0, 100)
+
+    return {
+        "directional_risk": {
+            "score": round(directional_risk, 1),
+            "level": _risk_level_from_score(directional_risk),
+            "explanation": "方向强度越弱，主方向兑现风险越高。",
+        },
+        "volatility_risk": {
+            "score": round(volatility_risk, 1),
+            "level": _risk_level_from_score(volatility_risk),
+            "explanation": "由 Volatility Index 映射，仅刻画结构波动，不预测比分。",
+        },
+        "market_conflict_risk": {
+            "score": round(conflict_risk, 1),
+            "level": _risk_level_from_score(conflict_risk),
+            "explanation": "来自 Market Conflict Index 的盘口冲突风险。",
+        },
+        "tail_risk": {
+            "score": round(tail_risk, 1),
+            "level": _risk_level_from_score(tail_risk),
+            "explanation": "S4 冷门与 S6 高波动权重形成的尾部风险暴露。",
+        },
+    }
+
+
+def _risk_score_v3(metrics, scenario_weights):
+    conflict = _clamp(metrics.get("market_conflict_index"), 0, 100)
+    volatility = _level_to_score(metrics.get("volatility_index"))
+    upset = _level_to_score(metrics.get("upset_probability"))
+    dispersion = _scenario_dispersion_score(scenario_weights)
+    score = (
+        conflict * 0.30
+        + volatility * 0.25
+        + upset * 0.20
+        + dispersion * 0.25
+    )
+    score = round(_clamp(score, 0, 100), 1)
+    return {
+        "score": score,
+        "level": _risk_level_from_score(score),
+        "formula": (
+            "RSS = 0.30 * Market Conflict Index + 0.25 * Volatility Index "
+            "+ 0.20 * Upset Probability + 0.25 * Scenario Dispersion"
+        ),
+        "components": {
+            "market_conflict_index": round(conflict, 1),
+            "volatility_index": round(volatility, 1),
+            "upset_probability": round(upset, 1),
+            "scenario_dispersion": dispersion,
+        },
+        "disclaimer": "RSS v3 是结构风险指标，不是 EV、ROI、收益优化器或 stake 输入。",
     }
 
 
@@ -509,10 +643,13 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
     distribution = _scenario_distribution(tpb, metrics)
     scenario_weights = _scenario_weights_v2(distribution, metrics)
     risk_surface = _risk_surface(distribution, metrics)
+    structural_risk_map = _structural_risk_map(tpb, metrics, scenario_weights)
+    risk_decomposition = _risk_decomposition(metrics, scenario_weights)
+    risk_score_v3 = _risk_score_v3(metrics, scenario_weights)
     coverage_map = _coverage_map(distribution)
     optimization_v2 = _coverage_optimization_v2(scenario_weights, metrics)
     return {
-        "version": "scenario_engine_v2",
+        "version": "scenario_engine_v3_phase1",
         "taxonomy": [
             {"code": code, "name": name}
             for code, name in SCENARIO_TAXONOMY
@@ -520,6 +657,20 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
         "probability_distribution": distribution,
         "scenario_weights": scenario_weights,
         "risk_surface": risk_surface,
+        "structural_risk_map": structural_risk_map,
+        "risk_decomposition": risk_decomposition,
+        "risk_score_v3": risk_score_v3,
+        "risk_surface_v3": {
+            "version": "risk_surface_quantification_v3_phase1",
+            "structural_risk_map": structural_risk_map,
+            "risk_decomposition": risk_decomposition,
+            "risk_score_v3": risk_score_v3,
+            "description": (
+                "Risk Surface Quantification Layer v3 quantifies structural uncertainty. "
+                "It does not predict results, calculate EV/ROI, optimize profit, alter TPB, "
+                "alter stake, or change ranking logic."
+            ),
+        },
         "coverage_map": coverage_map,
         "portfolio_mapping_explanation": _portfolio_mapping_explanation(coverage_map),
         "scenario_market_mapping": _scenario_market_mapping(),
@@ -528,7 +679,7 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
         "system_optimized_portfolio_v2": _system_optimized_portfolio_v2(optimization_v2),
         "methodology": build_model_methodology(),
         "disclaimer": (
-            "Scenario Engine v2 使用 bounded heuristic scenario weights 做覆盖优化；"
+            "Scenario Engine v3 Phase 1 使用 bounded heuristic scenario weights 和结构风险量化做覆盖解释；"
             "不预测比分，不计算 EV/ROI，不做盈利最大化，不覆盖 TPB，不改变 stake，也不使用用户输入。"
         ),
     }

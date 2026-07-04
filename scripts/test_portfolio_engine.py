@@ -175,7 +175,7 @@ def test_scenario_engine_contract():
         odds=fixture["context"]["odds"],
         market_intelligence=intelligence,
     )
-    assert scenario["version"] == "scenario_engine_v2"
+    assert scenario["version"] == "scenario_engine_v3_phase1"
     assert [item["code"] for item in scenario["taxonomy"]] == [code for code, _name in SCENARIO_TAXONOMY]
     distribution = scenario["probability_distribution"]
     assert [item["code"] for item in distribution] == ["S1", "S2", "S3", "S4", "S5", "S6"]
@@ -193,6 +193,30 @@ def test_scenario_engine_contract():
         "draw_dependency",
         "draw_dependency_value",
     }
+    assert set(scenario["structural_risk_map"]) == {
+        "tpb_uncertainty_concentration",
+        "market_disagreement_zones",
+        "scenario_volatility_clustering",
+        "draw_pressure_zones",
+        "upset_pressure_zones",
+    }
+    assert set(scenario["risk_decomposition"]) == {
+        "directional_risk",
+        "volatility_risk",
+        "market_conflict_risk",
+        "tail_risk",
+    }
+    assert set(scenario["risk_score_v3"]) >= {
+        "score",
+        "level",
+        "formula",
+        "components",
+        "disclaimer",
+    }
+    assert 0 <= scenario["risk_score_v3"]["score"] <= 100
+    assert scenario["risk_score_v3"]["level"] in {"Low", "Medium", "High"}
+    assert "not EV" in scenario["risk_score_v3"]["disclaimer"] or "不是 EV" in scenario["risk_score_v3"]["disclaimer"]
+    assert scenario["risk_surface_v3"]["version"] == "risk_surface_quantification_v3_phase1"
     assert set(scenario["coverage_map"]) == {
         "primary_coverage",
         "defensive_coverage",
@@ -245,6 +269,9 @@ def test_scenario_engine_contract():
     assert "No EV / ROI transformation" in methodology["scenario_probability_derivation"]["forbidden"]
     assert methodology["scenario_weighting_method_v2"]["formula"] == "w(Si) = f(TPB baseline, Market Structure, Volatility, Upset Probability)"
     assert "bounded deterministic heuristic" in methodology["coverage_optimization_v2"]["type"]
+    assert methodology["risk_surface_quantification_v3"]["name"] == "Risk Surface Quantification Layer v3"
+    assert "Market Conflict Index" in methodology["risk_surface_quantification_v3"]["rss_formula"]
+    assert "TPB mutation" in methodology["risk_surface_quantification_v3"]["forbidden"]
     assert "Coverage Efficiency Score combines" in methodology["coverage_mapping_logic"]["coverage_efficiency_score"]
     assert "Coverage Efficiency v2" in methodology["coverage_mapping_logic"]["coverage_efficiency_score_v2"]
     assert "No black-box scoring" in methodology["audit_guards"]
@@ -335,7 +362,7 @@ def test_architecture_guardrails():
 
     report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
     assert "## 最终决策区（FINAL DECISION BLOCK）" in report_text
-    assert "### 3. 情景概率与权重分析（Scenario Engine v2）" in report_text
+    assert "### 3. 情景概率与权重分析（Scenario Engine v3 Phase 1）" in report_text
     assert "### 4. Portfolio Top 3" in report_text
     assert "### 5. Ranking Top 3" in report_text
     assert "## 6. Execution Layer" in report_text
@@ -344,6 +371,10 @@ def test_architecture_guardrails():
     assert "### 市场结构计算方法" in report_text
     assert "### 情景概率推导方法" in report_text
     assert "### 覆盖映射逻辑" in report_text
+    assert "Risk Surface Quantification Layer v3" in report_text
+    assert "RSS v3" in report_text
+    assert "Structural Risk Map" in report_text
+    assert "Risk Decomposition" in report_text
     assert "### 情景到组合的解释映射" in report_text
     assert "波胆 Top Signal" in report_text
     assert "系统推荐组合明细（非决策入口）" in report_text
@@ -364,6 +395,8 @@ def test_architecture_guardrails():
     assert "render_final_decision_summary" in app_text
     assert "Portfolio Top 3（系统投注组合）" in app_text
     assert "波胆 Top Signal" in app_text
+    assert "Risk Surface Quantification Layer v3" in app_text
+    assert "RSS 结构风险分" in app_text
     assert "Ranking 是优先级排序结果，不是 Portfolio 明细复制" in app_text
     assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
     assert "        render_scenario_coverage_analysis(scenario_engine)" not in app_text
@@ -397,6 +430,9 @@ def test_architecture_guardrails():
     assert "SCENARIO_TAXONOMY" in scenario_text
     assert "portfolio_mapping_explanation" in scenario_text
     assert "scenario_weights" in scenario_text
+    assert "risk_score_v3" in scenario_text
+    assert "risk_decomposition" in scenario_text
+    assert "structural_risk_map" in scenario_text
     assert "coverage_optimization_v2" in scenario_text
     assert "stake_from_investment_score" not in scenario_text
     assert "build_user_portfolio_comparison" not in scenario_text

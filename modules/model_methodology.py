@@ -209,6 +209,35 @@ def build_model_methodology():
                 "user input influence",
             ],
         },
+        "risk_surface_quantification_v3": {
+            "name": "Risk Surface Quantification Layer v3",
+            "principle": "We model structural risk, not match outcome or profit opportunity.",
+            "outputs": [
+                "Structural Risk Map",
+                "Risk Decomposition",
+                "Risk Surface Score (RSS)",
+            ],
+            "rss_formula": (
+                "RSS = 0.30 * Market Conflict Index + 0.25 * Volatility Index "
+                "+ 0.20 * Upset Probability + 0.25 * Scenario Dispersion"
+            ),
+            "risk_decomposition": [
+                "Directional Risk",
+                "Volatility Risk",
+                "Market Conflict Risk",
+                "Tail Risk",
+            ],
+            "forbidden": [
+                "EV / ROI",
+                "profit maximization",
+                "optimizer replacement",
+                "ML training",
+                "black-box scoring",
+                "TPB mutation",
+                "stake mutation",
+                "ranking logic mutation",
+            ],
+        },
         "scenario_weighted_ranking_v2": {
             "name": "Scenario-weighted Ranking v2",
             "allowed_inputs": [

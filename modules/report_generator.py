@@ -316,6 +316,67 @@ def scenario_risk_surface_rows(scenario_engine):
     ]
 
 
+RISK_MAP_LABEL_CN = {
+    "tpb_uncertainty_concentration": "TPB 不确定性集中",
+    "market_disagreement_zones": "市场分歧区",
+    "scenario_volatility_clustering": "情景波动聚集",
+    "draw_pressure_zones": "平局压力区",
+    "upset_pressure_zones": "冷门压力区",
+}
+
+RISK_DECOMPOSITION_LABEL_CN = {
+    "directional_risk": "方向风险",
+    "volatility_risk": "波动风险",
+    "market_conflict_risk": "盘口冲突风险",
+    "tail_risk": "尾部风险",
+}
+
+
+def risk_surface_v3_map_rows(scenario_engine):
+    risk_map = (scenario_engine or {}).get("structural_risk_map") or {}
+    rows = []
+    for key, label in RISK_MAP_LABEL_CN.items():
+        item = risk_map.get(key) or {}
+        rows.append({
+            "结构风险区": label,
+            "分数": f"{format_value(item.get('score'))} / 100",
+            "等级": _level_cn(item.get("level")),
+            "说明": item.get("explanation", "-"),
+        })
+    return rows
+
+
+def risk_decomposition_v3_rows(scenario_engine):
+    decomposition = (scenario_engine or {}).get("risk_decomposition") or {}
+    rows = []
+    for key, label in RISK_DECOMPOSITION_LABEL_CN.items():
+        item = decomposition.get(key) or {}
+        rows.append({
+            "风险类型": label,
+            "分数": f"{format_value(item.get('score'))} / 100",
+            "等级": _level_cn(item.get("level")),
+            "说明": item.get("explanation", "-"),
+        })
+    return rows
+
+
+def risk_score_v3_summary(scenario_engine):
+    score = (scenario_engine or {}).get("risk_score_v3") or {}
+    components = score.get("components") or {}
+    return {
+        "RSS": f"{format_value(score.get('score'))} / 100",
+        "等级": _level_cn(score.get("level")),
+        "公式": score.get("formula", "-"),
+        "组件": (
+            f"冲突 {format_value(components.get('market_conflict_index'))} / "
+            f"波动 {format_value(components.get('volatility_index'))} / "
+            f"冷门 {format_value(components.get('upset_probability'))} / "
+            f"情景离散 {format_value(components.get('scenario_dispersion'))}"
+        ),
+        "说明": score.get("disclaimer", "RSS v3 是结构风险指标，不是 EV/ROI/optimizer。"),
+    }
+
+
 def scenario_coverage_map_rows(scenario_engine):
     coverage = (scenario_engine or {}).get("coverage_map") or {}
     return [
@@ -424,6 +485,8 @@ def _compact_legs_for_ranking(position, legs):
 def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, market_intelligence=None):
     rows = []
     sets = _optimization_sets(scenario_engine)
+    risk_summary = risk_score_v3_summary(scenario_engine)
+    risk_note = f"RSS v3 {risk_summary['RSS']}（{risk_summary['等级']}）；仅作结构风险标注，不改变排序。"
     for item in ((portfolio or {}).get("ranking") or [])[:3]:
         position = item.get("position", "-")
         legs = portfolio_leg_display_rows(
@@ -457,6 +520,7 @@ def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, mar
             "对应盘口": market_text,
             "结构理由": reason,
             "情景依赖": dependency_text,
+            "风险标注": risk_note,
         })
     return rows
 
@@ -1061,6 +1125,7 @@ def format_final_decision_block_lines(
     )
     optimization = scenario.get("scenario_optimization_v2") or {}
     risk = scenario.get("risk_surface") or {}
+    rss = risk_score_v3_summary(scenario)
     scenario_rows = scenario_probability_weight_rows(scenario)
     scenario_summary = "；".join(
         f"{row['情景']} {row['原始概率']} / 权重 {row['v2 权重']}"
@@ -1086,10 +1151,11 @@ def format_final_decision_block_lines(
         f"- 方向 / 冲突 / 效率：{metrics.get('directional_strength', '-')}；{format_value(metrics.get('market_conflict_index'))} / 100；{format_value(metrics.get('market_efficiency_score'))} / 100",
         f"- 波动 / 冷门：{metrics.get('volatility_index', '-')}；{metrics.get('upset_probability', '-')}",
         "",
-        "### 3. 情景概率与权重分析（Scenario Engine v2）",
+        "### 3. 情景概率与权重分析（Scenario Engine v3 Phase 1）",
         "",
         f"- S1-S6：{scenario_summary}",
         f"- 风险面：尾部 {_level_cn(risk.get('tail_risk_concentration'))} / 脆弱性 {_level_cn(risk.get('market_fragility'))} / 冷门 {_level_cn(risk.get('upset_exposure'))} / 平局 {_level_cn(risk.get('draw_dependency'))}",
+        f"- RSS v3：{rss['RSS']}（{rss['等级']}）｜{rss['组件']}",
         f"- 覆盖效率 v2：{format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
         "",
         "### 4. Portfolio Top 3",
@@ -1119,7 +1185,7 @@ def format_final_decision_block_lines(
         lines.append("- 暂无系统排序。")
     for row in ranking_rows:
         lines.append(
-            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}｜情景依赖：{row['情景依赖']}"
+            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}｜情景依赖：{row['情景依赖']}｜风险标注：{row.get('风险标注', '-')}"
         )
     return lines
 
@@ -1254,10 +1320,10 @@ def format_market_intelligence_lines(market_intelligence):
 def format_scenario_engine_lines(scenario_engine):
     scenario = scenario_engine or {}
     lines = [
-        "## 3. 情景概率与权重分析（Scenario Engine v2）",
+        "## 3. 情景概率与权重分析（Scenario Engine v3 Phase 1）",
         "",
         scenario.get("disclaimer")
-        or "Scenario Engine v2 使用受约束启发式情景权重做覆盖优化；不覆盖 TPB，不计算 EV/ROI，不改变推荐金额，不使用用户输入。",
+        or "Scenario Engine v3 Phase 1 使用受约束情景权重与结构风险量化做覆盖解释；不覆盖 TPB，不计算 EV/ROI，不改变推荐金额，不使用用户输入。",
         "",
         "### S1-S6 原始概率与 v2 权重",
     ]
@@ -1398,6 +1464,46 @@ def format_scenario_optimization_v2_lines(scenario_engine):
     return lines
 
 
+def format_risk_surface_v3_lines(scenario_engine):
+    scenario = scenario_engine or {}
+    risk_surface_v3 = scenario.get("risk_surface_v3") or {}
+    rss = risk_score_v3_summary(scenario)
+    lines = [
+        "## Risk Surface Quantification Layer v3",
+        "",
+        risk_surface_v3.get("description")
+        or "Risk Surface v3 只刻画结构风险，不预测结果，不计算 EV/ROI，不做 optimizer，不改变 TPB、stake 或 ranking。",
+        "",
+        "### RSS 结构风险分",
+        "",
+        f"- RSS：{rss['RSS']}（{rss['等级']}）",
+        f"- 组件：{rss['组件']}",
+        f"- 公式：{rss['公式']}",
+        f"- 说明：{rss['说明']}",
+        "",
+        "### Structural Risk Map",
+        "",
+    ]
+    for row in risk_surface_v3_map_rows(scenario):
+        lines.append(
+            f"- {row['结构风险区']}：{row['分数']}（{row['等级']}）｜{row['说明']}"
+        )
+    lines.extend([
+        "",
+        "### Risk Decomposition",
+        "",
+    ])
+    for row in risk_decomposition_v3_rows(scenario):
+        lines.append(
+            f"- {row['风险类型']}：{row['分数']}（{row['等级']}）｜{row['说明']}"
+        )
+    lines.extend([
+        "",
+        "边界：RSS v3 是 purely structural risk metric；不是 EV、ROI、profit maximization、ML training 或 black-box scoring。",
+    ])
+    return lines
+
+
 def format_model_explanation_lines(scenario_engine):
     methodology = (scenario_engine or {}).get("methodology") or {}
     lines = [
@@ -1423,6 +1529,7 @@ def format_model_explanation_lines(scenario_engine):
     mapping_method = methodology.get("scenario_mapping_method") or {}
     coverage_method = methodology.get("coverage_mapping_logic") or {}
     optimization_method = methodology.get("coverage_optimization_v2") or {}
+    risk_method = methodology.get("risk_surface_quantification_v3") or {}
     lines.extend([
         "",
         "### 情景概率推导方法",
@@ -1455,6 +1562,14 @@ def format_model_explanation_lines(scenario_engine):
         "",
         f"- 类型：{optimization_method.get('type', '-')}",
         f"- 禁止：{', '.join(optimization_method.get('forbidden') or ['-'])}",
+        "",
+        "### Risk Surface Quantification v3 方法",
+        "",
+        f"- 原则：{risk_method.get('principle', '-')}",
+        f"- 输出：{', '.join(risk_method.get('outputs') or ['-'])}",
+        f"- RSS 公式：{risk_method.get('rss_formula', '-')}",
+        f"- 风险拆解：{', '.join(risk_method.get('risk_decomposition') or ['-'])}",
+        f"- 禁止：{', '.join(risk_method.get('forbidden') or ['-'])}",
         "",
         "### 审计防线",
         "",
@@ -1642,6 +1757,8 @@ def build_report(
             market_intelligence,
             scenario_engine,
         ),
+        "",
+        *format_risk_surface_v3_lines(scenario_engine),
         "",
         *format_system_portfolio_lines(market_intelligence, scenario_engine, match),
         "",
