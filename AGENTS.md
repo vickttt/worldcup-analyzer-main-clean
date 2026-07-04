@@ -496,6 +496,33 @@ must not edit files, run commands, create branches, commit, push, merge, or
 trigger automation.
 The user is the final decision authority.
 No additional agents, branches, or parallel workflows are allowed.
+
+Claude Review Loop Lock:
+This loop is locked and must not be weakened without explicitly updating this
+section, `.github/workflows/claude-review.yml`, and
+`scripts/verify_claude_review_loop.py` in the same scoped governance change.
+
+Required flow:
+Codex commit -> push dev-clean -> GitHub Actions -> sanitized HEAD^..HEAD
+packet -> Claude API read-only review -> review artifact -> Codex reads
+artifact and reports to the user.
+
+Required invariants:
+- Push to `dev-clean` triggers the Claude Review workflow.
+- `workflow_dispatch` remains available for manual packet or review runs.
+- `pull_request` must not trigger Claude API review.
+- Push-triggered review must use a sanitized `HEAD^..HEAD` commit-range packet.
+- Claude receives only the sanitized packet plus the standard review prompt and
+  rubric.
+- `ANTHROPIC_API_KEY` must come only from GitHub Actions secrets.
+- Claude must not modify code, commit, push, create branches, open pull
+  requests, merge, rebase, or trigger follow-up automation.
+- The sanitized packet artifact must be uploaded.
+- The Claude verdict artifact must be uploaded.
+- `scripts/verify_claude_review_loop.py` is the enforcement guard for this
+  section and must run in ordinary CI.
+- If the guard fails, the workflow change is invalid even if syntax checks pass.
+
 3. Safety And Conflict Resolution
 Rule priority, highest to lowest:
 Multi-layer system contract.

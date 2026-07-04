@@ -39,6 +39,9 @@ jobs:
           set -euo pipefail
           python -m py_compile app.py modules/*.py scripts/*.py
 
+      - name: Verify Claude review loop lock
+        run: python scripts/verify_claude_review_loop.py
+
       - name: Portfolio engine smoke test
         run: python scripts/test_portfolio_engine.py
 
