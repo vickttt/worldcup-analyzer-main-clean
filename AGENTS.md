@@ -367,16 +367,39 @@ Codex-Claude loop:
 2. Codex executes on `dev-clean` with scoped changes only.
 3. Codex runs required local validation.
 4. Codex commits changes when the task requires or authorizes a commit.
-5. Codex pushes only when explicitly allowed by the user.
-6. Codex marks `REVIEW REQUIRED` after every commit.
-7. Claude Review is requested and triggered as an independent step.
-8. Claude performs read-only review and returns a verdict.
-9. Codex applies approved review fixes if needed on `dev-clean`, validates, and
+5. Codex marks `REVIEW REQUIRED` after every commit.
+6. Codex may stop at Local Complete with Review Pending if the user has not
+   requested remote sync or review execution.
+7. Codex pushes only when explicitly allowed by the user.
+8. Claude Review may be requested and triggered as an independent step.
+9. Claude performs read-only review and returns a verdict.
+10. Codex applies approved review fixes if needed on `dev-clean`, validates, and
    commits the fix.
-10. Every fix commit returns to `REVIEW REQUIRED`.
-11. Codex reports changes, Claude findings, fixes, and final status to the user
-    only after the review state is APPROVED. Pending review may only be reported
-    as an incomplete review state.
+11. Every fix commit returns to `REVIEW REQUIRED`.
+12. Codex reports local completion, review state, remote sync state, and any
+    unresolved risks. Production-ready status requires APPROVED review.
+
+Git / Review State Machine:
+
+- `LOCAL_COMPLETE`: commit complete, required local validation complete, and
+  working tree clean. This is a valid stopping state for local development.
+- `PENDING_REVIEW`: commit complete and Claude Review not yet completed. This
+  state records architecture review debt; it does not require push and does not
+  block unrelated local development unless the user requests production-ready
+  status, merge, release, or review closure.
+- `REMOTE_SYNC`: commit has been pushed to `origin/dev-clean` for remote backup,
+  CI, or GitHub Actions review. Remote sync is optional and requires explicit
+  user approval.
+
+State output standard:
+
+- `Local Complete`: `YES` when commit, local validation, and clean worktree are
+  confirmed.
+- `Review State`: `PENDING_REVIEW`, `IN_REVIEW`, `APPROVED`, or
+  `NEEDS_CHANGES`.
+- `Remote Sync`: `YES` only after push to `origin/dev-clean` succeeds.
+- `Push Required`: always `OPTIONAL`, never `REQUIRED`, unless a user explicitly
+  scopes a remote workflow that needs pushed commits.
 
 Decoupled Review Request System:
 
@@ -385,17 +408,23 @@ Decoupled Review Request System:
 - Codex must request Claude Review after every commit.
 - Codex must mark committed work as `REVIEW REQUIRED` / `PENDING_REVIEW` until
   a review is independently triggered and completed.
-- Commit does not equal completed task.
+- Commit plus local validation can be `LOCAL_COMPLETE`.
+- Commit does not equal `APPROVED` review.
 - CI does not replace Claude Review.
 - Review is not assumed to have run.
 - Claude Review is read-only but required as a separate architecture validation
   state.
 - Codex must not skip review for governance-only, documentation-only, or
   "low-risk" commits.
-- Codex must not proceed to the next task, merge, or report production-ready
-  status while review is pending.
-- If review cannot be requested or triggered because push, workflow, Claude, or
-  token authorization is missing, Codex must report:
+- Codex may continue local development while review is pending when the user
+  assigns another local task, but must not report production-ready status, merge,
+  release, or review closure while review is pending.
+- Push is optional remote sync, not a required validation step.
+- Claude Review does not inherently depend on push. It may run through local
+  `commit_range`, packet review, or remote `workflow_dispatch` when authorized.
+- If review cannot be requested or triggered because workflow, Claude, token
+  authorization, local dependency, or user approval is missing, Codex must
+  report:
   `REVIEW REQUIRED: PENDING_REVIEW`.
 - If Claude Review fails, returns NEEDS_CHANGES/BLOCKED, or cannot produce a
   verdict, Codex must report the task as incomplete until the user authorizes a
@@ -413,9 +442,11 @@ Review State Machine:
 
 Review request methods:
 
-- `commit_range` review for committed repository changes.
-- `packet_path` / packet-based review for sanitized review packets.
-- Manual `workflow_dispatch` through the Claude Review GitHub Actions workflow.
+- Local or remote `commit_range` review for committed repository changes.
+- Local or remote `packet_path` / packet-based review for sanitized review
+  packets.
+- Manual `workflow_dispatch` through the Claude Review GitHub Actions workflow
+  when remote sync is explicitly authorized.
 
 CI vs Claude Review:
 
@@ -467,8 +498,10 @@ Stop conditions:
 - A commit has been created but Codex has not marked `REVIEW REQUIRED` /
   `PENDING_REVIEW`.
 - Codex attempts to mark a committed task complete using CI only.
-- Codex attempts to start the next task, merge, or declare production readiness
-  while review state is PENDING_REVIEW, IN_REVIEW, or NEEDS_CHANGES.
+- Codex attempts to merge, release, or declare production readiness while review
+  state is PENDING_REVIEW, IN_REVIEW, or NEEDS_CHANGES.
+- Codex reports push as required when the user has not explicitly requested
+  remote sync, CI, or GitHub Actions review.
 - Multiple workflows or parallel agent paths are introduced.
 - Task would reintroduce EV, ROI, hybrid, legacy optimizer, scenario shadow,
   user-odds decision influence, or risk-gate blocking.
@@ -489,9 +522,10 @@ Validation defaults:
   `git diff --check`, and confirm `git status`.
 - UI changes: compile validation plus browser verification only when requested
   or required by the task.
-- After any commit, mark `REVIEW REQUIRED` and request Claude Review using an
-  authorized review method. If review cannot be triggered yet, report
-  `REVIEW REQUIRED: PENDING_REVIEW`.
+- After any commit, mark `REVIEW REQUIRED` and report the current review state.
+  Request Claude Review using an authorized review method when scoped or
+  approved. If review cannot be triggered yet, report
+  `REVIEW REQUIRED: PENDING_REVIEW` and `Push Required: OPTIONAL`.
 
 ## Codex Execution Loop
 
@@ -502,10 +536,14 @@ Validation defaults:
 5. Run local validation.
 6. Commit when the task requires or authorizes a commit.
 7. Mark `REVIEW REQUIRED` / `PENDING_REVIEW` after every commit.
-8. Request Claude Review as an independent step.
-9. Apply scoped fixes if needed, then repeat validation, commit, and review
+8. Report `LOCAL_COMPLETE` when commit, validation, and clean worktree are
+   confirmed.
+9. Request Claude Review as an independent step when scoped or approved.
+10. Push only when explicitly approved as optional remote sync.
+11. Apply scoped fixes if needed, then repeat validation, commit, and review
    request for the fix.
-10. Report files changed, validations, Claude findings, fixes, protected-path
+12. Report files changed, validations, Claude findings, fixes, protected-path
    status, TPB baseline integrity, market-structure integrity, customer
-   execution isolation, UI status, Git state, review state, and
+   execution isolation, UI status, Git state, review state, Remote Sync, Push
+   Required, and
    unresolved risks.
