@@ -1014,7 +1014,7 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
             ("比赛主方向", opinion.get("match_winner_reason", "-")),
             ("盘口观察", f"{bet_cn(opinion.get('handicap_market_direction') or opinion.get('asian_handicap', '暂无观点'))}。{opinion.get('asian_handicap_reason', '')}"),
             ("TPB 覆盖说明", f"{bet_cn(opinion.get('coverage_candidate', '暂无候选'))}。{opinion.get('coverage_reason', '')}"),
-            ("进球数观点", f"总进球盘口中心：{opinion.get('total_center', '-')}。{opinion.get('goals_market_bias', '')}"),
+            ("进球数观点", f"结构观察 - 总进球盘口中心（仅市场描述）：{opinion.get('total_center', '-')}。市场倾向（非推荐信号）：{opinion.get('goals_market_bias', '')}"),
             ("比赛投资价值", f"TPB 熵信心 {opinion.get('betting_confidence', '-')} / 100；TPB 概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}。"),
         ]
         for title, text in blocks:
@@ -1169,11 +1169,21 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None,
         render_ranking_score_notes(decision_layers)
 
 
-def render_final_decision_summary(match, distribution, data_context, market_intelligence=None, scenario_engine=None):
+def _recommended_stake_amount_from_summary(portfolio_summary):
+    stake = (portfolio_summary or {}).get("recommended_stake") or {}
+    try:
+        return float(stake.get("amount"))
+    except (TypeError, ValueError):
+        return None
+
+
+def render_final_decision_summary(match, distribution, data_context, market_intelligence=None, scenario_engine=None, portfolio_summary=None):
     decision_layers = build_core_decision_layers([], match, distribution, data_context)
     score_layer = decision_layers.get("score_layer") or {}
     execution_layer = decision_layers.get("execution_layer") or {}
     stake = execution_layer.get("stake") or {}
+    summary_stake_amount = _recommended_stake_amount_from_summary(portfolio_summary)
+    display_stake_amount = summary_stake_amount if summary_stake_amount is not None else stake.get("amount", 0)
     tpb = score_layer.get("tpb") or {}
     probabilities = tpb.get("probabilities") or {}
     metrics = (market_intelligence or {}).get("metrics") or {}
@@ -1185,13 +1195,15 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
     optimization = scenario.get("scenario_optimization_v2") or {}
     top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
     rss = risk_score_v3_summary(scenario)
+    observation_mode = float(display_stake_amount or 0) <= 0
 
     with st.container(border=True):
         st.markdown("**最终决策区（FINAL DECISION BLOCK）**")
         st.caption(
-            "唯一决策入口视图：TPB 锚点 + 市场结构 + 情景权重 + 推荐组合 + 系统排名汇总展示。"
-            "用户执行层不进入本区。"
+            "用户执行层不进入本区；Ranking 为结构排序，不代表最终下注建议。"
         )
+        if observation_mode:
+            st.info("当前为观察模式，系统不提供执行型投注组合。")
 
         st.markdown("**1. TPB 结论**")
         tpb_cols = st.columns(5)
@@ -1199,7 +1211,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         tpb_cols[1].metric("主方向概率", f"{metrics.get('favorite_probability', 0)}%")
         tpb_cols[2].metric("投注信心", f"{score_layer.get('betting_confidence', 0)} / 100")
         tpb_cols[3].metric("比赛投资分", f"{score_layer.get('investment_score', 0)} / 100")
-        tpb_cols[4].metric("推荐金额", f"{stake.get('amount', 0)} 元")
+        tpb_cols[4].metric("推荐金额", f"{display_stake_amount:g} 元")
         if probabilities:
             st.caption(
                 "TPB Anchor: "
@@ -1219,6 +1231,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
             st.markdown("**3. 情景概率与权重分析（Scenario Engine v3 Phase 1）**")
+            st.caption("Scenario 仅提供结构权重信号，不直接决定下注结果。")
             st.caption(
                 "S1-S6："
                 + "；".join(
@@ -1234,25 +1247,34 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         st.caption(f"RSS v3：{rss['RSS']}（{rss['等级']}）｜{rss['组件']}")
         st.caption(f"覆盖效率 v2：{optimization.get('coverage_efficiency_score_v2', '-')} / 100")
 
-        st.markdown("**4. Portfolio Top 3（系统投注组合）**")
-        st.caption("Portfolio 是投注组合集合；本区只显示 Top 3 压缩组合，完整明细见报告下方系统组合明细。")
-        st.dataframe(
-            pd.DataFrame(system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence)),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.caption(
-            "波胆 Top Signal："
-            f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
-            f"情景依赖：{top_score.get('情景依赖', '-')}"
-        )
-        st.markdown("**5. Ranking Top 3（系统排序）**")
-        st.caption("Ranking 是优先级排序结果，不是 Portfolio 明细复制；本区只保留 Top3 精简投注。")
-        st.dataframe(
-            pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
-            use_container_width=True,
-            hide_index=True,
-        )
+        portfolio_title = "4. 组合观察区（无执行信号）" if observation_mode else "4. Portfolio Top 3（系统投注组合）"
+        st.markdown(f"**{portfolio_title}**")
+        st.caption("Portfolio 是投注组合集合；执行状态由推荐金额决定。")
+        if observation_mode:
+            st.info("观察模式：推荐金额为 0 元，当前不输出具体投注组合。")
+            st.caption("高波动结构提示（仅分析）：观察模式，不输出波胆执行信号。")
+        else:
+            st.dataframe(
+                pd.DataFrame(system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence)),
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.caption(
+                "高波动信号提示："
+                f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
+                f"情景依赖：{top_score.get('情景依赖', '-')}"
+            )
+        ranking_title = "5. 排序结构（仅结构分析）" if observation_mode else "5. Ranking Top 3（系统排序）"
+        st.markdown(f"**{ranking_title}**")
+        st.caption("Ranking 为结构排序，不代表最终下注建议；只有推荐金额大于 0 时才输出执行信号。")
+        if observation_mode:
+            st.info("无执行信号：当前为观察模式，Ranking 不输出具体投注组合。")
+        else:
+            st.dataframe(
+                pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
+                use_container_width=True,
+                hide_index=True,
+            )
 
 
 def render_market_intelligence_layer(market_intelligence):
@@ -1595,7 +1617,7 @@ def render_core_risk_summary(match, decision, distribution):
             st.caption(exposure.get("meaning"))
 
 
-def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, user_portfolio_key=None, market_intelligence=None, scenario_engine=None):
+def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, user_portfolio_key=None, market_intelligence=None, scenario_engine=None, portfolio_summary=None):
     with st.container(border=True):
         st.markdown('<div class="section-title">核心决策</div>', unsafe_allow_html=True)
         render_final_decision_summary(
@@ -1608,6 +1630,7 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
             },
             market_intelligence,
             scenario_engine,
+            portfolio_summary,
         )
         render_risk_surface_quantification_v3(scenario_engine)
         render_model_explanation_layer(scenario_engine)
@@ -1908,10 +1931,10 @@ def render_handicap(match, market_data):
         )
         if summary.get("available"):
             c1, c2, c3 = st.columns(3)
-            c1.metric("盘口中心", summary.get("center_label"))
+            c1.metric("结构观察：盘口中心", summary.get("center_label"))
             c2.metric("市场均值", f"{summary.get('avg_odds'):.2f}" if summary.get("avg_odds") else "-")
             c3.metric("最佳赔率", f"{summary.get('best_odds'):.2f}" if summary.get("best_odds") else "-")
-            st.caption("盘口中心公司：" + (", ".join(summary.get("bookmakers", [])[:6]) or "-"))
+            st.caption("盘口中心公司（仅市场描述）：" + (", ".join(summary.get("bookmakers", [])[:6]) or "-"))
             if summary.get("coverage_label") not in (None, "No coverage candidate"):
                 st.info(f"TPB 覆盖说明（盘口参考）：{summary.get('coverage_label')}。这不是主方向，只用于防守平局、低节奏或热门方不打穿。")
             if summary.get("secondary_handicap_label"):
@@ -1966,7 +1989,7 @@ def render_totals(market_data):
         col4.metric("小球最佳赔率", fmt(best_under))
         st.caption(f"数据来源：{totals_data.get('source') or 'API-Football / Goals Over/Under'}")
         st.caption("主要公司：" + (", ".join(bookmakers[:3]) if bookmakers else "-"))
-        st.info(summary.get("market_bias", "大小球盘口中心暂不明确。"))
+        st.info("市场倾向（非推荐信号）：" + summary.get("market_bias", "大小球盘口中心暂不明确。"))
         st.caption(summary.get("recommended_interpretation", ""))
 
         if st.checkbox("展开全部赔率", value=False, key="market_all_totals"):
@@ -2630,6 +2653,7 @@ def render_analysis_page(match_text):
                     user_portfolio_key,
                     market_intelligence,
                     scenario_engine,
+                    top_strategy,
                 )
 
         with team_tab:

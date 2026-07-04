@@ -363,8 +363,8 @@ def test_architecture_guardrails():
     report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
     assert "## 最终决策区（FINAL DECISION BLOCK）" in report_text
     assert "### 3. 情景概率与权重分析（Scenario Engine v3 Phase 1）" in report_text
-    assert "### 4. Portfolio Top 3" in report_text
-    assert "### 5. Ranking Top 3" in report_text
+    assert "组合观察区（无执行信号）" in report_text
+    assert "排序结构（仅结构分析）" in report_text
     assert "## 6. Execution Layer" in report_text
     assert "## 模型方法透明层" in report_text
     assert "用户执行层不进入本区" in report_text
@@ -376,11 +376,13 @@ def test_architecture_guardrails():
     assert "Structural Risk Map" in report_text
     assert "Risk Decomposition" in report_text
     assert "### 情景到组合的解释映射" in report_text
-    assert "波胆 Top Signal" in report_text
+    assert "高波动信号提示" in report_text
+    assert "高波动结构提示（仅分析）" in report_text
     assert "系统推荐组合明细（非决策入口）" in report_text
     assert "波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）" in report_text
-    assert "Top 3 压缩组合" in report_text
-    assert "Ranking 是优先级排序结果，不是 Portfolio 明细复制" in report_text
+    assert "执行状态由推荐金额决定" in report_text
+    assert "Ranking 为结构排序，不代表最终下注建议" in report_text
+    assert "Scenario 仅提供结构权重信号，不直接决定下注结果" in report_text
     assert "主波胆" in report_text
     assert "结构波胆" in report_text
     assert "高波动波胆" in report_text
@@ -394,10 +396,14 @@ def test_architecture_guardrails():
     assert "用户执行层不进入本区" in app_text
     assert "render_final_decision_summary" in app_text
     assert "Portfolio Top 3（系统投注组合）" in app_text
-    assert "波胆 Top Signal" in app_text
+    assert "组合观察区（无执行信号）" in app_text
+    assert "高波动信号提示" in app_text
+    assert "高波动结构提示（仅分析）" in app_text
+    assert "排序结构（仅结构分析）" in app_text
     assert "Risk Surface Quantification Layer v3" in app_text
     assert "RSS 结构风险分" in app_text
-    assert "Ranking 是优先级排序结果，不是 Portfolio 明细复制" in app_text
+    assert "Ranking 为结构排序，不代表最终下注建议" in app_text
+    assert "Scenario 仅提供结构权重信号，不直接决定下注结果" in app_text
     assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
     assert "        render_scenario_coverage_analysis(scenario_engine)" not in app_text
     assert "        render_scenario_optimization_view_v2(scenario_engine, match=match, market_intelligence=market_intelligence)" not in app_text

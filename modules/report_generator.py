@@ -889,8 +889,8 @@ def format_asian_handicap_lines(api_football_data, odds=None, match=None):
     center = identify_handicap_center(markets, odds=odds, match=match)
     if center.get("available"):
         lines.extend([
-            f"让球盘口中心：{center.get('center_label')}",
-            f"TPB 覆盖说明：{center.get('coverage_label')}",
+            f"结构观察 - 让球盘口中心（仅市场描述）：{center.get('center_label')}",
+            f"TPB 覆盖说明（非推荐信号）：{center.get('coverage_label')}",
         ])
         if center.get("warning"):
             lines.append(f"数据提示：已过滤 {center.get('outlier_count')} 条可能异常盘口。")
@@ -975,8 +975,8 @@ def format_over_under_lines(odds):
     center = identify_total_center(markets)
     if center.get("available"):
         lines.extend([
-            f"总进球盘口中心：{center.get('center_label')}",
-            f"市场倾向：{center.get('market_bias')}",
+            f"结构观察 - 总进球盘口中心（仅市场描述）：{center.get('center_label')}",
+            f"市场倾向（非推荐信号）：{center.get('market_bias')}",
             f"解释：{center.get('recommended_interpretation')}",
             "",
         ])
@@ -1059,6 +1059,14 @@ def _recommended_stake_amount(portfolio_summary):
         return None
 
 
+def _is_observation_mode(portfolio_summary):
+    stake_amount = _recommended_stake_amount(portfolio_summary)
+    if stake_amount is not None:
+        return stake_amount <= 0
+    eligible = _portfolio_eligible(portfolio_summary)
+    return eligible is False
+
+
 def format_core_conclusion_lines(
     betting_opinion,
     portfolio_summary=None,
@@ -1132,6 +1140,7 @@ def format_final_decision_block_lines(
         for row in scenario_rows
     ) or "暂无情景概率与权重数据。"
     top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
+    observation_mode = _is_observation_mode(portfolio_summary)
     score = portfolio_summary.get("decision_score")
     if score is None:
         score = portfolio_summary.get("score")
@@ -1139,13 +1148,20 @@ def format_final_decision_block_lines(
     lines = [
         "## 最终决策区（FINAL DECISION BLOCK）",
         "",
-        "唯一决策入口视图：TPB 锚点 + 市场结构 + 情景权重 + 推荐组合 + 系统排名汇总展示。用户执行层不进入本区。",
+        "用户执行层不进入本区；Ranking 为结构排序，不代表最终下注建议。",
         "",
         "### 1. TPB 结论",
         "",
         f"- 主方向：{metrics.get('favorite_label') or opinion.get('match_direction') or opinion.get('match_winner', '-')}（{format_value(metrics.get('favorite_probability'))}%）｜TPB：主胜 {percent(probabilities.get('home_win', 0)) if probabilities else '-'} / 平局 {percent(probabilities.get('draw', 0)) if probabilities else '-'} / 客胜 {percent(probabilities.get('away_win', 0)) if probabilities else '-'}",
         f"- 信心 / 投资分 / 推荐金额：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100；{format_value(score)}；{_recommended_stake_text(portfolio_summary)}",
         "",
+    ]
+    if observation_mode:
+        lines.extend([
+            "当前为观察模式，系统不提供执行型投注组合。",
+            "",
+        ])
+    lines.extend([
         "### 2. 市场结构",
         "",
         f"- 方向 / 冲突 / 效率：{metrics.get('directional_strength', '-')}；{format_value(metrics.get('market_conflict_index'))} / 100；{format_value(metrics.get('market_efficiency_score'))} / 100",
@@ -1153,40 +1169,47 @@ def format_final_decision_block_lines(
         "",
         "### 3. 情景概率与权重分析（Scenario Engine v3 Phase 1）",
         "",
+        "- Scenario 仅提供结构权重信号，不直接决定下注结果。",
         f"- S1-S6：{scenario_summary}",
         f"- 风险面：尾部 {_level_cn(risk.get('tail_risk_concentration'))} / 脆弱性 {_level_cn(risk.get('market_fragility'))} / 冷门 {_level_cn(risk.get('upset_exposure'))} / 平局 {_level_cn(risk.get('draw_dependency'))}",
         f"- RSS v3：{rss['RSS']}（{rss['等级']}）｜{rss['组件']}",
         f"- 覆盖效率 v2：{format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
         "",
-        "### 4. Portfolio Top 3",
+        "### 4. " + ("组合观察区（无执行信号）" if observation_mode else "Portfolio Top 3"),
         "",
-        "Portfolio 是投注组合集合；本区只显示 Top 3 压缩组合，完整明细见下方系统组合明细。",
-        "",
-    ]
-    for row in system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence):
-        lines.append(
-            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
-        )
-    lines.extend([
-        "",
-        "### 5. Ranking Top 3",
-        "",
-        "Ranking 是优先级排序结果，不是 Portfolio 明细复制；本区只保留 Top3 精简投注。",
-        f"- 波胆 Top Signal：{top_score['中文投注描述']}｜盘口：{top_score['对应盘口']}｜情景依赖：{top_score['情景依赖']}",
+        "Portfolio 是投注组合集合；执行状态由推荐金额决定。",
         "",
     ])
-    ranking_rows = system_ranking_display_rows(
-        portfolio,
-        scenario,
-        match=match,
-        market_intelligence=market_intelligence,
-    )
-    if not ranking_rows:
-        lines.append("- 暂无系统排序。")
-    for row in ranking_rows:
-        lines.append(
-            f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}｜情景依赖：{row['情景依赖']}｜风险标注：{row.get('风险标注', '-')}"
+    if observation_mode:
+        lines.append("- 观察模式：推荐金额为 0 元，当前不输出具体投注组合。")
+    else:
+        for row in system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence):
+            lines.append(
+                f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
+            )
+    lines.extend([
+        "",
+        "### 5. " + ("排序结构（仅结构分析）" if observation_mode else "Ranking Top 3"),
+        "",
+        "Ranking 为结构排序，不代表最终下注建议；只有推荐金额大于 0 时才输出执行信号。",
+        f"- {'高波动结构提示（仅分析）' if observation_mode else '高波动信号提示'}：{top_score['中文投注描述'] if not observation_mode else '观察模式，不输出波胆执行信号'}｜盘口：{top_score['对应盘口'] if not observation_mode else '-'}｜情景依赖：{top_score['情景依赖'] if not observation_mode else '-'}",
+        "",
+    ])
+    ranking_rows = [] if observation_mode else system_ranking_display_rows(
+            portfolio,
+            scenario,
+            match=match,
+            market_intelligence=market_intelligence,
         )
+    if observation_mode:
+        lines.append("- 无执行信号：当前为观察模式，Ranking 不输出具体投注组合。")
+    elif not ranking_rows:
+        lines.append("- 暂无系统排序。")
+    else:
+        for row in ranking_rows:
+            lines.append(
+                f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}｜情景依赖：{row['情景依赖']}｜风险标注：{row.get('风险标注', '-')}"
+            )
     return lines
 
 
@@ -1195,7 +1218,7 @@ def format_tpb_coverage_lines(betting_opinion):
     lines = [
         "## TPB 覆盖说明",
         "",
-        opinion.get("coverage_candidate") or "暂无 TPB 覆盖说明",
+        f"结构观察（非推荐信号）：{opinion.get('coverage_candidate') or '暂无 TPB 覆盖说明'}",
         "",
         "说明：",
         _coverage_display_text(opinion.get("coverage_reason")) or "-",
@@ -1228,9 +1251,9 @@ def format_goals_view_lines(betting_opinion):
     return [
         "## 进球数观点",
         "",
-        f"总进球盘口中心：{opinion.get('total_center', '-')}",
+        f"结构观察 - 总进球盘口中心（仅市场描述）：{opinion.get('total_center', '-')}",
         "",
-        f"市场倾向：{opinion.get('goals_market_bias', opinion.get('over_under_reason', '-'))}",
+        f"市场倾向（非推荐信号）：{opinion.get('goals_market_bias', opinion.get('over_under_reason', '-'))}",
         "",
         f"比赛行为提示：{opinion.get('goals_game_behavior_note', '-')}",
         "",
@@ -1579,7 +1602,7 @@ def format_model_explanation_lines(scenario_engine):
     return lines
 
 
-def format_system_portfolio_lines(market_intelligence, scenario_engine=None, match=None):
+def format_system_portfolio_lines(market_intelligence, scenario_engine=None, match=None, portfolio_summary=None):
     scenario = scenario_engine or {}
     lines = [
         "## 系统推荐组合明细（非决策入口）",
@@ -1589,6 +1612,12 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         "Portfolio Priority v2：主覆盖（TPB aligned） -> 波胆策略（Correct Score Layer） -> 防守覆盖 -> 高波动覆盖。",
         "",
     ]
+    if _is_observation_mode(portfolio_summary):
+        lines.extend([
+            "观察模式：推荐金额为 0 元或当前不建议下注，本区不输出具体投注组合。",
+            "Ranking 仅代表结构排序语义，不代表最终下注建议。",
+        ])
+        return lines
     for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
         lines.append(
             f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
@@ -1760,7 +1789,7 @@ def build_report(
         "",
         *format_risk_surface_v3_lines(scenario_engine),
         "",
-        *format_system_portfolio_lines(market_intelligence, scenario_engine, match),
+        *format_system_portfolio_lines(market_intelligence, scenario_engine, match, portfolio_summary),
         "",
         *format_model_explanation_lines(scenario_engine),
         "",
