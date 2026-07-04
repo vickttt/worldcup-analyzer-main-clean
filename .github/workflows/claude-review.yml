@@ -9,18 +9,12 @@ on:
       packet_mode:
         description: "Artifact packet source"
         required: true
-        default: "packet_path"
+        default: "commit_range"
         type: choice
         options:
-          - packet_path
           - commit_range
-      packet_path:
-        description: "Existing sanitized packet path"
-        required: false
-        default: "reports/claude_reviews/github_action_test_packet.md"
-        type: string
       commit_range:
-        description: "Git range for packet generation. A..B excludes A; use A^..B to include A."
+        description: "Optional guard range. If provided, it must resolve to current HEAD^..HEAD."
         required: false
         default: ""
         type: string
@@ -52,28 +46,29 @@ jobs:
         run: |
           set -euo pipefail
           packet_mode="${{ inputs.packet_mode }}"
-          packet_path="${{ inputs.packet_path }}"
           commit_range="${{ inputs.commit_range }}"
           artifact_round="${{ inputs.artifact_round }}"
           case "${packet_mode}" in
-            packet_path|commit_range) ;;
+            commit_range) ;;
             *) echo "Unsupported packet_mode: ${packet_mode}" >&2; exit 1 ;;
           esac
-          if [[ "${packet_mode}" == "packet_path" ]]; then
-            case "${packet_path}" in
-              reports/claude_reviews/*_review_packet.md|reports/claude_reviews/github_action_test_packet.md) ;;
-              *) echo "Refusing non-packet path: ${packet_path}" >&2; exit 1 ;;
-            esac
-            echo "packet_path=${packet_path}" >> "$GITHUB_OUTPUT"
-          else
-            if [[ -z "${commit_range}" ]]; then
-              echo "commit_range is required when packet_mode=commit_range" >&2
-              exit 1
-            fi
-            echo "commit_range=${commit_range}" >> "$GITHUB_OUTPUT"
+          if [[ "${packet_mode}" != "commit_range" ]]; then
+            echo "packet_path mode is disabled for HEAD-bound packet artifacts" >&2
+            exit 1
           fi
+          echo "commit_range=${commit_range}" >> "$GITHUB_OUTPUT"
           echo "packet_mode=${packet_mode}" >> "$GITHUB_OUTPUT"
           echo "artifact_round=${artifact_round}" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve current HEAD binding
+        id: head
+        shell: bash
+        run: |
+          set -euo pipefail
+          head_sha="$(git rev-parse HEAD)"
+          short_sha="$(git rev-parse --short HEAD)"
+          echo "head_sha=${head_sha}" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -93,8 +88,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          packet_path="$(python scripts/prepare_commit_range_review_packet.py \
-            --commit-range "${{ steps.packet_mode.outputs.commit_range }}")"
+          if [[ -n "${{ steps.packet_mode.outputs.commit_range }}" ]]; then
+            packet_path="$(python scripts/prepare_commit_range_review_packet.py \
+              --commit-range "${{ steps.packet_mode.outputs.commit_range }}")"
+          else
+            packet_path="$(python scripts/prepare_commit_range_review_packet.py)"
+          fi
           if [[ ! -f "${packet_path}" ]]; then
             echo "Generated packet does not exist: ${packet_path}" >&2
             exit 1
@@ -110,26 +109,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ "${{ steps.packet_mode.outputs.packet_mode }}" == "commit_range" ]]; then
-            input_file="${{ steps.commit_range_packet.outputs.packet_path }}"
-          else
-            input_file="${{ steps.packet_mode.outputs.packet_path }}"
+          input_file="${{ steps.commit_range_packet.outputs.packet_path }}"
+          if [[ ! -f "${input_file}" ]]; then
+            echo "Generated packet does not exist: ${input_file}" >&2
+            exit 1
           fi
-          if [[ "${{ steps.packet_mode.outputs.packet_mode }}" == "commit_range" ]]; then
-            if [[ ! -f "${input_file}" ]]; then
-              echo "Generated packet does not exist: ${input_file}" >&2
-              exit 1
-            fi
-            case "$(basename "${input_file}")" in
-              *_review_packet.md) ;;
-              *) echo "Refusing generated non-packet input path: ${input_file}" >&2; exit 1 ;;
-            esac
-          else
-            case "${input_file}" in
-              reports/claude_reviews/*_review_packet.md|reports/claude_reviews/github_action_test_packet.md) ;;
-              *) echo "Refusing non-packet input path: ${input_file}" >&2; exit 1 ;;
-            esac
-          fi
+          case "$(basename "${input_file}")" in
+            *"${{ steps.head.outputs.short_sha }}"*_review_packet.md) ;;
+            *) echo "Generated packet is not bound to current HEAD: ${input_file}" >&2; exit 1 ;;
+          esac
           echo "input_file=${input_file}" >> "$GITHUB_OUTPUT"
           echo "artifact_round=${{ steps.packet_mode.outputs.artifact_round }}" >> "$GITHUB_OUTPUT"
 
@@ -144,7 +132,7 @@ jobs:
       - name: Upload sanitized packet artifact
         uses: actions/upload-artifact@v4
         with:
-          name: claude-review-packet-round-${{ steps.packet_mode.outputs.artifact_round }}
+          name: claude-review-packet-round-${{ steps.packet_mode.outputs.artifact_round }}-${{ steps.head.outputs.short_sha }}
           path: |
             ${{ steps.packet.outputs.input_file }}
           if-no-files-found: error

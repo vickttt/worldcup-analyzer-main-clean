@@ -20,7 +20,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = Path(os.getenv("RUNNER_TEMP") or tempfile.gettempdir()) / "worldcup2026_review_packets"
-OUTPUT_PATH = OUTPUT_DIR / "commit_range_review_packet.md"
 RUBRIC_PATH = ROOT / "reports" / "claude_reviews" / "CLAUDE_REVIEW_RUBRIC.md"
 MAX_PACKET_BYTES = 48 * 1024
 MAX_SNIPPET_LINES_PER_FILE = 80
@@ -94,6 +93,35 @@ def run_git(args: list[str]) -> str:
     return result.stdout.strip()
 
 
+def resolve_commit(expr: str) -> str:
+    return run_git(["rev-parse", "--verify", f"{expr}^{{commit}}"])
+
+
+def current_head() -> str:
+    return resolve_commit("HEAD")
+
+
+def current_head_parent() -> str:
+    return resolve_commit("HEAD^")
+
+
+def head_bound_commit_range(raw_commit_range: str | None) -> tuple[str, str]:
+    head = current_head()
+    parent = current_head_parent()
+    normalized = f"{head}^..{head}"
+    if not raw_commit_range:
+        return normalized, head
+
+    if not COMMIT_RANGE_RE.fullmatch(raw_commit_range):
+        raise ValueError("commit range must look like base..head and contain no whitespace")
+    left_expr, right_expr = raw_commit_range.split("..", 1)
+    if resolve_commit(right_expr) != head:
+        raise ValueError("commit range head must resolve to current git HEAD")
+    if resolve_commit(left_expr) != parent:
+        raise ValueError("commit range base must resolve to current git HEAD parent")
+    return normalized, head
+
+
 def sanitize_text(text: str) -> str:
     sanitized = text
     for needle, replacement in REDACTIONS.items():
@@ -114,8 +142,6 @@ def reject_secret_like_text(label: str, text: str) -> None:
 
 
 def validate_commit_range(commit_range: str) -> None:
-    if not COMMIT_RANGE_RE.fullmatch(commit_range):
-        raise ValueError("commit range must look like base..head and contain no whitespace")
     run_git(["rev-list", "--count", commit_range])
 
 
@@ -191,6 +217,7 @@ def selected_snippet(path: str) -> str:
 
 
 def build_packet(commit_range: str) -> str:
+    head = current_head()
     rubric = read_rubric()
     commit_log = sanitize_text(run_git(["log", "--oneline", commit_range]))
     name_status = sanitize_text(run_git(["diff", "--name-status", commit_range]))
@@ -225,6 +252,14 @@ If the user says "include commit A through B", Codex must convert the range to A
 If the user gives raw A..B, Codex must report that A itself is excluded.
 
 Current raw commit range: `{commit_range}`
+
+# HEAD Binding
+
+Current git HEAD used for packet generation: `{head}`
+
+Normalized packet range: `{commit_range}`
+
+This packet is freshly generated from the current git HEAD. Cached packet files, previous workflow artifacts, and user-supplied stale commit ranges are not used.
 
 # Task
 
@@ -359,18 +394,24 @@ Review questions:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--commit-range", required=True)
+    parser.add_argument(
+        "--commit-range",
+        required=False,
+        default="",
+        help="Optional guard range. If provided, it must resolve to current HEAD^..HEAD.",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    commit_range = args.commit_range.strip()
+    commit_range, head = head_bound_commit_range(args.commit_range.strip())
     validate_commit_range(commit_range)
     packet = build_packet(commit_range)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(packet, encoding="utf-8")
-    print(OUTPUT_PATH.as_posix())
+    output_path = OUTPUT_DIR / f"commit_range_{head[:7]}_review_packet.md"
+    output_path.write_text(packet, encoding="utf-8")
+    print(output_path.as_posix())
     return 0
 
 
