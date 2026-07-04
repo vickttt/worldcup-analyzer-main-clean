@@ -371,11 +371,11 @@ Codex-Claude loop:
 6. Codex may stop at Local Complete with Review Pending if the user has not
    requested remote sync or review execution.
 7. Codex pushes only when explicitly allowed by the user.
-8. Claude Review may be requested as an independent step. GitHub Actions may
-   only prepare/upload sanitized review packet artifacts; it must not call any
-   external AI API.
-9. Claude performs read-only review manually/chat-based from the artifact or
-   packet content and returns a verdict.
+8. Manual Claude Review may be requested as an independent step outside CI.
+   GitHub Actions is not a review system; it only runs validation and produces
+   sanitized packet artifacts.
+9. Claude performs read-only review manually/chat-based from copied packet
+   content or a downloaded artifact and returns a verdict.
 10. Codex applies approved review fixes if needed on `dev-clean`, validates, and
    commits the fix.
 11. Every fix commit returns to `REVIEW REQUIRED`.
@@ -423,19 +423,19 @@ Decoupled Review Request System:
   assigns another local task, but must not report production-ready status, merge,
   release, or review closure while review is pending.
 - Push is optional remote sync, not a required validation step.
-- Claude Review does not inherently depend on push. It may use local
-  `commit_range` packets, packet review, or remote `workflow_dispatch` packet
-  artifacts when authorized.
-- Remote `workflow_dispatch` is artifact-only. It may generate or collect a
-  sanitized packet and upload it as a GitHub Actions artifact, but it must not
-  call Claude, Anthropic, or any external AI API from CI.
+- Claude Review does not inherently depend on push. It uses packet content
+  outside CI, either from a local packet or from a downloaded artifact.
+- Remote `workflow_dispatch` is a non-AI CI trigger only. It may run tests,
+  generate or collect a sanitized packet, and upload it as a GitHub Actions
+  artifact. It must not start, imply, or execute Claude Review.
 - AI review is external and manual only. CI is never allowed to execute AI
   inference.
 - CI may build, test, generate sanitized review packets, and upload artifacts.
   CI must not perform model-based review, automated AI evaluation, or external
   LLM inference.
 - Claude Review is performed only by manual/chat-based analysis of the
-  downloaded artifact or copied packet content.
+  downloaded artifact or copied packet content. CI has zero awareness of
+  Claude and no AI review lifecycle.
 - If review cannot be requested or triggered because workflow, Claude, token
   authorization, local dependency, or user approval is missing, Codex must
   report:
@@ -463,14 +463,15 @@ Review System Rule (locked artifact-only flow):
 - No external AI API calls are allowed from CI.
 - GitHub Actions may run tests, generate sanitized review packets, and upload
   packet artifacts only.
+- GitHub Actions must not be described as a Claude Review pipeline, review
+  trigger, or commit-range review executor.
 
-Review request methods:
+Manual review input methods:
 
 - Local `commit_range` packet generation for committed repository changes.
-- Local `packet_path` / packet-based review for sanitized review packets.
-- Manual `workflow_dispatch` through the Claude Review GitHub Actions workflow
-  when remote sync is explicitly authorized, limited to packet/artifact
-  generation and upload only.
+- Local `packet_path` / packet-based packet preparation.
+- Remote `workflow_dispatch` for CI validation and packet artifact generation
+  only when remote sync is explicitly authorized.
 - Manual/chat-based Claude Review from the downloaded artifact or copied packet
   content. CI must not execute the Claude review itself.
 
@@ -479,13 +480,14 @@ CI vs Claude Review:
 - CI checks syntax, imports, unit tests, smoke tests, and basic command
   correctness.
 - GitHub Actions may generate sanitized review packets and upload artifacts for
-  manual review, but it must not execute external AI inference.
+  external manual analysis, but it must not execute or imply external AI
+  inference.
 - Claude Review checks architecture validation, TPB baseline integrity, market
   structure boundaries, Scenario Engine isolation, EV/ROI violation detection,
   ranking contamination, execution-layer isolation, and governance compliance.
 - CI and Claude Review are both mandatory after a commit. Neither replaces the
-  other, but Claude Review remains a decoupled request state rather than an
-  automatic commit hook.
+  other, but Claude Review remains external/manual and is never a CI pipeline
+  action or workflow_dispatch side effect.
 
 Role boundaries:
 

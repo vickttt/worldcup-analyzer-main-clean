@@ -1,13 +1,13 @@
-name: Claude Review
+name: Review Packet Artifact
 
-# Artifact-only review preparation. The active repository workflow is defined
-# in AGENTS.md: dev-clean only, no branch creation, no automatic Claude review
-# loop, and no CI-hosted external AI calls.
+# Pure artifact generation. The active repository workflow is defined in
+# AGENTS.md: dev-clean only, no branch creation, no CI-hosted AI semantics,
+# no external inference, and no workflow-based AI evaluation.
 on:
   workflow_dispatch:
     inputs:
-      review_mode:
-        description: "Manual review mode"
+      packet_mode:
+        description: "Artifact packet source"
         required: true
         default: "packet_path"
         type: choice
@@ -15,17 +15,17 @@ on:
           - packet_path
           - commit_range
       packet_path:
-        description: "Existing sanitized packet path for packet_path mode"
+        description: "Existing sanitized packet path"
         required: false
         default: "reports/claude_reviews/github_action_test_packet.md"
         type: string
       commit_range:
-        description: "Git range for commit_range mode. A..B excludes A; use A^..B to include A."
+        description: "Git range for packet generation. A..B excludes A; use A^..B to include A."
         required: false
         default: ""
         type: string
-      round:
-        description: "Review round number"
+      artifact_round:
+        description: "Artifact round label"
         required: true
         default: "1"
         type: string
@@ -35,8 +35,8 @@ permissions:
   actions: read
 
 jobs:
-  claude-review:
-    name: Generate Claude review packet artifact
+  packet-artifact:
+    name: Generate sanitized packet artifact
     runs-on: ubuntu-latest
 
     steps:
@@ -46,20 +46,20 @@ jobs:
           ref: dev-clean
           fetch-depth: 0
 
-      - name: Select manual review mode
-        id: review
+      - name: Select packet artifact mode
+        id: packet_mode
         shell: bash
         run: |
           set -euo pipefail
-          review_mode="${{ inputs.review_mode }}"
+          packet_mode="${{ inputs.packet_mode }}"
           packet_path="${{ inputs.packet_path }}"
           commit_range="${{ inputs.commit_range }}"
-          round="${{ inputs.round }}"
-          case "${review_mode}" in
+          artifact_round="${{ inputs.artifact_round }}"
+          case "${packet_mode}" in
             packet_path|commit_range) ;;
-            *) echo "Unsupported review_mode: ${review_mode}" >&2; exit 1 ;;
+            *) echo "Unsupported packet_mode: ${packet_mode}" >&2; exit 1 ;;
           esac
-          if [[ "${review_mode}" == "packet_path" ]]; then
+          if [[ "${packet_mode}" == "packet_path" ]]; then
             case "${packet_path}" in
               reports/claude_reviews/*_review_packet.md|reports/claude_reviews/github_action_test_packet.md) ;;
               *) echo "Refusing non-packet path: ${packet_path}" >&2; exit 1 ;;
@@ -67,13 +67,13 @@ jobs:
             echo "packet_path=${packet_path}" >> "$GITHUB_OUTPUT"
           else
             if [[ -z "${commit_range}" ]]; then
-              echo "commit_range is required when review_mode=commit_range" >&2
+              echo "commit_range is required when packet_mode=commit_range" >&2
               exit 1
             fi
             echo "commit_range=${commit_range}" >> "$GITHUB_OUTPUT"
           fi
-          echo "review_mode=${review_mode}" >> "$GITHUB_OUTPUT"
-          echo "round=${round}" >> "$GITHUB_OUTPUT"
+          echo "packet_mode=${packet_mode}" >> "$GITHUB_OUTPUT"
+          echo "artifact_round=${artifact_round}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -87,49 +87,49 @@ jobs:
           python -m py_compile app.py modules/*.py scripts/*.py
           python scripts/test_portfolio_engine.py
 
-      - name: Generate commit range review packet
+      - name: Generate commit range packet
         id: commit_range_packet
-        if: steps.review.outputs.review_mode == 'commit_range'
+        if: steps.packet_mode.outputs.packet_mode == 'commit_range'
         shell: bash
         run: |
           set -euo pipefail
           packet_path="$(python scripts/prepare_commit_range_review_packet.py \
-            --commit-range "${{ steps.review.outputs.commit_range }}")"
+            --commit-range "${{ steps.packet_mode.outputs.commit_range }}")"
           case "${packet_path}" in
             reports/claude_reviews/*_review_packet.md) ;;
             *) echo "Generated packet has invalid path: ${packet_path}" >&2; exit 1 ;;
           esac
           echo "packet_path=${packet_path}" >> "$GITHUB_OUTPUT"
 
-      - name: Resolve sanitized review packet
+      - name: Resolve sanitized packet
         id: packet
         shell: bash
         run: |
           set -euo pipefail
-          if [[ "${{ steps.review.outputs.review_mode }}" == "commit_range" ]]; then
+          if [[ "${{ steps.packet_mode.outputs.packet_mode }}" == "commit_range" ]]; then
             input_file="${{ steps.commit_range_packet.outputs.packet_path }}"
           else
-            input_file="${{ steps.review.outputs.packet_path }}"
+            input_file="${{ steps.packet_mode.outputs.packet_path }}"
           fi
           case "${input_file}" in
             reports/claude_reviews/*_review_packet.md|reports/claude_reviews/github_action_test_packet.md) ;;
             *) echo "Refusing non-packet input path: ${input_file}" >&2; exit 1 ;;
           esac
           echo "input_file=${input_file}" >> "$GITHUB_OUTPUT"
-          echo "round=${{ steps.review.outputs.round }}" >> "$GITHUB_OUTPUT"
+          echo "artifact_round=${{ steps.packet_mode.outputs.artifact_round }}" >> "$GITHUB_OUTPUT"
 
-      - name: Confirm artifact-only review mode
+      - name: Confirm artifact-only mode
         shell: bash
         run: |
           set -euo pipefail
-          echo "Claude Review workflow is artifact-only."
-          echo "No external AI API call is executed in GitHub Actions."
+          echo "This workflow only runs validation and uploads a sanitized packet artifact."
+          echo "No AI evaluation, external inference, or external AI API call is executed."
           echo "Packet artifact: ${{ steps.packet.outputs.input_file }}"
 
-      - name: Upload Claude review packet artifact
+      - name: Upload sanitized packet artifact
         uses: actions/upload-artifact@v4
         with:
-          name: claude-review-packet-round-${{ steps.review.outputs.round }}
+          name: sanitized-packet-round-${{ steps.packet_mode.outputs.artifact_round }}
           path: |
             ${{ steps.packet.outputs.input_file }}
           if-no-files-found: error
