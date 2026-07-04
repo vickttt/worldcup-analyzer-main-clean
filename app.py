@@ -2620,21 +2620,16 @@ def render_analysis_page(match_text):
                 top_strategy = tpb_report_strategy(decision)
             with perf_timer("detail", "report_generation"):
                 report = build_report(
-                    match,
-                    odds,
-                    polymarket,
-                    news,
-                    None,
-                    None,
-                    None,
-                    api_football_data,
-                    None,
-                    betting_opinion,
-                    top_strategy,
-                    None,
-                    my_portfolio,
-                    market_intelligence,
-                    scenario_engine,
+                    match=match,
+                    odds=odds,
+                    polymarket=polymarket,
+                    news=news,
+                    api_football_data=api_football_data,
+                    betting_opinion=betting_opinion,
+                    portfolio_summary=top_strategy,
+                    user_portfolio=my_portfolio,
+                    market_intelligence=market_intelligence,
+                    scenario_engine=scenario_engine,
                 )
                 report_path = save_report(report, match, config["report"]["output_dir"])
 

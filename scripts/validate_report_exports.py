@@ -44,7 +44,20 @@ def validate_match(match):
     opinion = build_betting_opinion(match, odds, polymarket, value, api_data)
     portfolio_summary = portfolio_from_database(db)
     actual_odds = (db.get("pre_match") or {}).get("actual_odds") or {}
-    report = build_report(match, odds, polymarket, {}, {}, [], {}, api_data, value, opinion, portfolio_summary, actual_odds)
+    report = build_report(
+        match=match,
+        odds=odds,
+        polymarket=polymarket,
+        news={},
+        probabilities={},
+        scores=[],
+        rating={},
+        api_football_data=api_data,
+        value_analysis=value,
+        betting_opinion=opinion,
+        portfolio_summary=portfolio_summary,
+        actual_odds=actual_odds,
+    )
     report_path = save_report(report, match, ROOT / "outputs" / "reports")
 
     meta = fixture_metadata(api_data, match)
