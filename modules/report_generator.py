@@ -59,6 +59,27 @@ def _level_cn(value):
     return LEVEL_CN.get(str(value), format_value(value))
 
 
+def _score_to_number(value):
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).strip().replace("%", "")
+    if "/" in text:
+        text = text.split("/", 1)[0].strip()
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def _metric_number_text(value):
+    number = _score_to_number(value)
+    if number is None:
+        return "-"
+    return f"{number:.0f} / 100"
+
+
 def _scenario_name_cn(code, name=None):
     return f"{code} {SCENARIO_NAME_CN.get(code, name or '-')}"
 
@@ -381,6 +402,45 @@ def risk_score_v3_summary(scenario_engine):
     }
 
 
+def market_structure_numeric_rows(market_intelligence):
+    metrics = (market_intelligence or {}).get("metrics") or {}
+    return [
+        {
+            "指标": "Direction Strength",
+            "数值": _metric_number_text(metrics.get("directional_strength_score") or metrics.get("direction_score")),
+            "说明": "TPB 集中度 + 盘口偏差",
+        },
+        {
+            "指标": "Market Agreement",
+            "数值": _metric_number_text(metrics.get("market_agreement_score")),
+            "说明": "多市场一致性指数",
+        },
+        {
+            "指标": "Volatility Pressure",
+            "数值": _metric_number_text(metrics.get("volatility_pressure_score")),
+            "说明": "波胆 + 平局 + odds spread",
+        },
+    ]
+
+
+def scenario_projection_table_rows(scenario_engine):
+    rows = []
+    for row in scenario_probability_weight_rows(scenario_engine):
+        scenario_text = str(row.get("情景", ""))
+        code = scenario_text.split(" ", 1)[0] if scenario_text else "-"
+        probability = row.get("原始概率", "-")
+        weight = row.get("Lite 权重", "-")
+        if probability == weight and probability != "-":
+            weight = f"{weight}（未调整）"
+        rows.append({
+            "Scenario": code,
+            "描述": SCENARIO_NAME_CN.get(code, scenario_text.replace(code, "", 1).strip() or "-"),
+            "概率": probability,
+            "权重": weight,
+        })
+    return rows
+
+
 def system_semantic_alignment_rows():
     return [
         {
@@ -422,6 +482,46 @@ def system_semantic_alignment_rows():
             "层 / 指标": "Correct Score",
             "统一语义": "high variance structural signal layer, not execution signal",
             "真实作用": "作为高波动结构信号展示，不进入 Investment Score、Ranking Score 或 stake mapping。",
+        },
+    ]
+
+
+def system_semantic_alignment_sections():
+    return [
+        {
+            "标题": "Scenario",
+            "简短说明": "受约束情景权重层。",
+            "详细说明": "Scenario 用于组合构建、排序调整和风险估计；不覆盖 TPB，不使用用户输入，不计算 EV/ROI。",
+        },
+        {
+            "标题": "Portfolio",
+            "简短说明": "覆盖结构层。",
+            "详细说明": "Portfolio 展示主覆盖、防守覆盖、高波动覆盖，用于理解覆盖空间，不直接生成最终金额。",
+        },
+        {
+            "标题": "Stake",
+            "简短说明": "最终执行金额映射。",
+            "详细说明": "Stake 只由 Investment Score 档位映射得出；RSI 不直接输入 stake mapping。",
+        },
+        {
+            "标题": "Ranking",
+            "简短说明": "结构排序层。",
+            "详细说明": "Ranking 对系统投注结构排序，帮助阅读优先级；最终执行仍取决于 Investment Score 到 Stake 的映射。",
+        },
+        {
+            "标题": "RSI",
+            "简短说明": "风险调整因子。",
+            "详细说明": "RSI 表示结构风险压力，较高时会压低 Investment Score 的风险调整项，并间接降低推荐金额；它不是单独下注信号。",
+        },
+        {
+            "标题": "TPB",
+            "简短说明": "概率锚点。",
+            "详细说明": "TPB 提供主胜 / 平局 / 客胜三项概率坐标，不被 Scenario、Market 或用户输入覆盖。",
+        },
+        {
+            "标题": "Market Conflict",
+            "简短说明": "市场一致性的反向指标。",
+            "详细说明": "当前 active model 使用 100 - market_agreement_score；legacy conflict function 已废弃且不使用。",
         },
     ]
 
@@ -513,11 +613,11 @@ def system_portfolio_top_rows(scenario_engine, match=None, market_intelligence=N
 def _score_rows_for_ranking(position, match=None, market_intelligence=None, scenario_engine=None):
     rows = correct_score_strategy_rows(match, market_intelligence, scenario_engine)
     if position == "Primary Coverage Set":
-        return [row for row in rows if row["波胆层级"] == "主波胆"][:2]
+        return [row for row in rows if row["波胆层级"] == "主波胆"][:3]
     if position == "Defensive Coverage Set":
-        return [row for row in rows if row["波胆层级"] == "结构波胆"][:2]
+        return [row for row in rows if row["波胆层级"] == "结构波胆"][:3]
     if position == "Tail Coverage Set":
-        return [row for row in rows if row["波胆层级"] == "高波动波胆"][:2]
+        return [row for row in rows if row["波胆层级"] == "高波动波胆"][:3]
     return []
 
 
@@ -535,7 +635,7 @@ def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, mar
     rows = []
     sets = _optimization_sets(scenario_engine)
     risk_summary = risk_score_v3_summary(scenario_engine)
-    risk_note = f"RSI {risk_summary['RSI']}；Ranking Score = SS + Scenario Alignment - RSI。"
+    risk_note = f"RSI {risk_summary['RSI']}；重点风险路径：结构不确定性 + 情景分散 + 高波动尾部风险。"
     for item in ((portfolio or {}).get("ranking") or [])[:3]:
         position = item.get("position", "-")
         legs = portfolio_leg_display_rows(
@@ -554,17 +654,39 @@ def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, mar
         dependency_text = "；".join(
             [leg.get("情景依赖", "-") for leg in legs if leg.get("情景依赖")]
         ) or "-"
+        score_rows = _score_rows_for_ranking(position, match, market_intelligence, scenario_engine)[:3]
+        correct_score_text = "；".join(row.get("中文投注描述", "-") for row in score_rows) or "-"
         reason = _basis_cn(item.get("basis"))
         rows.append({
             "排名": f"Rank {item.get('rank', '-')}",
             "组合类型": _portfolio_position_cn(position),
             "具体投注组合": bet_text,
             "对应盘口": market_text,
+            "波胆": correct_score_text,
             "结构理由": reason,
             "情景依赖": dependency_text,
             "风险标注": risk_note,
         })
     return rows
+
+
+def correct_score_limited_rows(match=None, market_intelligence=None, scenario_engine=None):
+    rows = correct_score_strategy_rows(match, market_intelligence, scenario_engine)
+    grouped = []
+    grouped.extend([row for row in rows if row.get("波胆层级") == "主波胆"][:2])
+    grouped.extend([row for row in rows if row.get("波胆层级") == "结构波胆"][:2])
+    grouped.extend([row for row in rows if row.get("波胆层级") == "高波动波胆"][:1])
+    return grouped
+
+
+def markdown_table(headers, rows):
+    lines = [
+        "| " + " | ".join(headers) + " |",
+        "| " + " | ".join(["---"] * len(headers)) + " |",
+    ]
+    for row in rows:
+        lines.append("| " + " | ".join(str(row.get(header, "-")) for header in headers) + " |")
+    return lines
 
 
 def _match_team_label(match, side):
@@ -1176,11 +1298,7 @@ def format_final_decision_block_lines(
     optimization = scenario.get("scenario_optimization_v2") or {}
     risk = scenario.get("risk_surface") or {}
     rss = risk_score_v3_summary(scenario)
-    scenario_rows = scenario_probability_weight_rows(scenario)
-    scenario_summary = "；".join(
-        f"{row['情景']} {row['原始概率']} / 权重 {row['Lite 权重']}"
-        for row in scenario_rows
-    ) or "暂无情景概率与权重数据。"
+    scenario_rows = scenario_projection_table_rows(scenario)
     top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
     score = portfolio_summary.get("decision_score")
     if score is None:
@@ -1190,15 +1308,13 @@ def format_final_decision_block_lines(
     lines = [
         "## 最终决策区（FINAL DECISION BLOCK）",
         "",
-        "Lite v1：Ranking 是结构排序层，不是最终执行指令；Portfolio 只保留 coverage structure；用户执行层不进入本区。",
-        "最终执行取决于 stake decision layer：Stake 只由 Investment Score 档位映射得出。",
-        "",
         "### System Semantic Alignment Layer",
         "",
     ]
-    for row in system_semantic_alignment_rows():
+    for row in system_semantic_alignment_sections():
         lines.append(
-            f"- {row['层 / 指标']}：{row['统一语义']}｜{row['真实作用']}"
+            f"<details><summary>{row['标题']}｜{row['简短说明']}</summary>"
+            f"{row['详细说明']}</details>"
         )
     lines.extend([
         "",
@@ -1206,26 +1322,37 @@ def format_final_decision_block_lines(
         "",
         f"- 主方向：{metrics.get('favorite_label') or opinion.get('match_direction') or opinion.get('match_winner', '-')}（{format_value(metrics.get('favorite_probability'))}%）｜TPB：主胜 {percent(probabilities.get('home_win', 0)) if probabilities else '-'} / 平局 {percent(probabilities.get('draw', 0)) if probabilities else '-'} / 客胜 {percent(probabilities.get('away_win', 0)) if probabilities else '-'}",
         f"- Signal Strength / 推荐金额：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100；{_recommended_stake_text(portfolio_summary)}",
+        "- Signal Strength = (max(TPB probabilities) - second max) × 100。",
+        "- 推荐金额 = Investment Score → 固定区间映射。",
         "",
     ])
     lines.extend([
         "### 2. Market Structure（3指标）",
         "",
-        f"- 方向强度：{metrics.get('directional_strength', '-')}",
-        f"- 市场一致性：{metrics.get('market_agreement', '-')}（{format_value(metrics.get('market_agreement_score'))} / 100）",
-        f"- 波动压力：{metrics.get('volatility_pressure', metrics.get('volatility_index', '-'))}",
+    ])
+    for row in market_structure_numeric_rows(market_intelligence):
+        lines.append(f"- {row['指标']}：{row['数值']}｜{row['说明']}")
+    lines.extend([
         "",
         "### 3. Scenario Projection（简化版）",
         "",
         "- Scenario = 受约束结构权重层；用于 portfolio construction、ranking adjustment、risk estimation，不覆盖 TPB，不计算 EV/ROI。",
-        f"- S1-S6：{scenario_summary}",
+        "",
+    ])
+    if scenario_rows:
+        lines.extend(markdown_table(["Scenario", "描述", "概率", "权重"], scenario_rows))
+    else:
+        lines.append("暂无情景概率与权重数据。")
+    lines.extend([
         "",
         "### 4. Investment Score（2因子）",
         "",
-        f"- Signal：{format_value(investment_breakdown.get('signal'))} / 100；Risk Adjustment：{format_value(investment_breakdown.get('risk_adjustment'))}；RSI：{rss['RSI']}",
+        f"- 输入因素：TPB Edge / Scenario Alignment / Market Conflict / RSI",
+        f"- 当前因子读数：TPB Edge + Scenario Alignment {format_value(investment_breakdown.get('signal'))} / 100；Risk Adjustment {format_value(investment_breakdown.get('risk_adjustment'))}；RSI {rss['RSI']}",
         f"- Investment Score：{format_value(score)} / 100",
-        "- 公式：Investment Score = Signal × Risk Adjustment；Signal = TPB Edge + Scenario Alignment。",
-        "- 资金链：RSI 不直接输入 stake mapping；RSI 通过 Risk Adjustment 改变 Investment Score，从而间接影响推荐金额。",
+        "- 解释：Investment Score 是多因子加权结果；TPB Edge、Scenario Alignment、Market Conflict 与 RSI 共同解释当前投资分。",
+        "- RSI 是 risk adjustment factor：它不直接输入 stake mapping，但会通过 Investment Score 间接影响推荐金额。",
+        "- 低分不下注：当 Investment Score 落入低分档位，推荐金额映射为 0 元。",
         "",
         "### 5. Portfolio（coverage only）",
         "",
@@ -1240,7 +1367,7 @@ def format_final_decision_block_lines(
         "",
         "### 6. Ranking Top 3（结构排序，非执行指令）",
         "",
-        "Ranking Score = SS + Scenario Alignment - RSI；Ranking 只排序投注结构，不是最终下注指令；最终执行取决于 stake decision layer。",
+        "Ranking 是系统结构排序，不是单独的下注指令；每个排序项附带 1-3 个 Correct Score 结构信号供阅读。",
         "",
     ])
     ranking_rows = system_ranking_display_rows(
@@ -1254,19 +1381,21 @@ def format_final_decision_block_lines(
     else:
         for row in ranking_rows:
             lines.append(
-                f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}｜情景依赖：{row['情景依赖']}｜风险标注：{row.get('风险标注', '-')}"
+                f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜波胆：{row.get('波胆', '-')}｜原因：{row['结构理由']}｜风险说明：{row.get('风险标注', '-')}"
             )
     lines.extend([
         "",
         "### 7. RSI Risk",
         "",
         f"- RSI：{rss['RSI']}｜{rss['组件']}",
-        "- RSI 语义：risk adjustment factor；不直接输入 stake mapping，但会通过 Investment Score 间接影响资金分配。",
+        "- RSI 表示结构风险压力；越高说明情景分散、尾部或市场分歧压力越大。它不是单独下注信号，会通过 Investment Score 间接影响推荐金额。",
         "",
         "### 8. High Variance Structural Signal（波胆）",
         "",
-        "- Correct Score = high variance structural signal layer, not execution signal；不进入 Investment Score、Ranking Score 或 stake mapping。",
+        "- Correct Score 是高波动结构信号，不是执行信号；这里只保留一个最高权重提示。",
         f"- 高波动结构信号：{top_score['中文投注描述']}｜盘口：{top_score['对应盘口']}｜情景依赖：{top_score['情景依赖']}",
+        "",
+        "重点风险路径：结构不确定性 + 情景分散 + 高波动尾部风险",
     ])
     return lines
 
@@ -1385,10 +1514,9 @@ def format_market_intelligence_lines(market_intelligence):
         "",
         "Lite v1 市场结构只保留 3 个指标：方向强度、市场一致性、波动压力；不使用用户输入，不计算 EV/ROI。",
         "",
-        f"- 方向强度：{metrics.get('directional_strength', '-')}",
-        f"- 市场一致性：{metrics.get('market_agreement', '-')}（{format_value(metrics.get('market_agreement_score'))} / 100）",
-        f"- 波动压力：{metrics.get('volatility_pressure', metrics.get('volatility_index', '-'))}",
     ]
+    for row in market_structure_numeric_rows(market_intelligence):
+        lines.append(f"- {row['指标']}：{row['数值']}｜{row['说明']}")
     if metrics.get("favorite_label"):
         lines.append(f"- TPB baseline 主方向：{metrics.get('favorite_label')}（{format_value(metrics.get('favorite_probability'))}%）")
     if metrics.get("explanation"):
@@ -1593,9 +1721,10 @@ def format_model_explanation_lines(scenario_engine):
         "### System Semantic Alignment Layer",
         "",
     ]
-    for row in system_semantic_alignment_rows():
+    for row in system_semantic_alignment_sections():
         lines.append(
-            f"- {row['层 / 指标']}：{row['统一语义']}｜{row['真实作用']}"
+            f"<details><summary>{row['标题']}｜{row['简短说明']}</summary>"
+            f"{row['详细说明']}</details>"
         )
     lines.extend([
         "",
@@ -1684,10 +1813,10 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         "",
         "### High Variance Structural Signal（波胆）",
         "",
-        "说明：Correct Score = high variance structural signal layer, not execution signal；不进入 Investment Score、Ranking Score 或 stake mapping。",
+        "说明：波胆是高波动结构信号，不是执行信号；最多展示 5 个：主波胆 2 个、结构波胆 2 个、高波动波胆 1 个。",
         "",
     ])
-    for row in correct_score_strategy_rows(match, market_intelligence, scenario):
+    for row in correct_score_limited_rows(match, market_intelligence, scenario):
         lines.append(
             f"- {row['波胆层级']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
         )

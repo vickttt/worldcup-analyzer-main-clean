@@ -30,6 +30,7 @@ from modules.pregame_content import (
 )
 from modules.report_generator import (
     build_report,
+    correct_score_limited_rows,
     portfolio_leg_display_rows,
     risk_decomposition_v3_rows,
     risk_score_v3_summary,
@@ -38,9 +39,12 @@ from modules.report_generator import (
     scenario_coverage_map_rows,
     correct_score_strategy_rows,
     correct_score_top_signal_row,
+    market_structure_numeric_rows,
     scenario_probability_weight_rows,
+    scenario_projection_table_rows,
     scenario_risk_surface_rows,
     system_semantic_alignment_rows,
+    system_semantic_alignment_sections,
     system_portfolio_display_rows,
     system_portfolio_top_rows,
     system_ranking_display_rows,
@@ -1066,12 +1070,9 @@ def render_result_distribution(distribution):
             st.progress(row["probability"])
             st.caption(f"{percent(row['probability'])} · {row['meaning']}")
 
-        exposure = distribution.get("risk_exposure") or {}
         with st.container(border=True):
-            st.markdown("**风险暴露**")
-            st.write(f"示例下注：{exposure.get('example_bet', '-')}")
-            st.write("输的路径：" + " / ".join(exposure.get("lose_paths", [])))
-            st.caption(exposure.get("meaning", ""))
+            st.markdown("**风险提示**")
+            st.caption("重点风险路径：结构不确定性 + 情景分散 + 高波动尾部风险")
 
 
 def tpb_report_strategy(decision):
@@ -1214,15 +1215,10 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
 
     with st.container(border=True):
         st.markdown("**最终决策区（FINAL DECISION BLOCK）**")
-        st.caption(
-            "用户执行层不进入本区；Ranking 是结构排序，不是最终执行指令；最终执行仍取决于 stake decision layer。"
-        )
         st.markdown("**System Semantic Alignment Layer**")
-        st.dataframe(
-            pd.DataFrame(system_semantic_alignment_rows()),
-            use_container_width=True,
-            hide_index=True,
-        )
+        for section in system_semantic_alignment_sections():
+            with st.expander(f"{section['标题']}｜{section['简短说明']}", expanded=False):
+                st.write(section["详细说明"])
 
         st.markdown("**1. TPB Summary**")
         tpb_cols = st.columns(4)
@@ -1237,31 +1233,30 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
                 f"平局 {percent(probabilities.get('draw', 0))} / "
                 f"客胜 {percent(probabilities.get('away_win', 0))}"
             )
+        st.caption("Signal Strength = (max(TPB probabilities) - second max) × 100。")
+        st.caption("推荐金额 = Investment Score → 固定区间映射。")
 
         st.markdown("**2. Market Structure（3指标）**")
+        market_rows = market_structure_numeric_rows(market_intelligence)
         market_cols = st.columns(3)
-        market_cols[0].metric("方向强度", metrics.get("directional_strength", "-"))
-        market_cols[1].metric("市场一致性", metrics.get("market_agreement", "-"), f"{metrics.get('market_agreement_score', 0)} / 100")
-        market_cols[2].metric("波动压力", metrics.get("volatility_pressure", metrics.get("volatility_index", "-")))
+        for index, row in enumerate(market_rows):
+            market_cols[index].metric(row["指标"], row["数值"])
+        st.caption("Direction Strength = TPB集中度 + 盘口偏差；Market Agreement = 多市场一致性指数；Volatility Pressure = 波胆 + 平局 + odds spread。")
 
-        probability_weight_rows = scenario_probability_weight_rows(scenario)
-        if probability_weight_rows:
+        scenario_table_rows = scenario_projection_table_rows(scenario)
+        if scenario_table_rows:
             st.markdown("**3. Scenario Projection（简化版）**")
             st.caption("Scenario = 受约束结构权重层；用于 portfolio construction、ranking adjustment、risk estimation，不覆盖 TPB，不计算 EV/ROI。")
-            st.caption(
-                "S1-S6："
-                + "；".join(
-                    f"{row['情景']} {row['原始概率']} / 权重 {row['Lite 权重']}"
-                    for row in probability_weight_rows
-                )
-            )
+            st.table(pd.DataFrame(scenario_table_rows))
         st.markdown("**4. Investment Score（2因子）**")
         score_cols = st.columns(4)
-        score_cols[0].metric("Signal", f"{investment_breakdown.get('signal', '-')} / 100")
+        score_cols[0].metric("TPB Edge + Scenario Alignment", f"{investment_breakdown.get('signal', '-')} / 100")
         score_cols[1].metric("RSI", rss["RSI"])
+        score_cols[1].caption("RSI 是 risk adjustment factor")
         score_cols[2].metric("Risk Adjustment", fmt(investment_breakdown.get("risk_adjustment")))
         score_cols[3].metric("Investment Score", f"{score_layer.get('investment_score', 0)} / 100")
-        st.caption("Investment Score = Signal × Risk Adjustment；Signal = TPB Edge + Scenario Alignment。RSI 不直接输入 stake，但会通过 Investment Score 间接影响资金分配。")
+        st.caption("Investment Score 是多因子加权结果：TPB Edge、Scenario Alignment、Market Conflict 与 RSI 共同解释当前投资分。RSI 作为风险调整因子，先影响 Investment Score，再间接影响推荐金额。")
+        st.caption("当 Investment Score 落入低分档位时，推荐金额映射为 0 元，表示当前不进入执行型下注。")
 
         st.markdown("**5. Portfolio（coverage only）**")
         st.caption(f"Portfolio 只保留 coverage structure，不参与 Ranking Score；CQS：{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', '-'))} / 100。")
@@ -1271,16 +1266,16 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
             hide_index=True,
         )
         st.markdown("**6. Ranking Top 3（结构排序，非执行指令）**")
-        st.caption("Ranking Score = SS + Scenario Alignment - RSI；Ranking 只排序投注结构，不是最终下注指令；最终执行取决于 stake decision layer。")
+        st.caption("Ranking 是系统结构排序，不是单独的下注指令；每个排序项附带 1-3 个 Correct Score 结构信号供阅读。")
         st.dataframe(
             pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
             use_container_width=True,
             hide_index=True,
         )
         st.markdown("**7. RSI Risk**")
-        st.caption(f"RSI：{rss['RSI']}｜{rss['组件']}。RSI 是风险调整因子：不直接输入 stake mapping，但通过 Investment Score 间接影响资金分配。")
+        st.caption(f"RSI：{rss['RSI']}｜{rss['组件']}。RSI 表示结构风险压力；越高说明情景分散、尾部或市场分歧压力越大。它不是单独下注信号，会通过 Investment Score 间接影响推荐金额。")
         st.markdown("**8. High Variance Structural Signal（波胆）**")
-        st.caption("Correct Score = high variance structural signal layer, not execution signal；不进入 Investment Score、Ranking Score 或 stake mapping。")
+        st.caption("Correct Score 是高波动结构信号，不是执行信号；这里只保留一个最高权重提示。")
         st.caption(
             "高波动结构信号："
             f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
@@ -1294,10 +1289,11 @@ def render_market_intelligence_layer(market_intelligence):
     with st.container(border=True):
         st.markdown("**市场结构分析**")
         st.caption("Lite v1 只保留方向强度、市场一致性、波动压力；不使用用户输入，不计算 EV/ROI。")
+        rows = market_structure_numeric_rows(market_intelligence)
         cols = st.columns(3)
-        cols[0].metric("方向强度", metrics.get("directional_strength", "-"))
-        cols[1].metric("市场一致性", metrics.get("market_agreement", "-"), f"{metrics.get('market_agreement_score', 0)} / 100")
-        cols[2].metric("波动压力", metrics.get("volatility_pressure", metrics.get("volatility_index", "-")))
+        for index, row in enumerate(rows):
+            cols[index].metric(row["指标"], row["数值"])
+        st.caption("Direction Strength = TPB集中度 + 盘口偏差；Market Agreement = 多市场一致性指数；Volatility Pressure = 波胆 + 平局 + odds spread。")
 
 
 def render_system_portfolio_layer(market_intelligence, scenario_engine=None, match=None):
@@ -1316,9 +1312,9 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
             hide_index=True,
         )
         st.markdown("**波胆高波动结构信号（Correct Score）**")
-        st.caption("Correct Score = high variance structural signal layer, not execution signal；用于表达情景波动结构，不进入 Investment Score、Ranking Score 或 stake mapping。")
+        st.caption("波胆是高波动结构信号，不是执行信号；最多展示 5 个：主波胆 2 个、结构波胆 2 个、高波动波胆 1 个。")
         st.dataframe(
-            pd.DataFrame(correct_score_strategy_rows(match, market_intelligence, scenario)),
+            pd.DataFrame(correct_score_limited_rows(match, market_intelligence, scenario)),
             use_container_width=True,
             hide_index=True,
         )
@@ -1343,7 +1339,7 @@ def render_scenario_coverage_analysis(scenario_engine):
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
             st.markdown("**S1-S6 原始概率与 Lite 权重**")
-            st.dataframe(pd.DataFrame(probability_weight_rows), use_container_width=True, hide_index=True)
+            st.table(pd.DataFrame(scenario_projection_table_rows(scenario)))
 
         st.markdown("**覆盖图**")
         st.dataframe(pd.DataFrame(scenario_coverage_map_rows(scenario)), use_container_width=True, hide_index=True)
@@ -1387,7 +1383,7 @@ def render_scenario_optimization_view_v2(scenario_engine, match=None, market_int
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
             st.markdown("**S1-S6 原始概率与 Lite 权重**")
-            st.dataframe(pd.DataFrame(probability_weight_rows), use_container_width=True, hide_index=True)
+            st.table(pd.DataFrame(scenario_projection_table_rows(scenario)))
 
         for title, key in [
             ("主覆盖组合", "primary_coverage_set"),
@@ -1615,14 +1611,7 @@ def render_market_consensus_panel(match, market_data):
 def render_core_risk_summary(match, decision, distribution):
     with st.container(border=True):
         st.markdown('<div class="section-title">风险提示</div>', unsafe_allow_html=True)
-        notes = build_risk_notes(match, decision)[:3]
-        for note in notes:
-            st.markdown(f'<div class="warning-item">{note}</div>', unsafe_allow_html=True)
-        exposure = (distribution or {}).get("risk_exposure") or {}
-        if exposure.get("lose_paths"):
-            st.caption("重点风险路径：" + " / ".join(exposure.get("lose_paths", [])[:5]))
-        if exposure.get("meaning"):
-            st.caption(exposure.get("meaning"))
+        st.markdown('<div class="warning-item">重点风险路径：结构不确定性 + 情景分散 + 高波动尾部风险</div>', unsafe_allow_html=True)
 
 
 def render_core_decision(match, odds, api_football_data, distribution, decision, betting_opinion, actual_odds=None, selected_fixture=None, my_portfolio=None, polymarket=None, user_portfolio_key=None, market_intelligence=None, scenario_engine=None, portfolio_summary=None):
@@ -2098,8 +2087,7 @@ def render_storylines(match, betting_opinion, decision):
 def render_risk_notes(match, decision):
     with st.container(border=True):
         st.markdown('<div class="section-title">风险提示</div>', unsafe_allow_html=True)
-        for note in build_risk_notes(match, decision):
-            st.markdown(f'<div class="warning-item">{note}</div>', unsafe_allow_html=True)
+        st.markdown('<div class="warning-item">重点风险路径：结构不确定性 + 情景分散 + 高波动尾部风险</div>', unsafe_allow_html=True)
 
 
 def render_post_match_analysis_tab(match, selected_fixture, distribution, strategies=None, my_portfolio=None):

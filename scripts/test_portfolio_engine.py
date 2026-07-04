@@ -356,8 +356,8 @@ def test_architecture_guardrails():
     report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
     assert "## 最终决策区（FINAL DECISION BLOCK）" in report_text
     assert "### 3. Scenario Projection（简化版）" in report_text
-    assert "Investment Score = Signal × Risk Adjustment" in report_text
-    assert "Ranking Score = SS + Scenario Alignment - RSI" in report_text
+    assert "Investment Score 是多因子加权结果" in report_text
+    assert "每个排序项附带 1-3 个 Correct Score" in report_text
     assert "Portfolio 只保留 coverage structure" in report_text
     assert "System Semantic Alignment Layer" in report_text
     assert "High Variance Structural Signal" in report_text
@@ -367,7 +367,7 @@ def test_architecture_guardrails():
     assert "排序结构（仅结构分析）" not in report_text
     assert "当前不输出具体投注组合" not in report_text
     assert "## 6. Execution Layer" in report_text
-    assert "用户执行层不进入本区" in report_text
+    assert "用户执行层不进入本区" not in report_text
     assert "RSI：{rss['RSI']}" in report_text
     assert "高波动结构信号" in report_text
     assert "Portfolio Coverage（coverage only）" in report_text
@@ -383,7 +383,7 @@ def test_architecture_guardrails():
 
     app_text = (repo_root / "app.py").read_text(encoding="utf-8")
     assert "最终决策区（FINAL DECISION BLOCK）" in app_text
-    assert "用户执行层不进入本区" in app_text
+    assert "用户执行层不进入本区" not in app_text
     assert "render_final_decision_summary" in app_text
     assert "Portfolio（coverage only）" in app_text
     assert "Investment Score（2因子）" in app_text
@@ -394,7 +394,7 @@ def test_architecture_guardrails():
     assert "高波动结构提示（仅分析）" not in app_text
     assert "排序结构（仅结构分析）" not in app_text
     assert "当前不输出具体投注组合" not in app_text
-    assert "Ranking Score = SS + Scenario Alignment - RSI" in app_text
+    assert "每个排序项附带 1-3 个 Correct Score" in app_text
     assert "Scenario = 受约束结构权重层" in app_text
     assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
     assert "        render_risk_surface_quantification_v3(scenario_engine)" not in app_text
