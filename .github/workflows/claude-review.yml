@@ -1,9 +1,13 @@
 name: Claude Review / Packet Artifact
 
-# Default mode is pure packet artifact generation. Explicitly authorized
-# workflow_dispatch runs may set execute_claude_review=true to send only the
-# sanitized packet to Anthropic Claude API and upload a read-only verdict.
+# Default manual mode can generate a packet only, or explicitly call Claude API.
+# Pushes to dev-clean automatically generate a sanitized HEAD^..HEAD packet and
+# run a read-only Claude API review. Claude receives only the sanitized packet.
 on:
+  push:
+    branches:
+      - dev-clean
+
   workflow_dispatch:
     inputs:
       packet_mode:
@@ -19,7 +23,7 @@ on:
         default: ""
         type: string
       artifact_round:
-        description: "Artifact round label"
+        description: "Numeric artifact round label"
         required: true
         default: "1"
         type: string
@@ -38,7 +42,7 @@ permissions:
 
 jobs:
   packet-artifact:
-    name: Generate sanitized packet artifact
+    name: Generate sanitized packet and optional Claude review
     runs-on: ubuntu-latest
 
     steps:
@@ -48,27 +52,43 @@ jobs:
           ref: dev-clean
           fetch-depth: 0
 
-      - name: Select packet artifact mode
+      - name: Select review mode
         id: packet_mode
         shell: bash
         run: |
           set -euo pipefail
-          packet_mode="${{ inputs.packet_mode }}"
-          commit_range="${{ inputs.commit_range }}"
-          artifact_round="${{ inputs.artifact_round }}"
-          execute_claude_review="${{ inputs.execute_claude_review }}"
+
+          packet_mode="commit_range"
+
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            commit_range=""
+            artifact_round="${{ github.run_number }}"
+            execute_claude_review="true"
+          else
+            commit_range="${{ inputs.commit_range }}"
+            artifact_round="${{ inputs.artifact_round }}"
+            execute_claude_review="${{ inputs.execute_claude_review }}"
+          fi
+
           case "${packet_mode}" in
             commit_range) ;;
             *) echo "Unsupported packet_mode: ${packet_mode}" >&2; exit 1 ;;
           esac
+
           case "${execute_claude_review}" in
             true|false) ;;
             *) echo "execute_claude_review must be true or false" >&2; exit 1 ;;
           esac
-          if [[ "${packet_mode}" != "commit_range" ]]; then
-            echo "packet_path mode is disabled for HEAD-bound packet artifacts" >&2
-            exit 1
+
+          if [[ "${execute_claude_review}" == "true" ]]; then
+            case "${artifact_round}" in
+              ''|*[!0-9]*)
+                echo "artifact_round must be numeric when Claude API review is enabled" >&2
+                exit 1
+                ;;
+            esac
           fi
+
           echo "commit_range=${commit_range}" >> "$GITHUB_OUTPUT"
           echo "packet_mode=${packet_mode}" >> "$GITHUB_OUTPUT"
           echo "artifact_round=${artifact_round}" >> "$GITHUB_OUTPUT"
@@ -98,24 +118,27 @@ jobs:
 
       - name: Generate commit range packet
         id: commit_range_packet
-        if: steps.packet_mode.outputs.packet_mode == 'commit_range'
         shell: bash
         run: |
           set -euo pipefail
+
           if [[ -n "${{ steps.packet_mode.outputs.commit_range }}" ]]; then
             packet_path="$(python scripts/prepare_commit_range_review_packet.py \
               --commit-range "${{ steps.packet_mode.outputs.commit_range }}")"
           else
             packet_path="$(python scripts/prepare_commit_range_review_packet.py)"
           fi
+
           if [[ ! -f "${packet_path}" ]]; then
             echo "Generated packet does not exist: ${packet_path}" >&2
             exit 1
           fi
+
           case "$(basename "${packet_path}")" in
             *_review_packet.md) ;;
             *) echo "Generated packet has invalid filename: ${packet_path}" >&2; exit 1 ;;
           esac
+
           echo "packet_path=${packet_path}" >> "$GITHUB_OUTPUT"
 
       - name: Resolve sanitized packet
@@ -123,15 +146,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+
           input_file="${{ steps.commit_range_packet.outputs.packet_path }}"
+
           if [[ ! -f "${input_file}" ]]; then
             echo "Generated packet does not exist: ${input_file}" >&2
             exit 1
           fi
+
           case "$(basename "${input_file}")" in
             *"${{ steps.head.outputs.short_sha }}"*_review_packet.md) ;;
             *) echo "Generated packet is not bound to current HEAD: ${input_file}" >&2; exit 1 ;;
           esac
+
           echo "input_file=${input_file}" >> "$GITHUB_OUTPUT"
           echo "artifact_round=${{ steps.packet_mode.outputs.artifact_round }}" >> "$GITHUB_OUTPUT"
 
@@ -139,12 +166,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+
           if [[ "${{ steps.packet_mode.outputs.execute_claude_review }}" == "true" ]]; then
-            echo "Authorized Claude API review mode is enabled for this workflow_dispatch run."
+            echo "Claude API review mode is enabled."
             echo "Only the sanitized packet will be sent to Claude."
           else
             echo "Packet artifact mode only. No AI evaluation, external inference, or external AI API call is executed."
           fi
+
           echo "Packet artifact: ${{ steps.packet.outputs.input_file }}"
 
       - name: Upload sanitized packet artifact
@@ -163,7 +192,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install anthropic
 
-      - name: Prepare sanitized packet for authorized Claude API review
+      - name: Prepare sanitized packet for Claude API review
         id: claude_input
         if: steps.packet_mode.outputs.execute_claude_review == 'true'
         shell: bash
@@ -174,7 +203,7 @@ jobs:
           cp "${{ steps.packet.outputs.input_file }}" "${review_input}"
           echo "review_input=${review_input}" >> "$GITHUB_OUTPUT"
 
-      - name: Execute authorized read-only Claude review
+      - name: Execute read-only Claude review
         if: steps.packet_mode.outputs.execute_claude_review == 'true'
         shell: bash
         env:
