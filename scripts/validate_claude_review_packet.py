@@ -13,13 +13,15 @@ import argparse
 import math
 import os
 import re
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKET_DIR = ROOT / "reports" / "claude_reviews"
-REPORT_PATH = PACKET_DIR / "packet_validation_report.md"
+REPORT_DIR = Path(os.getenv("RUNNER_TEMP") or tempfile.gettempdir()) / "worldcup2026_review_packets"
+REPORT_PATH = REPORT_DIR / "packet_validation_report.md"
 MAX_PACKET_BYTES = 48 * 1024
 DEFAULT_MODEL_CLASS = "haiku"
 DEFAULT_EXPECTED_OUTPUT_TOKENS = 1200
@@ -131,12 +133,14 @@ class ValidationResult:
 
 
 def relative_repo_path(path_text: str) -> tuple[Path, str]:
-    candidate = (ROOT / path_text).resolve()
+    raw_path = Path(path_text)
+    candidate = raw_path.resolve() if raw_path.is_absolute() else (ROOT / raw_path).resolve()
     try:
         relative = candidate.relative_to(ROOT)
-    except ValueError as exc:
-        raise ValueError("packet path must be inside this repository") from exc
-    return candidate, relative.as_posix()
+        display_text = relative.as_posix()
+    except ValueError:
+        display_text = candidate.as_posix()
+    return candidate, display_text
 
 
 def section_present(text: str, section: str) -> bool:
@@ -230,9 +234,22 @@ def validate_packet(path_text: str) -> ValidationResult:
         packet_path.relative_to(PACKET_DIR.resolve())
         under_review_dir = True
     except ValueError:
-        under_review_dir = False
+        try:
+            packet_path.relative_to(REPORT_DIR.resolve())
+            under_review_dir = True
+        except ValueError:
+            under_review_dir = False
 
-    filename_ok = relative_text.startswith("reports/claude_reviews/") and relative_text.endswith("_review_packet.md")
+    filename_ok = (
+        (
+            relative_text.startswith("reports/claude_reviews/")
+            and relative_text.endswith("_review_packet.md")
+        )
+        or (
+            under_review_dir
+            and packet_path.name.endswith("_review_packet.md")
+        )
+    )
     size_bytes = packet_path.stat().st_size if exists else 0
     size_ok = exists and size_bytes <= MAX_PACKET_BYTES
     text = packet_path.read_text(encoding="utf-8") if exists else ""
@@ -374,7 +391,7 @@ def main() -> int:
     print(f"CLAUDE_REVIEW_COST_BUDGET: {result.budget.status_text}")
     if not result.budget.budget_passed:
         print("BUDGET_ACTION: reduce packet size, send summaries/diffs only, or use explicit approved override")
-    print(f"REPORT: {REPORT_PATH.relative_to(ROOT).as_posix()}")
+    print(f"REPORT: {REPORT_PATH.as_posix()}")
     return 0 if result.passed else 1
 
 

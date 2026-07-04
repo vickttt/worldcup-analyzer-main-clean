@@ -1,25 +1,27 @@
 #!/usr/bin/env python3
 """Prepare a sanitized packet from a git commit range for manual Claude review.
 
-This helper is for the manual GitHub Actions Claude Review workflow only. It
+This helper is for packet artifact generation only. It
 does not call Claude APIs, create branches, open pull requests, commit, push,
 merge, or trigger any workflow. It reads git metadata and selected safe text
-snippets, then writes one packet under reports/claude_reviews for the current
-runner workspace.
+snippets, then writes one packet under the system temp directory or
+RUNNER_TEMP for the current runner workspace.
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import subprocess
+import tempfile
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT_DIR = ROOT / "reports" / "claude_reviews"
+OUTPUT_DIR = Path(os.getenv("RUNNER_TEMP") or tempfile.gettempdir()) / "worldcup2026_review_packets"
 OUTPUT_PATH = OUTPUT_DIR / "commit_range_review_packet.md"
-RUBRIC_PATH = OUTPUT_DIR / "CLAUDE_REVIEW_RUBRIC.md"
+RUBRIC_PATH = ROOT / "reports" / "claude_reviews" / "CLAUDE_REVIEW_RUBRIC.md"
 MAX_PACKET_BYTES = 48 * 1024
 MAX_SNIPPET_LINES_PER_FILE = 80
 CONTEXT_LINES = 4
@@ -368,7 +370,7 @@ def main() -> int:
     packet = build_packet(commit_range)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(packet, encoding="utf-8")
-    print(OUTPUT_PATH.relative_to(ROOT).as_posix())
+    print(OUTPUT_PATH.as_posix())
     return 0
 
 

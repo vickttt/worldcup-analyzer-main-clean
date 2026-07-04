@@ -95,9 +95,13 @@ jobs:
           set -euo pipefail
           packet_path="$(python scripts/prepare_commit_range_review_packet.py \
             --commit-range "${{ steps.packet_mode.outputs.commit_range }}")"
-          case "${packet_path}" in
-            reports/claude_reviews/*_review_packet.md) ;;
-            *) echo "Generated packet has invalid path: ${packet_path}" >&2; exit 1 ;;
+          if [[ ! -f "${packet_path}" ]]; then
+            echo "Generated packet does not exist: ${packet_path}" >&2
+            exit 1
+          fi
+          case "$(basename "${packet_path}")" in
+            *_review_packet.md) ;;
+            *) echo "Generated packet has invalid filename: ${packet_path}" >&2; exit 1 ;;
           esac
           echo "packet_path=${packet_path}" >> "$GITHUB_OUTPUT"
 
@@ -111,10 +115,21 @@ jobs:
           else
             input_file="${{ steps.packet_mode.outputs.packet_path }}"
           fi
-          case "${input_file}" in
-            reports/claude_reviews/*_review_packet.md|reports/claude_reviews/github_action_test_packet.md) ;;
-            *) echo "Refusing non-packet input path: ${input_file}" >&2; exit 1 ;;
-          esac
+          if [[ "${{ steps.packet_mode.outputs.packet_mode }}" == "commit_range" ]]; then
+            if [[ ! -f "${input_file}" ]]; then
+              echo "Generated packet does not exist: ${input_file}" >&2
+              exit 1
+            fi
+            case "$(basename "${input_file}")" in
+              *_review_packet.md) ;;
+              *) echo "Refusing generated non-packet input path: ${input_file}" >&2; exit 1 ;;
+            esac
+          else
+            case "${input_file}" in
+              reports/claude_reviews/*_review_packet.md|reports/claude_reviews/github_action_test_packet.md) ;;
+              *) echo "Refusing non-packet input path: ${input_file}" >&2; exit 1 ;;
+            esac
+          fi
           echo "input_file=${input_file}" >> "$GITHUB_OUTPUT"
           echo "artifact_round=${{ steps.packet_mode.outputs.artifact_round }}" >> "$GITHUB_OUTPUT"
 
