@@ -336,8 +336,8 @@ def test_architecture_guardrails():
     report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
     assert "## 最终决策区（FINAL DECISION BLOCK）" in report_text
     assert "### 3. 情景概率与权重分析（Scenario Engine v2）" in report_text
-    assert "### 4. 系统推荐投注组合（System Portfolio）" in report_text
-    assert "### 5. 系统排名组合（System Ranking Bets，仅系统）" in report_text
+    assert "### 4. Portfolio Top 3" in report_text
+    assert "### 5. Ranking Top 3" in report_text
     assert "## 6. Execution Layer" in report_text
     assert "## 模型方法透明层" in report_text
     assert "用户执行层不进入本区" in report_text
@@ -345,10 +345,10 @@ def test_architecture_guardrails():
     assert "### 情景概率推导方法" in report_text
     assert "### 覆盖映射逻辑" in report_text
     assert "### 情景到组合的解释映射" in report_text
-    assert "波胆策略摘要（Correct Score Strategy v2.2 / High Variance Strategy Layer）" in report_text
+    assert "波胆 Top Signal" in report_text
     assert "系统推荐组合明细（非决策入口）" in report_text
     assert "波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）" in report_text
-    assert "Portfolio Priority v2" in report_text
+    assert "Top 3 压缩组合" in report_text
     assert "Ranking 是优先级排序结果，不是 Portfolio 明细复制" in report_text
     assert "主波胆" in report_text
     assert "结构波胆" in report_text
@@ -362,8 +362,8 @@ def test_architecture_guardrails():
     assert "最终决策区（FINAL DECISION BLOCK）" in app_text
     assert "用户执行层不进入本区" in app_text
     assert "render_final_decision_summary" in app_text
-    assert "波胆策略摘要（Correct Score Strategy v2.2 / High Variance Strategy Layer）" in app_text
-    assert "Portfolio Priority v2" in app_text
+    assert "Portfolio Top 3（系统投注组合）" in app_text
+    assert "波胆 Top Signal" in app_text
     assert "Ranking 是优先级排序结果，不是 Portfolio 明细复制" in app_text
     assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
     assert "        render_scenario_coverage_analysis(scenario_engine)" not in app_text

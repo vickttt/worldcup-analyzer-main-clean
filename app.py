@@ -32,11 +32,11 @@ from modules.report_generator import (
     save_report,
     scenario_coverage_map_rows,
     correct_score_strategy_rows,
-    correct_score_strategy_summary_rows,
+    correct_score_top_signal_row,
     scenario_probability_weight_rows,
     scenario_risk_surface_rows,
     system_portfolio_display_rows,
-    system_portfolio_summary_rows,
+    system_portfolio_top_rows,
     system_ranking_display_rows,
     tpb_probability_label,
 )
@@ -1180,7 +1180,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         or ((market_intelligence or {}).get("system_portfolio") or {})
     )
     optimization = scenario.get("scenario_optimization_v2") or {}
-    coverage = scenario.get("coverage_map") or {}
+    top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
 
     with st.container(border=True):
         st.markdown("**最终决策区（FINAL DECISION BLOCK）**")
@@ -1215,28 +1215,33 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
             st.markdown("**3. 情景概率与权重分析（Scenario Engine v2）**")
-            st.dataframe(pd.DataFrame(probability_weight_rows), use_container_width=True, hide_index=True)
-        st.markdown("**风险面**")
-        st.dataframe(pd.DataFrame(scenario_risk_surface_rows(scenario)), use_container_width=True, hide_index=True)
-        st.markdown("**覆盖图**")
-        st.dataframe(pd.DataFrame(scenario_coverage_map_rows(scenario)), use_container_width=True, hide_index=True)
+            st.caption(
+                "S1-S6："
+                + "；".join(
+                    f"{row['情景']} {row['原始概率']} / 权重 {row['v2 权重']}"
+                    for row in probability_weight_rows
+                )
+            )
+        risk_rows = scenario_risk_surface_rows(scenario)
+        st.caption(
+            "风险面："
+            + " / ".join(f"{row['风险面']} {row['等级']}" for row in risk_rows)
+        )
         st.caption(f"覆盖效率 v2：{optimization.get('coverage_efficiency_score_v2', '-')} / 100")
 
-        st.markdown("**4. 系统推荐投注组合（System Portfolio）**")
-        st.caption("Portfolio Priority v2：主覆盖（TPB aligned） -> 波胆策略（Correct Score Layer） -> 防守覆盖 -> 高波动覆盖。")
+        st.markdown("**4. Portfolio Top 3（系统投注组合）**")
+        st.caption("Portfolio 是投注组合集合；本区只显示 Top 3 压缩组合，完整明细见报告下方系统组合明细。")
         st.dataframe(
-            pd.DataFrame(system_portfolio_summary_rows(scenario, match=match, market_intelligence=market_intelligence)),
+            pd.DataFrame(system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence)),
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**波胆策略摘要（Correct Score Strategy v2.2 / High Variance Strategy Layer）**")
-        st.caption("波胆是高熵、高方差、高信息密度市场，用于表达情景波动结构，不作为 EV/ROI 或收益优化。")
-        st.dataframe(
-            pd.DataFrame(correct_score_strategy_summary_rows(match, market_intelligence, scenario)),
-            use_container_width=True,
-            hide_index=True,
+        st.caption(
+            "波胆 Top Signal："
+            f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
+            f"情景依赖：{top_score.get('情景依赖', '-')}"
         )
-        st.markdown("**5. 系统排名组合（System Ranking Bets，仅系统）**")
+        st.markdown("**5. Ranking Top 3（系统排序）**")
         st.caption("Ranking 是优先级排序结果，不是 Portfolio 明细复制；本区只保留 Top3 精简投注。")
         st.dataframe(
             pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
