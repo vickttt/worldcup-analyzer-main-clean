@@ -77,8 +77,10 @@ def test_core_decision_layers_contract():
 
     assert_probability_contract(score_layer["tpb"])
     assert 0 <= score_layer["betting_confidence"] <= 100
+    assert score_layer["signal_strength"] == score_layer["betting_confidence"]
     assert 0 <= score_layer["investment_score"] <= 100
-    assert score_layer["confidence_breakdown"]["formula"] == "35 + (1 - TPB entropy) * 65"
+    assert score_layer["confidence_breakdown"]["formula"] == "Signal Strength = (top TPB probability - second TPB probability) * 100"
+    assert score_layer["investment_breakdown"]["formula"] == "Investment Score = Signal × Risk Adjustment"
 
     expected_stake = stake_from_investment_score(score_layer["investment_score"])
     assert execution_layer["stake"] == expected_stake
@@ -88,8 +90,9 @@ def test_core_decision_layers_contract():
     coverage = explanation_layer["coverage"]
     assert coverage["type"] in {"draw", "upset", "balanced", "none"}
     assert explanation_layer["coverage_explanation"] == coverage["reason"]
-    assert "TPB信心" in explanation_layer["components"]
-    assert "博彩公司一致性" in explanation_layer["components"]
+    assert "Signal Strength" in explanation_layer["components"]
+    assert "Scenario Alignment" in explanation_layer["components"]
+    assert "RSI" in explanation_layer["components"]
 
 
 def test_match_investment_score_contract():
@@ -103,9 +106,9 @@ def test_match_investment_score_contract():
     assert_probability_contract(result["true_probability_base"])
     assert 0 <= result["score"] <= 100
     assert result["coverage"]["type"] in {"draw", "upset", "balanced", "none"}
-    assert result["confidence_breakdown"]["formula"] == "35 + (1 - TPB entropy) * 65"
-    assert result["weights"]["TPB信心"] == "55%"
-    assert result["weights"]["博彩公司一致性"] == "扣分项"
+    assert result["confidence_breakdown"]["formula"] == "Signal Strength = (top TPB probability - second TPB probability) * 100"
+    assert result["investment_breakdown"]["formula"] == "Investment Score = Signal × Risk Adjustment"
+    assert result["weights"]["Investment Score"] == "Signal × Risk Adjustment"
 
 
 def test_legacy_portfolio_helpers_are_disabled_stubs():
@@ -142,16 +145,14 @@ def test_market_intelligence_contract():
     )
     assert intelligence["available"] is True
     metrics = intelligence["metrics"]
-    assert metrics["directional_strength"] in {
-        "Strong Direction",
-        "Medium Direction",
-        "Weak Direction",
-    }
+    assert metrics["model_version"] == "lite_explainable_betting_decision_v1"
+    assert metrics["directional_strength"] in {"Strong", "Medium", "Weak"}
+    assert metrics["market_agreement"] in {"High", "Medium", "Low"}
+    assert 0 <= metrics["market_agreement_score"] <= 100
+    assert metrics["volatility_pressure"] in {"High", "Medium", "Low"}
     assert 0 <= metrics["market_conflict_index"] <= 100
-    assert metrics["market_conflict_label"] in {"低冲突", "中冲突", "高不确定性市场"}
     assert 0 <= metrics["market_efficiency_score"] <= 100
     assert metrics["volatility_index"] in {"Low", "Medium", "High"}
-    assert metrics["upset_probability"] in {"Low", "Medium", "High"}
 
     portfolio = intelligence["system_portfolio"]
     assert set(portfolio) == {
@@ -175,7 +176,7 @@ def test_scenario_engine_contract():
         odds=fixture["context"]["odds"],
         market_intelligence=intelligence,
     )
-    assert scenario["version"] == "scenario_engine_v3_phase1"
+    assert scenario["version"] == "scenario_projection_lite_v1"
     assert [item["code"] for item in scenario["taxonomy"]] == [code for code, _name in SCENARIO_TAXONOMY]
     distribution = scenario["probability_distribution"]
     assert [item["code"] for item in distribution] == ["S1", "S2", "S3", "S4", "S5", "S6"]
@@ -209,14 +210,16 @@ def test_scenario_engine_contract():
     assert set(scenario["risk_score_v3"]) >= {
         "score",
         "level",
+        "index",
         "formula",
         "components",
         "disclaimer",
     }
-    assert 0 <= scenario["risk_score_v3"]["score"] <= 100
+    assert scenario["risk_score_v3"]["score"] is None
+    assert scenario["risk_score_v3"]["index"] == "RSI"
     assert scenario["risk_score_v3"]["level"] in {"Low", "Medium", "High"}
-    assert "not EV" in scenario["risk_score_v3"]["disclaimer"] or "不是 EV" in scenario["risk_score_v3"]["disclaimer"]
-    assert scenario["risk_surface_v3"]["version"] == "risk_surface_quantification_v3_phase1"
+    assert "RSI" in scenario["risk_score_v3"]["disclaimer"]
+    assert scenario["risk_surface_v3"]["version"] == "risk_surface_index_lite_v1"
     assert set(scenario["coverage_map"]) == {
         "primary_coverage",
         "defensive_coverage",
@@ -227,11 +230,13 @@ def test_scenario_engine_contract():
         "defensive_position_coverage",
         "tail_exposure",
     }
-    assert "bounded scenario weights" in scenario["portfolio_mapping_explanation"]["main_position_coverage"]["explanation"]
     assert set(scenario["scenario_market_mapping"]) == {"S1", "S2", "S3", "S4", "S5", "S6"}
     assert 0 <= scenario["coverage_efficiency_score"] <= 100
+    assert 0 <= scenario["coverage_quality_score"] <= 100
+    assert scenario["risk_surface_index"] in {"Low", "Medium", "High"}
+    assert 0 <= scenario["scenario_alignment"] <= 100
     optimization = scenario["scenario_optimization_v2"]
-    assert optimization["version"] == "coverage_optimization_v2"
+    assert optimization["version"] == "lite_coverage_quality_v1"
     assert set(optimization) >= {
         "primary_coverage_set",
         "defensive_coverage_set",
@@ -239,42 +244,24 @@ def test_scenario_engine_contract():
         "scenario_coverage_map_v2",
         "risk_distribution_surface",
         "coverage_efficiency_score_v2",
+        "coverage_quality_score",
         "scenario_weighted_ranking_v2",
     }
     assert 0 <= optimization["coverage_efficiency_score_v2"] <= 100
     assert [item["rank"] for item in optimization["scenario_weighted_ranking_v2"]] == [1, 2, 3]
+    assert all("signal_strength" in item and "scenario_alignment" in item and "rsi" in item for item in optimization["scenario_weighted_ranking_v2"])
     optimized_portfolio = scenario["system_optimized_portfolio_v2"]
     assert optimized_portfolio["version"] == "system_optimized_portfolio_v2"
     assert [item["rank"] for item in optimized_portfolio["ranking"]] == [1, 2, 3]
     methodology = scenario["methodology"]
-    assert methodology["version"] == "model_methodology_transparency_v2"
-    assert methodology["system_definition"]["identity"] == "Market Structure + Scenario-Weighted Bounded Optimization + Probability Anchor System"
-    assert "prediction model" in methodology["system_definition"]["not"]
-    assert "EV/ROI optimizer" in methodology["system_definition"]["not"]
-    assert methodology["tpb_definition"]["role"] == "probability normalization anchor and coordinate system"
-    assert "decision engine" in methodology["tpb_definition"]["not"]
-    assert methodology["odds_definition"]["odds_are_not"] == "true probability"
-    assert "true probability" in methodology["ev_roi_boundary"]["excluded_reason"]
-    assert "profit maximization engine" in methodology["optimizer_boundary"]["forbidden"]
-    methods = methodology["market_structure_methods"]
-    assert set(methods) == {
-        "directional_strength",
-        "market_conflict_index",
-        "efficiency_score",
-        "volatility_index",
-    }
-    assert "TPB probability concentration" in methods["directional_strength"]["inputs"]
-    assert "0-30" in methods["market_conflict_index"]["thresholds"]["Low conflict"]
-    assert "structural projection" in methodology["scenario_probability_derivation"]["principle"]
-    assert "No EV / ROI transformation" in methodology["scenario_probability_derivation"]["forbidden"]
-    assert methodology["scenario_weighting_method_v2"]["formula"] == "w(Si) = f(TPB baseline, Market Structure, Volatility, Upset Probability)"
-    assert "bounded deterministic heuristic" in methodology["coverage_optimization_v2"]["type"]
-    assert methodology["risk_surface_quantification_v3"]["name"] == "Risk Surface Quantification Layer v3"
-    assert "Market Conflict Index" in methodology["risk_surface_quantification_v3"]["rss_formula"]
-    assert "TPB mutation" in methodology["risk_surface_quantification_v3"]["forbidden"]
-    assert "Coverage Efficiency Score combines" in methodology["coverage_mapping_logic"]["coverage_efficiency_score"]
-    assert "Coverage Efficiency v2" in methodology["coverage_mapping_logic"]["coverage_efficiency_score_v2"]
-    assert "No black-box scoring" in methodology["audit_guards"]
+    assert methodology["version"] == "lite_model_methodology_v1"
+    assert methodology["system_definition"]["identity"] == "Lite Explainable Betting Decision System v1"
+    assert methodology["signal_strength"]["formula"] == "SS = (max(TPB probabilities) - second max(TPB probabilities)) * 100"
+    assert methodology["investment_score"]["formula"] == "Investment Score = Signal × Risk Adjustment"
+    assert methodology["scenario_projection"]["principle"] == "Scenario = TPB + Market signal projection."
+    assert methodology["risk_surface_index"]["outputs"] == ["Low", "Medium", "High"]
+    assert methodology["coverage_quality_score"]["formula"] == "CQS = coverage completeness - redundancy"
+    assert methodology["ranking"]["formula"] == "Ranking Score = SS + Scenario Alignment - RSI"
     assert "不覆盖 TPB" in scenario["disclaimer"]
 
 
@@ -362,27 +349,20 @@ def test_architecture_guardrails():
 
     report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
     assert "## 最终决策区（FINAL DECISION BLOCK）" in report_text
-    assert "### 3. 情景概率与权重分析（Scenario Engine v3 Phase 1）" in report_text
+    assert "### 3. Scenario Projection（简化版）" in report_text
+    assert "Investment Score = Signal × Risk Adjustment" in report_text
+    assert "Ranking Score = SS + Scenario Alignment - RSI" in report_text
+    assert "Portfolio 只保留 coverage structure" in report_text
+    assert "Tail Signal Layer" in report_text
     assert "组合观察区（无执行信号）" in report_text
     assert "排序结构（仅结构分析）" in report_text
     assert "## 6. Execution Layer" in report_text
-    assert "## 模型方法透明层" in report_text
     assert "用户执行层不进入本区" in report_text
-    assert "### 市场结构计算方法" in report_text
-    assert "### 情景概率推导方法" in report_text
-    assert "### 覆盖映射逻辑" in report_text
-    assert "Risk Surface Quantification Layer v3" in report_text
-    assert "RSS v3" in report_text
-    assert "Structural Risk Map" in report_text
-    assert "Risk Decomposition" in report_text
-    assert "### 情景到组合的解释映射" in report_text
-    assert "高波动信号提示" in report_text
+    assert "RSI：{rss['RSI']}" in report_text
     assert "高波动结构提示（仅分析）" in report_text
-    assert "系统推荐组合明细（非决策入口）" in report_text
-    assert "波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）" in report_text
-    assert "执行状态由推荐金额决定" in report_text
-    assert "Ranking 为结构排序，不代表最终下注建议" in report_text
-    assert "Scenario 仅提供结构权重信号，不直接决定下注结果" in report_text
+    assert "Portfolio Coverage（coverage only）" in report_text
+    assert "Ranking 是唯一排序入口" in report_text
+    assert "Scenario = TPB + Market signal projection" in report_text
     assert "主波胆" in report_text
     assert "结构波胆" in report_text
     assert "高波动波胆" in report_text
@@ -395,16 +375,18 @@ def test_architecture_guardrails():
     assert "最终决策区（FINAL DECISION BLOCK）" in app_text
     assert "用户执行层不进入本区" in app_text
     assert "render_final_decision_summary" in app_text
-    assert "Portfolio Top 3（系统投注组合）" in app_text
+    assert "Portfolio（coverage only）" in app_text
+    assert "Investment Score（2因子）" in app_text
+    assert "Ranking Top 3（唯一决策排序入口）" in app_text
+    assert "Tail Signal（波胆）" in app_text
     assert "组合观察区（无执行信号）" in app_text
-    assert "高波动信号提示" in app_text
     assert "高波动结构提示（仅分析）" in app_text
     assert "排序结构（仅结构分析）" in app_text
-    assert "Risk Surface Quantification Layer v3" in app_text
-    assert "RSS 结构风险分" in app_text
-    assert "Ranking 为结构排序，不代表最终下注建议" in app_text
-    assert "Scenario 仅提供结构权重信号，不直接决定下注结果" in app_text
+    assert "Ranking Score = SS + Scenario Alignment - RSI" in app_text
+    assert "Scenario = TPB + Market signal projection" in app_text
     assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
+    assert "        render_risk_surface_quantification_v3(scenario_engine)" not in app_text
+    assert "        render_model_explanation_layer(scenario_engine)" not in app_text
     assert "        render_scenario_coverage_analysis(scenario_engine)" not in app_text
     assert "        render_scenario_optimization_view_v2(scenario_engine, match=match, market_intelligence=market_intelligence)" not in app_text
     assert "        render_system_portfolio_layer(market_intelligence, scenario_engine, match=match)" not in app_text
@@ -421,7 +403,6 @@ def test_architecture_guardrails():
         assert "expected_value" not in text.lower()
         assert "roi_" not in text.lower()
         assert "portfolio_optimizer" not in text.lower()
-        assert "scenario_engine" not in text
         assert "override_tpb" not in text.lower()
         assert "tpb_override" not in text.lower()
 
@@ -430,7 +411,9 @@ def test_architecture_guardrails():
     assert "stake_from_investment_score" not in intelligence_text
     assert "recommended_stake" not in intelligence_text
     assert "user_portfolio" not in intelligence_text
-    assert "bounded Scenario Weights" in intelligence_text
+    assert "directional_strength" in intelligence_text
+    assert "market_agreement" in intelligence_text
+    assert "volatility_pressure" in intelligence_text
 
     scenario_text = (repo_root / "modules" / "scenario_engine.py").read_text(encoding="utf-8")
     assert "SCENARIO_TAXONOMY" in scenario_text
@@ -440,6 +423,7 @@ def test_architecture_guardrails():
     assert "risk_decomposition" in scenario_text
     assert "structural_risk_map" in scenario_text
     assert "coverage_optimization_v2" in scenario_text
+    assert "SS + Scenario Alignment - RSI" in scenario_text
     assert "stake_from_investment_score" not in scenario_text
     assert "build_user_portfolio_comparison" not in scenario_text
     assert "expected_value" not in scenario_text.lower()

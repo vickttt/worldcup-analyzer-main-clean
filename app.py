@@ -991,7 +991,7 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
         with col2:
             soft_card("TPB 覆盖说明", bet_cn(opinion.get("coverage_candidate", "暂无候选")))
         with col3:
-            soft_card("投注信心", f"{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100", f"数据质量：{data_quality_label}")
+            soft_card("Signal Strength", f"{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100", f"数据质量：{data_quality_label}")
         tpb = opinion.get("true_probability_base") or {}
         tpb_probs = tpb.get("probabilities") or {}
         if tpb_probs:
@@ -1003,11 +1003,11 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
             )
         confidence_breakdown = opinion.get("betting_confidence_breakdown") or {}
         if confidence_breakdown:
-            entropy_value = confidence_breakdown.get("entropy")
-            entropy_text = "-" if entropy_value is None else f"{entropy_value:.3f}"
+            edge_value = confidence_breakdown.get("tpb_edge")
+            edge_text = "-" if edge_value is None else f"{edge_value:.1f}"
             st.caption(
-                f"信心公式：{confidence_breakdown.get('formula', '-')}；"
-                f"TPB 熵值 {entropy_text}；隐藏扣分：无。"
+                f"Signal 公式：{confidence_breakdown.get('formula', '-')}；"
+                f"TPB Edge {edge_text}；隐藏扣分：无。"
             )
 
         blocks = [
@@ -1015,7 +1015,7 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
             ("盘口观察", f"{bet_cn(opinion.get('handicap_market_direction') or opinion.get('asian_handicap', '暂无观点'))}。{opinion.get('asian_handicap_reason', '')}"),
             ("TPB 覆盖说明", f"{bet_cn(opinion.get('coverage_candidate', '暂无候选'))}。{opinion.get('coverage_reason', '')}"),
             ("进球数观点", f"结构观察 - 总进球盘口中心（仅市场描述）：{opinion.get('total_center', '-')}。市场倾向（非推荐信号）：{opinion.get('goals_market_bias', '')}"),
-            ("比赛投资价值", f"TPB 熵信心 {opinion.get('betting_confidence', '-')} / 100；TPB 概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}。"),
+            ("比赛投资价值", f"Signal Strength {opinion.get('betting_confidence', '-')} / 100；TPB 概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}。"),
         ]
         for title, text in blocks:
             st.markdown(
@@ -1068,6 +1068,7 @@ def render_result_distribution(distribution):
 
 def tpb_report_strategy(decision):
     stake = decision.get("recommended_stake") or {}
+    direction = decision.get("direction_confidence") or {}
     score = decision.get("value_rating_score") or decision.get("final_confidence_score") or 0
     return {
         "code": "multi_layer_baseline",
@@ -1079,7 +1080,7 @@ def tpb_report_strategy(decision):
         "items": [],
         "risk_diagnostic": {
             "risk_level": "诊断",
-            "reason": "风险不阻断 TPB 决策；推荐金额只由投资分决定。",
+            "reason": "RSI 参与 Lite Investment Score 的风险调整；推荐金额仍由投资分档位决定。",
         },
         "rank1_eligibility": {
             "rank1_eligible": True,
@@ -1088,6 +1089,7 @@ def tpb_report_strategy(decision):
             "summary": "Multi-layer 系统无 legacy gate 阻断。",
         },
         "recommended_stake": stake,
+        "investment_breakdown": direction.get("investment_breakdown") or {},
     }
 
 
@@ -1111,8 +1113,8 @@ def render_ranking_score_notes(decision_layers):
     with st.expander("评分说明", expanded=False):
         rows = [
             {"项目": "TPB", "说明": "API-Football 胜平负赔率归一化后的唯一概率 baseline anchor。"},
-            {"项目": "投资分", "说明": f"{score_layer.get('investment_score', 0)} / 100；由 TPB 集中度、热门差值和平/冷概率派生。"},
-            {"项目": "投注信心", "说明": f"{score_layer.get('betting_confidence', 0)} / 100；由 TPB 熵值派生，无首发/伤病扣分。"},
+            {"项目": "投资分", "说明": f"{score_layer.get('investment_score', 0)} / 100；Lite v1 由 Signal × Risk Adjustment 派生。"},
+            {"项目": "Signal Strength", "说明": f"{score_layer.get('signal_strength', score_layer.get('betting_confidence', 0))} / 100；由 TPB 最高概率与第二概率差值派生。"},
             {"项目": "推荐金额", "说明": f"{stake.get('amount', 0)} 元；只由投资分档位决定。"},
             {"项目": "覆盖定义", "说明": explanation_layer.get("coverage_explanation", "-")},
             {"项目": "风险解释", "说明": explanation_layer.get("risk_explanation", "-")},
@@ -1160,7 +1162,7 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None,
             "主胜": percent(probs.get("home_win", 0)) if probs else "-",
             "平局": percent(probs.get("draw", 0)) if probs else "-",
             "客胜": percent(probs.get("away_win", 0)) if probs else "-",
-            "投注信心": f"{score_layer.get('betting_confidence', 0)} / 100",
+            "Signal Strength": f"{score_layer.get('signal_strength', score_layer.get('betting_confidence', 0))} / 100",
             "投资分": f"{score_layer.get('investment_score', 0)} / 100",
             "推荐金额": f"{stake.get('amount', 0)} 元",
             "执行判断": execution_layer.get("risk_decision", "-"),
@@ -1178,6 +1180,11 @@ def _recommended_stake_amount_from_summary(portfolio_summary):
 
 
 def render_final_decision_summary(match, distribution, data_context, market_intelligence=None, scenario_engine=None, portfolio_summary=None):
+    data_context = {
+        **(data_context or {}),
+        "market_intelligence": market_intelligence,
+        "scenario_engine": scenario_engine,
+    }
     decision_layers = build_core_decision_layers([], match, distribution, data_context)
     score_layer = decision_layers.get("score_layer") or {}
     execution_layer = decision_layers.get("execution_layer") or {}
@@ -1186,6 +1193,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
     display_stake_amount = summary_stake_amount if summary_stake_amount is not None else stake.get("amount", 0)
     tpb = score_layer.get("tpb") or {}
     probabilities = tpb.get("probabilities") or {}
+    investment_breakdown = score_layer.get("investment_breakdown") or {}
     metrics = (market_intelligence or {}).get("metrics") or {}
     scenario = scenario_engine or {}
     portfolio = (
@@ -1205,51 +1213,48 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         if observation_mode:
             st.info("当前为观察模式，系统不提供执行型投注组合。")
 
-        st.markdown("**1. TPB 结论**")
-        tpb_cols = st.columns(5)
+        st.markdown("**1. TPB Summary**")
+        tpb_cols = st.columns(4)
         tpb_cols[0].metric("主方向", metrics.get("favorite_label") or "-")
         tpb_cols[1].metric("主方向概率", f"{metrics.get('favorite_probability', 0)}%")
-        tpb_cols[2].metric("投注信心", f"{score_layer.get('betting_confidence', 0)} / 100")
-        tpb_cols[3].metric("比赛投资分", f"{score_layer.get('investment_score', 0)} / 100")
-        tpb_cols[4].metric("推荐金额", f"{display_stake_amount:g} 元")
+        tpb_cols[2].metric("Signal Strength", f"{score_layer.get('signal_strength', score_layer.get('betting_confidence', 0))} / 100")
+        tpb_cols[3].metric("推荐金额", f"{display_stake_amount:g} 元")
         if probabilities:
             st.caption(
-                "TPB Anchor: "
+                "TPB 仅保留三项概率："
                 f"主胜 {percent(probabilities.get('home_win', 0))} / "
                 f"平局 {percent(probabilities.get('draw', 0))} / "
                 f"客胜 {percent(probabilities.get('away_win', 0))}"
             )
 
-        st.markdown("**2. 市场结构**")
-        market_cols = st.columns(5)
+        st.markdown("**2. Market Structure（3指标）**")
+        market_cols = st.columns(3)
         market_cols[0].metric("方向强度", metrics.get("directional_strength", "-"))
-        market_cols[1].metric("冲突指数", f"{metrics.get('market_conflict_index', 0)} / 100")
-        market_cols[2].metric("效率分", f"{metrics.get('market_efficiency_score', 0)} / 100")
-        market_cols[3].metric("波动指数", metrics.get("volatility_index", "-"))
-        market_cols[4].metric("冷门概率", metrics.get("upset_probability", "-"))
+        market_cols[1].metric("市场一致性", metrics.get("market_agreement", "-"), f"{metrics.get('market_agreement_score', 0)} / 100")
+        market_cols[2].metric("波动压力", metrics.get("volatility_pressure", metrics.get("volatility_index", "-")))
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
-            st.markdown("**3. 情景概率与权重分析（Scenario Engine v3 Phase 1）**")
-            st.caption("Scenario 仅提供结构权重信号，不直接决定下注结果。")
+            st.markdown("**3. Scenario Projection（简化版）**")
+            st.caption("Scenario = TPB + Market signal projection；不做双重 normalization，不计算 EV/ROI。")
             st.caption(
                 "S1-S6："
                 + "；".join(
-                    f"{row['情景']} {row['原始概率']} / 权重 {row['v2 权重']}"
+                    f"{row['情景']} {row['原始概率']} / 权重 {row['Lite 权重']}"
                     for row in probability_weight_rows
                 )
             )
-        risk_rows = scenario_risk_surface_rows(scenario)
-        st.caption(
-            "风险面："
-            + " / ".join(f"{row['风险面']} {row['等级']}" for row in risk_rows)
-        )
-        st.caption(f"RSS v3：{rss['RSS']}（{rss['等级']}）｜{rss['组件']}")
-        st.caption(f"覆盖效率 v2：{optimization.get('coverage_efficiency_score_v2', '-')} / 100")
+        st.markdown("**4. Investment Score（2因子）**")
+        score_cols = st.columns(4)
+        score_cols[0].metric("Signal", f"{investment_breakdown.get('signal', '-')} / 100")
+        score_cols[1].metric("RSI", rss["RSI"])
+        score_cols[2].metric("Risk Adjustment", fmt(investment_breakdown.get("risk_adjustment")))
+        score_cols[3].metric("Investment Score", f"{score_layer.get('investment_score', 0)} / 100")
+        st.caption("Investment Score = Signal × Risk Adjustment；Signal = TPB Edge + Scenario Alignment。")
 
-        portfolio_title = "4. 组合观察区（无执行信号）" if observation_mode else "4. Portfolio Top 3（系统投注组合）"
+        portfolio_title = "5. 组合观察区（无执行信号）" if observation_mode else "5. Portfolio（coverage only）"
         st.markdown(f"**{portfolio_title}**")
-        st.caption("Portfolio 是投注组合集合；执行状态由推荐金额决定。")
+        st.caption(f"Portfolio 只保留 coverage structure，不参与 Ranking Score；CQS：{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', '-'))} / 100。")
         if observation_mode:
             st.info("观察模式：推荐金额为 0 元，当前不输出具体投注组合。")
             st.caption("高波动结构提示（仅分析）：观察模式，不输出波胆执行信号。")
@@ -1259,14 +1264,9 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
                 use_container_width=True,
                 hide_index=True,
             )
-            st.caption(
-                "高波动信号提示："
-                f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
-                f"情景依赖：{top_score.get('情景依赖', '-')}"
-            )
-        ranking_title = "5. 排序结构（仅结构分析）" if observation_mode else "5. Ranking Top 3（系统排序）"
+        ranking_title = "6. 排序结构（仅结构分析）" if observation_mode else "6. Ranking Top 3（唯一决策排序入口）"
         st.markdown(f"**{ranking_title}**")
-        st.caption("Ranking 为结构排序，不代表最终下注建议；只有推荐金额大于 0 时才输出执行信号。")
+        st.caption("Ranking Score = SS + Scenario Alignment - RSI；不复制 Portfolio，不使用用户输入。")
         if observation_mode:
             st.info("无执行信号：当前为观察模式，Ranking 不输出具体投注组合。")
         else:
@@ -1275,6 +1275,18 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
                 use_container_width=True,
                 hide_index=True,
             )
+        st.markdown("**7. RSI Risk**")
+        st.caption(f"RSI：{rss['RSI']}｜{rss['组件']}。RSI 只做 Low / Medium / High 风险层级。")
+        st.markdown("**8. Tail Signal（波胆）**")
+        st.caption("波胆已降级为 Tail Signal Layer：不进入 Ranking Score，不影响 Investment Score，仅提示结构尾部。")
+        if observation_mode:
+            st.caption("高波动结构提示（仅分析）：观察模式，不输出波胆执行信号。")
+        else:
+            st.caption(
+                "高波动信号提示："
+                f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
+                f"情景依赖：{top_score.get('情景依赖', '-')}"
+            )
 
 
 def render_market_intelligence_layer(market_intelligence):
@@ -1282,13 +1294,11 @@ def render_market_intelligence_layer(market_intelligence):
     metrics = intelligence.get("metrics") or {}
     with st.container(border=True):
         st.markdown("**市场结构分析**")
-        st.caption("只解释 API-Football 市场结构；不覆盖 TPB，不影响推荐金额，不使用用户输入，不计算 EV/ROI。")
-        cols = st.columns(5)
+        st.caption("Lite v1 只保留方向强度、市场一致性、波动压力；不使用用户输入，不计算 EV/ROI。")
+        cols = st.columns(3)
         cols[0].metric("方向强度", metrics.get("directional_strength", "-"))
-        cols[1].metric("冲突指数", f"{metrics.get('market_conflict_index', 0)} / 100", metrics.get("market_conflict_label", "-"))
-        cols[2].metric("效率分", f"{metrics.get('market_efficiency_score', 0)} / 100")
-        cols[3].metric("波动指数", metrics.get("volatility_index", "-"))
-        cols[4].metric("冷门概率", metrics.get("upset_probability", "-"))
+        cols[1].metric("市场一致性", metrics.get("market_agreement", "-"), f"{metrics.get('market_agreement_score', 0)} / 100")
+        cols[2].metric("波动压力", metrics.get("volatility_pressure", metrics.get("volatility_index", "-")))
 
 
 def render_system_portfolio_layer(market_intelligence, scenario_engine=None, match=None):
@@ -1325,15 +1335,15 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
 def render_scenario_coverage_analysis(scenario_engine):
     scenario = scenario_engine or {}
     with st.container(border=True):
-        st.markdown("**情景概率与权重分析（Scenario Engine v3 Phase 1）**")
+        st.markdown("**Scenario Projection（Lite v1）**")
         st.caption(
-            "Scenario Engine v3 Phase 1 是受约束情景权重 + 结构风险量化层：不覆盖 TPB，不改变比赛投资分或推荐金额，不使用用户输入，不计算 EV/ROI。"
+            "Scenario Projection Lite v1 是 TPB + Market signal projection：不覆盖 TPB，不改变比赛投资分或推荐金额，不使用用户输入，不计算 EV/ROI。"
         )
-        st.metric("情景覆盖效率分", f"{scenario.get('coverage_efficiency_score', 0)} / 100")
+        st.metric("Coverage Quality Score", f"{scenario.get('coverage_quality_score', scenario.get('coverage_efficiency_score', 0))} / 100")
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
-            st.markdown("**S1-S6 原始概率与 v2 权重**")
+            st.markdown("**S1-S6 原始概率与 Lite 权重**")
             st.dataframe(pd.DataFrame(probability_weight_rows), use_container_width=True, hide_index=True)
 
         st.markdown("**覆盖图**")
@@ -1370,15 +1380,14 @@ def render_scenario_optimization_view_v2(scenario_engine, match=None, market_int
     if not optimization:
         return
     with st.container(border=True):
-        st.markdown("**情景覆盖优化视图 v2**")
+        st.markdown("**Portfolio Coverage View（Lite v1）**")
         st.caption(
-            "受约束情景覆盖优化：展示情景权重、投注组合覆盖、风险面和覆盖效率；"
-            "不计算 EV/ROI，不做盈利最大化，不改变 TPB、比赛投资分、推荐金额，不使用用户输入。"
+            "Portfolio 只展示 coverage structure；Ranking Score 独立使用 SS + Scenario Alignment - RSI。"
         )
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
-            st.markdown("**S1-S6 原始概率与 v2 权重**")
+            st.markdown("**S1-S6 原始概率与 Lite 权重**")
             st.dataframe(pd.DataFrame(probability_weight_rows), use_container_width=True, hide_index=True)
 
         for title, key in [
@@ -1423,7 +1432,7 @@ def render_scenario_optimization_view_v2(scenario_engine, match=None, market_int
         ]
         st.markdown("**风险分布面**")
         st.dataframe(pd.DataFrame(risk_rows), use_container_width=True, hide_index=True)
-        st.metric("覆盖效率分 v2", f"{optimization.get('coverage_efficiency_score_v2', 0)} / 100")
+        st.metric("Coverage Quality Score", f"{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', 0))} / 100")
 
 
 def render_risk_surface_quantification_v3(scenario_engine):
@@ -1432,7 +1441,7 @@ def render_risk_surface_quantification_v3(scenario_engine):
         return
     rss = risk_score_v3_summary(scenario)
     with st.container(border=True):
-        st.markdown("**Risk Surface Quantification Layer v3**")
+        st.markdown("**RSI Risk（Lite v1）**")
         st.caption(
             "结构风险量化层：刻画不确定性结构，不预测赛果，不计算 EV/ROI，不做 optimizer，"
             "不改变 TPB、比赛投资分、推荐金额或 ranking 计算。"
@@ -1632,8 +1641,6 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
             scenario_engine,
             portfolio_summary,
         )
-        render_risk_surface_quantification_v3(scenario_engine)
-        render_model_explanation_layer(scenario_engine)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)
         st.caption("结果分布为观察层，不参与 TPB 投资分、推荐金额或排序。")
@@ -2601,6 +2608,8 @@ def render_analysis_page(match_text):
                     betting_opinion,
                     None,
                     result_distribution,
+                    market_intelligence,
+                    scenario_engine,
                 )
             user_portfolio_key = f"user_portfolio_input_{selected_fixture.get('fixture_id') or match_text}"
             user_portfolio_raw = st.session_state.get(user_portfolio_key, "")

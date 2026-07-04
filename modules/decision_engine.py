@@ -1,6 +1,7 @@
 from modules.pregame_content import team_cn
 from modules.probability_base import (
     betting_confidence_from_tpb,
+    investment_score_breakdown,
     investment_score_from_tpb,
     market_direction_from_tpb,
     stake_from_investment_score,
@@ -60,7 +61,7 @@ def traffic_light(score, high_label="High"):
     return "🟢 较低"
 
 
-def direction_confidence(match, odds, polymarket=None, api_football_data=None):
+def direction_confidence(match, odds, polymarket=None, api_football_data=None, scenario_engine=None):
     tpb = true_probability_base(odds)
     probabilities = tpb.get("probabilities")
     if not probabilities:
@@ -78,7 +79,18 @@ def direction_confidence(match, odds, polymarket=None, api_football_data=None):
     favorite_label = display_team(label_for_key(match, favorite))
     favorite_probability = probabilities[favorite]
     score = betting_confidence_from_tpb(tpb)
-    investment_score = investment_score_from_tpb(tpb)
+    scenario_alignment = (scenario_engine or {}).get("scenario_alignment")
+    rsi = (scenario_engine or {}).get("risk_surface_index")
+    investment_score = investment_score_from_tpb(
+        tpb,
+        scenario_alignment=scenario_alignment,
+        risk_surface_index=rsi,
+    )
+    investment_breakdown = investment_score_breakdown(
+        tpb,
+        scenario_alignment=scenario_alignment,
+        risk_surface_index=rsi,
+    )
     market_direction = market_direction_from_tpb(tpb, {
         "home_win": f"{favorite_label}占优",
         "draw": "平衡 / 平局权重高",
@@ -91,7 +103,7 @@ def direction_confidence(match, odds, polymarket=None, api_football_data=None):
             "max_points": 100,
             "reason": (
                 f"{favorite_label} TPB {favorite_probability * 100:.1f}%，"
-                "信心由 TPB 熵值唯一派生。"
+                "Signal Strength 由 TPB 最高概率与第二概率差值派生。"
             ),
         },
         {
@@ -111,16 +123,17 @@ def direction_confidence(match, odds, polymarket=None, api_football_data=None):
         level = "谨慎参与"
     else:
         level = "观望"
-    summary = f"TPB 显示 {favorite_label} 为最高概率方向，投注信心由熵值派生为{level}。"
+    summary = f"TPB 显示 {favorite_label} 为最高概率方向，Signal Strength 为{level}。"
     return {
         "score": score,
         "level": level,
         "components": components,
         "investment_score": investment_score,
+        "investment_breakdown": investment_breakdown,
         "market_direction": market_direction,
         "true_probability_base": tpb,
         "summary": summary,
-        "reason": "方向把握只由 API-Football 1X2 TPB 决定；盘口与波胆不参与方向评分。",
+        "reason": "方向把握由 TPB Edge 表达；Scenario Alignment 和 RSI 只进入 Lite Investment Score。",
     }
 
 
@@ -163,8 +176,8 @@ def final_recommendation(match, betting_opinion):
     }
 
 
-def build_decision_engine(match, odds, polymarket, api_football_data, betting_opinion, actual_odds=None, distribution=None):
-    direction = direction_confidence(match, odds, polymarket, api_football_data)
+def build_decision_engine(match, odds, polymarket, api_football_data, betting_opinion, actual_odds=None, distribution=None, market_intelligence=None, scenario_engine=None):
+    direction = direction_confidence(match, odds, polymarket, api_football_data, scenario_engine=scenario_engine)
     investment_score = direction.get("investment_score", 0)
     odds_value = {
         "score": investment_score,
@@ -208,8 +221,8 @@ def build_decision_engine(match, odds, polymarket, api_football_data, betting_op
         },
         "weights": {
             "TPB": "API-Football 胜平负博彩公司共识概率",
-            "投注信心": "仅由 TPB 熵值派生",
-            "投资分": "TPB 集中度、热门差值、平局/冷门概率和博彩公司离散度",
+            "Signal Strength": "TPB 最高概率 - 第二概率",
+            "投资分": "Signal × Risk Adjustment",
             "推荐仓位": "仅由投资分档位确定",
         },
     }

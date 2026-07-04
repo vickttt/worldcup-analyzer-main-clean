@@ -115,6 +115,9 @@ def _basis_cn(value):
         "TPB anchor": "TPB 锚点",
         "Directional Strength": "方向强度",
         "scenario weights": "情景权重",
+        "SS": "Signal Strength",
+        "alignment": "情景对齐",
+        "RSI": "RSI",
         "Conflict Index": "冲突指数",
         "Volatility": "波动指数",
         "tail exposure constraint": "尾部风险约束",
@@ -301,7 +304,7 @@ def scenario_probability_weight_rows(scenario_engine):
         rows.append({
             "情景": _scenario_name_cn(code, item.get("name")),
             "原始概率": percent(item.get("probability", 0)),
-            "v2 权重": percent(weight.get("weight", 0)),
+            "Lite 权重": percent(weight.get("weight", 0)),
         })
     return rows
 
@@ -364,16 +367,17 @@ def risk_score_v3_summary(scenario_engine):
     score = (scenario_engine or {}).get("risk_score_v3") or {}
     components = score.get("components") or {}
     return {
-        "RSS": f"{format_value(score.get('score'))} / 100",
+        "RSI": _level_cn(score.get("level")),
+        "RSS": _level_cn(score.get("level")),
         "等级": _level_cn(score.get("level")),
         "公式": score.get("formula", "-"),
         "组件": (
-            f"冲突 {format_value(components.get('market_conflict_index'))} / "
-            f"波动 {format_value(components.get('volatility_index'))} / "
-            f"冷门 {format_value(components.get('upset_probability'))} / "
+            f"市场分歧 {format_value(components.get('market_disagreement'))} / "
+            f"波动压力 {format_value(components.get('volatility_pressure'))} / "
+            f"尾部密度 {format_value(components.get('tail_density'))} / "
             f"情景离散 {format_value(components.get('scenario_dispersion'))}"
         ),
-        "说明": score.get("disclaimer", "RSS v3 是结构风险指标，不是 EV/ROI/optimizer。"),
+        "说明": score.get("disclaimer", "RSI 是 Low / Medium / High 结构风险索引，不是 EV/ROI/optimizer。"),
     }
 
 
@@ -486,7 +490,7 @@ def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, mar
     rows = []
     sets = _optimization_sets(scenario_engine)
     risk_summary = risk_score_v3_summary(scenario_engine)
-    risk_note = f"RSS v3 {risk_summary['RSS']}（{risk_summary['等级']}）；仅作结构风险标注，不改变排序。"
+    risk_note = f"RSI {risk_summary['RSI']}；Ranking Score = SS + Scenario Alignment - RSI。"
     for item in ((portfolio or {}).get("ranking") or [])[:3]:
         position = item.get("position", "-")
         legs = portfolio_leg_display_rows(
@@ -496,23 +500,16 @@ def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, mar
             scenario_engine=scenario_engine,
         )
         legs = _compact_legs_for_ranking(position, legs)
-        score_rows = _score_rows_for_ranking(position, match, market_intelligence, scenario_engine)[:1]
         bet_text = "；".join(
             [leg.get("中文投注描述", "-") for leg in legs]
-            + [row.get("中文投注描述", "-") for row in score_rows]
         ) or "暂无"
         market_text = "；".join(
             [leg.get("对应盘口", "-") for leg in legs]
-            + [row.get("对应盘口", "-") for row in score_rows]
         ) or "-"
         dependency_text = "；".join(
             [leg.get("情景依赖", "-") for leg in legs if leg.get("情景依赖")]
-            + [row.get("情景依赖", "-") for row in score_rows if row.get("情景依赖")]
         ) or "-"
-        score_reason = "；".join(row.get("理由", "-") for row in score_rows)
         reason = _basis_cn(item.get("basis"))
-        if score_reason:
-            reason = f"{reason}；波胆：{score_reason}"
         rows.append({
             "排名": f"Rank {item.get('rank', '-')}",
             "组合类型": _portfolio_position_cn(position),
@@ -1094,7 +1091,7 @@ def format_core_conclusion_lines(
         f"- 比赛主方向：{opinion.get('match_direction') or opinion.get('match_winner', '暂无观点')}",
         f"- TPB 概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}",
         f"- 比赛投资分：{format_value(score)}",
-        f"- 投注信心：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100",
+        f"- Signal Strength：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100",
         f"- 推荐金额：{_recommended_stake_text(portfolio_summary)}",
         f"- 执行判断：{execution_judgment}",
         f"- 数据质量：{quality_cn(opinion.get('data_quality'))}",
@@ -1136,7 +1133,7 @@ def format_final_decision_block_lines(
     rss = risk_score_v3_summary(scenario)
     scenario_rows = scenario_probability_weight_rows(scenario)
     scenario_summary = "；".join(
-        f"{row['情景']} {row['原始概率']} / 权重 {row['v2 权重']}"
+        f"{row['情景']} {row['原始概率']} / 权重 {row['Lite 权重']}"
         for row in scenario_rows
     ) or "暂无情景概率与权重数据。"
     top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
@@ -1144,16 +1141,17 @@ def format_final_decision_block_lines(
     score = portfolio_summary.get("decision_score")
     if score is None:
         score = portfolio_summary.get("score")
+    investment_breakdown = ((portfolio_summary or {}).get("investment_breakdown") or {})
 
     lines = [
         "## 最终决策区（FINAL DECISION BLOCK）",
         "",
-        "用户执行层不进入本区；Ranking 为结构排序，不代表最终下注建议。",
+        "Lite v1：Ranking 是唯一决策排序入口；Portfolio 只保留 coverage structure；用户执行层不进入本区。",
         "",
-        "### 1. TPB 结论",
+        "### 1. TPB Summary",
         "",
         f"- 主方向：{metrics.get('favorite_label') or opinion.get('match_direction') or opinion.get('match_winner', '-')}（{format_value(metrics.get('favorite_probability'))}%）｜TPB：主胜 {percent(probabilities.get('home_win', 0)) if probabilities else '-'} / 平局 {percent(probabilities.get('draw', 0)) if probabilities else '-'} / 客胜 {percent(probabilities.get('away_win', 0)) if probabilities else '-'}",
-        f"- 信心 / 投资分 / 推荐金额：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100；{format_value(score)}；{_recommended_stake_text(portfolio_summary)}",
+        f"- Signal Strength / 推荐金额：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100；{_recommended_stake_text(portfolio_summary)}",
         "",
     ]
     if observation_mode:
@@ -1162,22 +1160,26 @@ def format_final_decision_block_lines(
             "",
         ])
     lines.extend([
-        "### 2. 市场结构",
+        "### 2. Market Structure（3指标）",
         "",
-        f"- 方向 / 冲突 / 效率：{metrics.get('directional_strength', '-')}；{format_value(metrics.get('market_conflict_index'))} / 100；{format_value(metrics.get('market_efficiency_score'))} / 100",
-        f"- 波动 / 冷门：{metrics.get('volatility_index', '-')}；{metrics.get('upset_probability', '-')}",
+        f"- 方向强度：{metrics.get('directional_strength', '-')}",
+        f"- 市场一致性：{metrics.get('market_agreement', '-')}（{format_value(metrics.get('market_agreement_score'))} / 100）",
+        f"- 波动压力：{metrics.get('volatility_pressure', metrics.get('volatility_index', '-'))}",
         "",
-        "### 3. 情景概率与权重分析（Scenario Engine v3 Phase 1）",
+        "### 3. Scenario Projection（简化版）",
         "",
-        "- Scenario 仅提供结构权重信号，不直接决定下注结果。",
+        "- Scenario = TPB + Market signal projection；不做双重 normalization，不计算 EV/ROI。",
         f"- S1-S6：{scenario_summary}",
-        f"- 风险面：尾部 {_level_cn(risk.get('tail_risk_concentration'))} / 脆弱性 {_level_cn(risk.get('market_fragility'))} / 冷门 {_level_cn(risk.get('upset_exposure'))} / 平局 {_level_cn(risk.get('draw_dependency'))}",
-        f"- RSS v3：{rss['RSS']}（{rss['等级']}）｜{rss['组件']}",
-        f"- 覆盖效率 v2：{format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
         "",
-        "### 4. " + ("组合观察区（无执行信号）" if observation_mode else "Portfolio Top 3"),
+        "### 4. Investment Score（2因子）",
         "",
-        "Portfolio 是投注组合集合；执行状态由推荐金额决定。",
+        f"- Signal：{format_value(investment_breakdown.get('signal'))} / 100；Risk Adjustment：{format_value(investment_breakdown.get('risk_adjustment'))}；RSI：{rss['RSI']}",
+        f"- Investment Score：{format_value(score)} / 100",
+        "- 公式：Investment Score = Signal × Risk Adjustment；Signal = TPB Edge + Scenario Alignment。",
+        "",
+        "### 5. " + ("组合观察区（无执行信号）" if observation_mode else "Portfolio（coverage only）"),
+        "",
+        f"Portfolio 只保留 coverage structure，不参与 Ranking Score；CQS：{format_value(optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2')))} / 100。",
         "",
     ])
     if observation_mode:
@@ -1189,10 +1191,9 @@ def format_final_decision_block_lines(
             )
     lines.extend([
         "",
-        "### 5. " + ("排序结构（仅结构分析）" if observation_mode else "Ranking Top 3"),
+        "### 6. " + ("排序结构（仅结构分析）" if observation_mode else "Ranking Top 3（唯一决策排序入口）"),
         "",
-        "Ranking 为结构排序，不代表最终下注建议；只有推荐金额大于 0 时才输出执行信号。",
-        f"- {'高波动结构提示（仅分析）' if observation_mode else '高波动信号提示'}：{top_score['中文投注描述'] if not observation_mode else '观察模式，不输出波胆执行信号'}｜盘口：{top_score['对应盘口'] if not observation_mode else '-'}｜情景依赖：{top_score['情景依赖'] if not observation_mode else '-'}",
+        "Ranking Score = SS + Scenario Alignment - RSI；不复制 Portfolio，不使用用户输入。",
         "",
     ])
     ranking_rows = [] if observation_mode else system_ranking_display_rows(
@@ -1210,6 +1211,17 @@ def format_final_decision_block_lines(
             lines.append(
                 f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜原因：{row['结构理由']}｜情景依赖：{row['情景依赖']}｜风险标注：{row.get('风险标注', '-')}"
             )
+    lines.extend([
+        "",
+        "### 7. RSI Risk",
+        "",
+        f"- RSI：{rss['RSI']}｜{rss['组件']}",
+        "",
+        "### 8. Tail Signal（波胆）",
+        "",
+        "- 波胆已降级为 Tail Signal Layer：不进入 Ranking Score，不影响 Investment Score，仅提示结构尾部。",
+        f"- {'高波动结构提示（仅分析）' if observation_mode else '高波动信号提示'}：{top_score['中文投注描述'] if not observation_mode else '观察模式，不输出波胆执行信号'}｜盘口：{top_score['对应盘口'] if not observation_mode else '-'}｜情景依赖：{top_score['情景依赖'] if not observation_mode else '-'}",
+    ])
     return lines
 
 
@@ -1325,13 +1337,11 @@ def format_market_intelligence_lines(market_intelligence):
     lines = [
         "## 2. 市场结构层",
         "",
-        "该层只解释市场结构，不独立决策，不覆盖 TPB，不影响推荐金额，不使用用户输入，不计算 EV/ROI。",
+        "Lite v1 市场结构只保留 3 个指标：方向强度、市场一致性、波动压力；不使用用户输入，不计算 EV/ROI。",
         "",
         f"- 方向强度：{metrics.get('directional_strength', '-')}",
-        f"- 市场冲突指数：{format_value(metrics.get('market_conflict_index'))} / 100（{metrics.get('market_conflict_label', '-')}）",
-        f"- 市场效率分：{format_value(metrics.get('market_efficiency_score'))} / 100",
-        f"- 波动指数：{metrics.get('volatility_index', '-')}",
-        f"- 冷门概率：{metrics.get('upset_probability', '-')}",
+        f"- 市场一致性：{metrics.get('market_agreement', '-')}（{format_value(metrics.get('market_agreement_score'))} / 100）",
+        f"- 波动压力：{metrics.get('volatility_pressure', metrics.get('volatility_index', '-'))}",
     ]
     if metrics.get("favorite_label"):
         lines.append(f"- TPB baseline 主方向：{metrics.get('favorite_label')}（{format_value(metrics.get('favorite_probability'))}%）")
@@ -1343,19 +1353,19 @@ def format_market_intelligence_lines(market_intelligence):
 def format_scenario_engine_lines(scenario_engine):
     scenario = scenario_engine or {}
     lines = [
-        "## 3. 情景概率与权重分析（Scenario Engine v3 Phase 1）",
+        "## 3. Scenario Projection（Lite v1）",
         "",
         scenario.get("disclaimer")
-        or "Scenario Engine v3 Phase 1 使用受约束情景权重与结构风险量化做覆盖解释；不覆盖 TPB，不计算 EV/ROI，不改变推荐金额，不使用用户输入。",
+        or "Scenario Projection Lite v1 使用 TPB + Market signal projection；不覆盖 TPB，不计算 EV/ROI，不改变推荐金额，不使用用户输入。",
         "",
-        "### S1-S6 原始概率与 v2 权重",
+        "### S1-S6 原始概率与 Lite 权重",
     ]
     probability_rows = scenario_probability_weight_rows(scenario)
     if not probability_rows:
         lines.append("暂无情景概率数据。")
     else:
         for row in probability_rows:
-            lines.append(f"- {row['情景']}：原始概率 {row['原始概率']}；v2 权重 {row['v2 权重']}")
+            lines.append(f"- {row['情景']}：原始概率 {row['原始概率']}；Lite 权重 {row['Lite 权重']}")
 
     lines.extend([
         "",
@@ -1404,9 +1414,9 @@ def format_scenario_engine_lines(scenario_engine):
 
     lines.extend([
         "",
-        "### 情景覆盖效率分",
+        "### Coverage Quality Score",
         "",
-        f"- 覆盖效率分：{format_value(scenario.get('coverage_efficiency_score'))} / 100",
+        f"- CQS：{format_value(scenario.get('coverage_quality_score', scenario.get('coverage_efficiency_score')))} / 100",
     ])
     return lines
 
@@ -1416,15 +1426,15 @@ def format_scenario_optimization_v2_lines(scenario_engine):
     optimization = scenario.get("scenario_optimization_v2") or {}
     if not optimization:
         return [
-            "## 情景覆盖优化层 v2",
+            "## Portfolio Coverage（Lite v1）",
             "",
-            "暂无情景覆盖优化层 v2 输出。",
+            "暂无 Portfolio Coverage 输出。",
         ]
 
     lines = [
-        "## 情景覆盖优化层 v2",
+        "## Portfolio Coverage（Lite v1）",
         "",
-        "该层只做受约束启发式覆盖优化：不计算 EV/ROI，不做盈利最大化，不使用用户输入，不覆盖 TPB，不改变推荐金额。",
+        "该层只展示 coverage structure；Ranking Score 独立使用 SS + Scenario Alignment - RSI。",
         "",
         "### 覆盖优化目标",
         "",
@@ -1478,11 +1488,11 @@ def format_scenario_optimization_v2_lines(scenario_engine):
 
     lines.extend([
         "",
-        "### 覆盖效率分 v2",
+        "### Coverage Quality Score",
         "",
-        f"- {format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
+        f"- {format_value(optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2')))} / 100",
         "",
-        "说明：覆盖效率 v2 = 情景覆盖 /（风险暴露 + 冗余），是可解释的受约束覆盖评分，不是 EV/ROI 或收益优化。",
+        "说明：CQS = coverage completeness - redundancy；不是 Ranking Score、EV/ROI 或收益优化。",
     ])
     return lines
 
@@ -1492,14 +1502,14 @@ def format_risk_surface_v3_lines(scenario_engine):
     risk_surface_v3 = scenario.get("risk_surface_v3") or {}
     rss = risk_score_v3_summary(scenario)
     lines = [
-        "## Risk Surface Quantification Layer v3",
+        "## RSI Risk（Lite v1）",
         "",
         risk_surface_v3.get("description")
         or "Risk Surface v3 只刻画结构风险，不预测结果，不计算 EV/ROI，不做 optimizer，不改变 TPB、stake 或 ranking。",
         "",
-        "### RSS 结构风险分",
+        "### RSI 结构风险",
         "",
-        f"- RSS：{rss['RSS']}（{rss['等级']}）",
+        f"- RSI：{rss['RSI']}",
         f"- 组件：{rss['组件']}",
         f"- 公式：{rss['公式']}",
         f"- 说明：{rss['说明']}",
@@ -1522,7 +1532,7 @@ def format_risk_surface_v3_lines(scenario_engine):
         )
     lines.extend([
         "",
-        "边界：RSS v3 是 purely structural risk metric；不是 EV、ROI、profit maximization、ML training 或 black-box scoring。",
+        "边界：RSI 是 Low / Medium / High qualitative risk index；不是 EV、ROI、profit maximization、ML training 或 black-box scoring。",
     ])
     return lines
 
@@ -1605,11 +1615,10 @@ def format_model_explanation_lines(scenario_engine):
 def format_system_portfolio_lines(market_intelligence, scenario_engine=None, match=None, portfolio_summary=None):
     scenario = scenario_engine or {}
     lines = [
-        "## 系统推荐组合明细（非决策入口）",
+        "## Portfolio Coverage（coverage only）",
         "",
-        "本区是 Portfolio 明细，不是新的决策入口；FINAL DECISION BLOCK 仍是唯一压缩决策视图。",
-        "系统推荐投注组合 = TPB 锚点 + 市场结构 + 受约束情景权重综合生成。用户实盘输入不参与系统组合、推荐或排序。",
-        "Portfolio Priority v2：主覆盖（TPB aligned） -> 波胆策略（Correct Score Layer） -> 防守覆盖 -> 高波动覆盖。",
+        "本区只展示 coverage structure，不参与 Ranking Score；FINAL DECISION BLOCK 仍是压缩决策视图。",
+        "Lite v1：Portfolio 保留 Primary / Defensive / High Variance Coverage；Ranking 是唯一排序入口。",
         "",
     ]
     if _is_observation_mode(portfolio_summary):
@@ -1624,9 +1633,9 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         )
     lines.extend([
         "",
-        "### 波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）",
+        "### Tail Signal（波胆）",
         "",
-        "说明：波胆是高熵、高方差、高信息密度市场，用于表达情景波动结构，不作为 EV/ROI 或收益优化。",
+        "说明：波胆已降级为 Tail Signal Layer；不进入 Ranking Score，不影响 Investment Score。",
         "",
     ])
     for row in correct_score_strategy_rows(match, market_intelligence, scenario):
@@ -1787,11 +1796,7 @@ def build_report(
             scenario_engine,
         ),
         "",
-        *format_risk_surface_v3_lines(scenario_engine),
-        "",
         *format_system_portfolio_lines(market_intelligence, scenario_engine, match, portfolio_summary),
-        "",
-        *format_model_explanation_lines(scenario_engine),
         "",
         *format_user_portfolio_lines(user_portfolio),
         "",

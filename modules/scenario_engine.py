@@ -55,20 +55,18 @@ def _scenario_distribution(tpb, metrics):
     away = probabilities["away_win"]
     favorite = max(home, away)
     underdog = min(home, away)
-    favorite_edge = max(0, favorite - max(draw, underdog))
-    conflict = _clamp(metrics.get("market_conflict_index"), 0, 100) / 100
-    efficiency = _clamp(metrics.get("market_efficiency_score"), 0, 100) / 100
-    upset_score = _clamp(metrics.get("upset_score"), 0, 100) / 100
-    volatility_score = _clamp(metrics.get("volatility_score"), 0, 100) / 100
+    direction = _clamp(metrics.get("direction_score"), 0, 100) / 100
+    disagreement = 1 - _clamp(metrics.get("market_agreement_score"), 0, 100) / 100
+    volatility_score = _clamp(metrics.get("volatility_pressure_score") or metrics.get("volatility_score"), 0, 100) / 100
     tail_density = _clamp(metrics.get("tail_density"), 0, 1)
 
     weights = {
-        "S1": favorite * (0.55 + favorite_edge) * (0.65 + efficiency * 0.35),
-        "S2": favorite * (0.35 + conflict * 0.30) * (1 - min(0.4, favorite_edge)),
-        "S3": draw * (0.85 + conflict * 0.45),
-        "S4": underdog * (0.80 + upset_score * 0.65 + conflict * 0.20),
-        "S5": max(0.08, draw * 0.40 + conflict * 0.15 + (1 - volatility_score) * 0.20),
-        "S6": max(0.06, volatility_score * 0.45 + tail_density * 0.35 + conflict * 0.20),
+        "S1": favorite * (1 + direction),
+        "S2": favorite * (1 - min(0.55, direction)) + draw * 0.25,
+        "S3": draw * (1 + disagreement),
+        "S4": underdog * (1 + disagreement),
+        "S5": draw * 0.55 + max(0, 1 - volatility_score) * 0.20,
+        "S6": volatility_score * 0.45 + tail_density * 0.35,
     }
     distribution = _normalize_weights(weights)
     return [
@@ -204,7 +202,7 @@ def _risk_decomposition(metrics, scenario_weights):
         "market_conflict_risk": {
             "score": round(conflict_risk, 1),
             "level": _risk_level_from_score(conflict_risk),
-            "explanation": "来自 Market Conflict Index 的盘口冲突风险。",
+            "explanation": "来自 Market Agreement 反向映射的市场分歧风险。",
         },
         "tail_risk": {
             "score": round(tail_risk, 1),
@@ -215,31 +213,24 @@ def _risk_decomposition(metrics, scenario_weights):
 
 
 def _risk_score_v3(metrics, scenario_weights):
-    conflict = _clamp(metrics.get("market_conflict_index"), 0, 100)
-    volatility = _level_to_score(metrics.get("volatility_index"))
-    upset = _level_to_score(metrics.get("upset_probability"))
+    disagreement = 100 - _clamp(metrics.get("market_agreement_score"), 0, 100)
+    volatility = _clamp(metrics.get("volatility_pressure_score") or metrics.get("volatility_score"), 0, 100)
+    tail_density = _clamp(metrics.get("tail_density"), 0, 1) * 100
     dispersion = _scenario_dispersion_score(scenario_weights)
-    score = (
-        conflict * 0.30
-        + volatility * 0.25
-        + upset * 0.20
-        + dispersion * 0.25
-    )
-    score = round(_clamp(score, 0, 100), 1)
+    qualitative_basis = max(disagreement, volatility, tail_density, dispersion * 0.75)
+    level = _risk_level_from_score(qualitative_basis)
     return {
-        "score": score,
-        "level": _risk_level_from_score(score),
-        "formula": (
-            "RSS = 0.30 * Market Conflict Index + 0.25 * Volatility Index "
-            "+ 0.20 * Upset Probability + 0.25 * Scenario Dispersion"
-        ),
+        "score": None,
+        "level": level,
+        "index": "RSI",
+        "formula": "RSI = qualitative max(Market disagreement, Scenario dispersion, Tail density)",
         "components": {
-            "market_conflict_index": round(conflict, 1),
-            "volatility_index": round(volatility, 1),
-            "upset_probability": round(upset, 1),
+            "market_disagreement": round(disagreement, 1),
+            "volatility_pressure": round(volatility, 1),
+            "tail_density": round(tail_density, 1),
             "scenario_dispersion": dispersion,
         },
-        "disclaimer": "RSS v3 是结构风险指标，不是 EV、ROI、收益优化器或 stake 输入。",
+        "disclaimer": "RSI 是 Low / Medium / High 结构风险索引，不是 100 分制 RSS、EV、ROI 或 stake 输入。",
     }
 
 
@@ -316,22 +307,7 @@ def _coverage_efficiency_score(distribution, risk_surface):
 
 def _scenario_weights_v2(distribution, metrics):
     base = {item["code"]: item["probability"] for item in distribution}
-    direction = _clamp(metrics.get("direction_score"), 0, 100) / 100
-    conflict = _clamp(metrics.get("market_conflict_index"), 0, 100) / 100
-    efficiency = _clamp(metrics.get("market_efficiency_score"), 0, 100) / 100
-    upset = _clamp(metrics.get("upset_score"), 0, 100) / 100
-    volatility = _clamp(metrics.get("volatility_score"), 0, 100) / 100
-    tail_density = _clamp(metrics.get("tail_density"), 0, 1)
-
-    weighted = {
-        "S1": base.get("S1", 0) * (1 + direction * 0.28 + efficiency * 0.18),
-        "S2": base.get("S2", 0) * (1 + direction * 0.12 + conflict * 0.16),
-        "S3": base.get("S3", 0) * (1 + conflict * 0.22 + volatility * 0.12),
-        "S4": base.get("S4", 0) * (1 + upset * 0.30 + conflict * 0.14),
-        "S5": base.get("S5", 0) * (1 + (1 - volatility) * 0.18 + conflict * 0.10),
-        "S6": base.get("S6", 0) * (1 + volatility * 0.30 + tail_density * 0.20),
-    }
-    normalized = _normalize_weights(weighted)
+    normalized = _normalize_weights(base)
     return [
         {
             "code": code,
@@ -339,8 +315,8 @@ def _scenario_weights_v2(distribution, metrics):
             "weight": normalized.get(code, 0),
             "base_probability": base.get(code, 0),
             "rationale": (
-                "Bounded heuristic weight from TPB baseline, Market Structure, "
-                "Volatility, Upset Probability, and tail density; no EV/ROI or ML."
+                "Lite v1 uses one projection pass: scenario weight equals normalized "
+                "TPB + Market signal projection; no second normalization chain."
             ),
         }
         for code, _label in SCENARIO_TAXONOMY
@@ -498,54 +474,48 @@ def _risk_distribution_surface(scored_legs, weights):
 
 
 def _coverage_efficiency_v2(scenario_coverage_map, risk_surface_rows):
-    weighted_coverage = sum(
-        row.get("weight", 0) * row.get("coverage_score", 0)
-        for row in scenario_coverage_map
-    )
-    weighted_risk = sum(
-        row.get("weight", 0) * row.get("risk_exposure", 0)
-        for row in risk_surface_rows
-    )
-    weighted_redundancy = sum(
-        row.get("weight", 0) * row.get("redundancy", 0)
-        for row in risk_surface_rows
-    )
-    denominator = max(0.1, weighted_risk + weighted_redundancy)
-    score = (weighted_coverage / denominator) * 55
+    coverage = sum(row.get("coverage_score", 0) for row in scenario_coverage_map) / max(1, len(scenario_coverage_map))
+    redundancy = sum(row.get("redundancy", 0) for row in risk_surface_rows) / max(1, len(risk_surface_rows))
+    score = (coverage - redundancy) * 100
     return round(_clamp(score, 0, 100))
 
 
 def _scenario_weighted_ranking_v2(primary_set, defensive_set, tail_set, weights, metrics):
-    direction_bonus = _clamp(metrics.get("direction_score"), 0, 100) / 100
-    conflict = _clamp(metrics.get("market_conflict_index"), 0, 100) / 100
-    volatility = _clamp(metrics.get("volatility_score"), 0, 100) / 100
+    ss = _clamp(metrics.get("signal_strength") or metrics.get("direction_score"), 0, 100)
+    rsi_level = metrics.get("risk_surface_index") or "Medium"
+    risk_penalty = {"Low": 15, "Medium": 35, "High": 55}.get(str(rsi_level), 35)
 
     candidates = [
         {
             "position": "Primary Coverage Set",
             "legs": primary_set,
-            "score": sum(leg.get("coverage_contribution", 0) for leg in primary_set) * (1 + direction_bonus * 0.15),
-            "basis": "TPB anchor + Directional Strength + S1/S2 scenario weights",
+            "scenario_alignment": max(weights.get("S1", 0), weights.get("S2", 0)) * 100,
+            "basis": "SS + S1/S2 alignment - RSI",
         },
         {
             "position": "Defensive Coverage Set",
             "legs": defensive_set,
-            "score": sum(leg.get("coverage_contribution", 0) for leg in defensive_set) * (1 + conflict * 0.18),
-            "basis": "Conflict Index + Volatility + S3/S4/S5 scenario weights",
+            "scenario_alignment": max(weights.get("S3", 0), weights.get("S5", 0)) * 100,
+            "basis": "SS + S3/S5 alignment - RSI",
         },
         {
             "position": "Tail Coverage Set",
             "legs": tail_set,
-            "score": sum(leg.get("coverage_contribution", 0) for leg in tail_set) * (1 + volatility * 0.12),
-            "basis": "S4/S6 scenario weights + tail exposure constraint",
+            "scenario_alignment": max(weights.get("S4", 0), weights.get("S6", 0)) * 100,
+            "basis": "SS + S4/S6 alignment - RSI",
         },
     ]
+    for item in candidates:
+        item["score"] = max(0, ss + item["scenario_alignment"] - risk_penalty)
     ranked = sorted(candidates, key=lambda item: item["score"], reverse=True)
     return [
         {
             "rank": index,
             "position": item["position"],
-            "score": round(item["score"] * 100, 1),
+            "score": round(item["score"], 1),
+            "signal_strength": round(ss, 1),
+            "scenario_alignment": round(item["scenario_alignment"], 1),
+            "rsi": rsi_level,
             "basis": item["basis"],
             "legs": [leg.get("name") for leg in item["legs"]],
         }
@@ -565,11 +535,11 @@ def _coverage_optimization_v2(scenario_weights, metrics):
     efficiency = _coverage_efficiency_v2(scenario_coverage_map, risk_surface)
     ranking = _scenario_weighted_ranking_v2(primary_set, defensive_set, tail_set, weights, metrics)
     return {
-        "version": "coverage_optimization_v2",
+        "version": "lite_coverage_quality_v1",
         "objective": {
-            "maximize": ["scenario coverage", "probability alignment", "risk balance"],
-            "minimize": ["tail exposure", "conflict exposure", "redundancy"],
-            "type": "bounded deterministic heuristic",
+            "maximize": ["coverage completeness"],
+            "minimize": ["redundancy"],
+            "type": "coverage-only structure; not ranking scoring",
         },
         "constraints": [
             "TPB remains anchor and cannot be overridden",
@@ -583,10 +553,10 @@ def _coverage_optimization_v2(scenario_weights, metrics):
         "scenario_coverage_map_v2": scenario_coverage_map,
         "risk_distribution_surface": risk_surface,
         "coverage_efficiency_score_v2": efficiency,
+        "coverage_quality_score": efficiency,
         "scenario_weighted_ranking_v2": ranking,
         "explanation": (
-            "Coverage Optimization Engine v2 is a bounded heuristic coverage layer. "
-            "It optimizes scenario coverage, not expected profit."
+            "Portfolio is coverage structure only. Ranking Score is computed separately as SS + Scenario Alignment - RSI."
         ),
     }
 
@@ -642,44 +612,54 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
     metrics = (market_intelligence or {}).get("metrics") or {}
     distribution = _scenario_distribution(tpb, metrics)
     scenario_weights = _scenario_weights_v2(distribution, metrics)
+    weights = _weight_map(scenario_weights)
+    scenario_alignment = round(max(weights.get("S1", 0), weights.get("S2", 0)) * 100)
     risk_surface = _risk_surface(distribution, metrics)
     structural_risk_map = _structural_risk_map(tpb, metrics, scenario_weights)
     risk_decomposition = _risk_decomposition(metrics, scenario_weights)
     risk_score_v3 = _risk_score_v3(metrics, scenario_weights)
+    metrics = dict(metrics)
+    metrics["risk_surface_index"] = risk_score_v3.get("level")
+    metrics["scenario_alignment"] = scenario_alignment
+    metrics["signal_strength"] = metrics.get("direction_score")
     coverage_map = _coverage_map(distribution)
     optimization_v2 = _coverage_optimization_v2(scenario_weights, metrics)
     return {
-        "version": "scenario_engine_v3_phase1",
+        "version": "scenario_projection_lite_v1",
         "taxonomy": [
             {"code": code, "name": name}
             for code, name in SCENARIO_TAXONOMY
         ],
         "probability_distribution": distribution,
         "scenario_weights": scenario_weights,
+        "scenario_projection": scenario_weights,
+        "scenario_alignment": scenario_alignment,
+        "risk_surface_index": risk_score_v3.get("level"),
         "risk_surface": risk_surface,
         "structural_risk_map": structural_risk_map,
         "risk_decomposition": risk_decomposition,
         "risk_score_v3": risk_score_v3,
         "risk_surface_v3": {
-            "version": "risk_surface_quantification_v3_phase1",
+            "version": "risk_surface_index_lite_v1",
             "structural_risk_map": structural_risk_map,
             "risk_decomposition": risk_decomposition,
             "risk_score_v3": risk_score_v3,
             "description": (
-                "Risk Surface Quantification Layer v3 quantifies structural uncertainty. "
+                "Risk Surface Index Lite v1 reports Low / Medium / High structural risk. "
                 "It does not predict results, calculate EV/ROI, optimize profit, alter TPB, "
-                "alter stake, or change ranking logic."
+                "or alter stake."
             ),
         },
         "coverage_map": coverage_map,
         "portfolio_mapping_explanation": _portfolio_mapping_explanation(coverage_map),
         "scenario_market_mapping": _scenario_market_mapping(),
         "coverage_efficiency_score": _coverage_efficiency_score(distribution, risk_surface),
+        "coverage_quality_score": optimization_v2.get("coverage_quality_score"),
         "scenario_optimization_v2": optimization_v2,
         "system_optimized_portfolio_v2": _system_optimized_portfolio_v2(optimization_v2),
         "methodology": build_model_methodology(),
         "disclaimer": (
-            "Scenario Engine v3 Phase 1 使用 bounded heuristic scenario weights 和结构风险量化做覆盖解释；"
+            "Scenario Projection Lite v1 使用 TPB + Market signal projection 生成 S1-S6；"
             "不预测比分，不计算 EV/ROI，不做盈利最大化，不覆盖 TPB，不改变 stake，也不使用用户输入。"
         ),
     }

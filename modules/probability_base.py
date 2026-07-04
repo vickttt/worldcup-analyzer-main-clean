@@ -107,30 +107,55 @@ def entropy(probabilities):
 
 
 def betting_confidence_from_tpb(tpb):
+    return signal_strength_from_tpb(tpb)
+
+
+def signal_strength_from_tpb(tpb):
     probabilities = (tpb or {}).get("probabilities")
-    entropy_value = entropy(probabilities)
-    if entropy_value is None:
+    if not probabilities:
         return 0
-    return clamp(35 + (1 - entropy_value) * 65)
+    ordered = sorted((float(probabilities.get(key) or 0) for key in OUTCOMES), reverse=True)
+    if len(ordered) < 2:
+        return 0
+    return clamp((ordered[0] - ordered[1]) * 100)
 
 
 def betting_confidence_breakdown(tpb):
     probabilities = (tpb or {}).get("probabilities")
-    entropy_value = entropy(probabilities)
-    if entropy_value is None:
+    if not probabilities:
         return {
-            "entropy": None,
+            "tpb_edge": None,
             "base": 0,
             "adjustments": [],
-            "formula": "TPB unavailable",
+            "formula": "Signal Strength unavailable",
         }
-    score = betting_confidence_from_tpb(tpb)
+    ordered = sorted((float(probabilities.get(key) or 0) for key in OUTCOMES), reverse=True)
+    edge = (ordered[0] - ordered[1]) * 100 if len(ordered) >= 2 else 0
+    score = signal_strength_from_tpb(tpb)
     return {
-        "entropy": entropy_value,
+        "tpb_edge": edge,
         "base": score,
         "adjustments": [],
-        "formula": "35 + (1 - TPB entropy) * 65",
+        "formula": "Signal Strength = (top TPB probability - second TPB probability) * 100",
     }
+
+
+def risk_adjustment_from_rsi(level):
+    normalized = str(level or "Medium").strip().lower()
+    if normalized == "low":
+        return 0.9
+    if normalized == "high":
+        return 0.4
+    return 0.65
+
+
+def rsi_penalty(level):
+    normalized = str(level or "Medium").strip().lower()
+    if normalized == "low":
+        return 15
+    if normalized == "high":
+        return 55
+    return 35
 
 
 def market_direction_from_tpb(tpb, labels=None):
@@ -150,23 +175,35 @@ def market_direction_from_tpb(tpb, labels=None):
     return labels.get(top, top)
 
 
-def investment_score_from_tpb(tpb):
+def investment_score_from_tpb(tpb, scenario_alignment=None, risk_surface_index=None):
     probabilities = (tpb or {}).get("probabilities")
     if not probabilities:
         return 0
-    ordered = sorted((probabilities[key] for key in OUTCOMES), reverse=True)
-    favorite_edge = (ordered[0] - ordered[1]) * 100
-    confidence = betting_confidence_from_tpb(tpb)
-    draw_risk_control = 100 - probabilities["draw"] * 100
-    upset_risk_control = 100 - min(probabilities["home_win"], probabilities["away_win"]) * 100
-    dispersion_penalty = (tpb.get("market_dispersion") or 0) * 100
-    return clamp(
-        confidence * 0.55
-        + favorite_edge * 0.35
-        + draw_risk_control * 0.05
-        + upset_risk_control * 0.05
-        - dispersion_penalty
-    )
+    tpb_edge = signal_strength_from_tpb(tpb)
+    alignment = tpb_edge if scenario_alignment is None else clamp(scenario_alignment)
+    signal = min(100, tpb_edge + alignment)
+    risk_adjustment = risk_adjustment_from_rsi(risk_surface_index)
+    return clamp(signal * risk_adjustment)
+
+
+def investment_score_breakdown(tpb, scenario_alignment=None, risk_surface_index=None):
+    tpb_edge = signal_strength_from_tpb(tpb)
+    alignment = tpb_edge if scenario_alignment is None else clamp(scenario_alignment)
+    signal = min(100, tpb_edge + alignment)
+    rsi = risk_surface_index or "Medium"
+    risk_adjustment = risk_adjustment_from_rsi(rsi)
+    score = investment_score_from_tpb(tpb, alignment, rsi)
+    return {
+        "formula": "Investment Score = Signal × Risk Adjustment",
+        "signal_formula": "Signal = TPB Edge + Scenario Alignment",
+        "risk_formula": "Risk Adjustment = 1 - RSI qualitative penalty",
+        "tpb_edge": tpb_edge,
+        "scenario_alignment": alignment,
+        "signal": round(signal),
+        "rsi": rsi,
+        "risk_adjustment": risk_adjustment,
+        "score": score,
+    }
 
 
 def stake_from_investment_score(score):

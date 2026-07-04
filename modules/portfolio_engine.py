@@ -14,6 +14,7 @@ import re
 from modules.probability_base import (
     betting_confidence_breakdown,
     betting_confidence_from_tpb,
+    investment_score_breakdown,
     investment_score_from_tpb,
     odds_data_quality,
     stake_from_investment_score,
@@ -207,11 +208,15 @@ def compute_match_investment_score(strategies, match=None, distribution=None, co
     context = context or {}
     odds = context.get("odds") or {}
     api_football_data = context.get("api_football_data") or {}
+    scenario_engine = context.get("scenario_engine") or {}
     tpb = true_probability_base(odds)
     data_quality_score, data_quality_note = _api_quality(odds, api_football_data)
-    score = investment_score_from_tpb(tpb)
+    scenario_alignment = scenario_engine.get("scenario_alignment")
+    rsi = scenario_engine.get("risk_surface_index")
+    score = investment_score_from_tpb(tpb, scenario_alignment=scenario_alignment, risk_surface_index=rsi)
     confidence = betting_confidence_from_tpb(tpb)
     breakdown = betting_confidence_breakdown(tpb)
+    investment_breakdown = investment_score_breakdown(tpb, scenario_alignment=scenario_alignment, risk_surface_index=rsi)
     probabilities = tpb.get("probabilities") or {}
     ordered = sorted(probabilities.values(), reverse=True) if probabilities else [0, 0]
     favorite_edge = (ordered[0] - ordered[1]) * 100 if len(ordered) >= 2 else 0
@@ -229,28 +234,24 @@ def compute_match_investment_score(strategies, match=None, distribution=None, co
         "score": score,
         "rating": rating,
         "main_reason": f"TPB 投资分 {score}，最高方向差值 {favorite_edge:.1f}。",
-        "key_risk": "主要风险来自 TPB 熵值偏高或博彩公司概率分歧。" if score < 65 else "主要风险在临场赔率变化。",
+        "key_risk": "主要风险来自 Signal Strength 偏弱或 RSI 风险偏高。" if score < 65 else "主要风险在临场赔率变化。",
         "data_quality_score": data_quality_score,
         "data_quality_note": data_quality_note,
         "true_probability_base": tpb,
         "coverage": coverage,
         "confidence_breakdown": breakdown,
+        "investment_breakdown": investment_breakdown,
         "components": {
-            "TPB信心": confidence,
-            "热门差值": round(favorite_edge),
-            "平局概率": round((probabilities.get("draw", 0) if probabilities else 0) * 100),
-            "冷门概率": round(min(
-                probabilities.get("home_win", 0),
-                probabilities.get("away_win", 0),
-            ) * 100) if probabilities else 0,
-            "博彩公司一致性": dispersion_score,
+            "Signal Strength": confidence,
+            "TPB Edge": round(favorite_edge),
+            "Scenario Alignment": investment_breakdown.get("scenario_alignment"),
+            "RSI": investment_breakdown.get("rsi"),
+            "Risk Adjustment": investment_breakdown.get("risk_adjustment"),
         },
         "weights": {
-            "TPB信心": "55%",
-            "热门差值": "35%",
-            "平局概率": "5%",
-            "冷门概率": "5%",
-            "博彩公司一致性": "扣分项",
+            "Investment Score": "Signal × Risk Adjustment",
+            "Signal": "TPB Edge + Scenario Alignment",
+            "Risk": "1 - RSI qualitative penalty",
         },
     }
 
@@ -260,8 +261,10 @@ def build_core_decision_layers(strategies, match=None, distribution=None, contex
     tpb = investment.get("true_probability_base") or {}
     score_layer = {
         "tpb": tpb,
-        "betting_confidence": investment.get("components", {}).get("TPB信心", 0),
+        "betting_confidence": investment.get("components", {}).get("Signal Strength", 0),
+        "signal_strength": investment.get("components", {}).get("Signal Strength", 0),
         "confidence_breakdown": investment.get("confidence_breakdown") or {},
+        "investment_breakdown": investment.get("investment_breakdown") or {},
         "investment_score": investment.get("score", 0),
         "data_quality_note": investment.get("data_quality_note", "-"),
     }
