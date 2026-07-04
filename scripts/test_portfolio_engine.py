@@ -345,10 +345,12 @@ def test_architecture_guardrails():
     assert "### 情景概率推导方法" in report_text
     assert "### 覆盖映射逻辑" in report_text
     assert "### 情景到组合的解释映射" in report_text
-    assert "波胆策略增强层（Correct Score Strategy v2.1）" in report_text
-    assert "主波胆覆盖" in report_text
-    assert "防守波胆" in report_text
-    assert "高赔率尾部波胆" in report_text
+    assert "波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）" in report_text
+    assert "Portfolio Priority v2" in report_text
+    assert "System Ranking Bets v2" in report_text
+    assert "主波胆" in report_text
+    assert "结构波胆" in report_text
+    assert "高波动波胆" in report_text
     assert "｜情景依赖：" in report_text
     assert "*format_market_intelligence_lines(market_intelligence)" not in report_text
     assert "*format_scenario_engine_lines(scenario_engine)" not in report_text
@@ -359,7 +361,9 @@ def test_architecture_guardrails():
     assert "最终决策区（FINAL DECISION BLOCK）" in app_text
     assert "用户执行层不进入本区" in app_text
     assert "render_final_decision_summary" in app_text
-    assert "波胆策略增强层（Correct Score Strategy v2.1）" in app_text
+    assert "波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）" in app_text
+    assert "Portfolio Priority v2" in app_text
+    assert "System Ranking Bets v2" in app_text
     assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
     assert "        render_scenario_coverage_analysis(scenario_engine)" not in app_text
     assert "        render_scenario_optimization_view_v2(scenario_engine, match=match, market_intelligence=market_intelligence)" not in app_text

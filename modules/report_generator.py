@@ -51,7 +51,7 @@ LEVEL_CN = {
 PORTFOLIO_SET_CN = {
     "Primary Coverage Set": "主覆盖组合",
     "Defensive Coverage Set": "防守覆盖组合",
-    "Tail Coverage Set": "尾部风险组合",
+    "Tail Coverage Set": "高波动覆盖组合",
 }
 
 
@@ -172,8 +172,8 @@ def portfolio_leg_display(leg, match=None, market_intelligence=None, scenario_en
         },
         "tail_variance": {
             "bet": "大球 Over 3.5",
-            "market": "大小球 3.5 / 波胆尾部",
-            "reason": "仅覆盖 S6 高波动尾部路径。",
+            "market": "大小球 3.5",
+            "reason": "覆盖 S6 高波动路径；波胆由高波动策略层单独表达。",
         },
     }
     template = templates.get(leg_id, {})
@@ -203,49 +203,72 @@ def correct_score_strategy_rows(match=None, market_intelligence=None, scenario_e
     favorite, underdog = _favorite_and_underdog(match, market_intelligence, scenario_engine)
     primary_10 = _score_for_side(match, favorite, 1, 0)
     primary_20 = _score_for_side(match, favorite, 2, 0)
+    primary_21 = _score_for_side(match, favorite, 2, 1)
     upset_01 = _score_for_side(match, underdog, 1, 0)
     high_32 = _score_for_side(match, favorite, 3, 2)
+    high_31 = _score_for_side(match, favorite, 3, 1)
     return [
         {
-            "波胆层级": "主波胆覆盖",
+            "波胆层级": "主波胆",
             "中文投注描述": f"{primary_10} {favorite}胜",
             "对应盘口": "波胆 / Correct Score",
-            "理由": "S1 小胜路径，补充主覆盖组合。",
+            "理由": "TPB + S1 主路径，小胜结构覆盖。",
             "情景依赖": "S1",
         },
         {
-            "波胆层级": "主波胆覆盖",
+            "波胆层级": "主波胆",
             "中文投注描述": f"{primary_20} {favorite}胜",
             "对应盘口": "波胆 / Correct Score",
-            "理由": "S1 强覆盖路径，跟随 TPB 主方向。",
-            "情景依赖": "S1",
+            "理由": "S1 + S2 强化路径，跟随 TPB 主方向。",
+            "情景依赖": "S1/S2",
         },
         {
-            "波胆层级": "防守波胆",
+            "波胆层级": "主波胆",
+            "中文投注描述": f"{primary_21} {favorite}胜",
+            "对应盘口": "波胆 / Correct Score",
+            "理由": "S2 窄胜路径，补充热门方向但保留失球风险。",
+            "情景依赖": "S2",
+        },
+        {
+            "波胆层级": "结构波胆",
             "中文投注描述": "1:1 平局",
             "对应盘口": "波胆 / Correct Score",
-            "理由": "S3 平局风险对冲。",
+            "理由": "S3 平局密度与市场冲突结构覆盖。",
             "情景依赖": "S3",
         },
         {
-            "波胆层级": "防守波胆",
+            "波胆层级": "结构波胆",
+            "中文投注描述": "0:0",
+            "对应盘口": "波胆 / Correct Score",
+            "理由": "S3 + S5 低节奏平局结构。",
+            "情景依赖": "S3/S5",
+        },
+        {
+            "波胆层级": "结构波胆",
             "中文投注描述": f"{upset_01} {underdog}冷门",
             "对应盘口": "波胆 / Correct Score",
-            "理由": "S4 冷门尾部路径保护。",
+            "理由": "S4 冷门路径与冲突市场保护。",
             "情景依赖": "S4",
         },
         {
-            "波胆层级": "高赔率尾部波胆",
+            "波胆层级": "高波动波胆",
             "中文投注描述": "2:2",
             "对应盘口": "波胆 / Correct Score",
-            "理由": "S6 高波动路径。",
+            "理由": "S6 高波动核心，兼顾进球扩展。",
             "情景依赖": "S6",
         },
         {
-            "波胆层级": "高赔率尾部波胆",
-            "中文投注描述": f"{high_32} 高进球尾部",
+            "波胆层级": "高波动波胆",
+            "中文投注描述": f"{high_32} 高进球波动",
             "对应盘口": "波胆 / Correct Score",
-            "理由": "S6 高进球尾部路径。",
+            "理由": "S6 高进球波动路径。",
+            "情景依赖": "S6",
+        },
+        {
+            "波胆层级": "高波动波胆",
+            "中文投注描述": f"{high_31} 高波动胜出",
+            "对应盘口": "波胆 / Correct Score",
+            "理由": "S5/S6 低比分与高波动之间的扩展路径。",
             "情景依赖": "S6",
         },
     ]
@@ -311,7 +334,13 @@ def _optimization_sets(scenario_engine):
 
 def system_portfolio_display_rows(scenario_engine, match=None, market_intelligence=None):
     rows = []
-    for title, legs in _optimization_sets(scenario_engine).items():
+    sets = _optimization_sets(scenario_engine)
+    ordered_sets = [
+        ("Primary Coverage Set", sets.get("Primary Coverage Set") or []),
+        ("Defensive Coverage Set", sets.get("Defensive Coverage Set") or []),
+        ("Tail Coverage Set", sets.get("Tail Coverage Set") or []),
+    ]
+    for title, legs in ordered_sets:
         display_legs = portfolio_leg_display_rows(
             legs,
             match=match,
@@ -334,11 +363,11 @@ def system_portfolio_display_rows(scenario_engine, match=None, market_intelligen
 def _score_rows_for_ranking(position, match=None, market_intelligence=None, scenario_engine=None):
     rows = correct_score_strategy_rows(match, market_intelligence, scenario_engine)
     if position == "Primary Coverage Set":
-        return [row for row in rows if row["波胆层级"] == "主波胆覆盖"][:2]
+        return [row for row in rows if row["波胆层级"] == "主波胆"][:2]
     if position == "Defensive Coverage Set":
-        return [row for row in rows if row["波胆层级"] == "防守波胆"][:2]
+        return [row for row in rows if row["波胆层级"] == "结构波胆"][:2]
     if position == "Tail Coverage Set":
-        return [row for row in rows if row["波胆层级"] == "高赔率尾部波胆"][:2]
+        return [row for row in rows if row["波胆层级"] == "高波动波胆"][:2]
     return []
 
 
@@ -1015,10 +1044,12 @@ def format_final_decision_block_lines(
         lines.append(f"- {row['情景']}：原始概率 {row['原始概率']}；v2 权重 {row['v2 权重']}")
     lines.extend([
         f"- 风险面：尾部 {_level_cn(risk.get('tail_risk_concentration'))} / 脆弱性 {_level_cn(risk.get('market_fragility'))} / 冷门 {_level_cn(risk.get('upset_exposure'))} / 平局 {_level_cn(risk.get('draw_dependency'))}",
-        f"- 覆盖图：主覆盖 {(coverage.get('primary_coverage') or {}).get('scenario', '-')} / 防守覆盖 {(coverage.get('defensive_coverage') or {}).get('scenario', '-')} / 尾部覆盖 {(coverage.get('tail_optionality') or {}).get('scenario', '-')}",
+        f"- 覆盖图：主覆盖 {(coverage.get('primary_coverage') or {}).get('scenario', '-')} / 防守覆盖 {(coverage.get('defensive_coverage') or {}).get('scenario', '-')} / 高波动覆盖 {(coverage.get('tail_optionality') or {}).get('scenario', '-')}",
         f"- 覆盖效率 v2：{format_value(optimization.get('coverage_efficiency_score_v2'))} / 100",
         "",
         "### 4. 系统推荐投注组合（System Portfolio）",
+        "",
+        "Portfolio Priority v2：主覆盖（TPB aligned） -> 波胆策略（Correct Score Layer） -> 防守覆盖 -> 高波动覆盖。",
         "",
     ])
     for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
@@ -1027,7 +1058,9 @@ def format_final_decision_block_lines(
         )
     lines.extend([
         "",
-        "#### 波胆策略增强层（Correct Score Strategy v2.1）",
+        "#### 波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）",
+        "",
+        "说明：波胆是高熵、高方差、高信息密度市场，用于表达情景波动结构，不作为 EV/ROI 或收益优化。",
         "",
     ])
     for row in correct_score_strategy_rows(match, market_intelligence, scenario):
@@ -1037,6 +1070,8 @@ def format_final_decision_block_lines(
     lines.extend([
         "",
         "### 5. 系统排名组合（System Ranking Bets，仅系统）",
+        "",
+        "System Ranking Bets v2：每个 Rank 同时展示主覆盖、波胆结构和对应防守/高波动路径。",
         "",
     ])
     ranking_rows = system_ranking_display_rows(
@@ -1404,6 +1439,7 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         "## 4. 系统推荐投注组合（System Portfolio）",
         "",
         "系统推荐投注组合 = TPB 锚点 + 市场结构 + 受约束情景权重综合生成。用户实盘输入不参与系统组合、推荐或排序。",
+        "Portfolio Priority v2：主覆盖（TPB aligned） -> 波胆策略（Correct Score Layer） -> 防守覆盖 -> 高波动覆盖。",
         "",
     ]
     for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
@@ -1412,7 +1448,9 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         )
     lines.extend([
         "",
-        "### 波胆策略增强层（Correct Score Strategy v2.1）",
+        "### 波胆策略层（Correct Score Strategy v2.2 / High Variance Strategy Layer）",
+        "",
+        "说明：波胆是高熵、高方差、高信息密度市场，用于表达情景波动结构，不作为 EV/ROI 或收益优化。",
         "",
     ])
     for row in correct_score_strategy_rows(match, market_intelligence, scenario):
@@ -1424,6 +1462,7 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         "## 5. 系统排名组合（System Ranking Bets）",
         "",
         "系统排名只使用 TPB 锚点、市场结构和受约束情景权重；不使用用户输入、EV/ROI 或盈利优化器。",
+        "System Ranking Bets v2：每个 Rank 同时展示主覆盖、波胆结构和对应防守/高波动路径。",
     ])
     ranking_rows = system_ranking_display_rows(
         portfolio,
