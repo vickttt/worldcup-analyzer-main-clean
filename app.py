@@ -43,6 +43,7 @@ from modules.schedule_client import (
 )
 from modules.team_profile_client import fetch_team_profile
 from modules.weather_client import weather_for_fixture
+from modules.venue_utils import venue_city_for
 from modules.perf_logger import perf_timer
 from modules.portfolio_engine import build_core_decision_layers
 from modules.user_portfolio_compare import (
@@ -931,7 +932,7 @@ def render_match_overview(match, api_football_data, selected_fixture=None, allow
         away = selected_fixture.get("away_team") or {"name": match["away_cn"]}
         kickoff_text = fixture_time_text(selected_fixture)
         venue_name = selected_fixture.get("venue_name") or "球场待确认"
-        city = selected_fixture.get("venue_city") or "城市待确认"
+        city = venue_city_for(venue_name, selected_fixture.get("venue_city")) or "城市待确认"
         weather = weather_for_fixture(selected_fixture) if allow_live_weather else {
             "summary": "天气暂不可用",
             "source": "Local cache",
@@ -957,7 +958,7 @@ def render_match_overview(match, api_football_data, selected_fixture=None, allow
         kickoff_date, kickoff_time = parse_kickoff(fixture_info.get("date"))
         kickoff_text = f"{kickoff_date} {kickoff_time}" if kickoff_date != "TBD" else "时间待确认"
         venue_name = venue.get("name") or "球场待确认"
-        city = venue.get("city") or "城市待确认"
+        city = venue_city_for(venue_name, venue.get("city")) or "城市待确认"
         weather = weather_for_fixture(fixture) if allow_live_weather else {
             "summary": "天气暂不可用",
             "source": "Local cache",

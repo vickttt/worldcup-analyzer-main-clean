@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 import streamlit as st
 
 from modules.api_client import request_json
+from modules.venue_utils import venue_city_for
 
 LOCAL_TZ = ZoneInfo("Asia/Shanghai")
 LIVE_CACHE_TTL = 5 * 60
@@ -58,7 +59,7 @@ def normalize_fixture(item, source):
         "league_name": f"{league.get('name') or 'World Cup'} {league.get('season') or 2026}",
         "round": league.get("round") or "",
         "venue_name": venue.get("name") or "",
-        "venue_city": venue.get("city") or "",
+        "venue_city": venue_city_for(venue.get("name"), venue.get("city")),
         "group": league.get("round") or "",
         "status": status.get("short") or "NS",
         "status_text": status.get("long") or "未开始",

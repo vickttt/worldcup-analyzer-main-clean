@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 import requests
 import streamlit as st
 
+from modules.venue_utils import venue_city_for
+
 
 WEATHER_TTL = 6 * 60 * 60
 GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
@@ -134,7 +136,9 @@ def fetch_weather(city, kickoff_value):
 def weather_for_fixture(fixture):
     if not fixture:
         return {"available": False, "summary": "天气暂不可用", "source": "Open-Meteo"}
-    city = fixture.get("venue_city") or ((fixture.get("raw") or {}).get("fixture") or {}).get("venue", {}).get("city")
+    raw_venue = ((fixture.get("raw") or {}).get("fixture") or {}).get("venue", {}) or {}
+    venue_name = fixture.get("venue_name") or raw_venue.get("name")
+    city = venue_city_for(venue_name, fixture.get("venue_city") or raw_venue.get("city"))
     kickoff = fixture.get("kickoff_utc") or ((fixture.get("raw") or {}).get("fixture") or {}).get("date")
     try:
         return fetch_weather(city, kickoff)

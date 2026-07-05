@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 from modules.market_utils import identify_handicap_center, identify_total_center, parse_handicap_value, safe_float
 from modules.pregame_content import static_recent_form_for, team_cn
 from modules.probability_base import true_probability_base
+from modules.venue_utils import venue_city_for
 
 
 def percent(value):
@@ -1115,6 +1116,7 @@ def fixture_metadata(api_football_data, match=None):
         fixture.get("city"),
         schedule_fixture.get("venue_city"),
     )
+    venue_city = venue_city_for(venue_name, venue_city)
     missing = []
     for key, label in [
         (competition, "赛事"),
