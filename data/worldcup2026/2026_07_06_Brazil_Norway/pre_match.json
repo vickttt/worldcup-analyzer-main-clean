@@ -1,0 +1,121 @@
+{
+  "source_id": 1568100,
+  "match": {
+    "home_cn": "Brazil",
+    "away_cn": "Norway",
+    "home_en": "Brazil",
+    "away_en": "Norway",
+    "display_name": "Brazil vs Norway"
+  },
+  "created_at": "2026-07-05T17:44:32.951500+08:00",
+  "schedule_source": "API-Football",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "model_version": "v1.61",
+  "probability_distribution": {
+    "available": true,
+    "favorite": "巴西",
+    "underdog": "挪威",
+    "tpb": {
+      "home_win": 0.5399533013361008,
+      "draw": 0.2524646517057984,
+      "away_win": 0.20758204695810092
+    },
+    "rows": [
+      {
+        "label": "平局区间",
+        "probability": 0.2614727596772126,
+        "meaning": "比赛进入低分差或胶着路径。"
+      },
+      {
+        "label": "巴西小胜（1球）",
+        "probability": 0.23486460648299293,
+        "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+      },
+      {
+        "label": "巴西赢2球",
+        "probability": 0.20475375949799382,
+        "meaning": "盘口边界路径，决定让球盘输赢。"
+      },
+      {
+        "label": "巴西赢3球以上",
+        "probability": 0.18066508190999453,
+        "meaning": "强队大胜路径，过去版本容易低估。"
+      },
+      {
+        "label": "挪威不败",
+        "probability": 0.11824379243180616,
+        "meaning": "爆冷或热门方向失效路径。"
+      }
+    ],
+    "risk_exposure": {
+      "example_bet": "巴西 -1.5",
+      "lose_paths": [
+        "巴西只赢1球",
+        "平局",
+        "挪威胜"
+      ],
+      "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+    },
+    "main_path": "平局区间",
+    "boundary_path": "巴西赢2球",
+    "extreme_path": "巴西赢3球以上",
+    "explanation": "基于 API-Football TPB 概率生成的路径分布；盘口只用于展示，不参与 TPB 基准。"
+  },
+  "strategy_candidates": [],
+  "recommendation_slots": [],
+  "portfolios": [
+    {
+      "rank": 1,
+      "name": "无推荐组合",
+      "items": []
+    },
+    {
+      "rank": 2,
+      "name": "无推荐组合",
+      "items": []
+    },
+    {
+      "rank": 3,
+      "name": "无推荐组合",
+      "items": []
+    }
+  ],
+  "asset_roles": [],
+  "risk_paths": {
+    "example_bet": "巴西 -1.5",
+    "lose_paths": [
+      "巴西只赢1球",
+      "平局",
+      "挪威胜"
+    ],
+    "meaning": "如果下注深盘，风险主要来自强队小胜、平局和弱队爆冷，而不是独赢方向本身。"
+  },
+  "top_probable_outcomes": [
+    {
+      "label": "平局区间",
+      "probability": 0.2614727596772126,
+      "meaning": "比赛进入低分差或胶着路径。"
+    },
+    {
+      "label": "巴西小胜（1球）",
+      "probability": 0.23486460648299293,
+      "meaning": "市场主路径之一，强队赢但不打穿深盘。"
+    },
+    {
+      "label": "巴西赢2球",
+      "probability": 0.20475375949799382,
+      "meaning": "盘口边界路径，决定让球盘输赢。"
+    },
+    {
+      "label": "巴西赢3球以上",
+      "probability": 0.18066508190999453,
+      "meaning": "强队大胜路径，过去版本容易低估。"
+    },
+    {
+      "label": "挪威不败",
+      "probability": 0.11824379243180616,
+      "meaning": "爆冷或热门方向失效路径。"
+    }
+  ]
+}

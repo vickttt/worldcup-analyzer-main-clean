@@ -1,0 +1,167 @@
+{
+  "created_at": "2026-07-05T17:44:45.203772+08:00",
+  "matches": [
+    {
+      "match": "Brazil vs Norway",
+      "directory": "/Users/zijianchen/Library/Mobile Documents/com~apple~CloudDocs/iCloud文件/4、2026年增收计划/worldcup2026V1/data/worldcup2026/2026_07_06_Brazil_Norway",
+      "schedule_fixture_id": 1568100,
+      "api_football_fixture_id": 1568100,
+      "odds_found": false,
+      "effective_odds_found": true,
+      "effective_odds_source": "API-Football / 10Bet",
+      "effective_totals_rows": 112,
+      "api_asian_rows": 173,
+      "api_correct_rows": 521,
+      "lineups_rows": 0,
+      "injuries_rows": 2,
+      "recommended": "无推荐组合",
+      "data_completeness": 67,
+      "fetch_rows": [
+        {
+          "source": "API-Football / 10Bet",
+          "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
+          "dataset": "Winner Odds / Totals",
+          "success": true,
+          "records": 112,
+          "empty": false,
+          "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1568100&bet=4",
+          "dataset": "Asian Handicap",
+          "success": true,
+          "records": 173,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1568100&bet=10",
+          "dataset": "Correct Score",
+          "success": true,
+          "records": 521,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/lineups?fixture=1568100",
+          "dataset": "Lineups",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/injuries?fixture=1568100",
+          "dataset": "Injuries",
+          "success": true,
+          "records": 2,
+          "empty": false,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/statistics?fixture=1568100",
+          "dataset": "Match Stats",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/players?fixture=1568100",
+          "dataset": "Players",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        }
+      ]
+    },
+    {
+      "match": "Mexico vs England",
+      "directory": "/Users/zijianchen/Library/Mobile Documents/com~apple~CloudDocs/iCloud文件/4、2026年增收计划/worldcup2026V1/data/worldcup2026/2026_07_06_Mexico_England",
+      "schedule_fixture_id": 1570714,
+      "api_football_fixture_id": 1570714,
+      "odds_found": false,
+      "effective_odds_found": true,
+      "effective_odds_source": "API-Football / 10Bet",
+      "effective_totals_rows": 103,
+      "api_asian_rows": 172,
+      "api_correct_rows": 465,
+      "lineups_rows": 0,
+      "injuries_rows": 0,
+      "recommended": "无推荐组合",
+      "data_completeness": 67,
+      "fetch_rows": [
+        {
+          "source": "API-Football / 10Bet",
+          "endpoint": "/v4/sports/{sport_key}/odds?markets=h2h,spreads,totals",
+          "dataset": "Winner Odds / Totals",
+          "success": true,
+          "records": 103,
+          "empty": false,
+          "message": "The Odds API 未返回时，已从 API-Football All Odds 读取胜平负和大小球。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1570714&bet=4",
+          "dataset": "Asian Handicap",
+          "success": true,
+          "records": 172,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/odds?fixture=1570714&bet=10",
+          "dataset": "Correct Score",
+          "success": true,
+          "records": 465,
+          "empty": false,
+          "message": "强制刷新成功。"
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/lineups?fixture=1570714",
+          "dataset": "Lineups",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/injuries?fixture=1570714",
+          "dataset": "Injuries",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/statistics?fixture=1570714",
+          "dataset": "Match Stats",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        },
+        {
+          "source": "API-Football",
+          "endpoint": "/fixtures/players?fixture=1570714",
+          "dataset": "Players",
+          "success": true,
+          "records": 0,
+          "empty": true,
+          "message": null
+        }
+      ]
+    }
+  ]
+}

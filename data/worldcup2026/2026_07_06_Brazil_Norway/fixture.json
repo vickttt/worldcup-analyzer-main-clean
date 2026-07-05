@@ -1,0 +1,158 @@
+{
+  "source_id": 1568100,
+  "match": {
+    "home_cn": "Brazil",
+    "away_cn": "Norway",
+    "home_en": "Brazil",
+    "away_en": "Norway",
+    "display_name": "Brazil vs Norway"
+  },
+  "created_at": "2026-07-05T17:44:32.951500+08:00",
+  "schedule_source": "API-Football",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": 1568100,
+    "home_team": {
+      "id": 6,
+      "name": "Brazil",
+      "logo": "https://media.api-sports.io/football/teams/6.png"
+    },
+    "away_team": {
+      "id": 1090,
+      "name": "Norway",
+      "logo": "https://media.api-sports.io/football/teams/1090.png"
+    },
+    "kickoff_utc": "2026-07-05T20:00:00+00:00",
+    "league_name": "World Cup 2026",
+    "round": "Round of 16",
+    "venue_name": "MetLife Stadium",
+    "venue_city": "",
+    "group": "Round of 16",
+    "status": "NS",
+    "status_text": "Not Started",
+    "score": null,
+    "post_match": null,
+    "source": "API-Football"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1568100,
+    "kickoff_utc": "2026-07-05T20:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Round of 16",
+    "venue": "MetLife Stadium",
+    "city": null,
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1568100,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-07-05T20:00:00+00:00",
+        "timestamp": 1783281600,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": 0,
+          "name": "MetLife Stadium",
+          "city": null
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Round of 16",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 6,
+          "name": "Brazil",
+          "logo": "https://media.api-sports.io/football/teams/6.png",
+          "winner": null
+        },
+        "away": {
+          "id": 1090,
+          "name": "Norway",
+          "logo": "https://media.api-sports.io/football/teams/1090.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 6,
+    "name": "Brazil",
+    "code": "BRA",
+    "country": "Brazil",
+    "founded": 1914,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/6.png",
+    "_resolver": {
+      "input": "Brazil",
+      "matched_query": "Brazil",
+      "matched_name": "Brazil",
+      "team_id": 6,
+      "attempted": [
+        "Brazil"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 1090,
+    "name": "Norway",
+    "code": "NOR",
+    "country": "Norway",
+    "founded": 1902,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/1090.png",
+    "_resolver": {
+      "input": "Norway",
+      "matched_query": "Norway",
+      "matched_name": "Norway",
+      "team_id": 1090,
+      "attempted": [
+        "Norway"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": null
+}

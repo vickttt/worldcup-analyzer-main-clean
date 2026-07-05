@@ -1,0 +1,158 @@
+{
+  "source_id": 1570714,
+  "match": {
+    "home_cn": "Mexico",
+    "away_cn": "England",
+    "home_en": "Mexico",
+    "away_en": "England",
+    "display_name": "Mexico vs England"
+  },
+  "created_at": "2026-07-05T17:44:43.220210+08:00",
+  "schedule_source": "API-Football",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "schedule_fixture": {
+    "fixture_id": 1570714,
+    "home_team": {
+      "id": 16,
+      "name": "Mexico",
+      "logo": "https://media.api-sports.io/football/teams/16.png"
+    },
+    "away_team": {
+      "id": 10,
+      "name": "England",
+      "logo": "https://media.api-sports.io/football/teams/10.png"
+    },
+    "kickoff_utc": "2026-07-06T00:00:00+00:00",
+    "league_name": "World Cup 2026",
+    "round": "Round of 16",
+    "venue_name": "Estadio Banorte",
+    "venue_city": "Mexico City",
+    "group": "Round of 16",
+    "status": "NS",
+    "status_text": "Not Started",
+    "score": null,
+    "post_match": null,
+    "source": "API-Football"
+  },
+  "api_football_fixture": {
+    "fixture_id": 1570714,
+    "kickoff_utc": "2026-07-06T00:00:00+00:00",
+    "league_id": 1,
+    "league": "World Cup",
+    "season": 2026,
+    "round": "Round of 16",
+    "venue": "Estadio Banorte",
+    "city": "Mexico City",
+    "status": "NS",
+    "raw": {
+      "fixture": {
+        "id": 1570714,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2026-07-06T00:00:00+00:00",
+        "timestamp": 1783296000,
+        "periods": {
+          "first": null,
+          "second": null
+        },
+        "venue": {
+          "id": null,
+          "name": "Estadio Banorte",
+          "city": "Mexico City"
+        },
+        "status": {
+          "long": "Not Started",
+          "short": "NS",
+          "elapsed": null,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 1,
+        "name": "World Cup",
+        "country": "World",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "season": 2026,
+        "round": "Round of 16",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 16,
+          "name": "Mexico",
+          "logo": "https://media.api-sports.io/football/teams/16.png",
+          "winner": null
+        },
+        "away": {
+          "id": 10,
+          "name": "England",
+          "logo": "https://media.api-sports.io/football/teams/10.png",
+          "winner": null
+        }
+      },
+      "goals": {
+        "home": null,
+        "away": null
+      },
+      "score": {
+        "halftime": {
+          "home": null,
+          "away": null
+        },
+        "fulltime": {
+          "home": null,
+          "away": null
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  },
+  "home_team": {
+    "id": 16,
+    "name": "Mexico",
+    "code": "MEX",
+    "country": "Mexico",
+    "founded": 1927,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/16.png",
+    "_resolver": {
+      "input": "Mexico",
+      "matched_query": "Mexico",
+      "matched_name": "Mexico",
+      "team_id": 16,
+      "attempted": [
+        "Mexico"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "away_team": {
+    "id": 10,
+    "name": "England",
+    "code": "ENG",
+    "country": "England",
+    "founded": 1863,
+    "national": true,
+    "logo": "https://media.api-sports.io/football/teams/10.png",
+    "_resolver": {
+      "input": "England",
+      "matched_query": "England",
+      "matched_name": "England",
+      "team_id": 10,
+      "attempted": [
+        "England"
+      ],
+      "cache_status": "fresh api response"
+    }
+  },
+  "standings": null
+}

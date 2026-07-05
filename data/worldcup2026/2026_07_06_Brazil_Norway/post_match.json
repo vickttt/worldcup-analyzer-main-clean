@@ -1,0 +1,16 @@
+{
+  "source_id": 1568100,
+  "match": {
+    "home_cn": "Brazil",
+    "away_cn": "Norway",
+    "home_en": "Brazil",
+    "away_en": "Norway",
+    "display_name": "Brazil vs Norway"
+  },
+  "created_at": "2026-07-05T17:44:32.951500+08:00",
+  "schedule_source": "API-Football",
+  "schedule_cache_status": "实时数据",
+  "api_football_fixture_message": "API-Football head-to-head 已返回 fixture。",
+  "status": "pending_post_match",
+  "post_match": null
+}
