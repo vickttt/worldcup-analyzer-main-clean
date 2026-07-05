@@ -13,6 +13,7 @@ from modules.market_utils import correct_score_summary, identify_handicap_center
 from modules.betting_opinion import build_betting_opinion
 import modules.probability_base as probability_base_module
 import modules.decision_engine as decision_engine_module
+import modules.weather_client as weather_client_module
 from modules.odds_client import fetch_match_data
 from modules.market_data import build_market_data
 from modules.market_intelligence import build_market_intelligence
@@ -42,7 +43,6 @@ from modules.schedule_client import (
     tournament_stats,
 )
 from modules.team_profile_client import fetch_team_profile
-from modules.weather_client import weather_for_fixture
 from modules.venue_utils import venue_city_for
 from modules.perf_logger import perf_timer
 from modules.portfolio_engine import build_core_decision_layers
@@ -55,6 +55,7 @@ from modules.user_portfolio_compare import (
 probability_base_module = importlib.reload(probability_base_module)
 decision_engine_module = importlib.reload(decision_engine_module)
 report_generator_module = importlib.reload(report_generator_module)
+weather_client_module = importlib.reload(weather_client_module)
 build_decision_engine = decision_engine_module.build_decision_engine
 build_report = report_generator_module.build_report
 correct_score_limited_rows = report_generator_module.correct_score_limited_rows
@@ -77,6 +78,7 @@ system_portfolio_display_rows = report_generator_module.system_portfolio_display
 system_portfolio_top_rows = report_generator_module.system_portfolio_top_rows
 system_ranking_display_rows = report_generator_module.system_ranking_display_rows
 tpb_probability_label = report_generator_module.tpb_probability_label
+weather_for_fixture = weather_client_module.weather_for_fixture
 
 
 MODEL_VERSION_TRACKING = {
