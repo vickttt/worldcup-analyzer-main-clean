@@ -835,36 +835,36 @@ def render_debug_panel(match, odds, api_football_data, odds_date_key):
     handicap = (api_football_data or {}).get("asian_handicap") or {}
     correct_score = (api_football_data or {}).get("correct_score") or {}
     debug_rows = [
-        {"项目": "Match", "状态": match.get("display_name"), "详情": f"{match.get('home_en')} vs {match.get('away_en')}"},
-        {"项目": "Odds Date Key", "状态": odds_date_key or "-", "详情": "API-Football UTC比赛日"},
-        {"项目": "Fixture ID", "状态": fixture.get("id") or "-", "详情": fixture_result.get("message") or "-"},
+        {"项目": "比赛", "状态": match.get("display_name"), "详情": f"{match.get('home_en')} vs {match.get('away_en')}"},
+        {"项目": "赔率日期键", "状态": odds_date_key or "-", "详情": "API-Football UTC比赛日"},
+        {"项目": "比赛ID", "状态": fixture.get("id") or "-", "详情": fixture_result.get("message") or "-"},
         {
-            "项目": "Home Team",
+            "项目": "主队",
             "状态": home_team.get("id") or "-",
             "详情": f"{home_team.get('name') or '-'} / {(home_team.get('_resolver') or {}).get('cache_status', '-')}",
         },
         {
-            "项目": "Away Team",
+            "项目": "客队",
             "状态": away_team.get("id") or "-",
             "详情": f"{away_team.get('name') or '-'} / {(away_team.get('_resolver') or {}).get('cache_status', '-')}",
         },
         {
-            "项目": "Match Winner",
-            "状态": "found" if odds.get("found") else "missing",
+            "项目": "胜平负",
+            "状态": "已找到" if odds.get("found") else "缺失",
             "详情": f"{odds.get('event_title') or odds.get('message')} / cache={odds.get('cache')}",
         },
         {
-            "项目": "Over/Under",
+            "项目": "大小球",
             "状态": len(odds.get("over_under") or []),
             "详情": "API-Football totals rows",
         },
         {
-            "项目": "Asian Handicap",
+            "项目": "亚洲让球",
             "状态": len(handicap.get("rows") or []),
             "详情": f"{handicap.get('source')} / {handicap.get('message')} / cache={handicap.get('cache')}",
         },
         {
-            "项目": "Correct Score",
+            "项目": "波胆",
             "状态": len(correct_score.get("rows") or []),
             "详情": f"{correct_score.get('source')} / {correct_score.get('message')} / cache={correct_score.get('cache')}",
         },
@@ -873,18 +873,18 @@ def render_debug_panel(match, odds, api_football_data, odds_date_key):
         {key: "" if value is None else str(value) for key, value in row.items()}
         for row in debug_rows
     ]
-    if st.checkbox("显示 Debug Panel：页面实际读取的数据对象", value=False, key="debug_panel_data_objects"):
+    if st.checkbox("显示调试面板：页面实际读取的数据对象", value=False, key="debug_panel_data_objects"):
         st.dataframe(pd.DataFrame(debug_rows), use_container_width=True, hide_index=True)
 
 
 def safe_render_market_section(label, renderer, *args, **kwargs):
     try:
         renderer(*args, **kwargs)
-        return {"模块": label, "状态": "Success", "错误": ""}
+        return {"模块": label, "状态": "成功", "错误": ""}
     except Exception as error:
         st.error(f"{label}模块加载失败。")
         st.caption(str(error))
-        return {"模块": label, "状态": "Failed", "错误": str(error)}
+        return {"模块": label, "状态": "失败", "错误": str(error)}
 
 
 def render_market_debug_summary(odds, api_football_data, section_results):
@@ -892,28 +892,28 @@ def render_market_debug_summary(odds, api_football_data, section_results):
     correct_score = (api_football_data or {}).get("correct_score") or {}
     debug_rows = [
         {
-            "项目": "Fixture",
-            "状态": "Success" if ((api_football_data or {}).get("fixture") or {}).get("id") else "Missing",
+            "项目": "比赛ID",
+            "状态": "成功" if ((api_football_data or {}).get("fixture") or {}).get("id") else "缺失",
             "详情": str(((api_football_data or {}).get("fixture") or {}).get("id") or "-"),
         },
         {
-            "项目": "Winner Odds",
-            "状态": "Success" if (odds or {}).get("found") else "Missing",
+            "项目": "胜平负赔率",
+            "状态": "成功" if (odds or {}).get("found") else "缺失",
             "详情": (odds or {}).get("event_title") or (odds or {}).get("message") or "-",
         },
         {
-            "项目": "Asian Handicap",
-            "状态": "Success" if handicap.get("found") else "Missing",
+            "项目": "亚洲让球",
+            "状态": "成功" if handicap.get("found") else "缺失",
             "详情": f"{len(handicap.get('rows') or [])} rows",
         },
         {
-            "项目": "Totals",
-            "状态": "Success" if (odds or {}).get("over_under") else "Missing",
+            "项目": "大小球",
+            "状态": "成功" if (odds or {}).get("over_under") else "缺失",
             "详情": f"{len((odds or {}).get('over_under') or [])} rows",
         },
         {
-            "项目": "Correct Score",
-            "状态": "Success" if correct_score.get("found") else "Missing",
+            "项目": "波胆",
+            "状态": "成功" if correct_score.get("found") else "缺失",
             "详情": f"{len(correct_score.get('rows') or [])} rows",
         },
     ]
@@ -921,7 +921,7 @@ def render_market_debug_summary(odds, api_football_data, section_results):
         {"项目": row["模块"], "状态": row["状态"], "详情": row["错误"] or "-"}
         for row in section_results
     )
-    if st.checkbox("显示 Debug Summary", value=False, key="market_debug_summary"):
+    if st.checkbox("显示调试摘要", value=False, key="market_debug_summary"):
         st.dataframe(pd.DataFrame(debug_rows), use_container_width=True, hide_index=True)
 
 
@@ -1005,14 +1005,14 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
         with col1:
             soft_card("比赛主方向", bet_cn(opinion.get("match_direction") or opinion.get("match_winner", "暂无观点")))
         with col2:
-            soft_card("TPB 覆盖说明", bet_cn(opinion.get("coverage_candidate", "暂无候选")))
+            soft_card("概率基准覆盖说明", bet_cn(opinion.get("coverage_candidate", "暂无候选")))
         with col3:
-            soft_card("Signal Strength", f"{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100", f"数据质量：{data_quality_label}")
+            soft_card("信号强度", f"{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100", f"数据质量：{data_quality_label}")
         tpb = opinion.get("true_probability_base") or {}
         tpb_probs = tpb.get("probabilities") or {}
         if tpb_probs:
             st.caption(
-                "TPB："
+                "概率基准："
                 f"主胜 {percent(tpb_probs.get('home_win', 0))} · "
                 f"平局 {percent(tpb_probs.get('draw', 0))} · "
                 f"客胜 {percent(tpb_probs.get('away_win', 0))}"
@@ -1022,16 +1022,16 @@ def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
             edge_value = confidence_breakdown.get("tpb_edge")
             edge_text = "-" if edge_value is None else f"{edge_value:.1f}"
             st.caption(
-                f"Signal 公式：{confidence_breakdown.get('formula', '-')}；"
-                f"TPB Edge {edge_text}；隐藏扣分：无。"
+                f"信号公式：{confidence_breakdown.get('formula', '-')}；"
+                f"概率优势 {edge_text}；隐藏扣分：无。"
             )
 
         blocks = [
             ("比赛主方向", opinion.get("match_winner_reason", "-")),
             ("盘口观察", f"{bet_cn(opinion.get('handicap_market_direction') or opinion.get('asian_handicap', '暂无观点'))}。{opinion.get('asian_handicap_reason', '')}"),
-            ("TPB 覆盖说明", f"{bet_cn(opinion.get('coverage_candidate', '暂无候选'))}。{opinion.get('coverage_reason', '')}"),
+            ("概率基准覆盖说明", f"{bet_cn(opinion.get('coverage_candidate', '暂无候选'))}。{opinion.get('coverage_reason', '')}"),
             ("进球数观点", f"结构观察 - 总进球盘口中心（仅市场描述）：{opinion.get('total_center', '-')}。市场倾向（非推荐信号）：{opinion.get('goals_market_bias', '')}"),
-            ("比赛投资价值", f"Signal Strength {opinion.get('betting_confidence', '-')} / 100；TPB 概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}。"),
+            ("比赛投资价值", f"信号强度 {opinion.get('betting_confidence', '-')} / 100；概率标签：{tpb_probability_label(odds, match, opinion.get('market_direction_label'))}。"),
         ]
         for title, text in blocks:
             st.markdown(
@@ -1093,7 +1093,7 @@ def tpb_report_strategy(decision):
         "items": [],
         "risk_diagnostic": {
             "risk_level": "诊断",
-            "reason": "RSI 参与 Lite Investment Score 的风险调整；推荐金额仍由投资分档位决定。",
+            "reason": "风险指数参与投资评分的风险调整；推荐金额仍由投资分档位决定。",
         },
         "rank1_eligibility": {
             "rank1_eligible": True,
@@ -1125,9 +1125,9 @@ def render_ranking_score_notes(decision_layers):
     stake = execution_layer.get("stake") or {}
     with st.expander("评分说明", expanded=False):
         rows = [
-            {"项目": "TPB", "说明": "API-Football 胜平负赔率归一化后的唯一概率 baseline anchor。"},
-            {"项目": "投资分", "说明": f"{score_layer.get('investment_score', 0)} / 100；Lite v1 由 Signal × Risk Adjustment 派生。"},
-            {"项目": "Signal Strength", "说明": f"{score_layer.get('signal_strength', score_layer.get('betting_confidence', 0))} / 100；由 TPB 最高概率与第二概率差值派生。"},
+            {"项目": "概率基准", "说明": "API-Football 胜平负赔率归一化后的唯一概率锚点。"},
+            {"项目": "投资分", "说明": f"{score_layer.get('investment_score', 0)} / 100；由信号强度 × 风险调整派生。"},
+            {"项目": "信号强度", "说明": f"{score_layer.get('signal_strength', score_layer.get('betting_confidence', 0))} / 100；由概率基准最高概率与第二概率差值派生。"},
             {"项目": "推荐金额", "说明": f"{stake.get('amount', 0)} 元；只由投资分档位决定。"},
             {"项目": "覆盖定义", "说明": explanation_layer.get("coverage_explanation", "-")},
             {"项目": "风险解释", "说明": explanation_layer.get("risk_explanation", "-")},
@@ -1161,8 +1161,8 @@ def render_match_decision_cards(decision_layers):
 
 def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None, data_context=None):
     with perf_timer("detail", "render_tpb_decision", {"mode": "multi_layer_baseline"}):
-        st.markdown("**TPB 基准层**")
-        st.caption("本区展示 TPB 锚点、投资分和推荐金额；市场结构分析在下方作为系统结构层展示。")
+        st.markdown("**概率基准层**")
+        st.caption("本区展示概率锚点、投资分和推荐金额；市场结构分析在下方作为系统结构层展示。")
         decision_layers = build_core_decision_layers([], match, distribution, data_context)
         render_match_decision_cards(decision_layers)
         score_layer = decision_layers.get("score_layer") or {}
@@ -1171,11 +1171,11 @@ def render_portfolio_ranking(strategies, match, distribution, my_portfolio=None,
         tpb = score_layer.get("tpb") or {}
         probs = tpb.get("probabilities") or {}
         rows = [{
-            "决策层": "TPB 基准",
+            "决策层": "概率基准",
             "主胜": percent(probs.get("home_win", 0)) if probs else "-",
             "平局": percent(probs.get("draw", 0)) if probs else "-",
             "客胜": percent(probs.get("away_win", 0)) if probs else "-",
-            "Signal Strength": f"{score_layer.get('signal_strength', score_layer.get('betting_confidence', 0))} / 100",
+            "信号强度": f"{score_layer.get('signal_strength', score_layer.get('betting_confidence', 0))} / 100",
             "投资分": f"{score_layer.get('investment_score', 0)} / 100",
             "推荐金额": f"{stake.get('amount', 0)} 元",
             "执行判断": execution_layer.get("risk_decision", "-"),
@@ -1238,12 +1238,12 @@ def _investment_reason(score_layer, investment_breakdown, rss, display_stake_amo
     if display_stake_amount <= 0:
         return (
             f"本场投资分 {investment_score:g}/100，信号端为 {signal:g}/100，"
-            f"但 RSI 为{rss.get('RSI', '-')}、风险调整为 {fmt(risk_adjustment)}，"
+            f"但风险指数为{rss.get('RSI', '-')}、风险调整为 {fmt(risk_adjustment)}，"
             "说明主方向存在但风险折扣较重；因此固定区间映射后的推荐金额为 0 元。"
         )
     return (
         f"本场投资分 {investment_score:g}/100 已进入下注映射区间，"
-        f"推荐金额 {display_stake_amount:g} 元来自 Investment Score 的固定区间映射。"
+        f"推荐金额 {display_stake_amount:g} 元来自投资评分的固定区间映射。"
     )
 
 
@@ -1274,7 +1274,7 @@ def _rsi_match_explanation(rss):
         meaning = "表示结构风险相对可控，主方向信号受到的风险折扣较小。"
     else:
         meaning = "表示当前风险层数据不足，需要结合盘口和情景表阅读。"
-    return f"RSI 为{rsi}；{components}。{meaning}RSI 不单独给下注信号，而是先影响 Investment Score，再间接影响推荐金额。"
+    return f"风险指数为{rsi}；{components}。{meaning}风险指数不单独给下注信号，而是先影响投资评分，再间接影响推荐金额。"
 
 
 def _investment_factor_explanation(investment_breakdown, score_layer, rss):
@@ -1282,9 +1282,9 @@ def _investment_factor_explanation(investment_breakdown, score_layer, rss):
     investment_score = _metric_number(score_layer.get("investment_score"))
     signal_level = _level_from_score(signal, 70, 40)
     return (
-        f"TPB Edge + Scenario Alignment 为 {signal:g}/100（{signal_level}）："
+        f"概率优势 + 情景匹配度为 {signal:g}/100（{signal_level}）："
         "它反映主方向概率边际与情景权重是否同向；"
-        f"Investment Score 为 {investment_score:g}/100，是信号端再经过市场冲突和 RSI 风险折扣后的结果。"
+        f"投资评分为 {investment_score:g}/100，是信号端再经过市场冲突和风险指数折扣后的结果。"
     )
 
 
@@ -1320,16 +1320,16 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
     )
 
     with st.container(border=True):
-        st.markdown("**最终决策区（FINAL DECISION BLOCK）**")
+        st.markdown("**最终决策区**")
 
         st.markdown("**1. 投注组合与暴露总览（优先阅读）**")
-        st.caption(f"组合层只保留 coverage structure，不参与 Ranking Score；CQS：{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', '-'))} / 100。")
+        st.caption(f"组合层只保留覆盖结构，不参与排序分；覆盖质量分：{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', '-'))} / 100。")
         st.dataframe(
             pd.DataFrame(exposure_control["portfolio_top_rows"]),
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**情景暴露图（Scenario Exposure Map）**")
+        st.markdown("**情景暴露图**")
         st.caption("每个情景最多保留 2 个投注暴露，用来避免同一风险路径被重复放大。")
         st.dataframe(
             pd.DataFrame(exposure_control["exposure_map_rows"]),
@@ -1337,13 +1337,13 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
             hide_index=True,
         )
         st.markdown("**结构排序 Top 3（非直接下注指令）**")
-        st.caption("Ranking 是结构排序，不是单独的下注指令；最终执行仍取决于推荐金额与人工判断。")
+        st.caption("排序信号是结构排序，不是单独的下注指令；最终执行仍取决于推荐金额与人工判断。")
         st.dataframe(
             pd.DataFrame(exposure_control["ranking_rows"]),
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**降级观察项（Removed Bets List）**")
+        st.markdown("**已剔除投注（降级观察项）**")
         st.caption("超过情景暴露上限的低优先级项会降级为观察项，不进入最终组合。")
         st.dataframe(
             pd.DataFrame(exposure_control["removed_bets_rows"]),
@@ -1351,10 +1351,10 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
             hide_index=True,
         )
 
-        st.markdown("**2. RSI 风险层（优先阅读）**")
+        st.markdown("**2. 风险指数层（优先阅读）**")
         st.caption(_rsi_match_explanation(rss))
 
-        with st.expander("系统语义说明（System Semantic Alignment Layer）", expanded=False):
+        with st.expander("系统语义对齐层", expanded=False):
             st.caption("这些说明只解释各层职责，不参与任何计算。")
             title_map = {
                 "Scenario": "情景权重层",
@@ -1372,7 +1372,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
                     f"- **{title}**：{section.get('简短说明', '-')} {section.get('详细说明', '-')}"
                 )
 
-        st.markdown("**3. TPB 概率摘要**")
+        st.markdown("**3. 概率摘要**")
         tpb_cols = st.columns(4)
         tpb_cols[0].metric("主方向", metrics.get("favorite_label") or "-")
         tpb_cols[1].metric("主方向概率", f"{metrics.get('favorite_probability', 0)}%")
@@ -1381,12 +1381,12 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         tpb_cols[3].metric("推荐金额", f"{display_stake_amount:g} 元")
         if probabilities:
             st.caption(
-                "TPB 仅保留三项概率："
+                "概率基准仅保留三项概率："
                 f"主胜 {percent(probabilities.get('home_win', 0))} / "
                 f"平局 {percent(probabilities.get('draw', 0))} / "
                 f"客胜 {percent(probabilities.get('away_win', 0))}"
             )
-        st.caption("信号强度 = (TPB 三项概率最高值 - 第二高值) × 100；0-20 为弱，20-40 为中，40 以上为强。")
+        st.caption("信号强度 = （概率基准三项概率最高值 - 第二高值）× 100；0-20 为弱，20-40 为中，40 以上为强。")
         st.caption(_investment_reason(score_layer, investment_breakdown, rss, display_stake_amount))
 
         st.markdown("**4. 市场结构（三指标）**")
@@ -1399,24 +1399,24 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         }
         for index, row in enumerate(market_rows):
             market_cols[index].metric(market_label_map.get(row["指标"], row["指标"]), row["数值"])
-        st.caption("定义：方向强度 = TPB 集中度 + 盘口偏差；市场一致性 = 多市场一致性指数；波动压力 = 波胆 + 平局 + 赔率分散。")
+        st.caption("定义：方向强度 = 概率基准集中度 + 盘口偏差；市场一致性 = 多市场一致性指数；波动压力 = 波胆 + 平局 + 赔率分散。")
         st.caption(_market_structure_explanation(market_rows, metrics.get("favorite_label") or "-"))
 
         scenario_table_rows = scenario_projection_table_rows(scenario)
         if scenario_table_rows:
             st.markdown("**5. 情景概率投影（简化版）**")
-            st.caption("情景层是受约束结构权重层，用于组合构建、结构排序调整和风险估计；不覆盖 TPB，不计算 EV/ROI。")
+            st.caption("情景层是受约束结构权重层，用于组合构建、结构排序调整和风险估计；不覆盖概率基准，不计算 EV/ROI。")
             st.table(pd.DataFrame(scenario_table_rows))
             if _scenario_weights_unadjusted(scenario_table_rows):
-                st.caption("观察意见：当前情景概率与权重完全相同，说明权重层尚未根据 RSI、市场分歧或结果分布拉开差异；本次先不修改计算，只提示该层未来可做受约束调整。")
+                st.caption("观察意见：当前情景概率与权重完全相同，说明权重层尚未根据风险指数、市场分歧或结果分布拉开差异；本次先不修改计算，只提示该层未来可做受约束调整。")
 
-        st.markdown("**6. 投资分解释（Investment Score）**")
+        st.markdown("**6. 投资评分解释**")
         score_cols = st.columns(4)
-        score_cols[0].metric("TPB 边际 + 情景一致性", f"{investment_breakdown.get('signal', '-')} / 100")
-        score_cols[1].metric("RSI", rss["RSI"])
+        score_cols[0].metric("概率优势 + 情景匹配度", f"{investment_breakdown.get('signal', '-')} / 100")
+        score_cols[1].metric("风险指数", rss["RSI"])
         score_cols[2].metric("风险调整", fmt(investment_breakdown.get("risk_adjustment")))
         score_cols[3].metric("投资分", f"{score_layer.get('investment_score', 0)} / 100")
-        st.caption("本栏定义：投资分由主方向信号、情景一致性、市场冲突和 RSI 风险调整共同解释；推荐金额只由投资分固定区间映射。")
+        st.caption("本栏定义：投资分由主方向信号、情景一致性、市场冲突和风险指数共同解释；推荐金额只由投资分固定区间映射。")
         st.caption(_investment_factor_explanation(investment_breakdown, score_layer, rss))
         st.caption(_rsi_match_explanation(rss))
         st.caption("低投资分进入低档位时，推荐金额映射为 0 元，表示当前不进入执行型下注。")
@@ -1437,10 +1437,15 @@ def render_market_intelligence_layer(market_intelligence):
         st.markdown("**市场结构分析**")
         st.caption("Lite v1 只保留方向强度、市场一致性、波动压力；不使用用户输入，不计算 EV/ROI。")
         rows = market_structure_numeric_rows(market_intelligence)
+        market_label_map = {
+            "Direction Strength": "方向强度",
+            "Market Agreement": "市场一致性",
+            "Volatility Pressure": "波动压力",
+        }
         cols = st.columns(3)
         for index, row in enumerate(rows):
-            cols[index].metric(row["指标"], row["数值"])
-        st.caption("Direction Strength = TPB集中度 + 盘口偏差；Market Agreement = 多市场一致性指数；Volatility Pressure = 波胆 + 平局 + odds spread。")
+            cols[index].metric(market_label_map.get(row["指标"], row["指标"]), row["数值"])
+        st.caption("方向强度 = 概率基准集中度 + 盘口偏差；市场一致性 = 多市场一致性指数；波动压力 = 波胆 + 平局 + 赔率分散。")
 
 
 def render_system_portfolio_layer(market_intelligence, scenario_engine=None, match=None):
@@ -1456,35 +1461,35 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
         match=match,
     )
     with st.container(border=True):
-        st.markdown("**系统推荐投注组合（System Portfolio）**")
-        st.caption("系统组合由 TPB 锚点 + 市场结构 + 受约束情景权重综合生成；不使用用户输入，不计算 EV/ROI，不做盈利优化。")
+        st.markdown("**系统推荐投注组合**")
+        st.caption("系统组合由概率锚点 + 市场结构 + 受约束情景权重综合生成；不使用用户输入，不计算 EV/ROI，不做盈利优化。")
         st.dataframe(
             pd.DataFrame(exposure_control["portfolio_rows"]),
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**Scenario Exposure Map（情景暴露控制）**")
-        st.caption("每个 Scenario 最多保留 2 个投注暴露；超出项按优先级降级为观察项。")
+        st.markdown("**情景暴露图（暴露控制）**")
+        st.caption("每个情景最多保留 2 个投注暴露；超出项按优先级降级为观察项。")
         st.dataframe(
             pd.DataFrame(exposure_control["exposure_map_rows"]),
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**波胆高波动结构信号（Correct Score）**")
+        st.markdown("**波胆高波动结构信号**")
         st.caption("波胆是高波动结构信号，不是执行信号；最多展示 5 个：主波胆 2 个、结构波胆 2 个、高波动波胆 1 个。")
         st.dataframe(
             pd.DataFrame(exposure_control["correct_score_rows"]),
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**系统排名组合（System Ranking Bets，仅系统）**")
-        st.caption("系统排名只使用 TPB 锚点、市场结构和受约束情景权重；它是结构排序，不是最终执行指令，最终执行仍取决于 stake decision layer。")
+        st.markdown("**系统排序信号（仅系统）**")
+        st.caption("系统排序只使用概率锚点、市场结构和受约束情景权重；它是结构排序，不是最终执行指令，最终执行仍取决于推荐金额判断层。")
         st.dataframe(
             pd.DataFrame(exposure_control["ranking_rows"]),
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**Removed Bets List（降级观察项）**")
+        st.markdown("**已剔除投注（降级观察项）**")
         st.dataframe(
             pd.DataFrame(exposure_control["removed_bets_rows"]),
             use_container_width=True,
@@ -1495,11 +1500,11 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
 def render_scenario_coverage_analysis(scenario_engine):
     scenario = scenario_engine or {}
     with st.container(border=True):
-        st.markdown("**Scenario Projection（Lite v1）**")
+        st.markdown("**情景分布（精简版 v1）**")
         st.caption(
-            "Scenario Projection Lite v1 是 TPB + Market signal projection：不覆盖 TPB，不改变比赛投资分或推荐金额，不使用用户输入，不计算 EV/ROI。"
+            "情景分布精简版 v1 是概率基准 + 市场信号投影：不覆盖概率基准，不改变比赛投资分或推荐金额，不使用用户输入，不计算 EV/ROI。"
         )
-        st.metric("Coverage Quality Score", f"{scenario.get('coverage_quality_score', scenario.get('coverage_efficiency_score', 0))} / 100")
+        st.metric("覆盖质量分", f"{scenario.get('coverage_quality_score', scenario.get('coverage_efficiency_score', 0))} / 100")
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
@@ -1540,9 +1545,9 @@ def render_scenario_optimization_view_v2(scenario_engine, match=None, market_int
     if not optimization:
         return
     with st.container(border=True):
-        st.markdown("**Portfolio Coverage View（Lite v1）**")
+        st.markdown("**投注组合覆盖视图（精简版 v1）**")
         st.caption(
-            "Portfolio 只展示 coverage structure；Ranking Score 独立使用 SS + Scenario Alignment - RSI。"
+            "投注组合只展示覆盖结构；排序分独立使用信号强度 + 情景匹配度 - 风险指数。"
         )
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)
@@ -1592,7 +1597,7 @@ def render_scenario_optimization_view_v2(scenario_engine, match=None, market_int
         ]
         st.markdown("**风险分布面**")
         st.dataframe(pd.DataFrame(risk_rows), use_container_width=True, hide_index=True)
-        st.metric("Coverage Quality Score", f"{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', 0))} / 100")
+        st.metric("覆盖质量分", f"{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', 0))} / 100")
 
 
 def render_risk_surface_quantification_v3(scenario_engine):
@@ -1601,19 +1606,19 @@ def render_risk_surface_quantification_v3(scenario_engine):
         return
     rss = risk_score_v3_summary(scenario)
     with st.container(border=True):
-        st.markdown("**RSI Risk（Lite v1）**")
+        st.markdown("**风险指数（精简版 v1）**")
         st.caption(
             "结构风险量化层：刻画不确定性结构，不预测赛果，不计算 EV/ROI，不做 optimizer，"
-            "不改变 TPB、比赛投资分、推荐金额或 ranking 计算。"
+            "不改变概率基准、比赛投资分、推荐金额或排序计算。"
         )
         cols = st.columns(2)
-        cols[0].metric("RSS 结构风险分", rss["RSS"], rss["等级"])
+        cols[0].metric("结构风险分", rss["RSS"], rss["等级"])
         cols[1].caption(rss["组件"])
 
-        st.markdown("**Structural Risk Map**")
+        st.markdown("**结构风险图**")
         st.dataframe(pd.DataFrame(risk_surface_v3_map_rows(scenario)), use_container_width=True, hide_index=True)
 
-        st.markdown("**Risk Decomposition**")
+        st.markdown("**风险拆解**")
         st.dataframe(pd.DataFrame(risk_decomposition_v3_rows(scenario)), use_container_width=True, hide_index=True)
 
 
@@ -1650,7 +1655,7 @@ def render_user_portfolio_comparison(input_key, comparison):
         st.markdown("**我的实盘组合（可选）**")
         st.caption(
             "左侧记录我的实际盘口和赔率，用于 API 价格对比；右侧记录我的实际投注金额。"
-            "两部分都只用于复盘，不影响 TPB、比赛投资分、推荐金额、排序或系统主结论。"
+            "两部分都只用于复盘，不影响概率基准、比赛投资分、推荐金额、排序或系统主结论。"
         )
         odds_col, bets_col = st.columns(2)
         with odds_col:
@@ -1715,7 +1720,7 @@ def render_user_portfolio_comparison(input_key, comparison):
         st.dataframe(pd.DataFrame(detail_rows), use_container_width=True, hide_index=True)
 
         st.markdown("**我的执行价格分析（Value Check）**")
-        st.caption("仅用于复盘，不影响 TPB 决策；价格差异不参与比赛投资分、推荐金额或系统主结论。")
+        st.caption("仅用于复盘，不影响概率基准决策；价格差异不参与比赛投资分、推荐金额或系统主结论。")
         price_rows = [
             {
                 "市场": item.get("market"),
@@ -1819,12 +1824,12 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
             scenario_engine,
             portfolio_summary,
         )
-        st.caption("结果分布为观察层，不参与 TPB 投资分、推荐金额或排序。")
+        st.caption("结果分布为观察层，不参与概率基准、投资分、推荐金额或排序。")
         render_result_distribution(distribution)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
         render_core_risk_summary(match, decision, distribution)
 
-        st.caption("我的实盘组合仅作为 display-only 对比层，不参与 TPB、比赛投资分、推荐金额或系统主方向。")
+        st.caption("我的实盘组合仅作为展示对比层，不参与概率基准、比赛投资分、推荐金额或系统主方向。")
 
     return {
         "strategies": [],
@@ -2121,9 +2126,9 @@ def render_handicap(match, market_data):
             c3.metric("最佳赔率", f"{summary.get('best_odds'):.2f}" if summary.get("best_odds") else "-")
             st.caption("盘口中心公司（仅市场描述）：" + (", ".join(summary.get("bookmakers", [])[:6]) or "-"))
             if summary.get("coverage_label") not in (None, "No coverage candidate"):
-                st.info(f"TPB 覆盖说明（盘口参考）：{summary.get('coverage_label')}。这不是主方向，只用于防守平局、低节奏或热门方不打穿。")
+                st.info(f"概率基准覆盖说明（盘口参考）：{summary.get('coverage_label')}。这不是主方向，只用于防守平局、低节奏或热门方不打穿。")
             if summary.get("secondary_handicap_label"):
-                st.caption(f"盘口参考：{summary.get('secondary_handicap_label')}（仅展示，不参与 TPB 决策）。")
+                st.caption(f"盘口参考：{summary.get('secondary_handicap_label')}（仅展示，不参与概率基准决策）。")
             trace = summary.get("coverage_trace") or {}
             if trace:
                 st.caption(
@@ -2224,10 +2229,10 @@ def render_polymarket_comparison(market_data):
     reference = (market_data or {}).get("polymarket_reference") or {}
     metrics = (market_data or {}).get("comparison_metrics") or {}
     with st.container(border=True):
-        st.markdown('<div class="section-title">Polymarket 只读对比层</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-title">市场参考（Polymarket）只读对比层</div>', unsafe_allow_html=True)
         if not reference.get("found"):
-            st.info(reference.get("message") or "未找到对应 Polymarket 活跃市场。")
-            st.caption("Polymarket 仅作为情绪/概率参考，不替代 API-Football 赔率。")
+            st.info(reference.get("message") or "未找到对应市场参考（Polymarket）活跃市场。")
+            st.caption("市场参考（Polymarket）仅作为情绪/概率参考，不替代 API-Football 赔率。")
             return
 
         col1, col2, col3, col4 = st.columns(4)
@@ -2241,14 +2246,14 @@ def render_polymarket_comparison(market_data):
             rows.append({
                 "方向": row.get("label"),
                 "API-Football": percent(row.get("api_football_probability") or 0),
-                "Polymarket": percent(row.get("polymarket_probability") or 0),
+                "市场参考（Polymarket）": percent(row.get("polymarket_probability") or 0),
                 "偏差": percent(row.get("deviation") or 0),
             })
         if rows:
             st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
         if reference.get("event_title"):
             st.caption(f"事件：{reference.get('event_title')}")
-        st.caption("Polymarket 是只读对比层；推荐、赔率和盘口结构仍以 API-Football 为主。")
+        st.caption("市场参考（Polymarket）是只读对比层；推荐、赔率和盘口结构仍以 API-Football 为主。")
 
 
 def render_predicted_lineup_for_team(team_name):
@@ -2854,7 +2859,7 @@ def render_analysis_page(match_text):
                     safe_render_market_section("大小球盘口", render_totals, market_data),
                     safe_render_market_section("亚洲让球盘", render_handicap, match, market_data),
                     safe_render_market_section("真实波胆盘口", render_correct_score_market, market_data),
-                    safe_render_market_section("Polymarket概率对比", render_polymarket_comparison, market_data),
+                    safe_render_market_section("市场参考（Polymarket）概率对比", render_polymarket_comparison, market_data),
                 ]
                 render_market_debug_summary(odds, api_football_data, market_results)
 
@@ -2867,7 +2872,7 @@ def render_analysis_page(match_text):
                 render_debug_panel(match, odds, api_football_data, odds_date_key)
                 render_detail_data_source(odds, selected_fixture)
                 render_technical_notes(odds, api_football_data)
-                st.caption("旧版收益研究与旧组合研究不进入当前决策链；当前系统以 TPB 锚点、市场结构和受约束情景权重为准。")
+                st.caption("旧版收益研究与旧组合研究不进入当前决策链；当前系统以概率锚点、市场结构和受约束情景权重为准。")
 
         st.download_button(
             "下载 Markdown 报告",
