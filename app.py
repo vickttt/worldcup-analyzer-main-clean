@@ -501,6 +501,16 @@ def card_css():
             margin-top: 3px;
             overflow-wrap: anywhere;
         }
+        .weather-impact-note {
+            color: #64748b;
+            font-size: .86rem;
+            line-height: 1.55;
+            margin: -2px 2px 18px 2px;
+            padding: 8px 12px;
+            border-left: 3px solid #cbd5e1;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
         .date-nav-wrap {
             display: flex;
             gap: 8px;
@@ -928,6 +938,52 @@ def render_market_debug_summary(odds, api_football_data, section_results):
         st.dataframe(pd.DataFrame(debug_rows), use_container_width=True, hide_index=True)
 
 
+def weather_structural_impact_text(weather):
+    if not weather or not weather.get("available"):
+        return None
+
+    def numeric(value):
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
+    temperature = numeric(weather.get("temperature"))
+    humidity = numeric(weather.get("humidity"))
+    wind_speed = numeric(weather.get("wind_speed"))
+    rain_probability = numeric(weather.get("rain_probability"))
+    summary = str(weather.get("summary") or "")
+
+    triggers = []
+    if temperature is not None and temperature > 30:
+        triggers.append("温度较高")
+    if humidity is not None and humidity > 70:
+        triggers.append("湿度较高")
+    if wind_speed is not None and wind_speed > 10:
+        triggers.append("风速较强")
+    rain_or_extreme = (
+        (rain_probability is not None and rain_probability >= 50)
+        or any(keyword in summary for keyword in ("雨", "雷暴", "极端"))
+    )
+    if rain_or_extreme:
+        triggers.append("降雨或异常天气概率偏高")
+
+    if not triggers:
+        return "天气影响：天气条件正常（无显著体能或节奏扰动因素）。比赛影响：可忽略天气对模型的影响。"
+
+    if rain_or_extreme or (wind_speed is not None and wind_speed > 10):
+        goal_tendency = "进球数波动可能上升，尾部情景不确定性增加"
+        scenario_hint = "S5 / S6"
+    else:
+        goal_tendency = "比赛节奏可能下降，低节奏情景权重的解释意义上升"
+        scenario_hint = "S3 / S5"
+    trigger_text = "、".join(triggers)
+    return (
+        f"天气影响：{trigger_text}。可能影响：增加体能消耗或传控误差，降低比赛节奏。"
+        f"比赛倾向：{goal_tendency}。情景影响：仅作为环境解释，可能轻微增强 {scenario_hint} 的阅读权重。"
+    )
+
+
 def render_match_overview(match, api_football_data, selected_fixture=None, allow_live_weather=True):
     if selected_fixture:
         home = selected_fixture.get("home_team") or {"name": match["home_cn"]}
@@ -998,6 +1054,12 @@ def render_match_overview(match, api_football_data, selected_fixture=None, allow
         """,
         unsafe_allow_html=True,
     )
+    weather_impact = weather_structural_impact_text(weather)
+    if weather_impact:
+        st.markdown(
+            f'<div class="weather-impact-note">{escape(weather_impact)}</div>',
+            unsafe_allow_html=True,
+        )
 
 
 def render_betting_opinion(opinion, odds=None, polymarket=None, match=None):
@@ -1333,7 +1395,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
             hide_index=True,
         )
         st.markdown("**情景暴露图**")
-        st.caption("每个情景最多保留 2 个投注暴露，用来避免同一风险路径被重复放大。")
+        st.caption("仅统计各情景出现次数，不改变投注组合或排序 Top 3。")
         st.dataframe(
             pd.DataFrame(exposure_control["exposure_map_rows"]),
             use_container_width=True,
@@ -1343,13 +1405,6 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         st.caption("排序信号是结构排序，不是单独的下注指令；最终执行仍取决于推荐金额与人工判断。")
         st.dataframe(
             pd.DataFrame(exposure_control["ranking_rows"]),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.markdown("**已剔除投注（降级观察项）**")
-        st.caption("超过情景暴露上限的低优先级项会降级为观察项，不进入最终组合。")
-        st.dataframe(
-            pd.DataFrame(exposure_control["removed_bets_rows"]),
             use_container_width=True,
             hide_index=True,
         )
@@ -1471,8 +1526,8 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**情景暴露图（暴露控制）**")
-        st.caption("每个情景最多保留 2 个投注暴露；超出项按优先级降级为观察项。")
+        st.markdown("**情景暴露图（仅统计）**")
+        st.caption("该表只统计各情景出现次数，不过滤投注组合，也不改变排序。")
         st.dataframe(
             pd.DataFrame(exposure_control["exposure_map_rows"]),
             use_container_width=True,
@@ -1489,12 +1544,6 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
         st.caption("系统排序只使用概率锚点、市场结构和受约束情景权重；它是结构排序，不是最终执行指令，最终执行仍取决于推荐金额判断层。")
         st.dataframe(
             pd.DataFrame(exposure_control["ranking_rows"]),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.markdown("**已剔除投注（降级观察项）**")
-        st.dataframe(
-            pd.DataFrame(exposure_control["removed_bets_rows"]),
             use_container_width=True,
             hide_index=True,
         )

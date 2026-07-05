@@ -701,9 +701,6 @@ def correct_score_limited_rows(match=None, market_intelligence=None, scenario_en
 
 
 SCENARIO_CODES = ["S1", "S2", "S3", "S4", "S5", "S6"]
-SCENARIO_EXPOSURE_LIMIT = 2
-
-
 def _row_text(row):
     return " ".join(str(value) for value in (row or {}).values() if value is not None)
 
@@ -735,79 +732,31 @@ def _scenario_for_exposure(row):
     return _scenario_from_text(_row_text(row))
 
 
-def _exposure_priority(source, row):
-    text = _row_text(row)
-    if source == "Portfolio" and "主覆盖" in text:
-        return 1
-    if source == "Portfolio" and "防守" in text:
-        return 2
-    if source == "Ranking":
-        return 3
-    return 4
-
-
-def _bet_label_for_exposure(row):
-    for key in ["中文投注描述", "具体投注组合", "波胆", "组合类型"]:
-        value = (row or {}).get(key)
-        if value and str(value) != "-":
-            return str(value)
-    return "-"
-
-
-def _with_exposure_columns(row, scenario, status="保留"):
+def _with_exposure_columns(row, scenario):
     output = dict(row or {})
     output["Scenario"] = scenario
-    output["暴露状态"] = status
     return output
 
 
-def _apply_scenario_exposure_control(sections):
+def _build_scenario_exposure_summary(sections):
     counts = {code: 0 for code in SCENARIO_CODES}
     active = {name: [] for name, _rows in sections}
-    removed = []
-    candidates = []
-    serial = 0
     for source, rows in sections:
         for row in rows or []:
             scenario = _scenario_for_exposure(row)
-            candidates.append({
-                "source": source,
-                "row": row,
-                "scenario": scenario,
-                "priority": _exposure_priority(source, row),
-                "serial": serial,
-            })
-            serial += 1
-
-    for item in sorted(candidates, key=lambda value: (value["priority"], value["serial"])):
-        source = item["source"]
-        row = item["row"]
-        scenario = item["scenario"]
-        if scenario not in counts:
-            active[source].append(_with_exposure_columns(row, scenario, "保留"))
-            continue
-        if counts[scenario] < SCENARIO_EXPOSURE_LIMIT:
-            counts[scenario] += 1
-            active[source].append(_with_exposure_columns(row, scenario, "保留"))
-            continue
-        removed.append({
-            "来源": source,
-            "Scenario": scenario,
-            "投注": _bet_label_for_exposure(row),
-            "处理": "降级为观察项",
-            "原因": f"{scenario} 已达到 {SCENARIO_EXPOSURE_LIMIT} 个投注暴露上限；低优先级项不进入最终组合。",
-        })
+            active[source].append(_with_exposure_columns(row, scenario))
+            if scenario in counts:
+                counts[scenario] += 1
 
     exposure_map = [
         {
             "Scenario": code,
             "暴露数量": counts[code],
-            "暴露上限": SCENARIO_EXPOSURE_LIMIT,
-            "状态": "正常" if counts[code] <= SCENARIO_EXPOSURE_LIMIT else "超限",
+            "说明": "仅统计，不改变排序",
         }
         for code in SCENARIO_CODES
     ]
-    return active, exposure_map, removed
+    return active, exposure_map
 
 
 def scenario_exposure_control_display(
@@ -835,7 +784,7 @@ def scenario_exposure_control_display(
         market_intelligence=market_intelligence,
     )
     correct_score_rows = correct_score_limited_rows(match, market_intelligence, scenario)
-    active, exposure_map, removed = _apply_scenario_exposure_control([
+    active, exposure_map = _build_scenario_exposure_summary([
         ("Portfolio", portfolio_rows),
         ("Ranking", ranking_rows),
         ("Correct Score", correct_score_rows),
@@ -848,7 +797,6 @@ def scenario_exposure_control_display(
             "对应盘口": row.get("对应盘口", "-"),
             "理由": row.get("理由", "-"),
             "Scenario": row.get("Scenario", "-"),
-            "暴露状态": row.get("暴露状态", "-"),
         }
         for row in active_portfolio
         if row.get("中文投注描述") != "暂无"
@@ -859,13 +807,7 @@ def scenario_exposure_control_display(
         "ranking_rows": active.get("Ranking", [])[:3],
         "correct_score_rows": active.get("Correct Score", []),
         "exposure_map_rows": exposure_map,
-        "removed_bets_rows": removed or [{
-            "来源": "-",
-            "Scenario": "-",
-            "投注": "无",
-            "处理": "无需降级",
-            "原因": "所有 scenario 暴露均在上限内。",
-        }],
+        "removed_bets_rows": [],
     }
 
 
@@ -1562,10 +1504,12 @@ def format_final_decision_block_lines(
         )
     lines.extend([
         "",
-        "### Scenario Exposure Map（暴露控制）",
+        "### 情景暴露统计（仅统计）",
+        "",
+        "该表只统计各情景出现次数，不过滤投注组合，也不改变排序 Top 3。",
         "",
     ])
-    lines.extend(markdown_table(["Scenario", "暴露数量", "暴露上限", "状态"], exposure_control["exposure_map_rows"]))
+    lines.extend(markdown_table(["Scenario", "暴露数量", "说明"], exposure_control["exposure_map_rows"]))
     lines.extend([
         "",
         "### 6. Ranking Top 3（结构排序，非执行指令）",
@@ -1581,15 +1525,6 @@ def format_final_decision_block_lines(
             lines.append(
                 f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜波胆：{row.get('波胆', '-')}｜Scenario：{row.get('Scenario', '-')}｜原因：{row['结构理由']}｜风险说明：{row.get('风险标注', '-')}"
             )
-    lines.extend([
-        "",
-        "### Removed Bets List（降级观察项）",
-        "",
-    ])
-    for row in exposure_control["removed_bets_rows"]:
-        lines.append(
-            f"- {row['来源']}｜{row['Scenario']}｜{row['投注']}｜{row['处理']}｜{row['原因']}"
-        )
     lines.extend([
         "",
         "### 7. RSI Risk",
@@ -2024,21 +1959,12 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         )
     lines.extend([
         "",
-        "### Scenario Exposure Map（情景暴露控制）",
+        "### 情景暴露统计（仅统计）",
         "",
-        "规则：每个 Scenario 最多保留 2 个投注暴露（1 个主 + 1 个辅助）；超出项按优先级降级为观察项。",
-        "",
-    ])
-    lines.extend(markdown_table(["Scenario", "暴露数量", "暴露上限", "状态"], exposure_control["exposure_map_rows"]))
-    lines.extend([
-        "",
-        "### Removed Bets List（降级观察项）",
+        "该表只统计各情景出现次数，不过滤投注组合，也不改变排序。",
         "",
     ])
-    for row in exposure_control["removed_bets_rows"]:
-        lines.append(
-            f"- {row['来源']}｜{row['Scenario']}｜{row['投注']}｜{row['处理']}｜{row['原因']}"
-        )
+    lines.extend(markdown_table(["Scenario", "暴露数量", "说明"], exposure_control["exposure_map_rows"]))
     lines.extend([
         "",
         "### High Variance Structural Signal（波胆）",
