@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+import re
 from zoneinfo import ZoneInfo
 
 from modules.market_utils import identify_handicap_center, identify_total_center, parse_handicap_value, safe_float
@@ -698,6 +699,175 @@ def correct_score_limited_rows(match=None, market_intelligence=None, scenario_en
     return grouped
 
 
+SCENARIO_CODES = ["S1", "S2", "S3", "S4", "S5", "S6"]
+SCENARIO_EXPOSURE_LIMIT = 2
+
+
+def _row_text(row):
+    return " ".join(str(value) for value in (row or {}).values() if value is not None)
+
+
+def _scenario_from_text(text):
+    text = str(text or "")
+    explicit = re.findall(r"\bS[1-6]\b", text)
+    if explicit:
+        return explicit[0]
+    if "平局" in text or "Draw" in text or "0:0" in text or "1:1" in text:
+        return "S3"
+    if "冷门" in text or "Upset" in text or "0:1" in text:
+        return "S4"
+    if "小球" in text or "Under" in text or "低比分" in text:
+        return "S5"
+    if "大球" in text or "Over" in text or "高波动" in text or "2:2" in text or "3:2" in text or "3:1" in text:
+        return "S6"
+    if "让球" in text or "-0.5" in text or "小胜" in text:
+        return "S2"
+    if "独赢" in text or "主覆盖" in text or "胜平负" in text:
+        return "S1"
+    return "-"
+
+
+def _scenario_for_exposure(row):
+    dependency = (row or {}).get("情景依赖")
+    if dependency:
+        return _scenario_from_text(dependency)
+    return _scenario_from_text(_row_text(row))
+
+
+def _exposure_priority(source, row):
+    text = _row_text(row)
+    if source == "Portfolio" and "主覆盖" in text:
+        return 1
+    if source == "Portfolio" and "防守" in text:
+        return 2
+    if source == "Ranking":
+        return 3
+    return 4
+
+
+def _bet_label_for_exposure(row):
+    for key in ["中文投注描述", "具体投注组合", "波胆", "组合类型"]:
+        value = (row or {}).get(key)
+        if value and str(value) != "-":
+            return str(value)
+    return "-"
+
+
+def _with_exposure_columns(row, scenario, status="保留"):
+    output = dict(row or {})
+    output["Scenario"] = scenario
+    output["暴露状态"] = status
+    return output
+
+
+def _apply_scenario_exposure_control(sections):
+    counts = {code: 0 for code in SCENARIO_CODES}
+    active = {name: [] for name, _rows in sections}
+    removed = []
+    candidates = []
+    serial = 0
+    for source, rows in sections:
+        for row in rows or []:
+            scenario = _scenario_for_exposure(row)
+            candidates.append({
+                "source": source,
+                "row": row,
+                "scenario": scenario,
+                "priority": _exposure_priority(source, row),
+                "serial": serial,
+            })
+            serial += 1
+
+    for item in sorted(candidates, key=lambda value: (value["priority"], value["serial"])):
+        source = item["source"]
+        row = item["row"]
+        scenario = item["scenario"]
+        if scenario not in counts:
+            active[source].append(_with_exposure_columns(row, scenario, "保留"))
+            continue
+        if counts[scenario] < SCENARIO_EXPOSURE_LIMIT:
+            counts[scenario] += 1
+            active[source].append(_with_exposure_columns(row, scenario, "保留"))
+            continue
+        removed.append({
+            "来源": source,
+            "Scenario": scenario,
+            "投注": _bet_label_for_exposure(row),
+            "处理": "降级为观察项",
+            "原因": f"{scenario} 已达到 {SCENARIO_EXPOSURE_LIMIT} 个投注暴露上限；低优先级项不进入最终组合。",
+        })
+
+    exposure_map = [
+        {
+            "Scenario": code,
+            "暴露数量": counts[code],
+            "暴露上限": SCENARIO_EXPOSURE_LIMIT,
+            "状态": "正常" if counts[code] <= SCENARIO_EXPOSURE_LIMIT else "超限",
+        }
+        for code in SCENARIO_CODES
+    ]
+    return active, exposure_map, removed
+
+
+def scenario_exposure_control_display(
+    market_intelligence=None,
+    scenario_engine=None,
+    match=None,
+    portfolio_summary=None,
+):
+    scenario = scenario_engine or {}
+    portfolio = (
+        scenario.get("system_optimized_portfolio_v2")
+        or ((market_intelligence or {}).get("system_portfolio") or {})
+        or portfolio_summary
+        or {}
+    )
+    portfolio_rows = system_portfolio_display_rows(
+        scenario,
+        match=match,
+        market_intelligence=market_intelligence,
+    )
+    ranking_rows = system_ranking_display_rows(
+        portfolio,
+        scenario,
+        match=match,
+        market_intelligence=market_intelligence,
+    )
+    correct_score_rows = correct_score_limited_rows(match, market_intelligence, scenario)
+    active, exposure_map, removed = _apply_scenario_exposure_control([
+        ("Portfolio", portfolio_rows),
+        ("Ranking", ranking_rows),
+        ("Correct Score", correct_score_rows),
+    ])
+    active_portfolio = active.get("Portfolio", [])
+    top_rows = [
+        {
+            "组合类型": row.get("组合类型", "-"),
+            "中文投注描述": row.get("中文投注描述", "-"),
+            "对应盘口": row.get("对应盘口", "-"),
+            "理由": row.get("理由", "-"),
+            "Scenario": row.get("Scenario", "-"),
+            "暴露状态": row.get("暴露状态", "-"),
+        }
+        for row in active_portfolio
+        if row.get("中文投注描述") != "暂无"
+    ][:3]
+    return {
+        "portfolio_rows": active_portfolio,
+        "portfolio_top_rows": top_rows,
+        "ranking_rows": active.get("Ranking", [])[:3],
+        "correct_score_rows": active.get("Correct Score", []),
+        "exposure_map_rows": exposure_map,
+        "removed_bets_rows": removed or [{
+            "来源": "-",
+            "Scenario": "-",
+            "投注": "无",
+            "处理": "无需降级",
+            "原因": "所有 scenario 暴露均在上限内。",
+        }],
+    }
+
+
 def markdown_table(headers, rows):
     lines = [
         "| " + " | ".join(headers) + " |",
@@ -1323,6 +1493,12 @@ def format_final_decision_block_lines(
     if score is None:
         score = portfolio_summary.get("score")
     investment_breakdown = ((portfolio_summary or {}).get("investment_breakdown") or {})
+    exposure_control = scenario_exposure_control_display(
+        market_intelligence=market_intelligence,
+        scenario_engine=scenario,
+        match=match,
+        portfolio_summary=portfolio_summary,
+    )
 
     lines = [
         "## 最终决策区（FINAL DECISION BLOCK）",
@@ -1378,10 +1554,16 @@ def format_final_decision_block_lines(
         f"Portfolio 只保留 coverage structure，不参与 Ranking Score；CQS：{format_value(optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2')))} / 100。",
         "",
     ])
-    for row in system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence):
+    for row in exposure_control["portfolio_top_rows"]:
         lines.append(
-            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}"
+            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜Scenario：{row.get('Scenario', '-')}"
         )
+    lines.extend([
+        "",
+        "### Scenario Exposure Map（暴露控制）",
+        "",
+    ])
+    lines.extend(markdown_table(["Scenario", "暴露数量", "暴露上限", "状态"], exposure_control["exposure_map_rows"]))
     lines.extend([
         "",
         "### 6. Ranking Top 3（结构排序，非执行指令）",
@@ -1389,19 +1571,23 @@ def format_final_decision_block_lines(
         "Ranking 是系统结构排序，不是单独的下注指令；每个排序项附带 1-3 个 Correct Score 结构信号供阅读。",
         "",
     ])
-    ranking_rows = system_ranking_display_rows(
-        portfolio,
-        scenario,
-        match=match,
-        market_intelligence=market_intelligence,
-    )
+    ranking_rows = exposure_control["ranking_rows"]
     if not ranking_rows:
         lines.append("- 暂无系统排序。")
     else:
         for row in ranking_rows:
             lines.append(
-                f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜波胆：{row.get('波胆', '-')}｜原因：{row['结构理由']}｜风险说明：{row.get('风险标注', '-')}"
+                f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜波胆：{row.get('波胆', '-')}｜Scenario：{row.get('Scenario', '-')}｜原因：{row['结构理由']}｜风险说明：{row.get('风险标注', '-')}"
             )
+    lines.extend([
+        "",
+        "### Removed Bets List（降级观察项）",
+        "",
+    ])
+    for row in exposure_control["removed_bets_rows"]:
+        lines.append(
+            f"- {row['来源']}｜{row['Scenario']}｜{row['投注']}｜{row['处理']}｜{row['原因']}"
+        )
     lines.extend([
         "",
         "### 7. RSI Risk",
@@ -1817,6 +2003,12 @@ def format_model_explanation_lines(scenario_engine):
 
 def format_system_portfolio_lines(market_intelligence, scenario_engine=None, match=None, portfolio_summary=None):
     scenario = scenario_engine or {}
+    exposure_control = scenario_exposure_control_display(
+        market_intelligence=market_intelligence,
+        scenario_engine=scenario,
+        match=match,
+        portfolio_summary=portfolio_summary,
+    )
     lines = [
         "## Portfolio Coverage（coverage only）",
         "",
@@ -1824,9 +2016,26 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         "Lite v1：Portfolio 保留 Primary / Defensive / High Variance Coverage；Ranking 是结构排序层，不是最终执行指令。",
         "",
     ]
-    for row in system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence):
+    for row in exposure_control["portfolio_rows"]:
         lines.append(
-            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
+            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}｜Scenario：{row.get('Scenario', '-')}"
+        )
+    lines.extend([
+        "",
+        "### Scenario Exposure Map（情景暴露控制）",
+        "",
+        "规则：每个 Scenario 最多保留 2 个投注暴露（1 个主 + 1 个辅助）；超出项按优先级降级为观察项。",
+        "",
+    ])
+    lines.extend(markdown_table(["Scenario", "暴露数量", "暴露上限", "状态"], exposure_control["exposure_map_rows"]))
+    lines.extend([
+        "",
+        "### Removed Bets List（降级观察项）",
+        "",
+    ])
+    for row in exposure_control["removed_bets_rows"]:
+        lines.append(
+            f"- {row['来源']}｜{row['Scenario']}｜{row['投注']}｜{row['处理']}｜{row['原因']}"
         )
     lines.extend([
         "",
@@ -1835,9 +2044,9 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         "说明：波胆是高波动结构信号，不是执行信号；最多展示 5 个：主波胆 2 个、结构波胆 2 个、高波动波胆 1 个。",
         "",
     ])
-    for row in correct_score_limited_rows(match, market_intelligence, scenario):
+    for row in exposure_control["correct_score_rows"]:
         lines.append(
-            f"- {row['波胆层级']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}"
+            f"- {row['波胆层级']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}｜Scenario：{row.get('Scenario', '-')}"
         )
     return lines
 

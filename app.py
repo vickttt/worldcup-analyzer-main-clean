@@ -43,6 +43,7 @@ from modules.report_generator import (
     scenario_probability_weight_rows,
     scenario_projection_table_rows,
     scenario_risk_surface_rows,
+    scenario_exposure_control_display,
     system_semantic_alignment_rows,
     system_semantic_alignment_sections,
     system_portfolio_display_rows,
@@ -1212,6 +1213,12 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
     optimization = scenario.get("scenario_optimization_v2") or {}
     top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
     rss = risk_score_v3_summary(scenario)
+    exposure_control = scenario_exposure_control_display(
+        market_intelligence=market_intelligence,
+        scenario_engine=scenario,
+        match=match,
+        portfolio_summary=portfolio_summary,
+    )
 
     with st.container(border=True):
         st.markdown("**最终决策区（FINAL DECISION BLOCK）**")
@@ -1261,14 +1268,26 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         st.markdown("**5. Portfolio（coverage only）**")
         st.caption(f"Portfolio 只保留 coverage structure，不参与 Ranking Score；CQS：{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', '-'))} / 100。")
         st.dataframe(
-            pd.DataFrame(system_portfolio_top_rows(scenario, match=match, market_intelligence=market_intelligence)),
+            pd.DataFrame(exposure_control["portfolio_top_rows"]),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**Scenario Exposure Map（暴露控制）**")
+        st.dataframe(
+            pd.DataFrame(exposure_control["exposure_map_rows"]),
             use_container_width=True,
             hide_index=True,
         )
         st.markdown("**6. Ranking Top 3（结构排序，非执行指令）**")
         st.caption("Ranking 是系统结构排序，不是单独的下注指令；每个排序项附带 1-3 个 Correct Score 结构信号供阅读。")
         st.dataframe(
-            pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
+            pd.DataFrame(exposure_control["ranking_rows"]),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**Removed Bets List（降级观察项）**")
+        st.dataframe(
+            pd.DataFrame(exposure_control["removed_bets_rows"]),
             use_container_width=True,
             hide_index=True,
         )
@@ -1303,25 +1322,43 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
         or ((market_intelligence or {}).get("system_portfolio") or {})
     )
     scenario_mapping = (scenario_engine or {}).get("portfolio_mapping_explanation") or {}
+    exposure_control = scenario_exposure_control_display(
+        market_intelligence=market_intelligence,
+        scenario_engine=scenario,
+        match=match,
+    )
     with st.container(border=True):
         st.markdown("**系统推荐投注组合（System Portfolio）**")
         st.caption("系统组合由 TPB 锚点 + 市场结构 + 受约束情景权重综合生成；不使用用户输入，不计算 EV/ROI，不做盈利优化。")
         st.dataframe(
-            pd.DataFrame(system_portfolio_display_rows(scenario, match=match, market_intelligence=market_intelligence)),
+            pd.DataFrame(exposure_control["portfolio_rows"]),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**Scenario Exposure Map（情景暴露控制）**")
+        st.caption("每个 Scenario 最多保留 2 个投注暴露；超出项按优先级降级为观察项。")
+        st.dataframe(
+            pd.DataFrame(exposure_control["exposure_map_rows"]),
             use_container_width=True,
             hide_index=True,
         )
         st.markdown("**波胆高波动结构信号（Correct Score）**")
         st.caption("波胆是高波动结构信号，不是执行信号；最多展示 5 个：主波胆 2 个、结构波胆 2 个、高波动波胆 1 个。")
         st.dataframe(
-            pd.DataFrame(correct_score_limited_rows(match, market_intelligence, scenario)),
+            pd.DataFrame(exposure_control["correct_score_rows"]),
             use_container_width=True,
             hide_index=True,
         )
         st.markdown("**系统排名组合（System Ranking Bets，仅系统）**")
         st.caption("系统排名只使用 TPB 锚点、市场结构和受约束情景权重；它是结构排序，不是最终执行指令，最终执行仍取决于 stake decision layer。")
         st.dataframe(
-            pd.DataFrame(system_ranking_display_rows(portfolio, scenario, match=match, market_intelligence=market_intelligence)),
+            pd.DataFrame(exposure_control["ranking_rows"]),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**Removed Bets List（降级观察项）**")
+        st.dataframe(
+            pd.DataFrame(exposure_control["removed_bets_rows"]),
             use_container_width=True,
             hide_index=True,
         )
