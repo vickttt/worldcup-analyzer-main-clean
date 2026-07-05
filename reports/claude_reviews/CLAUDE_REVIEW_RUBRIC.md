@@ -146,7 +146,45 @@ Claude must check whether user-facing labels clearly distinguish:
 - Polymarket read-only comparison
 - risk and max_loss diagnostic-only information
 
-## 7. Git / Workflow Safety
+## 7. Change Reasoning Assessment
+
+Claude must assess not only whether the change works, but whether the change
+should exist in its current shape.
+
+Claude must answer:
+
+- Did the Codex change solve a real problem shown by the packet evidence, or
+  did it introduce extra complexity without sufficient need?
+- Is the change consistent with the existing Multi-Layer Betting Intelligence
+  System architecture, or does it drift away from the core principles?
+- Does the change create over-engineering, unnecessary abstraction, repeated
+  constraints, or duplicated functionality?
+- Could the same user-visible behavior or safety property be achieved with a
+  simpler implementation?
+- Does the change improve, preserve, or weaken system explainability and
+  maintainability?
+- Does the change create redundant layers, repeated checks, or logic that will
+  be difficult for Codex and users to reason about?
+- Does the change preserve the core invariants: TPB is not broken, Scenario
+  does not become decision-dominant, Market does not become an optimizer, and
+  Execution remains isolated?
+
+Claude must include a dedicated section:
+
+Change Reasoning Assessment:
+
+- Necessity: Yes / No / Partially
+- Over-Engineering Risk: Low / Medium / High
+- Redundant Abstraction: Yes / No / Partially
+- Simpler Alternative Suggested: Yes / No
+- Long-Term Architecture Fit: Yes / No / Partially
+- Maintainability / Explainability Impact: Improves / Neutral / Weakens
+
+If the implementation is technically correct but materially over-engineered,
+duplicative, or misaligned with the repository's long-term architecture, Claude
+should return PASS_WITH_POLISH or NEEDS_CHANGES depending on severity.
+
+## 8. Git / Workflow Safety
 
 Claude must check:
 
@@ -162,7 +200,7 @@ Claude must check:
 - no merge, production-ready declaration, or next-task continuation occurs while
   review state is PENDING_REVIEW, IN_REVIEW, or NEEDS_CHANGES
 
-## 8. Decoupled Review Request System
+## 9. Decoupled Review Request System
 
 Claude Review is a required architecture validation state after every Codex
 commit, but it is not assumed to run automatically.
@@ -209,7 +247,7 @@ CI vs Claude Review boundary:
 - Both are mandatory after a commit. Neither replaces the other. Review remains
   an independent request state, not an automatic commit hook.
 
-## 9. API / Secret / Data Safety
+## 10. API / Secret / Data Safety
 
 Claude must flag:
 
@@ -223,7 +261,7 @@ Claude must flag:
 - CI or smoke tests depending on TPB-only assumptions
 - legacy ranking imports or optimizer imports in active core paths
 
-## 10. Output Format
+## 11. Output Format
 
 Claude must output:
 
@@ -236,6 +274,15 @@ REVIEW_STATE: PENDING_REVIEW / IN_REVIEW / APPROVED / NEEDS_CHANGES
 MUST_FIX:
 
 POLISH:
+
+CHANGE_REASONING_ASSESSMENT:
+
+- Necessity: Yes / No / Partially
+- Over-Engineering Risk: Low / Medium / High
+- Redundant Abstraction: Yes / No / Partially
+- Simpler Alternative Suggested: Yes / No
+- Long-Term Architecture Fit: Yes / No / Partially
+- Maintainability / Explainability Impact: Improves / Neutral / Weakens
 
 EVIDENCE:
 

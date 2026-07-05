@@ -15,6 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CLAUDE_WORKFLOW = ROOT / ".github" / "workflows" / "claude-review.yml"
 CI_WORKFLOW = ROOT / ".github" / "workflows" / "ci.yml"
 AGENTS = ROOT / "AGENTS.md"
+RUBRIC = ROOT / "reports" / "claude_reviews" / "CLAUDE_REVIEW_RUBRIC.md"
+PROMPT_TEMPLATE = ROOT / "docs" / "CLAUDE_REVIEW_PROMPT_TEMPLATE.md"
 
 
 def read(path: Path) -> str:
@@ -84,6 +86,8 @@ def verify_agents(text: str) -> None:
     require(text, "sanitized HEAD^..HEAD", "HEAD-bound packet invariant")
     require(text, "must not trigger Claude API review", "pull_request ban")
     require(text, "ANTHROPIC_API_KEY", "secret source invariant")
+    require(text, "change reasoning quality", "Claude change reasoning responsibility")
+    require(text, "correctness, necessity, and simplicity", "correctness and necessity review scope")
     require(
         text,
         "scripts/verify_claude_review_loop.py",
@@ -91,10 +95,20 @@ def verify_agents(text: str) -> None:
     )
 
 
+def verify_change_reasoning_review(text: str, label: str) -> None:
+    require(text, "Change Reasoning Assessment", f"{label} change reasoning section")
+    require(text, "Over-Engineering Risk", f"{label} over-engineering check")
+    require(text, "Redundant Abstraction", f"{label} redundant abstraction check")
+    require(text, "Long-Term Architecture Fit", f"{label} architecture fit check")
+    require(text, "Maintainability / Explainability Impact", f"{label} maintainability check")
+
+
 def main() -> int:
     verify_claude_workflow(read(CLAUDE_WORKFLOW))
     verify_ci_workflow(read(CI_WORKFLOW))
     verify_agents(read(AGENTS))
+    verify_change_reasoning_review(read(RUBRIC), "rubric")
+    verify_change_reasoning_review(read(PROMPT_TEMPLATE), "prompt template")
     print("Claude Review loop guard passed.")
     return 0
 

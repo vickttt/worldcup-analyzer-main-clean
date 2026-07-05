@@ -483,7 +483,13 @@ the push-triggered dev-clean review mode using sanitized packets.
 
 Claude Review checks architecture validation, TPB baseline integrity, market
 structure boundaries, Scenario Engine isolation, EV/ROI violation detection,
-ranking contamination, execution-layer isolation, and governance compliance.
+ranking contamination, execution-layer isolation, governance compliance, and
+change reasoning quality.
+Claude Review must evaluate correctness, necessity, and simplicity. It must
+answer whether the Codex change solves a real problem, whether it fits the
+existing architecture, whether it introduces over-engineering or unnecessary
+abstraction, whether a simpler implementation would be safer, and whether the
+change improves or weakens explainability and maintainability.
 CI and Claude Review are both mandatory after a commit. Neither replaces the
 other. Claude Review is manual/chat-based, explicitly authorized
 workflow_dispatch review, or push-triggered dev-clean review; it is never a

@@ -58,6 +58,9 @@ Review only:
 - Whether the review input is appropriately small and token-light.
 - Whether context is limited to the current task, current diff/report, current gate status, and long-term goals.
 - Whether Codex should use available GitHub, branch, worktree, browser, app-run, profiling, validation, report-generation, or Claude review capabilities.
+- Whether the Codex change is necessary, proportional, simple enough, and aligned with the existing architecture.
+- Whether the change introduces over-engineering, unnecessary abstraction, repeated constraints, duplicated functionality, or avoidable maintenance burden.
+- Whether a simpler implementation could solve the same real problem with less risk.
 
 Token and context rules:
 
@@ -223,7 +226,30 @@ Browser or computer-use is appropriate only for UI or speed tasks, such as check
 Do not use browser or computer-use for secrets, API keys, or private credential pages.
 Recommend other app/API calls only when the task explicitly requires them, credentials are safely configured, no secrets are printed, outputs go to approved report paths, and Jin approves paid or high-volume API usage.
 
-## 10. Gate Status
+## 10. Change Reasoning Assessment
+
+Assess whether the Codex change should exist in its current shape, not only whether it works.
+
+Must include:
+
+- Necessity: Yes / No / Partially.
+- Over-Engineering Risk: Low / Medium / High.
+- Redundant Abstraction: Yes / No / Partially.
+- Simpler Alternative Suggested: Yes / No.
+- Long-Term Architecture Fit: Yes / No / Partially.
+- Maintainability / Explainability Impact: Improves / Neutral / Weakens.
+
+Answer these questions directly:
+
+- Did this solve a real problem shown by the packet evidence?
+- Is the change consistent with the existing Multi-Layer Betting Intelligence System architecture?
+- Does it introduce unnecessary layers, duplicate constraints, or logic redundancy?
+- Could a simpler display-only or rule-only change have solved the problem?
+- Does it preserve TPB as anchor, Scenario as bounded signal, Market as signal, and Execution as isolated evaluation?
+
+If the change is technically correct but over-engineered or unnecessary, use `PASS_WITH_NOTES` for minor concerns or `BLOCKED` for severe design risk.
+
+## 11. Gate Status
 
 Report:
 
@@ -232,7 +258,7 @@ Report:
 
 Do not mark either gate ready unless the supplied evidence explicitly satisfies the required gates.
 
-## 11. Codex Reply Quality Check
+## 12. Codex Reply Quality Check
 
 State whether Codex's response to Jin is clear enough.
 
@@ -250,7 +276,7 @@ Check that Codex's final reply includes, when relevant:
 
 If the reply is unclear, mark `PASS_WITH_NOTES` or `BLOCKED` depending on severity.
 
-## 12. Next Codex Task
+## 13. Next Codex Task
 
 Provide one precise task only.
 The task must be for Codex to execute, not Claude.
@@ -269,7 +295,7 @@ Include:
 - Validation commands.
 - Expected Codex final report fields.
 
-## 13. Stop Conditions
+## 14. Stop Conditions
 
 List conditions that should stop Codex before implementation.
 
