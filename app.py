@@ -28,29 +28,7 @@ from modules.pregame_content import (
     static_recent_form_for,
     team_cn,
 )
-from modules.report_generator import (
-    build_report,
-    correct_score_limited_rows,
-    portfolio_leg_display_rows,
-    risk_decomposition_v3_rows,
-    risk_score_v3_summary,
-    risk_surface_v3_map_rows,
-    save_report,
-    scenario_coverage_map_rows,
-    correct_score_strategy_rows,
-    correct_score_top_signal_row,
-    market_structure_numeric_rows,
-    scenario_probability_weight_rows,
-    scenario_projection_table_rows,
-    scenario_risk_surface_rows,
-    scenario_exposure_control_display,
-    system_semantic_alignment_rows,
-    system_semantic_alignment_sections,
-    system_portfolio_display_rows,
-    system_portfolio_top_rows,
-    system_ranking_display_rows,
-    tpb_probability_label,
-)
+import modules.report_generator as report_generator_module
 from modules.result_distribution import build_result_distribution
 from modules.schedule_client import (
     available_match_dates,
@@ -72,7 +50,29 @@ from modules.user_portfolio_compare import build_user_portfolio_comparison
 
 probability_base_module = importlib.reload(probability_base_module)
 decision_engine_module = importlib.reload(decision_engine_module)
+report_generator_module = importlib.reload(report_generator_module)
 build_decision_engine = decision_engine_module.build_decision_engine
+build_report = report_generator_module.build_report
+correct_score_limited_rows = report_generator_module.correct_score_limited_rows
+portfolio_leg_display_rows = report_generator_module.portfolio_leg_display_rows
+risk_decomposition_v3_rows = report_generator_module.risk_decomposition_v3_rows
+risk_score_v3_summary = report_generator_module.risk_score_v3_summary
+risk_surface_v3_map_rows = report_generator_module.risk_surface_v3_map_rows
+save_report = report_generator_module.save_report
+scenario_coverage_map_rows = report_generator_module.scenario_coverage_map_rows
+correct_score_strategy_rows = report_generator_module.correct_score_strategy_rows
+correct_score_top_signal_row = report_generator_module.correct_score_top_signal_row
+market_structure_numeric_rows = report_generator_module.market_structure_numeric_rows
+scenario_probability_weight_rows = report_generator_module.scenario_probability_weight_rows
+scenario_projection_table_rows = report_generator_module.scenario_projection_table_rows
+scenario_risk_surface_rows = report_generator_module.scenario_risk_surface_rows
+scenario_exposure_control_display = report_generator_module.scenario_exposure_control_display
+system_semantic_alignment_rows = report_generator_module.system_semantic_alignment_rows
+system_semantic_alignment_sections = report_generator_module.system_semantic_alignment_sections
+system_portfolio_display_rows = report_generator_module.system_portfolio_display_rows
+system_portfolio_top_rows = report_generator_module.system_portfolio_top_rows
+system_ranking_display_rows = report_generator_module.system_ranking_display_rows
+tpb_probability_label = report_generator_module.tpb_probability_label
 
 
 MODEL_VERSION_TRACKING = {
