@@ -1270,6 +1270,8 @@ def _signal_strength_level(score):
 
 
 def _metric_number(value, default=0):
+    if isinstance(value, str):
+        value = value.split("/", 1)[0].strip()
     try:
         return float(value)
     except (TypeError, ValueError):
@@ -1283,17 +1285,6 @@ def _level_from_score(value, high=70, medium=40):
     if score >= medium:
         return "中"
     return "低"
-
-
-def _scenario_weights_unadjusted(rows):
-    if not rows:
-        return False
-    for row in rows:
-        probability = str(row.get("概率", "")).replace("%", "").strip()
-        weight = str(row.get("权重", "")).replace("%", "").replace("（未调整）", "").strip()
-        if probability != weight:
-            return False
-    return True
 
 
 def _investment_reason(score_layer, investment_breakdown, rss, display_stake_amount):
@@ -1342,15 +1333,20 @@ def _rsi_match_explanation(rss):
     return f"风险指数为{rsi}；{components}。{meaning}风险指数不单独给下注信号，而是先影响投资评分，再间接影响推荐金额。"
 
 
-def _investment_factor_explanation(investment_breakdown, score_layer, rss):
+def _investment_explanation_lines(investment_breakdown, score_layer, rss, display_stake_amount):
     signal = _metric_number(investment_breakdown.get("signal"))
     investment_score = _metric_number(score_layer.get("investment_score"))
     signal_level = _level_from_score(signal, 70, 40)
-    return (
+    risk_adjustment = investment_breakdown.get("risk_adjustment")
+    lines = [
         f"概率优势 + 情景匹配度为 {signal:g}/100（{signal_level}）："
-        "它反映主方向概率边际与情景权重是否同向；"
-        f"投资评分为 {investment_score:g}/100，是信号端再经过市场冲突和风险指数折扣后的结果。"
-    )
+        "表示主方向概率边际与情景结构有一定同向性，但尚未形成强执行信号。",
+        f"风险指数为{rss.get('RSI', '-')}，风险调整为 {fmt(risk_adjustment)}："
+        "说明市场路径分散和尾部风险会压低本场投入力度。",
+        f"投资评分为 {investment_score:g}/100，推荐金额为 {display_stake_amount:g} 元："
+        "低分档位代表当前更适合作为观察场次，而不是执行型下注。",
+    ]
+    return lines[:3]
 
 
 def render_final_decision_summary(match, distribution, data_context, market_intelligence=None, scenario_engine=None, portfolio_summary=None):
@@ -1387,17 +1383,29 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
     with st.container(border=True):
         st.markdown("**最终决策区**")
 
-        st.markdown("**1. 投注组合与暴露总览（优先阅读）**")
+        st.markdown("**1. 投资评分解释（优先阅读）**")
+        score_cols = st.columns(4)
+        score_cols[0].metric("概率优势 + 情景匹配度", f"{investment_breakdown.get('signal', '-')} / 100")
+        score_cols[1].metric("风险指数", rss["RSI"])
+        score_cols[2].metric("风险调整", fmt(investment_breakdown.get("risk_adjustment")))
+        score_cols[3].metric("投资分", f"{score_layer.get('investment_score', 0)} / 100")
+        for line in _investment_explanation_lines(investment_breakdown, score_layer, rss, display_stake_amount):
+            st.caption(line)
+
+        scenario_table_rows = scenario_projection_table_rows(
+            scenario,
+            match=match,
+            market_intelligence=market_intelligence,
+        )
+        if scenario_table_rows:
+            st.markdown("**2. 情景概率投影（简化版）**")
+            st.caption("情景层用于解释本场可能路径，不覆盖概率基准，不计算 EV/ROI。")
+            st.table(pd.DataFrame(scenario_table_rows))
+
+        st.markdown("**3. 投注组合与排序（优先阅读）**")
         st.caption(f"组合层只保留覆盖结构，不参与排序分；覆盖质量分：{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', '-'))} / 100。")
         st.dataframe(
             pd.DataFrame(exposure_control["portfolio_top_rows"]),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.markdown("**情景暴露图**")
-        st.caption("仅统计各情景出现次数，不改变投注组合或排序 Top 3。")
-        st.dataframe(
-            pd.DataFrame(exposure_control["exposure_map_rows"]),
             use_container_width=True,
             hide_index=True,
         )
@@ -1409,7 +1417,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
             hide_index=True,
         )
 
-        st.markdown("**2. 风险指数层（优先阅读）**")
+        st.markdown("**4. 风险指数层**")
         st.caption(_rsi_match_explanation(rss))
 
         with st.expander("系统语义对齐层", expanded=False):
@@ -1430,7 +1438,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
                     f"- **{title}**：{section.get('简短说明', '-')} {section.get('详细说明', '-')}"
                 )
 
-        st.markdown("**3. 概率摘要**")
+        st.markdown("**5. 概率摘要**")
         tpb_cols = st.columns(4)
         tpb_cols[0].metric("主方向", metrics.get("favorite_label") or "-")
         tpb_cols[1].metric("主方向概率", f"{metrics.get('favorite_probability', 0)}%")
@@ -1447,7 +1455,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         st.caption("信号强度 = （概率基准三项概率最高值 - 第二高值）× 100；0-20 为弱，20-40 为中，40 以上为强。")
         st.caption(_investment_reason(score_layer, investment_breakdown, rss, display_stake_amount))
 
-        st.markdown("**4. 市场结构（三指标）**")
+        st.markdown("**6. 市场结构（三指标）**")
         market_rows = market_structure_numeric_rows(market_intelligence)
         market_cols = st.columns(3)
         market_label_map = {
@@ -1459,25 +1467,6 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
             market_cols[index].metric(market_label_map.get(row["指标"], row["指标"]), row["数值"])
         st.caption("定义：方向强度 = 概率基准集中度 + 盘口偏差；市场一致性 = 多市场一致性指数；波动压力 = 波胆 + 平局 + 赔率分散。")
         st.caption(_market_structure_explanation(market_rows, metrics.get("favorite_label") or "-"))
-
-        scenario_table_rows = scenario_projection_table_rows(scenario)
-        if scenario_table_rows:
-            st.markdown("**5. 情景概率投影（简化版）**")
-            st.caption("情景层是受约束结构权重层，用于组合构建、结构排序调整和风险估计；不覆盖概率基准，不计算 EV/ROI。")
-            st.table(pd.DataFrame(scenario_table_rows))
-            if _scenario_weights_unadjusted(scenario_table_rows):
-                st.caption("观察意见：当前情景概率与权重完全相同，说明权重层尚未根据风险指数、市场分歧或结果分布拉开差异；本次先不修改计算，只提示该层未来可做受约束调整。")
-
-        st.markdown("**6. 投资评分解释**")
-        score_cols = st.columns(4)
-        score_cols[0].metric("概率优势 + 情景匹配度", f"{investment_breakdown.get('signal', '-')} / 100")
-        score_cols[1].metric("风险指数", rss["RSI"])
-        score_cols[2].metric("风险调整", fmt(investment_breakdown.get("risk_adjustment")))
-        score_cols[3].metric("投资分", f"{score_layer.get('investment_score', 0)} / 100")
-        st.caption("本栏定义：投资分由主方向信号、情景一致性、市场冲突和风险指数共同解释；推荐金额只由投资分固定区间映射。")
-        st.caption(_investment_factor_explanation(investment_breakdown, score_layer, rss))
-        st.caption(_rsi_match_explanation(rss))
-        st.caption("低投资分进入低档位时，推荐金额映射为 0 元，表示当前不进入执行型下注。")
 
         st.markdown("**7. 高波动结构信号（波胆）**")
         st.caption("波胆是高波动结构信号，不是执行信号；这里只保留一个最高权重提示。")
@@ -1526,13 +1515,6 @@ def render_system_portfolio_layer(market_intelligence, scenario_engine=None, mat
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**情景暴露图（仅统计）**")
-        st.caption("该表只统计各情景出现次数，不过滤投注组合，也不改变排序。")
-        st.dataframe(
-            pd.DataFrame(exposure_control["exposure_map_rows"]),
-            use_container_width=True,
-            hide_index=True,
-        )
         st.markdown("**波胆高波动结构信号**")
         st.caption("波胆是高波动结构信号，不是执行信号；最多展示 5 个：主波胆 2 个、结构波胆 2 个、高波动波胆 1 个。")
         st.dataframe(
@@ -1560,7 +1542,7 @@ def render_scenario_coverage_analysis(scenario_engine):
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
-            st.markdown("**S1-S6 原始概率与 Lite 权重**")
+            st.markdown("**S1-S6 概率与本场含义**")
             st.table(pd.DataFrame(scenario_projection_table_rows(scenario)))
 
         st.markdown("**覆盖图**")
@@ -1604,8 +1586,8 @@ def render_scenario_optimization_view_v2(scenario_engine, match=None, market_int
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)
         if probability_weight_rows:
-            st.markdown("**S1-S6 原始概率与 Lite 权重**")
-            st.table(pd.DataFrame(scenario_projection_table_rows(scenario)))
+            st.markdown("**S1-S6 概率与本场含义**")
+            st.table(pd.DataFrame(scenario_projection_table_rows(scenario, match=match, market_intelligence=market_intelligence)))
 
         for title, key in [
             ("主覆盖组合", "primary_coverage_set"),

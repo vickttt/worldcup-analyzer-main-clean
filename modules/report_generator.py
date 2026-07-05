@@ -444,20 +444,32 @@ def market_structure_numeric_rows(market_intelligence):
     ]
 
 
-def scenario_projection_table_rows(scenario_engine):
+def _scenario_projection_meaning(code, match=None, market_intelligence=None):
+    metrics = (market_intelligence or {}).get("metrics") or {}
+    favorite = metrics.get("favorite_label") or _match_team_label(match, "home")
+    underdog = _match_team_label(match, "away")
+    meanings = {
+        "S1": f"{favorite} 主路径更清晰，常见阅读为 1:0、2:0 这类热门获胜比分区间。",
+        "S2": f"{favorite} 小胜路径，通常对应一球优势或轻让球覆盖，不代表大胜确定性。",
+        "S3": "平局路径，表示比赛可能进入低节奏、僵持或主方向无法拉开差距的状态。",
+        "S4": f"{underdog} 冷门路径，表示弱势方反击、定位球或主队失误导致方向反转的风险。",
+        "S5": "低比分路径，通常对应小球、节奏慢、进攻效率下降或双方谨慎开局。",
+        "S6": "高波动路径，表示大比分、连续进球或尾部波胆的概率解释空间增加。",
+    }
+    return meanings.get(code, "用于解释本场概率空间中的结构路径。")
+
+
+def scenario_projection_table_rows(scenario_engine, match=None, market_intelligence=None):
     rows = []
     for row in scenario_probability_weight_rows(scenario_engine):
         scenario_text = str(row.get("情景", ""))
         code = scenario_text.split(" ", 1)[0] if scenario_text else "-"
         probability = row.get("原始概率", "-")
-        weight = row.get("Lite 权重", "-")
-        if probability == weight and probability != "-":
-            weight = f"{weight}（未调整）"
         rows.append({
             "Scenario": code,
             "描述": SCENARIO_NAME_CN.get(code, scenario_text.replace(code, "", 1).strip() or "-"),
             "概率": probability,
-            "权重": weight,
+            "本场含义": _scenario_projection_meaning(code, match, market_intelligence),
         })
     return rows
 
@@ -1431,7 +1443,7 @@ def format_final_decision_block_lines(
     optimization = scenario.get("scenario_optimization_v2") or {}
     risk = scenario.get("risk_surface") or {}
     rss = risk_score_v3_summary(scenario)
-    scenario_rows = scenario_projection_table_rows(scenario)
+    scenario_rows = scenario_projection_table_rows(scenario, match=match, market_intelligence=market_intelligence)
     top_score = correct_score_top_signal_row(match, market_intelligence, scenario)
     score = portfolio_summary.get("decision_score")
     if score is None:
@@ -1479,7 +1491,7 @@ def format_final_decision_block_lines(
         "",
     ])
     if scenario_rows:
-        lines.extend(markdown_table(["Scenario", "描述", "概率", "权重"], scenario_rows))
+        lines.extend(markdown_table(["Scenario", "描述", "概率", "本场含义"], scenario_rows))
     else:
         lines.append("暂无情景概率与权重数据。")
     lines.extend([
@@ -1502,14 +1514,6 @@ def format_final_decision_block_lines(
         lines.append(
             f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜Scenario：{row.get('Scenario', '-')}"
         )
-    lines.extend([
-        "",
-        "### 情景暴露统计（仅统计）",
-        "",
-        "该表只统计各情景出现次数，不过滤投注组合，也不改变排序 Top 3。",
-        "",
-    ])
-    lines.extend(markdown_table(["Scenario", "暴露数量", "说明"], exposure_control["exposure_map_rows"]))
     lines.extend([
         "",
         "### 6. Ranking Top 3（结构排序，非执行指令）",
@@ -1674,14 +1678,14 @@ def format_scenario_engine_lines(scenario_engine):
         scenario.get("disclaimer")
         or "Scenario Projection Lite v1 使用 TPB + Market signal projection；不覆盖 TPB，不计算 EV/ROI，不改变推荐金额，不使用用户输入。",
         "",
-        "### S1-S6 原始概率与 Lite 权重",
+        "### S1-S6 概率与本场含义",
     ]
     probability_rows = scenario_probability_weight_rows(scenario)
     if not probability_rows:
         lines.append("暂无情景概率数据。")
     else:
-        for row in probability_rows:
-            lines.append(f"- {row['情景']}：原始概率 {row['原始概率']}；Lite 权重 {row['Lite 权重']}")
+        for row in scenario_projection_table_rows(scenario):
+            lines.append(f"- {row['Scenario']} {row['描述']}：概率 {row['概率']}；{row['本场含义']}")
 
     lines.extend([
         "",
@@ -1957,14 +1961,6 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
         lines.append(
             f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}｜Scenario：{row.get('Scenario', '-')}"
         )
-    lines.extend([
-        "",
-        "### 情景暴露统计（仅统计）",
-        "",
-        "该表只统计各情景出现次数，不过滤投注组合，也不改变排序。",
-        "",
-    ])
-    lines.extend(markdown_table(["Scenario", "暴露数量", "说明"], exposure_control["exposure_map_rows"]))
     lines.extend([
         "",
         "### High Variance Structural Signal（波胆）",
