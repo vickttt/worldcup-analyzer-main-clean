@@ -178,6 +178,53 @@ def parse_user_portfolio_text(raw_text):
     return positions, warnings
 
 
+def _parse_amount(value):
+    text = _clean_text(value).replace("元", "").replace("￥", "").replace("¥", "")
+    text = text.replace(",", "").replace("，", "")
+    return safe_float(text)
+
+
+def parse_actual_bet_combo_text(raw_text):
+    rows = []
+    warnings = []
+    for line_number, raw_line in enumerate(str(raw_text or "").splitlines(), start=1):
+        line = raw_line.strip()
+        if not line:
+            continue
+        parts = [part.strip() for part in line.replace("，", ",").split(",") if part.strip()]
+        if len(parts) < 2:
+            warnings.append(f"第 {line_number} 行字段不足，请至少填写：选择,金额。")
+            continue
+
+        amount = _parse_amount(parts[-1])
+        if amount is None:
+            warnings.append(f"第 {line_number} 行金额无法识别，已跳过。")
+            continue
+
+        market = "其他"
+        selection = ""
+        handicap = "-"
+        if _is_score_text(parts[0]):
+            market = "波胆"
+            selection = parts[0].replace("-", ":").replace("–", ":")
+        elif len(parts) == 2:
+            selection = parts[0]
+        else:
+            market = _normalize_market(parts[0])
+            selection = parts[1]
+            if len(parts) >= 4:
+                handicap = parts[2]
+
+        rows.append({
+            "市场": market,
+            "选择": selection,
+            "盘口": handicap or "-",
+            "金额": f"{amount:g} 元",
+            "解析状态": "已识别",
+        })
+    return rows, warnings
+
+
 
 def _selection_matches_side(selection, side, match):
     selected = _normalized(selection)

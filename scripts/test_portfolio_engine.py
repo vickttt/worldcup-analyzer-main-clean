@@ -385,17 +385,17 @@ def test_architecture_guardrails():
     assert "最终决策区（FINAL DECISION BLOCK）" in app_text
     assert "用户执行层不进入本区" not in app_text
     assert "render_final_decision_summary" in app_text
-    assert "Portfolio（coverage only）" in app_text
-    assert "Investment Score（2因子）" in app_text
-    assert "Ranking Top 3（结构排序，非执行指令）" in app_text
-    assert "High Variance Structural Signal（波胆）" in app_text
+    assert "投注组合与暴露总览（优先阅读）" in app_text
+    assert "投资分解释（Investment Score）" in app_text
+    assert "结构排序 Top 3（非直接下注指令）" in app_text
+    assert "高波动结构信号（波胆）" in app_text
     assert "System Semantic Alignment Layer" in app_text
     assert "组合观察区（无执行信号）" not in app_text
     assert "高波动结构提示（仅分析）" not in app_text
     assert "排序结构（仅结构分析）" not in app_text
     assert "当前不输出具体投注组合" not in app_text
-    assert "每个排序项附带 1-3 个 Correct Score" in app_text
-    assert "Scenario = 受约束结构权重层" in app_text
+    assert "Ranking 是结构排序" in app_text and "波胆" in app_text
+    assert "情景层是受约束结构权重层" in app_text
     assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
     assert "        render_risk_surface_quantification_v3(scenario_engine)" not in app_text
     assert "        render_model_explanation_layer(scenario_engine)" not in app_text

@@ -45,7 +45,10 @@ from modules.team_profile_client import fetch_team_profile
 from modules.weather_client import weather_for_fixture
 from modules.perf_logger import perf_timer
 from modules.portfolio_engine import build_core_decision_layers
-from modules.user_portfolio_compare import build_user_portfolio_comparison
+from modules.user_portfolio_compare import (
+    build_user_portfolio_comparison,
+    parse_actual_bet_combo_text,
+)
 
 
 probability_base_module = importlib.reload(probability_base_module)
@@ -1189,6 +1192,102 @@ def _recommended_stake_amount_from_summary(portfolio_summary):
         return None
 
 
+def _signal_strength_level(score):
+    try:
+        value = float(score)
+    except (TypeError, ValueError):
+        return "无法判断"
+    if value >= 40:
+        return "强"
+    if value >= 20:
+        return "中"
+    return "弱"
+
+
+def _metric_number(value, default=0):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _level_from_score(value, high=70, medium=40):
+    score = _metric_number(value)
+    if score >= high:
+        return "高"
+    if score >= medium:
+        return "中"
+    return "低"
+
+
+def _scenario_weights_unadjusted(rows):
+    if not rows:
+        return False
+    for row in rows:
+        probability = str(row.get("概率", "")).replace("%", "").strip()
+        weight = str(row.get("权重", "")).replace("%", "").replace("（未调整）", "").strip()
+        if probability != weight:
+            return False
+    return True
+
+
+def _investment_reason(score_layer, investment_breakdown, rss, display_stake_amount):
+    investment_score = _metric_number(score_layer.get("investment_score"))
+    signal = _metric_number(investment_breakdown.get("signal"))
+    risk_adjustment = investment_breakdown.get("risk_adjustment")
+    if display_stake_amount <= 0:
+        return (
+            f"本场投资分 {investment_score:g}/100，信号端为 {signal:g}/100，"
+            f"但 RSI 为{rss.get('RSI', '-')}、风险调整为 {fmt(risk_adjustment)}，"
+            "说明主方向存在但风险折扣较重；因此固定区间映射后的推荐金额为 0 元。"
+        )
+    return (
+        f"本场投资分 {investment_score:g}/100 已进入下注映射区间，"
+        f"推荐金额 {display_stake_amount:g} 元来自 Investment Score 的固定区间映射。"
+    )
+
+
+def _market_structure_explanation(market_rows, favorite_label="-"):
+    row_map = {row.get("指标"): row.get("数值") for row in market_rows}
+    direction = _metric_number(row_map.get("Direction Strength"))
+    agreement = _metric_number(row_map.get("Market Agreement"))
+    volatility = _metric_number(row_map.get("Volatility Pressure"))
+    direction_level = _level_from_score(direction, 45, 20)
+    agreement_level = _level_from_score(agreement, 70, 40)
+    volatility_level = _level_from_score(volatility, 60, 30)
+    return (
+        f"方向强度 {direction:g}/100（{direction_level}）：{favorite_label} 是主方向，"
+        "但不是压倒性单边；"
+        f"市场一致性 {agreement:g}/100（{agreement_level}）：多盘口对主方向的分歧较低；"
+        f"波动压力 {volatility:g}/100（{volatility_level}）：平局、波胆尾部和赔率分散仍提示比赛路径不止一种。"
+    )
+
+
+def _rsi_match_explanation(rss):
+    rsi = rss.get("RSI", "-")
+    components = rss.get("组件", "-")
+    if rsi == "高":
+        meaning = "表示本场不是单纯看主方向即可，情景离散和尾部路径会明显压低执行金额。"
+    elif rsi == "中":
+        meaning = "表示存在一定结构风险，但还没有完全压制主方向信号。"
+    elif rsi == "低":
+        meaning = "表示结构风险相对可控，主方向信号受到的风险折扣较小。"
+    else:
+        meaning = "表示当前风险层数据不足，需要结合盘口和情景表阅读。"
+    return f"RSI 为{rsi}；{components}。{meaning}RSI 不单独给下注信号，而是先影响 Investment Score，再间接影响推荐金额。"
+
+
+def _investment_factor_explanation(investment_breakdown, score_layer, rss):
+    signal = _metric_number(investment_breakdown.get("signal"))
+    investment_score = _metric_number(score_layer.get("investment_score"))
+    signal_level = _level_from_score(signal, 70, 40)
+    return (
+        f"TPB Edge + Scenario Alignment 为 {signal:g}/100（{signal_level}）："
+        "它反映主方向概率边际与情景权重是否同向；"
+        f"Investment Score 为 {investment_score:g}/100，是信号端再经过市场冲突和 RSI 风险折扣后的结果。"
+    )
+
+
 def render_final_decision_summary(match, distribution, data_context, market_intelligence=None, scenario_engine=None, portfolio_summary=None):
     data_context = {
         **(data_context or {}),
@@ -1222,16 +1321,63 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
 
     with st.container(border=True):
         st.markdown("**最终决策区（FINAL DECISION BLOCK）**")
-        st.markdown("**System Semantic Alignment Layer**")
-        for section in system_semantic_alignment_sections():
-            with st.expander(f"{section['标题']}｜{section['简短说明']}", expanded=False):
-                st.write(section["详细说明"])
 
-        st.markdown("**1. TPB Summary**")
+        st.markdown("**1. 投注组合与暴露总览（优先阅读）**")
+        st.caption(f"组合层只保留 coverage structure，不参与 Ranking Score；CQS：{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', '-'))} / 100。")
+        st.dataframe(
+            pd.DataFrame(exposure_control["portfolio_top_rows"]),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**情景暴露图（Scenario Exposure Map）**")
+        st.caption("每个情景最多保留 2 个投注暴露，用来避免同一风险路径被重复放大。")
+        st.dataframe(
+            pd.DataFrame(exposure_control["exposure_map_rows"]),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**结构排序 Top 3（非直接下注指令）**")
+        st.caption("Ranking 是结构排序，不是单独的下注指令；最终执行仍取决于推荐金额与人工判断。")
+        st.dataframe(
+            pd.DataFrame(exposure_control["ranking_rows"]),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.markdown("**降级观察项（Removed Bets List）**")
+        st.caption("超过情景暴露上限的低优先级项会降级为观察项，不进入最终组合。")
+        st.dataframe(
+            pd.DataFrame(exposure_control["removed_bets_rows"]),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        st.markdown("**2. RSI 风险层（优先阅读）**")
+        st.caption(_rsi_match_explanation(rss))
+
+        with st.expander("系统语义说明（System Semantic Alignment Layer）", expanded=False):
+            st.caption("这些说明只解释各层职责，不参与任何计算。")
+            title_map = {
+                "Scenario": "情景权重层",
+                "Portfolio": "组合覆盖层",
+                "Stake": "推荐金额映射",
+                "Ranking": "结构排序层",
+                "RSI": "风险调整因子",
+                "TPB": "概率锚点",
+                "Market Conflict": "市场冲突指标",
+            }
+            for section in system_semantic_alignment_sections():
+                raw_title = str(section.get("标题", "")).split("｜", 1)[0].strip()
+                title = title_map.get(raw_title, raw_title or section.get("标题", "-"))
+                st.markdown(
+                    f"- **{title}**：{section.get('简短说明', '-')} {section.get('详细说明', '-')}"
+                )
+
+        st.markdown("**3. TPB 概率摘要**")
         tpb_cols = st.columns(4)
         tpb_cols[0].metric("主方向", metrics.get("favorite_label") or "-")
         tpb_cols[1].metric("主方向概率", f"{metrics.get('favorite_probability', 0)}%")
-        tpb_cols[2].metric("Signal Strength", f"{score_layer.get('signal_strength', score_layer.get('betting_confidence', 0))} / 100")
+        signal_strength = score_layer.get("signal_strength", score_layer.get("betting_confidence", 0))
+        tpb_cols[2].metric("信号强度", f"{signal_strength} / 100（{_signal_strength_level(signal_strength)}）")
         tpb_cols[3].metric("推荐金额", f"{display_stake_amount:g} 元")
         if probabilities:
             st.caption(
@@ -1240,61 +1386,43 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
                 f"平局 {percent(probabilities.get('draw', 0))} / "
                 f"客胜 {percent(probabilities.get('away_win', 0))}"
             )
-        st.caption("Signal Strength = (max(TPB probabilities) - second max) × 100。")
-        st.caption("推荐金额 = Investment Score → 固定区间映射。")
+        st.caption("信号强度 = (TPB 三项概率最高值 - 第二高值) × 100；0-20 为弱，20-40 为中，40 以上为强。")
+        st.caption(_investment_reason(score_layer, investment_breakdown, rss, display_stake_amount))
 
-        st.markdown("**2. Market Structure（3指标）**")
+        st.markdown("**4. 市场结构（三指标）**")
         market_rows = market_structure_numeric_rows(market_intelligence)
         market_cols = st.columns(3)
+        market_label_map = {
+            "Direction Strength": "方向强度",
+            "Market Agreement": "市场一致性",
+            "Volatility Pressure": "波动压力",
+        }
         for index, row in enumerate(market_rows):
-            market_cols[index].metric(row["指标"], row["数值"])
-        st.caption("Direction Strength = TPB集中度 + 盘口偏差；Market Agreement = 多市场一致性指数；Volatility Pressure = 波胆 + 平局 + odds spread。")
+            market_cols[index].metric(market_label_map.get(row["指标"], row["指标"]), row["数值"])
+        st.caption("定义：方向强度 = TPB 集中度 + 盘口偏差；市场一致性 = 多市场一致性指数；波动压力 = 波胆 + 平局 + 赔率分散。")
+        st.caption(_market_structure_explanation(market_rows, metrics.get("favorite_label") or "-"))
 
         scenario_table_rows = scenario_projection_table_rows(scenario)
         if scenario_table_rows:
-            st.markdown("**3. Scenario Projection（简化版）**")
-            st.caption("Scenario = 受约束结构权重层；用于 portfolio construction、ranking adjustment、risk estimation，不覆盖 TPB，不计算 EV/ROI。")
+            st.markdown("**5. 情景概率投影（简化版）**")
+            st.caption("情景层是受约束结构权重层，用于组合构建、结构排序调整和风险估计；不覆盖 TPB，不计算 EV/ROI。")
             st.table(pd.DataFrame(scenario_table_rows))
-        st.markdown("**4. Investment Score（2因子）**")
-        score_cols = st.columns(4)
-        score_cols[0].metric("TPB Edge + Scenario Alignment", f"{investment_breakdown.get('signal', '-')} / 100")
-        score_cols[1].metric("RSI", rss["RSI"])
-        score_cols[1].caption("RSI 是 risk adjustment factor")
-        score_cols[2].metric("Risk Adjustment", fmt(investment_breakdown.get("risk_adjustment")))
-        score_cols[3].metric("Investment Score", f"{score_layer.get('investment_score', 0)} / 100")
-        st.caption("Investment Score 是多因子加权结果：TPB Edge、Scenario Alignment、Market Conflict 与 RSI 共同解释当前投资分。RSI 作为风险调整因子，先影响 Investment Score，再间接影响推荐金额。")
-        st.caption("当 Investment Score 落入低分档位时，推荐金额映射为 0 元，表示当前不进入执行型下注。")
+            if _scenario_weights_unadjusted(scenario_table_rows):
+                st.caption("观察意见：当前情景概率与权重完全相同，说明权重层尚未根据 RSI、市场分歧或结果分布拉开差异；本次先不修改计算，只提示该层未来可做受约束调整。")
 
-        st.markdown("**5. Portfolio（coverage only）**")
-        st.caption(f"Portfolio 只保留 coverage structure，不参与 Ranking Score；CQS：{optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2', '-'))} / 100。")
-        st.dataframe(
-            pd.DataFrame(exposure_control["portfolio_top_rows"]),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.markdown("**Scenario Exposure Map（暴露控制）**")
-        st.dataframe(
-            pd.DataFrame(exposure_control["exposure_map_rows"]),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.markdown("**6. Ranking Top 3（结构排序，非执行指令）**")
-        st.caption("Ranking 是系统结构排序，不是单独的下注指令；每个排序项附带 1-3 个 Correct Score 结构信号供阅读。")
-        st.dataframe(
-            pd.DataFrame(exposure_control["ranking_rows"]),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.markdown("**Removed Bets List（降级观察项）**")
-        st.dataframe(
-            pd.DataFrame(exposure_control["removed_bets_rows"]),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.markdown("**7. RSI Risk**")
-        st.caption(f"RSI：{rss['RSI']}｜{rss['组件']}。RSI 表示结构风险压力；越高说明情景分散、尾部或市场分歧压力越大。它不是单独下注信号，会通过 Investment Score 间接影响推荐金额。")
-        st.markdown("**8. High Variance Structural Signal（波胆）**")
-        st.caption("Correct Score 是高波动结构信号，不是执行信号；这里只保留一个最高权重提示。")
+        st.markdown("**6. 投资分解释（Investment Score）**")
+        score_cols = st.columns(4)
+        score_cols[0].metric("TPB 边际 + 情景一致性", f"{investment_breakdown.get('signal', '-')} / 100")
+        score_cols[1].metric("RSI", rss["RSI"])
+        score_cols[2].metric("风险调整", fmt(investment_breakdown.get("risk_adjustment")))
+        score_cols[3].metric("投资分", f"{score_layer.get('investment_score', 0)} / 100")
+        st.caption("本栏定义：投资分由主方向信号、情景一致性、市场冲突和 RSI 风险调整共同解释；推荐金额只由投资分固定区间映射。")
+        st.caption(_investment_factor_explanation(investment_breakdown, score_layer, rss))
+        st.caption(_rsi_match_explanation(rss))
+        st.caption("低投资分进入低档位时，推荐金额映射为 0 元，表示当前不进入执行型下注。")
+
+        st.markdown("**7. 高波动结构信号（波胆）**")
+        st.caption("波胆是高波动结构信号，不是执行信号；这里只保留一个最高权重提示。")
         st.caption(
             "高波动结构信号："
             f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
@@ -1517,22 +1645,47 @@ def render_model_explanation_layer(scenario_engine):
 
 def render_user_portfolio_comparison(input_key, comparison):
     input_key = input_key or "user_portfolio_input"
+    bet_combo_key = f"{input_key}_actual_bets"
     with st.container(border=True):
         st.markdown("**我的实盘组合（可选）**")
         st.caption(
-            "如果不输入，系统照常运行。若输入，仅用于执行价格复盘和 API 赔率对比，"
-            "不影响 TPB、比赛投资分、推荐金额或系统主结论。"
+            "左侧记录我的实际盘口和赔率，用于 API 价格对比；右侧记录我的实际投注金额。"
+            "两部分都只用于复盘，不影响 TPB、比赛投资分、推荐金额、排序或系统主结论。"
         )
-        st.text_area(
-            "每行一笔：市场,选择,盘口(可选),赔率",
-            key=input_key,
-            placeholder="独赢,埃及,2.32\n让球,埃及,-0.5,1.42\n大小球,Under 2.5,1.89\n波胆,2:0,19.5",
-            height=130,
-        )
-        st.caption("支持英文逗号或中文逗号；无需金额字段，系统会自动识别结构。")
+        odds_col, bets_col = st.columns(2)
+        with odds_col:
+            st.markdown("**我的实际盘口 / 赔率**")
+            st.text_area(
+                "每行一笔：市场,选择,盘口(可选),赔率",
+                key=input_key,
+                placeholder="独赢,巴西,2.32\n让球,巴西,-0.5,1.42\n大小球,Under 2.5,1.89\n波胆,1:0,19.5",
+                height=150,
+            )
+            st.caption("用于实际赔率 vs API 赔率对比；不填写金额。")
+        with bets_col:
+            st.markdown("**我的实际投注组合**")
+            st.text_area(
+                "每行一笔：市场,选择,盘口(可选),金额",
+                key=bet_combo_key,
+                placeholder="独赢,巴西,300元\n大小球,Under,300\n波胆,1:0,100\n1:0,100",
+                height=150,
+            )
+            st.caption("支持中英文逗号，不区分大小写；金额可写 300 或 300元。")
+
+        bet_rows, bet_errors = parse_actual_bet_combo_text(st.session_state.get(bet_combo_key, ""))
+        if bet_errors:
+            st.warning("部分投注组合未被解析：")
+            for error in bet_errors:
+                st.caption(f"- {error}")
+        if bet_rows:
+            st.markdown("**我的实际投注组合明细（仅复盘）**")
+            st.dataframe(pd.DataFrame(bet_rows), use_container_width=True, hide_index=True)
 
         if not comparison.get("has_input"):
-            st.info("未输入我的实盘组合。系统输出不受用户组合影响。")
+            if not bet_rows:
+                st.info("未输入我的实际盘口或投注组合。系统输出不受用户组合影响。")
+            else:
+                st.info("已记录投注组合；未输入实际赔率，因此暂无 API 赔率对比。系统输出不受用户组合影响。")
             return
 
         errors = comparison.get("errors") or []
@@ -1548,7 +1701,7 @@ def render_user_portfolio_comparison(input_key, comparison):
 
         st.metric("总笔数", comparison.get("total_count", 0))
 
-        st.markdown("**我的组合明细**")
+        st.markdown("**我的实际盘口明细**")
         detail_rows = [
             {
                 "市场": item.get("market"),
@@ -1666,10 +1819,10 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
             scenario_engine,
             portfolio_summary,
         )
-        render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
-        render_core_risk_summary(match, decision, distribution)
         st.caption("结果分布为观察层，不参与 TPB 投资分、推荐金额或排序。")
         render_result_distribution(distribution)
+        render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
+        render_core_risk_summary(match, decision, distribution)
 
         st.caption("我的实盘组合仅作为 display-only 对比层，不参与 TPB、比赛投资分、推荐金额或系统主方向。")
 
