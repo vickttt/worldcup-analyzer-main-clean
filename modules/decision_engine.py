@@ -79,17 +79,23 @@ def direction_confidence(match, odds, polymarket=None, api_football_data=None, s
     favorite_label = display_team(label_for_key(match, favorite))
     favorite_probability = probabilities[favorite]
     score = betting_confidence_from_tpb(tpb)
+    main_path_support = (scenario_engine or {}).get("main_path_support")
     scenario_alignment = (scenario_engine or {}).get("scenario_alignment")
     rsi = (scenario_engine or {}).get("risk_surface_index")
+    rsi_score = ((scenario_engine or {}).get("risk_score_v3") or {}).get("score")
     investment_score = investment_score_from_tpb(
         tpb,
+        main_path_support=main_path_support,
         scenario_alignment=scenario_alignment,
         risk_surface_index=rsi,
+        rsi_score=rsi_score,
     )
     investment_breakdown = investment_score_breakdown(
         tpb,
+        main_path_support=main_path_support,
         scenario_alignment=scenario_alignment,
         risk_surface_index=rsi,
+        rsi_score=rsi_score,
     )
     market_direction = market_direction_from_tpb(tpb, {
         "home_win": f"{favorite_label}占优",
@@ -133,7 +139,7 @@ def direction_confidence(match, odds, polymarket=None, api_football_data=None, s
         "market_direction": market_direction,
         "true_probability_base": tpb,
         "summary": summary,
-        "reason": "方向把握由 TPB Edge 表达；Scenario Alignment 和 RSI 只进入 Lite Investment Score。",
+        "reason": "方向把握由 TPB Edge 与 Main Path Support 表达；RSI Score 只通过风险折减进入 Investment Score。",
     }
 
 

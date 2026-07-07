@@ -36,12 +36,12 @@ def format_value(value):
 
 
 SCENARIO_NAME_CN = {
-    "S1": "强热门获胜",
-    "S2": "热门小胜",
-    "S3": "平局",
-    "S4": "冷门获胜",
-    "S5": "低比分比赛",
-    "S6": "高波动比赛",
+    "S1": "主方向优势胜出",
+    "S2": "主方向小胜 / 不打穿",
+    "S3": "平局胶着",
+    "S4": "冷门反转",
+    "S5": "低节奏小比分",
+    "S6": "比分扩展路径",
 }
 
 LEVEL_CN = {
@@ -410,14 +410,16 @@ def risk_score_v3_summary(scenario_engine):
     components = score.get("components") or {}
     return {
         "RSI": _level_cn(score.get("level")),
-        "RSS": _level_cn(score.get("level")),
+        "RSI Score": format_value(score.get("score")),
+        "RSS": format_value(score.get("score")),
         "等级": _level_cn(score.get("level")),
         "公式": score.get("formula", "-"),
         "组件": (
             f"市场分歧 {format_value(components.get('market_disagreement'))} / "
-            f"波动压力 {format_value(components.get('volatility_pressure'))} / "
-            f"尾部密度 {format_value(components.get('tail_density'))} / "
-            f"情景离散 {format_value(components.get('scenario_dispersion'))}"
+            f"比分路径不确定性 {format_value(components.get('score_path_uncertainty'))} / "
+            f"真实尾部概率风险 {format_value(components.get('true_tail_risk_score'))} / "
+            f"情景结构风险 {format_value(components.get('scenario_structure_risk'))} / "
+            f"主路径支撑 {format_value(components.get('main_path_support'))}"
         ),
         "说明": score.get("disclaimer", "RSI 是 Low / Medium / High 结构风险索引，不是 EV/ROI/optimizer。"),
     }
@@ -427,19 +429,29 @@ def market_structure_numeric_rows(market_intelligence):
     metrics = (market_intelligence or {}).get("metrics") or {}
     return [
         {
-            "指标": "Direction Strength",
+            "指标": "方向强度",
             "数值": _metric_number_text(_direction_strength_number(metrics)),
-            "说明": "TPB 集中度 + 盘口偏差",
+            "说明": "TPB 主方向与第二方向的概率差。",
         },
         {
-            "指标": "Market Agreement",
-            "数值": _metric_number_text(metrics.get("market_agreement_score")),
-            "说明": "多市场一致性指数",
+            "指标": "市场一致性评分",
+            "数值": _metric_number_text(metrics.get("market_consistency_score")),
+            "说明": "综合胜平负内部一致性、胜平负与亚洲盘方向、亚洲盘深度与TPB、大小球与波胆结构、Polymarket 与 API-Football 的一致性。",
         },
         {
-            "指标": "Volatility Pressure",
-            "数值": _metric_number_text(metrics.get("volatility_pressure_score")),
-            "说明": "波胆 + 平局 + odds spread",
+            "指标": "比分路径不确定性",
+            "数值": _metric_number_text(metrics.get("score_path_uncertainty_score")),
+            "说明": "由平局胶着压力和大小球-波胆结构张力构成，表示比赛是否容易从单一主路径分散到多种比分路径。",
+        },
+        {
+            "指标": "真实尾部概率",
+            "数值": _metric_number_text(metrics.get("true_tail_probability_score")),
+            "说明": "由去重后的波胆隐含概率计算，表示冷门、高比分平局、极端比分扩展等尾部结果的概率质量；它通过真实尾部概率风险进入 RSI。",
+        },
+        {
+            "指标": "旧尾部密度 tail_density（已废弃）",
+            "数值": _metric_number_text((metrics.get("tail_density_deprecated") or 0) * 100),
+            "说明": "旧指标只统计波胆条目密度，已废弃为核心指标；当前仅与真实尾部概率并列展示，帮助迁移核对。",
         },
     ]
 
@@ -449,12 +461,12 @@ def _scenario_projection_meaning(code, match=None, market_intelligence=None):
     favorite = metrics.get("favorite_label") or _match_team_label(match, "home")
     underdog = _match_team_label(match, "away")
     meanings = {
-        "S1": f"{favorite} 主路径更清晰，常见阅读为 1:0、2:0 这类热门获胜比分区间。",
-        "S2": f"{favorite} 小胜路径，通常对应一球优势或轻让球覆盖，不代表大胜确定性。",
-        "S3": "平局路径，表示比赛可能进入低节奏、僵持或主方向无法拉开差距的状态。",
-        "S4": f"{underdog} 冷门路径，表示弱势方反击、定位球或主队失误导致方向反转的风险。",
+        "S1": f"{favorite} 主方向优势胜出，通常对应稳定胜出、两球优势或让球方向兑现。",
+        "S2": f"{favorite} 小胜 / 不打穿路径，常见 1:0、2:1，适合解释轻让球或只兑现独赢。",
+        "S3": "平局胶着路径，表示比赛可能进入低节奏、僵持或主方向无法拉开差距的状态。",
+        "S4": f"{underdog} 冷门反转路径，表示弱势方反击、定位球或主队失误导致方向反转的风险。",
         "S5": "低比分路径，通常对应小球、节奏慢、进攻效率下降或双方谨慎开局。",
-        "S6": "高波动路径，表示大比分、连续进球或尾部波胆的概率解释空间增加。",
+        "S6": "比分扩展路径，表示 2:2、3:1、3:2 或 4球以上总进球等比分空间更开放；不是推荐大球或波胆。",
     }
     return meanings.get(code, "用于解释本场概率空间中的结构路径。")
 
@@ -466,7 +478,7 @@ def scenario_projection_table_rows(scenario_engine, match=None, market_intellige
         code = scenario_text.split(" ", 1)[0] if scenario_text else "-"
         probability = row.get("原始概率", "-")
         rows.append({
-            "Scenario": code,
+            "情景": code,
             "描述": SCENARIO_NAME_CN.get(code, scenario_text.replace(code, "", 1).strip() or "-"),
             "概率": probability,
             "本场含义": _scenario_projection_meaning(code, match, market_intelligence),
@@ -498,8 +510,8 @@ def system_semantic_alignment_rows():
         },
         {
             "层 / 指标": "RSI",
-            "统一语义": "risk adjustment factor",
-            "真实作用": "不直接输入 stake；通过 Risk Adjustment 改变 Investment Score，从而间接影响资金分配。",
+            "统一语义": "结构风险指数",
+            "真实作用": "由市场分歧、比分路径不确定性、真实尾部概率风险和情景结构风险加权生成；通过风险折减系数间接影响投资评分。",
         },
         {
             "层 / 指标": "Stake",
@@ -507,14 +519,14 @@ def system_semantic_alignment_rows():
             "真实作用": "只由 Investment Score 档位映射得出。",
         },
         {
-            "层 / 指标": "Market Conflict",
-            "统一语义": "inverse of market agreement score",
-            "真实作用": "当前 active model 使用 100 - market_agreement_score；legacy conflict function 已废弃且不使用。",
+            "层 / 指标": "市场分歧",
+            "统一语义": "100 - 市场一致性评分",
+            "真实作用": "市场一致性评分越低，市场分歧越高。",
         },
         {
-            "层 / 指标": "Correct Score",
-            "统一语义": "high variance structural signal layer, not execution signal",
-            "真实作用": "作为高波动结构信号展示，不进入 Investment Score、Ranking Score 或 stake mapping。",
+            "层 / 指标": "波胆",
+            "统一语义": "真实尾部概率与比分扩展概率来源",
+            "真实作用": "用于生成真实尾部概率和比分扩展概率；不直接构成投注推荐，不进入 stake mapping。",
         },
     ]
 
@@ -524,7 +536,7 @@ def system_semantic_alignment_sections():
         {
             "标题": "Scenario",
             "简短说明": "受约束情景权重层。",
-            "详细说明": "Scenario 用于组合构建、排序调整和风险估计；不覆盖 TPB，不使用用户输入，不计算 EV/ROI。",
+            "详细说明": "Scenario 使用 S1-S6 表达主路径、防守路径和比分扩展路径；不覆盖 TPB，不使用用户输入，不计算 EV/ROI。",
         },
         {
             "标题": "Portfolio",
@@ -543,8 +555,8 @@ def system_semantic_alignment_sections():
         },
         {
             "标题": "RSI",
-            "简短说明": "风险调整因子。",
-            "详细说明": "RSI 表示结构风险压力，较高时会压低 Investment Score 的风险调整项，并间接降低推荐金额；它不是单独下注信号。",
+            "简短说明": "结构风险指数。",
+            "详细说明": "RSI 由市场分歧、比分路径不确定性、真实尾部概率风险和情景结构风险加权生成；它不是单独下注信号。",
         },
         {
             "标题": "TPB",
@@ -552,9 +564,14 @@ def system_semantic_alignment_sections():
             "详细说明": "TPB 提供主胜 / 平局 / 客胜三项概率坐标，不被 Scenario、Market 或用户输入覆盖。",
         },
         {
-            "标题": "Market Conflict",
-            "简短说明": "市场一致性的反向指标。",
-            "详细说明": "当前 active model 使用 100 - market_agreement_score；legacy conflict function 已废弃且不使用。",
+            "标题": "市场分歧",
+            "简短说明": "市场一致性评分的反向指标。",
+            "详细说明": "市场分歧 = 100 - 市场一致性评分；分歧高说明跨盘口结构不够一致。",
+        },
+        {
+            "标题": "波胆",
+            "简短说明": "尾部概率与比分扩展来源。",
+            "详细说明": "波胆用于生成真实尾部概率和比分扩展概率；不直接构成投注推荐，不进入 stake mapping。",
         },
     ]
 
@@ -1492,7 +1509,7 @@ def format_final_decision_block_lines(
     lines = [
         "## 最终决策区（FINAL DECISION BLOCK）",
         "",
-        "### System Semantic Alignment Layer",
+        "### 系统语义对齐层",
         "",
     ]
     for row in system_semantic_alignment_sections():
@@ -1502,50 +1519,49 @@ def format_final_decision_block_lines(
         )
     lines.extend([
         "",
-        "### 1. TPB Summary",
+        "### 1. 概率基准摘要",
         "",
         f"- 主方向：{metrics.get('favorite_label') or opinion.get('match_direction') or opinion.get('match_winner', '-')}（{format_value(metrics.get('favorite_probability'))}%）｜TPB：主胜 {percent(probabilities.get('home_win', 0)) if probabilities else '-'} / 平局 {percent(probabilities.get('draw', 0)) if probabilities else '-'} / 客胜 {percent(probabilities.get('away_win', 0)) if probabilities else '-'}",
-        f"- Signal Strength / 推荐金额：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100；{_recommended_stake_text(portfolio_summary)}",
-        "- Signal Strength = (max(TPB probabilities) - second max) × 100。",
-        "- 推荐金额 = Investment Score → 固定区间映射。",
+        f"- 信号强度 / 推荐金额：{opinion.get('betting_confidence', opinion.get('confidence', 50))} / 100；{_recommended_stake_text(portfolio_summary)}",
+        "- 信号强度 =（TPB 最高概率 - 第二高概率）× 100。",
+        "- 推荐金额 = 投资分 → 固定区间映射。",
         "",
     ])
     lines.extend([
-        "### 2. Market Structure（3指标）",
+        "### 2. 市场结构（核心3项 + 尾部对比）",
         "",
     ])
     for row in market_structure_numeric_rows(market_intelligence):
         lines.append(f"- {row['指标']}：{row['数值']}｜{row['说明']}")
     lines.extend([
         "",
-        "### 3. Scenario Projection（简化版）",
+        "### 3. 情景概率投影（简化版）",
         "",
-        "- Scenario = 受约束结构权重层；用于 portfolio construction、ranking adjustment、risk estimation，不覆盖 TPB，不计算 EV/ROI。",
+        "- 情景层 = 受约束结构权重层；用于组合构建、排序调整和风险估计，不覆盖 TPB，不计算 EV/ROI。",
         "",
     ])
     if scenario_rows:
-        lines.extend(markdown_table(["Scenario", "描述", "概率", "本场含义"], scenario_rows))
+        lines.extend(markdown_table(["情景", "描述", "概率", "本场含义"], scenario_rows))
     else:
         lines.append("暂无情景概率与权重数据。")
     lines.extend([
         "",
-        "### 4. Investment Score（2因子）",
+        "### 4. 投资评分（基础信号 × 风险折减）",
         "",
-        f"- 输入因素：TPB Edge / Scenario Alignment / Market Conflict / RSI",
-        f"- 当前因子读数：TPB Edge + Scenario Alignment {format_value(investment_breakdown.get('signal'))} / 100；Risk Adjustment {format_value(investment_breakdown.get('risk_adjustment'))}；RSI {rss['RSI']}",
-        f"- Investment Score：{format_value(score)} / 100",
-        "- 解释：Investment Score 是多因子加权结果；TPB Edge、Scenario Alignment、Market Conflict 与 RSI 共同解释当前投资分。",
-        "- RSI 是 risk adjustment factor：它不直接输入 stake mapping，但会通过 Investment Score 间接影响推荐金额。",
-        "- 低分不下注：当 Investment Score 落入低分档位，推荐金额映射为 0 元。",
+        "- 输入结构：TPB 概率优势 + 主路径支撑 → 基础信号；市场分歧 + 比分路径不确定性 + 真实尾部概率风险 + 情景结构风险 → RSI。",
+        f"- 当前读数：TPB 概率优势 {format_value(investment_breakdown.get('tpb_edge'))} / 100；主路径支撑 {format_value(investment_breakdown.get('main_path_support'))} / 100；基础信号 {format_value(investment_breakdown.get('base_signal'))} / 100；风险折减 {format_value(investment_breakdown.get('risk_adjustment'))}；RSI {rss['RSI']}。",
+        f"- 投资评分：{format_value(score)} / 100",
+        "- 解释：投资评分 = 基础信号 × 风险折减。RSI 不直接输入推荐金额映射，但会先折减投资评分，再由投资评分映射推荐金额。",
+        "- 低分不下注：当投资评分落入低分档位，推荐金额映射为 0 元。",
         "",
-        "### 5. Portfolio（coverage only）",
+        "### 5. 投注组合（仅覆盖结构）",
         "",
-        f"Portfolio 只保留 coverage structure，不参与 Ranking Score；CQS：{format_value(optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2')))} / 100。",
+        f"投注组合只保留覆盖结构，不参与排序评分；覆盖质量分：{format_value(optimization.get('coverage_quality_score', optimization.get('coverage_efficiency_score_v2')))} / 100。",
         "",
     ])
     for row in exposure_control["portfolio_top_rows"]:
         lines.append(
-            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜Scenario：{row.get('Scenario', '-')}"
+            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景：{row.get('Scenario', '-')}"
         )
     lines.extend([
         "",
@@ -1564,14 +1580,14 @@ def format_final_decision_block_lines(
             )
     lines.extend([
         "",
-        "### 7. RSI Risk",
+        "### 7. 风险指数 RSI",
         "",
         f"- RSI：{rss['RSI']}｜{rss['组件']}",
         "- RSI 表示结构风险压力；越高说明情景分散、尾部或市场分歧压力越大。它不是单独下注信号，会通过 Investment Score 间接影响推荐金额。",
         "",
-        "### 8. High Variance Structural Signal（波胆）",
+        "### 8. 波胆结构信号",
         "",
-        "- Correct Score 是高波动结构信号，不是执行信号；这里只保留一个最高权重提示。",
+        "- 波胆是比分尾部与比分扩展结构信号，不是执行信号；这里只保留一个最高权重提示。",
         f"- 高波动结构信号：{top_score['中文投注描述']}｜盘口：{top_score['对应盘口']}｜情景依赖：{top_score['情景依赖']}",
         "",
         "重点风险路径：结构不确定性 + 情景分散 + 高波动尾部风险",
@@ -1691,7 +1707,7 @@ def format_market_intelligence_lines(market_intelligence):
     lines = [
         "## 2. 市场结构层",
         "",
-        "Lite v1 市场结构只保留 3 个指标：方向强度、市场一致性、波动压力；不使用用户输入，不计算 EV/ROI。",
+        "Lite v2 市场结构保留 4 个指标：方向强度、市场一致性评分、比分路径不确定性、真实尾部概率；不使用用户输入，不计算 EV/ROI。",
         "",
     ]
     for row in market_structure_numeric_rows(market_intelligence):
@@ -1706,10 +1722,10 @@ def format_market_intelligence_lines(market_intelligence):
 def format_scenario_engine_lines(scenario_engine):
     scenario = scenario_engine or {}
     lines = [
-        "## 3. Scenario Projection（Lite v1）",
+        "## 3. 情景概率投影（Lite v2）",
         "",
         scenario.get("disclaimer")
-        or "Scenario Projection Lite v1 使用 TPB + Market signal projection；不覆盖 TPB，不计算 EV/ROI，不改变推荐金额，不使用用户输入。",
+        or "情景概率投影使用 TPB + 市场结构信号；不覆盖 TPB，不计算 EV/ROI，不改变推荐金额，不使用用户输入。",
         "",
         "### S1-S6 概率与本场含义",
     ]
@@ -1718,7 +1734,7 @@ def format_scenario_engine_lines(scenario_engine):
         lines.append("暂无情景概率数据。")
     else:
         for row in scenario_projection_table_rows(scenario):
-            lines.append(f"- {row['Scenario']} {row['描述']}：概率 {row['概率']}；{row['本场含义']}")
+            lines.append(f"- {row['情景']} {row['描述']}：概率 {row['概率']}；{row['本场含义']}")
 
     lines.extend([
         "",
@@ -1738,12 +1754,12 @@ def format_scenario_engine_lines(scenario_engine):
     mapping = scenario.get("scenario_market_mapping") or {}
     lines.extend(["", "### 情景与盘口映射", ""])
     for code, name in [
-        ("S1", "Strong Favorite Win"),
-        ("S2", "Narrow Favorite Win"),
-        ("S3", "Draw"),
-        ("S4", "Upset Win"),
-        ("S5", "Low Scoring Match"),
-        ("S6", "High Variance Match"),
+        ("S1", "Main Direction Control Win"),
+        ("S2", "Narrow Main Direction Win"),
+        ("S3", "Draw Stalemate"),
+        ("S4", "Upset Reversal"),
+        ("S5", "Low Tempo Low Score"),
+        ("S6", "Score Extension Path"),
     ]:
         item = mapping.get(code) or {}
         lines.append(
@@ -1787,7 +1803,7 @@ def format_scenario_optimization_v2_lines(scenario_engine):
     lines = [
         "## Portfolio Coverage（Lite v1）",
         "",
-        "该层只展示 coverage structure；Ranking Score 独立使用 SS + Scenario Alignment - RSI。",
+        "该层只展示覆盖结构；排序评分独立使用 0.60×信号强度 + 0.40×路径支撑，RSI 只作为风险标签展示。",
         "",
         "### 覆盖优化目标",
         "",
@@ -1855,7 +1871,7 @@ def format_risk_surface_v3_lines(scenario_engine):
     risk_surface_v3 = scenario.get("risk_surface_v3") or {}
     rss = risk_score_v3_summary(scenario)
     lines = [
-        "## RSI Risk（Lite v1）",
+        "## 风险指数 RSI（Lite v2）",
         "",
         risk_surface_v3.get("description")
         or "Risk Surface v3 只刻画结构风险，不预测结果，不计算 EV/ROI，不做 optimizer；RSI 可通过 Investment Score 间接影响 stake，不直接输入 stake mapping。",
@@ -1867,7 +1883,7 @@ def format_risk_surface_v3_lines(scenario_engine):
         f"- 公式：{rss['公式']}",
         f"- 说明：{rss['说明']}",
         "",
-        "### Structural Risk Map",
+        "### 结构风险图",
         "",
     ]
     for row in risk_surface_v3_map_rows(scenario):
@@ -1876,7 +1892,7 @@ def format_risk_surface_v3_lines(scenario_engine):
         )
     lines.extend([
         "",
-        "### Risk Decomposition",
+        "### 风险拆解",
         "",
     ])
     for row in risk_decomposition_v3_rows(scenario):
@@ -1885,7 +1901,7 @@ def format_risk_surface_v3_lines(scenario_engine):
         )
     lines.extend([
         "",
-        "边界：RSI 是 Low / Medium / High qualitative risk index；不是 EV、ROI、profit maximization、ML training 或 black-box scoring。RSI 不直接输入 stake mapping，但会通过 Investment Score 间接影响资金分配。",
+        "边界：RSI 是低 / 中 / 高结构风险指数；不是 EV、ROI、收益最大化、机器学习或黑箱评分。RSI 不直接输入推荐金额映射，但会通过投资评分间接影响资金分配。",
     ])
     return lines
 
@@ -1911,7 +1927,7 @@ def format_model_explanation_lines(scenario_engine):
         "",
     ])
     methods = methodology.get("market_structure_methods") or {}
-    for key in ["directional_strength", "market_agreement", "market_conflict_index", "volatility_pressure"]:
+    for key in ["directional_strength", "market_consistency", "market_disagreement", "score_path_uncertainty", "true_tail_probability"]:
         item = methods.get(key) or {}
         lines.append(f"- {item.get('name', key)}")
         lines.append(f"  - 输入：{', '.join(item.get('inputs') or ['-'])}")
@@ -1986,24 +2002,24 @@ def format_system_portfolio_lines(market_intelligence, scenario_engine=None, mat
     lines = [
         "## Portfolio Coverage（coverage only）",
         "",
-        "本区只展示 coverage structure，不参与 Ranking Score；FINAL DECISION BLOCK 仍是压缩决策视图。",
-        "Lite v1：Portfolio 保留 Primary / Defensive / High Variance Coverage；Ranking 是结构排序层，不是最终执行指令。",
+        "本区只展示覆盖结构，不参与排序评分；最终决策区仍是压缩决策视图。",
+        "Lite v2：投注组合保留主覆盖 / 防守覆盖 / 比分扩展观察；排序是结构排序层，不是最终执行指令。",
         "",
     ]
     for row in exposure_control["portfolio_rows"]:
         lines.append(
-            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}｜Scenario：{row.get('Scenario', '-')}"
+            f"- {row['组合类型']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}｜情景：{row.get('Scenario', '-')}"
         )
     lines.extend([
         "",
-        "### High Variance Structural Signal（波胆）",
+        "### 波胆结构信号",
         "",
-        "说明：波胆是高波动结构信号，不是执行信号；最多展示 5 个：主波胆 2 个、结构波胆 2 个、高波动波胆 1 个。",
+        "说明：波胆是比分尾部与比分扩展结构信号，不是执行信号；最多展示 5 个：主波胆 2 个、结构波胆 2 个、比分扩展波胆 1 个。",
         "",
     ])
     for row in exposure_control["correct_score_rows"]:
         lines.append(
-            f"- {row['波胆层级']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}｜Scenario：{row.get('Scenario', '-')}"
+            f"- {row['波胆层级']}：{row['中文投注描述']}｜盘口：{row['对应盘口']}｜理由：{row['理由']}｜情景依赖：{row['情景依赖']}｜情景：{row.get('Scenario', '-')}"
         )
     return lines
 

@@ -141,12 +141,22 @@ def betting_confidence_breakdown(tpb):
 
 
 def risk_adjustment_from_rsi(level):
+    return risk_adjustment_from_rsi_score(_rsi_level_fallback_score(level))
+
+
+def _rsi_level_fallback_score(level):
     normalized = str(level or "Medium").strip().lower()
     if normalized == "low":
-        return 0.9
+        return 20
     if normalized == "high":
-        return 0.4
-    return 0.65
+        return 70
+    return 47.5
+
+
+def risk_adjustment_from_rsi_score(rsi_score):
+    score = max(0, min(100, float(rsi_score or 0)))
+    adjustment = 0.95 - 0.45 * score / 100
+    return round(max(0.50, min(0.95, adjustment)), 4)
 
 
 def rsi_penalty(level):
@@ -175,31 +185,69 @@ def market_direction_from_tpb(tpb, labels=None):
     return labels.get(top, top)
 
 
-def investment_score_from_tpb(tpb, scenario_alignment=None, risk_surface_index=None):
+def base_signal_from_tpb(tpb, main_path_support=None, scenario_alignment=None):
     probabilities = (tpb or {}).get("probabilities")
     if not probabilities:
         return 0
     tpb_edge = signal_strength_from_tpb(tpb)
-    alignment = tpb_edge if scenario_alignment is None else clamp(scenario_alignment)
-    signal = min(100, tpb_edge + alignment)
-    risk_adjustment = risk_adjustment_from_rsi(risk_surface_index)
-    return clamp(signal * risk_adjustment)
+    support = main_path_support
+    if support is None:
+        support = scenario_alignment
+    support = tpb_edge if support is None else max(0, min(100, float(support or 0)))
+    return round(max(tpb_edge, support) + 0.35 * min(tpb_edge, support), 2)
 
 
-def investment_score_breakdown(tpb, scenario_alignment=None, risk_surface_index=None):
+def investment_score_from_tpb(
+    tpb,
+    main_path_support=None,
+    scenario_alignment=None,
+    risk_surface_index=None,
+    rsi_score=None,
+):
+    probabilities = (tpb or {}).get("probabilities")
+    if not probabilities:
+        return 0
+    base_signal = base_signal_from_tpb(tpb, main_path_support=main_path_support, scenario_alignment=scenario_alignment)
+    if rsi_score is None:
+        rsi_score = _rsi_level_fallback_score(risk_surface_index)
+    risk_adjustment = risk_adjustment_from_rsi_score(rsi_score)
+    return clamp(base_signal * risk_adjustment)
+
+
+def investment_score_breakdown(
+    tpb,
+    main_path_support=None,
+    scenario_alignment=None,
+    risk_surface_index=None,
+    rsi_score=None,
+):
     tpb_edge = signal_strength_from_tpb(tpb)
-    alignment = tpb_edge if scenario_alignment is None else clamp(scenario_alignment)
-    signal = min(100, tpb_edge + alignment)
+    support = main_path_support
+    if support is None:
+        support = scenario_alignment
+    support = tpb_edge if support is None else max(0, min(100, float(support or 0)))
+    base_signal = base_signal_from_tpb(tpb, main_path_support=support)
     rsi = risk_surface_index or "Medium"
-    risk_adjustment = risk_adjustment_from_rsi(rsi)
-    score = investment_score_from_tpb(tpb, alignment, rsi)
+    if rsi_score is None:
+        rsi_score = _rsi_level_fallback_score(rsi)
+    risk_adjustment = risk_adjustment_from_rsi_score(rsi_score)
+    score = investment_score_from_tpb(
+        tpb,
+        main_path_support=support,
+        risk_surface_index=rsi,
+        rsi_score=rsi_score,
+    )
     return {
-        "formula": "Investment Score = Signal × Risk Adjustment",
-        "signal_formula": "Signal = TPB Edge + Scenario Alignment",
-        "risk_formula": "Risk Adjustment = 1 - RSI qualitative penalty",
+        "formula": "Investment Score = Base Signal × Risk Adjustment",
+        "base_signal_formula": "Base Signal = max(TPB Edge, Main Path Support) + 0.35 × min(TPB Edge, Main Path Support)",
+        "signal_formula": "Base Signal = max(TPB Edge, Main Path Support) + 0.35 × min(TPB Edge, Main Path Support)",
+        "risk_formula": "Risk Adjustment = clamp(0.95 - 0.45 × RSI Score / 100, 0.50, 0.95)",
         "tpb_edge": tpb_edge,
-        "scenario_alignment": alignment,
-        "signal": round(signal),
+        "main_path_support": support,
+        "scenario_alignment": support,
+        "base_signal": base_signal,
+        "signal": base_signal,
+        "rsi_score": round(float(rsi_score), 1),
         "rsi": rsi,
         "risk_adjustment": risk_adjustment,
         "score": score,

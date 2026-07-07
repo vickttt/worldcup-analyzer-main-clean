@@ -12,9 +12,9 @@ from modules.portfolio_engine import (
     portfolio_style_name,
     rank1_eligibility_check,
 )
-from modules.market_intelligence import build_market_intelligence
-from modules.probability_base import stake_from_investment_score
-from modules.scenario_engine import SCENARIO_TAXONOMY, build_scenario_engine
+from modules.market_intelligence import _correct_score_probability_profile, build_market_intelligence
+from modules.probability_base import base_signal_from_tpb, investment_score_from_tpb, risk_adjustment_from_rsi_score, stake_from_investment_score
+from modules.scenario_engine import SCENARIO_TAXONOMY, _main_path_support_score, _risk_score_v3, build_scenario_engine
 from modules.user_portfolio_compare import build_user_portfolio_comparison, parse_user_portfolio_text
 
 
@@ -80,7 +80,7 @@ def test_core_decision_layers_contract():
     assert score_layer["signal_strength"] == score_layer["betting_confidence"]
     assert 0 <= score_layer["investment_score"] <= 100
     assert score_layer["confidence_breakdown"]["formula"] == "Signal Strength = (top TPB probability - second TPB probability) * 100"
-    assert score_layer["investment_breakdown"]["formula"] == "Investment Score = Signal × Risk Adjustment"
+    assert score_layer["investment_breakdown"]["formula"] == "Investment Score = Base Signal × Risk Adjustment"
 
     expected_stake = stake_from_investment_score(score_layer["investment_score"])
     assert execution_layer["stake"] == expected_stake
@@ -91,7 +91,8 @@ def test_core_decision_layers_contract():
     assert coverage["type"] in {"draw", "upset", "balanced", "none"}
     assert explanation_layer["coverage_explanation"] == coverage["reason"]
     assert "Signal Strength" in explanation_layer["components"]
-    assert "Scenario Alignment" in explanation_layer["components"]
+    assert "Main Path Support" in explanation_layer["components"]
+    assert "Base Signal" in explanation_layer["components"]
     assert "RSI" in explanation_layer["components"]
 
 
@@ -107,8 +108,8 @@ def test_match_investment_score_contract():
     assert 0 <= result["score"] <= 100
     assert result["coverage"]["type"] in {"draw", "upset", "balanced", "none"}
     assert result["confidence_breakdown"]["formula"] == "Signal Strength = (top TPB probability - second TPB probability) * 100"
-    assert result["investment_breakdown"]["formula"] == "Investment Score = Signal × Risk Adjustment"
-    assert result["weights"]["Investment Score"] == "Signal × Risk Adjustment"
+    assert result["investment_breakdown"]["formula"] == "Investment Score = Base Signal × Risk Adjustment"
+    assert result["weights"]["Investment Score"] == "Base Signal × Risk Adjustment"
 
 
 def test_legacy_portfolio_helpers_are_disabled_stubs():
@@ -145,12 +146,14 @@ def test_market_intelligence_contract():
     )
     assert intelligence["available"] is True
     metrics = intelligence["metrics"]
-    assert metrics["model_version"] == "lite_explainable_betting_decision_v1"
+    assert metrics["model_version"] == "lite_explainable_betting_decision_v2"
     assert metrics["directional_strength"] in {"Strong", "Medium", "Weak"}
-    assert metrics["market_agreement"] in {"High", "Medium", "Low"}
-    assert 0 <= metrics["market_agreement_score"] <= 100
-    assert metrics["volatility_pressure"] in {"High", "Medium", "Low"}
-    assert 0 <= metrics["market_conflict_index"] <= 100
+    assert metrics["market_consistency"] in {"High", "Medium", "Low"}
+    assert 0 <= metrics["market_consistency_score"] <= 100
+    assert metrics["score_path_uncertainty"] in {"High", "Medium", "Low"}
+    assert 0 <= metrics["market_disagreement_score"] <= 100
+    assert 0 <= metrics["true_tail_probability_score"] <= 100
+    assert "tail_density_deprecated" in metrics
     assert 0 <= metrics["market_efficiency_score"] <= 100
     assert metrics["volatility_index"] in {"Low", "Medium", "High"}
 
@@ -162,6 +165,77 @@ def test_market_intelligence_contract():
         "ranking",
     }
     assert [item["rank"] for item in portfolio["ranking"]] == [1, 2, 3]
+
+
+def test_tail_probability_profile_and_formula_boundaries():
+    tpb = {
+        "available": True,
+        "probabilities": {"home_win": 0.71, "draw": 0.18, "away_win": 0.11},
+    }
+    rows = [
+        {"score": "0:0", "odd": "8.0"},
+        {"score": "1:1", "odd": "6.5"},
+        {"score": "1:0", "odd": "7.0"},
+        {"score": "2:0", "odd": "8.0"},
+        {"score": "2:1", "odd": "8.5"},
+        {"score": "2:2", "odd": "14.0"},
+        {"score": "3:1", "odd": "13.0"},
+        {"score": "4:0", "odd": "25.0"},
+        {"score": "0:2", "odd": "30.0"},
+        {"score": "0:3", "odd": "51.0"},
+        {"score": "2:0", "odd": "9.0"},
+    ]
+    profile = _correct_score_probability_profile(rows, tpb=tpb)
+    assert profile["available"] is True
+    assert len(profile["score_probabilities"]) == 10
+    assert "0:0" not in profile["tail_scores"]
+    assert "1:1" not in profile["tail_scores"]
+    assert "0:2" in profile["tail_scores"]
+    assert "2:2" in profile["tail_scores"]
+    assert "4:0" in profile["tail_scores"]
+    assert 0 <= profile["true_tail_probability"] <= 1
+    assert 0 <= profile["true_tail_risk_score"] <= 100
+
+    metrics = {
+        "market_disagreement_score": 10,
+        "score_path_uncertainty_score": 40,
+        "true_tail_probability": 0.25,
+        "true_tail_probability_score": 25,
+        "true_tail_risk_score": 100,
+    }
+    weights = [
+        {"code": "S1", "weight": 0.443},
+        {"code": "S2", "weight": 0.164},
+        {"code": "S3", "weight": 0.081},
+        {"code": "S4", "weight": 0.039},
+        {"code": "S5", "weight": 0.097},
+        {"code": "S6", "weight": 0.176},
+    ]
+    rsi = _risk_score_v3(metrics, weights)
+    assert rsi["components"]["true_tail_risk_score"] == 100
+    assert rsi["formula"] == "RSI Score = 0.30×市场分歧 + 0.25×比分路径不确定性 + 0.25×真实尾部概率风险 + 0.20×情景结构风险"
+
+
+def test_main_path_support_base_signal_and_investment_score():
+    weights = {"S1": 0.443, "S2": 0.164}
+    main_path_support = _main_path_support_score(weights)
+    assert abs(main_path_support - 55.8) < 0.1
+
+    tpb = {
+        "available": True,
+        "probabilities": {"home_win": 0.71, "draw": 0.20, "away_win": 0.09},
+    }
+    base_signal = base_signal_from_tpb(tpb, main_path_support=main_path_support)
+    assert abs(base_signal - 73.65) < 0.2
+
+    risk_adjustment = risk_adjustment_from_rsi_score(50)
+    assert abs(risk_adjustment - 0.725) < 0.001
+    investment_score = investment_score_from_tpb(
+        tpb,
+        main_path_support=main_path_support,
+        rsi_score=50,
+    )
+    assert investment_score == 53
 
 
 def test_scenario_engine_contract():
@@ -215,7 +289,7 @@ def test_scenario_engine_contract():
         "components",
         "disclaimer",
     }
-    assert scenario["risk_score_v3"]["score"] is None
+    assert 0 <= scenario["risk_score_v3"]["score"] <= 100
     assert scenario["risk_score_v3"]["index"] == "RSI"
     assert scenario["risk_score_v3"]["level"] in {"Low", "Medium", "High"}
     assert "RSI" in scenario["risk_score_v3"]["disclaimer"]
@@ -235,6 +309,7 @@ def test_scenario_engine_contract():
     assert 0 <= scenario["coverage_quality_score"] <= 100
     assert scenario["risk_surface_index"] in {"Low", "Medium", "High"}
     assert 0 <= scenario["scenario_alignment"] <= 100
+    assert 0 <= scenario["main_path_support"] <= 100
     optimization = scenario["scenario_optimization_v2"]
     assert optimization["version"] == "lite_coverage_quality_v1"
     assert set(optimization) >= {
@@ -255,19 +330,19 @@ def test_scenario_engine_contract():
     assert [item["rank"] for item in optimized_portfolio["ranking"]] == [1, 2, 3]
     methodology = scenario["methodology"]
     assert methodology["version"] == "lite_model_methodology_v1"
-    assert methodology["system_definition"]["identity"] == "Lite Explainable Betting Decision System v1"
+    assert methodology["system_definition"]["identity"] == "Lite Explainable Betting Decision System v2"
     assert methodology["signal_strength"]["formula"] == "SS = (max(TPB probabilities) - second max(TPB probabilities)) * 100"
-    assert methodology["investment_score"]["formula"] == "Investment Score = Signal × Risk Adjustment"
+    assert methodology["investment_score"]["formula"] == "Investment Score = Base Signal × Risk Adjustment"
     assert methodology["scenario_projection"]["principle"] == "Scenario = bounded structural weighting layer from TPB + Market signal projection."
     assert methodology["scenario_projection"]["role"] == "Scenario weights are used for portfolio construction, ranking adjustment, and risk estimation."
-    assert methodology["risk_surface_index"]["outputs"] == ["Low", "Medium", "High"]
+    assert methodology["risk_surface_index"]["outputs"] == ["score 0-100", "Low", "Medium", "High"]
     assert "indirectly affect stake" in methodology["risk_surface_index"]["role"]
-    assert methodology["market_structure_methods"]["market_conflict_index"]["logic"] == "Market Conflict = 100 - Market Agreement Score in the active Lite model. The legacy conflict function is deprecated and not used."
+    assert methodology["market_structure_methods"]["market_disagreement"]["logic"] == "Market Disagreement = 100 - Market Consistency Score."
     assert methodology["coverage_quality_score"]["formula"] == "CQS = coverage completeness - redundancy"
-    assert methodology["ranking"]["formula"] == "Ranking Score = SS + Scenario Alignment - RSI"
+    assert methodology["ranking"]["formula"] == "Ranking Score = 0.60×SS + 0.40×path support; RSI is a displayed risk label and no longer a ranking penalty."
     assert "not a final execution instruction" in methodology["ranking"]["role"]
-    assert methodology["correct_score"]["role"] == "high variance structural signal layer, not execution signal"
-    assert methodology["semantic_alignment"]["RSI"] == "risk adjustment factor that indirectly influences stake through Investment Score"
+    assert methodology["correct_score"]["role"] == "Correct Score generates True Tail Probability and Score Extension Probability; it is not an execution signal."
+    assert methodology["semantic_alignment"]["RSI"] == "weighted structural risk index that indirectly influences stake through Investment Score"
     assert "不覆盖 TPB" in scenario["disclaimer"]
 
 
@@ -355,27 +430,27 @@ def test_architecture_guardrails():
 
     report_text = (repo_root / "modules" / "report_generator.py").read_text(encoding="utf-8")
     assert "## 最终决策区（FINAL DECISION BLOCK）" in report_text
-    assert "### 3. Scenario Projection（简化版）" in report_text
-    assert "Investment Score 是多因子加权结果" in report_text
+    assert "### 3. 情景概率投影（简化版）" in report_text
+    assert "投资评分 = 基础信号 × 风险折减" in report_text
     assert "本区展示主路径覆盖、防守覆盖和高波动观察三类结构" in report_text
-    assert "Portfolio 只保留 coverage structure" in report_text
-    assert "System Semantic Alignment Layer" in report_text
-    assert "High Variance Structural Signal" in report_text
-    assert "risk adjustment factor" in report_text
-    assert "legacy conflict function 已废弃且不使用" in report_text
+    assert "投注组合只保留覆盖结构" in report_text
+    assert "系统语义对齐层" in report_text
+    assert "波胆结构信号" in report_text
+    assert "风险折减" in report_text
+    assert "真实尾部概率风险" in report_text
     assert "组合观察区（无执行信号）" not in report_text
     assert "排序结构（仅结构分析）" not in report_text
     assert "当前不输出具体投注组合" not in report_text
     assert "## 6. Execution Layer" in report_text
     assert "用户执行层不进入本区" not in report_text
     assert "RSI：{rss['RSI']}" in report_text
-    assert "高波动结构信号" in report_text
+    assert "波胆结构信号" in report_text
     assert "Portfolio Coverage（coverage only）" in report_text
-    assert "Ranking 是结构排序层" in report_text
-    assert "Scenario = 受约束结构权重层" in report_text
+    assert "排序是结构排序层" in report_text
+    assert "情景层 = 受约束结构权重层" in report_text
     assert "主波胆" in report_text
     assert "结构波胆" in report_text
-    assert "高波动波胆" in report_text
+    assert "比分扩展波胆" in report_text
     assert "｜情景依赖：" in report_text
     assert "*format_market_intelligence_lines(market_intelligence)" not in report_text
     assert "*format_scenario_engine_lines(scenario_engine)" not in report_text
@@ -428,8 +503,10 @@ def test_architecture_guardrails():
     assert "recommended_stake" not in intelligence_text
     assert "user_portfolio" not in intelligence_text
     assert "directional_strength" in intelligence_text
-    assert "market_agreement" in intelligence_text
-    assert "volatility_pressure" in intelligence_text
+    assert "market_consistency" in intelligence_text
+    assert "score_path_uncertainty" in intelligence_text
+    assert "tail_density_deprecated" in intelligence_text
+    assert "true_tail_probability" in intelligence_text
 
     scenario_text = (repo_root / "modules" / "scenario_engine.py").read_text(encoding="utf-8")
     assert "SCENARIO_TAXONOMY" in scenario_text
@@ -439,7 +516,7 @@ def test_architecture_guardrails():
     assert "risk_decomposition" in scenario_text
     assert "structural_risk_map" in scenario_text
     assert "coverage_optimization_v2" in scenario_text
-    assert "SS + Scenario Alignment - RSI" in scenario_text
+    assert "0.60×SS + 0.40×path support" in scenario_text
     assert "stake_from_investment_score" not in scenario_text
     assert "build_user_portfolio_comparison" not in scenario_text
     assert "expected_value" not in scenario_text.lower()
@@ -457,6 +534,8 @@ def run():
     test_match_investment_score_contract()
     test_legacy_portfolio_helpers_are_disabled_stubs()
     test_market_intelligence_contract()
+    test_tail_probability_profile_and_formula_boundaries()
+    test_main_path_support_base_signal_and_investment_score()
     test_scenario_engine_contract()
     test_user_portfolio_comparison_is_display_only()
     test_architecture_guardrails()

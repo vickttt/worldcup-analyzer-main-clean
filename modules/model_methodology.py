@@ -6,7 +6,7 @@ def build_model_methodology():
             "不参与 TPB、Market、Scenario、Portfolio、Ranking、Stake 或 Execution 的任何计算。"
         ),
         "system_definition": {
-            "identity": "Lite Explainable Betting Decision System v1",
+            "identity": "Lite Explainable Betting Decision System v2",
             "not": [
                 "prediction model",
                 "EV/ROI optimizer",
@@ -15,7 +15,7 @@ def build_model_methodology():
             ],
             "does": [
                 "TPB probability anchoring",
-                "three-metric market structure summary",
+                "three core market-structure metrics plus tail-probability display comparison",
                 "scenario projection",
                 "two-factor investment scoring",
                 "single ranking score",
@@ -35,20 +35,25 @@ def build_model_methodology():
                 "inputs": ["TPB top probability", "TPB second probability"],
                 "logic": "Direction Strength follows TPB concentration only: top probability minus second probability.",
             },
-            "market_agreement": {
-                "name": "Market Agreement",
-                "inputs": ["bookmaker dispersion", "available market depth"],
-                "logic": "Higher agreement means lower bookmaker dispersion and sufficient market depth.",
+            "market_consistency": {
+                "name": "Market Consistency Score",
+                "inputs": ["1X2 dispersion", "Asian Handicap direction/depth", "Over/Under vs Correct Score", "Polymarket if available"],
+                "logic": "Market Consistency Score = weighted available components: 0.15×1X2 internal consistency + 0.25×1X2/AH direction + 0.20×AH depth/TPB + 0.25×OU/Correct Score + 0.15×Polymarket/API. Missing components are skipped and weights renormalized.",
             },
-            "market_conflict_index": {
-                "name": "Market Conflict",
-                "inputs": ["Market Agreement Score"],
-                "logic": "Market Conflict = 100 - Market Agreement Score in the active Lite model. The legacy conflict function is deprecated and not used.",
+            "market_disagreement": {
+                "name": "Market Disagreement",
+                "inputs": ["Market Consistency Score"],
+                "logic": "Market Disagreement = 100 - Market Consistency Score.",
             },
-            "volatility_pressure": {
-                "name": "Volatility Pressure",
-                "inputs": ["draw probability", "market disagreement", "correct-score tail density"],
-                "logic": "Draw pressure, disagreement, and tail density are compressed into Low / Medium / High pressure.",
+            "score_path_uncertainty": {
+                "name": "Score Path Uncertainty",
+                "inputs": ["draw probability", "Over/Under vs Correct Score consistency"],
+                "logic": "Score Path Uncertainty = 0.60×draw stalemate pressure + 0.40×OU/Correct Score structure tension. True Tail Probability is not a direct input.",
+            },
+            "true_tail_probability": {
+                "name": "True Tail Probability",
+                "inputs": ["deduped Correct Score implied probabilities"],
+                "logic": "True Tail Probability is normalized implied probability mass for upset, high-score draw, total goals >= 5, or extreme favorite-margin score paths. It is not row density.",
             },
         },
         "signal_strength": {
@@ -56,12 +61,12 @@ def build_model_methodology():
             "role": "primary signal strength display and ranking input",
         },
         "investment_score": {
-            "formula": "Investment Score = Signal × Risk Adjustment",
-            "signal": "Signal = TPB Edge + Scenario Alignment",
-            "risk": "Risk Adjustment is derived from RSI Low / Medium / High. RSI does not enter the stake mapping function directly; it indirectly influences stake through Investment Score.",
+            "formula": "Investment Score = Base Signal × Risk Adjustment",
+            "signal": "Base Signal = max(TPB Edge, Main Path Support) + 0.35×min(TPB Edge, Main Path Support)",
+            "risk": "Risk Adjustment = clamp(0.95 - 0.45×RSI Score/100, 0.50, 0.95). Stake mapping still reads only Investment Score.",
         },
         "scenario_projection": {
-            "name": "Scenario Projection Layer",
+            "name": "情景概率投影层",
             "principle": "Scenario = bounded structural weighting layer from TPB + Market signal projection.",
             "role": "Scenario weights are used for portfolio construction, ranking adjustment, and risk estimation.",
             "constraints": [
@@ -74,9 +79,9 @@ def build_model_methodology():
         },
         "risk_surface_index": {
             "name": "Risk Surface Index (RSI)",
-            "formula": "RSI = qualitative max(Market disagreement, Scenario dispersion, Tail density)",
-            "outputs": ["Low", "Medium", "High"],
-            "role": "RSI is a risk adjustment factor. It affects Investment Score through Risk Adjustment and therefore can indirectly affect stake.",
+            "formula": "RSI Score = 0.30×Market Disagreement + 0.25×Score Path Uncertainty + 0.25×True Tail Probability Risk + 0.20×Scenario Structure Risk",
+            "outputs": ["score 0-100", "Low", "Medium", "High"],
+            "role": "RSI is a structural risk index. True Tail Probability Risk enters RSI, and RSI can indirectly affect stake only through Investment Score via the continuous Risk Adjustment factor.",
             "not": ["100-point RSS", "EV input", "ROI input", "direct stake mapping input"],
         },
         "coverage_quality_score": {
@@ -86,7 +91,7 @@ def build_model_methodology():
         },
         "ranking": {
             "name": "Ranking Score",
-            "formula": "Ranking Score = SS + Scenario Alignment - RSI",
+            "formula": "Ranking Score = 0.60×SS + 0.40×path support; RSI is a displayed risk label and no longer a ranking penalty.",
             "outputs": "Top 3 ordered structure only",
             "role": "Ranking orders betting structures; it is not a final execution instruction. Final execution still depends on the stake decision layer.",
             "forbidden_inputs": [
@@ -99,9 +104,9 @@ def build_model_methodology():
         },
         "correct_score": {
             "name": "Correct Score",
-            "role": "high variance structural signal layer, not execution signal",
+            "role": "Correct Score generates True Tail Probability and Score Extension Probability; it is not an execution signal.",
             "boundaries": [
-                "does not enter Investment Score",
+                "True Tail Probability enters RSI through True Tail Probability Risk; Correct Score does not directly enter Investment Score",
                 "does not enter Ranking Score",
                 "does not enter stake mapping",
             ],
@@ -111,10 +116,10 @@ def build_model_methodology():
             "Scenario": "bounded structural weighting layer",
             "Portfolio": "coverage layer",
             "Ranking": "ordering layer, not final execution instruction",
-            "RSI": "risk adjustment factor that indirectly influences stake through Investment Score",
+            "RSI": "weighted structural risk index that indirectly influences stake through Investment Score",
             "Stake": "final execution mapping from Investment Score only",
-            "Market Conflict": "inverse of Market Agreement Score in the active Lite model; legacy conflict function is deprecated and not used",
-            "Correct Score": "high variance structural signal layer, not execution signal",
+            "Market Disagreement": "100 - Market Consistency Score",
+            "Correct Score": "source for true tail probability and score extension probability, not an execution signal",
         },
         "audit_guards": [
             "No hidden ranking weights",

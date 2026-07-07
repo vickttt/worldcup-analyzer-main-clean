@@ -211,12 +211,26 @@ def compute_match_investment_score(strategies, match=None, distribution=None, co
     scenario_engine = context.get("scenario_engine") or {}
     tpb = true_probability_base(odds)
     data_quality_score, data_quality_note = _api_quality(odds, api_football_data)
+    main_path_support = scenario_engine.get("main_path_support")
     scenario_alignment = scenario_engine.get("scenario_alignment")
     rsi = scenario_engine.get("risk_surface_index")
-    score = investment_score_from_tpb(tpb, scenario_alignment=scenario_alignment, risk_surface_index=rsi)
+    rsi_score = (scenario_engine.get("risk_score_v3") or {}).get("score")
+    score = investment_score_from_tpb(
+        tpb,
+        main_path_support=main_path_support,
+        scenario_alignment=scenario_alignment,
+        risk_surface_index=rsi,
+        rsi_score=rsi_score,
+    )
     confidence = betting_confidence_from_tpb(tpb)
     breakdown = betting_confidence_breakdown(tpb)
-    investment_breakdown = investment_score_breakdown(tpb, scenario_alignment=scenario_alignment, risk_surface_index=rsi)
+    investment_breakdown = investment_score_breakdown(
+        tpb,
+        main_path_support=main_path_support,
+        scenario_alignment=scenario_alignment,
+        risk_surface_index=rsi,
+        rsi_score=rsi_score,
+    )
     probabilities = tpb.get("probabilities") or {}
     ordered = sorted(probabilities.values(), reverse=True) if probabilities else [0, 0]
     favorite_edge = (ordered[0] - ordered[1]) * 100 if len(ordered) >= 2 else 0
@@ -244,14 +258,16 @@ def compute_match_investment_score(strategies, match=None, distribution=None, co
         "components": {
             "Signal Strength": confidence,
             "TPB Edge": round(favorite_edge),
-            "Scenario Alignment": investment_breakdown.get("scenario_alignment"),
+            "Main Path Support": investment_breakdown.get("main_path_support"),
+            "Base Signal": investment_breakdown.get("base_signal"),
+            "RSI Score": investment_breakdown.get("rsi_score"),
             "RSI": investment_breakdown.get("rsi"),
             "Risk Adjustment": investment_breakdown.get("risk_adjustment"),
         },
         "weights": {
-            "Investment Score": "Signal × Risk Adjustment",
-            "Signal": "TPB Edge + Scenario Alignment",
-            "Risk": "1 - RSI qualitative penalty",
+            "Investment Score": "Base Signal × Risk Adjustment",
+            "Base Signal": "max(TPB Edge, Main Path Support) + 0.35 × min(TPB Edge, Main Path Support)",
+            "Risk": "clamp(0.95 - 0.45 × RSI Score / 100, 0.50, 0.95)",
         },
     }
 

@@ -1547,17 +1547,22 @@ def _investment_reason(score_layer, investment_breakdown, rss, display_stake_amo
 
 def _market_structure_explanation(market_rows, favorite_label="-"):
     row_map = {row.get("指标"): row.get("数值") for row in market_rows}
-    direction = _metric_number(row_map.get("Direction Strength"))
-    agreement = _metric_number(row_map.get("Market Agreement"))
-    volatility = _metric_number(row_map.get("Volatility Pressure"))
+    direction = _metric_number(row_map.get("方向强度"))
+    agreement = _metric_number(row_map.get("市场一致性评分"))
+    score_uncertainty = _metric_number(row_map.get("比分路径不确定性"))
+    tail_probability = _metric_number(row_map.get("真实尾部概率"))
+    deprecated_tail_density = _metric_number(row_map.get("旧尾部密度 tail_density（已废弃）"))
     direction_level = _level_from_score(direction, 45, 20)
     agreement_level = _level_from_score(agreement, 70, 40)
-    volatility_level = _level_from_score(volatility, 60, 30)
+    uncertainty_level = _level_from_score(score_uncertainty, 60, 30)
+    tail_level = _level_from_score(tail_probability, 35, 15)
     return (
         f"方向强度 {direction:g}/100（{direction_level}）：{favorite_label} 是主方向，"
         "但不是压倒性单边；"
         f"市场一致性 {agreement:g}/100（{agreement_level}）：多盘口对主方向的分歧较低；"
-        f"波动压力 {volatility:g}/100（{volatility_level}）：平局、波胆尾部和赔率分散仍提示比赛路径不止一种。"
+        f"比分路径不确定性 {score_uncertainty:g}/100（{uncertainty_level}）：平局和大小球-波胆结构提示比赛路径是否分散；"
+        f"真实尾部概率 {tail_probability:g}/100（{tail_level}）：基于去重波胆概率质量，而不是波胆条目数量，并通过真实尾部概率风险进入 RSI；"
+        f"旧尾部密度 tail_density {deprecated_tail_density:g}/100 仅作迁移核对，不进入 RSI 或投资评分。"
     )
 
 
@@ -1576,7 +1581,9 @@ def _rsi_match_explanation(rss):
 
 
 def _investment_explanation_lines(investment_breakdown, score_layer, rss, display_stake_amount):
-    signal = _metric_number(investment_breakdown.get("signal"))
+    signal = _metric_number(investment_breakdown.get("base_signal", investment_breakdown.get("signal")))
+    tpb_edge = _metric_number(investment_breakdown.get("tpb_edge"))
+    main_path_support = _metric_number(investment_breakdown.get("main_path_support"))
     investment_score = _metric_number(score_layer.get("investment_score"))
     signal_level = _level_from_score(signal, 70, 40)
     risk_adjustment = investment_breakdown.get("risk_adjustment")
@@ -1584,13 +1591,13 @@ def _investment_explanation_lines(investment_breakdown, score_layer, rss, displa
     components = rss.get("组件", "-")
     if rsi == "高":
         return [
-            f"概率优势 + 情景匹配度为 {signal:g}/100（{signal_level}）：主方向有一定基础，但还没有强到可以忽略风险层。",
+            f"基础信号为 {signal:g}/100（{signal_level}）：由概率优势 {tpb_edge:g}/100 与主路径支撑 {main_path_support:g}/100 共同形成，主方向有基础但不能忽略风险层。",
             f"风险指数为高，风险调整为 {fmt(risk_adjustment)}：主要压力来自 {components}，说明本场存在情景分散、尾部波动或盘口路径不集中的问题。",
             f"结果影响：高风险指数会先压低投资评分至 {investment_score:g}/100，再通过固定区间映射影响推荐金额；防守和高波动项只解释风险路径，不代表加码。",
         ]
     lines = [
-        f"概率优势 + 情景匹配度为 {signal:g}/100（{signal_level}）："
-        "表示主方向概率边际与情景结构有一定同向性，但尚未形成强执行信号。",
+        f"基础信号为 {signal:g}/100（{signal_level}）："
+        f"由概率优势 {tpb_edge:g}/100 与主路径支撑 {main_path_support:g}/100 共同形成。",
         f"风险指数为{rsi}，风险调整为 {fmt(risk_adjustment)}："
         "说明市场路径分散和尾部风险会压低本场投入力度。",
         f"投资评分为 {investment_score:g}/100，推荐金额为 {display_stake_amount:g} 元："
@@ -1635,7 +1642,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
 
         st.markdown("**1. 投资评分解释（优先阅读）**")
         score_cols = st.columns(4)
-        score_cols[0].metric("概率优势 + 情景匹配度", f"{investment_breakdown.get('signal', '-')} / 100")
+        score_cols[0].metric("基础信号", f"{investment_breakdown.get('base_signal', investment_breakdown.get('signal', '-'))} / 100")
         score_cols[1].metric("风险指数", rss["RSI"])
         score_cols[2].metric("风险调整", fmt(investment_breakdown.get("risk_adjustment")))
         score_cols[3].metric("投资分", f"{score_layer.get('investment_score', 0)} / 100")
@@ -1679,7 +1686,7 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
                 "Ranking": "结构排序层",
                 "RSI": "风险调整因子",
                 "TPB": "概率锚点",
-                "Market Conflict": "市场冲突指标",
+                "市场分歧": "市场分歧指标",
             }
             for section in system_semantic_alignment_sections():
                 raw_title = str(section.get("标题", "")).split("｜", 1)[0].strip()
@@ -1705,21 +1712,16 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
         st.caption("信号强度 = （概率基准三项概率最高值 - 第二高值）× 100；0-20 为弱，20-40 为中，40 以上为强。")
         st.caption(_investment_reason(score_layer, investment_breakdown, rss, display_stake_amount))
 
-        st.markdown("**6. 市场结构（三指标）**")
+        st.markdown("**6. 市场结构（核心3项 + 尾部对比）**")
         market_rows = market_structure_numeric_rows(market_intelligence)
-        market_cols = st.columns(3)
-        market_label_map = {
-            "Direction Strength": "方向强度",
-            "Market Agreement": "市场一致性",
-            "Volatility Pressure": "波动压力",
-        }
+        market_cols = st.columns(len(market_rows) or 1)
         for index, row in enumerate(market_rows):
-            market_cols[index].metric(market_label_map.get(row["指标"], row["指标"]), row["数值"])
-        st.caption("定义：方向强度 = 概率基准集中度 + 盘口偏差；市场一致性 = 多市场一致性指数；波动压力 = 波胆 + 平局 + 赔率分散。")
+            market_cols[index].metric(row["指标"], row["数值"])
+        st.caption("定义：方向强度 = 概率基准集中度；市场一致性评分 = 多市场一致性指数；比分路径不确定性 = 平局胶着压力 + 大小球/波胆结构张力；真实尾部概率通过真实尾部概率风险进入 RSI，旧 tail_density 仅作迁移核对。")
         st.caption(_market_structure_explanation(market_rows, metrics.get("favorite_label") or "-"))
 
         st.markdown("**7. 高波动结构信号（波胆）**")
-        st.caption("波胆是高波动结构信号，不是执行信号；这里只保留一个最高权重提示。")
+        st.caption("波胆是比分尾部与比分扩展结构信号，不是执行信号；这里只保留一个最高权重提示。")
         st.caption(
             "高波动结构信号："
             f"{top_score.get('中文投注描述', '-')}｜盘口：{top_score.get('对应盘口', '-')}｜"
@@ -1732,17 +1734,12 @@ def render_market_intelligence_layer(market_intelligence):
     metrics = intelligence.get("metrics") or {}
     with st.container(border=True):
         st.markdown("**市场结构分析**")
-        st.caption("Lite v1 只保留方向强度、市场一致性、波动压力；不使用用户输入，不计算 EV/ROI。")
+        st.caption("Lite v2 保留方向强度、市场一致性评分、比分路径不确定性；真实尾部概率通过 RSI 间接影响投资评分，旧 tail_density 仅并列展示，不使用用户输入，不计算 EV/ROI。")
         rows = market_structure_numeric_rows(market_intelligence)
-        market_label_map = {
-            "Direction Strength": "方向强度",
-            "Market Agreement": "市场一致性",
-            "Volatility Pressure": "波动压力",
-        }
-        cols = st.columns(3)
+        cols = st.columns(len(rows) or 1)
         for index, row in enumerate(rows):
-            cols[index].metric(market_label_map.get(row["指标"], row["指标"]), row["数值"])
-        st.caption("方向强度 = 概率基准集中度 + 盘口偏差；市场一致性 = 多市场一致性指数；波动压力 = 波胆 + 平局 + 赔率分散。")
+            cols[index].metric(row["指标"], row["数值"])
+        st.caption("方向强度 = 概率基准集中度；市场一致性评分 = 多市场一致性指数；比分路径不确定性 = 平局胶着压力 + 大小球/波胆结构张力；真实尾部概率进入 RSI，旧 tail_density 仅用于迁移核对。")
 
 
 def render_system_portfolio_layer(market_intelligence, scenario_engine=None, match=None):
@@ -1831,7 +1828,7 @@ def render_scenario_optimization_view_v2(scenario_engine, match=None, market_int
     with st.container(border=True):
         st.markdown("**投注组合覆盖视图（精简版 v1）**")
         st.caption(
-            "投注组合只展示覆盖结构；排序分独立使用信号强度 + 情景匹配度 - 风险指数。"
+            "投注组合只展示覆盖结构；排序分独立使用 0.60×信号强度 + 0.40×路径支撑，RSI 只作为风险标签展示。"
         )
 
         probability_weight_rows = scenario_probability_weight_rows(scenario)

@@ -5,12 +5,12 @@ from modules.model_methodology import build_model_methodology
 
 
 SCENARIO_TAXONOMY = [
-    ("S1", "Strong Favorite Win"),
-    ("S2", "Narrow Favorite Win"),
-    ("S3", "Draw"),
-    ("S4", "Upset Win"),
-    ("S5", "Low Scoring Match"),
-    ("S6", "High Variance Match"),
+    ("S1", "Main Direction Control Win"),
+    ("S2", "Narrow Main Direction Win"),
+    ("S3", "Draw Stalemate"),
+    ("S4", "Upset Reversal"),
+    ("S5", "Low Tempo Low Score"),
+    ("S6", "Score Extension Path"),
 ]
 
 
@@ -56,17 +56,18 @@ def _scenario_distribution(tpb, metrics):
     favorite = max(home, away)
     underdog = min(home, away)
     direction = _clamp(metrics.get("direction_score"), 0, 100) / 100
-    disagreement = 1 - _clamp(metrics.get("market_agreement_score"), 0, 100) / 100
-    volatility_score = _clamp(metrics.get("volatility_pressure_score") or metrics.get("volatility_score"), 0, 100) / 100
-    tail_density = _clamp(metrics.get("tail_density"), 0, 1)
+    market_disagreement = _clamp(metrics.get("market_disagreement_score"), 0, 100) / 100
+    score_path_uncertainty = _clamp(metrics.get("score_path_uncertainty_score"), 0, 100) / 100
+    score_extension_probability = _clamp(metrics.get("score_extension_probability"), 0, 1)
+    adverse_tail_probability = _clamp(metrics.get("adverse_tail_probability"), 0, 1)
 
     weights = {
-        "S1": favorite * (1 + direction),
-        "S2": favorite * (1 - min(0.55, direction)) + draw * 0.25,
-        "S3": draw * (1 + disagreement),
-        "S4": underdog * (1 + disagreement),
-        "S5": draw * 0.55 + max(0, 1 - volatility_score) * 0.20,
-        "S6": volatility_score * 0.45 + tail_density * 0.35,
+        "S1": favorite * (1 + direction * 0.85) * (1 - score_path_uncertainty * 0.10),
+        "S2": favorite * (1 - min(0.50, direction * 0.65)) + draw * 0.20 + score_path_uncertainty * 0.10,
+        "S3": draw * (1 + market_disagreement * 0.40 + score_path_uncertainty * 0.25),
+        "S4": underdog * (1 + market_disagreement * 0.60) + adverse_tail_probability * 0.25,
+        "S5": draw * 0.45 + max(0, 1 - score_extension_probability) * 0.16 + score_path_uncertainty * 0.08,
+        "S6": score_extension_probability * 0.80 + max(0, score_path_uncertainty - 0.50) * 0.15,
     }
     distribution = _normalize_weights(weights)
     return [
@@ -110,7 +111,7 @@ def _risk_surface(distribution, metrics):
 
 
 def _risk_level_from_score(score):
-    if score >= 65:
+    if score >= 60:
         return "High"
     if score >= 35:
         return "Medium"
@@ -141,13 +142,23 @@ def _scenario_dispersion_score(scenario_weights):
     return round(_clamp(entropy / max_entropy * 100, 0, 100), 1)
 
 
+def _main_path_support_score(weights):
+    return round(_clamp((weights.get("S1", 0) + 0.7 * weights.get("S2", 0)) * 100, 0, 100), 1)
+
+
+def _scenario_structure_risk_score(scenario_weights, main_path_support):
+    dispersion = _scenario_dispersion_score(scenario_weights)
+    risk = 0.45 * dispersion + 0.55 * (100 - float(main_path_support or 0))
+    return round(_clamp(risk, 0, 100), 1)
+
+
 def _structural_risk_map(tpb, metrics, scenario_weights):
     probabilities = _probabilities_from_tpb(tpb)
     weights = _weight_map(scenario_weights)
     favorite_probability = max(probabilities.values()) if probabilities else 0
     draw_pressure = max(probabilities.get("draw", 0), weights.get("S3", 0))
     upset_pressure = max(weights.get("S4", 0), _clamp(metrics.get("upset_score"), 0, 100) / 100)
-    volatility_cluster = max(weights.get("S6", 0), _clamp(metrics.get("volatility_score"), 0, 100) / 100)
+    volatility_cluster = max(weights.get("S6", 0), _clamp(metrics.get("score_path_uncertainty_score"), 0, 100) / 100)
     conflict = _clamp(metrics.get("market_conflict_index"), 0, 100)
     uncertainty = max(0, 1 - favorite_probability) * 100
 
@@ -165,7 +176,7 @@ def _structural_risk_map(tpb, metrics, scenario_weights):
         "scenario_volatility_clustering": {
             "score": round(_clamp(volatility_cluster * 100, 0, 100), 1),
             "level": _risk_level_from_score(volatility_cluster * 100),
-            "explanation": "S6 与市场波动信号共同形成的高方差情景聚集。",
+            "explanation": "S6 与比分路径不确定性共同形成的比分扩展情景聚集。",
         },
         "draw_pressure_zones": {
             "score": round(_clamp(draw_pressure * 100, 0, 100), 1),
@@ -184,8 +195,8 @@ def _risk_decomposition(metrics, scenario_weights):
     weights = _weight_map(scenario_weights)
     direction_score = _clamp(metrics.get("direction_score"), 0, 100)
     directional_risk = 100 - direction_score
-    volatility_risk = _level_to_score(metrics.get("volatility_index"))
-    conflict_risk = _clamp(metrics.get("market_conflict_index"), 0, 100)
+    volatility_risk = _clamp(metrics.get("score_path_uncertainty_score"), 0, 100)
+    conflict_risk = _clamp(metrics.get("market_disagreement_score"), 0, 100)
     tail_risk = _clamp((weights.get("S4", 0) + weights.get("S6", 0)) * 100, 0, 100)
 
     return {
@@ -197,40 +208,55 @@ def _risk_decomposition(metrics, scenario_weights):
         "volatility_risk": {
             "score": round(volatility_risk, 1),
             "level": _risk_level_from_score(volatility_risk),
-            "explanation": "由 Volatility Index 映射，仅刻画结构波动，不预测比分。",
+            "explanation": "由比分路径不确定性映射，仅刻画比分路径分散，不预测比分。",
         },
         "market_conflict_risk": {
             "score": round(conflict_risk, 1),
             "level": _risk_level_from_score(conflict_risk),
-            "explanation": "来自 Market Agreement 反向映射的市场分歧风险。",
+            "explanation": "来自市场一致性评分反向映射的市场分歧风险。",
         },
         "tail_risk": {
             "score": round(tail_risk, 1),
             "level": _risk_level_from_score(tail_risk),
-            "explanation": "S4 冷门与 S6 高波动权重形成的尾部风险暴露。",
+            "explanation": "S4 冷门与 S6 比分扩展权重形成的尾部风险暴露。",
         },
     }
 
 
 def _risk_score_v3(metrics, scenario_weights):
-    disagreement = 100 - _clamp(metrics.get("market_agreement_score"), 0, 100)
-    volatility = _clamp(metrics.get("volatility_pressure_score") or metrics.get("volatility_score"), 0, 100)
-    tail_density = _clamp(metrics.get("tail_density"), 0, 1) * 100
+    weights = _weight_map(scenario_weights)
+    main_path_support = _main_path_support_score(weights)
+    disagreement = _clamp(metrics.get("market_disagreement_score"), 0, 100)
+    score_path_uncertainty = _clamp(metrics.get("score_path_uncertainty_score"), 0, 100)
+    true_tail_probability = _clamp(metrics.get("true_tail_probability"), 0, 1)
+    true_tail_probability_score = _clamp(metrics.get("true_tail_probability_score"), 0, 100)
+    true_tail_risk_score = _clamp(metrics.get("true_tail_risk_score"), 0, 100)
     dispersion = _scenario_dispersion_score(scenario_weights)
-    qualitative_basis = max(disagreement, volatility, tail_density, dispersion * 0.75)
-    level = _risk_level_from_score(qualitative_basis)
+    scenario_structure_risk = _scenario_structure_risk_score(scenario_weights, main_path_support)
+    rsi_score = (
+        0.30 * disagreement
+        + 0.25 * score_path_uncertainty
+        + 0.25 * true_tail_risk_score
+        + 0.20 * scenario_structure_risk
+    )
+    rsi_score = round(_clamp(rsi_score, 0, 100), 1)
+    level = _risk_level_from_score(rsi_score)
     return {
-        "score": None,
+        "score": rsi_score,
         "level": level,
         "index": "RSI",
-        "formula": "RSI = qualitative max(Market disagreement, Scenario dispersion, Tail density)",
+        "formula": "RSI Score = 0.30×市场分歧 + 0.25×比分路径不确定性 + 0.25×真实尾部概率风险 + 0.20×情景结构风险",
         "components": {
             "market_disagreement": round(disagreement, 1),
-            "volatility_pressure": round(volatility, 1),
-            "tail_density": round(tail_density, 1),
+            "score_path_uncertainty": round(score_path_uncertainty, 1),
+            "true_tail_probability": round(true_tail_probability * 100, 1),
+            "true_tail_probability_score": round(true_tail_probability_score, 1),
+            "true_tail_risk_score": round(true_tail_risk_score, 1),
             "scenario_dispersion": dispersion,
+            "main_path_support": main_path_support,
+            "scenario_structure_risk": scenario_structure_risk,
         },
-        "disclaimer": "RSI 是 Low / Medium / High 结构风险索引，不是 100 分制 RSS、EV 或 ROI。RSI 不直接输入 stake mapping，但会通过 Investment Score 间接影响资金分配。",
+        "disclaimer": "RSI 是结构风险指数；真实尾部概率风险进入 RSI，但不直接输入 stake mapping，只通过 Investment Score 的风险折减系数间接影响推荐金额。",
     }
 
 
@@ -483,31 +509,30 @@ def _coverage_efficiency_v2(scenario_coverage_map, risk_surface_rows):
 def _scenario_weighted_ranking_v2(primary_set, defensive_set, tail_set, weights, metrics):
     ss = _clamp(metrics.get("signal_strength") or metrics.get("direction_score"), 0, 100)
     rsi_level = metrics.get("risk_surface_index") or "Medium"
-    risk_penalty = {"Low": 15, "Medium": 35, "High": 55}.get(str(rsi_level), 35)
 
     candidates = [
         {
             "position": "Primary Coverage Set",
             "legs": primary_set,
-            "scenario_alignment": max(weights.get("S1", 0), weights.get("S2", 0)) * 100,
-            "basis": "SS + S1/S2 alignment - RSI",
+            "scenario_alignment": (weights.get("S1", 0) + 0.7 * weights.get("S2", 0)) * 100,
+            "basis": "SS + 主路径支撑",
         },
         {
             "position": "Defensive Coverage Set",
             "legs": defensive_set,
             "scenario_alignment": max(weights.get("S3", 0), weights.get("S5", 0)) * 100,
-            "basis": "SS + S3/S5 alignment - RSI",
+            "basis": "SS + 防守路径支撑",
         },
         {
             "position": "Tail Coverage Set",
             "legs": tail_set,
             "scenario_alignment": max(weights.get("S4", 0), weights.get("S6", 0)) * 100,
-            "basis": "SS + S4/S6 alignment - RSI",
+            "basis": "SS + 比分扩展/冷门尾部观察",
         },
     ]
     for item in candidates:
-        item["score"] = max(0, ss + item["scenario_alignment"] - risk_penalty)
-    ranked = sorted(candidates, key=lambda item: item["score"], reverse=True)
+        item["score"] = max(0, 0.60 * ss + 0.40 * item["scenario_alignment"])
+    ranked = candidates
     return [
         {
             "rank": index,
@@ -556,7 +581,7 @@ def _coverage_optimization_v2(scenario_weights, metrics):
         "coverage_quality_score": efficiency,
         "scenario_weighted_ranking_v2": ranking,
         "explanation": (
-            "Portfolio is coverage structure only. Ranking Score is computed separately as SS + Scenario Alignment - RSI."
+            "Portfolio is coverage structure only. Ranking Score is computed separately as 0.60×SS + 0.40×path support; RSI is displayed as a risk label and is not a ranking penalty."
         ),
     }
 
@@ -613,7 +638,8 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
     distribution = _scenario_distribution(tpb, metrics)
     scenario_weights = _scenario_weights_v2(distribution, metrics)
     weights = _weight_map(scenario_weights)
-    scenario_alignment = round(max(weights.get("S1", 0), weights.get("S2", 0)) * 100)
+    main_path_support = _main_path_support_score(weights)
+    scenario_alignment = main_path_support
     risk_surface = _risk_surface(distribution, metrics)
     structural_risk_map = _structural_risk_map(tpb, metrics, scenario_weights)
     risk_decomposition = _risk_decomposition(metrics, scenario_weights)
@@ -621,6 +647,7 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
     metrics = dict(metrics)
     metrics["risk_surface_index"] = risk_score_v3.get("level")
     metrics["scenario_alignment"] = scenario_alignment
+    metrics["main_path_support"] = main_path_support
     metrics["signal_strength"] = metrics.get("direction_score")
     coverage_map = _coverage_map(distribution)
     optimization_v2 = _coverage_optimization_v2(scenario_weights, metrics)
@@ -633,6 +660,8 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
         "probability_distribution": distribution,
         "scenario_weights": scenario_weights,
         "scenario_projection": scenario_weights,
+        "main_path_support": main_path_support,
+        "main_path_support_formula": "S1 + 0.7 × S2",
         "scenario_alignment": scenario_alignment,
         "risk_surface_index": risk_score_v3.get("level"),
         "risk_surface": risk_surface,
@@ -659,7 +688,7 @@ def build_scenario_engine(match=None, odds=None, market_intelligence=None):
         "system_optimized_portfolio_v2": _system_optimized_portfolio_v2(optimization_v2),
         "methodology": build_model_methodology(),
         "disclaimer": (
-            "Scenario Projection Lite v1 使用 TPB + Market signal projection 生成 S1-S6；"
+            "情景概率投影 Lite v2 使用 TPB + 市场结构信号生成 S1-S6；"
             "它是受约束结构权重层，用于 portfolio construction、ranking adjustment、risk estimation；"
             "不预测比分，不计算 EV/ROI，不做盈利最大化，不覆盖 TPB，也不使用用户输入。"
         ),
