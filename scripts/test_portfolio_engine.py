@@ -388,7 +388,8 @@ def test_architecture_guardrails():
     assert "投资评分解释（优先阅读）" in app_text
     assert "情景概率投影（简化版）" in app_text
     assert "投注组合与排序（优先阅读）" in app_text
-    assert "情景暴露图" not in app_text
+    assert "情景暴露图" in app_text
+    assert "赛前情景暴露快照" in app_text
     assert "投资评分解释" in app_text
     assert "组合覆盖结构（非投注推荐排序）" in app_text
     assert "高波动结构信号（波胆）" in app_text

@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from html import escape
 from zoneinfo import ZoneInfo
 import importlib
+import re
 
 import pandas as pd
 import streamlit as st
@@ -45,7 +46,7 @@ from modules.schedule_client import (
 from modules.team_profile_client import fetch_team_profile
 from modules.venue_utils import venue_city_for
 from modules.perf_logger import perf_timer
-from modules.portfolio_engine import build_core_decision_layers
+from modules.portfolio_engine import build_core_decision_layers, normalize_handicap_line, settle_asian_handicap
 from modules.user_portfolio_compare import (
     build_user_portfolio_comparison,
     parse_actual_bet_combo_text,
@@ -1183,6 +1184,247 @@ def final_score_from_fixture(fixture):
         return None
 
 
+def final_score_from_text(value):
+    match = re.search(r"(\d+)\s*[:：]\s*(\d+)", str(value or ""))
+    if not match:
+        return None
+    return f"{int(match.group(1))}:{int(match.group(2))}"
+
+
+def _score_tuple(score_text):
+    try:
+        home, away = [int(part) for part in str(score_text).split(":", 1)]
+        return home, away
+    except (TypeError, ValueError):
+        return None, None
+
+
+def _extract_line_from_text(text):
+    match = re.search(r"([+-]?\d+(?:\.\d+)?)", str(text or ""))
+    return float(match.group(1)) if match else None
+
+
+def _numeric_or_none(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _team_side_from_text(text, match):
+    text = str(text or "").lower()
+    home_names = {str(match.get("home_cn") or "").lower(), str(match.get("home_en") or "").lower()}
+    away_names = {str(match.get("away_cn") or "").lower(), str(match.get("away_en") or "").lower()}
+    if any(name and name in text for name in home_names):
+        return "home"
+    if any(name and name in text for name in away_names):
+        return "away"
+    return None
+
+
+def _price_for_settlement(row, match, odds, api_football_data):
+    bet_text = str(row.get("中文投注描述") or row.get("具体投注组合") or "")
+    market_text = str(row.get("对应盘口") or "")
+    full_text = f"{bet_text} {market_text}"
+    lower = full_text.lower()
+
+    if "波胆" in full_text or "correct score" in lower:
+        score = final_score_from_text(bet_text)
+        rows = ((api_football_data or {}).get("correct_score") or {}).get("rows") or []
+        prices = [
+            _numeric_or_none(item.get("odd"))
+            for item in rows
+            if score and str(item.get("score")) == score
+        ]
+        prices = [price for price in prices if price]
+        return {
+            "type": "correct_score",
+            "selection": score or bet_text,
+            "odds": max(prices) if prices else None,
+            "score": score,
+        }
+
+    if "大小球" in full_text or "under" in lower or "over" in lower or "小球" in full_text or "大球" in full_text:
+        side = "under" if ("under" in lower or "小球" in full_text) else "over"
+        line = _extract_line_from_text(full_text)
+        totals = (odds or {}).get("over_under") or []
+        prices = []
+        for item in totals:
+            row_line = _numeric_or_none(item.get("line"))
+            row_price = _numeric_or_none(item.get(f"{side}_odds"))
+            if line is not None and row_line is not None and abs(row_line - line) < 0.001 and row_price:
+                prices.append(row_price)
+        prices = [price for price in prices if price]
+        return {
+            "type": "total",
+            "selection": f"{'Under' if side == 'under' else 'Over'} {line:g}" if line is not None else bet_text,
+            "odds": max(prices) if prices else None,
+            "side": side,
+            "line": line,
+        }
+
+    if "亚洲让球" in full_text or "让球" in full_text:
+        side = _team_side_from_text(full_text, match)
+        wanted_line = _extract_line_from_text(full_text)
+        candidates = []
+        for item in (((api_football_data or {}).get("asian_handicap") or {}).get("rows") or []):
+            value = str(item.get("value") or "")
+            row_side = _team_side_from_text(value, match)
+            row_line = _extract_line_from_text(value)
+            odd = _numeric_or_none(item.get("odd"))
+            if side and row_side and side != row_side:
+                continue
+            if wanted_line is not None and row_line is not None and abs(wanted_line - row_line) > 0.001:
+                continue
+            if odd:
+                candidates.append((odd, value))
+        odds_value, line_text = max(candidates, default=(None, full_text))
+        return {
+            "type": "handicap",
+            "selection": bet_text,
+            "odds": odds_value,
+            "side": side,
+            "line_text": line_text,
+        }
+
+    if "平局" in full_text:
+        return {"type": "winner", "selection": "平局", "odds": _numeric_or_none((odds or {}).get("draw")), "side": "draw"}
+
+    side = _team_side_from_text(full_text, match)
+    if side or "独赢" in full_text or "胜平负" in full_text:
+        key = "home_win" if side == "home" else "away_win"
+        return {"type": "winner", "selection": bet_text, "odds": _numeric_or_none((odds or {}).get(key)), "side": side}
+
+    return None
+
+
+def _settle_price_info(price_info, final_score, stake):
+    if not price_info:
+        return "无法识别投注项", None
+    if not price_info.get("odds"):
+        return "暂无可用赔率", None
+    home_goals, away_goals = _score_tuple(final_score)
+    if home_goals is None:
+        return "暂无最终比分", None
+    odds_value = float(price_info["odds"])
+    stake_value = float(stake or 1)
+    kind = price_info.get("type")
+
+    if kind == "winner":
+        side = price_info.get("side")
+        won = (
+            (side == "home" and home_goals > away_goals)
+            or (side == "away" and away_goals > home_goals)
+            or (side == "draw" and home_goals == away_goals)
+        )
+        profit = stake_value * (odds_value - 1) if won else -stake_value
+        return ("命中" if won else "未命中"), profit / stake_value
+
+    if kind == "total":
+        line = price_info.get("line")
+        side = price_info.get("side")
+        if line is None or not side:
+            return "盘口不完整", None
+        total = home_goals + away_goals
+        if abs(total - line) < 0.001:
+            return "走水", 0
+        won = total < line if side == "under" else total > line
+        profit = stake_value * (odds_value - 1) if won else -stake_value
+        return ("命中" if won else "未命中"), profit / stake_value
+
+    if kind == "handicap":
+        side = price_info.get("side")
+        line_info = normalize_handicap_line(price_info.get("line_text"))
+        if side not in {"home", "away"} or not line_info.get("split_legs"):
+            return "盘口不完整", None
+        profit = settle_asian_handicap(final_score, side, line_info.get("split_legs"), odds_value, stake_value)
+        status = "命中" if profit > 0.001 else "未命中" if profit < -0.001 else "走水"
+        return status, profit / stake_value
+
+    if kind == "correct_score":
+        won = price_info.get("score") == final_score
+        profit = stake_value * (odds_value - 1) if won else -stake_value
+        return ("命中" if won else "未命中"), profit / stake_value
+
+    return "无法结算", None
+
+
+def recommendation_settlement_rows(match, odds, api_football_data, market_intelligence, scenario_engine, portfolio_summary, final_score):
+    exposure_control = scenario_exposure_control_display(
+        market_intelligence=market_intelligence,
+        scenario_engine=scenario_engine,
+        match=match,
+        portfolio_summary=portfolio_summary,
+    )
+    rows = [
+        row for row in exposure_control.get("portfolio_rows", [])
+        if row.get("中文投注描述") and row.get("中文投注描述") != "暂无"
+    ] or exposure_control.get("portfolio_top_rows", [])
+    if not rows:
+        return []
+
+    stake_amount = _recommended_stake_amount_from_summary(portfolio_summary)
+    unit_stake = (stake_amount / len(rows)) if stake_amount and stake_amount > 0 else 1
+    review_rows = []
+    for row in rows:
+        price_info = _price_for_settlement(row, match, odds, api_football_data)
+        status, return_rate = _settle_price_info(price_info, final_score, unit_stake)
+        review_rows.append({
+            "组合类型": row.get("组合类型", "-"),
+            "投注项": row.get("中文投注描述") or row.get("具体投注组合") or "-",
+            "赔率": fmt((price_info or {}).get("odds")) if price_info else "暂无可用赔率",
+            "赛果结算": status,
+            "收益率": "-" if return_rate is None else f"{return_rate * 100:.1f}%",
+        })
+    return review_rows
+
+
+def render_recommendation_settlement_review(match, odds, api_football_data, market_intelligence, scenario_engine, portfolio_summary, selected_fixture):
+    final_score = final_score_from_fixture(selected_fixture)
+    if not is_finished(selected_fixture) or not final_score:
+        return
+    with st.container(border=True):
+        st.markdown("**推荐组合收益复盘**")
+        st.caption("仅用赛前推荐组合、赛前盘口赔率和赛后最终比分做复盘展示；不影响模型评分、排序、投资分或推荐金额。")
+        rows = recommendation_settlement_rows(
+            match,
+            odds,
+            api_football_data,
+            market_intelligence,
+            scenario_engine,
+            portfolio_summary,
+            final_score,
+        )
+        if not rows:
+            st.info("暂无可结算的赛前推荐组合。")
+            return
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+
+def render_finished_prematch_snapshot_extras(match, market_intelligence, scenario_engine, portfolio_summary, selected_fixture):
+    if not is_finished(selected_fixture):
+        return
+    exposure_control = scenario_exposure_control_display(
+        market_intelligence=market_intelligence,
+        scenario_engine=scenario_engine,
+        match=match,
+        portfolio_summary=portfolio_summary,
+    )
+    with st.container(border=True):
+        st.markdown("**赛前情景暴露快照**")
+        st.caption("本区使用赛前推荐组合生成时的情景暴露结构；只做赛后复盘阅读，不用赛后比分反推模型。")
+        exposure_rows = exposure_control.get("exposure_map_rows") or []
+        if exposure_rows:
+            st.markdown("**情景暴露图**")
+            st.dataframe(pd.DataFrame(exposure_rows), use_container_width=True, hide_index=True)
+        removed_rows = exposure_control.get("removed_bets_rows") or []
+        st.markdown("**已剔除投注列表**")
+        if removed_rows:
+            st.dataframe(pd.DataFrame(removed_rows), use_container_width=True, hide_index=True)
+        else:
+            st.info("当前赛前快照没有被剔除或降级的投注项。")
+
+
 def render_ranking_score_notes(decision_layers):
     score_layer = (decision_layers or {}).get("score_layer") or {}
     execution_layer = (decision_layers or {}).get("execution_layer") or {}
@@ -1866,6 +2108,22 @@ def render_core_decision(match, odds, api_football_data, distribution, decision,
             scenario_engine,
             portfolio_summary,
         )
+        render_finished_prematch_snapshot_extras(
+            match,
+            market_intelligence,
+            scenario_engine,
+            portfolio_summary,
+            selected_fixture,
+        )
+        render_recommendation_settlement_review(
+            match,
+            odds,
+            api_football_data,
+            market_intelligence,
+            scenario_engine,
+            portfolio_summary,
+            selected_fixture,
+        )
         st.caption("结果分布为观察层，不参与概率基准、投资分、推荐金额或排序。")
         render_result_distribution(distribution)
         render_user_portfolio_comparison(user_portfolio_key, my_portfolio or {})
@@ -2327,7 +2585,18 @@ def render_risk_notes(match, decision):
         st.markdown('<div class="warning-item">重点风险路径：结构不确定性 + 情景分散 + 高波动尾部风险</div>', unsafe_allow_html=True)
 
 
-def render_post_match_analysis_tab(match, selected_fixture, distribution, strategies=None, my_portfolio=None):
+def render_post_match_analysis_tab(
+    match,
+    selected_fixture,
+    distribution,
+    strategies=None,
+    my_portfolio=None,
+    odds=None,
+    api_football_data=None,
+    market_intelligence=None,
+    scenario_engine=None,
+    portfolio_summary=None,
+):
     with st.container(border=True):
         st.markdown('<div class="section-title">Post Match Analysis</div>', unsafe_allow_html=True)
         if not selected_fixture or not is_finished(selected_fixture):
@@ -2343,7 +2612,16 @@ def render_post_match_analysis_tab(match, selected_fixture, distribution, strate
         score_cols[0].metric("最终比分", final_score)
         score_cols[1].metric("数据来源", "API-Football")
         score_cols[2].metric("决策模型", "Multi-layer v2")
-        st.caption("赛后页仅展示比赛结果与观察层分布；旧组合结算、收益率审计和历史绩效写入已退出运行路径。")
+        st.caption("赛后页展示最终比分、赛前推荐组合收益复盘与观察层分布；复盘不写入模型评分。")
+        render_recommendation_settlement_review(
+            match,
+            odds or {},
+            api_football_data or {},
+            market_intelligence,
+            scenario_engine,
+            portfolio_summary,
+            selected_fixture,
+        )
         render_result_distribution(distribution)
 
 
@@ -2480,7 +2758,7 @@ def fixture_score_text(fixture):
 def open_fixture(fixture):
     remember_valid_fixture(fixture, "open_fixture")
     st.session_state.selected_match_text = schedule_match_text(fixture)
-    st.session_state.page = "post_match" if is_finished(fixture) else "analysis"
+    st.session_state.page = "analysis"
     st.rerun()
 
 
@@ -2492,7 +2770,7 @@ def render_schedule_card(fixture, index):
         value for value in [fixture.get("venue_name"), fixture.get("venue_city")] if value
     )
     finished = is_finished(fixture)
-    button_text = "查看赛后报告" if finished else "查看赛前分析"
+    button_text = "查看比赛详情" if finished else "查看赛前分析"
     heat = fixture.get("market_heat")
 
     with st.container(border=True):
@@ -2772,10 +3050,6 @@ def render_analysis_page(match_text):
             with perf_timer("detail", "parse_and_fixture"):
                 match = parse_match(match_text)
                 selected_fixture = refresh_selected_fixture_if_needed(st.session_state.get("selected_fixture"))
-                if selected_fixture and is_finished(selected_fixture):
-                    st.session_state.selected_fixture = selected_fixture
-                    st.session_state.page = "post_match"
-                    st.rerun()
                 selected_fixture = enforce_ui_fixture_for_market_request("before_api_football_odds", selected_fixture)
                 if not selected_fixture:
                     return
@@ -2907,7 +3181,18 @@ def render_analysis_page(match_text):
 
         with post_tab:
             with perf_timer("detail", "tab_post_match"):
-                render_post_match_analysis_tab(match, selected_fixture, result_distribution, [], my_portfolio)
+                render_post_match_analysis_tab(
+                    match,
+                    selected_fixture,
+                    result_distribution,
+                    [],
+                    my_portfolio,
+                    odds=odds,
+                    api_football_data=api_football_data,
+                    market_intelligence=market_intelligence,
+                    scenario_engine=scenario_engine,
+                    portfolio_summary=top_strategy,
+                )
 
         with source_tab:
             with perf_timer("detail", "tab_source"):
@@ -2987,7 +3272,9 @@ if "selected_fixture" not in st.session_state:
     st.session_state.selected_fixture = None
 
 if st.session_state.page == "post_match" and st.session_state.selected_fixture:
-    render_post_match_page(st.session_state.selected_fixture)
+    st.session_state.selected_match_text = schedule_match_text(st.session_state.selected_fixture)
+    st.session_state.page = "analysis"
+    render_analysis_page(st.session_state.selected_match_text)
 elif st.session_state.page == "analysis" and st.session_state.selected_match_text:
     render_analysis_page(st.session_state.selected_match_text)
 else:
