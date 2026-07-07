@@ -1338,10 +1338,18 @@ def _investment_explanation_lines(investment_breakdown, score_layer, rss, displa
     investment_score = _metric_number(score_layer.get("investment_score"))
     signal_level = _level_from_score(signal, 70, 40)
     risk_adjustment = investment_breakdown.get("risk_adjustment")
+    rsi = rss.get("RSI", "-")
+    components = rss.get("组件", "-")
+    if rsi == "高":
+        return [
+            f"概率优势 + 情景匹配度为 {signal:g}/100（{signal_level}）：主方向有一定基础，但还没有强到可以忽略风险层。",
+            f"风险指数为高，风险调整为 {fmt(risk_adjustment)}：主要压力来自 {components}，说明本场存在情景分散、尾部波动或盘口路径不集中的问题。",
+            f"结果影响：高风险指数会先压低投资评分至 {investment_score:g}/100，再通过固定区间映射影响推荐金额；防守和高波动项只解释风险路径，不代表加码。",
+        ]
     lines = [
         f"概率优势 + 情景匹配度为 {signal:g}/100（{signal_level}）："
         "表示主方向概率边际与情景结构有一定同向性，但尚未形成强执行信号。",
-        f"风险指数为{rss.get('RSI', '-')}，风险调整为 {fmt(risk_adjustment)}："
+        f"风险指数为{rsi}，风险调整为 {fmt(risk_adjustment)}："
         "说明市场路径分散和尾部风险会压低本场投入力度。",
         f"投资评分为 {investment_score:g}/100，推荐金额为 {display_stake_amount:g} 元："
         "低分档位代表当前更适合作为观察场次，而不是执行型下注。",
