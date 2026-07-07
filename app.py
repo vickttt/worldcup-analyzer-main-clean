@@ -17,8 +17,8 @@ import modules.decision_engine as decision_engine_module
 import modules.weather_client as weather_client_module
 from modules.odds_client import fetch_match_data
 from modules.market_data import build_market_data
-from modules.market_intelligence import build_market_intelligence
-from modules.scenario_engine import build_scenario_engine
+import modules.market_intelligence as market_intelligence_module
+import modules.scenario_engine as scenario_engine_module
 from modules.polymarket_client import fetch_polymarket
 from modules.pregame_content import (
     BANNER_IMAGE_URL,
@@ -46,7 +46,7 @@ from modules.schedule_client import (
 from modules.team_profile_client import fetch_team_profile
 from modules.venue_utils import venue_city_for
 from modules.perf_logger import perf_timer
-from modules.portfolio_engine import build_core_decision_layers, normalize_handicap_line, settle_asian_handicap
+import modules.portfolio_engine as portfolio_engine_module
 from modules.user_portfolio_compare import (
     build_user_portfolio_comparison,
     parse_actual_bet_combo_text,
@@ -54,10 +54,18 @@ from modules.user_portfolio_compare import (
 
 
 probability_base_module = importlib.reload(probability_base_module)
+market_intelligence_module = importlib.reload(market_intelligence_module)
+scenario_engine_module = importlib.reload(scenario_engine_module)
+portfolio_engine_module = importlib.reload(portfolio_engine_module)
 decision_engine_module = importlib.reload(decision_engine_module)
 report_generator_module = importlib.reload(report_generator_module)
 weather_client_module = importlib.reload(weather_client_module)
 build_decision_engine = decision_engine_module.build_decision_engine
+build_market_intelligence = market_intelligence_module.build_market_intelligence
+build_scenario_engine = scenario_engine_module.build_scenario_engine
+build_core_decision_layers = portfolio_engine_module.build_core_decision_layers
+normalize_handicap_line = portfolio_engine_module.normalize_handicap_line
+settle_asian_handicap = portfolio_engine_module.settle_asian_handicap
 build_report = report_generator_module.build_report
 correct_score_limited_rows = report_generator_module.correct_score_limited_rows
 portfolio_leg_display_rows = report_generator_module.portfolio_leg_display_rows
@@ -1520,6 +1528,20 @@ def _metric_number(value, default=0):
         return default
 
 
+def _metric_number_or_none(value):
+    if value is None:
+        return None
+    if isinstance(value, str):
+        text = value.split("/", 1)[0].strip()
+        if not text or text == "-":
+            return None
+        value = text
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def _level_from_score(value, high=70, medium=40):
     score = _metric_number(value)
     if score >= high:
@@ -1527,6 +1549,25 @@ def _level_from_score(value, high=70, medium=40):
     if score >= medium:
         return "中"
     return "低"
+
+
+def _level_from_optional_score(value, high=70, medium=40):
+    score = _metric_number_or_none(value)
+    if score is None:
+        return "暂无"
+    if score >= high:
+        return "高"
+    if score >= medium:
+        return "中"
+    return "低"
+
+
+def _metric_clause(label, value, high=70, medium=40, meaning="", missing_note="当前数据不足，不能按 0 解读"):
+    score = _metric_number_or_none(value)
+    if score is None:
+        return f"{label}暂无有效读数：{missing_note}"
+    detail = str(meaning or "").rstrip("。；; ")
+    return f"{label}{score:g}/100（{_level_from_optional_score(score, high, medium)}）：{detail}"
 
 
 def _investment_reason(score_layer, investment_breakdown, rss, display_stake_amount):
@@ -1547,22 +1588,48 @@ def _investment_reason(score_layer, investment_breakdown, rss, display_stake_amo
 
 def _market_structure_explanation(market_rows, favorite_label="-"):
     row_map = {row.get("指标"): row.get("数值") for row in market_rows}
-    direction = _metric_number(row_map.get("方向强度"))
-    agreement = _metric_number(row_map.get("市场一致性评分"))
-    score_uncertainty = _metric_number(row_map.get("比分路径不确定性"))
-    tail_probability = _metric_number(row_map.get("真实尾部概率"))
-    deprecated_tail_density = _metric_number(row_map.get("旧尾部密度 tail_density（已废弃）"))
-    direction_level = _level_from_score(direction, 45, 20)
-    agreement_level = _level_from_score(agreement, 70, 40)
-    uncertainty_level = _level_from_score(score_uncertainty, 60, 30)
-    tail_level = _level_from_score(tail_probability, 35, 15)
+    direction = _metric_number_or_none(row_map.get("方向强度"))
+    deprecated_tail_density = _metric_number_or_none(row_map.get("旧尾部密度 tail_density（已废弃）"))
+    direction_text = (
+        f"方向强度 {direction:g}/100（{_level_from_optional_score(direction, 45, 20)}）：{favorite_label} 是主方向，"
+        "该值越高越接近单边主路径；"
+        if direction is not None
+        else f"方向强度暂无有效读数：{favorite_label} 主方向只能结合 TPB 概率摘要阅读；"
+    )
     return (
-        f"方向强度 {direction:g}/100（{direction_level}）：{favorite_label} 是主方向，"
-        "但不是压倒性单边；"
-        f"市场一致性 {agreement:g}/100（{agreement_level}）：多盘口对主方向的分歧较低；"
-        f"比分路径不确定性 {score_uncertainty:g}/100（{uncertainty_level}）：平局和大小球-波胆结构提示比赛路径是否分散；"
-        f"真实尾部概率 {tail_probability:g}/100（{tail_level}）：基于去重波胆概率质量，而不是波胆条目数量，并通过真实尾部概率风险进入 RSI；"
-        f"旧尾部密度 tail_density {deprecated_tail_density:g}/100 仅作迁移核对，不进入 RSI 或投资评分。"
+        direction_text
+        + _metric_clause(
+            "市场一致性 ",
+            row_map.get("市场一致性评分"),
+            70,
+            40,
+            "多盘口越一致，主路径解释越稳定。",
+            "当前无法计算跨盘口一致性，不应理解为市场一致性为 0。",
+        )
+        + "；"
+        + _metric_clause(
+            "比分路径不确定性 ",
+            row_map.get("比分路径不确定性"),
+            60,
+            30,
+            "刻画平局、大小球和波胆路径是否分散。",
+            "当前无法计算比分路径分散度，不应理解为不确定性为 0。",
+        )
+        + "；"
+        + _metric_clause(
+            "真实尾部概率 ",
+            row_map.get("真实尾部概率"),
+            35,
+            15,
+            "基于去重波胆概率质量，并通过真实尾部概率风险进入 RSI。",
+            "当前无法计算真实尾部概率，不应理解为尾部概率为 0。",
+        )
+        + "；"
+        + (
+            f"旧尾部密度 tail_density {deprecated_tail_density:g}/100 仅作迁移核对，不进入 RSI 或投资评分。"
+            if deprecated_tail_density is not None
+            else "旧尾部密度 tail_density 暂无有效读数，仅作迁移核对，不进入 RSI 或投资评分。"
+        )
     )
 
 
