@@ -654,11 +654,35 @@ def _score_rows_for_ranking(position, match=None, market_intelligence=None, scen
     return []
 
 
+def _scenario_basis_text(scenario_engine, codes):
+    weights = {
+        item.get("code"): item.get("weight")
+        for item in ((scenario_engine or {}).get("scenario_weights") or [])
+    }
+    parts = []
+    for code in codes:
+        value = weights.get(code)
+        parts.append(f"{code} {percent(value)}" if value is not None else code)
+    return " / ".join(parts) or "-"
+
+
+def _ranking_display_reason(position):
+    if position == "Primary Coverage Set":
+        return "主方向与热门小胜路径最匹配，用于展示主路径覆盖。"
+    if position == "Defensive Coverage Set":
+        return "平局和低比分路径仅作为防守覆盖，不是独立主推荐。"
+    if position == "Tail Coverage Set":
+        return "高波动尾部存在，但仅作观察，不作为主推荐。"
+    return "结构排序展示，不代表最终下注指令。"
+
+
 def _compact_legs_for_ranking(position, legs):
     if position == "Primary Coverage Set":
-        return legs[1:2] if len(legs) > 1 else legs[:1]
+        handicap = [leg for leg in legs if "-0.5" in str(leg.get("中文投注描述", ""))]
+        return handicap[:1] or (legs[1:2] if len(legs) > 1 else legs[:1])
     if position == "Defensive Coverage Set":
-        return legs[2:3] if len(legs) > 2 else legs[1:2] if len(legs) > 1 else legs[:1]
+        draw = [leg for leg in legs if "平局" in str(leg.get("中文投注描述", ""))]
+        return draw[:1] or (legs[2:3] if len(legs) > 2 else legs[1:2] if len(legs) > 1 else legs[:1])
     if position == "Tail Coverage Set":
         return []
     return legs[:1]
@@ -667,9 +691,17 @@ def _compact_legs_for_ranking(position, legs):
 def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, market_intelligence=None):
     rows = []
     sets = _optimization_sets(scenario_engine)
-    risk_summary = risk_score_v3_summary(scenario_engine)
-    risk_note = f"RSI {risk_summary['RSI']}；重点风险路径：结构不确定性 + 情景分散 + 高波动尾部风险。"
-    for item in ((portfolio or {}).get("ranking") or [])[:3]:
+    ranking_by_position = {
+        item.get("position"): item
+        for item in ((portfolio or {}).get("ranking") or [])
+    }
+    display_order = [
+        ("Primary Coverage Set", "主路径覆盖", ["S1", "S2"], "S1/S2"),
+        ("Defensive Coverage Set", "防守覆盖", ["S3", "S5"], "S3/S5"),
+        ("Tail Coverage Set", "高波动观察", ["S6", "S4"], "S6/S4"),
+    ]
+    for position, label, scenario_codes, scenario_label in display_order:
+        item = ranking_by_position.get(position) or {"position": position}
         position = item.get("position", "-")
         legs = portfolio_leg_display_rows(
             sets.get(position) or [],
@@ -680,25 +712,21 @@ def system_ranking_display_rows(portfolio, scenario_engine=None, match=None, mar
         legs = _compact_legs_for_ranking(position, legs)
         bet_text = "；".join(
             [leg.get("中文投注描述", "-") for leg in legs]
-        ) or "暂无"
+        ) or "无主投注项（仅观察）"
         market_text = "；".join(
             [leg.get("对应盘口", "-") for leg in legs]
-        ) or "-"
-        dependency_text = "；".join(
-            [leg.get("情景依赖", "-") for leg in legs if leg.get("情景依赖")]
-        ) or "-"
+        ) or "不作为执行盘口"
+        dependency_text = _scenario_basis_text(scenario_engine, scenario_codes)
         score_rows = _score_rows_for_ranking(position, match, market_intelligence, scenario_engine)[:3]
         correct_score_text = "；".join(row.get("中文投注描述", "-") for row in score_rows) or "-"
-        reason = _basis_cn(item.get("basis"))
         rows.append({
-            "排名": f"Rank {item.get('rank', '-')}",
-            "组合类型": _portfolio_position_cn(position),
-            "具体投注组合": bet_text,
-            "对应盘口": market_text,
-            "波胆": correct_score_text,
-            "结构理由": reason,
-            "情景依赖": dependency_text,
-            "风险标注": risk_note,
+            "覆盖定位": label,
+            "主投注项": bet_text,
+            "盘口": market_text,
+            "附属波胆观察（非推荐）": correct_score_text,
+            "本场解释": _ranking_display_reason(position),
+            "情景依据": dependency_text,
+            "情景": scenario_label,
         })
     return rows
 
@@ -802,6 +830,11 @@ def scenario_exposure_control_display(
         ("Correct Score", correct_score_rows),
     ])
     active_portfolio = active.get("Portfolio", [])
+    active_ranking = []
+    for row in active.get("Ranking", [])[:3]:
+        display_row = dict(row)
+        display_row.pop("Scenario", None)
+        active_ranking.append(display_row)
     top_rows = [
         {
             "组合类型": row.get("组合类型", "-"),
@@ -816,7 +849,7 @@ def scenario_exposure_control_display(
     return {
         "portfolio_rows": active_portfolio,
         "portfolio_top_rows": top_rows,
-        "ranking_rows": active.get("Ranking", [])[:3],
+        "ranking_rows": active_ranking,
         "correct_score_rows": active.get("Correct Score", []),
         "exposure_map_rows": exposure_map,
         "removed_bets_rows": [],
@@ -1516,18 +1549,18 @@ def format_final_decision_block_lines(
         )
     lines.extend([
         "",
-        "### 6. Ranking Top 3（结构排序，非执行指令）",
+        "### 6. 组合覆盖结构（非投注推荐排序）",
         "",
-        "Ranking 是系统结构排序，不是单独的下注指令；每个排序项附带 1-3 个 Correct Score 结构信号供阅读。",
+        "本区展示主路径覆盖、防守覆盖和高波动观察三类结构。它用于理解系统如何覆盖主要比赛路径和风险路径，不等于逐个投注项的推荐强弱。附属波胆只作为结构观察，不构成独立推荐。",
         "",
     ])
     ranking_rows = exposure_control["ranking_rows"]
     if not ranking_rows:
-        lines.append("- 暂无系统排序。")
+        lines.append("- 暂无组合覆盖结构。")
     else:
         for row in ranking_rows:
             lines.append(
-                f"- {row['排名']}：{row['具体投注组合']}｜盘口：{row['对应盘口']}｜波胆：{row.get('波胆', '-')}｜Scenario：{row.get('Scenario', '-')}｜原因：{row['结构理由']}｜风险说明：{row.get('风险标注', '-')}"
+                f"- {row['覆盖定位']}：{row['主投注项']}｜盘口：{row['盘口']}｜附属波胆观察（非推荐）：{row.get('附属波胆观察（非推荐）', '-')}｜本场解释：{row['本场解释']}｜情景依据：{row.get('情景依据', '-')}｜情景：{row.get('情景', '-')}"
             )
     lines.extend([
         "",

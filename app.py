@@ -1409,8 +1409,8 @@ def render_final_decision_summary(match, distribution, data_context, market_inte
             use_container_width=True,
             hide_index=True,
         )
-        st.markdown("**结构排序 Top 3（非直接下注指令）**")
-        st.caption("排序信号是结构排序，不是单独的下注指令；最终执行仍取决于推荐金额与人工判断。")
+        st.markdown("**组合覆盖结构（非投注推荐排序）**")
+        st.caption("本区展示主路径覆盖、防守覆盖和高波动观察三类结构。它用于理解系统如何覆盖主要比赛路径和风险路径，不等于逐个投注项的推荐强弱。附属波胆只作为结构观察，不构成独立推荐。")
         st.dataframe(
             pd.DataFrame(exposure_control["ranking_rows"]),
             use_container_width=True,

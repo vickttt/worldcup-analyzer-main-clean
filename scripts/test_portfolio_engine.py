@@ -357,7 +357,7 @@ def test_architecture_guardrails():
     assert "## 最终决策区（FINAL DECISION BLOCK）" in report_text
     assert "### 3. Scenario Projection（简化版）" in report_text
     assert "Investment Score 是多因子加权结果" in report_text
-    assert "每个排序项附带 1-3 个 Correct Score" in report_text
+    assert "本区展示主路径覆盖、防守覆盖和高波动观察三类结构" in report_text
     assert "Portfolio 只保留 coverage structure" in report_text
     assert "System Semantic Alignment Layer" in report_text
     assert "High Variance Structural Signal" in report_text
@@ -390,14 +390,14 @@ def test_architecture_guardrails():
     assert "投注组合与排序（优先阅读）" in app_text
     assert "情景暴露图" not in app_text
     assert "投资评分解释" in app_text
-    assert "结构排序 Top 3（非直接下注指令）" in app_text
+    assert "组合覆盖结构（非投注推荐排序）" in app_text
     assert "高波动结构信号（波胆）" in app_text
     assert "系统语义对齐层" in app_text
     assert "组合观察区（无执行信号）" not in app_text
     assert "高波动结构提示（仅分析）" not in app_text
     assert "排序结构（仅结构分析）" not in app_text
     assert "当前不输出具体投注组合" not in app_text
-    assert "排序信号是结构排序" in app_text and "波胆" in app_text
+    assert "附属波胆只作为结构观察" in app_text
     assert "情景层用于解释本场可能路径" in app_text
     assert "        render_market_intelligence_layer(market_intelligence)" not in app_text
     assert "        render_risk_surface_quantification_v3(scenario_engine)" not in app_text
