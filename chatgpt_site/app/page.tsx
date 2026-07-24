@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 
 type ReportItem = {
   id: string;
@@ -69,12 +69,27 @@ type MarketRow = {
   extra: string;
 };
 
+type ReportSection = {
+  title: string;
+  raw: string;
+};
+
 const marketTitles: Record<keyof NonNullable<ApiFixtureData["markets"]>, string> = {
   matchWinner: "胜平负",
   asianHandicap: "亚洲让球",
   overUnder: "大小球",
   correctScore: "波胆",
 };
+
+const reportTabConfig = [
+  { id: "decision", label: "重点结论", hint: "先看投注组合、排序、投资分和风险指数。" },
+  { id: "scenario", label: "情景与风险", hint: "查看情景概率、结果分布和主要风险路径。" },
+  { id: "odds", label: "赔率与盘口", hint: "胜平负、让球、大小球和波胆统一折叠展示。" },
+  { id: "team", label: "球队与数据", hint: "伤病、首发、Polymarket 和数据来源说明。" },
+  { id: "full", label: "完整报告", hint: "按原报告章节折叠查看全部内容。" },
+] as const;
+
+type ReportTabId = (typeof reportTabConfig)[number]["id"];
 
 function extractValue(content: string, patterns: RegExp[]) {
   for (const pattern of patterns) {
@@ -200,6 +215,61 @@ function parseDetailLine(line: string) {
   };
 }
 
+function splitReportSections(content: string): { intro: string; sections: ReportSection[] } {
+  const lines = content.split(/\r?\n/);
+  const intro: string[] = [];
+  const sections: ReportSection[] = [];
+  let current: string[] = [];
+
+  const flush = () => {
+    if (!current.length) return;
+    const firstLine = current[0] ?? "";
+    sections.push({
+      title: renderInline(firstLine.replace(/^##\s+/, "")),
+      raw: current.join("\n").trim(),
+    });
+    current = [];
+  };
+
+  for (const line of lines) {
+    if (line.startsWith("## ")) {
+      flush();
+      current.push(line);
+      continue;
+    }
+    if (current.length) {
+      current.push(line);
+    } else {
+      intro.push(line);
+    }
+  }
+  flush();
+
+  return { intro: intro.join("\n").trim(), sections };
+}
+
+function sectionMatches(section: ReportSection, keywords: string[]) {
+  const haystack = `${section.title}\n${section.raw}`.toLowerCase();
+  return keywords.some((keyword) => haystack.includes(keyword.toLowerCase()));
+}
+
+function sectionsByKeywords(sections: ReportSection[], keywords: string[]) {
+  return sections.filter((section) => sectionMatches(section, keywords));
+}
+
+function sectionBody(section: ReportSection) {
+  return section.raw.replace(/^##\s+[^\n]*\n?/, "").trim();
+}
+
+function initials(name?: string) {
+  const parts = (name || "?").split(/\s+/).filter(Boolean);
+  return parts
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+
 function MarkdownView({ content }: { content: string }) {
   return (
     <div className="markdown-view">
@@ -263,37 +333,204 @@ function MarkdownView({ content }: { content: string }) {
   );
 }
 
+function SectionAccordion({
+  title,
+  children,
+  defaultOpen = false,
+}: {
+  title: string;
+  children: ReactNode;
+  defaultOpen?: boolean;
+}) {
+  return (
+    <details className="report-accordion" open={defaultOpen}>
+      <summary>
+        <span>{title}</span>
+        <small>{defaultOpen ? "已展开" : "点击展开"}</small>
+      </summary>
+      <div className="accordion-body">{children}</div>
+    </details>
+  );
+}
+
+function AccordionSections({
+  sections,
+  emptyText,
+  defaultOpenFirst = false,
+}: {
+  sections: ReportSection[];
+  emptyText: string;
+  defaultOpenFirst?: boolean;
+}) {
+  if (!sections.length) {
+    return <p className="muted">{emptyText}</p>;
+  }
+  return (
+    <div className="accordion-stack">
+      {sections.map((section, index) => (
+        <SectionAccordion
+          key={`${section.title}-${index}`}
+          title={section.title}
+          defaultOpen={defaultOpenFirst && index === 0}
+        >
+          <MarkdownView content={sectionBody(section)} />
+        </SectionAccordion>
+      ))}
+    </div>
+  );
+}
+
+function ReportTabbedView({ report }: { report: ReportItem }) {
+  const [activeReportTab, setActiveReportTab] = useState<ReportTabId>("decision");
+  const { intro, sections } = useMemo(() => splitReportSections(report.content), [report.content]);
+
+  const decisionSections = sectionsByKeywords(sections, [
+    "最终决策",
+    "投资评分",
+    "投注组合",
+    "组合覆盖结构",
+    "风险指数",
+    "波胆结构信号",
+    "Portfolio Coverage",
+    "Execution Layer",
+    "我的实盘组合",
+  ]);
+  const scenarioSections = sectionsByKeywords(sections, [
+    "情景",
+    "结果分布",
+    "进球数观点",
+    "风险",
+  ]);
+  const oddsSections = sectionsByKeywords(sections, [
+    "盘口观察",
+    "胜平负",
+    "Match Winner",
+    "亚洲让球",
+    "Asian Handicap",
+    "大小球",
+    "Over/Under",
+    "波胆 / Correct Score",
+    "赔率",
+  ]);
+  const teamSections = sectionsByKeywords(sections, [
+    "比赛概览",
+    "伤病",
+    "首发",
+    "Polymarket",
+    "数据来源",
+    "TPB 覆盖说明",
+  ]);
+
+  return (
+    <section className="report-workspace">
+      <div className="report-subtabs" aria-label="报告阅读分区">
+        {reportTabConfig.map((tab) => (
+          <button
+            className={activeReportTab === tab.id ? "active" : ""}
+            key={tab.id}
+            onClick={() => setActiveReportTab(tab.id)}
+          >
+            <strong>{tab.label}</strong>
+            <span>{tab.hint}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="report-tab-panel">
+        {activeReportTab === "decision" && (
+          <MarkdownView content={decisionSections.map((section) => section.raw).join("\n\n") || report.content} />
+        )}
+
+        {activeReportTab === "scenario" && (
+          <AccordionSections
+            sections={scenarioSections}
+            emptyText="这份报告暂无独立的情景或风险章节。"
+            defaultOpenFirst
+          />
+        )}
+
+        {activeReportTab === "odds" && (
+          <AccordionSections sections={oddsSections} emptyText="这份报告暂无盘口明细章节。" />
+        )}
+
+        {activeReportTab === "team" && (
+          <AccordionSections
+            sections={teamSections}
+            emptyText="这份报告暂无球队或外部数据章节。"
+            defaultOpenFirst
+          />
+        )}
+
+        {activeReportTab === "full" && (
+          <div className="full-report-stack">
+            {intro && (
+              <SectionAccordion title="报告标题与摘要" defaultOpen>
+                <MarkdownView content={intro} />
+              </SectionAccordion>
+            )}
+            <AccordionSections sections={sections} emptyText="暂无完整报告内容。" />
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function TeamIdentity({
+  name,
+  logo,
+  align = "home",
+}: {
+  name: string;
+  logo?: string;
+  align?: "home" | "away";
+}) {
+  return (
+    <div className={`team-identity ${align === "away" ? "away" : ""}`}>
+      <div className="team-logo-wrap">
+        {logo ? <img src={logo} alt={`${name} logo`} /> : <span>{initials(name)}</span>}
+      </div>
+      <strong>{name}</strong>
+    </div>
+  );
+}
+
 function MarketTable({ title, rows }: { title: string; rows: MarketRow[] }) {
   return (
-    <section className="market-card">
-      <h3>{title}</h3>
-      {rows.length ? (
-        <div className="table-wrap compact">
-          <table>
-            <thead>
-              <tr>
-                <th>公司</th>
-                <th>盘口</th>
-                <th>选择</th>
-                <th>赔率</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, index) => (
-                <tr key={`${row.bookmaker}-${row.bet}-${row.selection}-${index}`}>
-                  <td>{row.bookmaker}</td>
-                  <td>{row.extra || row.bet}</td>
-                  <td>{row.selection}</td>
-                  <td>{row.odds}</td>
+    <details className="market-accordion">
+      <summary>
+        <span>{title}</span>
+        <small>{rows.length ? `${rows.length} 条盘口` : "暂无数据"}</small>
+      </summary>
+      <div className="market-accordion-body">
+        {rows.length ? (
+          <div className="table-wrap compact">
+            <table>
+              <thead>
+                <tr>
+                  <th>公司</th>
+                  <th>盘口</th>
+                  <th>选择</th>
+                  <th>赔率</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p className="muted">该市场暂未返回数据。</p>
-      )}
-    </section>
+              </thead>
+              <tbody>
+                {rows.map((row, index) => (
+                  <tr key={`${row.bookmaker}-${row.bet}-${row.selection}-${index}`}>
+                    <td>{row.bookmaker}</td>
+                    <td>{row.extra || row.bet}</td>
+                    <td>{row.selection}</td>
+                    <td>{row.odds}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="muted">该市场暂未返回数据。</p>
+        )}
+      </div>
+    </details>
   );
 }
 
@@ -369,6 +606,8 @@ export default function Home() {
     overUnder: flattenMarkets(fixtureData?.markets?.overUnder, 10),
     correctScore: flattenMarkets(fixtureData?.markets?.correctScore, 10),
   };
+  const bannerHomeName = selectedFixture?.home_team.name || selectedReport?.home || "主队";
+  const bannerAwayName = selectedFixture?.away_team.name || selectedReport?.away || "客队";
 
   return (
     <main>
@@ -424,17 +663,17 @@ export default function Home() {
 
         <section className="fixture-panel">
           <div className="match-banner">
-            <div>
+            <div className="match-teams">
               <p className="eyebrow">当前比赛</p>
-              <h2>
-                {selectedFixture
-                  ? `${selectedFixture.home_team.name} vs ${selectedFixture.away_team.name}`
-                  : selectedReport?.match || "暂无比赛"}
-              </h2>
-              <p>
+              <div className="team-versus">
+                <TeamIdentity name={bannerHomeName} logo={selectedFixture?.home_team.logo} />
+                <span className="versus-badge">VS</span>
+                <TeamIdentity name={bannerAwayName} logo={selectedFixture?.away_team.logo} align="away" />
+              </div>
+              <p className="match-context">
                 {selectedFixture
                   ? `${localKickoff(selectedFixture.kickoff_utc)} · ${selectedFixture.round || "世界杯"}`
-                  : "使用报告快照展示。"}
+                  : selectedReport?.match || "使用报告快照展示。"}
               </p>
             </div>
             <div className="banner-meta">
@@ -479,7 +718,7 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-              <MarkdownView content={selectedReport.content} />
+              <ReportTabbedView report={selectedReport} />
             </>
           )}
 

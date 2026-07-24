@@ -135,6 +135,7 @@ h3 {
 .live-panel,
 .fixture-panel,
 .market-card,
+.market-accordion,
 .source-panel {
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -222,10 +223,13 @@ h3 {
   gap: 14px;
   align-items: stretch;
   margin-bottom: 14px;
-  padding: 20px;
+  padding: 22px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #082455, #143f7e);
+  background:
+    radial-gradient(circle at 22% 12%, rgba(255, 255, 255, 0.16), transparent 14rem),
+    linear-gradient(135deg, #082455, #143f7e);
   color: #ffffff;
+  overflow: hidden;
 }
 
 .match-banner h2 {
@@ -237,6 +241,78 @@ h3 {
 .match-banner p {
   margin: 10px 0 0;
   color: #d8e6f7;
+}
+
+.match-teams {
+  min-width: 0;
+}
+
+.team-versus {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.team-identity {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 12px;
+}
+
+.team-identity.away {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.team-logo-wrap {
+  display: grid;
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.team-logo-wrap img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.team-logo-wrap span {
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.team-identity strong {
+  overflow: hidden;
+  font-size: clamp(22px, 3vw, 36px);
+  line-height: 1.08;
+  text-overflow: ellipsis;
+}
+
+.versus-badge {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.13);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.match-context {
+  margin-top: 18px !important;
 }
 
 .banner-meta {
@@ -286,13 +362,57 @@ h3 {
 }
 
 .market-card,
+.market-accordion,
 .source-panel {
   padding: 18px;
 }
 
 .market-card h3,
+.market-accordion h3,
 .source-panel h2 {
   margin-bottom: 12px;
+}
+
+.market-accordion,
+.report-accordion {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 8px 22px rgba(31, 44, 64, 0.06);
+}
+
+.market-accordion summary,
+.report-accordion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  color: #1d2838;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.market-accordion summary::marker,
+.report-accordion summary::marker {
+  color: var(--accent);
+}
+
+.market-accordion summary small,
+.report-accordion summary small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.market-accordion-body,
+.accordion-body {
+  padding: 0 18px 18px;
+}
+
+.market-accordion .table-wrap,
+.report-accordion .table-wrap {
+  margin-bottom: 0;
 }
 
 .source-panel p {
@@ -451,6 +571,69 @@ h3 {
   line-height: 1.35;
 }
 
+.report-workspace {
+  margin-top: 18px;
+}
+
+.report-subtabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
+.report-subtabs button {
+  min-height: 88px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #ffffff;
+  color: #243044;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(31, 44, 64, 0.05);
+}
+
+.report-subtabs button:hover {
+  border-color: rgba(10, 44, 95, 0.28);
+  background: #f8fbff;
+}
+
+.report-subtabs button.active {
+  border-color: rgba(227, 61, 79, 0.32);
+  background: linear-gradient(180deg, #fff7f8, #ffffff);
+  box-shadow: 0 12px 22px rgba(227, 61, 79, 0.08);
+}
+
+.report-subtabs strong,
+.report-subtabs span {
+  display: block;
+}
+
+.report-subtabs strong {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.report-subtabs span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.report-tab-panel {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.accordion-stack,
+.full-report-stack {
+  display: grid;
+  gap: 12px;
+}
+
 .markdown-view {
   color: #202a39;
 }
@@ -585,6 +768,25 @@ tr:last-child td {
   .metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .report-subtabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .team-versus {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .team-identity.away {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .versus-badge {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 @media (max-width: 560px) {
@@ -599,5 +801,13 @@ tr:last-child td {
 
   .metric-grid {
     grid-template-columns: 1fr;
+  }
+
+  .report-subtabs {
+    grid-template-columns: 1fr;
+  }
+
+  .report-tab-panel {
+    padding: 14px;
   }
 }
