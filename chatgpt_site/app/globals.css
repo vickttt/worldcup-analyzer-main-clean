@@ -482,6 +482,25 @@ h3 {
   margin-left: 20px;
 }
 
+.markdown-detail {
+  margin: 10px 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+}
+
+.markdown-detail summary {
+  padding: 12px 14px;
+  color: #2f3a4c;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.markdown-detail p {
+  margin: 0;
+  padding: 0 14px 14px 34px;
+}
+
 .table-wrap {
   width: 100%;
   margin: 14px 0 22px;

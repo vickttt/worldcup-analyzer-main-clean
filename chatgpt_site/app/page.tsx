@@ -185,7 +185,19 @@ function renderInline(text: string) {
   return text
     .replace(/\*\*([^*]+)\*\*/g, "$1")
     .replace(/`([^`]+)`/g, "$1")
+    .replace(/<\/?(details|summary)>/gi, "")
     .trim();
+}
+
+function parseDetailLine(line: string) {
+  const match = line
+    .trim()
+    .match(/^<details>\s*<summary>(.*?)<\/summary>\s*([\s\S]*?)\s*<\/details>$/i);
+  if (!match) return null;
+  return {
+    summary: renderInline(match[1]),
+    body: renderInline(match[2]),
+  };
 }
 
 function MarkdownView({ content }: { content: string }) {
@@ -230,6 +242,15 @@ function MarkdownView({ content }: { content: string }) {
         }
 
         const line = block.lines[0];
+        const detail = parseDetailLine(line);
+        if (detail) {
+          return (
+            <details className="markdown-detail" key={index}>
+              <summary>{detail.summary}</summary>
+              <p>{detail.body}</p>
+            </details>
+          );
+        }
         const text = renderInline(line);
         if (!text) return null;
         if (text.startsWith("### ")) return <h3 key={index}>{text.slice(4)}</h3>;
