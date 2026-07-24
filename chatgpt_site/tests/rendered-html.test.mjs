@@ -31,8 +31,11 @@ test("renders the World Cup report viewer shell", async () => {
   const html = await response.text();
   assert.match(html, /<title>世界杯赛前分析平台<\/title>/i);
   assert.match(html, /世界杯赛前分析平台/);
-  assert.match(html, /chatgpt\.site 只读版/);
-  assert.match(html, /查找比赛/);
+  assert.match(html, /API-Football 状态/);
+  assert.match(html, /实时赛程/);
+  assert.match(html, /核心决策/);
+  assert.match(html, /市场盘口/);
+  assert.match(html, /查找报告快照/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/i);
 });
 

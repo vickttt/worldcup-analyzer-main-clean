@@ -109,6 +109,201 @@ h3 {
   line-height: 1;
 }
 
+.notice {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid #f4c6cc;
+  border-radius: 8px;
+  background: #fff1f3;
+  color: #7b1f2d;
+  line-height: 1.65;
+}
+
+.notice.soft {
+  background: #fff8e7;
+  border-color: #f5daa6;
+  color: #76520f;
+}
+
+.live-layout {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr) 310px;
+  gap: 18px;
+  align-items: start;
+}
+
+.live-panel,
+.fixture-panel,
+.market-card,
+.source-panel {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 28px rgba(31, 44, 64, 0.08);
+}
+
+.live-panel {
+  position: sticky;
+  top: 18px;
+  max-height: calc(100vh - 36px);
+  padding: 16px;
+  overflow: hidden;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.panel-heading h2 {
+  font-size: 22px;
+}
+
+.panel-heading span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.fixture-list {
+  display: grid;
+  max-height: calc(100vh - 118px);
+  gap: 8px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.fixture-list button {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+}
+
+.fixture-list button:hover {
+  background: var(--panel-soft);
+}
+
+.fixture-list button.active {
+  border-color: rgba(10, 44, 95, 0.24);
+  background: var(--navy-soft);
+}
+
+.fixture-list strong,
+.fixture-list span {
+  display: block;
+}
+
+.fixture-list strong {
+  font-size: 14px;
+}
+
+.fixture-list span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.fixture-panel {
+  min-width: 0;
+  padding: 18px;
+}
+
+.match-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 14px;
+  align-items: stretch;
+  margin-bottom: 14px;
+  padding: 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #082455, #143f7e);
+  color: #ffffff;
+}
+
+.match-banner h2 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.08;
+}
+
+.match-banner p {
+  margin: 10px 0 0;
+  color: #d8e6f7;
+}
+
+.banner-meta {
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.banner-meta span,
+.banner-meta small {
+  color: #d8e6f7;
+}
+
+.banner-meta strong {
+  font-size: 19px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tabs button {
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: #4f5968;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+
+.market-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.market-card,
+.source-panel {
+  padding: 18px;
+}
+
+.market-card h3,
+.source-panel h2 {
+  margin-bottom: 12px;
+}
+
+.source-panel p {
+  color: #4f5968;
+  line-height: 1.85;
+}
+
+.muted {
+  color: var(--muted) !important;
+}
+
 .workspace {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
@@ -332,6 +527,18 @@ tr:last-child td {
   text-align: center;
 }
 
+@media (max-width: 1180px) {
+  .live-layout {
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+
+  .live-layout .report-list {
+    position: static;
+    grid-column: 1 / -1;
+    max-height: none;
+  }
+}
+
 @media (max-width: 980px) {
   main {
     width: min(100vw - 28px, 760px);
@@ -339,16 +546,20 @@ tr:last-child td {
   }
 
   .hero,
-  .workspace {
+  .workspace,
+  .live-layout,
+  .match-banner {
     grid-template-columns: 1fr;
   }
 
-  .report-list {
+  .report-list,
+  .live-panel {
     position: static;
     max-height: none;
   }
 
-  .list-items {
+  .list-items,
+  .fixture-list {
     max-height: 320px;
   }
 
